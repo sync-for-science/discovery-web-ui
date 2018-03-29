@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import './PatientListItem.css';
+import './ParticipantListItem.css';
 
 //
 // Render info and link for a patient/participant
 //
-export default class PatientListItem extends Component
+export default class ParticipantListItem extends Component
 {
    static propTypes = {
       id: PropTypes.string,
@@ -17,8 +17,8 @@ export default class PatientListItem extends Component
    render() {
       const id = this.props.id;
       return (
-	 <div className="PatientListItem">
-	    <Link to={'/patient/'+id}>{this.props.name+' ('+id+')'}</Link>
+	 <div className="ParticipantListItem">
+	    <Link to={'/participant/'+id}>{this.props.name+' ('+id+')'}</Link>
 	 </div>
       );
    }

@@ -5,14 +5,14 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
 import './index.css';
-import PatientList from './components/PatientList';
-import PatientDetail from './components/PatientDetail';
+import ParticipantList from './components/ParticipantList';
+import ParticipantDetail from './components/ParticipantDetail';
 
 ReactDOM.render(
     <Router>
 	<Switch>
-	    <Route exact path='/' component={PatientList} />
-	    <Route path='/patient/:index' component={PatientDetail} />
+	    <Route exact path='/' component={ParticipantList} />
+	    <Route path='/participant/:index' component={ParticipantDetail} />
 	</Switch>
     </Router>,
     document.getElementById('root')

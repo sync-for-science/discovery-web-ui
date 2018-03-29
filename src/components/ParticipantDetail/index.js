@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import './PatientDetail.css';
+import './ParticipantDetail.css';
 import config from '../../config.js';
 
 //
-// Render the detail page
+// Render the participant detail page
 //
-export default class PatientDetail extends Component {
+export default class ParticipantDetail extends Component {
 
    static propTypes = {
       match: PropTypes.object
@@ -36,9 +36,9 @@ export default class PatientDetail extends Component {
 
    render() {
       return (
-         <div className='PatientDetail'>
-            <header className='PatientDetail-header'>
-               <h1 className='PatientDetail-title'>Participant Details</h1>
+         <div className='ParticipantDetail'>
+            <header className='ParticipantDetail-header'>
+               <h1 className='ParticipantDetail-title'>Participant Details</h1>
             </header>
 	   
 	    { this.renderDetails() }
@@ -50,7 +50,7 @@ export default class PatientDetail extends Component {
       const { details, isLoading, fetchError } = this.state;
 
       if (fetchError) {
-	  return <p>{ 'PatientDetail: ' + fetchError.message }</p>;
+	  return <p>{ 'ParticipantDetail: ' + fetchError.message }</p>;
       }
 
       if (isLoading) {

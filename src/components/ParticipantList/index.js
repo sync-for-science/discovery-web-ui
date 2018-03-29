@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 
-import './PatientList.css';
-import PatientListItem from '../PatientListItem';
+import './ParticipantList.css';
+import ParticipantListItem from '../ParticipantListItem';
 import config from '../../config.js';
 
 //
-// Render the list of patients/participants
+// Render the list of participants
 //
-export default class PatientList extends Component {
+export default class ParticipantList extends Component {
 
    state = {
-      patients: {},
+      participants: {},
       isLoading: false,
       fetchError: null
    }
@@ -25,16 +25,16 @@ export default class PatientList extends Component {
 	       throw new Error("Can't fetch participants!");
 	    }
 	 })
-         .then(data => this.setState({ patients: data, isLoading: false }))
+         .then(data => this.setState({ participants: data, isLoading: false }))
 
          .catch(fetchError => this.setState({ fetchError, isLoading: false }));
    }
 
    render() {
       return (
-	 <div className='PatientList'>
-            <header className='PatientList-header'>
-              <h1 className='PatientList-title'>Select a participant to view details</h1>
+	 <div className='ParticipantList'>
+            <header className='ParticipantList-header'>
+              <h1 className='ParticipantList-title'>Select a participant to view details</h1>
             </header>
 
 	    { this.renderList() }
@@ -43,19 +43,19 @@ export default class PatientList extends Component {
    }
 
    renderList() {
-      const { patients, isLoading, fetchError } = this.state;
+      const { participants, isLoading, fetchError } = this.state;
       const results = [];
 
       if (fetchError) {
-	 return <p>{ 'PatientList: ' + fetchError.message }</p>;
+	 return <p>{ 'ParticipantList: ' + fetchError.message }</p>;
       }
 
       if (isLoading) {
 	 return <p>Loading ...</p>;
       }
 
-      for (let patientId in patients) {
-	  results.push(<PatientListItem key={patientId} id={patientId} name={patients[patientId]} />);
+      for (let participantId in participants) {
+	  results.push(<ParticipantListItem key={participantId} id={participantId} name={participants[participantId]} />);
       }
       return results;
    }
