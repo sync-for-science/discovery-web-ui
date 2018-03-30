@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import './ParticipantList.css';
 import ParticipantListItem from '../ParticipantListItem';
@@ -17,17 +18,9 @@ export default class ParticipantList extends Component {
     
    componentDidMount() {
       this.setState({ isLoading: true });
-      fetch(config.serverUrl + '/participants')
-         .then(response => {
-	    if (response.ok) {
-	       return response.json();
-	    } else {
-	       throw new Error("Can't fetch participants!");
-	    }
-	 })
-         .then(data => this.setState({ participants: data, isLoading: false }))
-
-         .catch(fetchError => this.setState({ fetchError, isLoading: false }));
+      axios.get(config.serverUrl + '/participants')
+	   .then(response => this.setState({ participants: response.data, isLoading: false }))
+	   .catch(fetchError => this.setState({ fetchError, isLoading: false }));
    }
 
    render() {

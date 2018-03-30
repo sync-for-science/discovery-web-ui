@@ -1,4 +1,4 @@
 export default {
-    serverUrl: 'http://159.65.99.80',
+    serverUrl: 'http://data.discovery.cingulata.us',
     timeout: 5000	// msec
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 import './ParticipantDetail.css';
 import config from '../../config.js';
@@ -21,17 +22,9 @@ export default class ParticipantDetail extends Component {
 
    componentDidMount() {
       this.setState({ isLoading: true });
-      fetch(config.serverUrl + '/participants/' + this.props.match.params.index)
-	 .then(response => {
-	    if (response.ok) {
-	       return response.json();
-	    } else {
-	       throw new Error("Can't fetch participant details!");
-	    }
-	 })
-	 .then(data => this.setState({ details: data, isLoading: false }))
-
-	 .catch(fetchError => this.setState({ fetchError, isLoading: false }));
+      axios.get(config.serverUrl + '/participants/' + this.props.match.params.index)
+	   .then(response => this.setState({ details: response.data, isLoading: false }))
+	   .catch(fetchError => this.setState({ fetchError, isLoading: false }));
    }
 
    render() {
