@@ -1,0 +1,22 @@
+.active-dots {
+    fill: red;
+}
+
+line.active-dots {
+    stroke: black;
+    stroke-width: 2px;
+}    
+
+.inactive-dots {
+    fill: gray;
+}
+
+.highlight-dots {
+    fill: none;
+    stroke: red;
+    stroke-width: 1.5px;
+}
+
+line.highlight-dots {
+    stroke: none;
+}

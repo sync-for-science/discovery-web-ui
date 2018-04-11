@@ -1,0 +1,12 @@
+.provider-rollup-nav {
+    width:20%;
+    margin-top:1px;
+    border:1.5px solid black;
+    float:left;
+}
+
+.provider-rollup-svg {
+    width:80%;
+    height:25px;
+    float:right;
+}
