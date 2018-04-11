@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import {get} from 'axios';
 
 import './ParticipantList.css';
 import ParticipantListItem from '../ParticipantListItem';
@@ -18,16 +18,16 @@ export default class ParticipantList extends Component {
     
    componentDidMount() {
       this.setState({ isLoading: true });
-      axios.get(config.serverUrl + '/participants')
-	   .then(response => this.setState({ participants: response.data, isLoading: false }))
-	   .catch(fetchError => this.setState({ fetchError, isLoading: false }));
+      get(config.serverUrl + '/participants')
+         .then(response => this.setState({ participants: response.data, isLoading: false }))
+	 .catch(fetchError => this.setState({ fetchError, isLoading: false }));
    }
 
    render() {
       return (
-	 <div className='ParticipantList'>
-            <header className='ParticipantList-header'>
-              <h1 className='ParticipantList-title'>Select a participant to view details</h1>
+	 <div className='participant-list'>
+            <header className='participant-list-header'>
+              <h1 className='participant-list-title'>Select a participant to view details</h1>
             </header>
 
 	    { this.renderList() }

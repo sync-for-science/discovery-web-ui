@@ -17,7 +17,7 @@ export default class ParticipantListItem extends Component
    render() {
       const id = this.props.id;
       return (
-	 <div className="ParticipantListItem">
+	 <div className="participant-list-item">
 	    <Link to={'/participant/'+id}>{this.props.name+' ('+id+')'}</Link>
 	 </div>
       );
