@@ -13,6 +13,7 @@ import DotLine from '../DotLine';
 export default class Category extends Component {
 
    static propTypes = {
+      category: PropTypes.string,
       active: PropTypes.array,
       highlight: PropTypes.array,
       inactive: PropTypes.array
@@ -22,7 +23,7 @@ export default class Category extends Component {
       return (
 	 <div className='category'>
 	    <div className='category-nav'>
-	       TODO: Category nav
+	       { this.props.category }
 	    </div>
 	    <SVGContainer className='category-svg'>
 	       <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius} dotPositions={this.props.active} />

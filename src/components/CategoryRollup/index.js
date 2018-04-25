@@ -22,7 +22,7 @@ export default class CategoryRollup extends Component {
       return (
 	 <div className='category-rollup'>
 	    <div className='category-rollup-nav'>
-	       TODO: Category rollup nav
+	       --- Categories ---
 	    </div>
 	    <SVGContainer className='category-rollup-svg'>
 	       <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius} dotPositions={this.props.active} />

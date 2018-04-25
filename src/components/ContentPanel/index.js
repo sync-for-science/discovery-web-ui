@@ -10,7 +10,7 @@ export default class ContentPanel extends Component {
    render() {
       return (
 	 <div className='content-panel'>
-	    TODO: ContentPanel
+	    &lt;&lt; ContentPanel &gt;&gt;
 	 </div>
       )
    }

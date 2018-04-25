@@ -10,7 +10,7 @@ export default class PageHeader extends Component {
    render() {
       return (
 	 <div className='page-header'>
-	    TODO: PageHeader
+	    &lt;&lt; PageHeader &gt;&gt;
 	 </div>
       )
    }

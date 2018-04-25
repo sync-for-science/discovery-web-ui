@@ -22,7 +22,7 @@ export default class ProviderRollup extends Component {
       return (
 	 <div className='provider-rollup'>
 	    <div className='provider-rollup-nav'>
-	       TODO: Provider rollup nav
+	       --- Providers ---
 	    </div>
 	    <SVGContainer className='provider-rollup-svg'>
 	       <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius} dotPositions={this.props.active} />

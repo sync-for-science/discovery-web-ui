@@ -10,7 +10,7 @@ export default class TimeWidget extends Component {
    render() {
       return (
 	 <div className='time-widget'>
-	    TODO: TimeWidget
+	    &lt;&lt; TimeWidget &gt;&gt;
 	 </div>
       )
    }

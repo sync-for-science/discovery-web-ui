@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
+//import { Button } from 'react-bootstrap';
 
 import './Provider.css';
 import config from '../../config.js';
@@ -14,6 +14,7 @@ import DotLine from '../DotLine';
 export default class Provider extends Component {
 
    static propTypes = {
+      provider: PropTypes.string,
       active: PropTypes.array,
       highlight: PropTypes.array,
       inactive: PropTypes.array
@@ -23,7 +24,7 @@ export default class Provider extends Component {
       return (
 	 <div className='provider'>
 	    <div className='provider-nav'>
-	       TODO: Category nav
+	       { this.props.provider }
 	    </div>
 	    <SVGContainer className='provider-svg'>
 	       <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius} dotPositions={this.props.active} />
