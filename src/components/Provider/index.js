@@ -14,10 +14,8 @@ import DotLine from '../DotLine';
 export default class Provider extends Component {
 
    static propTypes = {
-      provider: PropTypes.string,
-      active: PropTypes.array,
-      highlight: PropTypes.array,
-      inactive: PropTypes.array
+      provider: PropTypes.string.isRequired,
+      callbackFn: PropTypes.func.isRequired
    }
 
    render() {
@@ -27,9 +25,12 @@ export default class Provider extends Component {
 	       { this.props.provider }
 	    </div>
 	    <SVGContainer className='provider-svg'>
-	       <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius} dotPositions={this.props.active} />
-	       <DotLine className='highlight-dots' key='highlight' dotRadius={config.highlightDotRadius} dotPositions={this.props.highlight} />
-	       <DotLine className='inactive-dots' key='inactive' dotRadius={config.normalDotRadius} dotPositions={this.props.inactive} />
+	       <DotLine className='inactive-dots' key='inactive' dotRadius={config.normalDotRadius}
+			dotPositions={this.props.callbackFn(this.constructor.name, this.props.provider, 'inactive')} />
+	       <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius}
+			dotPositions={this.props.callbackFn(this.constructor.name, this.props.provider, 'active')} />
+	       <DotLine className='highlight-dots' key='highlight' dotRadius={config.highlightDotRadius}
+			dotPositions={this.props.callbackFn(this.constructor.name, this.props.provider, 'highlight')} />
 	    </SVGContainer>
 	 </div>
       )

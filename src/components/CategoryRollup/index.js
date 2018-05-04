@@ -13,9 +13,7 @@ import DotLine from '../DotLine';
 export default class CategoryRollup extends Component {
 
    static propTypes = {
-      active: PropTypes.array,
-      highlight: PropTypes.array,
-      inactive: PropTypes.array
+      callbackFn: PropTypes.func.isRequired
    }
 
    render() {
@@ -25,9 +23,12 @@ export default class CategoryRollup extends Component {
 	       --- Categories ---
 	    </div>
 	    <SVGContainer className='category-rollup-svg'>
-	       <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius} dotPositions={this.props.active} />
-	       <DotLine className='highlight-dots' key='highlight' dotRadius={config.highlightDotRadius} dotPositions={this.props.highlight} />
-	       <DotLine className='inactive-dots' key='inactive' dotRadius={config.normalDotRadius} dotPositions={this.props.inactive} />
+	       <DotLine className='inactive-dots' key='inactive' dotRadius={config.normalDotRadius}
+			dotPositions={this.props.callbackFn(this.constructor.name, null, 'inactive')} />
+	       <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius}
+			dotPositions={this.props.callbackFn(this.constructor.name, null, 'active')} />
+	       <DotLine className='highlight-dots' key='highlight' dotRadius={config.highlightDotRadius}
+			dotPositions={this.props.callbackFn(this.constructor.name, null, 'highlight')} />
 	    </SVGContainer>
 	 </div>
       )

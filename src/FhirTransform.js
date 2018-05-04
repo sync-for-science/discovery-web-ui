@@ -17,7 +17,7 @@ export default class FhirTransform {
    }
 
    pathItem(path, options) {
-      return this.getPathItem(this.transformed, path, options);
+      return FhirTransform.getPathItem(this.transformed, path, options);
    }
 
    // Walk the template, creating a copy and replacing functions (that refer to 'data') with their return values
