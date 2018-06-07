@@ -1,0 +1,381 @@
+@charset "UTF-8";
+
+/* Discovery Modal CSS v1.03 06/4/2018 */
+
+/* --- General Modal Styles --- */
+
+/* Modal Overlay */
+
+.discovery-modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 60px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+    padding: 0px;
+}
+
+/* General Modal Styles */
+
+.discovery-modal {
+width:auto;
+position: relative;
+padding: 0px;
+background-color: transparent;
+background-clip: padding-box;
+border-radius: 25px 25px 25px 25px;
+border: 0px solid transparent;
+box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.25);
+margin-top: 70px;
+}
+
+/* Close Button */
+
+.discovery-modal-close-button {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    display: flex;
+}
+
+/* Close Icon */
+
+.discovery-modal-close-icon {
+fill: rgba(255,255,255,1.0);
+}
+
+/* --- End Modal Styles --- */
+
+/* Logo Modal Styles */
+
+.logo-modal-title {
+height:60px;
+width: 100%;
+min-width: 550px;
+background-color:rgba(64,50,206,1.0);
+background-image: url(../../svg/s4s-discovery-modal-logo.svg);
+background-repeat: no-repeat;
+background-position: 18px 10px;
+background-size:40px 40px;
+border: 2px solid rgba(64,50,206,1.0);
+border-radius: 25px 25px 0px 0px;
+font-family: discovery-bold;
+font-size: 100%;
+color:rgba(255,255,255,1.0);
+margin: 0px;
+padding: 0px 0px 0px 70px;
+display: flex;
+align-items: center;
+}
+
+.logo-modal-body {
+background-color: rgba(255,255,255,1.0);
+margin: 0px;
+padding: 20px;
+border: 2px solid rgba(64,50,206,1.0);  
+border-radius: 0px 0px 25px 25px;    
+}
+
+.logo-modal-body-row {
+display: flex;
+flex-direction: row;
+flex-basis: auto;
+}
+
+.logo-modal-body-property {
+width: 50%;
+padding: 0px 15px 0px 0px;
+font-family: discovery-regular;
+font-size: 100%;
+font-style: italic;
+text-align: right;    
+}
+
+.logo-modal-body-value {
+width: 50%;   
+font-family: discovery-regular;
+font-size: 100%;
+text-align: left;  
+}
+
+.logo-modal-legal {
+font-family: discovery-regular;
+font-size: 60%;
+margin:20px 0px 0px 0px;
+}
+
+
+/* Participant Info Modal Styles */
+
+.info-modal-title {
+height:60px;
+width: 100%;
+min-width: 550px;
+background-color: rgba(64,50,206,1.0);
+background-image: url(../../svg/participant-info-modal-icon-male.svg);
+background-repeat: no-repeat;
+background-position: 10px 10px;
+background-size:40px 40px;
+margin: 0px;
+padding-left:60px;
+border: 2px solid rgba(64,50,206,1.0);
+border-radius: 25px 25px 0px 0px;
+font-family: discovery-bold;
+font-size: 100%;
+color:rgba(255,255,255,1.0);
+display: flex;
+align-items: center;
+}
+
+.info-modal-body {
+margin: 0px;
+padding: 20px;
+background-color: rgba(255,255,255,1.0);
+border: 2px solid rgba(64,50,206,1.0);
+border-radius: 0px 0px 25px 25px;   
+}
+
+.info-modal-body-row {
+display: flex;
+flex-direction: row;
+flex-basis: auto;
+}
+
+.info-modal-body-property {
+width: 50%;
+padding-right: 15px;
+font-family: discovery-regular;
+font-size: 100%;
+font-style: italic;
+text-align: right;    
+}
+
+.info-modal-body-value {
+width: 50%;
+font-family: discovery-regular;
+font-size: 100%;
+text-align: left;
+}
+
+
+/* Help Modal */
+
+.help-modal-title {
+height:60px;
+width: 100%;
+min-width: 550px;
+background-color: rgba(64,50,206,1.0);
+background-image: url(../../svg/help-modal-icon.svg);
+background-repeat: no-repeat;
+background-position: 15px 10px;
+background-size:40px 40px;
+border: 2px solid rgba(64,50,206,1.0);
+border-radius: 25px 25px 0px 0px;
+margin: 0px;
+padding-left: 60px;
+font-family: discovery-bold;
+font-size: 100%;
+color:rgba(255,255,255,1.0);
+display: flex;
+align-items: center;        
+}
+
+.help-modal-body {
+margin: 0px;
+padding: 20px;
+background-color:rgba(255,255,255,1.0);
+border: 2px solid rgba(64,50,206,1.0);
+border-radius: 0px 0px 25px 25px;   
+}
+
+.help-modal-body-row {
+display: flex;
+flex-direction: row;
+flex-basis: auto;
+}
+
+.help-modal-body-property {
+width: 50%;
+padding-right: 15px;
+font-family: discovery-regular;
+font-size: 100%;
+font-style: italic;
+text-align: right;    
+}
+
+.help-modal-body-value {
+width: 50%;    
+font-family: discovery-regular;
+font-size: 100%;
+text-align: left;  
+}
+
+
+/* Download Modal */
+
+.download-modal-title {
+height:60px;   
+width: 100%;
+min-width: 550px;
+background-color:rgba(64,50,206,1.0);
+background-image: url(../../svg/download-modal-icon.svg);
+background-repeat: no-repeat;
+background-position: 15px 10px;
+background-size:40px 40px;
+border: 2px solid rgba(64,50,206,1.0);
+border-radius: 25px 25px 0px 0px;
+margin: 0px;
+padding-left: 60px;
+font-family: discovery-bold;
+font-size: 100%;
+color:rgba(255,255,255,1.0);
+display: flex;
+align-items: center;
+}
+
+.download-modal-body {
+margin: 0px;
+padding: 20px;
+background-color:rgba(255,255,255,1.0);
+border: 2px solid rgba(64,50,206,1.0);
+border-radius: 0px 0px 25px 25px;    
+}
+
+.download-modal-body-row {
+display: flex;
+flex-direction: row;
+flex-basis: auto;
+}
+
+.download-modal-body-property {
+width: 50%;
+padding-right: 15px;
+font-family: discovery-regular;
+font-size: 100%;
+font-style: italic;
+text-align: right; 
+}
+
+.download-modal-body-value {
+width: 50%;
+font-family: discovery-regular;
+font-size: 100%;
+text-align: left;   
+}
+
+.download-modal-button {
+	
+}
+
+.download-modal-cancel-button {
+	
+}
+
+/* Print modal */
+
+.print-modal-title {
+height:60px;
+width: 100%;
+min-width: 550px;
+background-color:rgba(64,50,206,1.0);
+background-image: url(../../svg/print-modal-icon.svg);
+background-repeat: no-repeat;
+background-position: 10px 10px;
+background-size:40px 40px;
+border: 2px solid rgba(64,50,206,1.0);
+border-radius: 25px 25px 0px 0px;
+margin: 0px; 
+padding-left: 60px;
+font-family: discovery-bold;
+font-size: 100%;
+color:rgba(255,255,255,1.0);
+display: flex;
+align-items: center;
+}
+
+.print-modal-body {
+background-color: rgba(255,255,255,1.0);
+margin: 0px;
+padding: 20px;
+border: 2px solid rgba(64,50,206,1.0);
+border-radius: 0px 0px 25px 25px;      
+}
+
+.print-modal-body-row {
+display: flex;
+flex-direction: row;
+flex-basis: auto;
+}
+
+.print-modal-body-property {
+width: 50%;
+padding-right: 15px;
+font-family: discovery-regular;
+font-size: 100%;
+font-style: italic;
+text-align: right;    
+}
+
+.print-modal-body-value {
+width: 50%;
+font-family: discovery-regular;
+font-size: 100%;
+text-align: left;    
+}
+
+.print-modal-button {
+	
+}
+
+.print-modal-cancel-button {
+	
+}
+
+/* PEP modal */
+
+.pep-modal-title {
+width: 325px;
+background-color:rgba(64,50,206,1.0);
+font-family: discovery-bold;
+color:rgba(255,255,255,1.0);
+}
+
+.pep-modal-body {
+}
+
+.pep-modal-body-row {
+}
+
+.pep-modal-body-property {
+}
+
+.pep-modal-body-value {
+}
+
+/* Search modal */
+
+.search-modal-title {
+width: 325px;
+}
+
+.search-modal-body {
+}
+
+.search-modal-body-row {
+}
+
+.search-modal-body-property {
+}
+
+.search-modal-body-value {
+}

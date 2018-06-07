@@ -21,8 +21,25 @@ export function getPatientName(patient) {
 
    return [
       prefix.map(elt => String(elt || '').trim()).join(' '),
-      given .map(elt => String(elt || '').trim()).join(' '),
+      given.map (elt => String(elt || '').trim()).join(' '),
       family.map(elt => String(elt || '').trim()).join(' '),
       suffix.map(elt => String(elt || '').trim()).join(' ')
    ].filter(Boolean).join(' ').replace( /\s\s+/g, ' ' );
+}
+
+export function getPatientAddress(patient) {
+   if (!patient) {
+      return '';
+   }
+
+   let addr = Array.isArray(patient.address) ? patient.address[0] : patient.address;
+   if (!addr) {
+      return '';
+   }
+
+   let line = Array.isArray(addr.line) ? addr.line : [ addr.line ];
+
+   return line.map(elt => String(elt || '').trim()).join('\n') + '\n'
+	+ addr.city + ', ' + addr.state + ' ' + addr.postalCode + '\n'
+	+ addr.country;
 }

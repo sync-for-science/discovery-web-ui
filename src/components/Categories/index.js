@@ -9,7 +9,7 @@ export default class Categories extends Component {
 
    render() {
       return (
-	 <div className='Categories'>
+	 <div className='categories'>
 	    { this.props.children }  
 	 </div>
       )

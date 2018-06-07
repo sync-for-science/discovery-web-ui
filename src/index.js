@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
-import './index.css';
+import './css/s4s_discovery03.css';
+//import './index.css';
 import ParticipantList from './components/ParticipantList';
 import ParticipantDetail from './components/ParticipantDetail';
 

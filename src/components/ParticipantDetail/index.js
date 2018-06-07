@@ -5,7 +5,7 @@ import { get } from 'axios';
 import './ParticipantDetail.css';
 import config from '../../config.js';
 import FhirTransform from '../../FhirTransform.js';
-
+import { getPatientName, getPatientAddress } from '../../fhirUtil.js';
 import PageHeader from '../PageHeader';
 import TimeWidget from '../TimeWidget';
 import CategoryRollup from '../CategoryRollup';
@@ -15,6 +15,7 @@ import ProviderRollup from '../ProviderRollup';
 import Providers from '../Providers';
 import Provider from '../Provider';
 import PageFooter from '../PageFooter';
+import DiscoveryModal from '../DiscoveryModal';
 
 //
 // Render the participant detail page
@@ -28,8 +29,16 @@ export default class ParticipantDetail extends Component {
    state = {
       details: undefined,	    // Will be set to an instance of FhirTransform
       isLoading: false,
-      fetchError: null		    // Possible axios error object
+      fetchError: null,		    // Possible axios error object
+      catsExpanded: true,
+      provsExpanded: true,
+      modalName: '',
+      modalIsOpen: false,
+      dotClickContext: null,
    }
+
+   onOpenModal =  (name) => this.setState({ modalName: name, modalIsOpen: true });
+   onCloseModal = ()     => this.setState({ modalName: '', modalIsOpen: false });
 
    // Options for jsonQuery -- see https://www.npmjs.com/package/json-query
    get queryOptions() {
@@ -41,11 +50,14 @@ export default class ParticipantDetail extends Component {
    }
 
    // Collect resources by category from a provider section of the merged data set
-   // (functions will be replaced with their results)
+   // (functions in the template will be replaced with their return values)
    get categoriesForProviderTemplate() {
       return {
 	 'Patient': [{
 	    name:       e => FhirTransform.getPathItem(e, 'entry.resource[resourceType=Patient].name'),
+	    gender:     e => FhirTransform.getPathItem(e, 'entry.resource[resourceType=Patient].gender'),
+	    birthDate:  e => FhirTransform.getPathItem(e, 'entry.resource[resourceType=Patient].birthDate'),
+	    address:    e => FhirTransform.getPathItem(e, 'entry.resource[resourceType=Patient].address'),
 	    identType:	e => FhirTransform.getPathItem(e, 'entry.resource[resourceType=Patient].identifier[0].type.text'),
             identifier: e => FhirTransform.getPathItem(e, 'entry.resource[resourceType=Patient].identifier[0].value')
 	 }],
@@ -158,7 +170,8 @@ export default class ParticipantDetail extends Component {
       return Object.keys(provs);
    }
 
-   // Normalize an array of dates by comparing elements to 'min' (return 0.0) and 'max' (return 1.0)
+   // Normalize an array of dates by comparing elements to 'min' (returning 0.0) and 'max' (returning 1.0)
+   //   (if min == max then return 0.5)
    normalizeDates(elts, minDate, maxDate) {
       let min = (minDate instanceof Date) ? minDate : new Date(minDate);
       let max = (maxDate instanceof Date) ? maxDate : new Date(maxDate);
@@ -167,13 +180,32 @@ export default class ParticipantDetail extends Component {
    }
 
    //
-   // Callback function for this component's state
-   //	requestingComponent:	'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
-   //	type:			<category-name>/<provider-name>
-   //	subType:		'active', 'inactive', 'highlight'
+   // Modal callback function
    //
-   // TODO: fix after TimeWidget in place
-   fetchData(requestingComponent, type, subType) {
+   fetchModalData = this.fetchModalData.bind(this);
+   fetchModalData(modalName) {
+      switch (modalName) {
+         case 'participantInfoModal':
+	    let identType = this.state.details.pathItem('[category=Patient].data.identType');
+	    let res = { Name: getPatientName(this.state.details.pathItem('[category=Patient].data')),
+			Address: getPatientAddress(this.state.details.pathItem('[category=Patient].data')),
+			Gender: this.state.details.pathItem('[category=Patient].data.gender'),
+			'Birth Date': this.state.details.pathItem('[category=Patient].data.birthDate') };
+	    res[identType] = this.state.details.pathItem('[category=Patient].data.identifier');
+	    return res;
+	 default:
+	    return '?????';
+      }
+   }
+
+   //
+   // Callback function for this component's state
+   //	parent:		'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
+   //	rowName:	<category-name>/<provider-name>
+   //	dotType:	'active', 'inactive', 'highlight'
+   //
+   // TODO: fix after TimeWidget is in place
+   fetchData = (parent, rowName, dotType) => {
       if (!this.state.details) {
 	 return [];
       } else {
@@ -185,70 +217,87 @@ export default class ParticipantDetail extends Component {
 	 let mid = Math.trunc(normAllDates.length/2);
 	 let midDate = allDates[mid];
 
-	 switch (requestingComponent) {
+	 switch (parent) {
 	    case 'ProviderRollup':
-	       switch (subType) {
+	       switch (dotType) {
 	          case 'highlight':
 		     // TODO: get from state
-//		     return [0.50];
 		     return this.normalizeDates([midDate], minDate, maxDate);
 	          case 'inactive':
-//		     return [0.30, 0.55, 0.60];
 		     return normAllDates.slice(0, mid);
 	          default:	// 'active'
-//		     return [0.25, 0.50, 0.75];
 		     return normAllDates.slice(mid, normAllDates.length);
 	       }
 	    case 'Provider':
-	       let provDates = this.cleanDates(this.state.details.pathItem(`[*provider=${type}].itemDate`, this.queryOptions));
+	       let provDates = this.cleanDates(this.state.details.pathItem(`[*provider=${rowName}].itemDate`, this.queryOptions));
 	       let normProvDates = this.normalizeDates(provDates, minDate, maxDate);
 	       let indexOfMidProvDate = provDates.indexOf(midDate);
-	       switch (subType) {
+	       switch (dotType) {
 	          case 'highlight':
 		     // TODO: get from state
-//		     return [0.50];
 		     return indexOfMidProvDate >= 0 ? [ normProvDates[indexOfMidProvDate] ] : [];
 	          case 'inactive':
-//		     return [0.30, 0.55, 0.60];
 		     return indexOfMidProvDate >= 0 ? normProvDates.slice(0, indexOfMidProvDate)
 						    : normProvDates.filter(value => value < normAllDates[mid]);
 	          default:	// 'active'
-//		     return [0.25, 0.50, 0.75];
 		     return indexOfMidProvDate >= 0 ? normProvDates.slice(indexOfMidProvDate, normProvDates.length)
 						    : normProvDates.filter(value => value >= normAllDates[mid]);
 	       }
             case 'CategoryRollup':
-	       switch (subType) {
+	       switch (dotType) {
 	          case 'highlight':
 		     // TODO: get from state
-//		     return [0.50];
 		     return this.normalizeDates([midDate], minDate, maxDate);
 	          case 'inactive':
-//		     return [0.30, 0.55, 0.60];
 		     return normAllDates.slice(0, mid);
 	          default:	// 'active'
-//		     return [0.25, 0.50, 0.75];
 		     return normAllDates.slice(mid, normAllDates.length);
 	       }
             default:   // 'Category'
-	       let catDates = this.cleanDates(this.state.details.pathItem(`[*category=${type}].itemDate`, this.queryOptions));
+	       let catDates = this.cleanDates(this.state.details.pathItem(`[*category=${rowName}].itemDate`, this.queryOptions));
 	       let normCatDates = this.normalizeDates(catDates, minDate, maxDate);
 	       let indexOfMidCatDate = catDates.indexOf(midDate);
-	       switch (subType) {
+	       switch (dotType) {
 	          case 'highlight':
 		     // TODO: get from state
-//		     return [0.50];
 		     return indexOfMidCatDate >= 0 ? [ normCatDates[indexOfMidCatDate] ] : [];
 	          case 'inactive':
-//		     return [0.30, 0.55, 0.60];
 		     return indexOfMidCatDate >= 0 ? normCatDates.slice(0, indexOfMidCatDate)
 		       				   : normCatDates.filter(value => value < normAllDates[mid]);
 	          default:	// 'active'
-//		     return [0.25, 0.50, 0.75];
 		     return indexOfMidCatDate >= 0 ? normCatDates.slice(indexOfMidCatDate, normCatDates.length)
 		       				   : normCatDates.filter(value => value >= normAllDates[mid]);
 	       }
 	 }
+      }
+   }
+
+   //
+   // Handle dot clicks
+   //   context = {
+   //      parent:	   'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
+   //      rowName:	   <category-name>/<provider-name>
+   //      dotType:	   'active', 'inactive', 'highlight'
+   //      location:	   scaled location on DotLine (added below)
+   //   } 
+   //   location:	   normalized x-location of the clicked dot
+   //
+   onDotClick = (context, location) => {
+      context.location = location;
+      this.setState({ dotClickContext: context });
+//      alert(JSON.stringify(context, null, 3));
+   }
+
+   //
+   // Handle Category/Provider expand/contract
+   //    section:	'Categories', 'Providers'
+   //	 expand:	true/false
+   //
+   onExpandContract = (section, expand) => {
+      if (section === 'Categories') {
+	 this.setState({ catsExpanded: expand });
+      } else {
+	 this.setState({ provsExpanded: expand });
       }
    }
 
@@ -262,39 +311,48 @@ export default class ParticipantDetail extends Component {
    }
 
    render() {
-      const { details, isLoading, fetchError } = this.state;
-
-      if (fetchError) {
-	 return <p>{ 'ParticipantDetail: ' + fetchError.message }</p>;
+      if (this.state.fetchError) {
+	 return <p>{ 'ParticipantDetail: ' + this.state.fetchError.message }</p>;
       }
 
-      if (isLoading) {
+      if (this.state.isLoading) {
 	 return <p>Loading ...</p>;
       }
 
       return (
          <div className='participant-detail'>
 	    <div className='participant-detail-fixed-header'>
-	       <PageHeader />
+	       <PageHeader modalFn={this.onOpenModal} />
 	       <TimeWidget />
 	    </div>
 	    <div className='participant-detail-categories-and-providers'>
 	       <Categories>
-	          <CategoryRollup key='rollup' callbackFn={this.fetchData.bind(this)} />
-	          { this.categories.map(
-		      name => <Category key={name} category={name} callbackFn={this.fetchData.bind(this)} /> )}
+	          <CategoryRollup key='rollup' callbackFn={this.fetchData} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
+		  {/* TODO: change spacer class names to have 'participant-detail-' prefix */}
+	          { this.state.catsExpanded ? [
+		       <div className='category category-nav-spacer-top' key='0' />,
+	               this.categories.map(
+			  cat => <Category key={cat} categoryName={cat} callbackFn={this.fetchData} dotClickFn={this.onDotClick} /> ),
+		       <div className='category category-nav-spacer-bottom' key='1' />
+		  ] : null }
 	       </Categories>
 	       <Providers>
-	          <ProviderRollup key='rollup' callbackFn={this.fetchData.bind(this)} />
-	          { this.providers.map(
-	              name => <Provider key={name} provider={name} callbackFn={this.fetchData.bind(this)} /> )}
+	          <ProviderRollup key='rollup' callbackFn={this.fetchData} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
+		  {/* TODO: change spacer class names to have 'participant-detail-' prefix */}
+		  { this.state.provsExpanded ? [
+		       <div className='provider provider-nav-spacer-top' key='0' />,
+		       this.providers.map(
+			  prov => <Provider key={prov} providerName={prov} callbackFn={this.fetchData} dotClickFn={this.onDotClick} /> ),
+		          <div className='provider provider-nav-spacer-bottom' key='1' />
+		  ] : null }
 	       </Providers>
 	    </div>
-	    <PageFooter />  
-	    Temp data display --
-	      <pre>{ details ? JSON.stringify(details.initialData,null,3) : 'Loading...' }</pre>
-	      <br/>
-	      <pre>{ details ? JSON.stringify(details.transformedData,null,3) : 'Loading...' }</pre>
+	    <DiscoveryModal isOpen={this.state.modalIsOpen} modalName={this.state.modalName} onClose={this.onCloseModal} callbackFn={this.fetchModalData} />
+	    <PageFooter callbackFn={this.fetchData} context={this.state.dotClickContext} />  
+	       { /* Temp data display --
+	         <pre>{ this.state.details ? JSON.stringify(this.state.details.initialData,null,3) : 'Loading...' }</pre>
+	         <br/>
+	         <pre>{ this.state.details ? JSON.stringify(this.state.details.transformedData,null,3) : 'Loading...' }</pre> */ }
 	 </div>
       );
    }

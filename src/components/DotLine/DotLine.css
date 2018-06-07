@@ -1,5 +1,6 @@
 .active-dots {
-    fill: red;
+    fill: #4430d6;
+    cursor: pointer;
 }
 
 line.active-dots {
@@ -8,13 +9,16 @@ line.active-dots {
 }    
 
 .inactive-dots {
-    fill: gray;
+    fill: #b0b0b0;
+    cursor: pointer;
 }
 
 .highlight-dots {
-    fill: none;
+    fill: red;
+    fill-opacity: 0.0;
     stroke: red;
     stroke-width: 1.5px;
+    cursor: pointer;
 }
 
 line.highlight-dots {

@@ -13,22 +13,39 @@ import DotLine from '../DotLine';
 export default class ProviderRollup extends Component {
 
    static propTypes = {
-      callbackFn: PropTypes.func.isRequired
+      callbackFn: PropTypes.func.isRequired,
+      dotClickFn: PropTypes.func.isRequired,
+      expansionFn: PropTypes.func.isRequired
+   }
+
+   state = {
+      isExpanded: true
+   }
+
+   handleClick = () => {
+      this.setState({isExpanded: !this.state.isExpanded});
+      this.props.expansionFn('Providers', !this.state.isExpanded);
    }
 
    render() {
       return (
 	 <div className='provider-rollup'>
-	    <div className='provider-rollup-nav'>
-	       --- Providers ---
+	    <div className={this.state.isExpanded ? 'provider-rollup-nav-enabled' : 'category-rollup-nav-disabled'} onClick={this.handleClick} >
+	       Providers
 	    </div>
 	    <SVGContainer className='provider-rollup-svg'>
 	       <DotLine className='inactive-dots' key='inactive' dotRadius={config.normalDotRadius}
-			dotPositions={this.props.callbackFn(this.constructor.name, null, 'inactive')} />
+			dotPositions={this.props.callbackFn(this.constructor.name, 'Providers', 'inactive')}
+			context={ {parent:this.constructor.name, rowName:'Providers', dotType:'inactive'} }
+			dotClickFn={this.props.dotClickFn} />
 	       <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius}
-			dotPositions={this.props.callbackFn(this.constructor.name, null, 'active')} />
+			dotPositions={this.props.callbackFn(this.constructor.name, 'Providers', 'active')}
+			context={ {parent:this.constructor.name, rowName:'Providers', dotType:'active'} }
+			dotClickFn={this.props.dotClickFn} />
 	       <DotLine className='highlight-dots' key='highlight' dotRadius={config.highlightDotRadius}
-			dotPositions={this.props.callbackFn(this.constructor.name, null, 'highlight')} />
+			dotPositions={this.props.callbackFn(this.constructor.name, 'Providers', 'highlight')}
+			context={ {parent:this.constructor.name, rowName:'Providers', dotType:'highlight'} }
+			dotClickFn={this.props.dotClickFn} />
 	    </SVGContainer>
 	 </div>
       )

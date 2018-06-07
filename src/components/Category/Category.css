@@ -1,12 +1,16 @@
 .category-nav {
-    width:20%;
+/*    width:20%;
+    height:23px;
     margin-top:1px;
     border:1.5px solid black;
-    float:left;
+    float:left; */
+    cursor: pointer;
 }
 
 .category-svg {
-    width:80%;
-    height:25px;
-    float:right;
+/*    width:80%;
+    height:23px;
+    margin-top:1px;
+    float:right; */
+    height:42px;
 }
