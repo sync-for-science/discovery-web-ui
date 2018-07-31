@@ -1,14 +1,10 @@
-.active-dots {
-/*    width:100;
-    height:25; */
-}
+@charset "UTF-8";
 
-.active-dots circle {
-/*    fill:green; */
-}
+/* Sync for Science Discovery Categories Stylesheet */
+/* v.01.02 Updated 07/23/2018 */
 
-.Categories {
-/*    width: 100;
-    height: 25;
-    fill: yellow; */
+.categories {
+	height: auto;
+	width: auto;
+	padding:0 20px;
 }

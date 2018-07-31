@@ -1,3 +1,83 @@
-.participant-detail-fixed-header {
+@charset "UTF-8";
 
+/* Sync for Science Discovery ParticipantDetail Stylesheet */
+/* v.01.02 Updated 07/23/2018 */
+
+.participant-detail {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width:100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: var(--discovery-background);
+}
+
+.participant-detail-fixed-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	display:flex;
+	flex-direction: column;
+	height: 140px;
+	width: 100%;
+	margin:0; 
+	padding: 0;
+}
+
+.participant-detail-categories-and-providers {
+	position: fixed;
+	top: 140px;
+	left: 0;
+	width:100%;
+	height: auto;
+	margin:0;
+	padding:0;
+	overflow:hidden;
+}
+
+.category-nav-spacer-top {
+	height:5px;
+	min-height: 5px;
+	width:246px;
+	min-width: 246px;
+	margin:0;
+	border-left:2px solid var(--discovery-category);
+	border-right:2px solid var(--discovery-category);
+	padding:0;
+	cursor: default;
+}
+
+.category-nav-spacer-bottom {
+	height:5px;
+	width:246px;
+	min-width: 246px;
+	margin:0;
+	border-right:2px solid var(--discovery-category);
+	border-bottom: 2px solid var(--discovery-category);
+	border-left:2px solid var(--discovery-category);
+	padding: 0;
+}
+
+.provider-nav-spacer-top {
+	height:5px;
+	min-height: 5px;
+	width:246px;
+	min-width: 246px;
+	margin:0;
+	border-right:2px solid var(--discovery-provider);
+	border-left:2px solid var(--discovery-provider);
+	padding:0;
+}
+
+.provider-nav-spacer-bottom {
+	height:5px;
+	width:246px;
+	min-width: 246px;
+	margin:0;
+	border-right:2px solid var(--discovery-provider);
+	border-bottom: 2px solid var(--discovery-provider);
+	border-left:2px solid var(--discovery-provider);
+	padding:0;
 }

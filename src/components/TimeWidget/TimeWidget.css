@@ -1,0 +1,126 @@
+@charset "UTF-8";
+
+/* Sync for Science Discovery TimeWidget Stylesheet */
+/* v.01.02 Updated 07/23/2018 */
+
+.time-widget {
+	display:flex;
+	flex-direction: row;
+	height: 77px;
+	width: auto;
+	margin: 0;
+	padding:0 20px;
+}
+
+.calendar-daterange-box {
+	display:flex;
+	flex-direction: row;
+	align-items: center; 
+	height:77px;
+	width:250px;
+	min-width: 250px;
+}
+
+.calendar-button-off {
+	height: 40px;
+	width: 40px;
+	background-color:transparent;
+	background-image: url(../../svg/calendar_icon.svg);
+	background-size: 40px 40px;
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	border: 0;
+	cursor: pointer;
+}
+
+.calendar-button-on {
+	height: 40px;
+	width: 40px;
+	background-color:transparent;
+	background-image: url(../../svg/calendar_icon.svg);
+	background-size: 40px 40px;
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	border: 0;
+	cursor: pointer;
+}
+
+.date-range {
+	font-family:discovery-regular;
+	font-size: 80%;
+	color: var(--discovery-blue);
+	margin: 0 0 0 20px;
+	white-space: nowrap;
+	text-align: center;
+}
+
+.timeline-controls {
+	display:flex;
+	flex-direction: column;
+	width:100%;
+	margin: 0;
+	padding: 0;
+}
+
+.timeline-selection-box {
+	display:flex;
+	flex-direction: row;
+	height: 42px;
+	width:100%;
+	background-color:transparent;
+	background-image: url(../../svg/horizontal-rule-1px-black.svg);
+	background-repeat:repeat-x;
+}
+
+.timeline-reference-box {
+	display:flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items:initial;
+	width:100%;
+	margin: 0;
+	padding:0;
+}	
+
+.timeline-selection-row-left{
+	height:52px;
+	width:50%;
+}
+
+.timeline-selector-left {
+	height:42px;
+	width:42px;
+	margin-left: -22px;
+	background-color:transparent;
+	background-image: url(../../svg/thumb-left.svg);
+	background-repeat: no-repeat;
+}
+
+.timeline-selection-row-right {
+	display: flex;
+	flex-direction: row-reverse;
+	height:52px;
+	width:50%;
+}
+
+.timeline-selector-right {
+	height:42px;
+	width:42px;
+	margin-right: -22px;
+	background-color:transparent;
+	background-image: url(../../svg/thumb-right.svg);
+	background-position: right;
+	background-repeat: no-repeat;
+}
+
+.timeline-years {
+	width:100%;
+	flex-grow: inherit;
+	flex-basis: auto;
+	font-family: discovery-regular;
+	font-size: 80%;
+	margin: 10px 0 0 0;
+	border-bottom: var(--discovery-black) solid 1px;
+	border-left: var(--discovery-black) solid 1px;
+	padding:0 0 0 10px;
+}

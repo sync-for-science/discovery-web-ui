@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {get} from 'axios';
+import { get } from 'axios';
+import queryString from 'query-string';
 
 import './ParticipantList.css';
 import ParticipantListItem from '../ParticipantListItem';
@@ -13,10 +14,15 @@ export default class ParticipantList extends Component {
    state = {
       participants: {},
       isLoading: false,
-      fetchError: null
+      fetchError: null,
+      logoClasses: ['logo-s4s-button']		// Parsed from query string 'logos=a,b,c'
    }
     
    componentDidMount() {
+      const queryVals = queryString.parse(this.props.location.search);
+      if (queryVals.logos) {
+	  this.setState({logoClasses: queryVals.logos.split(',')});
+      }
       this.setState({ isLoading: true });
       get(config.serverUrl + '/participants')
          .then(response => this.setState({ participants: response.data, isLoading: false }))
@@ -26,11 +32,23 @@ export default class ParticipantList extends Component {
    render() {
       return (
 	 <div className='participant-list'>
-            <header className='participant-list-header'>
-              <h1 className='participant-list-title'>Select a participant to view details</h1>
-            </header>
-
-	    { this.renderList() }
+            <div className='participant-list-header'>
+               <div className='logo-box'>
+		  { this.state.logoClasses.map(
+		       (logoClass,index) => <div className={logoClass+'-off'} key={logoClass+index} /> )}
+	       </div>
+	    </div>
+	    <div className='participant-list-content'>
+	       <div className='participant-list-title'>Select a Participant to View Details</div>
+	       <div className='participant-list-column-header-flagged'/>
+	       <div className='participant-list-column-header-name-id'>Participant</div>
+	       <div className='participant-list-column-header-gender'>Gender</div>
+	       <div className='participant-list-column-header-dob'>DOB</div>
+	       <div className='participant-list-column-header-dates'>Date Range</div>
+	       <div className='participant-list-column-header-providers'>Providers</div>
+	       <div className='participant-list-column-header-values'>Data Values</div>
+	       { this.renderList() }
+	    </div>
 	 </div>
       );
    }
@@ -48,7 +66,8 @@ export default class ParticipantList extends Component {
       }
 
       for (let participantId in participants) {
-	  results.push(<ParticipantListItem key={participantId} id={participantId} name={participants[participantId]} />);
+	 results.push(<ParticipantListItem key={participantId} id={participantId}
+					   participant={participants[participantId]} rawQueryString={this.props.location.search}/>);
       }
       return results;
    }

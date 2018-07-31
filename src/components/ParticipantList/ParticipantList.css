@@ -1,2 +1,129 @@
-.participant-list {padding:50px;
+@charset "UTF-8";
+
+/* Sync for Science Discovery ParticipantList Stylesheet */
+/* v.01.02 Updated 07/23/2018 */
+
+.participant-list-header {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	display:flex;
+	flex-direction: row;
+	height: 60px;
+	min-height: 60px;
+	width: 100%;
+	padding:0 20px;
+	border-bottom: 3px solid var(--discovery-blue);
+	background-color: var(--discovery-gray);
+}
+
+.logo-box {
+	display:flex;
+	align-items: center;
+	height:60px;
+	width:250px;
+	min-width: 250px;
+	padding:0;
+}
+
+.logo-s4s-button-off {
+	height:60px;
+	width:220px;
+	border:none;
+	padding:0px;
+	background-color:transparent;
+	background-image: url(../../svg/logo-s4s-off.svg);
+	background-size: 220px 60px;
+	background-repeat:no-repeat;
+	outline: none;
+	cursor:none;
+}
+
+.logo-s4s-button-on {
+	height:60px;
+	width:220px;
+	border:none;
+	padding:0px;
+	background-color:transparent;
+	background-image: url(../../svg/logo-s4s-on.svg);
+	background-size: 220px 60px;
+	background-repeat:no-repeat;
+	outline: none;
+	cursor:none;
+}
+
+.participant-list-content {
+	margin:83px 20px 0 20px;
+	display:grid;
+	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
+	grid-column-gap: 0;
+	overflow: auto;
+}
+
+.participant-list-title {
+	margin:0;
+	font-family: discovery-bold;
+	font-size: 120%;
+	color:var(--discovery-blue);
+	border-bottom: 1px solid var(--discovery-blue);
+	padding: 0 0 5px 0;
+	grid-column: 1/span 40;
+}
+
+.participant-list-column-header-flagged {
+	font-family: discovery-bold;
+	font-size: 100%;
+}
+
+.participant-list-column-header-name-id {
+	font-family: discovery-bold;
+	font-size: 100%;
+	padding: 10px 0 5px 0;
+	grid-column: 2/span 10;
+	white-space:nowrap;
+}
+
+.participant-list-column-header-gender {
+	font-family: discovery-bold;
+	font-size: 100%;
+	text-align: center;
+	padding: 10px 0 5px 0;
+	grid-column: 12/span 2;
+	white-space:nowrap;
+}
+
+.participant-list-column-header-dob {
+	font-family: discovery-bold;
+	font-size: 100%;
+	text-align: center;
+	padding: 10px 0 5px 0;
+	grid-column: 14/span 3;
+	white-space:nowrap;
+}
+
+.participant-list-column-header-dates {
+	font-family: discovery-bold;
+	font-size: 100%;
+	text-align: center;
+	padding: 10px 0 5px 0;
+	grid-column: 18/span 3;
+	white-space:nowrap;
+}
+
+.participant-list-column-header-providers {
+	font-family: discovery-bold;
+	font-size: 100%;
+	text-align: center;
+	padding: 10px 0 5px 0;
+	grid-column: 22/span 3;
+	white-space:nowrap;
+}
+
+.participant-list-column-header-values {
+	font-family: discovery-bold;
+	font-size: 100%;
+	text-align: center;
+	padding: 10px 0 5px 0;
+	grid-column: 26/span 3;
+	white-space:nowrap;
 }

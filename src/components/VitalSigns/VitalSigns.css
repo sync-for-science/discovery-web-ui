@@ -1,0 +1,151 @@
+@charset "UTF-8";
+
+/* Sync for Science Discovery VitalSigns Stylesheet */
+/* v.01.02 Updated 07/26/2018 */
+
+.vital-signs-header {
+	margin:10px 20px 10px 20px;
+	border-bottom: 1px solid var(--discovery-blue);
+	font-family: discovery-bold;
+	font-size:100%;
+	color: var(--discovery-blue);
+}
+
+.vital-signs-body {
+	margin:0 20px 0 20px;
+}
+
+.body-height {
+	display:grid;
+	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
+	grid-column-gap: 0;
+	margin:0 0 10px 0;
+}
+
+.body-height-header {
+	font-family: discovery-regular;
+	font-size:90%;
+	text-align: right;
+	white-space: nowrap;
+	padding:0 5px 0 0;
+	grid-column: 1/span 13;
+}
+
+.body-height-value {
+	font-family: discovery-data;
+	font-size:160%;
+	color:var(--discovery-data);
+	text-align: right;
+	grid-column: 14/span 3;
+}
+
+.body-height-unit {
+	font-family: discovery-regular;
+	font-size:60%;
+	padding:12px 0 0 5px;
+	grid-column: 18/span 2;
+}
+
+.body-weight {
+	display:grid;
+	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
+	grid-column-gap: 0;
+	margin:0 0 10px 0;
+}
+
+.body-weight-header {
+	font-family: discovery-regular;
+	font-size:90%;
+	text-align: right;
+	white-space: nowrap;
+	padding:0 5px 0 0;
+	grid-column: 1/span 13;
+}
+
+.body-weight-value {
+	font-family: discovery-data;
+	font-size:160%;
+	text-align: right;
+	color:var(--discovery-data);
+	grid-column: 14/span 3;
+}
+
+.body-weight-unit {
+	font-family: discovery-regular;
+	font-size:60%;
+	padding:12px 0 0 5px;
+	grid-column: 18/span 2;
+}
+
+.blood-pressure {
+	display:grid;
+	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
+	grid-column-gap: 0;
+	margin:0 0 10px 0;
+}
+
+.blood-pressure-header {
+	font-family: discovery-regular;
+	font-size:90%;
+	text-align: right;
+	vertical-align: bottom;
+	white-space: nowrap;
+	padding:0 5px 0 0;
+	grid-column: 1/span 13;
+}
+
+.blood-pressure-value {
+	font-family: discovery-data;
+	font-size:160%;
+	color:var(--discovery-data);
+	text-align: right;
+	grid-column: 14/span 3;
+	grid-row: span 2;
+}
+
+.blood-pressure-unit {
+	font-family: discovery-regular;
+	font-size:60%;
+	padding:0 0 0 5px;
+	grid-column: 18/span 1;
+}
+
+.blood-pressure-label {
+	font-family: discovery-bold;
+	font-size:60%;
+	padding:0 0 0 5px;
+	grid-column: 18/span 2;
+	margin:-10px 0 0 0;
+}
+
+.body-mass-index-bmi {
+	display:grid;
+	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
+	grid-column-gap: 0;
+	margin:0 0 10px 0;
+}
+
+.body-mass-index-bmi-header {
+	font-family: discovery-regular;
+	font-size:90%;
+	text-align: right;
+	white-space: nowrap;
+	padding:0 5px 0 0;
+	grid-column: 1/span 13;
+}
+
+.body-mass-index-bmi-value {
+	font-family: discovery-data;
+	font-size:160%;
+	color:var(--discovery-data);
+	text-align: right;
+	grid-column: 14/span 3;
+}
+
+.body-mass-index-bmi-unit {
+	font-family: discovery-regular;
+	font-size:60%;
+	padding:12px 0 0 5px;
+	grid-column: 18/span 2;
+}
+

@@ -3,5 +3,7 @@ export default {
     timeout: 5000,	// msec
 
     normalDotRadius: '5px',
-    highlightDotRadius: '7.5px'
+    highlightDotRadius: '7.5px',
+
+    textSizeStep: 0.04
 }

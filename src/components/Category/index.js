@@ -14,6 +14,7 @@ export default class Category extends Component {
 
    static propTypes = {
       categoryName: PropTypes.string.isRequired,
+      svgWidth: PropTypes.string.isRequired,
       callbackFn: PropTypes.func.isRequired,
       dotClickFn: PropTypes.func.isRequired
    }
@@ -36,7 +37,11 @@ export default class Category extends Component {
 		  dotPositions={this.props.callbackFn(this.constructor.name, this.props.categoryName, 'active')}
 		  context={ {parent:this.constructor.name, rowName:this.props.categoryName, dotType:'active'} }
 		  dotClickFn={this.props.dotClickFn} />,
-	 <DotLine className='highlight-dots' key='highlight' dotRadius={config.highlightDotRadius}
+	 <DotLine className='highlight-dots' key='highlight' dotRadius={config.normalDotRadius}
+		  dotPositions={this.props.callbackFn(this.constructor.name, this.props.categoryName, 'highlight')}
+		  context={ {parent:this.constructor.name, rowName:this.props.categoryName, dotType:'highlight'} }
+		  dotClickFn={this.props.dotClickFn} />,
+	 <DotLine className='highlight-ring-dots' key='highlight-ring' dotRadius={config.highlightDotRadius}
 		  dotPositions={this.props.callbackFn(this.constructor.name, this.props.categoryName, 'highlight')}
 		  context={ {parent:this.constructor.name, rowName:this.props.categoryName, dotType:'highlight'} }
 		  dotClickFn={this.props.dotClickFn} />
@@ -51,7 +56,7 @@ export default class Category extends Component {
 	          { this.props.categoryName }
 	       </button>
 	    </div>
-	    <SVGContainer className='category-svg'>
+	    <SVGContainer className='category-svg-container' svgClassName='category-svg' svgWidth={this.props.svgWidth}>
 	       {this.state.isEnabled ? this.renderDotLines() : null}
 	    </SVGContainer>
 	 </div>

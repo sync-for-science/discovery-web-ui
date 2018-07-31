@@ -1,0 +1,266 @@
+@charset "UTF-8";
+
+/* Sync for Science Discovery Allergies Stylesheet */
+/* v.01.00 Updated 07/29/2018 */
+
+.allergies-header {
+	margin:10px 20px 10px 20px;
+	border-bottom: 1px solid var(--discovery-blue);
+	font-family: discovery-bold;
+	font-size:100%;
+	color: var(--discovery-blue);
+}
+
+.allergies-body {
+	margin:0 20px 0 20px;
+}
+
+
+/* column testing styles */
+
+.column-testing {
+	display:grid;
+	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
+	grid-column-gap: 0;
+	margin:20px 20px 0 20px;
+}
+
+.column-01 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-02 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-03 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-04 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-05 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-06 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-07 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-08 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-09 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-10 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-11 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-12 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-13 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-14 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-15 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-16 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-17 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-18 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-19 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-20 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-21 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-22 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-23 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-24 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-25 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-26 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-27 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-28 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-29 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-30 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-31 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-32 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-33 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-34 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-35 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-36 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-37 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-38 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}
+
+.column-39 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color: aqua;
+}
+
+.column-40 {
+	font-family: discovery-regular;
+	font-size:80%;
+	background-color:bisque;
+}

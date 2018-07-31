@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+/* Sync for Science Discovery Providers Stylesheet */
+/* v.01.02 Updated 07/23/2018 */
+
+.providers {
+	height: auto;
+	width: auto;
+	margin:20px 0 0 0;
+	padding:0 20px;
+}

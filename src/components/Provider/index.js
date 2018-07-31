@@ -14,6 +14,7 @@ export default class Provider extends Component {
 
    static propTypes = {
       providerName: PropTypes.string.isRequired,
+      svgWidth: PropTypes.string.isRequired,
       callbackFn: PropTypes.func.isRequired,
       dotClickFn: PropTypes.func.isRequired
    }
@@ -36,7 +37,11 @@ export default class Provider extends Component {
 		  dotPositions={this.props.callbackFn(this.constructor.name, this.props.providerName, 'active')}
 		  context={ {parent:this.constructor.name, rowName:this.props.providerName, dotType:'active'} }
 		  dotClickFn={this.props.dotClickFn} />,
-	 <DotLine className='highlight-dots' key='highlight' dotRadius={config.highlightDotRadius}
+	 <DotLine className='highlight-dots' key='highlight' dotRadius={config.normalDotRadius}
+		  dotPositions={this.props.callbackFn(this.constructor.name, this.props.providerName, 'highlight')}
+		  context={ {parent:this.constructor.name, rowName:this.props.providerName, dotType:'highlight'} }
+	  	  dotClickFn={this.props.dotClickFn} />,
+	 <DotLine className='highlight-ring-dots' key='highlight-ring' dotRadius={config.highlightDotRadius}
 		  dotPositions={this.props.callbackFn(this.constructor.name, this.props.providerName, 'highlight')}
 		  context={ {parent:this.constructor.name, rowName:this.props.providerName, dotType:'highlight'} }
 		  dotClickFn={this.props.dotClickFn} />
@@ -51,7 +56,7 @@ export default class Provider extends Component {
 	          { this.props.providerName }
 	       </button>
 	    </div>
-	    <SVGContainer className='provider-svg'>
+	    <SVGContainer className='provider-svg-container' svgClassName='provider-svg' svgWidth={this.props.svgWidth}>
 	       {this.state.isEnabled ? this.renderDotLines() : null}
 	    </SVGContainer>
 	 </div>

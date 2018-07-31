@@ -1,25 +1,70 @@
+@charset "UTF-8";
+
+/* Sync for Science Discovery CategoryRollup Stylesheet */
+/* v.01.03 Updated 07/30/2018 */
+
+.category-rollup {
+	display:flex;
+	flex-direction: row;
+	height: 36px;
+	width:100%;
+	margin: 0;
+}
+
 .category-rollup-nav-enabled {
-/*    width:20%; */
-/*    height:23px; */
-/*    margin-top:1px; */
-/*    border:1.5px solid black; */
-/*    float:left; */
-    cursor: pointer;
+	display:flex;
+	justify-content: center;
+	height: auto;
+	width:250px;
+	min-width: 250px;
+	margin:0;
+	padding: 9px 0;
+	background-color: var(--discovery-category);
+	background-image: url(../../svg/arrow-down-icon.svg);
+	background-size: 25px 25px;
+	background-position: 8px 7px;
+	background-repeat: no-repeat;
+	font-family:discovery-bold;
+	font-size: inherit;
+	color: var(--discovery-category-label-light);
+	text-align:center;
 }
 
 .category-rollup-nav-disabled {
-/*    width:20%; */
-/*    height:23px; */
-/*    margin-top:1px; */
-/*    border:1.5px solid black; */
-/*    float:left; */
-    cursor: pointer;
+	display:flex;
+	justify-content: center;
+	height: auto;
+	width:250px;
+	min-width: 250px;
+	margin:0;
+	padding:9px 0;
+	background-color: var(--discovery-category);
+	background-image: url(../../svg/arrow-right-icon.svg);
+	background-size: 25px 25px;
+	background-position: 8px 7px;
+	background-repeat: no-repeat;
+	font-family:discovery-bold;
+	font-size: inherit;
+	color: var(--discovery-category-label-light);
+	text-align: center;
+}
+
+.category-rollup-svg-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: inherit;
+	width: 100%;
+	margin: 0;
+	padding:0 5px 0 5px;
+	background-image: url(../../svg/horizontal-rule-1px-black.svg);
+	background-position: center;
+	background-repeat: repeat-x;
+	background-clip: padding-box;
+	overflow:hidden;
 }
 
 .category-rollup-svg {
-/*    width:80%; */
-/*    height:23px; */
-/*    margin-top:1px; */
-/*    float:right; */
-    height:42px;    
+	height:inherit;
+	overflow: visible;
 }

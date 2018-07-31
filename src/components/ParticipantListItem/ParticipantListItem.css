@@ -1,1 +1,89 @@
+@charset "UTF-8";
 
+/* Sync for Science Discovery ParticipantListItem Stylesheet */
+/* v.01.05 Updated 07/30/2018 */
+
+.participant-list-item {
+	font-family: discovery-regular;
+	font-size: 100%;
+}
+
+.participant-list-item-link {
+	font-family: discovery-regular;
+	font-size: 100%;
+	padding:0 0 0 0;
+	grid-column: 2/span 10;
+	white-space:nowrap; 
+}
+
+.participant-list-item-info {
+	font-family: discovery-regular;
+	font-size: 100%;
+	padding:0 0 0 20px;
+	grid-column: 2/10;
+	white-space:nowrap;
+}
+
+.participant-list-item-gender {
+	font-family: discovery-regular;
+	font-size: 100%;
+	text-align: center;
+	padding:0 0 0 0;
+	grid-column: 12/span 2;
+	white-space:nowrap;
+}
+
+.participant-list-item-dob {
+	font-family: discovery-data;
+	font-size: 100%;
+	text-align: center;
+	padding:0 0 0 0;
+	grid-column: 14/span 3;
+	white-space:nowrap;
+}
+
+.participant-list-item-dates {
+	font-family: discovery-data;
+	font-size: 100%;
+	text-align: center;
+	padding:0 0 0 0;
+	grid-column: 18/span 3;
+	white-space:nowrap;
+}
+
+.participant-list-item-providers {
+	font-family: discovery-data;
+	font-size: 100%;
+	text-align: center;
+	padding:0 0 0 0;
+	grid-column: 22/span 3;
+	white-space:nowrap;
+}
+
+.participant-list-item-values {
+	font-family: discovery-data;
+	font-size: 100%;
+	text-align: center;
+	padding:0 0 0 0;
+	grid-column: 26/span 3;
+	white-space:nowrap;
+}
+
+.participant-list-item-flagged {
+	font-family: discovery-regular;
+	font-size: 100%;
+	text-align: center;
+	padding:0 0 0 0;
+	grid-column: 1/span 1;
+	white-space:nowrap;
+}
+
+a:link {
+	color:var(--discovery-blue);
+	text-decoration: none;
+}
+
+a:hover {
+	color:var(--discovery-blue);
+	text-decoration:underline;
+}

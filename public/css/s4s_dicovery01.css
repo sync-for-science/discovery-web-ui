@@ -1,0 +1,480 @@
+@charset "UTF-8";
+/* Sync for Science Discovery Container Stylesheet 01 */
+/* This stylesheet is supplimental to the Bootstrap stylesheet. */
+
+/* Styles Part 00 - Global Styles */
+	/* Fonts */
+	@font-face {
+		font-family:discovery-regular;
+		src: url(../fonts/arial.ttf);
+	}
+	@font-face {
+		font-family:discovery-bold;
+		src: url(../fonts/arial-bold.ttf);
+	}
+
+	body {
+		
+	}
+
+hr {
+	width: 100%;
+	height:1px;
+	color: #ccc;
+	background-color: #ccc;
+	padding:0px;
+	margin-top:15px; 
+}
+/* Styles Part 01 - Desktop Screen Styles */
+
+/* Part 01 Section 00.0 Modal Styles */
+
+
+:focus { 
+  outline: 0 !important;
+}
+
+.modal-header {
+	background-color:#4430d6;
+	font-family: discovery-bold;
+	color:#fff;
+}
+
+.modal-button {
+	background-color: #4430d6;
+	font-family:discovery-bold;
+	color:#fff;
+}
+
+.modal-close {
+	color:#fff;
+}
+
+/* Master Container - adds background color and zeros out margins and padding */
+.participant-detail {
+		background-color: #fff;
+		margin: 0px;
+		padding: 0px;
+}
+
+/* Part 01 Section 01.0 Header Styles */
+		.participant-detail-fixed-header {
+		position: fixed;
+		top: 0;
+		margin: 0px;
+		padding: 0px;
+		width: 100%;
+		height: 140px;
+	}
+	
+	/* Section 01.1 Header Bar Styles*/
+		.page-header {
+			height: 60px;
+			width: 100%;
+			margin: 0px;
+			padding: 0px;
+			background-color: #ccc;
+			border-bottom: solid #4032ce 3px;
+			width: 100%;
+		}
+
+			.logo-box {
+				height:60px;
+				display:flex;
+				align-items: center;
+			}
+
+			.logo {
+				height:40px;
+			}
+
+			.pep {
+				height: 40px;
+				margin:20px;
+			}
+
+			.header-controls-box {
+				height: 60px;
+				display:flex;
+				flex-direction: row;
+				flex-wrap: nowrap;
+				align-items: center;
+				justify-content: flex-end;
+				}
+
+			.header-icon {
+				height:40px;
+				margin-left: 10px;
+			}
+	
+	/* Section 01.2 Date Range & Timeline Controls Styles */
+		.time-widget {
+			height: 80px;
+			width: 100%;
+			margin: 0px;
+			padding: 0px;
+		}
+
+		.calendar-daterange-box {
+			height:80px;
+			display:flex;
+			align-items: center;
+		}
+
+		.calendar {
+			height:40px;
+		}
+
+		.date-range {
+			margin-left: 20px;
+			font-family:discovery-regular;
+			font-size: 16px;
+			color: #4430d6;
+		}
+
+		.timeline-controls {
+		display:flex;
+		flex-direction: column;
+			margin: 0px;
+			padding: 0px;
+}
+
+		.timeline-reference-box {
+			display:flex;
+			flex-direction: row;
+			width:100%;
+			margin: 0px;
+			padding: 0px;
+			}		
+
+		.timeline-years {
+			border-bottom: #000 solid 1px;
+			border-left: #000 solid 1px;
+			margin-top: 10px;
+			padding-left: 10px;
+			font-family: discovery-regular;
+			font-size: 12px;
+			width:10%;
+		}
+
+		.timeline-selection-box {
+	width:100%;
+	background-color: coral;
+}
+
+/* Part 01 Section 02.0 Content Styles */
+	.participant-detail-categories-and-providers {
+		margin-top: 140px;
+		padding-left: 20px;
+}
+	
+	/* Categories Subsection Styles */
+		.categories {
+			width: 100%;	
+		}
+
+		.categories-row {
+			margin: 0px;
+			height: 42px;
+			}
+
+		.categories-header {
+			background-color: #0082ca;
+			text-align: center;
+			color: #fff;
+			font-family:discovery-bold;
+			font-size: 14px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			height: 42px;
+			}
+
+		.categories-box {
+			border-left:2px solid #0082ca;
+			border-right:2px solid #0082ca;
+			text-align:center;
+			padding-top: 0px;
+			padding-bottom: 0px;
+			margin:0px;
+			height: 42px;
+			}
+
+		
+		.categories-button {
+			width:100%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			font-family:discovery-regular;
+			color:#0082ca;
+			box-shadow: none;
+}
+
+		.categories-button:active {
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			background-color: #0082ca;
+			font-family:discovery-bold;
+			color:#fff;
+			box-shadow: none;
+}
+
+		.categories-button:focus {
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			background-color: #0082ca;
+			font-family:discovery-bold;
+			color:#fff;
+			box-shadow: none;
+			}
+
+		.button-bottom {
+			margin-bottom: 10px;
+			}
+
+		.button-bottom:active {
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			background-color: #0082ca;
+			font-family:discovery-bold;
+			color:#fff;
+			box-shadow: none;
+}
+
+		.button-bottom:focus {
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 0px;
+			margin-bottom: 0px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			background-color: #0082ca;
+			font-family:discovery-bold;
+			color:#fff;
+			box-shadow: none;
+			}
+
+		
+
+		.button-top {
+			margin-top: 10px;
+			}
+
+		.categories-timeline-box {
+			padding:0px;
+			margin: 0px; 
+			}
+	
+	/* Spacer Row Styles */
+		.left-column-spacer {
+			border-top:2px solid #0082ca;
+			margin: 0px;
+			}
+	
+
+	/* Provider Subsection Styles */
+		.providers {
+			width: 100%;
+			margin-top:20px;
+			}
+
+		.provider-row {
+			margin:0px;
+			}
+
+		.provider-header {
+			background-color: #0082ca;
+			text-align: center;
+			color: #fff;
+			font-family:discovery-bold;
+			font-size: 14px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			margin:0px;
+			}
+
+		.provider-box {
+			border-left:2px solid #0082ca;
+			border-right:2px solid #0082ca;
+			text-align:center;
+			padding-top: 0px;
+			padding-bottom: 0px;
+			margin:0px;
+			}
+
+		.provider-button {
+			width:100%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			font-family:discovery-regular;
+			color:#0082ca;
+			box-shadow: none;
+}
+
+		.provider-button:active {
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			background-color: #0082ca;
+			font-family:discovery-bold;
+			color:#fff;
+			box-shadow: none;
+}
+
+		.provider-button:focus {
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			background-color: #0082ca;
+			font-family:discovery-bold;
+			color:#fff;
+			box-shadow: none;
+}
+
+		.provider-button-top {
+			width:100%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 10px;
+			margin-bottom: 5px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			font-family:discovery-regular;
+			color:#0082ca;
+			box-shadow: none;
+}
+
+		.provider-button-top:active {
+			width: 100%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 10px;
+			margin-bottom: 5px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			background-color: #0082ca;
+			font-family:discovery-bold;
+			color:#fff;
+			box-shadow: none;
+}
+
+		.provider-button-top:focus {
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 10px;
+			margin-bottom: 5px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			background-color: #0082ca;
+			font-family:discovery-bold;
+			color:#fff;
+			box-shadow: none;
+}
+
+		.provider-button-bottom {
+			width:100%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 5px;
+			margin-bottom: 10px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			font-family:discovery-regular;
+			color:#0082ca;
+			box-shadow: none;
+}
+
+		.provider-button-bottom:active {
+			width: 100%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 5px;
+			margin-bottom: 10px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			background-color: #0082ca;
+			font-family:discovery-bold;
+			color:#fff;
+			box-shadow: none;
+}
+
+		.provider-button-bottom:focus {
+			width: 100%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 5px;
+			margin-bottom: 10px;
+			border:2px solid #0082ca;
+			border-radius: 25px;
+			background-color: #0082ca;
+			font-family:discovery-bold;
+			color:#fff;
+			box-shadow: none;
+}
+
+		.provider-timeline-box {
+			padding:0px;
+			}
+
+/* SECTION BREAK - Footer Section Styles */
+	.page-footer {
+    height: 60px;
+	background-color: #ccc;
+	border-top: solid #4032ce 3px;
+}
+
+
+/* Part 01 Section 03.0 Footer Styles */
+.panel-control-box {
+	height: 60px;
+	width:60px;
+	background-color:#4430d6;
+	color:#fff;
+	font-size: 18px;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
+}
+
+.arrow-button {
+	background-color:#4430d6;
+	border:0px solid #fff;
+}
+
+/* Part 02 Styles for tablet screens.Target resolution - 1366px x 768px. */
+		@media screen and (max-width: 992px){
+	
+}
+
+/* Part 03 Styles for smartphones screens.Target resolution - 640px x 360px. */
+		@media screen and (max-width: 640px){
+	
+}

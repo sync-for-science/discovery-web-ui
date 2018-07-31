@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+/* Sync for Science Discovery LabResults Stylesheet */
+/* v.01.00 Updated 07/29/2018 */
+
+.lab-results-header {
+	margin:10px 20px 10px 20px;
+	border-bottom: 1px solid var(--discovery-blue);
+	font-family: discovery-bold;
+	font-size:100%;
+	color: var(--discovery-blue);
+}
+
+.lab-results-body {
+	margin:0 20px 0 20px;
+}
+
+.lab-results-container {
+	display:grid;
+	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
+	grid-column-gap: 0;
+	margin:0 0 10px 0;	
+}
+
+.lab-results-name {
+	font-family: discovery-regular;
+	font-size:90%;
+	text-align: right;
+	white-space: nowrap;
+	padding:0 5px 0 0;
+	grid-column: 1/span 13;
+}
+.lab-results-value {
+	font-family: discovery-data;
+	font-size:160%;
+	color:var(--discovery-data);
+	text-align: right;
+	grid-column: 14/span 3;
+}
+
+.lab-results-unit {
+	font-family: discovery-regular;
+	font-size:60%;
+	padding:12px 0 0 5px;
+	grid-column: 18/span 2;
+}

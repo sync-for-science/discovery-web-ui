@@ -1,11 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
 
 import './css/s4s_discovery03.css';
-//import './index.css';
 import ParticipantList from './components/ParticipantList';
 import ParticipantDetail from './components/ParticipantDetail';
 

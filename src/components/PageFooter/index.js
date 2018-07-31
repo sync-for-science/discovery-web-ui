@@ -5,26 +5,38 @@ import './PageFooter.css';
 
 import ContentPanel from '../ContentPanel';
 
+var snapshotDate = null;
+
+try {
+   // Set snapshotDate if present
+   snapshotDate = require('../../SNAPSHOT_DATE.js').snapshotDate;
+} catch (err) {};
+
 //
 // Render the page footer of ParticipantDetail page
 //
 export default class PageFooter extends Component {
 
    static propTypes = {
-      callbackFn: PropTypes.func.isRequired,	// Callback to fetch data for ContentPanel
       context: PropTypes.shape({
 	 parent: PropTypes.string.isRequired,
 	 rowName: PropTypes.string.isRequired,
 	 dotType: PropTypes.string.isRequired,
-	 location: PropTypes.string.number
+	 date: PropTypes.string.isRequired,
+	 data: PropTypes.array
       })
    }
 
    state = {
       contentPanelIsOpen: false,
-      contentType: ''
+      contentType: '',
+      snapshotDate: null
    }
     
+   componentDidMount() {
+      this.setState({ snapshotDate: snapshotDate });
+   }
+
    componentDidUpdate(prevProps, prevState) {
       if (!prevState.contentPanelIsOpen && prevProps.context !== this.props.context) {
 	 this.setState({ contentPanelIsOpen: true });
@@ -34,18 +46,48 @@ export default class PageFooter extends Component {
       }
    }
 
-   onOpenContentPanel = (contentType) => this.setState({ contentPanelIsOpen: true, contentType: contentType });
-   onCloseContentPanel = () => this.setState({ contentPanelIsOpen: false, contentType: '' });
+   onOpenContentPanel = (contentType) => {
+      if (!this.state.contentPanelIsOpen) {
+	 this.setState({ contentPanelIsOpen: true, contentType: contentType });
+	 switch (contentType) {
+	    case 'pep':
+	       document.querySelector('.quick-look-data-panel-button-off').className = 'quick-look-data-panel-button-on';
+	       break;
+	    case 'search':
+	       document.querySelector('.search-button-off').className = 'search-button-on';
+	       break;
+	    default:
+	       break;
+	 }
+      }
+   }
+
+   onCloseContentPanel = (contentType) => {
+      this.setState({ contentPanelIsOpen: false, contentType: '' });
+      switch (contentType) {
+	 case 'pep':
+	    document.querySelector('.quick-look-data-panel-button-on').className = 'quick-look-data-panel-button-off';
+	    break;
+	 case 'search':
+	    document.querySelector('.search-button-on').className = 'search-button-off';
+	    break;
+	 default:
+	    break;
+      }
+   }
 
    render() {
       return (
 	 <div className='page-footer'>
 	    <div className='footer-controls-box'>
-	       <button className="pep-data-panel-button-off" onClick={() => this.onOpenContentPanel('pep')} />
+	       <button className="quick-look-data-panel-button-off" onClick={() => this.onOpenContentPanel('pep')} />
 	       <button className="search-button-off"	     onClick={() => this.onOpenContentPanel('search')} />
 	    </div>
-	      <ContentPanel open={this.state.contentPanelIsOpen} contentType={this.state.contentType}
-	  		    onClose={this.onCloseContentPanel} callbackFn={this.props.callbackFn} />
+	    <ContentPanel open={this.state.contentPanelIsOpen} contentType={this.state.contentType}
+			  onClose={this.onCloseContentPanel} context={this.props.context} />
+	    <div className='footer-snapshot-date'>
+	       { this.state.snapshotDate ? `Snapshot: ${this.state.snapshotDate}` : null }
+	    </div>
          </div>
       )
    }

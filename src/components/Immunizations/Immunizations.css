@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+/* Sync for Science Discovery Immunizations Stylesheet */
+/* v.01.01 Updated 07/23/2018 */
+
+.immunizations-header {
+	margin:10px 20px 0 20px;
+	border-bottom: 1px solid var(--discovery-blue);
+	font-family: discovery-bold;
+	font-size:100%;
+	color: var(--discovery-blue);
+}
+
+.immunizations-body {
+	display:grid;
+	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
+	grid-column-gap: 0;
+	margin:10px 0 10px 0;
+}
+
+.immunizations-display {
+	font-family: discovery-regular;
+	font-size:90%;
+	text-align: right;
+	white-space: nowrap;
+	padding:0 0 0 0;
+	grid-column: 1/span 13;
+}

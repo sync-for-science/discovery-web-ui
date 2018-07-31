@@ -13,6 +13,7 @@ import DotLine from '../DotLine';
 export default class CategoryRollup extends Component {
 
    static propTypes = {
+      svgWidth: PropTypes.string.isRequired,
       callbackFn: PropTypes.func.isRequired,
       dotClickFn: PropTypes.func.isRequired,
       expansionFn: PropTypes.func.isRequired
@@ -33,7 +34,7 @@ export default class CategoryRollup extends Component {
 	    <div className={this.state.isExpanded ? 'category-rollup-nav-enabled' : 'category-rollup-nav-disabled'} onClick={this.handleClick} >
 	       Categories
 	    </div>
-	    <SVGContainer className='category-rollup-svg'>
+	      <SVGContainer className='category-rollup-svg-container' svgClassName='category-rollup-svg' svgWidth={this.props.svgWidth}>
 	       <DotLine className='inactive-dots' key='inactive' dotRadius={config.normalDotRadius}
 			dotPositions={this.props.callbackFn(this.constructor.name, 'Categories', 'inactive')}
 			context={ {parent:this.constructor.name, rowName:'Categories', dotType:'inactive'} }
@@ -42,7 +43,11 @@ export default class CategoryRollup extends Component {
 			dotPositions={this.props.callbackFn(this.constructor.name, 'Categories', 'active')}
 			context={ {parent:this.constructor.name, rowName:'Categories', dotType:'active'} }
 			dotClickFn={this.props.dotClickFn} />
-	       <DotLine className='highlight-dots' key='highlight' dotRadius={config.highlightDotRadius}
+	       <DotLine className='highlight-dots' key='highlight' dotRadius={config.normalDotRadius}
+			dotPositions={this.props.callbackFn(this.constructor.name, 'Categories', 'highlight')}
+			context={ {parent:this.constructor.name, rowName:'Categories', dotType:'highlight'} }
+			dotClickFn={this.props.dotClickFn} />
+	       <DotLine className='highlight-ring-dots' key='highlight-ring' dotRadius={config.highlightDotRadius}
 			dotPositions={this.props.callbackFn(this.constructor.name, 'Categories', 'highlight')}
 			context={ {parent:this.constructor.name, rowName:'Categories', dotType:'highlight'} }
 			dotClickFn={this.props.dotClickFn} />
