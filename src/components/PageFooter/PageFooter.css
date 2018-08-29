@@ -1,85 +1,85 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery PageFooter Stylesheet */
-/* v.01.04 Updated 07/23/2018 */
+/* v.01.05 Updated 08/20/2018 */
 
 .page-footer {
 	position:fixed;
-	left: 0;
-	bottom: 0;
-	height: 60px;
-	width: 100%;
-	border-top: 3px solid var(--discovery-blue);
-	padding:0 20px;
+	left:0;
+	bottom:0;
+	height:3.750rem;
+	width:100%;
+	border-top:0.188rem  solid var(--discovery-blue);
+	padding:0 1.250rem;
 	background-color: var(--discovery-gray);
 }
 
 .page-footer {
-    display: flex;
-    flex-direction: row;
+    display:flex;
+    flex-direction:row;
 }
 
 .footer-controls-box {
 	display:flex;
-	flex-direction: row;
-	align-items: center;
-	width:250px;
-	margin: 0;
-	background-color: transparent;
+	flex-direction:row;
+	align-items:center;
+	width:15.625rem;
+	margin:0;
+	background-color:transparent;
 }
 
 .quick-look-data-panel-button-off {
-	height: 40px;
-	width: 50px;
-	border: 0;
+	height:2.500rem;
+	width:3.125rem;
+	border:0;
 	background-color:transparent;
-	background-image: url(../../svg/icon-quick-look-off.svg);
-	background-size: 50px 40px;
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	cursor: pointer;
+	background-image:url(../../svg/icon-quick-look-off.svg);
+	background-size:3.125rem 2.500rem;
+	background-position:0 0;
+	background-repeat:no-repeat;
+	cursor:pointer;
 }
 
 .quick-look-data-panel-button-on {
-	height: 40px;
-	width: 50px;
-	border: 0; 
+	height:2.500rem;
+	width:3.125rem;
+	border:0; 
 	background-color:transparent;
 	background-image: url(../../svg/icon-quick-look-on.svg);
-	background-size: 50px 40px;
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	cursor: pointer;
+	background-size:3.125rem 2.500rem;
+	background-position:0 0;
+	background-repeat:no-repeat;
+	cursor:pointer;
 }
 
 .search-button-off {
-	height: 40px;
-	width: 40px;
+	height:2.500rem;
+	width:2.500rem;
 	background-color:transparent;
-	background-image: url(../../svg/icon-search-off.svg);
-	background-position: 0 0;
-	background-repeat: no-repeat;	
-	margin:0 0 0 10px;	
-	border: 0;
-	cursor: pointer;
+	background-image:url(../../svg/icon-search-off.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;	
+	margin:0 0 0 0.625rem;	
+	border:0;
+	cursor:pointer;
 }
 
 .search-button-on {
-	height: 40px;
-	width: 40px;
+	height:2.500rem;
+	width:2.500rem;
 	background-color:transparent;
-	background-image: url(../../svg/icon-search-on.svg);
-	background-position: 0 0;
-	background-repeat: no-repeat;	
-	margin:0 0 0 10px;	
-	border: 0;
-	cursor: pointer;
+	background-image:url(../../svg/icon-search-on.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;	
+	margin:0 0 0 0.625rem;	
+	border:0;
+	cursor:pointer;
 }
 
 .footer-snapshot-date {
-    font-family: discovery-regular;
-	font-size: 80%;
-	color: var(--discovery-blue);
-	vertical-align: middle;
-	margin:20px 30px 0 auto;
+   font-family:discovery-regular;
+	font-size:0.800rem;
+	color:var(--discovery-blue);
+	vertical-align:middle;
+	margin:1.250rem 1.875rem 0 auto;
 }

@@ -1,0 +1,117 @@
+@charset "UTF-8";
+
+/* Sync for Science Discovery MedsDispensed Stylesheet */
+/* v.01.06 Updated 08/21/2018 */
+
+.meds-dispensed-header {
+	margin:0.625rem 1.250rem;
+	border-bottom: 0.063rem solid var(--discovery-blue);
+	font-family: discovery-bold;
+	font-size:1.000rem;
+	color: var(--discovery-blue);
+}
+
+.meds-dispensed-body {
+	margin:0 1.250rem;
+}
+
+.meds-dispensed-container {
+	display:grid;
+	grid-template-columns:repeat(40, minmax(min-content, 1fr));
+	grid-column-gap:0.313rem;
+	border-bottom:0.063rem solid var(--discovery-data-divider);
+	padding:0 0 0.313rem 0;
+	margin:0 0 0.625rem 0;
+}
+
+.meds-dispensed-container-last {
+	display:grid;
+	grid-template-columns:repeat(40, minmax(min-content, 1fr));
+	grid-column-gap:0.313rem;
+	border-bottom:0.063rem solid var(--discovery-background);
+	padding:0 0 0.313rem 0;
+	margin:0 0 0.625rem 0;
+}
+
+.meds-dispensed-display {
+	height:auto;
+	width:auto;
+	font-family: discovery-data-text;
+	font-size:1.200rem;
+	text-align: left;
+	color: var(--discovery-data);
+	white-space: nowrap;
+	padding:0;
+	grid-column: 1/span 40;
+}
+
+.meds-dispensed-status-label {
+	height:auto;
+	width:auto;
+	font-family:discovery-regular;
+	font-size:0.800rem;
+	text-align: right;
+	color: var(--discovery-data-label);
+	white-space: nowrap;
+	padding:0.375rem 0 0 0.938rem;
+	grid-column: 1;
+}
+
+.meds-dispensed-status-value {
+	height:auto;
+	width:auto;
+	font-family: discovery-data-text;
+	font-size:1.200rem;
+	text-align: left;
+	color: var(--discovery-data);
+	white-space: nowrap;
+	padding:0;
+	grid-column: 2;
+}
+
+.meds-dispensed-quantity {
+	height:auto;
+	width:auto;
+	font-family: discovery-data;
+	font-size:120%;
+	text-align: right;
+	color: var(--discovery-data);
+	white-space: nowrap;
+	padding:0 0 0 0.938rem;
+	grid-column: 3;
+}
+.meds-dispensed-quantity-unit {
+	height:auto;
+	width:auto;
+	font-family: discovery-regular;
+	font-size:80%;
+	text-align: left;
+	color: var(--discovery-data-label);
+	white-space: nowrap;
+	padding:0.375rem 0 0 0;
+	grid-column: 4;
+}
+
+.meds-dispensed-supply {
+	height:auto;
+	width:auto;
+	font-family: discovery-data;
+	font-size:120%;
+	text-align: right;
+	color: var(--discovery-data);
+	white-space: nowrap;
+	padding:0 0 0 0.938rem;
+	grid-column: 5;
+}
+
+.meds-dispensed-supply-unit {
+	height:auto;
+	width:auto;
+	font-family: discovery-regular;
+	font-size:80%;
+	text-align: left;
+	color: var(--discovery-data-label);
+	white-space: nowrap;
+	padding:0.375rem 0 0 0;
+	grid-column: 6;
+}

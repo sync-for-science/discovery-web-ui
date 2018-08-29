@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Container Stylesheet 03 */
-/* v.03.21 Updated 07/23/2018 */
+/* v.03.25 Updated 08/22/2018 */
 
 /* SECTION 00.00 – Global Styles */
 
@@ -24,9 +24,13 @@
 	--discovery-dots-highlight:rgba(1,166,170,1.0);
 	--discovery-dots-highlight-stroke:rgba(255,255,255,1.0);
 	--discovery-dots-highlight-ring:rgba(1,166,170,0.0);
-	--discovery-dots-highlight-ring-stroke:rgba(1,166,170,1.0);
+/* --discovery-dots-highlight-ring-stroke:rgba(1,166,170,1.0); */
+	--discovery-dots-highlight-ring-stroke:rgba(255,80,80,1.0);
 	--discovery-modal-shadow:rgba(0,0,10,0.25);
-	--discovery-data:rgba(50,50,250,1.00);
+	--discovery-data:rgba(0,0,250,1.0);
+	--discovery-data-label:rgba(125,125,125,1.0);
+/*	--discovery-data-divider:rgba(220,220,220,1.0); */
+	--discovery-data-divider:rgba(200,200,200,1.0);
 }
 
 @font-face {
@@ -43,7 +47,13 @@
 
 @font-face {
 	font-family:'discovery-data';
-	src: url('../fonts/Letter-Gothic-Std-Bold.ttf');
+	src: url('../fonts/SourceCodePro-Medium.ttf');
+	format:('truetype');
+}
+
+@font-face {
+	font-family:'discovery-data-text';
+	src: url('../fonts/PragmaticaBook.otf');
 	format:('truetype');
 }
 

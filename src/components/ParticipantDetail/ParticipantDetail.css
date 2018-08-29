@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery ParticipantDetail Stylesheet */
-/* v.01.02 Updated 07/23/2018 */
+/* v.01.03 Updated 08/20/2018 */
 
 .participant-detail {
 	position: fixed;
@@ -38,46 +38,46 @@
 }
 
 .category-nav-spacer-top {
-	height:5px;
-	min-height: 5px;
-	width:246px;
-	min-width: 246px;
+	height:0.313rem;
+	min-height: 0.313rem;
+	width:15.375rem;
+	min-width:15.375rem;
 	margin:0;
-	border-left:2px solid var(--discovery-category);
-	border-right:2px solid var(--discovery-category);
+	border-left:0.125rem solid var(--discovery-category);
+	border-right:0.125rem solid var(--discovery-category);
 	padding:0;
-	cursor: default;
+	cursor:default;
 }
 
 .category-nav-spacer-bottom {
-	height:5px;
-	width:246px;
-	min-width: 246px;
+	height:0.313rem;
+	width:15.375rem;
+	min-width:15.375rem;
 	margin:0;
-	border-right:2px solid var(--discovery-category);
-	border-bottom: 2px solid var(--discovery-category);
-	border-left:2px solid var(--discovery-category);
-	padding: 0;
+	border-right:0.125rem solid var(--discovery-category);
+	border-bottom:0.125rem solid var(--discovery-category);
+	border-left:0.125rem solid var(--discovery-category);
+	padding:0;
 }
 
 .provider-nav-spacer-top {
-	height:5px;
-	min-height: 5px;
-	width:246px;
-	min-width: 246px;
+	height:0.313rem;
+	min-height:0.313rem;
+	width:15.375rem;
+	min-width:15.375rem;
 	margin:0;
-	border-right:2px solid var(--discovery-provider);
-	border-left:2px solid var(--discovery-provider);
+	border-right:0.125rem solid var(--discovery-provider);
+	border-left:0.125rem solid var(--discovery-provider);
 	padding:0;
 }
 
 .provider-nav-spacer-bottom {
-	height:5px;
-	width:246px;
-	min-width: 246px;
+	height:0.313rem;
+	width:15.375rem;
+	min-width:15.375rem;
 	margin:0;
-	border-right:2px solid var(--discovery-provider);
-	border-bottom: 2px solid var(--discovery-provider);
-	border-left:2px solid var(--discovery-provider);
+	border-right:0.125rem solid var(--discovery-provider);
+	border-bottom:0.125rem solid var(--discovery-provider);
+	border-left:0.125rem solid var(--discovery-provider);
 	padding:0;
 }

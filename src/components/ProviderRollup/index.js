@@ -36,19 +36,19 @@ export default class ProviderRollup extends Component {
 	    </div>
 	    <SVGContainer className='provider-rollup-svg-container' svgClassName='provider-rollup-svg' svgWidth={this.props.svgWidth}>
 	       <DotLine className='inactive-dots' key='inactive' dotRadius={config.normalDotRadius}
-			dotPositions={this.props.callbackFn(this.constructor.name, 'Providers', 'inactive')}
+			dotPositions={this.props.callbackFn(this.constructor.name, 'Providers', true, 'inactive')}
 			context={ {parent:this.constructor.name, rowName:'Providers', dotType:'inactive'} }
 			dotClickFn={this.props.dotClickFn} />
 	       <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius}
-			dotPositions={this.props.callbackFn(this.constructor.name, 'Providers', 'active')}
+			dotPositions={this.props.callbackFn(this.constructor.name, 'Providers', true, 'active')}
 			context={ {parent:this.constructor.name, rowName:'Providers', dotType:'active'} }
 			dotClickFn={this.props.dotClickFn} />
 	       <DotLine className='highlight-dots' key='highlight' dotRadius={config.normalDotRadius}
-			dotPositions={this.props.callbackFn(this.constructor.name, 'Providers', 'highlight')}
+			dotPositions={this.props.callbackFn(this.constructor.name, 'Providers', true, 'highlight')}
 			context={ {parent:this.constructor.name, rowName:'Providers', dotType:'highlight'} }
 			dotClickFn={this.props.dotClickFn} />
 	       <DotLine className='highlight-ring-dots' key='highlight-ring' dotRadius={config.highlightDotRadius}
-			dotPositions={this.props.callbackFn(this.constructor.name, 'Providers', 'highlight')}
+			dotPositions={this.props.callbackFn(this.constructor.name, 'Providers', true, 'highlight')}
 			context={ {parent:this.constructor.name, rowName:'Providers', dotType:'highlight'} }
 			dotClickFn={this.props.dotClickFn} />
 	    </SVGContainer>

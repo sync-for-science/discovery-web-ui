@@ -1,70 +1,70 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery ProviderRollup Stylesheet */
-/* v.01.03 Updated 07/30/2018 */
+/* v.01.04 Updated 08/20/2018 */
 
 .provider-rollup {
 	display:flex;
 	flex-direction: row;
-	height: 36px;
+	height:2.250rem;
 	width:100%;
-	margin: 0;
+	margin:0;
 }
 
 .provider-rollup-nav-enabled {
 	display:flex;
-	justify-content: center;
-	height: auto;
-	width:250px;
-	min-width: 250px;
+	justify-content:center;
+	height:auto;
+	width:15.625rem;
+	min-width:15.625rem;
 	margin:0;
-	padding: 9px 0;
-	background-color: var(--discovery-provider);
-	background-image: url(../../svg/arrow-down-icon.svg);
-	background-size: 25px 25px;
-	background-position: 8px 7px;
+	padding:0.563rem 0;
+	background-color:var(--discovery-provider);
+	background-image:url(../../svg/arrow-down-icon.svg);
+	background-size:1.563rem 1.563rem;
+	background-position:0.500rem 0.438rem;
 	background-repeat: no-repeat;
 	font-family:discovery-bold;
-	font-size: inherit;
-	color: var(--discovery-provider-label-light);
-	text-align: center;
+	font-size:inherit;
+	color:var(--discovery-provider-label-light);
+	text-align:center;
 }
 
 .provider-rollup-nav-disabled {
 	display:flex;
-	justify-content: center;
-	height: auto;
-	width:250px;
-	min-width: 250px;
+	justify-content:center;
+	height:auto;
+	width:15.625rem;
+	min-width:15.625rem;
 	margin:0;
-	padding: 9px 0;
-	background-color: var(--discovery-provider);
-	background-image: url(../../svg/arrow-right-icon.svg);
-	background-size: 25px 25px;
-	background-position: 8px 7px;
-	background-repeat: no-repeat;
+	padding:0.563rem 0;
+	background-color:var(--discovery-provider);
+	background-image:url(../../svg/arrow-right-icon.svg);
+	background-size:1.563rem 1.563rem;
+	background-position:0.500rem 0.438rem;
+	background-repeat:no-repeat;
 	font-family:discovery-bold;
-	font-size: inherit;
-	color: var(--discovery-provider-label-light);
-	text-align: center;
+	font-size:inherit;
+	color:var(--discovery-provider-label-light);
+	text-align:center;
 }
 
 .provider-rollup-svg-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: inherit;
-	width: 100%;
-	margin: 0;
-	padding:0 5px 0 5px;
-	background-image: url(../../svg/horizontal-rule-1px-black.svg);
-	background-position: center;
-	background-repeat: repeat-x;
-	background-clip: padding-box;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	height:inherit;
+	width:100%;
+	margin:0;
+	padding:0 0.313rem;
+	background-image:url(../../svg/horizontal-rule-1px-black.svg);
+	background-position:center;
+	background-repeat:repeat-x;
+	background-clip:padding-box;
 	overflow:hidden;
 }
 
 .provider-rollup-svg {
 	height:inherit;
-	overflow: visible;
+	overflow:visible;
 }

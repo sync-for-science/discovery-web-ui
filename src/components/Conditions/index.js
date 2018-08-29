@@ -13,39 +13,39 @@ import { stringCompare } from '../../util.js';
 export default class Conditions extends Component {
 
    static propTypes = {
-      id: PropTypes.string,
-      data: PropTypes.oneOfType([
-	 PropTypes.object,
-	 PropTypes.array,
-	 PropTypes.string,
-	 PropTypes.number
-      ]).isRequired
+      data: PropTypes.array.isRequired
    }
 
    state = {
       matchingData: null
    }
 
-   componentDidMount() {
+   setMatchingData() {
       let match = FhirTransform.getPathItem(this.props.data, '[*category=Conditions]');
       if (match.length > 0) {
 	 this.setState({ matchingData: match.sort((a, b) => stringCompare(a.data.code.coding[0].display, b.data.code.coding[0].display)) });
+      } else {
+	 this.setState({ matchingData: null });
+      }
+   }
+
+   componentDidMount() {
+      this.setMatchingData();
+   }
+
+   componentDidUpdate(prevProps, prevState) {
+      if (prevProps.data !== this.props.data) {
+	 this.setMatchingData();
       }
    }
 
    render() {
-      let data = this.state.matchingData;
-      if (this.state.matchingData) {
-	 return (
-	    <div id={this.props.id} className={this.props.className}>
-	       <div className={this.props.className+'-header'}>Conditions</div>
-	       <div className={this.props.className+'-body'}>
-		  { renderDisplay(data, this.props.className) }
-	       </div>
-	    </div>
-	 );
-      } else {
-	 return null;
-      }
+      return ( this.state.matchingData &&
+	       <div className={this.props.className}>
+	          <div className={this.props.className+'-header'}>Conditions</div>
+	          <div className={this.props.className+'-body'}>
+		     { renderDisplay(this.state.matchingData, this.props.className) }
+	          </div>
+	       </div> );
    }
 }

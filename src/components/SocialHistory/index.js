@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import './Allergies.css';
+import './SocialHistory.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { renderAllergies } from '../../fhirUtil.js';
+import { renderSocialHistory } from '../../fhirUtil.js';
 import { stringCompare } from '../../util.js';
 
 //
-// Display the 'Allergies' category if there are matching resources
+// Display the 'Social History' category if there are matching resources
 //
-export default class Allergies extends Component {
+export default class SocialHistory extends Component {
 
    static propTypes = {
       data: PropTypes.array.isRequired
@@ -21,16 +21,14 @@ export default class Allergies extends Component {
    }
 
    setMatchingData() {
-      let match = FhirTransform.getPathItem(this.props.data, '[*category=Allergies]');
+      let match = FhirTransform.getPathItem(this.props.data, '[*category=Social History]');
       if (match.length > 0) {
 	 this.setState({ matchingData: match.sort((a, b) => stringCompare(a.data.code.coding[0].display, b.data.code.coding[0].display)) });
-      } else {
-	 this.setState({ matchingData: null });
       }
    }
 
    componentDidMount() {
-       this.setMatchingData();
+      this.setMatchingData();
    }
 
    componentDidUpdate(prevProps, prevState) {
@@ -42,9 +40,9 @@ export default class Allergies extends Component {
    render() {
       return ( this.state.matchingData &&
 	       <div className={this.props.className}>
-	          <div className={this.props.className+'-header'}>Allergies</div>
+	          <div className={this.props.className+'-header'}>Social History</div>
 	          <div className={this.props.className+'-body'}>
-		     { renderAllergies(this.state.matchingData, this.props.className) }
+		     { renderSocialHistory(this.state.matchingData, this.props.className) }
 	          </div>
 	       </div> );
    }

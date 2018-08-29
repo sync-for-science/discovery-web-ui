@@ -1,78 +1,79 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Provider Stylesheet */
-/* v.01.03 Updated 07/30/2018 */
+/* v.01.04 Updated 08/20/2018 */
 
 .provider {
 	display:flex;
-	flex-direction: row;
-	height: 36px;
+	flex-direction:row;
+	height:2.250rem;
 	width:100%;
 	margin:0;
-	padding: 0;
+	padding:0;
 }
 
 .provider-nav {
 	display:flex;
-	justify-content: center;
-	height: auto;
-	width:246px;
-	min-width: 246px;
+	justify-content:center;
+	height:auto;
+	width:15.375rem;
+	min-width:15.375rem;
 	margin:0;
-	border-right:2px solid var(--discovery-provider);
-	border-left:2px solid var(--discovery-provider);
+	border-right:0.125rem solid var(--discovery-provider);
+	border-left:0.125rem solid var(--discovery-provider);
 	padding: 0;
 	text-align:center;
 }
 
 .provider-button-enabled {
 	display:flex;
-	justify-content: center;
-	height: auto;
+	justify-content:center;
+	height:auto;
 	min-width:80%;
-	max-width: 98%;
-	margin:5px auto;
-	border:2px solid var(--discovery-provider);
-	border-radius: 25px;
-	padding:2px 0;
-	background-color: var(--discovery-provider);
+	max-width:98%;
+	margin:0.313rem auto;
+	border:0.125rem solid var(--discovery-provider);
+	border-radius:1.563rem;
+	padding:0.125rem 0;
+	background-color:var(--discovery-provider);
 	font-family:discovery-bold;
-	font-size: inherit;
+	font-size:inherit;
 	color:var(--discovery-provider-label-light);
-	white-space: nowrap;
-	cursor: pointer;
+	white-space:nowrap;
+	cursor:pointer;
 }
 
 .provider-button-disabled {
 	display:flex;
-	justify-content: center;
-	height: auto;
+	justify-content:center;
+	height:auto;
 	min-width:80%;
-	max-width: 98%;
-	margin:5px auto;
-	border:2px solid var(--discovery-provider);
-	border-radius: 25px;
-	padding:2px 0;
-	background-color: var(--discovery-background);
+	max-width:98%;
+	max-resolution:0.313rem; 
+	margin:0.313rem auto;
+	border:0.125rem solid var(--discovery-provider);
+	border-radius:1.563rem;
+	padding:0.125rem 0;
+	background-color:var(--discovery-background);
 	font-family:discovery-regular;
-	font-size: inherit;
+	font-size:inherit;
 	color:var(--discovery-provider-label-dark);
 	white-space:nowrap;
-	cursor: pointer;
+	cursor:pointer;
 }
 
 .provider-svg-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: inherit;
-	width: 100%;
-	margin: 0;
-	padding:0 5px 0 5px;
-	background-image: url(../../svg/horizontal-rule-1px-black.svg);
-	background-position: center;
-	background-repeat: repeat-x;
-	background-clip: padding-box;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	height:inherit;
+	width:100%;
+	margin:0;
+	padding:0 0.313rem 0 0.313rem;
+	background-image:url(../../svg/horizontal-rule-1px-black.svg);
+	background-position:center;
+	background-repeat:repeat-x;
+	background-clip:padding-box;
 	overflow:hidden;
 }
 

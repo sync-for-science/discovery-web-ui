@@ -1,129 +1,197 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery ParticipantList Stylesheet */
-/* v.01.02 Updated 07/23/2018 */
+/* v.01.06 Updated 08/20/2018 */
+
+.participant-list {
+	height: 100%;
+}
 
 .participant-list-header {
 	position: fixed;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
 	display:flex;
 	flex-direction: row;
-	height: 60px;
-	min-height: 60px;
+	height: 3.750rem;
+	min-height: 3.750rem;
 	width: 100%;
-	padding:0 20px;
-	border-bottom: 3px solid var(--discovery-blue);
+	padding:0 1.25rem;
+	border-bottom: 0.188rem solid var(--discovery-blue);
 	background-color: var(--discovery-gray);
 }
 
 .logo-box {
 	display:flex;
 	align-items: center;
-	height:60px;
-	width:250px;
-	min-width: 250px;
+	height:3.750rem;
+	width:13.750rem;
+	min-width:13.750rem;
 	padding:0;
 }
 
 .logo-s4s-button-off {
-	height:60px;
-	width:220px;
+	height:3.750rem;
+	width:13.750rem;
 	border:none;
-	padding:0px;
+	padding:0;
 	background-color:transparent;
 	background-image: url(../../svg/logo-s4s-off.svg);
-	background-size: 220px 60px;
+	background-size: 13.750rem 3.750rem;
 	background-repeat:no-repeat;
 	outline: none;
 	cursor:none;
 }
 
 .logo-s4s-button-on {
-	height:60px;
-	width:220px;
+	height:3.750rem;
+	width:13.750rem;
 	border:none;
 	padding:0px;
 	background-color:transparent;
 	background-image: url(../../svg/logo-s4s-on.svg);
-	background-size: 220px 60px;
+	background-size: 13.750rem 3.750rem;
 	background-repeat:no-repeat;
 	outline: none;
 	cursor:none;
 }
 
 .participant-list-content {
-	margin:83px 20px 0 20px;
-	display:grid;
-	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
-	grid-column-gap: 0;
-	overflow: auto;
+	position:absolute;
+	top:5.88rem;
+	display: flex;
+	flex-direction:column;
+	height: 100%;
+	width:95%;
+	padding:0 2.5%;
+	
 }
 
 .participant-list-title {
-	margin:0;
 	font-family: discovery-bold;
 	font-size: 120%;
+	width:100%;
 	color:var(--discovery-blue);
 	border-bottom: 1px solid var(--discovery-blue);
-	padding: 0 0 5px 0;
-	grid-column: 1/span 40;
+	padding: 0 0 .313rem 0;
+}
+
+.participant-list-content-data {
+	height:auto;
+	padding:0 0 1.250rem 0;
+}
+
+.participant-list-header-wrapper {
+	display:flex;
+	flex-direction: row;
+	width:auto;
+	height:auto;
+	font-family:discovery-regular;
+	font-size:1.000rem;
+   white-space: pre-wrap;
 }
 
 .participant-list-column-header-flagged {
+	height:auto;
+	width:1.125rem;
+	min-width:1.125rem;
 	font-family: discovery-bold;
-	font-size: 100%;
+	font-size: 1.000rem;
+	padding:.625rem 0 .313rem 0;
+	white-space:nowrap;
 }
 
 .participant-list-column-header-name-id {
+	height:auto;
+	width:17.875rem;
+	min-width:17.875rem;
 	font-family: discovery-bold;
-	font-size: 100%;
-	padding: 10px 0 5px 0;
-	grid-column: 2/span 10;
+	font-size: 1.000rem;
+	padding: .625rem 0 .313rem .313rem;
 	white-space:nowrap;
 }
 
 .participant-list-column-header-gender {
+	height:auto;
+	width:5.000rem;
+	min-width:5.000rem;
 	font-family: discovery-bold;
-	font-size: 100%;
+	font-size: 1.000rem;
 	text-align: center;
-	padding: 10px 0 5px 0;
-	grid-column: 12/span 2;
+	padding: .625rem 0 .313rem .313rem;
 	white-space:nowrap;
 }
 
 .participant-list-column-header-dob {
+	height:auto;
+	width:7.250rem;
+	min-width:7.250rem;
 	font-family: discovery-bold;
-	font-size: 100%;
+	font-size: 1.000rem;
 	text-align: center;
-	padding: 10px 0 5px 0;
-	grid-column: 14/span 3;
+	padding: .625rem 0 .313rem .313rem;
 	white-space:nowrap;
 }
 
 .participant-list-column-header-dates {
+	height:auto;
+	width:7.250rem;
+	min-width:7.250rem;
 	font-family: discovery-bold;
-	font-size: 100%;
+	font-size: 1.000rem;
 	text-align: center;
-	padding: 10px 0 5px 0;
-	grid-column: 18/span 3;
+	padding: .625rem 0 .313rem .625rem;
 	white-space:nowrap;
 }
 
 .participant-list-column-header-providers {
+	height:auto;
+	width:6.125rem;
+	min-width:6.125rem;
 	font-family: discovery-bold;
-	font-size: 100%;
+	font-size: 1.000rem;
 	text-align: center;
-	padding: 10px 0 5px 0;
-	grid-column: 22/span 3;
+	padding: .625rem 0 .313rem .625rem;
 	white-space:nowrap;
 }
 
 .participant-list-column-header-values {
+	height:auto;
+	width:7.250rem;
+	min-width:7.250rem;
 	font-family: discovery-bold;
-	font-size: 100%;
+	font-size: 1.000rem;
 	text-align: center;
-	padding: 10px 0 5px 0;
-	grid-column: 26/span 3;
+	padding: .625rem .625rem .313rem .625rem;
 	white-space:nowrap;
 }
+
+.participant-list-data-wrapper {
+	display:grid;
+	grid-template-columns:repeat(7, minmax(min-content, max-content));
+	grid-column-gap: .313rem;
+	height: calc(100vh - 12.500rem);
+	font-family:discovery-regular;
+	font-size:1.000rem;
+   overflow-y: scroll;
+	white-space: pre-wrap;
+	margin:.313rem 0 1.250rem 0;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: .625rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 .313rem var(--discovery-data-label); 
+    border-radius: .625rem;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--discovery-blue); 
+    border-radius: .625rem;
+}
+

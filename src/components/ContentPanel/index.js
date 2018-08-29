@@ -2,18 +2,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import Modal from 'react-responsive-modal';
-import moment from 'moment';
 
 import './ContentPanel.css';
 import { getStyle } from '../../util.js';
-import VitalSigns from '../VitalSigns';
-import Conditions from '../Conditions';
-import LabResults from '../LabResults';
-import MedsRequested from '../MedsRequested';
-import MedsDispensed from '../MedsDispensed';
-import Immunizations from '../Immunizations';
+
 import Allergies from '../Allergies';
+import Conditions from '../Conditions';
+import DocumentReferences from '../DocumentReferences';
+import Immunizations from '../Immunizations';
+import LabResults from '../LabResults';
+import MedsAdministration from '../MedsAdministration';
+import MedsDispensed from '../MedsDispensed';
+import MedsRequested from '../MedsRequested';
+import MedsStatement from '../MedsStatement';
 import Procedures from '../Procedures';
+import SocialHistory from '../SocialHistory';
+import VitalSigns from '../VitalSigns';
+
 
 //
 // Render the content panel of ParticipantDetail page
@@ -30,7 +35,8 @@ export default class ContentPanel extends Component {
 	 dotType: PropTypes.string.isRequired,
 	 date: PropTypes.string.isRequired,
 	 data: PropTypes.array
-      })
+      }),
+      nextPrevFn: PropTypes.func.isRequired
    }
 
    state = {
@@ -39,6 +45,7 @@ export default class ContentPanel extends Component {
       topBound: 0,
       positionY: 0,
       panelWidth: 0,
+      dragging: false,
       payloadModalIsOpen: false
    }
 
@@ -70,17 +77,32 @@ export default class ContentPanel extends Component {
 		       panelWidth: getStyle(svg, 'width') });
    }
 
+   onDragStart = (e, data) => {
+      this.setState({ dragging: true });
+   }
+
    onDragStop = (e, data) => {
       this.setState({ positionY: data.y });
+      setTimeout(() => this.setState({ dragging: false }), 250);	// Wait a bit before clearing drag state
+   }
+
+   onKeydown = (event) => {
+      if (this.state.isOpen && event.key === 'ArrowLeft') {
+	 this.props.nextPrevFn('prev');
+      } else if (this.state.isOpen && event.key === 'ArrowRight') {
+	 this.props.nextPrevFn('next');
+      }
    }
 
    componentDidMount() {
       this.updateDraggableOnMount();
       window.addEventListener('resize', this.updateDraggableOnResize);
+      window.addEventListener('keydown', this.onKeydown);
    }
 
    componentWillUnmount() {
       window.removeEventListener('resize', this.updateDraggableOnResize);
+      window.removeEventListener('keydown', this.onKeydown);
    }
 
    componentDidUpdate(prevProps, prevState) {
@@ -99,24 +121,31 @@ export default class ContentPanel extends Component {
       return (
 	 <div className='content-panel-inner'>
 	    <div className='content-panel-inner-title'>
-	       <button className='content-panel-inner-title-payload-button' onClick={() => this.setState({payloadModalIsOpen: true})}>
-	          { `Participant Data for ${context.date.replace(/T/g, ' at ')}` }
+	       <button className='content-panel-inner-title-payload-button' onClick={() => !this.state.dragging && this.setState({payloadModalIsOpen: true})}>
+	          { context.date.includes('T') ? new Date(context.date).toUTCString() : new Date(context.date).toUTCString().substring(0,16) }
 	       </button>
 	       <button className='content-panel-inner-title-close-button' onClick={this.onClose} />
 	    </div>
-	    <VitalSigns className='vital-signs' data={context.data}/>
-	    <Conditions className='conditions' data={context.data}/>
-	    <LabResults className='lab-results' data={context.data}/>
-	    <MedsRequested className='meds-requested' data={context.data}/>
-	    <MedsDispensed className='meds-dispensed' data={context.data}/>
-	    <Immunizations className='immunizations' data={context.data}/>
-	    <Allergies className='allergies' data={context.data}/>
-	    <Procedures className='procedures' data={context.data}/>
-	    <Modal open={this.state.payloadModalIsOpen} onClose={() => this.setState({payloadModalIsOpen: false})}>
-	       <pre>
-	          { JSON.stringify(context.data, null, 3) }
-	       </pre>
-	    </Modal>
+	    <div className='content-panel-inner-body'>
+	       <Allergies className='allergies' data={context.data}/>
+	       <Conditions className='conditions' data={context.data}/>
+	       <DocumentReferences className='doc-refs' data={context.data}/>
+	       <Immunizations className='immunizations' data={context.data}/>
+	       <LabResults className='lab-results' data={context.data}/>
+	       <MedsAdministration className='meds-admin' data={context.data}/>
+	       <MedsDispensed className='meds-dispensed' data={context.data}/>
+	       <MedsRequested className='meds-requested' data={context.data}/>
+	       <MedsStatement className='meds-statement' data={context.data}/>
+	       <Procedures className='procedures' data={context.data}/>
+	       <SocialHistory className='social-history' data={context.data}/>
+	       <VitalSigns className='vital-signs' data={context.data}/>
+
+	       <Modal open={this.state.payloadModalIsOpen} onClose={() => this.setState({payloadModalIsOpen: false})}>
+	          <pre>
+	             { JSON.stringify(context.data, null, 3) }
+	          </pre>
+	       </Modal>
+	    </div>
 	 </div>
       );
    }
@@ -217,15 +246,14 @@ export default class ContentPanel extends Component {
 
    render() {
       return ( this.state.isOpen &&
-	       <Draggable axis='y' position={{x:0, y:this.state.positionY}} bounds={{top:this.state.topBound, bottom:0}} onStop={this.onDragStop}>
+	       <Draggable axis='y' position={{x:0, y:this.state.positionY}} handle='.content-panel-inner-title'
+			  bounds={{top:this.state.topBound, bottom:0}} onDrag={this.onDragStart} onStop={this.onDragStop}>
 	          <div className='content-panel' style={{width:this.state.panelWidth}}>
 		     <div className='content-panel-left'>
-			<button className='content-panel-left-button'/>
+			<button className='content-panel-left-button' onClick={() => this.props.nextPrevFn('prev')} />
+			<button className='content-panel-right-button' onClick={() => this.props.nextPrevFn('next')} />
 		     </div>
 		     { this.renderContents(this.props.context) }
-		     <div className='content-panel-right'>
-			<button className='content-panel-right-button'/>
-		     </div>
 	          </div>
 	       </Draggable>
       )

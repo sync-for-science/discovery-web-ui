@@ -1,151 +1,131 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery VitalSigns Stylesheet */
-/* v.01.02 Updated 07/26/2018 */
+/* v.01.09 Updated 08/21/2018 */
 
 .vital-signs-header {
-	margin:10px 20px 10px 20px;
-	border-bottom: 1px solid var(--discovery-blue);
+	margin:.625rem 1.250rem;
+	border-bottom: 0.063rem solid var(--discovery-blue);
 	font-family: discovery-bold;
-	font-size:100%;
+	font-size:1.000rem;
 	color: var(--discovery-blue);
 }
 
 .vital-signs-body {
-	margin:0 20px 0 20px;
+	margin:0 1.250rem 1.250rem 1.250rem;
+	height:18.750rem;
 }
 
-.body-height {
+.vital-signs-container {
 	display:grid;
-	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
-	grid-column-gap: 0;
-	margin:0 0 10px 0;
+	grid-template-columns:repeat(40, minmax(min-content, 1fr)); 
+	grid-column-gap:.313rem;
+	border-bottom:0.063rem solid var(--discovery-data-divider);
+	padding:0 0 0.313rem 0;
+	margin:0 0 .625rem 0;
 }
 
-.body-height-header {
-	font-family: discovery-regular;
-	font-size:90%;
-	text-align: right;
-	white-space: nowrap;
-	padding:0 5px 0 0;
-	grid-column: 1/span 13;
+.vital-signs-container-last {
+	display:grid;
+	grid-template-columns:repeat(40, minmax(min-content, 1fr)); 
+	grid-column-gap:.313rem;
+	border-bottom:0.063rem solid var(--discovery-background);
+	padding:0 0 0.313rem 0;
+	margin:0 0 .625rem 0;
 }
 
-.body-height-value {
-	font-family: discovery-data;
-	font-size:160%;
+.vital-signs-display {
+	height:auto;
+	width:auto;
+	font-family: discovery-data-text;
+	font-size:1.200rem;
+	text-align: left;
 	color:var(--discovery-data);
-	text-align: right;
-	grid-column: 14/span 3;
-}
-
-.body-height-unit {
-	font-family: discovery-regular;
-	font-size:60%;
-	padding:12px 0 0 5px;
-	grid-column: 18/span 2;
-}
-
-.body-weight {
-	display:grid;
-	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
-	grid-column-gap: 0;
-	margin:0 0 10px 0;
-}
-
-.body-weight-header {
-	font-family: discovery-regular;
-	font-size:90%;
-	text-align: right;
 	white-space: nowrap;
-	padding:0 5px 0 0;
-	grid-column: 1/span 13;
+	padding:0;
+	grid-column: 1/ span 40;
 }
 
-.body-weight-value {
+.vital-signs-value1 {
+	height:auto;
+	width:auto;
 	font-family: discovery-data;
-	font-size:160%;
+	font-size:1.200rem;
 	text-align: right;
 	color:var(--discovery-data);
-	grid-column: 14/span 3;
+	padding:0 0 0 0.938rem;
+	grid-column: 1;
 }
 
-.body-weight-unit {
+.vital-signs-unit1 {
+	height:auto;
+	text-align: left;
 	font-family: discovery-regular;
-	font-size:60%;
-	padding:12px 0 0 5px;
-	grid-column: 18/span 2;
+	font-size:.800rem;
+	color:var(--discovery-data-label);
+	padding:4px 0 0 0;
+	grid-column: 2;
 }
 
-.blood-pressure {
-	display:grid;
-	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
-	grid-column-gap: 0;
-	margin:0 0 10px 0;
-}
-
-.blood-pressure-header {
+.vital-signs-label1 {
+	height:auto;
+	text-align: left;
 	font-family: discovery-regular;
-	font-size:90%;
-	text-align: right;
-	vertical-align: bottom;
-	white-space: nowrap;
-	padding:0 5px 0 0;
-	grid-column: 1/span 13;
+	font-size:.800rem;
+	color:var(--discovery-data-label);
+	padding:4px 0 0 0;
+	grid-column: 3;
 }
 
-.blood-pressure-value {
+.vital-signs-value2 {
+	height:auto;
+	width:auto;
 	font-family: discovery-data;
-	font-size:160%;
+	font-size:1.200rem;
+	text-align: right;
 	color:var(--discovery-data);
-	text-align: right;
-	grid-column: 14/span 3;
-	grid-row: span 2;
+	grid-column: 1;
 }
 
-.blood-pressure-unit {
+.vital-signs-unit2 {
+	height:auto;
+	text-align: left;
 	font-family: discovery-regular;
-	font-size:60%;
-	padding:0 0 0 5px;
-	grid-column: 18/span 1;
+	font-size:.800rem;
+	color:var(--discovery-data-label);
+	padding:4px 0 0 0;
+	grid-column: 2;
 }
 
-.blood-pressure-label {
-	font-family: discovery-bold;
-	font-size:60%;
-	padding:0 0 0 5px;
-	grid-column: 18/span 2;
-	margin:-10px 0 0 0;
-}
-
-.body-mass-index-bmi {
-	display:grid;
-	grid-template-columns:repeat(40, minmax(2.5%, 1fr));
-	grid-column-gap: 0;
-	margin:0 0 10px 0;
-}
-
-.body-mass-index-bmi-header {
+.vital-signs-label2 {
+	height:auto;
+	text-align: left;
 	font-family: discovery-regular;
-	font-size:90%;
+	font-size:.800rem;
+	color:var(--discovery-data-label);
+	padding:4px 0 0 0;
+	grid-column: 3;
+}
+
+.vital-signs-status-label {
+	height: auto;
+	width:auto;
+	font-family:discovery-regular;
+	font-size:.800rem;
 	text-align: right;
+	color:var(--discovery-data-label);
 	white-space: nowrap;
-	padding:0 5px 0 0;
-	grid-column: 1/span 13;
+	padding:9px 0 0 15px;
+	grid-column: 1;
 }
 
-.body-mass-index-bmi-value {
-	font-family: discovery-data;
-	font-size:160%;
+.vital-signs-status-value {
+	height: auto;
+	font-family: discovery-data-text;
+	font-size:140%;
+	text-align: left;
 	color:var(--discovery-data);
-	text-align: right;
-	grid-column: 14/span 3;
+	white-space: nowrap;
+	padding:0;
+	grid-column: 2;
 }
-
-.body-mass-index-bmi-unit {
-	font-family: discovery-regular;
-	font-size:60%;
-	padding:12px 0 0 5px;
-	grid-column: 18/span 2;
-}
-

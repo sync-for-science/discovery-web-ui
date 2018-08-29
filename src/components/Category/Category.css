@@ -1,12 +1,12 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Category Stylesheet */
-/* v.01.12 Updated 07/23/2018 */
+/* v.01.13 Updated 08/20/2018 */
 
 .category {
 	display:flex;
 	flex-direction: row;
-	height:36px;
+	height:2.250rem;
 	width:100%;
 	margin: 0;
 }
@@ -15,11 +15,11 @@
 	display:flex;
 	justify-content: center;
 	height: auto;
-	width:246px;
-	min-width: 246px;
+	width:15.375rem;
+	min-width:15.375rem;
 	margin:0;
-	border-right:2px solid var(--discovery-category);
-	border-left:2px solid var(--discovery-category);
+	border-right:0.125rem solid var(--discovery-category);
+	border-left:0.125rem solid var(--discovery-category);
 	padding: 0;
 	text-align:center;
 	cursor: default;
@@ -31,10 +31,10 @@
 	height: auto;
 	min-width:80%;
 	max-width: 98%;
-	margin:5px auto;
-	border:2px solid var(--discovery-category);
-	border-radius: 25px;
-	padding:2px 0;
+	margin:0.313rem auto;
+	border:0.125rem solid var(--discovery-category);
+	border-radius:1.563rem;
+	padding:0.125rem 0;
 	background-color: var(--discovery-category);
 	font-family:discovery-bold;
  	font-size: inherit;
@@ -49,10 +49,10 @@
 	height:auto;
 	min-width:80%;
 	max-width: 98%;
-	margin:5px auto;
-	border:2px solid var(--discovery-category);
-	border-radius: 25px;
-	padding:2px 0;
+	margin:0.313rem auto;
+	border:0.125rem solid var(--discovery-category);
+	border-radius:1.563rem;
+	padding:0.125rem 0;
 	background-color: var(--discovery-background);
 	font-family:discovery-regular;
 	font-size: inherit;
@@ -68,7 +68,7 @@
 	height: inherit;
 	width: 100%;
 	margin: 0;
-	padding:0 5px 0 5px;
+	padding:0 0.313rem;
 	background-image: url(../../svg/horizontal-rule-1px-black.svg);
 	background-position: center;
 	background-repeat: repeat-x;

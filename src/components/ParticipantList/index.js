@@ -38,18 +38,25 @@ export default class ParticipantList extends Component {
 		       (logoClass,index) => <div className={logoClass+'-off'} key={logoClass+index} /> )}
 	       </div>
 	    </div>
+		
 	    <div className='participant-list-content'>
 	       <div className='participant-list-title'>Select a Participant to View Details</div>
-	       <div className='participant-list-column-header-flagged'/>
-	       <div className='participant-list-column-header-name-id'>Participant</div>
-	       <div className='participant-list-column-header-gender'>Gender</div>
-	       <div className='participant-list-column-header-dob'>DOB</div>
-	       <div className='participant-list-column-header-dates'>Date Range</div>
-	       <div className='participant-list-column-header-providers'>Providers</div>
-	       <div className='participant-list-column-header-values'>Data Values</div>
-	       { this.renderList() }
-	    </div>
-	 </div>
+				<div className="participant-list-content-data">
+					<div className='participant-list-header-wrapper'>
+	       			<div className='participant-list-column-header-flagged'/>
+	       			<div className='participant-list-column-header-name-id'>Participant</div>
+	       			<div className='participant-list-column-header-gender'>Gender</div>
+	       			<div className='participant-list-column-header-dob'>DOB</div>
+	       			<div className='participant-list-column-header-dates'>Date Range</div>
+	       			<div className='participant-list-column-header-providers'>Providers</div>
+	       			<div className='participant-list-column-header-values'>Data Values</div>
+					</div>
+					<div className='participant-list-data-wrapper'>
+	       			{ this.renderList() }
+					</div>
+	    		</div>
+			</div>
+	 	</div>
       );
    }
 

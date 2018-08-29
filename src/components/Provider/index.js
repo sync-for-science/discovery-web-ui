@@ -16,7 +16,8 @@ export default class Provider extends Component {
       providerName: PropTypes.string.isRequired,
       svgWidth: PropTypes.string.isRequired,
       callbackFn: PropTypes.func.isRequired,
-      dotClickFn: PropTypes.func.isRequired
+      dotClickFn: PropTypes.func.isRequired,
+      enabledFn: PropTypes.func.isRequired
    }
 
    state = {
@@ -24,28 +25,8 @@ export default class Provider extends Component {
    }
 
    handleClick = () => {
+      this.props.enabledFn('Provider', this.props.providerName, !this.state.isEnabled);
       this.setState({isEnabled: !this.state.isEnabled});
-   }
-
-   renderDotLines() {
-      return [
-	 <DotLine className='inactive-dots' key='inactive' dotRadius={config.normalDotRadius}
-		  dotPositions={this.props.callbackFn(this.constructor.name, this.props.providerName, 'inactive')}
-		  context={ {parent:this.constructor.name, rowName:this.props.providerName, dotType:'inactive'} }
-		  dotClickFn={this.props.dotClickFn} />,
-	 <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius}
-		  dotPositions={this.props.callbackFn(this.constructor.name, this.props.providerName, 'active')}
-		  context={ {parent:this.constructor.name, rowName:this.props.providerName, dotType:'active'} }
-		  dotClickFn={this.props.dotClickFn} />,
-	 <DotLine className='highlight-dots' key='highlight' dotRadius={config.normalDotRadius}
-		  dotPositions={this.props.callbackFn(this.constructor.name, this.props.providerName, 'highlight')}
-		  context={ {parent:this.constructor.name, rowName:this.props.providerName, dotType:'highlight'} }
-	  	  dotClickFn={this.props.dotClickFn} />,
-	 <DotLine className='highlight-ring-dots' key='highlight-ring' dotRadius={config.highlightDotRadius}
-		  dotPositions={this.props.callbackFn(this.constructor.name, this.props.providerName, 'highlight')}
-		  context={ {parent:this.constructor.name, rowName:this.props.providerName, dotType:'highlight'} }
-		  dotClickFn={this.props.dotClickFn} />
-      ]
    }
 
    render() {
@@ -57,7 +38,22 @@ export default class Provider extends Component {
 	       </button>
 	    </div>
 	    <SVGContainer className='provider-svg-container' svgClassName='provider-svg' svgWidth={this.props.svgWidth}>
-	       {this.state.isEnabled ? this.renderDotLines() : null}
+	       <DotLine className='inactive-dots' key='inactive' dotRadius={config.normalDotRadius}
+			dotPositions={this.props.callbackFn(this.constructor.name, this.props.providerName, this.state.isEnabled, 'inactive')}
+			context={ {parent:this.constructor.name, rowName:this.props.providerName, dotType:'inactive'} }
+			dotClickFn={this.props.dotClickFn} />
+	       <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius}
+			dotPositions={this.props.callbackFn(this.constructor.name, this.props.providerName, this.state.isEnabled, 'active')}
+			context={ {parent:this.constructor.name, rowName:this.props.providerName, dotType:'active'} }
+			dotClickFn={this.props.dotClickFn} />
+	       <DotLine className='highlight-dots' key='highlight' dotRadius={config.normalDotRadius}
+			dotPositions={this.props.callbackFn(this.constructor.name, this.props.providerName, this.state.isEnabled, 'highlight')}
+			context={ {parent:this.constructor.name, rowName:this.props.providerName, dotType:'highlight'} }
+			dotClickFn={this.props.dotClickFn} />
+	       <DotLine className='highlight-ring-dots' key='highlight-ring' dotRadius={config.highlightDotRadius}
+			dotPositions={this.props.callbackFn(this.constructor.name, this.props.providerName, this.state.isEnabled, 'highlight')}
+			context={ {parent:this.constructor.name, rowName:this.props.providerName, dotType:'highlight'} }
+			dotClickFn={this.props.dotClickFn} />
 	    </SVGContainer>
 	 </div>
       )

@@ -20,7 +20,8 @@ export default class PageHeader extends Component {
 
    state = {
       modalName: '',
-      logoClasses: ['logo-s4s-button']		// Parsed from query string 'logos=a,b,c'
+      logoClasses: ['logo-s4s-button'],		// Default value. Parsed from query string 'logos=a,b,c'
+      currentTextSize: 1.0
    }
 
    componentDidMount() {
@@ -61,10 +62,26 @@ export default class PageHeader extends Component {
 
    resizeText(dir) {
       if (document.body.style.fontSize === '') {
-         document.body.style.fontSize = '1.0em';
+         document.body.style.fontSize = '1.0rem';
       }
-      let currSize = parseFloat(document.body.style.fontSize);
-      document.body.style.fontSize = currSize * ((dir==='+') ? 1+config.textSizeStep : 1-config.textSizeStep) + 'em';
+
+      let size = parseFloat(document.body.style.fontSize);
+
+      if (dir==='+' && size < config.maxTextSize) {
+	 size = size + config.textSizeStep;
+	 this.setState({currentTextSize: size});
+	 document.body.style.fontSize = size + 'rem';
+
+      } else if (dir==='-' && size > config.minTextSize) {
+	 size = size - config.textSizeStep;
+	 this.setState({currentTextSize: size});
+	 document.body.style.fontSize = size + 'rem';
+      }
+   }
+
+   resetTextSize() {
+      this.setState({currentTextSize: 1.0});
+      document.body.style.fontSize = '1.0rem';
    }
 
    buttonClick(buttonName) {
@@ -100,17 +117,21 @@ export default class PageHeader extends Component {
    render() {
       return (
 	 <div className='page-header'>
-	    <div className="logo-box">
+	    <div className='logo-box'>
 	       { this.state.logoClasses.map(
 		   (logoClass,index) => <button className={logoClass+'-off'} key={logoClass+index} onClick={() => this.buttonClick('logoModal')} /> )}
 	    </div>
-	    <div className="header-controls-box">
-	       <button className="text-size-smaller-button-off"		onClick={() => this.resizeText('-')} />
-	       <button className="text-size-larger-button-off"		onClick={() => this.resizeText('+')} />
-	       <button className="participant-info-button-off"	onClick={() => this.buttonClick('participantInfoModal')} />
-	       <button className="help-button-off"			onClick={() => this.buttonClick('helpModal')} />
-	       <button className="download-button-off"			onClick={() => this.buttonClick('downloadModal')} />
-	       <button className="print-button-off"			onClick={() => this.buttonClick('printModal')} />
+	    <div className='header-controls-box'>
+	       <button className='text-size-smaller-button-off'	onClick={() => this.resizeText('-')} />
+	       <button className='text-size-larger-button-off'	onClick={() => this.resizeText('+')} />
+	       <div className='text-size-current'		onClick={() => this.resetTextSize()}>
+	         {Math.round(this.state.currentTextSize*100)}%
+	       </div>
+
+	       <button className='participant-info-button-off'	onClick={() => this.buttonClick('participantInfoModal')} />
+	       <button className='help-button-off'		onClick={() => this.buttonClick('helpModal')} />
+	       <button className='download-button-off'		onClick={() => this.buttonClick('downloadModal')} />
+	       <button className='print-button-off'		onClick={() => this.buttonClick('printModal')} />
 	    </div>
 	 </div>
       )

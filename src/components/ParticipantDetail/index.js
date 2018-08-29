@@ -30,18 +30,37 @@ export default class ParticipantDetail extends Component {
    state = {
       details: undefined,	    // Will be set to an instance of FhirTransform
       allDates: null,
-      minDate: 0,
-      startDate: 0,
-      maxDate: 0,
-      endDate: 0,
+      minDate: 0,		    // Earliest date we have data for this participant
+      startDate: 0,		    // Jan 1 of minDate's year
+      maxDate: 0,		    // Latest date we have data for this participant
+      endDate: 0,		    // Dec 31 of maxDate's year
+      minActivePos: 0,		    // Earliest normalized date/position allowed by TimeWidget
+      maxActivePos: 1,		    // Latest normalized date/position allowed by TimeWidget
       isLoading: false,
       fetchError: null,		    // Possible axios error object
       catsExpanded: true,
+      catsEnabled: {},		    // Enabled status of categories
       provsExpanded: true,
+      provsEnabled: {},		    // Enabled status of providers
       modalName: '',
       modalIsOpen: false,
-      dotClickContext: null,
+      dotClickContext: null,	    // The current dot
       svgWidth: '0'
+   }
+
+   //
+   // Inactive dot handling
+   //
+   //   inactiveLocked: false
+   //      Clicking on an inactive dot displays its data
+   //      Next/prev from a dot can result in displaying an inactive dot
+   //
+   //   inactiveLocked: true
+   //      Clicking on an inactive dot does nothing
+   //      Next/prev will never display an inactive dot
+   //
+   get inactiveLocked () {
+      return true;
    }
 
    // Kluge: following needs to know about lower-level SVG-related classes
@@ -70,12 +89,12 @@ export default class ParticipantDetail extends Component {
 	       let normDates = dates.length > 0 ? this.normalizeDates(dates, startDate, endDate) : [];
 	       let allDates = dates.length > 0 ? dates.map((date, index) => ({position: normDates[index], date: date})) : [];
 	       this.setState({ details: details,
-			    allDates: allDates,
-			    minDate: minDate,
-			    startDate: startDate,
-			    maxDate: maxDate,
-			    endDate: endDate,
-			    isLoading: false })
+			       allDates: allDates,
+			       minDate: minDate,
+			       startDate: startDate,
+			       maxDate: maxDate,
+			       endDate: endDate,
+			       isLoading: false })
 	    } else {
 		this.setState({ fetchError: { message: 'Invalid Participant ID' },
 				isLoading: false })
@@ -103,7 +122,7 @@ export default class ParticipantDetail extends Component {
       let min = (minDate instanceof Date) ? minDate : new Date(minDate);
       let max = (maxDate instanceof Date) ? maxDate : new Date(maxDate);
       let delta = max - min;
-       return elts.map( elt => (delta === 0) ? 0.5 : (((elt instanceof Date) ? elt : new Date(elt)) - min) / delta);
+      return elts.map( elt => (delta === 0) ? 0.5 : (((elt instanceof Date) ? elt : new Date(elt)) - min) / delta);
    }
 
    // Options for jsonQuery -- see https://www.npmjs.com/package/json-query
@@ -111,7 +130,7 @@ export default class ParticipantDetail extends Component {
       return {
 	 locals: {
 	    isCategory: (input, value) => {
-	       console.log('input.category: ' + JSON.stringify(input.category,null,3));
+//	       console.log('input.category: ' + JSON.stringify(input.category,null,3));
 	       if (input && input.category) {
 		  if (input.category.text === value) {
 		     return true;
@@ -146,45 +165,75 @@ export default class ParticipantDetail extends Component {
 										 +'[*:isCategory(Vital Signs)|:isCategory(vital-signs)]', this.queryOptions),
 	 'Social History':	  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
 										 +'[*:isCategory(Social History)]', this.queryOptions),
+	 'Meds Statement':	  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationStatement]'),
 	 'Meds Requested':        e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationOrder|resourceType=MedicationRequest]'),
 	 'Meds Dispensed':        e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationDispense]'),
+	 'Meds Administration':	  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationAdministration]'),
 	 'Immunizations':	  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Immunization]'),
-	 'Procedures':		  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Procedure]|[*resourceType=Observation]'
-													   +'[*:isCategory(procedure)]'),
+	 'Procedures':		  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Procedure]').concat(
+					  FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation][*:isCategory(procedure)]', this.queryOptions)),
 	 'Document References':	  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=DocumentReference]'),
 	 'Allergies':		  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=AllergyIntolerance]')
       }
    }
 
    itemDate(item, category) {
+      let date = null;
       try {
 	 switch (category) {
 	    case 'Conditions':
-	       return item.onsetDateTime;
+	       date = item.onsetDateTime;
+	       break;
 	    case 'Lab Results':
 	    case 'Vital Signs':
-	       return item.effectiveDateTime;
+	       date = item.effectiveDateTime;
+	       break;
+	    case 'Social History':
+	       date = new Date().toISOString();		// Use today's date
+	       break;
+	    case 'Meds Statement':
+	       date = item.dateAsserted;
+	       break;
 	    case 'Meds Requested':
 	       try {
-		  return item.dosageInstruction[0].timing.repeat.boundsPeriod.start;
+		  date = item.dosageInstruction[0].timing.repeat.boundsPeriod.start;
 	       } catch (e) {
-		  return item.authoredOn;
+		  date = item.authoredOn;
 	       }
+	       break;
 	    case 'Meds Dispensed':
-	       return item.whenHandedOver;
+	       date = item.whenHandedOver;
+	       break;
+	    case 'Meds Administration':
+	       date = item.effectiveTimeDateTime !== undefined ? item.effectiveTimeDateTime
+							       : (item.effectiveTimePeriod.start !== undefined ? item.effectiveTimePeriod.start
+													       : item.effectiveTimePeriod.end);
+	       break;
 	    case 'Immunizations':
-	       return item.date;
+	       date = item.date;
+	       break;
 	    case 'Procedures':
-	       return item.performedDateTime;
+	       date = item.performedDateTime || item.effectiveDateTime || (item.performedPeriod ? item.performedPeriod.start : null);
+	       break;
 	    case 'Document References':
-	       return item.created;
+	       date = item.created;
+	       break;
 	    case 'Allergies':
-	       return item.recordedDate || item.assertedDate;
+	       date = item.recordedDate || item.assertedDate;
+	       break;
 	    default:
 	       return null;	// Items without a date
 	 }
       } catch (err) {
-	   return `*** ${category}: DATE NOT FOUND ***`;
+	  console.log(`*** ${category} -- date error: ${err.message} ***`);
+	  return null;
+      }
+
+      if (date) {
+	 return date;
+      } else {
+	 console.log(`*** ${category} -- no date found! ***`);
+	 return null;
       }
    }
 
@@ -224,7 +273,7 @@ export default class ParticipantDetail extends Component {
       }
    }
 
-   // Return array of all populated category names for this participant
+   // Return sorted array of all populated category names for this participant
    get categories() {
       let cats = {};
       if (this.state.details) {
@@ -235,10 +284,10 @@ export default class ParticipantDetail extends Component {
 	    }
 	 }
       }
-      return Object.keys(cats);
+      return Object.keys(cats).sort();
    }
 
-   // Return array of all provider names for this participant
+   // Return sorted array of all provider names for this participant
    get providers() {
       let provs = {};
       if (this.state.details) {
@@ -247,7 +296,7 @@ export default class ParticipantDetail extends Component {
 	    provs[elt.provider] = null;
 	 }
       }
-      return Object.keys(provs);
+      return Object.keys(provs).sort();
    }
 
    //
@@ -270,14 +319,53 @@ export default class ParticipantDetail extends Component {
    }
 
    //
+   // Callback function to record category/provider enable/disable
+   //   parent:	'Category', 'Provider'
+   //   rowName:	<category-name>/<provider-name>
+   //	 isEnabled:	the current state to record
+   //
+   setEnabled = this.setEnabled.bind(this);
+   setEnabled(parent, rowName, isEnabled) {
+      if (parent === 'Category') {
+	 if (this.state.catsEnabled[rowName] !== isEnabled) {
+	    let catsEnabled = this.state.catsEnabled;
+	    catsEnabled[rowName] = isEnabled;
+	    this.setState({catsEnabled: catsEnabled});
+//	    console.log(JSON.stringify(catsEnabled, null, 3));
+
+	    if (this.state.dotClickContext) {
+	       let newContext = this.state.dotClickContext;
+	       newContext.data = this.fetchDataForDot(newContext.parent, newContext.rowName, newContext.date);
+	       this.setState({dotClickContext: newContext});
+	    }
+	 }
+      } else {
+	 // Provider
+	 if (this.state.provsEnabled[rowName] !== isEnabled) {
+	    let provsEnabled = this.state.provsEnabled;
+	    provsEnabled[rowName] = isEnabled;
+	    this.setState({provsEnabled: provsEnabled});
+//	    console.log(JSON.stringify(provsEnabled, null, 3));
+
+	    if (this.state.dotClickContext) {
+	       let newContext = this.state.dotClickContext;
+	       newContext.data = this.fetchDataForDot(newContext.parent, newContext.rowName, newContext.date);
+	       this.setState({dotClickContext: newContext});
+	    }
+	 }
+      }
+   }
+
+   //
    // Callback function for this component's state, returning the requested array of position+date objects
    //	parent:		'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
    //	rowName:	<category-name>/<provider-name>
-   //	dotType:	'active', 'inactive', 'highlight'
+   //   isEnabled:	'true' = render normally, 'false' = active dots become inactive
+   //	dotType:	'active', 'inactive', 'highlight', 'all'
    //
-   // TODO: fix after TimeWidget is complete
+   // TODO: complete after TimeWidget, search are finished
    fetchDates = this.fetchDates.bind(this);
-   fetchDates(parent, rowName, dotType) {
+   fetchDates(parent, rowName, isEnabled, dotType) {
       if (!this.state.details) {
 	 return [];
       } else {
@@ -285,54 +373,60 @@ export default class ParticipantDetail extends Component {
 	 if (allDates.length === 0) {
 	    return [];
 	 } else {
-	     // TODO: temp kluge
-	     let mid = Math.trunc(allDates.length/2);
-	     let midDate = allDates[mid].date;
+	     if (dotType === 'highlight') {
+		if (this.state.dotClickContext && this.state.dotClickContext.parent === parent && this.state.dotClickContext.rowName === rowName) {
+		   return [allDates.find(elt => elt.date === this.state.dotClickContext.date)];
+		} else {
+		   return [];
+		}
+	     }
 
 	     switch (parent) {
 	        case 'ProviderRollup':
                 case 'CategoryRollup':
 	           switch (dotType) {
-	              case 'highlight':
-		         // TODO: get from state
-		         return [allDates[mid]];
 	              case 'inactive':
-		         return allDates.slice(0, mid);
-	              default:  // 'active'
-		         return allDates.slice(mid, allDates.length);
+		         return allDates.filter(elt => elt.position < this.state.minActivePos || elt.position > this.state.maxActivePos);
+		      case 'active':
+		         return allDates.filter(elt => elt.position >= this.state.minActivePos && elt.position <= this.state.maxActivePos);
+	              default:  // 'all'
+		         return allDates;
 		   }
 	        case 'Provider':
 	           let provDates = this.cleanDates(this.state.details.pathItem(`[*provider=${rowName}].itemDate`, this.queryOptions));
 	           let normProvDates = this.normalizeDates(provDates, startDate, endDate);
 	           let allProvDates = provDates.map((date, index) => ({position: normProvDates[index], date: date}));
-	           let indexOfMidProvDate = provDates.indexOf(midDate);
-	           switch (dotType) {
-	              case 'highlight':
-		         // TODO: get from state
-		         return indexOfMidProvDate >= 0 ? [ allProvDates[indexOfMidProvDate] ] : [];
+		   switch (dotType) {
 	              case 'inactive':
-		         return indexOfMidProvDate >= 0 ? allProvDates.slice(0, indexOfMidProvDate)
-							: allProvDates.filter(value => value.position < allDates[mid].position);
-		      default:  // 'active'
-		         return indexOfMidProvDate >= 0 ? allProvDates.slice(indexOfMidProvDate, allProvDates.length)
-							: allProvDates.filter(value => value.position >= allDates[mid].position);
+		         return isEnabled ? allProvDates.filter(elt => elt.position < this.state.minActivePos || elt.position > this.state.maxActivePos)
+					  : allProvDates;
+		      case 'active':
+		         return isEnabled ? allProvDates.filter(elt => elt.position >= this.state.minActivePos && elt.position <= this.state.maxActivePos)
+					  : [];
+		      default:  // 'all'
+		         return allProvDates;
 		   }
-                default:   // 'Category'
+                case 'Category':
 	           let catDates = this.cleanDates(this.state.details.pathItem(`[*category=${rowName}].itemDate`, this.queryOptions));
 	           let normCatDates = this.normalizeDates(catDates, startDate, endDate);
 	           let allCatDates = catDates.map((date, index) => ({position: normCatDates[index], date: date}));
-	           let indexOfMidCatDate = catDates.indexOf(midDate);
-	           switch (dotType) {
-	              case 'highlight':
-		         // TODO: get from state
-		         return indexOfMidCatDate >= 0 ? [ allCatDates[indexOfMidCatDate] ] : [];
+		   switch (dotType) {
 	              case 'inactive':
-		         return indexOfMidCatDate >= 0 ? allCatDates.slice(0, indexOfMidCatDate)
-		       				       : allCatDates.filter(value => value.position < allDates[mid].position);
-		      default:  // 'active'
-		         return indexOfMidCatDate >= 0 ? allCatDates.slice(indexOfMidCatDate, allCatDates.length)
-		       				       : allCatDates.filter(value => value.position >= allDates[mid].position);
+		         return isEnabled ? allCatDates.filter(elt => elt.position < this.state.minActivePos || elt.position > this.state.maxActivePos)
+					  : allCatDates;
+		      case 'active':
+		         return isEnabled ? allCatDates.filter(elt => elt.position >= this.state.minActivePos && elt.position <= this.state.maxActivePos)
+					  : [];
+		      default:  // 'all'
+		         return allCatDates;
 		   }
+	        default:   // TimeWidget
+		 switch (dotType) {
+		    case 'inactive':
+		       return allDates.filter(elt => elt.position < this.state.minActivePos || elt.position > this.state.maxActivePos)
+		    default: // 'active'
+		       return allDates.filter(elt => elt.position >= this.state.minActivePos && elt.position <= this.state.maxActivePos)
+		 }
 	     }
 	 }
       }
@@ -340,17 +434,21 @@ export default class ParticipantDetail extends Component {
 
    //
    // Return data for the clicked dot
-   //    parent:	   'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
-   //    rowName:	   <category-name>/<provider-name>
-   //    dotType:	   'active', 'inactive', 'highlight'
-   //    date:		   date of the clicked dot
+   //    parent:	'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
+   //    rowName:	<category-name>/<provider-name>
+   //    date:		date of the clicked dot
    //
-   fetchDataForDot = (parent, rowName, dotType, date) => {
+   fetchDataForDot = (parent, rowName, date) => {
        switch (parent) {
        case 'CategoryRollup':
+	   // Return all resources for enabled categories matching the clicked date
+	   return this.state.details.pathItem(`[*itemDate=${date}]`).filter(elt => this.state.catsEnabled[elt.category] === undefined ||
+										   this.state.catsEnabled[elt.category]);
+
        case 'ProviderRollup':
-	   // Return all resources for categories/providers matching the clicked date
-	   return this.state.details.pathItem(`[*itemDate=${date}]`);
+	   // Return all resources for enabled providers matching the clicked date
+	   return this.state.details.pathItem(`[*itemDate=${date}]`).filter(elt => this.state.provsEnabled[elt.provider] === undefined ||
+										   this.state.provsEnabled[elt.provider]);
 	   
        case 'Category':
 	   // Return all resources matching the clicked category and date
@@ -361,6 +459,60 @@ export default class ParticipantDetail extends Component {
 	   // Return all resources matching the clicked provider and date
 	   return this.state.details.pathItem(`[*itemDate=${date}][*provider=${rowName}]`);
        }
+   }
+
+   //
+   // Handle TimeWidget left/right thumb movement
+   //   minDatePos:	location [0..1] of left thumb
+   //   maxDatePos:	location [0..1] of right thumb
+   //
+   setLeftRight = this.setLeftRight.bind(this);
+   setLeftRight(minActivePos, maxActivePos) {
+//      console.log('minPos: ' + minActivePos + '  maxPos: ' + maxActivePos);
+      this.setState({ minActivePos: minActivePos,
+		      maxActivePos: maxActivePos });
+      // Return equivalent min/max dates
+      return {minDate: this.state.allDates.find(elt => elt.position >= minActivePos).date,
+	      maxDate: this.state.allDates.slice().reverse().find(elt => elt.position <= maxActivePos).date};
+   }
+
+   //
+   // Handle ContentPanel next/prev button clicks
+   //   direction:	'next' or 'prev'
+   //
+   onNextPrevClick = (direction) => {
+      let newContext = this.state.dotClickContext;
+      let dates = this.fetchDates(newContext.parent, newContext.rowName, true, 'all');
+      let currDateIndex = dates.findIndex( elt => elt.date === newContext.date);
+
+      if (currDateIndex === -1) {
+	 // TODO: an error!
+	 return;
+      }
+
+      // Determine next/prev date
+      if (direction === 'next') {
+	  if (currDateIndex === dates.length-1) {
+	     // No 'next' -- do nothing
+	     return;
+	  } else {
+	     newContext.date = dates[currDateIndex+1].date;
+	  }
+      } else {
+	 // 'prev'
+	 if (currDateIndex === 0) {
+	    // No 'prev' -- do nothing
+	    return;
+	 } else {
+	    newContext.date = dates[currDateIndex-1].date;
+	 }
+      }
+
+      // Fetch new/appropriate data
+      newContext.data = this.fetchDataForDot(newContext.parent, newContext.rowName, newContext.date);
+
+      // Set state accordingly
+      this.setState({ dotClickContext: newContext });
    }
 
    //
@@ -376,7 +528,8 @@ export default class ParticipantDetail extends Component {
    //
    onDotClick = (context, date) => {
       context.date = date;
-      context.data = this.fetchDataForDot(context.parent, context.rowName, context.dotType, context.date);
+      context.dotType = 'highlight';
+      context.data = this.fetchDataForDot(context.parent, context.rowName, context.date);
       this.setState({ dotClickContext: context });
    }
 
@@ -405,9 +558,10 @@ export default class ParticipantDetail extends Component {
       return (
          <div className='participant-detail'>
 	    <div className='participant-detail-fixed-header'>
-	      <PageHeader rawQueryString={this.props.location.search} modalIsOpen={this.state.modalIsOpen}
-			  modalFn={ name => this.setState({ modalName: name, modalIsOpen: true })} />
-	       <TimeWidget minDate={this.state.minDate} maxDate={this.state.maxDate} />
+	       <PageHeader rawQueryString={this.props.location.search} modalIsOpen={this.state.modalIsOpen}
+			   modalFn={ name => this.setState({ modalName: name, modalIsOpen: true })} />
+	       <TimeWidget minDate={this.state.minDate} maxDate={this.state.maxDate}
+			   timelineWidth={this.state.svgWidth} setLeftRightFn={this.setLeftRight} callbackFn={this.fetchDates} />
 	    </div>
 	    <div className='participant-detail-categories-and-providers'>
 	       <Categories>
@@ -418,7 +572,7 @@ export default class ParticipantDetail extends Component {
 		       <div className='category-nav-spacer-top' key='0' />,
 	               this.categories.map(
 			  cat => <Category key={cat} svgWidth={this.state.svgWidth} categoryName={cat}
-					   callbackFn={this.fetchDates} dotClickFn={this.onDotClick} /> ),
+					   callbackFn={this.fetchDates} dotClickFn={this.onDotClick} enabledFn={this.setEnabled} /> ),
 		       <div className='category-nav-spacer-bottom' key='1' />
 		  ] : null }
 	       </Categories>
@@ -430,14 +584,14 @@ export default class ParticipantDetail extends Component {
 		       <div className='provider-nav-spacer-top' key='0' />,
 		       this.providers.map(
 			  prov => <Provider key={prov} svgWidth={this.state.svgWidth} providerName={prov}
-					    callbackFn={this.fetchDates} dotClickFn={this.onDotClick} /> ),
+					    callbackFn={this.fetchDates} dotClickFn={this.onDotClick} enabledFn={this.setEnabled} /> ),
 		       <div className='provider-nav-spacer-bottom' key='1' />
 		  ] : null }
 	       </Providers>
 	    </div>
-	      <DiscoveryModal isOpen={this.state.modalIsOpen} modalName={this.state.modalName}
-			      onClose={ name => this.setState({ modalName: '', modalIsOpen: false })} callbackFn={this.fetchModalData} />
-	    <PageFooter context={this.state.dotClickContext} />  
+	    <DiscoveryModal isOpen={this.state.modalIsOpen} modalName={this.state.modalName}
+			    onClose={ name => this.setState({ modalName: '', modalIsOpen: false })} callbackFn={this.fetchModalData} />
+	    <PageFooter context={this.state.dotClickContext} nextPrevFn={this.onNextPrevClick} />  
 	 </div>
       );
    }

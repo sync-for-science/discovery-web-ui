@@ -1,348 +1,383 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.05 Updated 07/26/2018 */
+/* v.01.06 Updated 08/20/2018 */
 
 .page-header {
 	display:flex;
-	flex-direction: row;
-	height: 60px;
-	width: auto;
-	margin: 0;
-	padding:0 20px;
-	border-bottom: 3px solid var(--discovery-blue);
-	background-color: var(--discovery-gray);
+	flex-direction:row;
+	height:3.750rem;
+	width:auto;
+	margin:0;
+	padding:0 1.250rem;
+	border-bottom:0.188rem  solid var(--discovery-blue);
+	background-color:var(--discovery-gray);
 }
 
 .logo-box {
 	display:flex;
-	align-items: center;
-	height:60px;
+	align-items:center;
+	height:3.750rem;
 	width:100%;
-	min-width: 250px;
+	min-width:15.625rem;
 	padding:0;
 }
 
 .logo-s4s-button-off {
-	height:60px;
-	width:220px;
-	margin:0 20px 0 0;
+	height:3.750rem;
+	width:13.750rem;
+	margin:0 1.250rem 0 0;
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image: url(../../svg/logo-s4s-off.svg);
-	background-size: 220px 60px;
+	background-image:url(../../svg/logo-s4s-off.svg);
+	background-size:13.750rem 3.750rem;
 	background-repeat:no-repeat;
 	cursor: pointer;
 }
 
 .logo-s4s-button-on {
-	height:60px;
-	width:220px;
-	margin:0 20px 0 0;
+	height:3.750rem;
+	width:13.750rem;
+	margin:0 1.250rem 0 0;
 	border:none;
 	padding:0;
 	background-color:transparent;
 	background-image: url(../../svg/logo-s4s-on.svg);
-	background-size: 220px 60px;
+	background-size:13.750rem 3.750rem;
 	background-repeat:no-repeat;
-	cursor: pointer;
+	cursor:pointer;
 }
 
 .logo-harvard-button-off {
-	height:60px;
-	width:220px;
-	margin:0 20px 0 0;
+	height:3.750rem;
+	width:8.750rem;
+	margin:0;
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image: url(../../svg/logo-harvard-off.svg);
-	background-size: 220px 40px;
+	background-image:url(../../svg/logo-harvard-off.svg);
+	background-size:8.750rem 2.500rem;
 	background-repeat:no-repeat;
-	background-position: center center;
-	cursor: pointer;
+	background-position:center center;
+	cursor:pointer;
 }
 
 .logo-harvard-button-on {
-	height:60px;
-	width:220px;
+	height:3.750rem;
+	width:8.750rem;
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image: url(../../svg/logo-harvard-on.svg);
-	background-size: 220px 40px;
+	background-image:url(../../svg/logo-harvard-on.svg);
+	background-size:8.750rem 2.500rem;
 	background-repeat:no-repeat;
-	background-position: center center;
-	cursor: pointer;
+	background-position:center center;
+	cursor:pointer;
 }
 
 .logo-harvard-dbmi-button-off {
-	height:60px;
-	width:270px;
-	margin:0 20px 0 20px;
+	height:3.750rem;
+	width:16.250rem;
+	margin:0 0 0 1.250rem;
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image: url(../../svg/logo-harvard-bmi-off.svg);
-	background-size: 270px 40px;
+	background-image:url(../../svg/logo-harvard-bmi-off.svg);
+	background-size:16.250rem 2.500rem;
 	background-repeat:no-repeat;
-	background-position: center center;
-	cursor: pointer;
+	background-position:center center;
+	cursor:pointer;
 }
 
 .logo-harvard-dbmi-button-on {
-	height:60px;
-	width:270px;
-	margin:0 20px 0 20px;
+	height:3.750rem;
+	width:16.250rem;
+	margin:0 0 0 1.250rem;
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image: url(../../svg/logo-harvard-bmi-on.svg);
-	background-size: 270px 40px;
+	background-image:url(../../svg/logo-harvard-bmi-on.svg);
+	background-size:16.250rem 2.500rem;
 	background-repeat:no-repeat;
 	background-position: center center;
-	cursor: pointer;
+	cursor:pointer;
 }
 
 .logo-cms-button-off {
-	height:60px;
-	width:180px;
-	margin:0 20px 0 0;
+	height:3.750rem;
+	width:7.500rem;
+	margin:0 0 0 1.250rem;
 	border:none;
 	padding:0;
 	background-color:transparent;
 	background-image: url(../../svg/logo-cms-off.svg);
-	background-size: 180px 40px;
+	background-size:7.500rem 2.500rem;
 	background-repeat:no-repeat;
 	background-position: center center;
 	cursor: pointer;
 }
 
 .logo-csm-button-on {
-	height:60px;
-	width:180px;
-	margin:0 20px 0 0;
+	height:3.750rem;
+	width:7.500rem;
+	margin:0 0 0 1.250rem;
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image: url(../../svg/logo-cms-on.svg);
-	background-size: 180px 40px;
+	background-image:url(../../svg/logo-cms-on.svg);
+	background-size:7.500rem 2.500rem;
 	background-repeat:no-repeat;
-	background-position: center center;
-	cursor: pointer;
+	background-position:center center;
+	cursor:pointer;
 }
 
 .logo-nih-button-off {
-	height:60px;
-	width:200px;
-	margin:0 20px 0 20px;
+	height:3.750rem;
+	width:13.750rem;
+	margin:0 0 0 1.250rem;
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image: url(../../svg/logo-nih-off.svg);
-	background-size: 200px 40px;
+	background-image:url(../../svg/logo-nih-off.svg);
+	background-size:12.500rem 2.500rem;
 	background-repeat:no-repeat;
 	background-position: center center;
 	cursor: pointer;
 }
 
 .logo-nih-button-on {
-	height:60px;
-	width:200px;
-	margin:0 20px 0 20px;
+	height:3.750rem;
+	width:13.750rem;
+	margin:0 0 0 1.250rem;
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image: url(../../svg/logo-nih-on.svg);
-	background-size: 200px 40px;
+	background-image:url(../../svg/logo-nih-on.svg);
+	background-size:12.500rem 2.500rem;
 	background-repeat:no-repeat;
 	background-position: center center;
 	cursor: pointer;
 }
 
 .logo-ppm-button-off {
-	height:60px;
-	width:200px;
-	margin:0 20px 0 0;
+	height:3.750rem;
+	width:9.375rem;
+	margin:0 0 0 1.250rem;
 	border:none;
 	padding:0;
 	background-color:transparent;
 	background-image: url(../../svg/logo-ppm-off.svg);
-	background-size: 200px 40px;
+	background-size:9.375rem 2.500rem;
 	background-repeat:no-repeat;
 	background-position: center center;
 	cursor: pointer;
 }
 
 .logo-ppm-button-on {
-	height:60px;
-	width:200px;
-	margin:0 20px 0 0;
+	height:3.750rem;
+	width:9.375rem;
+	margin:0 0 0 1.250rem;
 	border:none;
 	padding:0;
 	background-color:transparent;
 	background-image: url(../../svg/logo-ppm-on.svg);
-	background-size: 200px 40px;
+	background-size:9.375rem 2.500rem;
 	background-repeat:no-repeat;
 	background-position: center center;
 	cursor: pointer;
 }
 
 .logo-all-of-us-button-off {
-	height:60px;
-	width:200px;
-	margin:0 20px 0 0;
+	height:3.750rem;
+	width:12.500rem;
+	margin:0 1.250rem 0 0;
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image: url(../../svg/logo-all-of-us-off.svg);
-	background-size: 200px 40px;
+	background-image:url(../../svg/logo-all-of-us-off.svg);
+	background-size:12.500rem 2.500rem;
 	background-repeat:no-repeat;
-	background-position: center center;
-	cursor: pointer;
+	background-position:center center;
+	cursor:pointer;
 }
 
 .logo-all-of-us-button-on {
-	height:60px;
-	width:200px;
-	margin:0 20px 0 0;
+	height:3.750rem;
+	width:12.500rem;
+	margin:0 1.250rem 0 0;
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image: url(../../svg/logo-all-of-us-on.svg);
-	background-size: 200px 40px;
+	background-image:url(../../svg/logo-all-of-us-on.svg);
+	background-size:12.500rem 2.500rem;
 	background-repeat:no-repeat;
-	background-position: center center;
-	cursor: pointer;
+	background-position:center center;
+	cursor:pointer;
+}
+
+.logo-va-button-off {
+	height:3.750rem;
+	width:9.375rem;
+	margin:0 0 0 1.250rem;
+	border:none;
+	padding:0;
+	background-color:transparent;
+	background-image: url(../../svg/logo-va-health-off.svg);
+	background-size:9.375rem 2.500rem;
+	background-repeat:no-repeat;
+	background-position:center center;
+	cursor:pointer;
+}
+
+.logo-va-button-on {
+	height:3.750rem;
+	width:9.375rem;
+	margin:0 0 0 1.250rem;
+	border:none;
+	padding:0;
+	background-color:transparent;
+	background-image:url(../../svg/logo-va-health-on.svg);
+	background-size:9.375rem 2.500rem;
+	background-repeat:no-repeat;
+	background-position:center center;
+	cursor:pointer;
 }
 
 .header-controls-box {
 	display:flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-	align-items: center;
-	justify-content: flex-end;
-	height: 60px;
-	width: 100%;
+	flex-direction:row;
+	flex-wrap:nowrap;
+	align-items:center;
+	justify-content:flex-end;
+	height:3.750rem;
 	padding:0;
 }
 			
 .text-size-smaller-button-off {
-	height: 20px;
-	width: 20px;
+	height:1.250rem;
+	width:1.250rem;
 	background-color:transparent;
-	background-image: url(../../svg/icon-text-size-smaller.svg);
-	background-position: 5px 0;
-	background-repeat: no-repeat;
-	margin:17px -5px 0 0;
-	border: none;
-	cursor: pointer;
+	background-image:url(../../svg/icon-text-size-smaller.svg);
+	background-position:0.313rem 0;
+	background-repeat:no-repeat;
+	margin:1.063rem -0.313rem 0 0;
+	border:none;
+	cursor:pointer;
 }
 
 .text-size-larger-button-off {
-	height: 40px;
-	width: 40px;
+	height:2.500rem;
+	width:2.500rem;
 	background-color:transparent;
-	background-image: url(../../svg/icon-text-size-larger.svg);
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	margin: 0 30px 0 2px;
-	border: none;
-	cursor: pointer;
+	background-image:url(../../svg/icon-text-size-larger.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;
+	margin:0 0 0 0.125rem;
+	border:none;
+	cursor:pointer;
+}
+
+.text-size-current {
+	font-family:discovery-bold;
+	font-size:0.900rem;
+	color:var(--discovery-blue);
+	padding:1.500rem 0 0 0;
+	margin:0 2.500rem 0 -0.500rem;
 }
 
 .participant-info-button-off {
-	height: 40px;
-	width: 40px;
+	height:2.500rem;
+	width:2.500rem;
 	background-color:transparent;
-	background-image: url(../../svg/icon-participant-info-off.svg);
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	margin: 0 0 0 10px;
-	border: none;
-	cursor: pointer;
+	background-image:url(../../svg/icon-participant-info-off.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;
+	margin:0 0 0 0.625rem;
+	border:none;
+	cursor:pointer;
 }
 
 .participant-info-button-on {
-	height: 40px;
-	width: 40px;
+	height:2.500rem;
+	width:2.500rem;
 	background-color:transparent;
-	background-image: url(../../svg/icon-participant-info-on.svg);
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	margin: 0 0 0 10px;
-	border: none;
-	cursor: pointer;
+	background-image:url(../../svg/icon-participant-info-on.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;
+	margin:0 0 0 0.625rem;
+	border:none;
+	cursor:pointer;
 }
 
 .help-button-off {
-	height: 40px;
-	width: 40px;
+	height:2.500rem;
+	width:2.500rem;
 	background-color:transparent;
-	background-image: url(../../svg/icon-help-off.svg);
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	margin: 0 0 0 10px;
-	border: 0;
-	cursor: pointer;
+	background-image:url(../../svg/icon-help-off.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;
+	margin:0 0 0 0.625rem;
+	border:0;
+	cursor:pointer;
 }
 
 .help-button-on {
-	height: 40px;
-	width: 40px;
+	height:2.500rem;
+	width:2.500rem;
 	background-color:transparent;
-	background-image: url(../../svg/icon-help-on.svg);
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	margin: 0 0 0 10px;
-	border: 0;
-	cursor: pointer;
+	background-image:url(../../svg/icon-help-on.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;
+	margin:0 0 0 0.625rem;
+	border:0;
+	cursor:pointer;
 }
 
 .download-button-off {
-	height: 40px;
-	width: 40px;
+	height:2.500rem;
+	width:2.500rem;
 	background-color:transparent;
-	background-image: url(../../svg/icon-download-off.svg);
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	margin: 0 0 0 10px;
-	border: 0;
-	cursor: pointer;
+	background-image:url(../../svg/icon-download-off.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;
+	margin:0 0 0 0.625rem;
+	border:0;
+	cursor:pointer;
 }
 
 .download-button-on {
-	height: 40px;
-	width: 40px;
+	height:2.500rem;
+	width:2.500rem;
 	background-color:transparent;
-	background-image: url(../../svg/icon-download-on.svg);
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	margin: 0 0 0 10px;
-	border: 0;
-	cursor: pointer;
+	background-image:url(../../svg/icon-download-on.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;
+	margin:0 0 0 0.625rem;
+	border:0;
+	cursor:pointer;
 }
 
 .print-button-off {
-	height: 40px;
-	width: 40px;
+	height:2.500rem;
+	width:2.500rem;
 	background-color:transparent;
-	background-image: url(../../svg/icon-print-off.svg);
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	margin: 0 0 0 10px;
-	border: 0;
-	cursor: pointer;
+	background-image:url(../../svg/icon-print-off.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;
+	margin:0 0 0 0.625rem;
+	border:0;
+	cursor:pointer;
 }
 
 .print-button-on {
-	height: 40px;
-	width: 40px;
+	height:2.500rem;
+	width:2.500rem;
 	background-color:transparent;
-	background-image: url(../../svg/icon-print-on.svg);
-	background-position: 0 0;
-	background-repeat: no-repeat;
-	margin: 0 0 0 10px;
-	border: 0;
-	cursor: pointer;
+	background-image:url(../../svg/icon-print-on.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;
+	margin:0 0 0 0.625rem;
+	border:0;
+	cursor:pointer;
 }

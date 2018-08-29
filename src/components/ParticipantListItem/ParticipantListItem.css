@@ -1,80 +1,93 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery ParticipantListItem Stylesheet */
-/* v.01.05 Updated 07/30/2018 */
+/* v.01.06 Updated 08/20/2018 */
 
 .participant-list-item {
 	font-family: discovery-regular;
-	font-size: 100%;
+	font-size:1.000rem;
 }
 
-.participant-list-item-link {
+.participant-list-item-flagged {
+	height: auto;
+	width: 1.125rem;
+	min-width: 1.125rem;
 	font-family: discovery-regular;
-	font-size: 100%;
-	padding:0 0 0 0;
-	grid-column: 2/span 10;
-	white-space:nowrap; 
-}
-
-.participant-list-item-info {
-	font-family: discovery-regular;
-	font-size: 100%;
-	padding:0 0 0 20px;
-	grid-column: 2/10;
+	font-size: 1.000rem;
+	text-align: center;
+	padding:0;
+	grid-column:1;
 	white-space:nowrap;
 }
 
-.participant-list-item-gender {
+.participant-list-item-link {
+	height: auto;
+	width:17.875rem;
+	min-width:17.875rem;
 	font-family: discovery-regular;
-	font-size: 100%;
-	text-align: center;
-	padding:0 0 0 0;
-	grid-column: 12/span 2;
+	font-size:1.000rem;
+	padding:0;
+	grid-column:2;
+	white-space:nowrap; 
+}
+
+.participant-list-item-gender {
+	height: auto;
+	width:5.000rem;
+	min-width:5.000rem;
+	font-family:discovery-regular;
+	font-size:1.000rem;
+	text-align:center;
+	padding:0;
+	grid-column:3;
 	white-space:nowrap;
 }
 
 .participant-list-item-dob {
-	font-family: discovery-data;
-	font-size: 100%;
-	text-align: center;
-	padding:0 0 0 0;
-	grid-column: 14/span 3;
+	height:auto;
+	width:7.250rem;
+	min-width:7.250rem;
+	font-family:discovery-data;
+	font-size:1.000rem;
+	text-align:center;
+	padding:0;
+	grid-column:4;
 	white-space:nowrap;
 }
 
 .participant-list-item-dates {
-	font-family: discovery-data;
-	font-size: 100%;
+	height:auto;
+	width:7.250rem;
+	min-width:7.250rem;
+	font-family:discovery-data;
+	font-size:1.000rem;
 	text-align: center;
-	padding:0 0 0 0;
-	grid-column: 18/span 3;
+	padding:0 .313rem;
+	grid-column:5;
 	white-space:nowrap;
 }
 
 .participant-list-item-providers {
-	font-family: discovery-data;
-	font-size: 100%;
-	text-align: center;
-	padding:0 0 0 0;
-	grid-column: 22/span 3;
+	height:auto;
+	width:6.125rem;
+	min-width:6.125rem;
+	font-family:discovery-data;
+	font-size:1.000rem;
+	text-align:center;
+	padding:0;
+	grid-column:6;
 	white-space:nowrap;
 }
 
 .participant-list-item-values {
-	font-family: discovery-data;
-	font-size: 100%;
-	text-align: center;
-	padding:0 0 0 0;
-	grid-column: 26/span 3;
-	white-space:nowrap;
-}
-
-.participant-list-item-flagged {
-	font-family: discovery-regular;
-	font-size: 100%;
-	text-align: center;
-	padding:0 0 0 0;
-	grid-column: 1/span 1;
+	height:auto;
+	width:4.813rem;
+	min-width:4.813rem;
+	font-family:discovery-data;
+	font-size:1.000rem;
+	text-align:right;
+	padding:0;
+	grid-column:7;
 	white-space:nowrap;
 }
 

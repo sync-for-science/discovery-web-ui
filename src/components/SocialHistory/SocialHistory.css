@@ -1,9 +1,9 @@
 @charset "UTF-8";
 
-/* Sync for Science Discovery Allergies Stylesheet */
-/* v.01.06 Updated 08/21/2018 */
+/* Sync for Science Discovery Social History Stylesheet */
+/* v.01.02 Updated 08/21/2018 */
 
-.allergies-header {
+.social-history-header {
 	margin:0.625rem 1.250rem;
 	border-bottom: 0.063rem solid var(--discovery-blue);
 	font-family: discovery-bold;
@@ -11,11 +11,11 @@
 	color: var(--discovery-blue);
 }
 
-.allergies-body {
+.social-history-body {
 	margin:0 1.250rem;
 }
 
-.allergies-container {
+.social-history-container {
 	display:grid;
 	grid-template-columns:repeat(40, minmax(min-content, 1fr));
 	grid-column-gap: 0.313rem;
@@ -24,7 +24,7 @@
 	margin:0 0 0.625rem 0;
 }
 
-.allergies-container-last {
+.social-history-container-last {
 	display:grid;
 	grid-template-columns:repeat(40, minmax(min-content, 1fr));
 	grid-column-gap: 0.313rem;
@@ -33,7 +33,7 @@
 	margin:0 0 0.625rem 0;
 }
 
-.allergies-display {
+.social-history-display {
 	height: auto;
 	width:auto;
 	font-family: discovery-data-text;
@@ -45,7 +45,18 @@
 	grid-column: 1/span 40;
 }
 
-.allergies-clinical-status-label {
+.social-history-value {
+	height: auto;
+	width:auto;
+	font-family: discovery-data-text;
+	font-size:1.200rem;
+	text-align: left;
+	color:var(--discovery-data);
+	white-space: nowrap;
+	padding:0 0 0 0.938rem;
+	grid-column: 1;
+}
+.social-history-status-label {
 	height: auto;
 	width:auto;
 	font-family:discovery-regular;
@@ -54,10 +65,10 @@
 	color:var(--discovery-data-label);
 	white-space: nowrap;
 	padding:0.375rem 0 0 0.938rem;
-	grid-column: 1;
+	grid-column: 2;
 }
 
-.allergies-clinical-status-value {
+.social-history-status-value {
 	height: auto;
 	width:auto;
 	font-family: discovery-data-text;
@@ -66,29 +77,5 @@
 	color:var(--discovery-data);
 	white-space: nowrap;
 	padding:0;
-	grid-column: 2;
-}
-
-.allergies-verification-status-label {
-	height:auto;
-	width:auto;
-	font-family: discovery-regular;
-	font-size:0.800rem;
-	text-align:left;
-	color:var(--discovery-data-label);
-	white-space: nowrap;
-	padding:0.375rem 0 0 0.938rem;
 	grid-column: 3;
-}
-
-.allergies-verification-status-value {
-	height: auto;
-	width:auto;
-	font-family:discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
-	grid-column: 4;
 }

@@ -1,52 +1,52 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Discovery Modal Stylesheet */
-/* v.01.07 Updated 07/23/2018 */
+/* v.01.08 Updated 08/20/2018 */
 
 /* --- General Modal Styles --- */
 
 /* Modal Overlay */
 
 .discovery-modal-overlay {
-    justify-content: center;
-    position: fixed;
-    top: 60px;
-    left: 0;
-    right: 0;
-    bottom: 60px;
-	z-index: 1000;
-	display: flex;
-    align-items: flex-start;
-    padding: 0;
-	background: var(--discovery-modal-shadow);
-	overflow-y: auto;
-    overflow-x: hidden;
+   justify-content:center;
+   position:fixed;
+   top:3.750rem;
+   left: 0;
+   right: 0;
+   bottom:3.750rem;
+	z-index:1000;
+	display:flex;
+   align-items:flex-start;
+   padding:0;
+	background:var(--discovery-modal-shadow);
+	overflow-y:auto;
+   overflow-x:hidden;
 }
 
 /* General Modal Styles */
 
 .discovery-modal {
-	position: relative;
+	position:relative;
 	width:auto;
-	min-width: 550px;
-	margin-top: 70px;
-	padding: 0;
-	border: 0 solid transparent;
-	border-radius: 15px;
+	min-width:34.375rem;
+	margin-top:4.375rem;
+	padding:0;
+	border:0 solid transparent;
+	border-radius:0.938rem;
 	background-color: transparent;
 	background-clip: padding-box;
-	box-shadow: 0 12px 15px 0 var(--discovery-modal-shadow);
+	box-shadow:0 0.750rem 0.938rem 0 var(--discovery-modal-shadow);
 }
 
 /* Close Button */
 
 .discovery-modal-close-button {
-   position: absolute;
-   top: 10px;
-   right: 14px;
-	display: flex;
-   border: none;
-   padding: 0;
+   position:absolute;
+   top:0.625rem;
+   right:0.875rem;
+	display:flex;
+   border:none;
+   padding:0;
    background-color: transparent;
 }
 
@@ -61,32 +61,32 @@
 /* Logo Modal Styles */
 
 .logo-modal-title {
-	display: flex;
-	align-items: center;
-	height:40px;
+	display:flex;
+	align-items:center;
+	height:2.500rem;
 	width: auto;
-	min-width: 550px;
-	margin: 0;
-	border: 2px solid var(--discovery-blue);
-	border-radius: 15px 15px 0 0;
-	padding: 0 0 0 70px;
+	min-width:34.375rem;
+	margin:0;
+	border:0.125rem solid var(--discovery-blue);
+	border-radius:0.938rem 0.938rem 0 0;
+	padding: 0 0 0 4.375rem;
 	background-color:var(--discovery-blue);
 	background-image: url(../../svg/icon-modal-logo-discovery.svg);
-	background-size:30px 30px;
-	background-position: 12px center;
+	background-size:1.875rem 1.875rem;
+	background-position:0.750rem center;
 	background-repeat: no-repeat;
 	font-family: discovery-bold;
-	font-size: 100%;
+	font-size:1.000rem;
 	color:var(--discovery-background);
 }
 
 .logo-modal-body {
 	width:auto;
-	margin: 0;
-	border: 2px solid var(--discovery-blue);  
-	border-radius: 0 0 15px 15px;
-	padding: 20px;
-	background-color: var(--discovery-background);
+	margin:0;
+	border:0.125rem solid var(--discovery-blue);  
+	border-radius:0 0 0.938rem 0.938rem;
+	padding:1.250rem;
+	background-color:var(--discovery-background);
 }
 
 .logo-modal-body-row {
@@ -96,24 +96,24 @@
 }
 
 .logo-modal-body-property {
-	width: 50%;
-	padding: 0 15px 0 0;
-	text-align: right;
-	font-family: discovery-regular;
-	font-size: 100%; 
+	width:50%;
+	padding:0 0.938rem 0 0;
+	text-align:right;
+	font-family:discovery-regular;
+	font-size:1.000rem; 
 }
 
 .logo-modal-body-value {
-	width: 50%; 
-	text-align: left;
-	font-family: discovery-bold;
-	font-size: 100%;
+	width:50%; 
+	text-align:left;
+	font-family:discovery-bold;
+	font-size:1.000rem;
 }
 
 .logo-modal-legal {
-	margin:20px 0 0 0;
-	font-family: discovery-regular;
-	font-size: 60%;
+	margin:1.250rem 0 0 0;
+	font-family:discovery-regular;
+	font-size:0.600rem;
 }
 
 
@@ -122,87 +122,87 @@
 .info-modal-title {
 	display: flex;
 	align-items: center;
-	height:40px;
+	height:2.500rem;
 	width: auto;
-	min-width: 550px;
+	min-width:34.375rem;
 	margin: 0;
-	border: 2px solid var(--discovery-blue);
-	border-radius: 15px 15px 0 0;
-	padding-left:60px;
+	border:0.125rem solid var(--discovery-blue);
+	border-radius:0.938rem 0.938rem 0 0;
+	padding-left:3.750rem;
 	background-color: var(--discovery-blue);
 	background-image: url(../../svg/icon-modal-participant-info.svg);
-	background-size:30px 30px;
-	background-position: 10px 8px;
-	background-repeat: no-repeat;
+	background-size:1.875rem 1.875rem;
+	background-position:0.625rem 0.500rem;
+	background-repeat:no-repeat;
 	font-family: discovery-bold;
-	font-size: 100%;
+	font-size:1.000rem;
 	color:var(--discovery-background);
 }
 
 .info-modal-body {
 	width:auto;
-	min-width: 550px;
-	margin: 0;
-	border: 2px solid var(--discovery-blue);
-	border-radius: 0 0 15px 15px; 
-	padding: 20px;
-	background-color: var(--discovery-background);
+	min-width:34.375rem;
+	margin:0;
+	border:0.125rem solid var(--discovery-blue);
+	border-radius:0 0 0.938rem 0.938rem; 
+	padding:1.250rem;
+	background-color:var(--discovery-background);
 }
 
 .info-modal-body-row {
-	display: flex;
-	flex-direction: row;
-	flex-basis: auto;
+	display:flex;
+	flex-direction:row;
+	flex-basis:auto;
 }
 
 .info-modal-body-property {
-	width: 50%;
-	padding-right: 15px;
-	font-family: discovery-regular;
-	font-size: 100%;
-	font-style: italic;
-	text-align: right;    
+	width:50%;
+	padding-right:0.938rem;
+	font-family:discovery-regular;
+	font-size:1.000rem;
+	font-style:italic;
+	text-align:right;    
 }
 
 .info-modal-body-value {
-	width: 50%;
-	font-family: discovery-regular;
-	font-size: 100%;
-	text-align: left;
+	width:50%;
+	font-family:discovery-regular;
+	font-size:1.000rem;
+	text-align:left;
 }
 
 
 /* Help Modal */
 
 .help-modal-title {
-	display: flex;
-	align-items: center;
-	height:40px;
-	width: auto;
-	min-width: 550px;
-	margin: 0;
-	border: 2px solid var(--discovery-blue);
-	border-radius: 15px 15px 0 0;
-	padding-left: 60px;
-	background-color: var(--discovery-blue);
-	background-image: url(../../svg/icon-modal-help.svg);
-	background-size:30px 30px;
-	background-position: 10px 5px;
-	background-repeat: no-repeat;
-	font-family: discovery-bold;
-	font-size: 100%;
+	display:flex;
+	align-items:center;
+	height:2.500rem;
+	width:auto;
+	min-width:34.375rem;
+	margin:0;
+	border:0.125rem solid var(--discovery-blue);
+	border-radius:0.938rem 0.938rem 0 0;
+	padding-left:3.750rem;
+	background-color:var(--discovery-blue);
+	background-image:url(../../svg/icon-modal-help.svg);
+	background-size:1.875rem 1.875rem;
+	background-position:0.625rem 0.313rem;
+	background-repeat:no-repeat;
+	font-family:discovery-bold;
+	font-size:1.000rem;
 	color:var(--discovery-background);     
 }
 
 .help-modal-body {
-	height: 300px;
-	max-height: 300px;
-	width: auto;
-	min-width: 550px;
-	margin: 0;
-	border: 2px solid var(--discovery-blue);
-	border-radius: 0 0 15px 15px;
-	padding: 20px;
+	height:18.750rem;
+	max-height:18.750rem;
+	width:auto;
+	min-width:34.375rem;
+	margin:0;
+	border:0.125rem solid var(--discovery-blue);
+	border-radius:0 0 0.938remx 0.938rem;
+	padding:1.250rem;
 	background-color:var(--discovery-background);
 	overflow:scroll; 
 }
@@ -212,9 +212,9 @@
 }
 
 .help-modal-header {
-	border-bottom: 1px solid var(--discovery-blue);
+	border-bottom:0.063rem solid var(--discovery-blue);
 	font-family: discovery-bold;
-	font-size: 100%;
+	font-size:1.000rem;
 	color:var(--discovery-blue);
 }
 
@@ -224,42 +224,42 @@
 
 .help-modal-list-item {
 	font-family: discovery-regular;
-	font-size: 100%;	
+	font-size:1.000rem;	
 }
 
 .help-modal-subheader {
-	margin:0 0 0 20px;
+	margin:0 0 0 1.250rem;
 	font-family:discovery-regular;
-	font-size:100%;
+	font-size:1.000rem;
 	color:var(--discovery-blue);
 }
 
 .help-modal-subheader-content {
-	margin: 0 0 10px 40px;
+	margin:0 0 0.625rem 2.500rem;
 	font-family:discovery-regular;
-	font-size:80%;
+	font-size:0.800rem;
 	
 }
 
 .help-modal-body-row {
-	display: flex;
-	flex-direction: row;
-	flex-basis: auto;
+	display:flex;
+	flex-direction:row;
+	flex-basis:auto;
 }
 
 .help-modal-body-property {
-	width: 50%;
-	padding: 0 15px 0 0;
-	font-family: discovery-regular;
-	font-size: 100%;
-	font-style: italic;
-	text-align: right;    
+	width:50%;
+	padding:0 0.938rem 0 0;
+	font-family:discovery-regular;
+	font-size:1.000rem;
+	font-style:italic;
+	text-align:right;    
 }
 
 .help-modal-body-value {
-	width: 50%;    
-	font-family: discovery-regular;
-	font-size: 100%;
+	width:50%;    
+	font-family:discovery-regular;
+	font-size:1.000rem;
 	text-align: left;  
 }
 
@@ -267,68 +267,68 @@
 /* Download Modal */
 
 .download-modal-title {
-	display: flex;
-	align-items: center;
-	height:40px;   
-	width: auto;
-	min-width: 550px;
-	margin: 0;
-	border: 2px solid var(--discovery-blue);
-	border-radius: 15px 15px 0 0;
-	padding-left: 60px;
+	display:flex;
+	align-items:center;
+	height:2.500rem;   
+	width:auto;
+	min-width:34.375rem;
+	margin:0;
+	border:0.125rem solid var(--discovery-blue);
+	border-radius:0.938rem 0.938rem 0 0;
+	padding-left:3.750rem;
 	background-color:var(--discovery-blue);
 	background-image: url(../../svg/icon-modal-download.svg);
-	background-size:30px 30px;
-	background-position: 10px 5px;
-	background-repeat: no-repeat;
-	font-family: discovery-bold;
-	font-size: 100%;
+	background-size:1.875rem 1.875rem;
+	background-position:0.625rem 0.313rem;
+	background-repeat:no-repeat;
+	font-family:discovery-bold;
+	font-size:1.000rem;
 	color:var(--discovery-background);
 }
 
 .download-modal-body {
 	width:auto;
-	min-width: 550px;
-	margin: 0;
-	border: 2px solid var(--discovery-blue);
-	border-radius: 0 0 15px 15px; 
-	padding: 20px;
+	min-width:34.375rem;
+	margin:0;
+	border:0.125rem solid var(--discovery-blue);
+	border-radius:0 0 0.938rem 0.938rem; 
+	padding:1.250rem;
 	background-color:var(--discovery-background);
 }
 
 .download-modal-body-row {
-	display: flex;
-	flex-direction: row;
-	flex-basis: auto;
-	justify-content: center;
+	display:flex;
+	flex-direction:row;
+	flex-basis:auto;
+	justify-content:center;
 }
 
 .download-modal-body-property {
-	width: 50%;
-	padding-right: 15px;
-	font-family: discovery-regular;
-	font-size: 100%;
-	font-style: italic;
-	text-align: right; 
+	width:50%;
+	padding-right:0.938rem;
+	font-family:discovery-regular;
+	font-size:1.000rem;
+	font-style:italic;
+	text-align:right; 
 }
 
 .download-modal-body-value {
-	width: 50%;
-	font-family: discovery-regular;
-	font-size: 100%;
-	text-align: left;   
+	width:50%;
+	font-family:discovery-regular;
+	font-size:1.000rem;
+	text-align:left;   
 }
 
 .download-modal-button {
 	width:60%;
-	margin:10px auto;
-	padding:10px 0;
-	background-color: var(--discovery-blue);
+	margin:0.625rem auto;
+	padding:0.625rem 0;
+	background-color:var(--discovery-blue);
 	font-family:discovery-bold;
-	font-size: 100%;
+	font-size:1.000rem;
 	color:var(--discovery-background);
-	border-radius: 25px;
-	text-align: center;
+	border-radius:1.563rem;
+	text-align:center;
 }
 
 .download-modal-cancel-button {
@@ -337,80 +337,80 @@
 
 .download-modal-text-block {
 	font-family:discovery-regular;
-	font-size:100%;
-	margin:20px 0 0;
+	font-size:1.000rem;
+	margin:1.250rem 0 0;
 }
 
 .download-modal-text-bold {
 	font-family:discovery-bold;
-	font-size:100%;
+	font-size:1.000rem;
 }
 
 /* Print modal */
 
 .print-modal-title {
-	display: flex;
-	align-items: center;
-	height:40px;
-	width: auto;
-	min-width: 550px;
-	margin: 0;
-	border: 2px solid var(--discovery-blue);
-	border-radius: 15px 15px 0 0;
-	padding: 0 0 0 60px;
+	display:flex;
+	align-items:center;
+	height:2.500rem;
+	width:auto;
+	min-width:34.375rem;
+	margin:0;
+	border:0.125rem solid var(--discovery-blue);
+	border-radius:0.938rem 0.938rem 0 0;
+	padding:0 0 0 3.750rem;
 	background-color:var(--discovery-blue);
-	background-image: url(../../svg/icon-modal-print.svg);
-	background-size:30px 30px;
-	background-position: 10px 5px;
-	background-repeat: no-repeat;
-	font-family: discovery-bold;
-	font-size: 100%;
+	background-image:url(../../svg/icon-modal-print.svg);
+	background-size:1.875rem 31.875rem;
+	background-position:0.625rem 0.313rem];
+	background-repeat:no-repeat;
+	font-family:discovery-bold;
+	font-size:1.000rem;
 	color:var(--discovery-background);
 }
 
 .print-modal-body {
 	height:auto;
 	width:auto;
-	min-width: 550px;
-	margin: 0;
-	border: 2px solid var(--discovery-blue);
-	border-radius: 0 0 15px 15px; 
-	padding: 20px;
+	min-width:34.375rem;
+	margin:0;
+	border:0.125rem solid var(--discovery-blue);
+	border-radius:0 0 0.938rem 0.938rem; 
+	padding:1.250rem;
 	background-color:var(--discovery-background);
 	overflow:scroll;
 }
 
 .print-modal-body-row {
-	display: flex;
-	flex-direction: row;
-	flex-basis: auto;
+	display:flex;
+	flex-direction:row;
+	flex-basis:auto;
 }
 
 .print-modal-body-property {
-	width: 50%;
-	padding: 0 15px 0 0;
-	font-family: discovery-regular;
-	font-size: 100%;
-	font-style: italic;
-	text-align: right;
+	width:50%;
+	padding:0 0.938rem 0 0;
+	font-family:discovery-regular;
+	font-size:1.000rem;
+	font-style:italic;
+	text-align:right;
 }
 
 .print-modal-body-value {
-	width: 50%;
-	font-family: discovery-regular;
-	font-size: 100%;
-	text-align: left;    
+	width:50%;
+	font-family:discovery-regular;
+	font-size:1.000rem;
+	text-align:left;    
 }
 
 .print-modal-button {
 	width:60%;
-	margin:10px auto;
-	padding:10px 0;
-	background-color: var(--discovery-blue);
+	margin:0.625rem auto;
+	padding:0.625rem 0;
+	background-color:var(--discovery-blue);
 	font-family:discovery-bold;
-	font-size: 100%;
+	font-size:1.000rem;
 	color:var(--discovery-background);
-	border-radius: 25px;
+	border-radius:1.563rem;
 	text-align: center;
 }
 
@@ -420,11 +420,11 @@
 
 .print-modal-text-block {
 	font-family:discovery-regular;
-	font-size:100%;
-	margin:20px 0 0;
+	font-size:1.000rem;
+	margin:1.250rem 0 0;
 }
 
 .print-modal-text-bold {
 	font-family:discovery-bold;
-	font-size:100%;
+	font-size:1.000rem;
 }
