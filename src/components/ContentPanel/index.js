@@ -4,7 +4,7 @@ import Draggable from 'react-draggable';
 import Modal from 'react-responsive-modal';
 
 import './ContentPanel.css';
-import { getStyle } from '../../util.js';
+import { getStyle, formatDate } from '../../util.js';
 
 import Allergies from '../Allergies';
 import Conditions from '../Conditions';
@@ -33,10 +33,13 @@ export default class ContentPanel extends Component {
 	 parent: PropTypes.string.isRequired,
 	 rowName: PropTypes.string.isRequired,
 	 dotType: PropTypes.string.isRequired,
+	 minDate: PropTypes.string.isRequired,
+	 maxDate: PropTypes.string.isRequired,
 	 date: PropTypes.string.isRequired,
 	 data: PropTypes.array
       }),
-      nextPrevFn: PropTypes.func.isRequired
+      nextPrevFn: PropTypes.func.isRequired,
+      enabledFn: PropTypes.func.isRequired
    }
 
    state = {
@@ -46,7 +49,9 @@ export default class ContentPanel extends Component {
       positionY: 0,
       panelWidth: 0,
       dragging: false,
-      payloadModalIsOpen: false
+      payloadModalIsOpen: false,
+      prevEnabled: true,
+      nextEnabled: true
    }
 
    // Kluge: this function violates locality/independence by needing to know absolute locations of various divs
@@ -109,6 +114,10 @@ export default class ContentPanel extends Component {
       if (!prevProps.open && this.props.open) {
 	 this.setState({ isOpen: true });
       } 
+      if (prevProps.context !== this.props.context) {
+	 this.setState({ prevEnabled: this.props.context.date !== this.props.context.minDate,
+			 nextEnabled: this.props.context.date !== this.props.context.maxDate });
+      }
    }
 
    onClose = this.onClose.bind(this);
@@ -117,28 +126,38 @@ export default class ContentPanel extends Component {
       this.props.onClose(this.props.contentType);
    }
 
+   onNextPrev = this.onNextPrev.bind(this);
+   onNextPrev(direction) {
+      const enabled = this.props.nextPrevFn(direction);
+      if (direction === 'prev') {
+	 this.setState({prevEnabled: enabled, nextEnabled: true});
+      } else {
+	 this.setState({prevEnabled: true, nextEnabled: enabled});
+      }
+   }
+
    renderDotClickContents(context) {
       return (
 	 <div className='content-panel-inner'>
 	    <div className='content-panel-inner-title'>
 	       <button className='content-panel-inner-title-payload-button' onClick={() => !this.state.dragging && this.setState({payloadModalIsOpen: true})}>
-	          { context.date.includes('T') ? new Date(context.date).toUTCString() : new Date(context.date).toUTCString().substring(0,16) }
+		  { formatDate(context.date, false, false) }
 	       </button>
 	       <button className='content-panel-inner-title-close-button' onClick={this.onClose} />
 	    </div>
 	    <div className='content-panel-inner-body'>
-	       <Allergies className='allergies' data={context.data}/>
-	       <Conditions className='conditions' data={context.data}/>
-	       <DocumentReferences className='doc-refs' data={context.data}/>
-	       <Immunizations className='immunizations' data={context.data}/>
-	       <LabResults className='lab-results' data={context.data}/>
-	       <MedsAdministration className='meds-admin' data={context.data}/>
-	       <MedsDispensed className='meds-dispensed' data={context.data}/>
-	       <MedsRequested className='meds-requested' data={context.data}/>
-	       <MedsStatement className='meds-statement' data={context.data}/>
-	       <Procedures className='procedures' data={context.data}/>
-	       <SocialHistory className='social-history' data={context.data}/>
-	       <VitalSigns className='vital-signs' data={context.data}/>
+	       <Allergies className='allergies' data={context.data} enabledFn={this.props.enabledFn} />
+	       <Conditions className='conditions' data={context.data} enabledFn={this.props.enabledFn} />
+	       <DocumentReferences className='doc-refs' data={context.data} enabledFn={this.props.enabledFn} />
+	       <Immunizations className='immunizations' data={context.data} enabledFn={this.props.enabledFn} />
+	       <LabResults className='lab-results' data={context.data} enabledFn={this.props.enabledFn} />
+	       <MedsAdministration className='meds-admin' data={context.data} enabledFn={this.props.enabledFn} />
+	       <MedsDispensed className='meds-dispensed' data={context.data} enabledFn={this.props.enabledFn} />
+	       <MedsRequested className='meds-requested' data={context.data} enabledFn={this.props.enabledFn} />
+	       <MedsStatement className='meds-statement' data={context.data} enabledFn={this.props.enabledFn} />
+	       <Procedures className='procedures' data={context.data} enabledFn={this.props.enabledFn} />
+	       <SocialHistory className='social-history' data={context.data} enabledFn={this.props.enabledFn} />
+	       <VitalSigns className='vital-signs' data={context.data} enabledFn={this.props.enabledFn} />
 
 	       <Modal open={this.state.payloadModalIsOpen} onClose={() => this.setState({payloadModalIsOpen: false})}>
 	          <pre>
@@ -250,8 +269,8 @@ export default class ContentPanel extends Component {
 			  bounds={{top:this.state.topBound, bottom:0}} onDrag={this.onDragStart} onStop={this.onDragStop}>
 	          <div className='content-panel' style={{width:this.state.panelWidth}}>
 		     <div className='content-panel-left'>
-			<button className='content-panel-left-button' onClick={() => this.props.nextPrevFn('prev')} />
-			<button className='content-panel-right-button' onClick={() => this.props.nextPrevFn('next')} />
+			<button className={'content-panel-left-button'+(this.state.prevEnabled ? '' : '-off')} onClick={() => this.onNextPrev('prev')} />
+			<button className={'content-panel-right-button'+(this.state.nextEnabled ? '' : '-off')} onClick={() => this.onNextPrev('next')} />
 		     </div>
 		     { this.renderContents(this.props.context) }
 	          </div>

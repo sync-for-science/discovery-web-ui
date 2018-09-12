@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './Allergies.css';
+import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderAllergies } from '../../fhirUtil.js';
@@ -13,7 +14,8 @@ import { stringCompare } from '../../util.js';
 export default class Allergies extends Component {
 
    static propTypes = {
-      data: PropTypes.array.isRequired
+      data: PropTypes.array.isRequired,
+      enabledFn: PropTypes.func.isRequired
    }
 
    state = {
@@ -40,11 +42,12 @@ export default class Allergies extends Component {
    }
 
    render() {
+      let isEnabled = this.props.enabledFn('Category', 'Allergies');
       return ( this.state.matchingData &&
 	       <div className={this.props.className}>
-	          <div className={this.props.className+'-header'}>Allergies</div>
-	          <div className={this.props.className+'-body'}>
-		     { renderAllergies(this.state.matchingData, this.props.className) }
+		  <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>Allergies</div>
+	          <div className='content-body'>
+		     { isEnabled && renderAllergies(this.state.matchingData, this.props.className) }
 	          </div>
 	       </div> );
    }

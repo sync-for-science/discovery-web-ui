@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './VitalSigns.css';
+import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderVitals } from '../../fhirUtil.js';
@@ -35,11 +36,12 @@ export default class VitalSigns extends Component {
    }
 
    render() {
+      let isEnabled = this.props.enabledFn('Category', 'Vital Signs');
       return ( this.state.matchingData &&
 	       <div className={this.props.className}>
-	          <div className={this.props.className+'-header'}>Vital Signs</div>
-	          <div className={this.props.className+'-body'}>
-		     { renderVitals(this.state.matchingData, this.props.className) }
+		  <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>Vital Signs</div>
+	          <div className='content-body'>
+		     { isEnabled && renderVitals(this.state.matchingData, this.props.className) }
 	          </div>
 	       </div> );
    }

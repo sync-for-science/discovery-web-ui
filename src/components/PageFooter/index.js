@@ -22,10 +22,13 @@ export default class PageFooter extends Component {
 	 parent: PropTypes.string.isRequired,
 	 rowName: PropTypes.string.isRequired,
 	 dotType: PropTypes.string.isRequired,
+	 minDate: PropTypes.string.isRequired,
+	 maxDate: PropTypes.string.isRequired,
 	 date: PropTypes.string.isRequired,
 	 data: PropTypes.array
       }),
-      nextPrevFn: PropTypes.func.isRequired
+      nextPrevFn: PropTypes.func.isRequired,
+      enabledFn: PropTypes.func.isRequired
    }
 
    state = {
@@ -85,7 +88,8 @@ export default class PageFooter extends Component {
 	       <button className="search-button-off"	     onClick={() => this.onOpenContentPanel('search')} />
 	    </div>
 	    <ContentPanel open={this.state.contentPanelIsOpen} contentType={this.state.contentType}
-			  onClose={this.onCloseContentPanel} context={this.props.context} nextPrevFn={this.props.nextPrevFn} />
+			  onClose={this.onCloseContentPanel} context={this.props.context}
+			  nextPrevFn={this.props.nextPrevFn} enabledFn={this.props.enabledFn} />
 	    <div className='footer-snapshot-date'>
 	       { this.state.snapshotDate ? `Snapshot: ${this.state.snapshotDate}` : null }
 	    </div>

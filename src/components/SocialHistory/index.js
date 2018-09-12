@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './SocialHistory.css';
+import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderSocialHistory } from '../../fhirUtil.js';
@@ -38,11 +39,12 @@ export default class SocialHistory extends Component {
    }
 
    render() {
+      let isEnabled = this.props.enabledFn('Category', 'Social History');
       return ( this.state.matchingData &&
 	       <div className={this.props.className}>
-	          <div className={this.props.className+'-header'}>Social History</div>
-	          <div className={this.props.className+'-body'}>
-		     { renderSocialHistory(this.state.matchingData, this.props.className) }
+		  <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>Social History</div>
+	          <div className='content-body'>
+		     { isEnabled && renderSocialHistory(this.state.matchingData, this.props.className) }
 	          </div>
 	       </div> );
    }

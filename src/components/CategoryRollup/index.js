@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './CategoryRollup.css';
-import config from '../../config.js';
 
 import SVGContainer from '../SVGContainer';
 import DotLine from '../DotLine';
@@ -35,21 +34,21 @@ export default class CategoryRollup extends Component {
 	       Categories
 	    </div>
 	    <SVGContainer className='category-rollup-svg-container' svgClassName='category-rollup-svg' svgWidth={this.props.svgWidth}>
-	       <DotLine className='inactive-dots' key='inactive' dotRadius={config.normalDotRadius}
+	       <DotLine key='inactive'
 			dotPositions={this.props.callbackFn(this.constructor.name, 'Categories', true, 'inactive')}
 			context={ {parent:this.constructor.name, rowName:'Categories', dotType:'inactive'} }
 			dotClickFn={this.props.dotClickFn} />
-	       <DotLine className='active-dots' key='active' dotRadius={config.normalDotRadius}
+	       <DotLine key='active'
 			dotPositions={this.props.callbackFn(this.constructor.name, 'Categories', true, 'active')}
 			context={ {parent:this.constructor.name, rowName:'Categories', dotType:'active'} }
 			dotClickFn={this.props.dotClickFn} />
-	       <DotLine className='highlight-dots' key='highlight' dotRadius={config.normalDotRadius}
-			dotPositions={this.props.callbackFn(this.constructor.name, 'Categories', true, 'highlight')}
-			context={ {parent:this.constructor.name, rowName:'Categories', dotType:'highlight'} }
+	       <DotLine key='inactiveHighlight'
+			dotPositions={this.props.callbackFn(this.constructor.name, 'Categories', true, 'inactiveHighlight')}
+			context={ {parent:this.constructor.name, rowName:'Categories', dotType:'inactiveHighlight'} }
 			dotClickFn={this.props.dotClickFn} />
-	       <DotLine className='highlight-ring-dots' key='highlight-ring' dotRadius={config.highlightDotRadius}
-			dotPositions={this.props.callbackFn(this.constructor.name, 'Categories', true, 'highlight')}
-			context={ {parent:this.constructor.name, rowName:'Categories', dotType:'highlight'} }
+	       <DotLine key='activeHighlight'
+			dotPositions={this.props.callbackFn(this.constructor.name, 'Categories', true, 'activeHighlight')}
+			context={ {parent:this.constructor.name, rowName:'Categories', dotType:'activeHighlight'} }
 			dotClickFn={this.props.dotClickFn} />
 	    </SVGContainer>
 	 </div>

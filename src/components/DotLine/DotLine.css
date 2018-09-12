@@ -4,28 +4,35 @@
 /* v.01.02 Updated 08/20/2018 */
 
 .active-dots {
-	fill: var(--discovery-dots-active);
+   fill: var(--discovery-dots-active);
    stroke: var(--discovery-dots-active-stroke);
-	stroke-width:1px;
-	cursor: pointer;
+   stroke-width:1px;
+   cursor: pointer;
 }  
 
 .inactive-dots {
    fill:var(--discovery-dots-inactive);
    stroke:var(--discovery-dots-inactive-stroke);
-	stroke-width:0.063rem;
-	cursor:pointer;
+   stroke-width:0.063rem;
+   cursor:pointer;
 }
 
-.highlight-dots {
-   fill:var(--discovery-dots-highlight);
-	stroke:var(--discovery-dots-hightlight-stroke);
-	stroke-width:0.063rem;
+.active-highlight-dots {
+   fill:var(--discovery-dots-active-highlight);
+   stroke:var(--discovery-dots-active-hightlight-stroke);
+   stroke-width:0.063rem;
+   cursor:pointer;
+}
+
+.inactive-highlight-dots {
+   fill:var(--discovery-dots-inactive-highlight);
+   stroke:var(--discovery-dots-inactive-hightlight-stroke);
+   stroke-width:0.063rem;
    cursor:pointer;
 }
 
 .highlight-ring-dots {
-	fill:var(--discovery-dots-highlight-ring);
+   fill:var(--discovery-dots-highlight-ring);
    stroke:var(--discovery-dots-highlight-ring-stroke);
    stroke-width:0.188rem;
    cursor:pointer;

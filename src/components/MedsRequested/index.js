@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { get } from 'axios';
 
 import './MedsRequested.css';
+import '../ContentPanel/ContentPanel.css';
 import config from '../../config.js';
 
 import FhirTransform from '../../FhirTransform.js';
@@ -77,6 +78,7 @@ export default class MedsRequested extends Component {
    }
 
    // TODO: Handle multiple reason references per single medication request
+   //       Move to fhirUtil.js (with callback for state management)
    resolveReasonReference(elt) {
       if (elt.data.reasonReference && elt.data.reasonReference[0] && !elt.data.reasonReference[0].code) {
 	 this.setState({loadingRefs: this.state.loadingRefs+1});
@@ -94,12 +96,13 @@ export default class MedsRequested extends Component {
    }
 
    render() {
+      let isEnabled = this.props.enabledFn('Category', 'Meds Requested');
       return ( this.state.matchingData &&
 	       <div className={this.props.className}>
-	          <div className={this.props.className+'-header'}>Meds Requested</div>
-	          <div className={this.props.className+'-body'}>
-		     { renderMeds(this.state.matchingData, this.props.className) }
-	             { this.state.loadingRefs > 0 && <div className={this.props.className+'-loading'}>Loading ...</div> }
+		  <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>Meds Requested</div>
+	          <div className='content-body'>
+		     { isEnabled && renderMeds(this.state.matchingData, this.props.className) }
+	             { isEnabled && this.state.loadingRefs > 0 && <div className={this.props.className+'-loading'}>Loading ...</div> }
 	          </div>
 	       </div> );
    }

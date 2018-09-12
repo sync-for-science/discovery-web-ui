@@ -1,32 +1,32 @@
-@charset "UTF-8";
+ @charset "UTF-8";
 
 /* Sync for Science Discovery TimeWidget Stylesheet */
-/* v.01.05 Updated 08/28/2018 */
+/* v.01.08 Updated 09/10/2018 */
 
 .time-widget {
 	display:flex;
 	flex-direction:row;
-	height:4.813rem;
+	height:77px;
 	width:auto;
 	margin:0;
-	padding:0 1.250rem;
+	padding:0 20px;
 }
 
 .calendar-daterange-box {
 	display:flex;
 	flex-direction: row;
 	align-items: center; 
-	height:4.813rem;
+	height:77px;
 	width:15.625rem;
 	min-width:15.625rem;
 }
 
 .calendar-button-off {
-	height:2.500rem;
-	width:2.500rem;
+	height:40px;
+	width:40px;
 	background-color:transparent;
 	background-image:url(../../svg/calendar_icon.svg);
-	background-size:2.500rem 2.500rem;
+	background-size:40px 40px;
 	background-position:0 0;
 	background-repeat:no-repeat;
 	border:0;
@@ -34,11 +34,11 @@
 }
 
 .calendar-button-on {
-	height:2.500rem;
-	width:2.500rem;
+	height:40px;
+	width:40px;
 	background-color:transparent;
 	background-image:url(../../svg/calendar_icon.svg);
-	background-size:2.500rem 2.500rem;
+	background-size:40px 40px;
 	background-position:0 0;
 	background-repeat:no-repeat;
 	border:0;
@@ -46,10 +46,10 @@
 }
 
 .date-range {
-	font-family:discovery-regular;
+	font-family:discovery-data-bold;
 	font-size:0.800rem;
 	color: var(--discovery-blue);
-	margin:0 0 0 1.250rem;
+	margin:0 0 0 20px;
 	white-space:nowrap;
 	text-align:center;
 }
@@ -58,8 +58,9 @@
 	display:flex;
 	flex-direction: column;
 	width:100%;
+	height:auto;
 	margin:0;
-	padding:0;
+	padding:10px 0 0 0;
 	background-color:transparent;
 }
 
@@ -69,68 +70,76 @@
 	flex-wrap: nowrap;
 	align-items:initial;
 	width:inherit;
-	margin: 0;
+	margin:0 0 20px 0;
 	padding:0;
+	background-color:transparent;
 }	
 
 .timeline-years {
 	width:inherit;
-	flex-grow:inherit;
-	flex-basis:auto;
-	font-family:discovery-regular;
+	height:0.800rem;
+	font-family:discovery-data-bold;
 	font-size:0.800rem;
-	margin:0.625rem 0 0 0;
+	color: var(--discovery-blue);
+	margin:0;
 	border-bottom:var(--discovery-black) solid 1px;
 	border-left:var(--discovery-black) solid 1px;
-	padding:0 0 0 0.625rem;
+	padding:0 0 5px 5px;
+	overflow: visible;
 }
 
 .timeline-selection-box {
-	display:flex;
-	flex-direction:row;
-	height:2.625rem;
-	width:inherit;
-	background-color:transparent;
-}
-
-.timeline-selector-left {
-	height:2.625rem;
-	width:1.250rem;
-	margin:0 0 0 -1.250rem;
-	background-image:url(../../svg/thumb-left.svg);
-	background-repeat:no-repeat;
-	background-position:center center;
-	z-index: 2;
-}
-
-.timeline-selector-right {
-	height:2.625rem;
-	width:1.250rem;
-	margin:0 -1.250rem 0 0;
-	background-color:transparent;
-	background-image:url(../../svg/thumb-right.svg);
-	background-repeat:no-repeat;
-	background-position:center center;
-	z-index: 2;
-}
-
-
-.timeline-svg-container {
-	height: inherit;
+	display:grid;
+	grid-template-columns:repeat(40, minmax(min-content, 1fr));
 	width:inherit;
 	margin:0;
-	padding:0 0.313rem;
+	background-color:transparent;
+}
+
+.timeline-svg-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height:46px;
+	width:auto;
+	margin: 0;
+	padding:0 5px;
 	background-image: url(../../svg/horizontal-rule-1px-black.svg);
 	background-position: center;
 	background-repeat: repeat-x;
 	background-clip: padding-box;
-	overflow:visible;
+	overflow:hidden;
+	grid-column:1/span 40;
+	grid-row: 1;
 }
 
 .timeline-svg {
-	height:inherit;
+	height:46px;
 	overflow: visible;
-	width:inherit;
-	background-color:transparent;
+}
+
+.timeline-selector-left {
+	
+	height:46px;
+	width:20px;
 	margin:0;
+	background-image:url(../../svg/thumb-left.svg);
+	background-repeat:no-repeat;
+	background-position:center center;
+	margin:0 0 0 -20px;
+	grid-column:1/span 40;
+	grid-row: 1;
+}
+
+.timeline-selector-right {
+	
+	height:46px;
+	width:20px;
+	margin:0;
+	background-color:transparent;
+	background-image:url(../../svg/thumb-right.svg);
+	background-repeat:no-repeat;
+	background-position:center center;
+	grid-column:1/span 40;
+	grid-row: 1;
 }

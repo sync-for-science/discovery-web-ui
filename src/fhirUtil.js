@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { stringCompare } from './util.js';
+import { stringCompare, formatDate, formatDPs, isValid, titleCase } from './util.js';
+import './components/ContentPanel/ContentPanel.css';
 
 /*
  * Extracts a name string from the FHIR patient name object.
@@ -61,50 +62,9 @@ export function formatPatientMRN(identifier) {
    return 'Unknown';
 }
 
-export function formatDPs(number, places) {
-   const mult = Math.pow(10, places);
-   return parseFloat(Math.round(number * mult) / mult).toFixed(places);
-}
-
-function isValid(data, accessor) {
-   try {
-      return accessor(data) !== undefined;
-   } catch (e) {
-      return false;
-   }
-}
-
 // Remove extraneous words from vital signs labels
 function trimVitalsLabels(label) {
    return label.replace(/blood/gi, '').replace(/pressure/gi, '');
-}
-
-// Acronyms that should be displayed all uppercase
-var acronyms = ['Bmi'];
-
-// Words that should be displayed all lowercase
-var minorWords = ['A', 'An', 'And', 'As', 'At', 'But', 'By', 'For', 'From', 'In',
-		  'Into', 'Near', 'Nor', 'Of', 'On', 'Onto', 'Or', 'The', 'To', 'With']; 
-
-function titleCase(str) {
-   let finalWords = [];
-   let words = str.toLowerCase().split(' ').map(word => word.replace(word[0], word[0].toUpperCase()));
-
-   for (let index = 0; index < words.length; index++) {
-      let word = words[index];
-      if (acronyms.indexOf(word) >= 0) {
-	   // Uppercase acronyms
-	   finalWords.push(word.toUpperCase());
-       } else if (minorWords.indexOf(word) >= 0 && index > 0) {
-	   // Lowercase minor words, unless first
-	   finalWords.push(word.toLowerCase());
-       } else {
-	   // Title case everything else
-	   finalWords.push(word);
-       }
-   }
-
-   return finalWords.join(' ');
 }
 
 // Canonicalize vital signs display names
@@ -124,7 +84,7 @@ export function renderAllergies(matchingData, className) {
 
    if (found.length > 0) {
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? className+'-container' : className+'-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
 	    { elt.clinicalStatus && <div className={className+'-clinical-status-label'}>Clinical Status</div> }
 	    { elt.clinicalStatus && <div className={className+'-clinical-status-value'}>{elt.clinicalStatus}</div> }
@@ -160,7 +120,7 @@ export function renderDisplay(matchingData, className) {
 
    if (found.length > 0) {
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? className+'-container' : className+'-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
 
 	    { elt.valueQuantity && <div className={className+'-value-label'}>Result</div> }
@@ -169,6 +129,15 @@ export function renderDisplay(matchingData, className) {
 
 	    { isValid(elt, e => e.reason[0].code) && <div className={className+'-reason-label'}>Reason</div> }
 	    { isValid(elt, e => e.reason[0].code) && <div className={className+'-reason-value'}>{elt.reason[0].code.coding[0].display}</div> } 
+	    { isValid(elt, e => e.reason[0].onsetDateTime) && <div className={className+'-onset-label'}>Onset</div> }
+	    { isValid(elt, e => e.reason[0].onsetDateTime) &&
+		<div className={className+'-onset-value'}>{formatDate(elt.reason[0].onsetDateTime,false,false)}</div> }
+	    { isValid(elt, e => e.reason[0].abatementDateTime) && <div className={className+'-abatement-label'}>Abatement</div> }
+	    { isValid(elt, e => e.reason[0].abatementDateTime) &&
+	        <div className={className+'-abatement-value'}>{formatDate(elt.reason[0].abatementDateTime,false,false)}</div> }
+	    { isValid(elt, e => e.reason[0].assertedDate) && <div className={className+'-asserted-label'}>Asserted</div> }
+	    { isValid(elt, e => e.reason[0].assertedDate) &&
+	        <div className={className+'-asserted-value'}>{formatDate(elt.reason[0].assertedDate,false,false)}</div> }
 
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
@@ -178,6 +147,35 @@ export function renderDisplay(matchingData, className) {
 
 	    { elt.verificationStatus && <div className={className+'-verification-status-label'}>Verification Status</div> }
 	    { elt.verificationStatus && <div className={className+'-verification-status-value'}>{elt.verificationStatus}</div> }
+	 </div>
+      );
+   } else {
+      return null;
+   }
+}
+
+export function renderImmunizations(matchingData, className) {
+   let found = [];
+   for (const elt of matchingData) {
+      try {
+	  found.push({display: elt.data.vaccineCode.coding[0].display, status: elt.data.status, notGiven: elt.data.notGiven, wasNotGiven: elt.data.wasNotGiven,
+		      reported: elt.data.reported, primarySource: elt.data.primarySource});
+      } catch (e) {}
+   }
+
+   if (found.length > 0) {
+      return found.map((elt, index) => 
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	    <div className={className+'-display'}>{elt.display}</div>
+	    { elt.status && <div className={className+'-status-label'}>Status</div> }
+	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
+	    { ((elt.notGiven !== undefined) || (elt.wasNotGiven !== undefined)) && <div className={className+'-given-label'}>Given</div> }
+	    { elt.notGiven !== undefined && <div className={className+'-given-value'}>{elt.notGiven ? 'false' : 'true'}</div> }
+	    { elt.wasNotGiven !== undefined && <div className={className+'-given-value'}>{elt.wasNotGiven ? 'false' : 'true'}</div> }
+	    { elt.reported !== undefined && <div className={className+'-reported-label'}>Reported</div> }
+	    { elt.reported !== undefined && <div className={className+'-reported-value'}>{elt.reported ? 'true' : 'false'}</div> }
+	    { elt.primarySource !== undefined && <div className={className+'-primary-label'}>Primary Source</div> }
+	    { elt.primarySource !== undefined && <div className={className+'-primary-value'}>{elt.primarySource ? 'true' : 'false'}</div> }
 	 </div>
       );
    } else {
@@ -198,7 +196,7 @@ export function renderLabs(matchingData, className) {
 
    if (found.length > 0) {
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? className+'-container' : className+'-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
 
 	    { elt.valueQuantity && <div className={className+'-value'}>{formatDPs(elt.valueQuantity.value, 1)}</div> }
@@ -241,11 +239,20 @@ export function renderMeds(matchingData, className) {
 
    if (found.length > 0) {
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? className+'-container' : className+'-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
 
 	    { isValid(elt, e => e.reason[0].code) && <div className={className+'-reason-label'}>Reason</div> }
-	    { isValid(elt, e => e.reason[0].code) && <div className={className+'-reason-value'}>{elt.reason[0].code.coding[0].display}</div> }
+	    { isValid(elt, e => e.reason[0].code) && <div className={className+'-reason-value'}>{elt.reason[0].code.coding[0].display}</div> } 
+	    { isValid(elt, e => e.reason[0].onsetDateTime) && <div className={className+'-onset-label'}>Onset</div> }
+	    { isValid(elt, e => e.reason[0].onsetDateTime) &&
+		<div className={className+'-onset-value'}>{formatDate(elt.reason[0].onsetDateTime,false,false)}</div> }
+	    { isValid(elt, e => e.reason[0].abatementDateTime) && <div className={className+'-abatement-label'}>Abatement</div> }
+	    { isValid(elt, e => e.reason[0].abatementDateTime) &&
+	        <div className={className+'-abatement-value'}>{formatDate(elt.reason[0].abatementDateTime,false,false)}</div> }
+	    { isValid(elt, e => e.reason[0].assertedDate) && <div className={className+'-asserted-label'}>Asserted</div> }
+	    { isValid(elt, e => e.reason[0].assertedDate) &&
+	        <div className={className+'-asserted-value'}>{formatDate(elt.reason[0].assertedDate,false,false)}</div> }
 
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
@@ -283,40 +290,11 @@ export function renderSocialHistory(matchingData, className) {
 
    if (found.length > 0) {
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? className+'-container' : className+'-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
 	    <div className={className+'-value'}>{elt.value}</div>
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
-	 </div>
-      );
-   } else {
-      return null;
-   }
-}
-
-export function renderVaccines(matchingData, className) {
-   let found = [];
-   for (const elt of matchingData) {
-      try {
-	  found.push({display: elt.data.vaccineCode.coding[0].display, status: elt.data.status, notGiven: elt.data.notGiven, wasNotGiven: elt.data.wasNotGiven,
-		      reported: elt.data.reported, primarySource: elt.data.primarySource});
-      } catch (e) {}
-   }
-
-   if (found.length > 0) {
-      return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? className+'-container' : className+'-container-last'} key={index}>
-	    <div className={className+'-display'}>{elt.display}</div>
-	    { elt.status && <div className={className+'-status-label'}>Status</div> }
-	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
-	    { ((elt.notGiven !== undefined) || (elt.wasNotGiven !== undefined)) && <div className={className+'-given-label'}>Given</div> }
-	    { elt.notGiven !== undefined && <div className={className+'-given-value'}>{elt.notGiven ? 'false' : 'true'}</div> }
-	    { elt.wasNotGiven !== undefined && <div className={className+'-given-value'}>{elt.wasNotGiven ? 'false' : 'true'}</div> }
-	    { elt.reported !== undefined && <div className={className+'-reported-label'}>Reported</div> }
-	    { elt.reported !== undefined && <div className={className+'-reported-value'}>{elt.reported ? 'true' : 'false'}</div> }
-	    { elt.primarySource !== undefined && <div className={className+'-primary-label'}>Primary Source</div> }
-	    { elt.primarySource !== undefined && <div className={className+'-primary-value'}>{elt.primarySource ? 'true' : 'false'}</div> }
 	 </div>
       );
    } else {
@@ -340,7 +318,7 @@ export function renderVitals(matchingData, className) {
 
    if (found.length > 0) {
       return found.sort((a, b) => stringCompare(a.display, b.display)).map((elt, index) => 
-	 <div className={index < found.length-1 ? className+'-container' : className+'-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{canonVitals(elt.display)}</div>
 
 	    { elt.value && <div className={className+'-value1'}>{formatDPs(elt.value, 1)}</div> }

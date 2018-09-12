@@ -28,12 +28,12 @@ export default class ParticipantDetail extends Component {
    }
 
    state = {
-      details: undefined,	    // Will be set to an instance of FhirTransform
+      details: null,		    // Will be set to an instance of FhirTransform
       allDates: null,
-      minDate: 0,		    // Earliest date we have data for this participant
-      startDate: 0,		    // Jan 1 of minDate's year
-      maxDate: 0,		    // Latest date we have data for this participant
-      endDate: 0,		    // Dec 31 of maxDate's year
+      minDate: '',		    // Earliest date we have data for this participant
+      startDate: '',		    // Jan 1 of minDate's year
+      maxDate: '',		    // Latest date we have data for this participant
+      endDate: '',		    // Dec 31 of maxDate's year
       minActivePos: 0,		    // Earliest normalized date/position allowed by TimeWidget
       maxActivePos: 1,		    // Latest normalized date/position allowed by TimeWidget
       isLoading: false,
@@ -314,13 +314,27 @@ export default class ParticipantDetail extends Component {
 		      };
 	    return res;
 	 default:
-	    return '?????';
+	    return '?????';	// TODO
+      }
+   }
+
+   //
+   // Callback function to check category/provider enable/disable
+   //   parent:		'Category', 'Provider'
+   //   rowName:	<category-name>/<provider-name>
+   //
+   isEnabled = this.isEnabled.bind(this);
+   isEnabled(parent, rowName) {
+      if (parent === 'Category') {
+	 return this.state.catsEnabled[rowName] !== false;
+      } else {
+	 return this.state.provsEnabled[rowName] !== false;
       }
    }
 
    //
    // Callback function to record category/provider enable/disable
-   //   parent:	'Category', 'Provider'
+   //   parent:		'Category', 'Provider'
    //   rowName:	<category-name>/<provider-name>
    //	 isEnabled:	the current state to record
    //
@@ -333,11 +347,11 @@ export default class ParticipantDetail extends Component {
 	    this.setState({catsEnabled: catsEnabled});
 //	    console.log(JSON.stringify(catsEnabled, null, 3));
 
-	    if (this.state.dotClickContext) {
-	       let newContext = this.state.dotClickContext;
-	       newContext.data = this.fetchDataForDot(newContext.parent, newContext.rowName, newContext.date);
-	       this.setState({dotClickContext: newContext});
-	    }
+//	    if (this.state.dotClickContext) {
+//	       let newContext = this.state.dotClickContext;
+//	       newContext.data = this.fetchDataForDot(newContext.parent, newContext.rowName, newContext.date);
+//	       this.setState({dotClickContext: newContext});
+//	    }
 	 }
       } else {
 	 // Provider
@@ -347,13 +361,18 @@ export default class ParticipantDetail extends Component {
 	    this.setState({provsEnabled: provsEnabled});
 //	    console.log(JSON.stringify(provsEnabled, null, 3));
 
-	    if (this.state.dotClickContext) {
-	       let newContext = this.state.dotClickContext;
-	       newContext.data = this.fetchDataForDot(newContext.parent, newContext.rowName, newContext.date);
-	       this.setState({dotClickContext: newContext});
-	    }
+//	    if (this.state.dotClickContext) {
+//	       let newContext = this.state.dotClickContext;
+//	       newContext.data = this.fetchDataForDot(newContext.parent, newContext.rowName, newContext.date);
+//	       this.setState({dotClickContext: newContext});
+//	    }
 	 }
       }
+   }
+
+   isActiveTimeWidget = this.isActiveTimeWidget.bind(this);
+   isActiveTimeWidget(elt) {
+      return elt.position >= this.state.minActivePos && elt.position <= this.state.maxActivePos;
    }
 
    //
@@ -361,7 +380,7 @@ export default class ParticipantDetail extends Component {
    //	parent:		'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
    //	rowName:	<category-name>/<provider-name>
    //   isEnabled:	'true' = render normally, 'false' = active dots become inactive
-   //	dotType:	'active', 'inactive', 'highlight', 'all'
+   //	dotType:	'active', 'inactive', 'activeHighlight', 'inactiveHighlight', 'all'
    //
    // TODO: complete after TimeWidget, search are finished
    fetchDates = this.fetchDates.bind(this);
@@ -373,9 +392,17 @@ export default class ParticipantDetail extends Component {
 	 if (allDates.length === 0) {
 	    return [];
 	 } else {
-	     if (dotType === 'highlight') {
+	     if (dotType === 'inactiveHighlight') {
 		if (this.state.dotClickContext && this.state.dotClickContext.parent === parent && this.state.dotClickContext.rowName === rowName) {
-		   return [allDates.find(elt => elt.date === this.state.dotClickContext.date)];
+		   return allDates.filter(elt => (!isEnabled || !this.isActiveTimeWidget(elt)) &&
+						 elt.position === this.state.dotClickContext.position);
+		} else {
+		   return [];
+		}
+	     } else if (dotType === 'activeHighlight') {
+		if (this.state.dotClickContext && this.state.dotClickContext.parent === parent && this.state.dotClickContext.rowName === rowName) {
+		   return allDates.filter(elt => isEnabled && this.isActiveTimeWidget(elt) &&
+						 elt.position === this.state.dotClickContext.position);
 		} else {
 		   return [];
 		}
@@ -386,9 +413,9 @@ export default class ParticipantDetail extends Component {
                 case 'CategoryRollup':
 	           switch (dotType) {
 	              case 'inactive':
-		         return allDates.filter(elt => elt.position < this.state.minActivePos || elt.position > this.state.maxActivePos);
+			 return allDates.filter(elt => !this.isActiveTimeWidget(elt));
 		      case 'active':
-		         return allDates.filter(elt => elt.position >= this.state.minActivePos && elt.position <= this.state.maxActivePos);
+			 return allDates.filter(this.isActiveTimeWidget);
 	              default:  // 'all'
 		         return allDates;
 		   }
@@ -398,10 +425,10 @@ export default class ParticipantDetail extends Component {
 	           let allProvDates = provDates.map((date, index) => ({position: normProvDates[index], date: date}));
 		   switch (dotType) {
 	              case 'inactive':
-		         return isEnabled ? allProvDates.filter(elt => elt.position < this.state.minActivePos || elt.position > this.state.maxActivePos)
+			 return isEnabled ? allProvDates.filter(elt => !this.isActiveTimeWidget(elt))
 					  : allProvDates;
 		      case 'active':
-		         return isEnabled ? allProvDates.filter(elt => elt.position >= this.state.minActivePos && elt.position <= this.state.maxActivePos)
+			 return isEnabled ? allProvDates.filter(this.isActiveTimeWidget)
 					  : [];
 		      default:  // 'all'
 		         return allProvDates;
@@ -412,10 +439,10 @@ export default class ParticipantDetail extends Component {
 	           let allCatDates = catDates.map((date, index) => ({position: normCatDates[index], date: date}));
 		   switch (dotType) {
 	              case 'inactive':
-		         return isEnabled ? allCatDates.filter(elt => elt.position < this.state.minActivePos || elt.position > this.state.maxActivePos)
+			 return isEnabled ? allCatDates.filter(elt => !this.isActiveTimeWidget(elt))
 					  : allCatDates;
 		      case 'active':
-		         return isEnabled ? allCatDates.filter(elt => elt.position >= this.state.minActivePos && elt.position <= this.state.maxActivePos)
+			 return isEnabled ? allCatDates.filter(this.isActiveTimeWidget)
 					  : [];
 		      default:  // 'all'
 		         return allCatDates;
@@ -423,9 +450,9 @@ export default class ParticipantDetail extends Component {
 	        default:   // TimeWidget
 		 switch (dotType) {
 		    case 'inactive':
-		       return allDates.filter(elt => elt.position < this.state.minActivePos || elt.position > this.state.maxActivePos)
+		       return allDates.filter(elt => !this.isActiveTimeWidget(elt));
 		    default: // 'active'
-		       return allDates.filter(elt => elt.position >= this.state.minActivePos && elt.position <= this.state.maxActivePos)
+		       return allDates.filter(this.isActiveTimeWidget);
 		 }
 	     }
 	 }
@@ -442,13 +469,15 @@ export default class ParticipantDetail extends Component {
        switch (parent) {
        case 'CategoryRollup':
 	   // Return all resources for enabled categories matching the clicked date
-	   return this.state.details.pathItem(`[*itemDate=${date}]`).filter(elt => this.state.catsEnabled[elt.category] === undefined ||
-										   this.state.catsEnabled[elt.category]);
+//	   return this.state.details.pathItem(`[*itemDate=${date}]`).filter(elt => this.state.catsEnabled[elt.category] === undefined ||
+//										   this.state.catsEnabled[elt.category]);
+	   return this.state.details.pathItem(`[*itemDate=${date}]`);
 
        case 'ProviderRollup':
 	   // Return all resources for enabled providers matching the clicked date
-	   return this.state.details.pathItem(`[*itemDate=${date}]`).filter(elt => this.state.provsEnabled[elt.provider] === undefined ||
-										   this.state.provsEnabled[elt.provider]);
+//	   return this.state.details.pathItem(`[*itemDate=${date}]`).filter(elt => this.state.provsEnabled[elt.provider] === undefined ||
+//										   this.state.provsEnabled[elt.provider]);
+	   return this.state.details.pathItem(`[*itemDate=${date}]`);
 	   
        case 'Category':
 	   // Return all resources matching the clicked category and date
@@ -479,32 +508,38 @@ export default class ParticipantDetail extends Component {
    //
    // Handle ContentPanel next/prev button clicks
    //   direction:	'next' or 'prev'
+   // Returns true if the button should be enabled, else false
    //
    onNextPrevClick = (direction) => {
       let newContext = this.state.dotClickContext;
       let dates = this.fetchDates(newContext.parent, newContext.rowName, true, 'all');
       let currDateIndex = dates.findIndex( elt => elt.date === newContext.date);
+      let ret = false;
 
       if (currDateIndex === -1) {
 	 // TODO: an error!
-	 return;
+	 return false;
       }
 
       // Determine next/prev date
       if (direction === 'next') {
 	  if (currDateIndex === dates.length-1) {
 	     // No 'next' -- do nothing
-	     return;
+	     return false;
 	  } else {
 	     newContext.date = dates[currDateIndex+1].date;
+	     newContext.position = dates[currDateIndex+1].position;
+	     ret = currDateIndex+1 < dates.length-1;
 	  }
       } else {
 	 // 'prev'
 	 if (currDateIndex === 0) {
 	    // No 'prev' -- do nothing
-	    return;
+	    return false;
 	 } else {
 	    newContext.date = dates[currDateIndex-1].date;
+	    newContext.position = dates[currDateIndex-1].position;
+	    ret = currDateIndex-1 > 0;
 	 }
       }
 
@@ -513,6 +548,8 @@ export default class ParticipantDetail extends Component {
 
       // Set state accordingly
       this.setState({ dotClickContext: newContext });
+
+      return ret;
    }
 
    //
@@ -520,15 +557,23 @@ export default class ParticipantDetail extends Component {
    //   context = {
    //      parent:	   'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
    //      rowName:	   <category-name>/<provider-name>
-   //      dotType:	   'active', 'inactive', 'highlight'
+   //      dotType:	   'active', 'inactive', 'activeHighlight', 'inactiveHighlight'
+   //      minDate:	   date of the first dot for this row
+   //      maxDate:	   date of the last dot for this row
    //      date:	   date of the clicked dot (added below)
+   //      position:	   position of the clicked dot (added below)
    //	   data:	   data associated with the clicked dot (added below)
    //   } 
    //   date:		   date of the clicked dot
    //
    onDotClick = (context, date) => {
+      const rowDates = this.fetchDates(context.parent, context.rowName, true, 'all');
+      const position = rowDates.find(elt => elt.date === date).position;
+      context.minDate = rowDates[0].date;
+      context.maxDate = rowDates[rowDates.length-1].date;
       context.date = date;
-      context.dotType = 'highlight';
+      context.position = position;
+      context.dotType = position < this.state.minActivePos || position > this.state.maxActivePos ? 'inactiveHighlight' : 'activeHighlight';
       context.data = this.fetchDataForDot(context.parent, context.rowName, context.date);
       this.setState({ dotClickContext: context });
    }
@@ -591,7 +636,7 @@ export default class ParticipantDetail extends Component {
 	    </div>
 	    <DiscoveryModal isOpen={this.state.modalIsOpen} modalName={this.state.modalName}
 			    onClose={ name => this.setState({ modalName: '', modalIsOpen: false })} callbackFn={this.fetchModalData} />
-	    <PageFooter context={this.state.dotClickContext} nextPrevFn={this.onNextPrevClick} />  
+	    <PageFooter context={this.state.dotClickContext} nextPrevFn={this.onNextPrevClick} enabledFn={this.isEnabled} />  
 	 </div>
       );
    }

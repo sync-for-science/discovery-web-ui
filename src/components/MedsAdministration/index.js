@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './MedsAdministration.css';
+import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderDisplay } from '../../fhirUtil.js';
@@ -40,11 +41,12 @@ export default class MedsAdministration extends Component {
    }
 
    render() {
+      let isEnabled = this.props.enabledFn('Category', 'Meds Administration');
       return ( this.state.matchingData &&
 	       <div className={this.props.className}>
-	          <div className={this.props.className+'-header'}>Meds Administration</div>
-	          <div className={this.props.className+'-body'}>
-		     { renderDisplay(this.state.matchingData, this.props.className) }
+		  <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>Meds Administration</div>
+	          <div className='content-body'>
+		     { isEnabled && renderDisplay(this.state.matchingData, this.props.className) }
 	          </div>
 	       </div> );
    }

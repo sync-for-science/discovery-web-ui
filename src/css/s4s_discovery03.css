@@ -1,11 +1,9 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Container Stylesheet 03 */
-/* v.03.25 Updated 08/22/2018 */
+/* v.03.27 Updated 09/03/2018 */
 
-/* SECTION 00.00 – Global Styles */
-
-/* 00.01 – Root Elements */
+/* Root Elements */
 :root {
 	--discovery-background:rgba(255,255,255,1.0);
 	--discovery-black:rgba(0,0,0,1.0);
@@ -21,18 +19,19 @@
 	--discovery-dots-active-stroke:rgba(255,255,255,1.0);
 	--discovery-dots-inactive:rgba(176,176,176,0.6);
 	--discovery-dots-inactive-stroke:rgba(255,255,255,1.0);
-	--discovery-dots-highlight:rgba(1,166,170,1.0);
-	--discovery-dots-highlight-stroke:rgba(255,255,255,1.0);
+	--discovery-dots-active-highlight:rgba(1,166,170,1.0);
+	--discovery-dots-active-highlight-stroke:rgba(255,255,255,1.0);
+	--discovery-dots-inactive-highlight:rgba(176,176,176,0.6);
+	--discovery-dots-inactive-highlight-stroke:rgba(255,255,255,1.0);
 	--discovery-dots-highlight-ring:rgba(1,166,170,0.0);
-/* --discovery-dots-highlight-ring-stroke:rgba(1,166,170,1.0); */
-	--discovery-dots-highlight-ring-stroke:rgba(255,80,80,1.0);
+	--discovery-dots-highlight-ring-stroke:rgba(141,48,49,1.0);
 	--discovery-modal-shadow:rgba(0,0,10,0.25);
-	--discovery-data:rgba(0,0,250,1.0);
+	--discovery-data:rgba(141,48,49,1.0);
 	--discovery-data-label:rgba(125,125,125,1.0);
-/*	--discovery-data-divider:rgba(220,220,220,1.0); */
 	--discovery-data-divider:rgba(200,200,200,1.0);
 }
 
+/* Fonts */
 @font-face {
 	font-family:'discovery-regular';
 	src: url('../fonts/GothamBook.otf');
@@ -52,16 +51,22 @@
 }
 
 @font-face {
+	font-family:'discovery-data-bold';
+	src: url('../fonts/SourceCodePro-Bold.ttf');
+	format:('truetype');
+}
+
+@font-face {
 	font-family:'discovery-data-text';
 	src: url('../fonts/PragmaticaBook.otf');
 	format:('truetype');
 }
 
+/* Global Elements */
 button:focus {
 	outline: none;
 }
 
-/* 00.02 – Structure */
 body {
 	width:100%;
 	margin: 0;

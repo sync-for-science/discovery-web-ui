@@ -21,7 +21,8 @@ export default class PageHeader extends Component {
    state = {
       modalName: '',
       logoClasses: ['logo-s4s-button'],		// Default value. Parsed from query string 'logos=a,b,c'
-      currentTextSize: 1.0
+      currentTextSize: 1.0,
+      inactiveLight: true
    }
 
    componentDidMount() {
@@ -61,27 +62,27 @@ export default class PageHeader extends Component {
    }
 
    resizeText(dir) {
-      if (document.body.style.fontSize === '') {
-         document.body.style.fontSize = '1.0rem';
+      if (document.documentElement.style.fontSize === '') {
+         document.documentElement.style.fontSize = '1.0rem';
       }
 
-      let size = parseFloat(document.body.style.fontSize);
+      let size = parseFloat(document.documentElement.style.fontSize);
 
       if (dir==='+' && size < config.maxTextSize) {
 	 size = size + config.textSizeStep;
 	 this.setState({currentTextSize: size});
-	 document.body.style.fontSize = size + 'rem';
+	 document.documentElement.style.fontSize = size + 'rem';
 
       } else if (dir==='-' && size > config.minTextSize) {
 	 size = size - config.textSizeStep;
 	 this.setState({currentTextSize: size});
-	 document.body.style.fontSize = size + 'rem';
+	 document.documentElement.style.fontSize = size + 'rem';
       }
    }
 
    resetTextSize() {
       this.setState({currentTextSize: 1.0});
-      document.body.style.fontSize = '1.0rem';
+      document.documentElement.style.fontSize = '1.0rem';
    }
 
    buttonClick(buttonName) {
@@ -122,6 +123,7 @@ export default class PageHeader extends Component {
 		   (logoClass,index) => <button className={logoClass+'-off'} key={logoClass+index} onClick={() => this.buttonClick('logoModal')} /> )}
 	    </div>
 	    <div className='header-controls-box'>
+	      {/* make highlight active/inactive first <button className={'inactive-light-'+(this.state.inactiveLight ? 'on' : 'off')}>Inactive</button> */}
 	       <button className='text-size-smaller-button-off'	onClick={() => this.resizeText('-')} />
 	       <button className='text-size-larger-button-off'	onClick={() => this.resizeText('+')} />
 	       <div className='text-size-current'		onClick={() => this.resetTextSize()}>

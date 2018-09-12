@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './Immunizations.css';
+import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { renderVaccines } from '../../fhirUtil.js';
+import { renderImmunizations } from '../../fhirUtil.js';
 import { stringCompare } from '../../util.js';
 
 //
@@ -40,11 +41,12 @@ export default class Immunizations extends Component {
    }
 
    render() {
+      let isEnabled = this.props.enabledFn('Category', 'Immunizations');
       return ( this.state.matchingData &&
 	       <div className={this.props.className}>
-	          <div className={this.props.className+'-header'}>Immunizations</div>
-	          <div className={this.props.className+'-body'}>
-		     { renderVaccines(this.state.matchingData, this.props.className) }
+		  <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>Immunizations</div>
+	          <div className='content-body'>
+		     { isEnabled && renderImmunizations(this.state.matchingData, this.props.className) }
 	          </div>
 	       </div> );
    }
