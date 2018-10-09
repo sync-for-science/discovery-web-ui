@@ -7,5 +7,8 @@ export default {
 
     textSizeStep: 0.04,
     minTextSize: 0.80,
-    maxTextSize: 1.16
+    maxTextSize: 1.16,
+
+    searchMaxLength: 200,
+    searchShowSearching: 10000	// Number of search references before showing "Searching..." in status
 }

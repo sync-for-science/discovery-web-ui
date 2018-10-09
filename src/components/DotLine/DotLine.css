@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery DotLine Stylesheet */
-/* v.01.02 Updated 08/20/2018 */
+/* v.01.04 Updated 10/08/2018 */
 
 .active-dots {
    fill: var(--discovery-dots-active);
@@ -17,16 +17,16 @@
    cursor:pointer;
 }
 
-.active-highlight-dots {
-   fill:var(--discovery-dots-active-highlight);
-   stroke:var(--discovery-dots-active-hightlight-stroke);
-   stroke-width:0.063rem;
-   cursor:pointer;
-}
+.active-search-dots {
+   fill: var(--discovery-dots-active-search);
+   stroke: var(--discovery-dots-active-search-stroke);
+   stroke-width:1px;
+   cursor: pointer;
+}  
 
-.inactive-highlight-dots {
-   fill:var(--discovery-dots-inactive-highlight);
-   stroke:var(--discovery-dots-inactive-hightlight-stroke);
+.inactive-search-dots {
+   fill:var(--discovery-dots-inactive-search);
+   stroke:var(--discovery-dots-inactive-search-stroke);
    stroke-width:0.063rem;
    cursor:pointer;
 }

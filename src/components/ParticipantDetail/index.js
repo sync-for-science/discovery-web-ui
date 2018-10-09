@@ -36,6 +36,7 @@ export default class ParticipantDetail extends Component {
       endDate: '',		    // Dec 31 of maxDate's year
       minActivePos: 0,		    // Earliest normalized date/position allowed by TimeWidget
       maxActivePos: 1,		    // Latest normalized date/position allowed by TimeWidget
+      searchRefs: [],		    // Search results to highlight
       isLoading: false,
       fetchError: null,		    // Possible axios error object
       catsExpanded: true,
@@ -69,9 +70,17 @@ export default class ParticipantDetail extends Component {
       this.setState({ svgWidth: getStyle(elt, 'width') });
    }
 
+   onKeydown = (event) => {
+      if (this.state.dotClickContext && event.key === 'Enter') {
+	 // Open content panel with prior dot click context
+	 this.setState({ dotClickContext: Object.assign({}, this.state.dotClickContext) });
+      }
+   }
+
    componentDidMount() {
       this.updateSvgWidth();
       window.addEventListener('resize', this.updateSvgWidth);       
+      window.addEventListener('keydown', this.onKeydown);
 
       this.setState({ isLoading: true });
 
@@ -105,6 +114,7 @@ export default class ParticipantDetail extends Component {
 
    componentWillUnmount() {
       window.removeEventListener('resize', this.updateSvgWidth);
+      window.removeEventListener('keydown', this.onKeydown);
    }
 
    // Remove nulls and duplicates from dateArray, then sort in ascending order
@@ -113,7 +123,7 @@ export default class ParticipantDetail extends Component {
 	   	      .sort((a, b) => new Date(b) - new Date(a)).reverse();
 //      let res = dateArray.filter((value, index) => value !== null && dateArray.indexOf(value) === index)
 //	   	      .sort((a, b) => new Date(b) - new Date(a)).reverse();
-//       return res;
+//      return res;
    }
 
    // Normalize an array of dates by comparing elements to 'min' (returning 0.0) and 'max' (returning 1.0)
@@ -319,142 +329,156 @@ export default class ParticipantDetail extends Component {
    }
 
    //
-   // Callback function to check category/provider enable/disable
-   //   parent:		'Category', 'Provider'
-   //   rowName:	<category-name>/<provider-name>
+   // Search callback function
    //
-   isEnabled = this.isEnabled.bind(this);
-   isEnabled(parent, rowName) {
-      if (parent === 'Category') {
-	 return this.state.catsEnabled[rowName] !== false;
-      } else {
-	 return this.state.provsEnabled[rowName] !== false;
-      }
+   searchCallback = this.searchCallback.bind(this);
+   searchCallback(refs) {
+      let plusRefs = refs.map(ref => {
+	 ref.position = this.state.allDates.find(elt => elt.date === ref.date).position;
+	 return ref;
+      });
+      this.setState({searchRefs: plusRefs});
    }
 
    //
    // Callback function to record category/provider enable/disable
    //   parent:		'Category', 'Provider'
    //   rowName:	<category-name>/<provider-name>
-   //	 isEnabled:	the current state to record
+   //   isEnabled:	the current state to record
    //
    setEnabled = this.setEnabled.bind(this);
    setEnabled(parent, rowName, isEnabled) {
       if (parent === 'Category') {
 	 if (this.state.catsEnabled[rowName] !== isEnabled) {
-	    let catsEnabled = this.state.catsEnabled;
-	    catsEnabled[rowName] = isEnabled;
+	    let catsEnabled = Object.assign({}, this.state.catsEnabled, {[rowName]: isEnabled})
 	    this.setState({catsEnabled: catsEnabled});
-//	    console.log(JSON.stringify(catsEnabled, null, 3));
-
-//	    if (this.state.dotClickContext) {
-//	       let newContext = this.state.dotClickContext;
-//	       newContext.data = this.fetchDataForDot(newContext.parent, newContext.rowName, newContext.date);
-//	       this.setState({dotClickContext: newContext});
-//	    }
 	 }
       } else {
 	 // Provider
 	 if (this.state.provsEnabled[rowName] !== isEnabled) {
-	    let provsEnabled = this.state.provsEnabled;
-	    provsEnabled[rowName] = isEnabled;
+	    let provsEnabled = Object.assign({}, this.state.provsEnabled, {[rowName]: isEnabled})
 	    this.setState({provsEnabled: provsEnabled});
-//	    console.log(JSON.stringify(provsEnabled, null, 3));
-
-//	    if (this.state.dotClickContext) {
-//	       let newContext = this.state.dotClickContext;
-//	       newContext.data = this.fetchDataForDot(newContext.parent, newContext.rowName, newContext.date);
-//	       this.setState({dotClickContext: newContext});
-//	    }
 	 }
       }
    }
 
+   //
+   // Is 'dot' in the TimeWidget active range?
+   //
    isActiveTimeWidget = this.isActiveTimeWidget.bind(this);
-   isActiveTimeWidget(elt) {
-      return elt.position >= this.state.minActivePos && elt.position <= this.state.maxActivePos;
+   isActiveTimeWidget(dot) {
+      return dot.position >= this.state.minActivePos && dot.position <= this.state.maxActivePos;
    }
 
    //
-   // Callback function for this component's state, returning the requested array of position+date objects
+   // Concatenate n arrays, skipping null elements
+   //
+   combine() {
+      let res = [];
+      for (let i = 0; i < arguments.length; i++) {
+	 if (arguments[i]) {
+	    res = res.concat(arguments[i]);
+	 }
+      }
+      return res;
+   }
+
+   //
+   // Include a copy of this dot in result array and mark with 'dotType'
+   //
+   includeDot(result, dot, dotType) {
+      result.push(Object.assign({dotType: dotType}, dot));
+      return result;
+  }
+
+   //
+   // Callback function for this component's state, returning the requested array of position+date+dotType objects
    //	parent:		'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
    //	rowName:	<category-name>/<provider-name>
    //   isEnabled:	'true' = render normally, 'false' = active dots become inactive
-   //	dotType:	'active', 'inactive', 'activeHighlight', 'inactiveHighlight', 'all'
    //
    // TODO: complete after TimeWidget, search are finished
-   fetchDates = this.fetchDates.bind(this);
-   fetchDates(parent, rowName, isEnabled, dotType) {
-      if (!this.state.details) {
+   fetchDotPositions = this.fetchDotPositions.bind(this);
+   fetchDotPositions(parent, rowName, isEnabled, fetchAll) {
+      if (!this.state.details || this.state.allDates.length === 0) {
 	 return [];
       } else {
-	 let { startDate, endDate, allDates } = this.state;
-	 if (allDates.length === 0) {
-	    return [];
-	 } else {
-	     if (dotType === 'inactiveHighlight') {
-		if (this.state.dotClickContext && this.state.dotClickContext.parent === parent && this.state.dotClickContext.rowName === rowName) {
-		   return allDates.filter(elt => (!isEnabled || !this.isActiveTimeWidget(elt)) &&
-						 elt.position === this.state.dotClickContext.position);
-		} else {
-		   return [];
-		}
-	     } else if (dotType === 'activeHighlight') {
-		if (this.state.dotClickContext && this.state.dotClickContext.parent === parent && this.state.dotClickContext.rowName === rowName) {
-		   return allDates.filter(elt => isEnabled && this.isActiveTimeWidget(elt) &&
-						 elt.position === this.state.dotClickContext.position);
-		} else {
-		   return [];
-		}
-	     }
+	 let { startDate, endDate, allDates, searchRefs, dotClickContext } = this.state;
+	 let matchContext = dotClickContext && dotClickContext.parent === parent && dotClickContext.rowName === rowName;
+	 let inactiveHighlightDots = matchContext && allDates.reduce((res, elt) =>
+							 ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
+								? this.includeDot(res, elt, 'inactive-highlight') : res, []);
+	
+	 let activeHighlightDots = matchContext && allDates.reduce((res, elt) =>
+							 (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
+								? this.includeDot(res, elt, 'active-highlight') : res, []);
 
-	     switch (parent) {
-	        case 'ProviderRollup':
-                case 'CategoryRollup':
-	           switch (dotType) {
-	              case 'inactive':
-			 return allDates.filter(elt => !this.isActiveTimeWidget(elt));
-		      case 'active':
-			 return allDates.filter(this.isActiveTimeWidget);
-	              default:  // 'all'
-		         return allDates;
-		   }
-	        case 'Provider':
-	           let provDates = this.cleanDates(this.state.details.pathItem(`[*provider=${rowName}].itemDate`, this.queryOptions));
-	           let normProvDates = this.normalizeDates(provDates, startDate, endDate);
-	           let allProvDates = provDates.map((date, index) => ({position: normProvDates[index], date: date}));
-		   switch (dotType) {
-	              case 'inactive':
-			 return isEnabled ? allProvDates.filter(elt => !this.isActiveTimeWidget(elt))
-					  : allProvDates;
-		      case 'active':
-			 return isEnabled ? allProvDates.filter(this.isActiveTimeWidget)
-					  : [];
-		      default:  // 'all'
-		         return allProvDates;
-		   }
-                case 'Category':
-	           let catDates = this.cleanDates(this.state.details.pathItem(`[*category=${rowName}].itemDate`, this.queryOptions));
-	           let normCatDates = this.normalizeDates(catDates, startDate, endDate);
-	           let allCatDates = catDates.map((date, index) => ({position: normCatDates[index], date: date}));
-		   switch (dotType) {
-	              case 'inactive':
-			 return isEnabled ? allCatDates.filter(elt => !this.isActiveTimeWidget(elt))
-					  : allCatDates;
-		      case 'active':
-			 return isEnabled ? allCatDates.filter(this.isActiveTimeWidget)
-					  : [];
-		      default:  // 'all'
-		         return allCatDates;
-		   }
-	        default:   // TimeWidget
-		 switch (dotType) {
-		    case 'inactive':
-		       return allDates.filter(elt => !this.isActiveTimeWidget(elt));
-		    default: // 'active'
-		       return allDates.filter(this.isActiveTimeWidget);
-		 }
-	     }
+	 let inactiveHighlightSearchDots = matchContext && searchRefs.reduce((res, elt) =>
+							 ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
+								? this.includeDot(res, elt, 'inactive-highlight-search') : res, []);
+
+	 let activeHighlightSearchDots = matchContext && searchRefs.reduce((res, elt) =>
+							 (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
+								? this.includeDot(res, elt, 'active-highlight-search') : res, []);
+
+	 let highlightDots = this.combine(inactiveHighlightDots, activeHighlightDots, inactiveHighlightSearchDots, activeHighlightSearchDots);
+
+	 switch (parent) {
+	    case 'ProviderRollup':
+            case 'CategoryRollup':
+	       if (fetchAll) {
+		  return allDates;
+	       } else {
+		  return this.combine(allDates.reduce((res, elt) => !this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'inactive') : res, []),
+				      allDates.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active') : res, []),
+				      searchRefs.reduce((res, elt) => !this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'inactive-search') : res, []),
+				      searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active-search') : res, []),
+				      highlightDots);
+	       }
+
+	    case 'Provider':
+	       let provDates = this.cleanDates(this.state.details.pathItem(`[*provider=${rowName}].itemDate`, this.queryOptions));
+	       let normProvDates = this.normalizeDates(provDates, startDate, endDate);
+	       let provDateObjs = provDates.map((date, index) => ({position: normProvDates[index], date: date}));
+	       let provSearchRefs = this.state.searchRefs.filter( elt => elt.provider === rowName);
+	       if (fetchAll) {
+		  return provDateObjs;
+	       } else {
+		  return this.combine(provDateObjs.reduce((res, elt) => !isEnabled || !this.isActiveTimeWidget(elt)
+									   ? this.includeDot(res, elt, 'inactive') : res, []),
+				      provDateObjs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
+									   ? this.includeDot(res, elt, 'active') : res, []),
+				      provSearchRefs.reduce((res, elt) => !isEnabled || !this.isActiveTimeWidget(elt)
+									   ? this.includeDot(res, elt, 'inactive-search') : res, []),
+				      provSearchRefs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
+									   ? this.includeDot(res, elt, 'active-search') : res, []),
+				      highlightDots);
+	       }
+
+            case 'Category':
+	       let catDates = this.cleanDates(this.state.details.pathItem(`[*category=${rowName}].itemDate`, this.queryOptions));
+	       let normCatDates = this.normalizeDates(catDates, startDate, endDate);
+	       let catDateObjs = catDates.map((date, index) => ({position: normCatDates[index], date: date}));
+	       let catSearchRefs = this.state.searchRefs.filter( elt => elt.category === rowName);
+	       if (fetchAll) {
+		  return catDateObjs;
+	       } else {
+		  return this.combine(catDateObjs.reduce((res, elt) => !isEnabled || !this.isActiveTimeWidget(elt)
+									  ? this.includeDot(res, elt, 'inactive') : res, []),
+				      catDateObjs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
+									  ? this.includeDot(res, elt, 'active') : res, []),
+				      catSearchRefs.reduce((res, elt) => !isEnabled || !this.isActiveTimeWidget(elt)
+									  ? this.includeDot(res, elt, 'inactive-search') : res, []),
+				      catSearchRefs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
+									  ? this.includeDot(res, elt, 'active-search') : res, []),
+				      highlightDots);
+	       }
+
+	    default:   // TimeWidget
+	       return this.combine(allDates.reduce((res, elt) => !this.isActiveTimeWidget(elt)
+									  ? this.includeDot(res, elt, 'inactive') : res, []),
+				   allDates.reduce((res, elt) => this.isActiveTimeWidget(elt)
+									  ? this.includeDot(res, elt, 'active') : res, []));
 	 }
       }
    }
@@ -469,14 +493,10 @@ export default class ParticipantDetail extends Component {
        switch (parent) {
        case 'CategoryRollup':
 	   // Return all resources for enabled categories matching the clicked date
-//	   return this.state.details.pathItem(`[*itemDate=${date}]`).filter(elt => this.state.catsEnabled[elt.category] === undefined ||
-//										   this.state.catsEnabled[elt.category]);
 	   return this.state.details.pathItem(`[*itemDate=${date}]`);
 
        case 'ProviderRollup':
 	   // Return all resources for enabled providers matching the clicked date
-//	   return this.state.details.pathItem(`[*itemDate=${date}]`).filter(elt => this.state.provsEnabled[elt.provider] === undefined ||
-//										   this.state.provsEnabled[elt.provider]);
 	   return this.state.details.pathItem(`[*itemDate=${date}]`);
 	   
        case 'Category':
@@ -501,8 +521,8 @@ export default class ParticipantDetail extends Component {
       this.setState({ minActivePos: minActivePos,
 		      maxActivePos: maxActivePos });
       // Return equivalent min/max dates
-      return {minDate: this.state.allDates.find(elt => elt.position >= minActivePos).date,
-	      maxDate: this.state.allDates.slice().reverse().find(elt => elt.position <= maxActivePos).date};
+//      return {minDate: this.state.allDates.find(elt => elt.position >= minActivePos).date,
+//	      maxDate: this.state.allDates.slice().reverse().find(elt => elt.position <= maxActivePos).date};
    }
 
    //
@@ -510,9 +530,10 @@ export default class ParticipantDetail extends Component {
    //   direction:	'next' or 'prev'
    // Returns true if the button should be enabled, else false
    //
-   onNextPrevClick = (direction) => {
+   onNextPrevClick = this.onNextPrevClick.bind(this);
+   onNextPrevClick (direction) {
       let newContext = this.state.dotClickContext;
-      let dates = this.fetchDates(newContext.parent, newContext.rowName, true, 'all');
+      let dates = this.fetchDotPositions(newContext.parent, newContext.rowName, true, true);
       let currDateIndex = dates.findIndex( elt => elt.date === newContext.date);
       let ret = false;
 
@@ -557,7 +578,7 @@ export default class ParticipantDetail extends Component {
    //   context = {
    //      parent:	   'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
    //      rowName:	   <category-name>/<provider-name>
-   //      dotType:	   'active', 'inactive', 'activeHighlight', 'inactiveHighlight'
+   //      dotType:	   type of the clicked dot (added below)
    //      minDate:	   date of the first dot for this row
    //      maxDate:	   date of the last dot for this row
    //      date:	   date of the clicked dot (added below)
@@ -565,17 +586,32 @@ export default class ParticipantDetail extends Component {
    //	   data:	   data associated with the clicked dot (added below)
    //   } 
    //   date:		   date of the clicked dot
+   //   dotType:	   'active', 'inactive', 'active-highlight', 'inactive-highlight', 'active-highlight-search', 'inactive-highlight-search'
    //
-   onDotClick = (context, date) => {
-      const rowDates = this.fetchDates(context.parent, context.rowName, true, 'all');
+   onDotClick = (context, date, dotType) => {
+      const rowDates = this.fetchDotPositions(context.parent, context.rowName, true, true);
       const position = rowDates.find(elt => elt.date === date).position;
+
+      context.dotType = this.updateDotType(dotType, position, false);
       context.minDate = rowDates[0].date;
       context.maxDate = rowDates[rowDates.length-1].date;
       context.date = date;
       context.position = position;
-      context.dotType = position < this.state.minActivePos || position > this.state.maxActivePos ? 'inactiveHighlight' : 'activeHighlight';
       context.data = this.fetchDataForDot(context.parent, context.rowName, context.date);
+
       this.setState({ dotClickContext: context });
+   }
+
+   updateDotType(dotType, position, forceSearch) {
+      let isActivePos = position >= this.state.minActivePos && position <= this.state.maxActivePos;
+      let isSearch = dotType.includes('search') || forceSearch;
+      let parts = [];
+      parts.push(isActivePos ? 'active' : 'inactive');
+      parts.push('highlight');
+      if (isSearch) {
+	 parts.push('search');
+      }
+      return parts.join('-');
    }
 
    //
@@ -604,39 +640,48 @@ export default class ParticipantDetail extends Component {
          <div className='participant-detail'>
 	    <div className='participant-detail-fixed-header'>
 	       <PageHeader rawQueryString={this.props.location.search} modalIsOpen={this.state.modalIsOpen}
-			   modalFn={ name => this.setState({ modalName: name, modalIsOpen: true })} />
+			   modalFn={ name => this.setState({ modalName: name, modalIsOpen: true })}
+			   searchData={this.state.details && this.state.details.transformed}
+			   searchCallback={this.searchCallback} />
 	       <TimeWidget minDate={this.state.minDate} maxDate={this.state.maxDate}
-			   timelineWidth={this.state.svgWidth} setLeftRightFn={this.setLeftRight} callbackFn={this.fetchDates} />
+			   timelineWidth={this.state.svgWidth} setLeftRightFn={this.setLeftRight} dotPositionsFn={this.fetchDotPositions} />
 	    </div>
 	    <div className='participant-detail-categories-and-providers'>
 	       <Categories>
 	          <CategoryRollup key='rollup' svgWidth={this.state.svgWidth}
-			          callbackFn={this.fetchDates} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
+			          dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
 		  {/* TODO: change spacer class names to have 'participant-detail-' prefix */}
 	          { this.state.catsExpanded ? [
 		       <div className='category-nav-spacer-top' key='0' />,
 	               this.categories.map(
 			  cat => <Category key={cat} svgWidth={this.state.svgWidth} categoryName={cat}
-					   callbackFn={this.fetchDates} dotClickFn={this.onDotClick} enabledFn={this.setEnabled} /> ),
+					   dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} enabledFn={this.setEnabled} /> ),
 		       <div className='category-nav-spacer-bottom' key='1' />
 		  ] : null }
 	       </Categories>
-	       <Providers>
-	          <ProviderRollup key='rollup' svgWidth={this.state.svgWidth}
-				  callbackFn={this.fetchDates} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
-		  {/* TODO: change spacer class names to have 'participant-detail-' prefix */}
-		  { this.state.provsExpanded ? [
-		       <div className='provider-nav-spacer-top' key='0' />,
-		       this.providers.map(
-			  prov => <Provider key={prov} svgWidth={this.state.svgWidth} providerName={prov}
-					    callbackFn={this.fetchDates} dotClickFn={this.onDotClick} enabledFn={this.setEnabled} /> ),
-		       <div className='provider-nav-spacer-bottom' key='1' />
-		  ] : null }
-	       </Providers>
+	       { this.providers.length > 1 ?
+		 <Providers>
+	            <ProviderRollup key='rollup' svgWidth={this.state.svgWidth}
+				    dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
+		    {/* TODO: change spacer class names to have 'participant-detail-' prefix */}
+		    { this.state.provsExpanded ? [
+		         <div className='provider-nav-spacer-top' key='0' />,
+		         this.providers.map(
+			    prov => <Provider key={prov} svgWidth={this.state.svgWidth} providerName={prov}
+					      dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} enabledFn={this.setEnabled} /> ),
+		         <div className='provider-nav-spacer-bottom' key='1' />
+		    ] : null }
+	         </Providers> :
+		 <div className='single-provider'>
+		    <div className='single-provider-label'>Provider</div>
+		    <div className='single-provider-name'>{this.providers[0]}</div>
+		 </div>
+	       }
 	    </div>
 	    <DiscoveryModal isOpen={this.state.modalIsOpen} modalName={this.state.modalName}
 			    onClose={ name => this.setState({ modalName: '', modalIsOpen: false })} callbackFn={this.fetchModalData} />
-	    <PageFooter context={this.state.dotClickContext} nextPrevFn={this.onNextPrevClick} enabledFn={this.isEnabled} />  
+	    <PageFooter context={this.state.dotClickContext} catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
+			nextPrevFn={this.onNextPrevClick} />  
 	 </div>
       );
    }

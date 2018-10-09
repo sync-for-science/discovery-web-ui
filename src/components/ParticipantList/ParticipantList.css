@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery ParticipantList Stylesheet */
-/* v.01.06 Updated 08/20/2018 */
+/* v.01.07 Updated 10/09/2018 */
 
 .participant-list {
 	height: 100%;
@@ -13,44 +13,44 @@
 	left: 0;
 	display:flex;
 	flex-direction: row;
-	height: 3.750rem;
-	min-height: 3.750rem;
+	height:60px;
+	min-height:60px;
 	width: 100%;
-	padding:0 1.25rem;
-	border-bottom: 0.188rem solid var(--discovery-blue);
+	padding:0 20px;
+	border-bottom:3px solid var(--discovery-blue);
 	background-color: var(--discovery-gray);
 }
 
 .logo-box {
 	display:flex;
 	align-items: center;
-	height:3.750rem;
-	width:13.750rem;
-	min-width:13.750rem;
+	height:60px;
+	width:220px;
+	min-width:220px;
 	padding:0;
 }
 
 .logo-s4s-button-off {
-	height:3.750rem;
-	width:13.750rem;
+	height:60px;
+	width:220px;
 	border:none;
 	padding:0;
 	background-color:transparent;
 	background-image: url(../../svg/logo-s4s-off.svg);
-	background-size: 13.750rem 3.750rem;
+	background-size:220px 60px;
 	background-repeat:no-repeat;
 	outline: none;
 	cursor:none;
 }
 
 .logo-s4s-button-on {
-	height:3.750rem;
-	width:13.750rem;
+	height:60px;
+	width:220px;
 	border:none;
 	padding:0px;
 	background-color:transparent;
 	background-image: url(../../svg/logo-s4s-on.svg);
-	background-size: 13.750rem 3.750rem;
+	background-size:220px 60px;
 	background-repeat:no-repeat;
 	outline: none;
 	cursor:none;
@@ -58,7 +58,7 @@
 
 .participant-list-content {
 	position:absolute;
-	top:5.88rem;
+	top:94px;
 	display: flex;
 	flex-direction:column;
 	height: 100%;
@@ -69,16 +69,16 @@
 
 .participant-list-title {
 	font-family: discovery-bold;
-	font-size: 120%;
+	font-size:1.200rem;
 	width:100%;
 	color:var(--discovery-blue);
 	border-bottom: 1px solid var(--discovery-blue);
-	padding: 0 0 .313rem 0;
+	padding:0 0 5px 0;
 }
 
 .participant-list-content-data {
 	height:auto;
-	padding:0 0 1.250rem 0;
+	padding:0 0 20px 0;
 }
 
 .participant-list-header-wrapper {
@@ -93,105 +93,105 @@
 
 .participant-list-column-header-flagged {
 	height:auto;
-	width:1.125rem;
-	min-width:1.125rem;
+	width:18px;
+	min-width:18px;
 	font-family: discovery-bold;
 	font-size: 1.000rem;
-	padding:.625rem 0 .313rem 0;
+	padding:10px 0 5px 0;
 	white-space:nowrap;
 }
 
 .participant-list-column-header-name-id {
 	height:auto;
-	width:17.875rem;
-	min-width:17.875rem;
+	width:286px;
+	min-width:286px;
 	font-family: discovery-bold;
 	font-size: 1.000rem;
-	padding: .625rem 0 .313rem .313rem;
+	padding:10px 0 5px 5px;
 	white-space:nowrap;
 }
 
 .participant-list-column-header-gender {
 	height:auto;
-	width:5.000rem;
-	min-width:5.000rem;
+	width:80px;
+	min-width:80px;
 	font-family: discovery-bold;
 	font-size: 1.000rem;
 	text-align: center;
-	padding: .625rem 0 .313rem .313rem;
+	padding:10px 0 5px 5px;
 	white-space:nowrap;
 }
 
 .participant-list-column-header-dob {
 	height:auto;
-	width:7.250rem;
-	min-width:7.250rem;
+	width:116px;
+	min-width:116px;
 	font-family: discovery-bold;
 	font-size: 1.000rem;
 	text-align: center;
-	padding: .625rem 0 .313rem .313rem;
+	padding:10px 0 5px 5px;
 	white-space:nowrap;
 }
 
 .participant-list-column-header-dates {
 	height:auto;
-	width:7.250rem;
-	min-width:7.250rem;
+	width:116px;
+	min-width:116px;
 	font-family: discovery-bold;
 	font-size: 1.000rem;
 	text-align: center;
-	padding: .625rem 0 .313rem .625rem;
+	padding:10px 0 5px 5px;
 	white-space:nowrap;
 }
 
 .participant-list-column-header-providers {
 	height:auto;
-	width:6.125rem;
-	min-width:6.125rem;
+	width:98px;
+	min-width:98px;
 	font-family: discovery-bold;
 	font-size: 1.000rem;
 	text-align: center;
-	padding: .625rem 0 .313rem .625rem;
+	padding:10px 0 5px 10px;
 	white-space:nowrap;
 }
 
 .participant-list-column-header-values {
 	height:auto;
-	width:7.250rem;
-	min-width:7.250rem;
+	width:116px;
+	min-width:116px;
 	font-family: discovery-bold;
 	font-size: 1.000rem;
 	text-align: center;
-	padding: .625rem .625rem .313rem .625rem;
+	padding:10px 10px 5px 10px;
 	white-space:nowrap;
 }
 
 .participant-list-data-wrapper {
 	display:grid;
 	grid-template-columns:repeat(7, minmax(min-content, max-content));
-	grid-column-gap: .313rem;
+	grid-column-gap:5px;
 	height: calc(100vh - 12.500rem);
 	font-family:discovery-regular;
 	font-size:1.000rem;
    overflow-y: scroll;
 	white-space: pre-wrap;
-	margin:.313rem 0 1.250rem 0;
+	margin:5px 0 20px 0;
 }
 
 /* width */
 ::-webkit-scrollbar {
-    width: .625rem;
+    width:10px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 .313rem var(--discovery-data-label); 
-    border-radius: .625rem;
+    box-shadow: inset 0 0 5px var(--discovery-data-label); 
+    border-radius:10px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: var(--discovery-blue); 
-    border-radius: .625rem;
+    border-radius:10px;
 }
 

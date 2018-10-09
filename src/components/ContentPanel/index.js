@@ -39,7 +39,8 @@ export default class ContentPanel extends Component {
 	 data: PropTypes.array
       }),
       nextPrevFn: PropTypes.func.isRequired,
-      enabledFn: PropTypes.func.isRequired
+      catsEnabled: PropTypes.object.isRequired,
+      provsEnabled: PropTypes.object.isRequired
    }
 
    state = {
@@ -51,7 +52,8 @@ export default class ContentPanel extends Component {
       dragging: false,
       payloadModalIsOpen: false,
       prevEnabled: true,
-      nextEnabled: true
+      nextEnabled: true,
+      annunciator: null
    }
 
    // Kluge: this function violates locality/independence by needing to know absolute locations of various divs
@@ -93,9 +95,11 @@ export default class ContentPanel extends Component {
 
    onKeydown = (event) => {
       if (this.state.isOpen && event.key === 'ArrowLeft') {
-	 this.props.nextPrevFn('prev');
+	 this.onNextPrev('prev');
       } else if (this.state.isOpen && event.key === 'ArrowRight') {
-	 this.props.nextPrevFn('next');
+	 this.onNextPrev('next');
+      } else if (this.state.isOpen && event.key === 'Escape') {
+	 this.onClose();
       }
    }
 
@@ -118,11 +122,15 @@ export default class ContentPanel extends Component {
 	 this.setState({ prevEnabled: this.props.context.date !== this.props.context.minDate,
 			 nextEnabled: this.props.context.date !== this.props.context.maxDate });
       }
+      if (this.props.open && this.props.catsEnabled !== prevProps.catsEnabled) {
+	 this.setState({ annunciator: 'Categories changed' });
+      }
+
    }
 
    onClose = this.onClose.bind(this);
    onClose() {
-      this.setState({ isOpen: false });
+      this.setState({ isOpen:false, annunciator: '' });
       this.props.onClose(this.props.contentType);
    }
 
@@ -130,9 +138,9 @@ export default class ContentPanel extends Component {
    onNextPrev(direction) {
       const enabled = this.props.nextPrevFn(direction);
       if (direction === 'prev') {
-	 this.setState({prevEnabled: enabled, nextEnabled: true});
+	 this.setState({prevEnabled: enabled, nextEnabled: true, annunciator: ''});
       } else {
-	 this.setState({prevEnabled: true, nextEnabled: enabled});
+	 this.setState({prevEnabled: true, nextEnabled: enabled, annunciator: ''});
       }
    }
 
@@ -143,108 +151,28 @@ export default class ContentPanel extends Component {
 	       <button className='content-panel-inner-title-payload-button' onClick={() => !this.state.dragging && this.setState({payloadModalIsOpen: true})}>
 		  { formatDate(context.date, false, false) }
 	       </button>
+	       { this.state.annunciator && <div className='content-panel-annunciator'>{this.state.annunciator}</div> }
 	       <button className='content-panel-inner-title-close-button' onClick={this.onClose} />
 	    </div>
 	    <div className='content-panel-inner-body'>
-	       <Allergies className='allergies' data={context.data} enabledFn={this.props.enabledFn} />
-	       <Conditions className='conditions' data={context.data} enabledFn={this.props.enabledFn} />
-	       <DocumentReferences className='doc-refs' data={context.data} enabledFn={this.props.enabledFn} />
-	       <Immunizations className='immunizations' data={context.data} enabledFn={this.props.enabledFn} />
-	       <LabResults className='lab-results' data={context.data} enabledFn={this.props.enabledFn} />
-	       <MedsAdministration className='meds-admin' data={context.data} enabledFn={this.props.enabledFn} />
-	       <MedsDispensed className='meds-dispensed' data={context.data} enabledFn={this.props.enabledFn} />
-	       <MedsRequested className='meds-requested' data={context.data} enabledFn={this.props.enabledFn} />
-	       <MedsStatement className='meds-statement' data={context.data} enabledFn={this.props.enabledFn} />
-	       <Procedures className='procedures' data={context.data} enabledFn={this.props.enabledFn} />
-	       <SocialHistory className='social-history' data={context.data} enabledFn={this.props.enabledFn} />
-	       <VitalSigns className='vital-signs' data={context.data} enabledFn={this.props.enabledFn} />
+	       <Allergies          className='allergies'      data={context.data} isEnabled={this.props.catsEnabled['Allergies']} />
+	       <Conditions         className='conditions'     data={context.data} isEnabled={this.props.catsEnabled['Conditions']} />
+	       <DocumentReferences className='doc-refs'       data={context.data} isEnabled={this.props.catsEnabled['Document References']} />
+	       <Immunizations      className='immunizations'  data={context.data} isEnabled={this.props.catsEnabled['Immunizations']} />
+	       <LabResults         className='lab-results'    data={context.data} isEnabled={this.props.catsEnabled['Lab Results']} />
+	       <MedsAdministration className='meds-admin'     data={context.data} isEnabled={this.props.catsEnabled['Meds Administration']} />
+	       <MedsDispensed      className='meds-dispensed' data={context.data} isEnabled={this.props.catsEnabled['Meds Dispensed']} />
+	       <MedsRequested      className='meds-requested' data={context.data} isEnabled={this.props.catsEnabled['Meds Requested']} />
+	       <MedsStatement      className='meds-statement' data={context.data} isEnabled={this.props.catsEnabled['Meds Statement']} />
+	       <Procedures         className='procedures'     data={context.data} isEnabled={this.props.catsEnabled['Procedures']} />
+	       <SocialHistory      className='social-history' data={context.data} isEnabled={this.props.catsEnabled['Social History']} />
+	       <VitalSigns         className='vital-signs'    data={context.data} isEnabled={this.props.catsEnabled['Vital Signs']} />
 
 	       <Modal open={this.state.payloadModalIsOpen} onClose={() => this.setState({payloadModalIsOpen: false})}>
-	          <pre>
+	          <pre className='content-panel-data'>
 	             { JSON.stringify(context.data, null, 3) }
 	          </pre>
 	       </Modal>
-	    </div>
-	 </div>
-      );
-   }
-
-   renderPepContents(context) {
-      return (
-	 <div className='content-panel-inner'>
-	    <div className='content-panel-inner-title-quick-looks'>
-	       <div className="content-panel-inner-title-search-text">Quick Looks <span className="content-panel-search-header-italic">– Planned Feature</span></div>
-	       <button className='content-panel-inner-title-close-button' onClick={this.onClose} />
-	    </div>
-	    <div className='content-panel-inner-body'>
-	       	<div className="content-panel-search-row">
-				<div className="content-panel-quick-looks-button">Categories</div>
-				<div className="content-panel-quick-looks-button">Providers</div>
-				<div className="content-panel-quick-looks-button">Date Range</div>
-			</div>
-			<div className="content-panel-quick-looks-text-block">
-				<p><span className="content-panel-quick-looks-text-bold">Quick Looks</span> present several predefined views of data accessible via Discovery.</p>
-				<p>We expect to consider the following types of screens:</p>
-				<ul>
-					<li>Comparison of data across providers</li>
-					<li>Last viewed/ Last received / Newest / Most viewed data</li>
-					<li>Targeted lists of Procedures / Medications / Allergies by provider</li>
-					<li>Laboratory results of in/out of range as reported by the labs</li>
-					<li>Demographic data-driven presentation of national guidelines</li>
-				</ul>
-				<p>We will explore having options to:</p>
-				<ul>
-					<li>respect or ignore current category, provider, timeline filter settings</li>
-					<li>print and download any Quick-Look panel</li>
-				</ul>
-			</div>
-	    </div>
-	    <div className='content-panel-inner-footer'>
-	      
-	    </div>
-	 </div>
-      );
-   }
-
-   renderSearchContents(context) {
-      return (
-	 <div className='content-panel-inner'>
-	    <div className='content-panel-inner-title-search'>
-	       <div className="content-panel-inner-title-search-text">Search <span className="content-panel-search-header-italic">– Planned Feature</span></div>
-	       <button className='content-panel-inner-title-close-button' onClick={this.onClose} />
-	    </div>
-	    <div className='content-panel-inner-body'>
-			<div className="content-panel-search-row">
-				<div className="content-panel-search-button">Categories</div>
-				<div className="content-panel-search-button">Providers</div>
-				<div className="content-panel-search-button">Date Range</div>
-			</div>
-			<div className="content-panel-search-row">
-				<div className="content-panel-search-field">search string, e.g., HDL 2018</div>
-				<div className="content-panel-search-field-button">Search</div>
-			</div>
-			<div className="content-panel-search-text-block">
-	       		<p><span className="content-panel-search-text-bold">Search</span> supports searching for data by criteria in Discovery.</p>
-				<p>We expect to support searching for specific data</p>
-				<ul>
-					<li>
-						accepting free text input to find data with values, e.g., “HDL” allowing sub-selecting within or across usual filters
-					</li>
-					<li>
-						respecting or overriding current category, provider, timeline filter settings
-					</li>
-				</ul>
-				<p>We will explore having options to:</p>
-				<ul>
-					<li>breadcrumbing past searches, e.g., a la browser history</li>
-					<li>enabling “favoriting” of the search string</li>
-					<li>selecting corresponding timeline dots</li>
-					<li>downloading and printing search-specified data</li>
-				</ul>
-			</div>
-	    </div>
-	    <div className='content-panel-inner-footer'>
-	      
 	    </div>
 	 </div>
       );
@@ -254,10 +182,6 @@ export default class ContentPanel extends Component {
       switch (this.props.contentType) {
 	 case 'dotclick':
 	    return this.renderDotClickContents(context);			   
-	 case 'pep':
-	    return this.renderPepContents(context);
-	 case 'search':
-	    return this.renderSearchContents(context);
 	 default:
 	    return '?????';
       }

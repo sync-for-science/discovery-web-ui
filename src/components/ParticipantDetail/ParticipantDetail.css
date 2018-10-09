@@ -1,12 +1,13 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery ParticipantDetail Stylesheet */
-/* v.01.03 Updated 08/20/2018 */
+/* v.01.08 Updated 10/09/2018 */
 
 .participant-detail {
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index:0;
 	width:100%;
 	height: 100%;
 	margin: 0;
@@ -18,6 +19,7 @@
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index:-1;
 	display:flex;
 	flex-direction: column;
 	height: 140px;
@@ -30,6 +32,7 @@
 	position: fixed;
 	top: 140px;
 	left: 0;
+	z-index:-2;
 	width:100%;
 	height: auto;
 	margin:0;
@@ -38,46 +41,48 @@
 }
 
 .category-nav-spacer-top {
-	height:0.313rem;
-	min-height: 0.313rem;
-	width:15.375rem;
-	min-width:15.375rem;
+	height:3px;
+	min-height:3px;
+	width:180px;
+	min-width:182px;
 	margin:0;
-	border-left:0.125rem solid var(--discovery-category);
-	border-right:0.125rem solid var(--discovery-category);
+	border-left:1px solid var(--discovery-category);
+	border-right:1px solid var(--discovery-category);
 	padding:0;
 	cursor:default;
 }
 
 .category-nav-spacer-bottom {
-	height:0.313rem;
-	width:15.375rem;
-	min-width:15.375rem;
+	height:3px;
+	min-height:3px;
+	width:182px;
+	min-width:182px;
 	margin:0;
-	border-right:0.125rem solid var(--discovery-category);
-	border-bottom:0.125rem solid var(--discovery-category);
-	border-left:0.125rem solid var(--discovery-category);
+	border-right:1px solid var(--discovery-category);
+	border-bottom:1px solid var(--discovery-category);
+	border-left:1px solid var(--discovery-category);
 	padding:0;
 }
 
 .provider-nav-spacer-top {
-	height:0.313rem;
-	min-height:0.313rem;
-	width:15.375rem;
-	min-width:15.375rem;
+	height:3px;
+	min-height:3px;
+	width:182px;
+	min-width:182px;
 	margin:0;
-	border-right:0.125rem solid var(--discovery-provider);
-	border-left:0.125rem solid var(--discovery-provider);
+	border-right:1px solid var(--discovery-provider);
+	border-left:1px solid var(--discovery-provider);
 	padding:0;
 }
 
 .provider-nav-spacer-bottom {
-	height:0.313rem;
-	width:15.375rem;
-	min-width:15.375rem;
+	height:3px;
+	min-height:3px;
+	width:182px;
+	min-width:182px;
 	margin:0;
-	border-right:0.125rem solid var(--discovery-provider);
-	border-bottom:0.125rem solid var(--discovery-provider);
-	border-left:0.125rem solid var(--discovery-provider);
+	border-right:1px solid var(--discovery-provider);
+	border-bottom:1px solid var(--discovery-provider);
+	border-left:1px solid var(--discovery-provider);
 	padding:0;
 }

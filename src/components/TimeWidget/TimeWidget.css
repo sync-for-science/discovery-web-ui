@@ -1,7 +1,7 @@
  @charset "UTF-8";
 
 /* Sync for Science Discovery TimeWidget Stylesheet */
-/* v.01.08 Updated 09/10/2018 */
+/* v.01.11 Updated 10/09/2018 */
 
 .time-widget {
 	display:flex;
@@ -17,8 +17,8 @@
 	flex-direction: row;
 	align-items: center; 
 	height:77px;
-	width:15.625rem;
-	min-width:15.625rem;
+	width:182px;
+	min-width:182px;
 }
 
 .calendar-button-off {
@@ -48,6 +48,7 @@
 .date-range {
 	font-family:discovery-data-bold;
 	font-size:0.800rem;
+	line-height:100%;
 	color: var(--discovery-blue);
 	margin:0 0 0 20px;
 	white-space:nowrap;

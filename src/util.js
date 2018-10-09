@@ -40,7 +40,7 @@ export function formatDate(date, fillShortDates, surpressTime) {
       if (surpressTime) {
 	 return datePart;
       } else {
-	 const time = new Date(strDate).toLocaleTimeString('en-US', {timeZone:'UTC', timeZoneName:'short'}).replace('UTC','GMT');
+	 let time = new Date(strDate).toLocaleTimeString('en-US', {timeZone:'UTC', timeZoneName:'short'}).replace('UTC','GMT');
 	 return datePart + ' ' + time;
       }
    }

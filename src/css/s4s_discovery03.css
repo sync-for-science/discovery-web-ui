@@ -1,13 +1,14 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Container Stylesheet 03 */
-/* v.03.27 Updated 09/03/2018 */
+/* v.03.28 Updated 09/25/2018 */
 
 /* Root Elements */
 :root {
 	--discovery-background:rgba(255,255,255,1.0);
 	--discovery-black:rgba(0,0,0,1.0);
 	--discovery-gray:rgba(167,168,170,1.0);
+	--discovery-gray-light:rgba(167,168,170,0.4);
 	--discovery-blue:rgba(0,26,114,1.0);
 	--discovery-category:rgba(1,166,170,1.0);
 	--discovery-category-label-light:rgba(255,255,255,1.0);
@@ -17,18 +18,27 @@
 	--discovery-provider-label-dark:rgba(1,166,170,1.0);
 	--discovery-dots-active:rgba(1,166,170,0.7);
 	--discovery-dots-active-stroke:rgba(255,255,255,1.0);
+	--discovery-dots-active-search:rgba(255,80,80,1.0);
+	--discovery-dots-active-search-stroke:rgba(255,255,255,1.0);
 	--discovery-dots-inactive:rgba(176,176,176,0.6);
 	--discovery-dots-inactive-stroke:rgba(255,255,255,1.0);
+	--discovery-dots-inactive-search:rgba(255,160,160,1.0);
+	--discovery-dots-inactive-search-stroke:rgba(255,255,255,1.0);
 	--discovery-dots-active-highlight:rgba(1,166,170,1.0);
 	--discovery-dots-active-highlight-stroke:rgba(255,255,255,1.0);
+	--discovery-dots-active-highlight-search:rgba(255,80,80,1.0);
+	--discovery-dots-active-highlight-search-stroke:rgba(255,255,255,1.0);
 	--discovery-dots-inactive-highlight:rgba(176,176,176,0.6);
 	--discovery-dots-inactive-highlight-stroke:rgba(255,255,255,1.0);
+	--discovery-dots-inactive-highlight-search:rgba(255,160,160,1.0);
+	--discovery-dots-inactive-highlight-search-stroke:rgba(255,255,255,1.0);
 	--discovery-dots-highlight-ring:rgba(1,166,170,0.0);
 	--discovery-dots-highlight-ring-stroke:rgba(141,48,49,1.0);
 	--discovery-modal-shadow:rgba(0,0,10,0.25);
 	--discovery-data:rgba(141,48,49,1.0);
 	--discovery-data-label:rgba(125,125,125,1.0);
 	--discovery-data-divider:rgba(200,200,200,1.0);
+	--discovery-data-loading:rgba(255,20,20,1.0);
 }
 
 /* Fonts */

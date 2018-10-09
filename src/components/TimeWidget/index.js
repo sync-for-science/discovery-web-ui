@@ -18,7 +18,7 @@ export default class TimeWidget extends Component {
       maxDate: PropTypes.string.isRequired,
       timelineWidth: PropTypes.string.isRequired,
       setLeftRightFn: PropTypes.func.isRequired,
-      callbackFn: PropTypes.func.isRequired
+      dotPositionsFn: PropTypes.func.isRequired
    }
     
    state = {
@@ -27,17 +27,28 @@ export default class TimeWidget extends Component {
       thumbDates: null
    }
 
+   locToDate(pos) {
+      let min = new Date(this.props.minDate).getTime();
+      let max = new Date(this.props.maxDate).getTime();
+      let target = min + (max - min) * pos;
+      return new Date(target).toISOString();
+   }
+
    onLeftDragStop = this.onLeftDragStop.bind(this);
    onLeftDragStop(e, data) {
       const width = numericPart(this.props.timelineWidth);
-      const dates = this.props.setLeftRightFn(data.x/width, this.state.rightX/width);
+//      let dates = this.props.setLeftRightFn(data.x/width, this.state.rightX/width);
+      this.props.setLeftRightFn(data.x/width, this.state.rightX/width);
+      let dates = {minDate: this.locToDate(data.x/width), maxDate: this.locToDate(this.state.rightX/width)};
       this.setState({ leftX: data.x, thumbDates: dates });
    }
 
    onRightDragStop = this.onRightDragStop.bind(this);
    onRightDragStop(e, data) {
       const width = numericPart(this.props.timelineWidth);
-      const dates = this.props.setLeftRightFn(this.state.leftX/width, data.x/width);
+//      let dates = this.props.setLeftRightFn(this.state.leftX/width, data.x/width);
+      this.props.setLeftRightFn(this.state.leftX/width, data.x/width);
+      let dates = {minDate: this.locToDate(this.state.leftX/width), maxDate: this.locToDate(data.x/width)};
       this.setState({ rightX: data.x, thumbDates: dates });
    }
 
@@ -76,12 +87,8 @@ export default class TimeWidget extends Component {
 	       </div>
 	       <div className="timeline-selection-box">
 	          <SVGContainer className='timeline-svg-container' svgClassName='timeline-svg' svgWidth={this.props.timelineWidth}>
-		     <DotLine key='inactive'
-			      dotPositions={this.props.callbackFn('TimeWidget', 'TimeWidget', true, 'inactive')}
-			      context={ {parent:this.constructor.name, rowName:'timeWidget', dotType:'inactive'} } />
-		     <DotLine key='active'
-			      dotPositions={this.props.callbackFn('TimeWidget', 'TimeWidget', true, 'active')}
-			      context={ {parent:this.constructor.name, rowName:'timeWidget', dotType:'active'} } />
+		     <DotLine dotPositions={this.props.dotPositionsFn('TimeWidget', 'TimeWidget', true)}
+			      context={ {parent:this.constructor.name, rowName:'timeWidget'} } />
 	          </SVGContainer>
 		  <Draggable axis='x' bounds={{left:0, right:this.state.rightX}} defaultPosition={{x:0, y:0}} onStop={this.onLeftDragStop}>	       
 		     <div className='timeline-selector-left'></div>

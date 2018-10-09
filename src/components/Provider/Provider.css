@@ -1,12 +1,13 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Provider Stylesheet */
-/* v.01.04 Updated 08/20/2018 */
+/* v.01.11 Updated 10/09/2018 */
 
 .provider {
 	display:flex;
 	flex-direction:row;
-	height:2.250rem;
+	height:auto;
+	max-height:36px;
 	width:100%;
 	margin:0;
 	padding:0;
@@ -16,11 +17,11 @@
 	display:flex;
 	justify-content:center;
 	height:auto;
-	width:15.375rem;
-	min-width:15.375rem;
+	width:182px;
+	min-width:182px;
 	margin:0;
-	border-right:0.125rem solid var(--discovery-provider);
-	border-left:0.125rem solid var(--discovery-provider);
+	border-right:1px solid var(--discovery-provider);
+	border-left:1px solid var(--discovery-provider);
 	padding: 0;
 	text-align:center;
 }
@@ -29,15 +30,15 @@
 	display:flex;
 	justify-content:center;
 	height:auto;
-	min-width:80%;
-	max-width:98%;
-	margin:0.313rem auto;
-	border:0.125rem solid var(--discovery-provider);
-	border-radius:1.563rem;
-	padding:0.125rem 0;
+	min-width:160px;
+	max-width:160px;
+	margin:3px auto;
+	border:1px solid var(--discovery-provider);
+	border-radius:25px;
+	padding:4px 0;
 	background-color:var(--discovery-provider);
 	font-family:discovery-bold;
-	font-size:inherit;
+	font-size:0.813rem;
 	color:var(--discovery-provider-label-light);
 	white-space:nowrap;
 	cursor:pointer;
@@ -47,16 +48,16 @@
 	display:flex;
 	justify-content:center;
 	height:auto;
-	min-width:80%;
-	max-width:98%;
-	max-resolution:0.313rem; 
-	margin:0.313rem auto;
-	border:0.125rem solid var(--discovery-provider);
-	border-radius:1.563rem;
-	padding:0.125rem 0;
+	min-width:160px;
+	max-width:160px;
+	max-resolution:5px; 
+	margin:3px auto;
+	border:1px solid var(--discovery-provider);
+	border-radius:25px;
+	padding:4px 0;
 	background-color:var(--discovery-background);
 	font-family:discovery-regular;
-	font-size:inherit;
+	font-size:0.813rem;
 	color:var(--discovery-provider-label-dark);
 	white-space:nowrap;
 	cursor:pointer;
@@ -69,7 +70,7 @@
 	height:inherit;
 	width:100%;
 	margin:0;
-	padding:0 0.313rem 0 0.313rem;
+	padding:0 5px 0 5px;
 	background-image:url(../../svg/horizontal-rule-1px-black.svg);
 	background-position:center;
 	background-repeat:repeat-x;

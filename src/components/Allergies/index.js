@@ -15,7 +15,7 @@ export default class Allergies extends Component {
 
    static propTypes = {
       data: PropTypes.array.isRequired,
-      enabledFn: PropTypes.func.isRequired
+      isEnabled: PropTypes.bool
    }
 
    state = {
@@ -42,7 +42,7 @@ export default class Allergies extends Component {
    }
 
    render() {
-      let isEnabled = this.props.enabledFn('Category', 'Allergies');
+      let isEnabled = this.props.isEnabled === undefined || this.props.isEnabled;
       return ( this.state.matchingData &&
 	       <div className={this.props.className}>
 		  <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>Allergies</div>

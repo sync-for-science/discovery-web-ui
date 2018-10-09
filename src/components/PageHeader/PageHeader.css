@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.07 Updated 09/07/2018 */
+/* v.01.11 Updated 10/09/2018 */
 
 .page-header {
 	display:flex;
@@ -10,16 +10,17 @@
 	width:auto;
 	margin:0;
 	padding:0 20px;
-	border-bottom:3px  solid var(--discovery-blue);
+	border-bottom:2px  solid var(--discovery-blue);
 	background-color:var(--discovery-gray);
 }
 
+/* Logos */
 .logo-box {
 	display:flex;
 	align-items:center;
 	height:60px;
 	width:100%;
-	min-width:15.625rem;
+	min-width:250px;
 	padding:0;
 }
 
@@ -57,7 +58,7 @@
 	padding:0;
 	background-color:transparent;
 	background-image:url(../../svg/logo-harvard-off.svg);
-	background-size:8.750rem 40px;
+	background-size:140px 40px;
 	background-repeat:no-repeat;
 	background-position:center center;
 	cursor:pointer;
@@ -232,7 +233,7 @@
 
 .logo-va-button-on {
 	height:60px;
-	width:150pxrem;
+	width:150px;
 	margin:0 0 0 20px;
 	border:none;
 	padding:0;
@@ -244,6 +245,7 @@
 	cursor:pointer;
 }
 
+/* Header Controls */
 .header-controls-box {
 	display:flex;
 	flex-direction:row;
@@ -287,98 +289,124 @@
 	margin:0 40px 0 -8px;
 }
 
-.participant-info-button-off {
-	height:40px;
-	width:40px;
+/* Header Menu */
+.header-menu-button {
+	height:25px;
+	width:25px;
+	background-color:transparent;
+	background-image:url(../../svg/icon-header-menu.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;
+	margin:3px 0 0 10px;
+	border:0;
+	cursor:pointer;
+}
+
+.header-menu-button-open {
+	height:25px;
+	width:25px;
+	background-color:transparent;
+	background-image:url(../../svg/icon-header-menu-hover.svg);
+	background-position:0 0;
+	background-repeat:no-repeat;
+	margin:3px 0 0 10px;
+	border:0;
+	cursor:pointer;
+}
+
+.header-menu {
+	position: absolute;
+//	top: 62px;
+	top: 42px;
+	right:0;
+	z-index: 3;
+	width:120px;
+	background-color:var(--discovery-background);
+	padding:10px;
+	border:1px  solid var(--discovery-blue);
+	margin: 0 20px 0 0;
+}
+
+.header-menu-info {
+	height:20px;
+	width:auto;
 	background-color:transparent;
 	background-image:url(../../svg/icon-participant-info-off.svg);
-	background-position:0 0;
+	background-position:5px 0;
 	background-repeat:no-repeat;
-	margin:0 0 0 10px;
+	padding:2px 0 0 30px;
+	margin:0 0 5px 0;
 	border:none;
 	cursor:pointer;
+	font-family:discovery-regular;
+	font-size:1.000rem;
 }
 
-.participant-info-button-on {
-	height:40px;
-	width:40px;
-	background-color:transparent;
-	background-image:url(../../svg/icon-participant-info-on.svg);
-	background-position:0 0;
-	background-repeat:no-repeat;
-	margin:0 0 0 10px;
-	border:none;
-	cursor:pointer;
+.header-menu-info:hover {
+   width:auto;
+   background-color:var(--discovery-gray-light);
+	font-family:discovery-bold;
 }
 
-.help-button-off {
-	height:40px;
-	width:40px;
+.header-menu-help {
+	height:20px;
+	width:auto;
 	background-color:transparent;
 	background-image:url(../../svg/icon-help-off.svg);
-	background-position:0 0;
+	background-position:5px 0;
 	background-repeat:no-repeat;
-	margin:0 0 0 10px;
-	border:0;
+	padding:0 0 0 30px;
+	margin:0 0 5px 0;
+	border:none;
 	cursor:pointer;
+	font-family:discovery-regular;
+	font-size:1.000rem;
 }
 
-.help-button-on {
-	height:40px;
-	width:40px;
-	background-color:transparent;
-	background-image:url(../../svg/icon-help-on.svg);
-	background-position:0 0;
-	background-repeat:no-repeat;
-	margin:0 0 0 10px;
-	border:0;
-	cursor:pointer;
+.header-menu-help:hover {
+ 	width:auto;
+   background-color:var(--discovery-gray-light);
+	font-family:discovery-bold;
 }
 
-.download-button-off {
-	height:40px;
-	width:40px;
+.header-menu-download {
+	height:20px;
+	width:auto;
 	background-color:transparent;
 	background-image:url(../../svg/icon-download-off.svg);
-	background-position:0 0;
+	background-position:5px 0;
 	background-repeat:no-repeat;
-	margin:0 0 0 10px;
-	border:0;
+	padding:0 0 0 30px;
+	margin:0 0 5px 0;
+	border:none;
 	cursor:pointer;
+	font-family:discovery-regular;
+	font-size:1.000rem;
 }
 
-.download-button-on {
-	height:40px;
-	width:40px;
-	background-color:transparent;
-	background-image:url(../../svg/icon-download-on.svg);
-	background-position:0 0;
-	background-repeat:no-repeat;
-	margin:0 0 0 10pxrem;
-	border:0;
-	cursor:pointer;
+.header-menu-download:hover {
+ 	width:auto;
+   background-color:var(--discovery-gray-light);
+	font-family:discovery-bold;
 }
 
-.print-button-off {
-	height:40px;
-	width:40px;
+.header-menu-print {
+	height:20px;
+	width:auto;
 	background-color:transparent;
 	background-image:url(../../svg/icon-print-off.svg);
-	background-position:0 0;
+	background-position:5px 0;
 	background-repeat:no-repeat;
-	margin:0 0 0 10px;
-	border:0;
+	padding:0 0 0 30px;
+	margin:0;
+	border:none;
 	cursor:pointer;
+	font-family:discovery-regular;
+	font-size:1.000rem;
 }
 
-.print-button-on {
-	height:40px;
-	width:40px;
-	background-color:transparent;
-	background-image:url(../../svg/icon-print-on.svg);
-	background-position:0 0;
-	background-repeat:no-repeat;
-	margin:0 0 0 10px;
-	border:0;
-	cursor:pointer;
+.header-menu-print:hover {
+  	width:auto;
+   background-color:var(--discovery-gray-light);
+	font-family:discovery-bold;
 }

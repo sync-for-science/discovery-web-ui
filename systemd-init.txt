@@ -1,0 +1,8 @@
+- create x.service file
+- sudo ln -s /path/to/x.service /lib/systemd/system/x.service
+- sudo systemctl enable x.service
+- sudo systemctl start x.service
+- sudo systemctl status x.service
+- sudo shutdown -r now
+
+- sudo journalctl -u x.service

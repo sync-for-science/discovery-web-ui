@@ -1,42 +1,12 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Proceedures Stylesheet */
-/* v.01.09 Updated 09/07/2018 */
-
-.procedures-header {
-	margin:0.625rem 1.250rem;
-	border-bottom: 0.063rem solid var(--discovery-blue);
-	font-family: discovery-bold;
-	font-size:1.000rem;
-	color: var(--discovery-blue);
-}
-
-.procedures-body {
-	margin:0 1.250rem;
-}
+/* v.01.11 Updated 10/09/2018 */
 
 .procedures-loading {
-    color: white;
-    background-color: red;
-    padding: 0.313rem;
-}
-
-.procedures-container {
-	display:grid;
-	grid-template-columns:repeat(40, minmax(min-content, 1fr));
-	grid-column-gap: 0.313rem;
-	border-bottom:0.063rem solid var(--discovery-data-divider);
-	padding:0 0 0.313rem 0;
-	margin:0 0 0.625rem 0;
-}
-
-.procedures-container-last {
-	display:grid;
-	grid-template-columns:repeat(40, minmax(min-content, 1fr));
-	grid-column-gap: 0.313rem;
-	border-bottom:0.063rem solid var(--discovery-background);
-	padding:0 0 0.313rem 0;
-	margin:0 0 0.625rem 0;
+    color:var(--discovery-background);
+    background-color:var(--discovery-data-loading);
+    padding:5px;
 }
 
 .procedures-display {
@@ -53,13 +23,13 @@
 
 .procedures-value-label {
 	height:auto;
-	width:8.250rem;
+	width:132px;
 	font-family:discovery-regular;
 	font-size:0.800rem;
 	text-align: right;
 	color:var(--discovery-data-label);
 	white-space: nowrap;
-	padding:0.375rem 0 0 ;
+	padding:6px 0 0 ;
 	grid-column:1;
 }
 
@@ -83,19 +53,19 @@
 	text-align: left;
 	color:var(--discovery-data-label);
 	white-space: nowrap;
-	padding:0.375rem 0 0 0rem;
+	padding:6px 0 0 0rem;
 	grid-column:3;
 }
 
 .procedures-status-label {
 	height:auto;
-	width:8.250rem;
+	width:132px;
 	font-family:discovery-regular;
 	font-size:0.800rem;
 	text-align: right;
 	color:var(--discovery-data-label);
 	white-space: nowrap;
-	padding:0.375rem 0 0 0;
+	padding:6px 0 0 0;
 	grid-column:1;
 }
 
@@ -119,7 +89,7 @@
 	text-align: right;
 	color:var(--discovery-data-label);
 	white-space:nowrap;
-	padding:0.375rem 0 0 0.938rem;
+	padding:6px 0 0 15px;
 	grid-column:1;
 }
 
@@ -143,7 +113,7 @@
 	text-align: right;
 	color:var(--discovery-data-label);
 	white-space:nowrap;
-	padding:0.375rem 0 0 0.938rem;
+	padding:6px 0 0 15px;
 	grid-column:1;
 }
 
@@ -167,7 +137,7 @@
 	text-align: right;
 	color:var(--discovery-data-label);
 	white-space:nowrap;
-	padding:0.375rem 0 0 0.938rem;
+	padding:6px 0 0 015px;
 	grid-column:1;
 }
 
@@ -191,7 +161,7 @@
 	text-align: right;
 	color:var(--discovery-data-label);
 	white-space:nowrap;
-	padding:0.375rem 0 0 0.938rem;
+	padding:6px 0 0 15px;
 	grid-column:1;
 }
 

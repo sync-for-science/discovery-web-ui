@@ -14,7 +14,8 @@ import { stringCompare } from '../../util.js';
 export default class SocialHistory extends Component {
 
    static propTypes = {
-      data: PropTypes.array.isRequired
+      data: PropTypes.array.isRequired,
+      isEnabled: PropTypes.bool
    }
 
    state = {
@@ -39,7 +40,7 @@ export default class SocialHistory extends Component {
    }
 
    render() {
-      let isEnabled = this.props.enabledFn('Category', 'Social History');
+      let isEnabled = this.props.isEnabled === undefined || this.props.isEnabled;
       return ( this.state.matchingData &&
 	       <div className={this.props.className}>
 		  <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>Social History</div>
