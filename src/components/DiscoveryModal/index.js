@@ -66,7 +66,7 @@ export default class DiscoveryModal extends Component {
 	       	
 	       	<div className="logo-modal-body-row">
 		  		<div className="logo-modal-body-property">Version:</div>
-		  		<div className="logo-modal-body-value">Early Alpha 0.1.0</div>
+		  		<div className="logo-modal-body-value">Alpha 0.2.0</div>
 		  	</div>
 	       	<div className="logo-modal-body-row">
 		  		<div className="logo-modal-body-property">Project Lead:</div>

@@ -1,13 +1,15 @@
 @charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery Search Stylesheet */
-/* v.01.05 Updated 10/09/2018 */
+/* v.01.08 Updated 11/14/2018 */
 
 .search {
    position:relative;
    display:flex;
    flex-direction:row;
    height:40px;
+	width:30%;
    align-items:center;
    margin:12px 0 0 0;
 }
@@ -41,8 +43,8 @@
 .search-input {
    width:200px;
    margin:0;
-   border:1px solid var(--discovery-blue);
-   padding:0 0 0 5px;
+   border:1px solid var(--blue-dark);
+	padding:0 0 0 5px;
    outline: none;
 }
 
@@ -54,8 +56,8 @@
    background-color:transparent;
    font-family:discovery-data-bold;
    font-size:0.800rem;
-   color:var(--discovery-blue);
-   text-align:right;
+   color:var(--blue);
+	text-align:right;
    white-space:nowrap;
 }
 
@@ -63,13 +65,12 @@
    position:absolute;
    top:27px;
    left:50px;
-   z-index: 2;
-   width:195px;
-   background-color:var(--discovery-background);
-   border-top:1px solid var(--discovery-data-divider);
-   border-right:1px solid var(--discovery-blue);
-   border-bottom:1px solid var(--discovery-blue);
-   border-left:1px solid var(--discovery-blue);
+	width:195px;
+   background-color:var(--white);
+   border-top:1px solid var(--gray-medium);
+   border-right:1px solid var(--blue-dark);
+   border-bottom:1px solid var(--blue-dark);
+   border-left:1px solid var(--blue-dark);
    padding:5px;
    font-family:discovery-regular;
    font-size:0.800rem;
@@ -84,20 +85,21 @@
    left:50px;
    z-index:2;
    width:195px;
-   background-color:var(--discovery-background);
-   border-top:1px solid var(--discovery-data-divider);
-   border-right:1px solid var(--discovery-blue);
-   border-bottom:1px solid var(--discovery-blue);
-   border-left:1px solid var(--discovery-blue);
+   background-color:var(--white);
+   border-top:1px solid var(--gray-medium);
+   border-right:1px solid var(--blue-dark);
+   border-bottom:1px solid var(--blue-dark);
+   border-left:1px solid var(--blue-dark);
    padding:5px;
    font-family:discovery-regular;
    font-size:0.800rem;
-   color:var(--discovery-gray);
+   color:var(--gray-medium);
  }
 
 .search-results-element:hover {
    cursor:pointer;
-   background-color:var(--discovery-gray-light);
+   background-color:var(--gray-medium);
+	opacity:0.4;
 }
 
 .search-data {

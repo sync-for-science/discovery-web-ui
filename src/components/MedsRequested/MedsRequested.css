@@ -1,24 +1,12 @@
 @charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
+@import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery MedsRequested Stylesheet */
-/* v.01.11 Updated 10/08/2018 */
-
-.meds-requested-loading {
-    color:var(--discovery-background);
-    background-color:var(--discovery-data-loading);
-    padding:5px;
-}
+/* v.01.13 Updated 10/22/2018 */
 
 .meds-requested-display {
-	height:auto;
-	width:auto;
-	font-family:discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color: var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
-	grid-column: 1/span 40;
+	@insert .content-panel-display;
 }
 
 .meds-requested-status-label {
@@ -199,4 +187,10 @@
 	white-space: nowrap;
 	padding:0;
 	grid-column:2;
+}
+
+.meds-requested-loading {
+    color:var(--discovery-background);
+    background-color:var(--discovery-data-loading);
+    padding:5px;
 }

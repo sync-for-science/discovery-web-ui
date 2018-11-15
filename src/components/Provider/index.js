@@ -23,6 +23,21 @@ export default class Provider extends Component {
       isEnabled: true
    }
 
+   componentDidMount() {
+      window.addEventListener('keydown', this.onKeydown);
+   }
+
+   componentWillUnmount() {
+      window.removeEventListener('keydown', this.onKeydown);
+   }
+
+   onKeydown = (event) => {
+      if (event.key === 'Enter') {
+	 // Do nothing (don't want in-focus buttons to toggle on Enter
+	 event.preventDefault();
+      }
+   }
+
    handleButtonClick = () => {
       this.props.enabledFn('Provider', this.props.providerName, !this.state.isEnabled);
       this.setState({isEnabled: !this.state.isEnabled});

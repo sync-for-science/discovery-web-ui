@@ -1,17 +1,22 @@
 @charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.11 Updated 10/09/2018 */
+/* v.01.18 Updated 11/14/2018 */
 
 .page-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index:1;
 	display:flex;
 	flex-direction:row;
 	height:60px;
-	width:auto;
-	margin:0;
+	width:100%;
+	margin:0; 
 	padding:0 20px;
-	border-bottom:2px  solid var(--discovery-blue);
-	background-color:var(--discovery-gray);
+	border-bottom:2px  solid var(--blue-dark);
+	background-color:var(--gray-medium);
 }
 
 /* Logos */
@@ -19,7 +24,7 @@
 	display:flex;
 	align-items:center;
 	height:60px;
-	width:100%;
+	width:50%;
 	min-width:250px;
 	padding:0;
 }
@@ -31,7 +36,7 @@
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image:url(../../svg/logo-s4s-off.svg);
+	background-image:url(../../svg/logo-s4s-3-off.svg);
 	background-size:220px 60px;
 	background-repeat:no-repeat;
 	cursor: pointer;
@@ -44,7 +49,7 @@
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image: url(../../svg/logo-s4s-on.svg);
+	background-image: url(../../svg/logo-s4s-3-on.svg);
 	background-size:220px 60px;
 	background-repeat:no-repeat;
 	cursor:pointer;
@@ -253,6 +258,7 @@
 	align-items:center;
 	justify-content:flex-end;
 	height:60px;
+	width:calc(20% - 40px);
 	padding:0;
 }
 			
@@ -284,7 +290,7 @@
 	font-family:discovery-data-bold;
 	font-size:0.900rem;
 	text-align:right; 
-	color:var(--discovery-blue);
+	color:var(--blue);
 	padding:24px 0 0 0;
 	margin:0 40px 0 -8px;
 }
@@ -316,14 +322,13 @@
 
 .header-menu {
 	position: absolute;
-//	top: 62px;
 	top: 42px;
-	right:0;
+	right:20;
 	z-index: 3;
 	width:120px;
-	background-color:var(--discovery-background);
+	background-color:var(--white);
 	padding:10px;
-	border:1px  solid var(--discovery-blue);
+	border:1px  solid var(--blue-dark);
 	margin: 0 20px 0 0;
 }
 
@@ -344,8 +349,8 @@
 
 .header-menu-info:hover {
    width:auto;
-   background-color:var(--discovery-gray-light);
-	font-family:discovery-bold;
+   background-color:var(--gray-medium);
+	opacity:0.4;
 }
 
 .header-menu-help {
@@ -365,8 +370,8 @@
 
 .header-menu-help:hover {
  	width:auto;
-   background-color:var(--discovery-gray-light);
-	font-family:discovery-bold;
+   background-color:var(--gray-medium);
+	opacity:0.4;
 }
 
 .header-menu-download {
@@ -386,8 +391,8 @@
 
 .header-menu-download:hover {
  	width:auto;
-   background-color:var(--discovery-gray-light);
-	font-family:discovery-bold;
+   background-color:var(--gray-medium);
+	opacity:0.4;
 }
 
 .header-menu-print {
@@ -407,6 +412,6 @@
 
 .header-menu-print:hover {
   	width:auto;
-   background-color:var(--discovery-gray-light);
-	font-family:discovery-bold;
+   background-color:var(--gray-medium);
+	opacity:0.4;
 }

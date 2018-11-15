@@ -1,0 +1,114 @@
+@charset "UTF-8";
+
+/* Sync for Science Discovery Category and Provider CSS */
+/* v.01.05 Updated 11/14/2018 */
+
+.categories-providers {
+	height: auto;
+	width: auto;
+	padding:0 20px;
+}
+
+.category-provider-rollup {
+	display:flex;
+	flex-direction: row;
+	height:28px;
+	max-height:28px;
+	width:100%;
+	margin:0;
+}
+
+.category-provider-rollup-nav-enabled {
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	height:28px;
+	max-height:28px;
+	width:184px;
+	min-width:184px;
+	margin:0 10px 0 0;
+	padding:0 0;
+	background-image: url(../../svg/arrow-down-icon.svg);
+	background-size:20px 20px;
+	background-position:8px 4px;
+	background-repeat: no-repeat;
+	font-family:discovery-bold;
+	font-size:0.813rem;
+	text-align:center;
+}
+
+.category-provider-rollup-nav-disabled {
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	height:28px;
+	max-height:28px;
+	width:184px;
+	min-width:184px;
+	margin:0 10px 0 0;
+	padding:0 0;
+	background-image: url(../../svg/arrow-right-icon.svg);
+	background-size:20px 20px;
+	background-position:8px 4px;
+	background-repeat: no-repeat;
+	font-family:discovery-bold;
+	font-size:0.813rem;
+	text-align: center;
+}
+
+.category-provider-row {
+	display:flex;
+	flex-direction:row;
+	height:28px;
+	max-height:28px;
+	width:100%;
+	margin:0;
+	padding:0;
+}
+
+.category-provider-nav {
+	display:flex;
+	justify-content: center;
+	height: auto;
+	width:184px;
+	min-width:184px;
+	margin:0 10px 0 0;
+	padding: 0;
+	text-align:center;
+	cursor: default;
+}
+
+.category-provider-button {
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	height: auto;
+	width:160px;
+	max-width:160px;
+	margin:3px auto;
+	border-radius:20px;
+	padding:0 0;
+ 	font-size:0.813rem;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.category-provider-svg-container {
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	height:inherit;
+	width:100%;
+	margin:0;
+	padding:0 10px;
+	background-image:url(../../svg/horizontal-rule-1px-black.svg);
+	background-position:center;
+	background-repeat:repeat-x;
+	background-clip:padding-box;
+	overflow:hidden;
+}
+
+.category-provider-svg {
+	height:inherit;
+	overflow: visible;
+}

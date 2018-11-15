@@ -1,100 +1,63 @@
 @charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
+@import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery VitalSigns Stylesheet */
-/* v.01.13 Updated 10/09/2018 */
+/* v.01.18 Updated 11/14/2018 */
 
 .vital-signs-display {
-	height:auto;
-	width:auto;
-	font-family: discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
-	grid-column: 1/ span 40;
+	@insert .content-panel-display;
 }
 
 .vital-signs-value1 {
-	height:auto;
-	width:132px;
-	font-family: discovery-data;
-	font-size:1.200rem;
+	@insert .value;
 	text-align: right;
-	color:var(--discovery-data);
-	padding:0;
+	width:132px;
 	grid-column:1;
 }
 
 .vital-signs-unit1 {
-	height:auto;
+	@insert .label;
 	text-align: left;
-	font-family: discovery-regular;
-	font-size:0.800rem;
-	color:var(--discovery-data-label);
 	padding:4px 0 0 0;
 	grid-column:2;
 }
 
 .vital-signs-label1 {
-	height:auto;
+	@insert .label;
 	text-align: left;
-	font-family: discovery-regular;
-	font-size:.800rem;
-	color:var(--discovery-data-label);
 	padding:4px 0 0 0;
 	grid-column:3;
 }
 
 .vital-signs-value2 {
-	height:auto;
-	width:auto;
-	font-family: discovery-data;
-	font-size:1.200rem;
+	@insert .value;
 	text-align: right;
-	color:var(--discovery-data);
 	grid-column:1;
 }
 
 .vital-signs-unit2 {
-	height:auto;
+	@insert .label;
 	text-align: left;
-	font-family: discovery-regular;
-	font-size:.800rem;
-	color:var(--discovery-data-label);
 	padding:4px 0 0 0;
 	grid-column:2;
 }
 
 .vital-signs-label2 {
-	height:auto;
+	@insert .label;
 	text-align: left;
-	font-family: discovery-regular;
-	font-size:.800rem;
-	color:var(--discovery-data-label);
 	padding:4px 0 0 0;
 	grid-column:3;
 }
 
 .vital-signs-status-label {
-	height: auto;
+	@insert .label;
 	width:auto;
-	font-family:discovery-regular;
-	font-size:0.800rem;
-	text-align: right;
-	color:var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 15px;
 	grid-column:1;
 }
 
 .vital-signs-status-value {
-	height: auto;
-	font-family: discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
-	grid-column: 2;
+	@insert .value;
+	grid-column:2;
 }

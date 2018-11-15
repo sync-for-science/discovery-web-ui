@@ -1,18 +1,12 @@
 @charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
+@import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery MedsDispensed Stylesheet */
-/* v.01.10 Updated 10/08/2018 */
+/* v.01.13 Updated 10/22/2018 */
 
 .meds-dispensed-display {
-	height:auto;
-	width:auto;
-	font-family: discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color: var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
-	grid-column: 1/span 40;
+	@insert .content-panel-display;
 }
 
 .meds-dispensed-status-label {

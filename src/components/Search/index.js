@@ -302,7 +302,7 @@ export default class Search extends Component {
 	 <div className='search'>
 	    	<button className={this.state.searchResults ? 'search-button-cancel' : 'search-button'} onClick={this.doSearch.bind(this)} />
 			<input className='search-input' type='text' ref='textInput' maxLength={config.searchMaxLength}
-		   placeholder='search words (case-insensitive)' value={this.state.searchFor}
+		   placeholder='search terms' value={this.state.searchFor}
 		   onChange={this.onInputChange.bind(this)} />
 	    	<div className='search-status' onClick={this.showData.bind(this)}>{this.state.searchStatus}</div>
 			{ this.renderSearchOptions() }

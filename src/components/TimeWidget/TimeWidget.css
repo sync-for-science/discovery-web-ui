@@ -1,146 +1,232 @@
- @charset "UTF-8";
+@charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery TimeWidget Stylesheet */
-/* v.01.11 Updated 10/09/2018 */
+/* v.01.19 Updated 11/07/2018 */
 
 .time-widget {
-	display:flex;
-	flex-direction:row;
-	height:77px;
-	width:auto;
-	margin:0;
-	padding:0 20px;
+   position: fixed;
+   top:62px;
+   left: 0;
+   z-index:0;
+   display:flex;
+   flex-direction:row;
+   height:64px;
+   width:auto;
+   margin:0; 
+   padding: 0 20px;
+   background-color:transparent;
 }
 
 .calendar-daterange-box {
-	display:flex;
-	flex-direction: row;
-	align-items: center; 
-	height:77px;
-	width:182px;
-	min-width:182px;
+   display:flex;
+   flex-direction: row;
+   align-items: center; 
+   height:64px;
+   width:184px;
+   min-width:184px;
+   margin:0 10px 0 0px;
+}
+
+.calendar-button {
+   height:30px;
+   width:30px;
+   background-color:transparent;
+   background-size:30px 30px;
+   background-position:0 0;
+   background-repeat:no-repeat;
+   border:0;
+   margin:0 0 0 8px;
+   cursor:pointer;
 }
 
 .calendar-button-off {
-	height:40px;
-	width:40px;
-	background-color:transparent;
-	background-image:url(../../svg/calendar_icon.svg);
-	background-size:40px 40px;
-	background-position:0 0;
-	background-repeat:no-repeat;
-	border:0;
-	cursor:pointer;
+   @insert .calendar-button;
+   background-image:url(../../svg/calendar_icon.svg);
 }
 
 .calendar-button-on {
-	height:40px;
-	width:40px;
-	background-color:transparent;
-	background-image:url(../../svg/calendar_icon.svg);
-	background-size:40px 40px;
-	background-position:0 0;
-	background-repeat:no-repeat;
-	border:0;
-	cursor:pointer;
+   @insert .calendar-button;
+   background-image:url(../../svg/calendar_icon.svg);
 }
 
 .date-range {
-	font-family:discovery-data-bold;
-	font-size:0.800rem;
-	line-height:100%;
-	color: var(--discovery-blue);
-	margin:0 0 0 20px;
-	white-space:nowrap;
-	text-align:center;
+   font-family:discovery-data-bold;
+   font-size:0.800rem;
+   line-height:100%;
+   color: var(--discovery-blue);
+   margin:0 0 0 19px;
+   white-space:nowrap;
+   text-align:center;
 }
 
 .timeline-controls {
-	display:flex;
-	flex-direction: column;
-	width:100%;
-	height:auto;
-	margin:0;
-	padding:10px 0 0 0;
-	background-color:transparent;
+   display:flex;
+   flex-direction: column;
+   width:inherit;
+   height:64px;
+   max-height: 64px;
+   margin:0;
+   padding:0;
+   background-color:transparent;
 }
 
-.timeline-reference-box {
-	display:flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-	align-items:initial;
-	width:inherit;
-	margin:0 0 20px 0;
-	padding:0;
-	background-color:transparent;
+.timeline {
+   display:flex;
+   flex-direction: row;
+   flex-wrap: nowrap;
+   align-items:initial;
+   width:auto;
+   height:22px;
+   min-height:22px;
+   max-height: 22px;
+   margin:0;
+   padding:25px 0 12px 0;
+   background-color:transparent;
 }	
 
-.timeline-years {
-	width:inherit;
-	height:0.800rem;
-	font-family:discovery-data-bold;
-	font-size:0.800rem;
-	color: var(--discovery-blue);
-	margin:0;
-	border-bottom:var(--discovery-black) solid 1px;
-	border-left:var(--discovery-black) solid 1px;
-	padding:0 0 5px 5px;
-	overflow: visible;
+/* The offset to left/right of the timeline */
+.timeline-shim {
+   min-width:10px;
+   height:22px;
+}
+
+.timeline-full {
+   width:100%;
+   height:22px;
+   max-height:22px;
+   font-size:0.800rem;
+   background-position:left bottom;
+   background-size:2px 100%;
+   background-repeat:repeat-y;
+   background-color: transparent;
+   margin:1px 0 0 -1px;
+   padding:0 0 0 5px;
+   overflow: visible;
+}
+
+/* The full (top) timeline years inside the thumbs when the expanded (bottom) timeline ISN’T showing */
+.timeline-full-active-single-years {
+   @insert .timeline-full;
+   font-family:discovery-data-bold;
+   color: var(--discovery-blue);
+   background-image:url("../../svg/tickmark-black.svg");
+}
+
+/* The full (top) timeline years inside the thumbs when the expanded (bottom timeline IS showing */
+.timeline-full-active-double-years {
+   @insert .timeline-full;
+   font-family:discovery-data-bold;
+   color: var(--discovery-blue);
+   background-image:url("../../svg/tickmark-black.svg");
+}
+
+/* The full (top) timeline years outside the thumbs */
+.timeline-full-inactive-years {
+   @insert .timeline-full;
+   font-family:discovery-data;
+   color: var(--discovery-gray-light);
+   background-image:url("../../svg/tickmark-gray.svg");
 }
 
 .timeline-selection-box {
-	display:grid;
-	grid-template-columns:repeat(40, minmax(min-content, 1fr));
-	width:inherit;
-	margin:0;
-	background-color:transparent;
+   position:relative;
+   top:0;
+   left:0;
+   display:grid;
+   grid-template-columns:repeat(40, minmax(min-content, 1fr));
+   width:auto;
+   height:22px;
+   max-height: 22px;
+   margin:-22px 0 0 0;
+   padding:0px;
+   background-color:transparent;
+   overflow: visible;
 }
 
 .timeline-svg-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height:46px;
-	width:auto;
-	margin: 0;
-	padding:0 5px;
-	background-image: url(../../svg/horizontal-rule-1px-black.svg);
-	background-position: center;
-	background-repeat: repeat-x;
-	background-clip: padding-box;
-	overflow:hidden;
-	grid-column:1/span 40;
-	grid-row: 1;
+   display: flex;
+   justify-content:center;
+   align-items:center;
+   height:22px;
+   max-height: 22px;
+   width:inherit;
+   margin:0;
+   padding:0 10px;
+   background-image: url(../../svg/horizontal-rule-1px-black.svg);
+   background-position:center;
+   background-repeat: repeat-x;
+   background-clip: padding-box;
+   background-color:transparent;
+   overflow:hidden;
+   grid-column:1/span 40;
+   grid-row:1;
 }
 
 .timeline-svg {
-	height:46px;
-	overflow: visible;
+   position: relative;
+   left:0;
+   height:22px;
+   max-height: 22px;
+   padding:0;
+   overflow: visible;
+}
+
+.timeline-selector {
+   height:22px;
+   width:20px;
+   background-color:transparent;
+   background-repeat:no-repeat;
+   background-position:center center;
+   background-size:14px;
+   grid-column:1/span 40;
+   grid-row: 1;
+   cursor: pointer;
 }
 
 .timeline-selector-left {
-	
-	height:46px;
-	width:20px;
-	margin:0;
-	background-image:url(../../svg/thumb-left.svg);
-	background-repeat:no-repeat;
-	background-position:center center;
-	margin:0 0 0 -20px;
-	grid-column:1/span 40;
-	grid-row: 1;
+   @insert .timeline-selector;
+   background-image:url("../../svg/thumb-left.svg");
+   margin:0 0 0 -6px;
 }
 
 .timeline-selector-right {
-	
-	height:46px;
-	width:20px;
-	margin:0;
-	background-color:transparent;
-	background-image:url(../../svg/thumb-right.svg);
-	background-repeat:no-repeat;
-	background-position:center center;
-	grid-column:1/span 40;
-	grid-row: 1;
+   @insert .timeline-selector;
+   background-image:url(../../svg/thumb-right.svg);
+   margin:0 0 0 4px;
+}
+
+.timeline-expanded {
+   position:relative;
+   top:0px;
+   left:0px;
+   display:flex;
+   flex-direction: row;
+   flex-wrap: nowrap;
+   align-items:initial;
+   width:inherit;
+   height:22px;
+   max-height: 22px;
+   margin:-2px 0 0;
+   padding:0;
+   background-color:transparent;
+}
+
+/* The expanded (bottom timeline years */
+/* NOTE: If padding-left or padding-right are changed, remember to update index.js (line 12) */
+.timeline-expanded-years {
+   width:100%;
+   height:22px;
+   max-height: 22px;
+   font-family:discovery-data-bold;
+/*   font-size:0.800rem; */
+   font-size:0.750rem;
+   color: var(--discovery-blue);
+   margin:1px 0 0 0;
+   padding:5px 0 5px 5px;
+   background-image:url("../../svg/tickmark-black.svg");
+   background-position:0% 0%;
+   background-size:2px 100%;
+   background-repeat:repeat-y;
+   overflow: visible;
 }

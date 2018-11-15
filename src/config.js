@@ -9,6 +9,8 @@ export default {
     minTextSize: 0.80,
     maxTextSize: 1.16,
 
+    maxSinglePeriods: 15,	// Maximum single years/months to show in timeline
+
     searchMaxLength: 200,
     searchShowSearching: 10000	// Number of search references before showing "Searching..." in status
 }

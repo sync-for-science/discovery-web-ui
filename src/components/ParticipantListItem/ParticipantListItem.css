@@ -1,7 +1,8 @@
 @charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery ParticipantListItem Stylesheet */
-/* v.01.08 Updated 10/09/2018 */
+/* v.01.10 Updated 10/22/2018 */
 
 .participant-list-item {
 	font-family: discovery-regular;

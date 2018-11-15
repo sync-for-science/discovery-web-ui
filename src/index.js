@@ -4,13 +4,13 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import './css/s4s_discovery03.css';
 import ParticipantList from './components/ParticipantList';
-import ParticipantDetail from './components/ParticipantDetail';
+import DiscoveryApp from './components/DiscoveryApp';
 
 ReactDOM.render(
     <Router>
 	<Switch>
 	    <Route exact path='/' component={ParticipantList} />
-	    <Route path='/participant/:index' component={ParticipantDetail} />
+	    <Route path='/participant/:index' component={DiscoveryApp} />
 	</Switch>
     </Router>,
     document.getElementById('root')

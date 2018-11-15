@@ -11,7 +11,7 @@ export default class ParticipantListItem extends Component
 {
    static propTypes = {
       id: PropTypes.string,
-      participant: PropTypes.string,
+      participant: PropTypes.object,
       rawQueryString: PropTypes.string
    }
 

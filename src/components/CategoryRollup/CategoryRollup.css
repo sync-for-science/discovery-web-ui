@@ -1,71 +1,30 @@
 @charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
+@import '../../css/CategoryProvider.css';
 
 /* Sync for Science Discovery CategoryRollup Stylesheet */
-/* v.01.10 Updated 10/08/2018 */
+/* v.01.15 Updated 11/14/2018 */
 
 .category-rollup {
-	display:flex;
-	flex-direction: row;
-	height:auto;
-	max-height:36px;
-	width:100%;
-	margin: 0;
+	@insert .category-provider-rollup;
 }
 
 .category-rollup-nav-enabled {
-	display:flex;
-	justify-content: center;
-	height: auto;
-	width:184px;
-	min-width:184px;
-	margin:0;
-	padding:10px 0;
-	background-color: var(--discovery-category);
-	background-image: url(../../svg/arrow-down-icon.svg);
-	background-size:20px 20px;
-	background-position:8px 8px;
-	background-repeat: no-repeat;
-	font-family:discovery-bold;
-	font-size:0.813rem;
-	color: var(--discovery-category-label-light);
-	text-align:center;
+	@insert .category-provider-rollup-nav-enabled;
+	color: var(--white);
+	background-color: var(--category);
 }
 
 .category-rollup-nav-disabled {
-	display:flex;
-	justify-content: center;
-	height: auto;
-	width:184px;
-	min-width:184px;
-	margin:0;
-	padding:10px 0;
-	background-color: var(--discovery-category);
-	background-image: url(../../svg/arrow-right-icon.svg);
-	background-size:20px 20px;
-	background-position:8px 8px;
-	background-repeat: no-repeat;
-	font-family:discovery-bold;
-	font-size:0.813rem;
-	color: var(--discovery-category-label-light);
-	text-align: center;
+	@insert .category-provider-rollup-nav-disabled;
+	color: var(--white);
+	background-color: var(--category);
 }
 
 .category-rollup-svg-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: inherit;
-	width: 100%;
-	margin: 0;
-	padding:0 5px;
-	background-image: url(../../svg/horizontal-rule-1px-black.svg);
-	background-position: center;
-	background-repeat: repeat-x;
-	background-clip: padding-box;
-	overflow:hidden;
+	@insert .category-provider-svg-container;
 }
 
 .category-rollup-svg {
-	height:inherit;
-	overflow: visible;
+	@insert .category-provider-svg;
 }

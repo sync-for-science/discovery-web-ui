@@ -1,178 +1,96 @@
 @charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
+@import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery Proceedures Stylesheet */
-/* v.01.11 Updated 10/09/2018 */
-
-.procedures-loading {
-    color:var(--discovery-background);
-    background-color:var(--discovery-data-loading);
-    padding:5px;
-}
+/* v.01.17 Updated 11/14/2018 */
 
 .procedures-display {
-	height:auto;
-	width:auto;
-	font-family: discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color:var(--discovery-data);
-	white-space:nowrap;
-	padding:0;
-	grid-column:1/span 40;
+	@insert .content-panel-display;
 }
 
 .procedures-value-label {
-	height:auto;
+	@insert .label;
 	width:132px;
-	font-family:discovery-regular;
-	font-size:0.800rem;
-	text-align: right;
-	color:var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 ;
 	grid-column:1;
 }
 
 .procedures-value-value {
-	height:auto;
-	width:auto;
-	font-family:discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column:2;
 }
 
 .procedures-value-unit {
-	height:auto;
+	@insert .label;
 	width:auto;
-	font-family:discovery-regular;
-	font-size:0.800rem;
 	text-align: left;
-	color:var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 0rem;
 	grid-column:3;
 }
 
 .procedures-status-label {
-	height:auto;
+	@insert .label;
 	width:132px;
-	font-family:discovery-regular;
-	font-size:0.800rem;
-	text-align: right;
-	color:var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 0;
 	grid-column:1;
 }
 
 .procedures-status-value {
-	height:auto;
-	width:auto;
-	font-family:discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column:2/span 2;
 }
 
 .procedures-reason-label {
-	height:auto;
+	@insert .label;
 	width:auto;
-	font-family:discovery-regular;
-	font-size:0.800rem;
-	text-align: right;
-	color:var(--discovery-data-label);
-	white-space:nowrap;
 	padding:6px 0 0 15px;
 	grid-column:1;
 }
 
 .procedures-reason-value {
-	height:auto;
-	width:auto;
-	font-family: discovery-data-text;
-	font-size:1.200rem;
-	text-align:left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column:2;
 }
 
 .procedures-onset-label {
-	height:auto;
+	@insert .label;
 	width:auto;
-	font-family:discovery-regular;
-	font-size:0.800rem;
-	text-align: right;
-	color:var(--discovery-data-label);
-	white-space:nowrap;
 	padding:6px 0 0 15px;
 	grid-column:1;
 }
 
 .procedures-onset-value {
-	height:auto;
-	width:auto;
-	font-family: discovery-data;
-	font-size:1.200rem;
-	text-align:left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column:2;
 }
 
 .procedures-abatement-label {
-	height:auto;
+	@insert .label;
 	width:auto;
-	font-family:discovery-regular;
-	font-size:0.800rem;
-	text-align: right;
-	color:var(--discovery-data-label);
-	white-space:nowrap;
 	padding:6px 0 0 015px;
 	grid-column:1;
 }
 
 .procedures-abatement-value {
-	height:auto;
-	width:auto;
-	font-family: discovery-data;
-	font-size:1.200rem;
-	text-align:left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column:2;
 }
 
 .procedures-asserted-label {
-	height:auto;
+	@insert .label;
 	width:auto;
-	font-family:discovery-regular;
-	font-size:0.800rem;
-	text-align: right;
-	color:var(--discovery-data-label);
-	white-space:nowrap;
 	padding:6px 0 0 15px;
 	grid-column:1;
 }
 
 .procedures-asserted-value {
-	height:auto;
-	width:auto;
-	font-family: discovery-data;
-	font-size:1.200rem;
-	text-align:left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column:2;
+}
+
+.procedures-loading {
+    color:var(--white);
+    background-color:var(--red);
+    padding:5px;
 }

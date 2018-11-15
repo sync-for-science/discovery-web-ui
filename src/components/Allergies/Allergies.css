@@ -1,136 +1,67 @@
 @charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
+@import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery Allergies Stylesheet */
-/* v.01.10 Updated 10/08/2018 */
+/* v.01.16 Updated 11/14/2018 */
 
 .allergies-display {
-	height:auto;
-	width:auto;
-	font-family: discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
-	grid-column: 1/span 40;
+	@insert .content-panel-display;
 }
 
 .allergies-clinical-status-label {
-	height: auto;
+	@insert .label;
 	width:132px;
-	font-family:discovery-regular;
-	font-size:0.800rem;
-	text-align: right;
-	color:var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 0;
-	grid-column: 1;
+	grid-column:1;
 }
 
 .allergies-clinical-status-value {
-	height: auto;
-	width:auto;
-	font-family: discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column:2;
 }
 
 .allergies-verification-status-label {
-	height:auto;
+	@insert .label;
 	width:132px;
-	font-family: discovery-regular;
-	font-size:0.800rem;
-	text-align:right;
-	color:var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 0;
 	grid-column:1;
 }
 
 .allergies-verification-status-value {
-	height: auto;
-	width:auto;
-	font-family:discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column:2;
 }
 
 .allergies-type-label {
-	height:auto;
-	width:auto;
-	font-family: discovery-regular;
-	font-size:0.800rem;
-	text-align:right;
-	color:var(--discovery-data-label);
-	white-space: nowrap;
+	@insert .label;
 	padding:6px 0 0 0;
 	grid-column:3;
 }
 
 .allergies-type-value {
-	height: auto;
-	width:auto;
-	font-family:discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column:4;
 }
 
 .allergies-category-label {
-	height:auto;
-	width:auto;
-	font-family: discovery-regular;
-	font-size:0.800rem;
-	text-align:right;
-	color:var(--discovery-data-label);
-	white-space: nowrap;
+	@insert .label;
 	padding:6px 0 0 20px;
 	grid-column:1;
 }
 
 .allergies-category-value {
-	height: auto;
-	width:auto;
-	font-family:discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column:2;
 }
 
 .allergies-criticality-label {
-	height:auto;
-	width:auto;
-	font-family: discovery-regular;
-	font-size:0.800rem;
-	text-align:right;
-	color:var(--discovery-data-label);
-	white-space: nowrap;
+	@insert .label;
 	padding:6px 0 0 0;
 	grid-column:3;
 }
 
 .allergies-criticality-value {
-	height: auto;
-	width:auto;
-	font-family:discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column:4;
 }

@@ -1,152 +1,87 @@
 @charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
+@import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery LabResults Stylesheet */
-/* v.01.09 Updated 10/08/2018 */
+/* v.01.15 Updated 11/14/2018 */
 
 .lab-results-display {
-	height:auto;
-	width:auto;
-	font-family: discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color: var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
-	grid-column:1/span 40;
+	@insert .content-panel-display;
 }
 
 .lab-results-name {
-	height:auto;
-	width:auto;
-	font-family: discovery-data-text;
-	font-size:1.200rem;
-	text-align:left;
-	color:var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column: 1/span 40;
 }
 .lab-results-value {
-	height:auto;
+	@insert .value;
 	width:132px;
-	font-family: discovery-data;
-	font-size:1.200rem;
-	color:var(--discovery-data);
 	text-align: right;
 	margin:0 0 0 5px;
 	grid-column: 1;
 }
 
 .lab-results-unit {
-	height:auto;
-	width:auto;
-	font-family: discovery-regular;
-	font-size:0.800rem;
+	@insert .label;
 	text-align: left;
-	color: var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 0;
 	grid-column: 2;
 }
 
 .lab-results-value-label {
-	height:auto;
+	@insert .label;
 	width:132px;
-	font-family: discovery-regular;
-	font-size:0.800rem;
-	text-align: right;
-	color: var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 10px;
 	grid-column: 1;
 }
 
 .lab-results-value-string {
-	font-family: discovery-data-text;
-	font-size:1.200rem;
-	color: var(--discovery-data);
-	text-align: left;
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column: 2;
 }
 
 .lab-results-ref-label1 {
-	height:auto;
-	width:auto;
-	font-family: discovery-regular;
-	font-size:0.800rem;
-	text-align: right;
-	color: var(--discovery-data-label);
-	white-space: nowrap;
+	@insert .label;
 	padding:6px 0 0 10px;
 	grid-column: 3;
 }
 
 .lab-results-ref-value1 {
-	height:auto;
-	width:auto;
+	@insert .value;
 	font-family: discovery-data;
-	font-size:1.200rem;
-	color:var(--discovery-data);
 	text-align: right;
-	margin:0;
 	grid-column: 4;
 }
 
 .lab-results-ref-label2 {
-	height:auto;
+	@insert .label;
 	width:0.625rem;
-	font-family: discovery-regular;
-	font-size:0.800rem;
 	text-align:center;
-	color: var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 0;
 	grid-column:5;
 }
 
 .lab-results-ref-value2 {
-	height:auto;
-	width:auto;
+	@insert .value;
 	font-family: discovery-data;
-	font-size:1.200rem;
-	color:var(--discovery-data);
-	text-align:left;
-	margin:0;
 	grid-column: 6;
 }
 
 .lab-results-ref-unit2 {
-	height:auto;
+	@insert .label;
 	width:52px;
-	font-family: discovery-regular;
-	font-size:0.800rem;
 	text-align: left;
-	color: var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 0;
 	grid-column: 7;
 }
 
 .lab-results-status-label {
-	height:auto;
-	width:auto;
-	font-family: discovery-regular;
-	font-size:0.800rem;
-	text-align: right;
-	color: var(--discovery-data-label);
-	white-space: nowrap;
+	@insert .label;
 	padding:6px 0 0 15px;
 	grid-column: 1;
 }
 
 .lab-results-status-value {
-	font-family: discovery-data-text;
-	font-size:1.200rem;
-	color: var(--discovery-data);
-	text-align: left;
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column: 2;
 }

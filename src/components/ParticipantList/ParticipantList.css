@@ -1,7 +1,8 @@
 @charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery ParticipantList Stylesheet */
-/* v.01.07 Updated 10/09/2018 */
+/* v.01.09 Updated 10/22/2018 */
 
 .participant-list {
 	height: 100%;
@@ -64,7 +65,6 @@
 	height: 100%;
 	width:95%;
 	padding:0 2.5%;
-	
 }
 
 .participant-list-title {

@@ -96,3 +96,41 @@ export function unitPart(val) {
    const index = val.toString().search(/[A-Za-z%]/);
    return val.toString().substring(index);
 }
+
+//
+// Concatenate n arrays, skipping null elements
+//
+export function combine() {
+   let res = [];
+   for (let i = 0; i < arguments.length; i++) {
+      if (arguments[i]) {
+	 res = res.concat(arguments[i]);
+      }
+   }
+   return res;
+}
+
+// Remove nulls and duplicates from dateArray, then sort in ascending order
+export function cleanDates(dateArray) {
+   return dateArray.filter((value, index) => value !== null && dateArray.indexOf(value) === index)
+		   .sort((a, b) => new Date(b) - new Date(a)).reverse();
+}
+
+// Normalize an array of dates by comparing elements to 'min' (returning 0.0) and 'max' (returning 1.0)
+//   (if min == max then return 0.5)
+export function normalizeDates(elts, minDate, maxDate) {
+   let min = (minDate instanceof Date) ? minDate : new Date(minDate);
+   let max = (maxDate instanceof Date) ? maxDate : new Date(maxDate);
+   let delta = max - min;
+   return elts.map( elt => (delta === 0) ? 0.5 : (((elt instanceof Date) ? elt : new Date(elt)) - min) / delta);
+}
+
+// Determine the increment/skip factor (in years) for timeline tickmarks
+//   (dates are in ISO format)
+export function timelineIncrYears(minDate, maxDate, maxSinglePeriods) {
+   const firstYear = new Date(formatDate(minDate, true, true)).getUTCFullYear();
+   const lastYear = new Date(formatDate(maxDate, true, true)).getUTCFullYear();
+   const incr = Math.max(1, Math.ceil((lastYear-firstYear+1)/maxSinglePeriods));
+
+   return incr;
+}
