@@ -1,4 +1,5 @@
 export default [
+   'resourceType',
    'id',
    'div',
    'meta',

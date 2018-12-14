@@ -1,0 +1,32 @@
+@charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
+
+/* Sync for Science Discovery ReportView Stylesheet */
+/* v.01.04 Updated 12/06/2018 */
+
+.report-view {
+   position: fixed;
+   top:75px;
+   left:0;
+   width:100%;
+	min-width:840px;
+   height:calc(100% - 75px - 12px);
+	margin:20px 0 20px 0;
+}
+
+.report-contents {
+   position: fixed;
+   top: 160px;
+   left: 210px;
+   min-height: calc(100% - 160px - 15px);
+   max-height: calc(100% - 160px - 15px);
+   min-width: calc(100% - 210px - 20px);
+   max-width: calc(100% - 210px - 20px);
+   background-color: var(--discovery-background);
+   white-space: pre-wrap;
+   display:flex;
+   flex-direction: column;
+	
+   overflow-y:auto;
+	overflow-x: hidden;
+}

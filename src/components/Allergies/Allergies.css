@@ -65,3 +65,25 @@
 	@insert .value;
 	grid-column:4;
 }
+
+.allergies-substance-label {
+	@insert .label;
+	padding:6px 0 0 0;
+	grid-column:1;
+}
+
+.allergies-substance-value {
+	@insert .value;
+	grid-column:2;
+}
+
+.allergies-reaction-label {
+	@insert .label;
+	padding:6px 0 0 0;
+	grid-column:3;
+}
+
+.allergies-reaction-value {
+	@insert .value;
+	grid-column:4;
+}

@@ -8,7 +8,7 @@ import config from '../../config.js';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderMeds } from '../../fhirUtil.js';
-import { stringCompare } from '../../util.js';
+import { stringCompare, formatDate, isValid } from '../../util.js';
 
 //
 // Display the 'Meds Requested' category if there are matching resources
@@ -17,7 +17,8 @@ export default class MedsRequested extends Component {
 
    static propTypes = {
       data: PropTypes.array.isRequired,
-      isEnabled: PropTypes.bool
+      isEnabled: PropTypes.bool,
+      showDate: PropTypes.bool
    }
 
    state = {
@@ -97,13 +98,17 @@ export default class MedsRequested extends Component {
    }
 
    render() {
-      let isEnabled = this.props.isEnabled === undefined || this.props.isEnabled;
+      let itemDate =  this.props.showDate && isValid(this.state, st => st.matchingData[0]) && formatDate(this.state.matchingData[0].itemDate, true, true);
       return ( this.state.matchingData &&
 	       <div className={this.props.className}>
-		  <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>Meds Requested</div>
+	          <div className='content-header-container'>
+		     { itemDate &&
+		       <div className={this.props.isEnabled ? 'content-header-date' : 'content-header-date-disabled'}>{itemDate}</div> }
+		     <div className={this.props.isEnabled ? 'content-header' : 'content-header-disabled'}>Meds Requested</div>
+	          </div>
 	          <div className='content-body'>
-		     { isEnabled && renderMeds(this.state.matchingData, this.props.className) }
-	             { isEnabled && this.state.loadingRefs > 0 && <div className={this.props.className+'-loading'}>Loading ...</div> }
+		     { this.props.isEnabled && renderMeds(this.state.matchingData, this.props.className) }
+	             { this.props.isEnabled && this.state.loadingRefs > 0 && <div className={this.props.className+'-loading'}>Loading ...</div> }
 	          </div>
 	       </div> );
    }

@@ -2,19 +2,20 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery LongitudinalView Stylesheet */
-/* v.01.04 Updated 11/14/2018 */
+/* v.01.05 Updated 12/05/2018 */
 
 .longitudinal-view {
 	position: fixed;
 	top:62px;
 	left:0;
 	width:100%;
+	min-width: 1024px;
 	height:calc(100% - 62px - 12px);
 }
 
 .longitudinal-view-categories-and-providers {
 	position: fixed;
-	top: 126px;
+	top: 139px;
 	left: 0;
 	width:100%;
 	height: auto;

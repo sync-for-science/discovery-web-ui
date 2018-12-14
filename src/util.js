@@ -134,3 +134,18 @@ export function timelineIncrYears(minDate, maxDate, maxSinglePeriods) {
 
    return incr;
 }
+
+// Check whether a date (string or Date object) is within a date range (strings or Date objects)
+export function inDateRange(date, rangeLow, rangeHigh) {
+   let dateStr = (date instanceof Date ? date : new Date(date)).toISOString().substring(0,10);
+   let rangeLowStr = (rangeLow instanceof Date ? rangeLow : new Date(rangeLow)).toISOString().substring(0,10);
+   let rangeHighStr = (rangeHigh instanceof Date ? rangeHigh : new Date(rangeHigh)).toISOString().substring(0,10);
+
+   return dateStr >= rangeLowStr && dateStr <= rangeHighStr;
+}
+
+// Categories that currently aren't supported in views with the category selector
+export function ignoreCategories() {
+      return ['Patient', 'Practitioner', 'List', 'Exams', 'Encounter', 'Questionnaire', 'QuestionnaireResponse',
+	      'Observation (Other)', 'DiagnosticReport', 'CarePlan', 'Medication', 'Organization', 'Goal'];
+}

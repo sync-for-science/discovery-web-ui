@@ -5,10 +5,12 @@ import { get } from 'axios';
 import './DiscoveryApp.css';
 import config from '../../config.js';
 import FhirTransform from '../../FhirTransform.js';
-import { cleanDates, normalizeDates, timelineIncrYears } from '../../util.js';
-import { formatPatientName, formatPatientAddress, formatPatientMRN } from '../../fhirUtil.js';
+import { cleanDates, normalizeDates, timelineIncrYears, ignoreCategories } from '../../util.js';
 import PageHeader from '../PageHeader';
 import LongitudinalView from '../LongitudinalView';
+import SummaryView from '../SummaryView';
+import CompareView from '../CompareView';
+import ReportView from '../ReportView';
 import DiscoveryModal from '../DiscoveryModal';
 import PageFooter from '../PageFooter';
 
@@ -34,7 +36,8 @@ export default class DiscoveryApp extends Component {
       fetchError: null,		// Possible axios error object
       modalName: '',
       modalIsOpen: false,
-      lastEvent: null
+      lastEvent: null,
+      currentView: null
    }
 
    componentDidMount() {
@@ -61,6 +64,8 @@ export default class DiscoveryApp extends Component {
 	       const allDates = itemDates.length > 0 ? itemDates.map((date, index) => ({position: normDates[index], date: date})) : [];
 	       const dates = { allDates: allDates, minDate: minDate, startDate:startDate, maxDate: maxDate, endDate: endDate };
 
+	       this.checkResourceCoverage(resources);	// Check whether we "found" all resources
+
 	       this.setState({ resources: resources,
 			       dates: dates,
 			       isLoading: false })
@@ -81,55 +86,93 @@ export default class DiscoveryApp extends Component {
       this.setState({ lastEvent: event });
    }
 
+   checkResourceCoverage(resources) {
+      for (let providerName in resources.initial) {
+	 let initialResourceIDs = resources.initial[providerName].entry.map(elt => elt.resource.id);
+	 let finalResourceIDs = resources.transformed.filter(elt => elt.provider === providerName).map(elt => elt.data.id);
+	 if (finalResourceIDs.length !== initialResourceIDs.length) {
+	    let missingResources = initialResourceIDs.filter(id => !finalResourceIDs.includes(id)).map(id =>
+					resources.initial[providerName].entry.find(elt => elt.resource.id === id));
+	    alert('Participant ' + this.props.match.params.index + ' (' + providerName + ') has ' +
+		  finalResourceIDs.length + ' resources but should have ' + initialResourceIDs.length);
+	    console.log(JSON.stringify(missingResources, null, 3));
+	 }
+      }
+   }
+
+   // See queryOptions()
+   isCategory(input, value) {
+//      console.log('input.category: ' + JSON.stringify(input.category,null,3));
+      if (input && input.category) {
+	 if (input.category.text === value) {
+	    return true;
+	 } else if (input.category.coding) {
+	    return input.category.coding[0].code === value || input.category.coding[0].display === value;
+	 } else if (input.category[0]) {
+	    if (input.category[0].coding) {
+	       return input.category[0].coding[0].code === value || input.category[0].coding[0].display === value;
+	    } else {
+	       return false;
+	    }
+	 } else {
+	    return false;
+	 }
+      } else {
+	 return false;
+      }
+   }
+
    // Options for jsonQuery -- see https://www.npmjs.com/package/json-query
    get queryOptions() {
       return {
 	 locals: {
-	    isCategory: (input, value) => {
-//	       console.log('input.category: ' + JSON.stringify(input.category,null,3));
-	       if (input && input.category) {
-		  if (input.category.text === value) {
-		     return true;
-		  } else if (input.category.coding) {
-		     return input.category.coding[0].code === value;
-		  } else if (input.category[0]) {
-		      if (input.category[0].coding) {
-			  return input.category[0].coding[0].code === value;
-		      } else {
-			  return false;
-		      }
-		  } else {
-		     return false;
-		  }
-	       } else {
-		  return false;
-	       }
-	    }
+	    isCategory: (input, value) => this.isCategory(input, value),
+	    isNotCategory: (input, value) => !this.isCategory(input, value)
 	 }
       };
    }
-
+    
    // Collect resources by category from a provider section of the merged data set
    // (functions in the template will be replaced with their return values)
    get categoriesForProviderTemplate() {
       return {
-	 'Patient':		  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Patient]'),
-	 'Conditions':     	  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Condition]'),
-	 'Lab Results':		  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
-										 +'[*:isCategory(Laboratory)|:isCategory(laboratory)]', this.queryOptions),
-	 'Vital Signs':		  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
-										 +'[*:isCategory(Vital Signs)|:isCategory(vital-signs)]', this.queryOptions),
-	 'Social History':	  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
-										 +'[*:isCategory(Social History)]', this.queryOptions),
-	 'Meds Statement':	  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationStatement]'),
-	 'Meds Requested':        e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationOrder|resourceType=MedicationRequest]'),
-	 'Meds Dispensed':        e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationDispense]'),
-	 'Meds Administration':	  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationAdministration]'),
-	 'Immunizations':	  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Immunization]'),
-	 'Procedures':		  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Procedure]').concat(
-					  FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation][*:isCategory(procedure)]', this.queryOptions)),
-	 'Document References':	  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=DocumentReference]'),
-	 'Allergies':		  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=AllergyIntolerance]')
+	 'Patient':		   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Patient]'),
+	 'Conditions':     	   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Condition]'),
+	 'Lab Results':		   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
+										  +'[*:isCategory(Laboratory)|:isCategory(laboratory)]', this.queryOptions),
+	 'Vital Signs':		   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
+										  +'[*:isCategory(Vital Signs)|:isCategory(vital-signs)]', this.queryOptions),
+	 'Social History':	   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
+										  +'[*:isCategory(Social History)]', this.queryOptions),
+	 'Meds Statement':	   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationStatement]'),
+	 'Meds Requested':         e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationOrder|resourceType=MedicationRequest]'),
+	 'Meds Dispensed':         e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationDispense]'),
+	 'Meds Administration':	   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationAdministration]'),
+	 'Immunizations':	   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Immunization]'),
+	 'Procedures':		   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Procedure]').concat(
+					   FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation][*:isCategory(procedure)]', this.queryOptions)),
+	 'Document References':	   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=DocumentReference]'),
+	 'Allergies':		   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=AllergyIntolerance]'),
+	 'Benefits':		   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ExplanationOfBenefit]'),
+
+	 // Currently unsupported
+	 'Practitioner':	   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Practitioner]'),
+	 'List':		   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=List]'),
+	 'Exams':		   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
+										  +'[*:isCategory(Exam)|:isCategory(exam)]', this.queryOptions),
+	 'Encounter':		   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Encounter]'),
+	 'Questionnaire':	   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Questionnaire]'),
+	 'QuestionnaireResponse':  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=QuestionnaireResponse]'),
+	 'Observation (Other)':    e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
+										  +'[*:isNotCategory(Laboratory)&:isNotCategory(laboratory)'
+										  + '&:isNotCategory(Vital Signs)&:isNotCategory(vital-signs)'
+										  + '&:isNotCategory(Social History)&:isNotCategory(procedure)'
+										  + '&:isNotCategory(Exam)&:isNotCategory(exam)]', this.queryOptions),
+	 'DiagnosticReport':       e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=DiagnosticReport]'),
+	 'CarePlan':		   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=CarePlan]'),
+	 'Medication':		   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Medication]'),
+	 'Organization':	   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Organization]'),
+	 'Goal':		   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Goal]')
       }
    }
 
@@ -145,7 +188,7 @@ export default class DiscoveryApp extends Component {
 	       date = item.effectiveDateTime;
 	       break;
 	    case 'Social History':
-	       date = new Date().toISOString();		// Use today's date
+	       date = new Date().toISOString().substring(0,10);		// Use today's date
 	       break;
 	    case 'Meds Statement':
 	       date = item.dateAsserted;
@@ -169,6 +212,7 @@ export default class DiscoveryApp extends Component {
 	       date = item.date;
 	       break;
 	    case 'Procedures':
+	    case 'Exams': 
 	       date = item.performedDateTime || item.effectiveDateTime || (item.performedPeriod ? item.performedPeriod.start : null);
 	       break;
 	    case 'Document References':
@@ -176,6 +220,16 @@ export default class DiscoveryApp extends Component {
 	       break;
 	    case 'Allergies':
 	       date = item.recordedDate || item.assertedDate;
+	       break;
+	    case 'List':
+	       date = item.date; 
+	       break;
+	    case 'CarePlan':
+	    case 'Encounter':
+	       date = item.period.start;
+	       break;
+	    case 'Benefits':
+	       date = item.billablePeriod.start;
 	       break;
 	    default:
 	       return null;	// Items without a date
@@ -234,7 +288,7 @@ export default class DiscoveryApp extends Component {
       let cats = {};
       if (this.state.resources) {
          for (let resource of this.state.resources.transformed) {
-	    if (resource.category !== 'Patient') {
+	    if (!ignoreCategories().includes(resource.category)) {
 	       // Add the found category
 	       cats[resource.category] = null;
 	    }
@@ -256,25 +310,6 @@ export default class DiscoveryApp extends Component {
    }
 
    //
-   // Modal callback function
-   //
-   fetchModalData = this.fetchModalData.bind(this);
-   fetchModalData(modalName) {
-      switch (modalName) {
-         case 'participantInfoModal':
-	    let res = { Name: formatPatientName(this.state.resources.pathItem('[category=Patient].data.name')),
-			Address: formatPatientAddress(this.state.resources.pathItem('[category=Patient].data.address')),
-			Gender: this.state.resources.pathItem('[category=Patient].data.gender'),
-			'Birth Date': this.state.resources.pathItem('[category=Patient].data.birthDate'),
-			'Medical Record Number': formatPatientMRN(this.state.resources.pathItem('[category=Patient].data.identifier'))
-		      };
-	    return res;
-	 default:
-	    return '?????';	// TODO
-      }
-   }
-
-   //
    // Search callback function
    //
    searchCallback = this.searchCallback.bind(this);
@@ -284,6 +319,24 @@ export default class DiscoveryApp extends Component {
 	 return ref;
       });
       this.setState({searchRefs: plusRefs});
+   }
+
+   renderCurrentView() {
+      switch(this.state.currentView) {
+         case 'longitudinalView':
+	    return <LongitudinalView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
+				     searchRefs={this.state.searchRefs} lastEvent={this.state.lastEvent} />;
+         case 'compareView':
+	    return <CompareView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
+				searchRefs={this.state.searchRefs} lastEvent={this.state.lastEvent} />;
+         case 'reportView':
+	    return <ReportView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
+			       searchRefs={this.state.searchRefs} lastEvent={this.state.lastEvent} />;
+         case 'summaryView':
+         default:
+	    return <SummaryView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
+			        searchRefs={this.state.searchRefs} lastEvent={this.state.lastEvent} />;
+      }
    }
 
    render() {
@@ -298,13 +351,13 @@ export default class DiscoveryApp extends Component {
       return (
          <div className='discovery-app'>
 	    <PageHeader rawQueryString={this.props.location.search} modalIsOpen={this.state.modalIsOpen}
-			modalFn={ name => this.setState({ modalName: name, modalIsOpen: true })}
+			modalFn={ name => this.setState({ modalName: name, modalIsOpen: true }) }
+			viewFn={ name => this.setState({ currentView: name }) }
 			searchData={this.state.resources && this.state.resources.transformed}
 			searchCallback={this.searchCallback} />
-	    <LongitudinalView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
-			      searchRefs={this.state.searchRefs} lastEvent={this.state.lastEvent} />
+	    { this.state.currentView && this.renderCurrentView() }
 	    <DiscoveryModal isOpen={this.state.modalIsOpen} modalName={this.state.modalName}
-			    onClose={ name => this.setState({ modalName: '', modalIsOpen: false })} callbackFn={this.fetchModalData} />
+			    onClose={ name => this.setState({ modalName: '', modalIsOpen: false })} />
 	    <PageFooter/>
 	 </div>
       );

@@ -2,7 +2,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery ParticipantListItem Stylesheet */
-/* v.01.10 Updated 10/22/2018 */
+/* v.01.10 Updated 11/16/2018 */
 
 .participant-list-item {
 	font-family: discovery-regular;
@@ -93,11 +93,11 @@
 }
 
 a:link {
-	color:var(--discovery-blue);
+	color:var(--blue-dark);
 	text-decoration: none;
 }
 
 a:hover {
-	color:var(--discovery-blue);
+	color:var(--blue-dark);
 	text-decoration:underline;
 }

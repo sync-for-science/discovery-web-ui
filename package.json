@@ -14,7 +14,8 @@
     "react-draggable": "^3.0.5",
     "react-responsive-modal": "^3.2.0",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.0.3"
+    "react-scripts": "2.0.3",
+    "react-vis": "^1.11.5"
   },
   "scripts": {
     "start": "react-scripts start",

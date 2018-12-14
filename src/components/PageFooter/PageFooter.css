@@ -10,6 +10,7 @@
 	bottom:0;
 	height:10px;
 	width:100%;
+	min-width:1024px;
 	border-top:2px  solid var(--blue-dark);
 	padding:0 20px;
 	background-color: var(--gray-medium);

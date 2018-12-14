@@ -1,7 +1,9 @@
 import React from 'react';
 
-import { stringCompare, formatDate, formatDPs, isValid, titleCase } from './util.js';
 import './components/ContentPanel/ContentPanel.css';
+import FhirTransform from './FhirTransform.js';
+import { stringCompare, formatDate, formatDPs, isValid, titleCase } from './util.js';
+import TimeSeries from './components/TimeSeries';
 
 /*
  * Extracts a name string from the FHIR patient name object.
@@ -62,30 +64,20 @@ export function formatPatientMRN(identifier) {
    return 'Unknown';
 }
 
-// Remove extraneous words from vital signs labels
-function trimVitalsLabels(label) {
-   return label.replace(/blood/gi, '').replace(/pressure/gi, '');
-}
-
-// Canonicalize vital signs display names
-function canonVitals(display) {
-   return titleCase(display.replace(/_/g, ' '));
-}
-
 export function renderAllergies(matchingData, className) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({display: elt.data.code.coding[0].display, clinicalStatus: elt.data.clinicalStatus,
+	  found.push({code: elt.data.code, clinicalStatus: elt.data.clinicalStatus,
 		      verificationStatus: elt.data.verificationStatus, type: elt.data.type, category: elt.data.category,
-		      criticality: elt.data.criticality});
+		      criticality: elt.data.criticality, substance: elt.data.substance, reaction: elt.data.reaction});
       } catch (e) {}
    }
 
    if (found.length > 0) {
       return found.map((elt, index) => 
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
-	    <div className={className+'-display'}>{elt.display}</div>
+	    { elt.code && <div className={className+'-display'}>{elt.code.coding[0].display}</div> }
 	    { elt.clinicalStatus && <div className={className+'-clinical-status-label'}>Clinical Status</div> }
 	    { elt.clinicalStatus && <div className={className+'-clinical-status-value'}>{elt.clinicalStatus}</div> }
 	    { elt.verificationStatus && <div className={className+'-verification-status-label'}>Verification Status</div> }
@@ -97,6 +89,12 @@ export function renderAllergies(matchingData, className) {
 	    { elt.category && <div className={className+'-category-value'}>{elt.category}</div> }
 	    { elt.criticality && <div className={className+'-criticality-label'}>Criticality</div> }
 	    { elt.criticality && <div className={className+'-criticality-value'}>{elt.criticality}</div> }
+
+	    { elt.substance && <div className={className+'-substance-label'}>Substance</div> }
+	    { elt.substance && <div className={className+'-substance-value'}>{elt.substance.coding[0].display}</div> }
+
+	    { elt.reaction && <div className={className+'-reaction-label'}>Reaction</div> }
+	    { elt.reaction && <div className={className+'-reaction-value'}>{elt.reaction[0].manifestation[0].coding[0].display}</div> }
 	 </div>
       );
    } else {
@@ -183,39 +181,82 @@ export function renderImmunizations(matchingData, className) {
    }
 }
 
-export function renderLabs(matchingData, className) {
+export function renderLabs(matchingData, className, resources) {
+   // Collect info to display from matchingData
    let found = [];
    for (const elt of matchingData) {
       try {
-//	 found.push({display:elt.data.code.coding[0].display, value:formatDPs(elt.data.valueQuantity.value, 1), unit:elt.data.valueQuantity.unit,
-//		     referenceRange: elt.data.referenceRange, status:elt.data.status});
-	  found.push({display: elt.data.code.coding[0].display, valueQuantity: elt.data.valueQuantity, valueString: elt.data.valueString,
-		     referenceRange: elt.data.referenceRange, status:elt.data.status});
+	 found.push({date:elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
+		     display: elt.data.code.coding[0].display,
+		     valueQuantity: elt.data.valueQuantity,
+		     valueString: elt.data.valueString,
+		     referenceRange: elt.data.referenceRange,
+		     status:elt.data.status});
+      } catch (e) {};
+   }
+
+   // Collect full set of series (by display string) to graph from resources
+   let series = {};
+   let match = FhirTransform.getPathItem(resources.transformed, '[*category=Lab Results]');
+   for (const elt of match) {
+      try {
+	 const displayStr = elt.data.code.coding[0].display;
+	 const xVal = elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate);
+	 const yVal = elt.data.valueQuantity.value;
+	 if (series.hasOwnProperty(displayStr)) {
+	    // Add to series
+	    series[displayStr].push({x: xVal, y: yVal});
+	 } else {
+	    // New series
+	    series[displayStr] = [{x: xVal, y: yVal}];
+	 }
       } catch (e) {};
    }
 
    if (found.length > 0) {
-      return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
-	    <div className={className+'-display'}>{elt.display}</div>
+      return found.map((elt, index) => {
+	 let highlightValue = false;
+	 if (elt.referenceRange) {
+	    let value = elt.valueQuantity.value;
+	    let valueUnits = elt.valueQuantity.unit;
 
-	    { elt.valueQuantity && <div className={className+'-value'}>{formatDPs(elt.valueQuantity.value, 1)}</div> }
-	    { elt.valueQuantity && <div className={className+'-unit'}>{elt.valueQuantity.unit}</div> }
+	    let lowValue = elt.referenceRange[0].low.value;
+	    let lowUnits = elt.referenceRange[0].low.unit;
 
-	    { elt.valueString && <div className={className+'-value-label'}>Value</div> }
-	    { elt.valueString && <div className={className+'-value-string'}>{elt.valueString}</div> }
+	    let highValue = elt.referenceRange[0].high.value;
+	    let highUnits = elt.referenceRange[0].high.unit;
 
-	    { elt.referenceRange && <div className={className+'-ref-label1'}>{elt.referenceRange[0].meaning.coding[0].display}</div> }
-	    { elt.referenceRange && <div className={className+'-ref-value1'}>{elt.referenceRange[0].low.value}</div> }
-	    { elt.referenceRange && elt.referenceRange[0].low.unit !== elt.referenceRange[0].high.unit &&
+	    // Highlight the measured value if outside of the reference range
+	    highlightValue = valueUnits === lowUnits && valueUnits === highUnits && (value < lowValue || value > highValue);
+	 }
+
+	 let sortedSeries = series[elt.display] && series[elt.display].sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
+	 let thisValue = elt.valueQuantity ? elt.valueQuantity.value : null;
+
+	 return (
+	    <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	       <div className={className+'-display'}>{elt.display}</div>
+
+	       { elt.valueQuantity && <div className={className+(highlightValue?'-value-highlight':'-value')}>{formatDPs(elt.valueQuantity.value, 1)}</div> }
+	       { elt.valueQuantity && <div className={className+'-unit'}>{elt.valueQuantity.unit}</div> }
+
+	       { elt.valueString && <div className={className+'-value-label'}>Value</div> }
+	       { elt.valueString && <div className={className+'-value-string'}>{elt.valueString}</div> }
+
+	       { sortedSeries && <TimeSeries className={className} data={sortedSeries} highlights={[{x:elt.date, y:thisValue}]} /> }
+
+	       { elt.referenceRange && <div className={className+'-ref-label1'}>{elt.referenceRange[0].meaning.coding[0].display}</div> }
+	       { elt.referenceRange && <div className={className+'-ref-value1'}>{elt.referenceRange[0].low.value}</div> }
+	       { elt.referenceRange && elt.referenceRange[0].low.unit !== elt.referenceRange[0].high.unit &&
 	                            <div className={className+'-ref-unit1'}>{elt.referenceRange[0].low.unit}</div> }
-	    { elt.referenceRange && <div className={className+'-ref-label2'}>-</div> }
-	    { elt.referenceRange && <div className={className+'-ref-value2'}>{elt.referenceRange[0].high.value}</div> }
-	    { elt.referenceRange && <div className={className+'-ref-unit2'}>{elt.referenceRange[0].high.unit}</div> }
+	       { elt.referenceRange && <div className={className+'-ref-label2'}>-</div> }
+	       { elt.referenceRange && <div className={className+'-ref-value2'}>{elt.referenceRange[0].high.value}</div> }
+	       { elt.referenceRange && <div className={className+'-ref-unit2'}>{elt.referenceRange[0].high.unit}</div> }
 
-	    { elt.status && <div className={className+'-status-label'}>Status</div> }
-	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
-	 </div>
+	       { elt.status && <div className={className+'-status-label'}>Status</div> }
+	       { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
+	    </div>
+	 )}
       );
    } else {
       return null;
@@ -302,35 +343,127 @@ export function renderSocialHistory(matchingData, className) {
    }
 }
 
-export function renderVitals(matchingData, className) {
+// Remove extraneous words from vital signs labels
+function trimVitalsLabels(label) {
+   return label.replace(/blood/gi, '').replace(/pressure/gi, '');
+}
+
+// Canonicalize vital signs display names
+function canonVitals(display) {
+   return titleCase(display.replace(/_/g, ' '));
+}
+
+export function renderVitals(matchingData, className, resources) {
+   // Collect info to display from matchingData
    let found = [];
    for (const elt of matchingData) {
       try {
 	 // Don't display Vital Signs "container" resources with related elements
-	 if (elt.data.code.coding[0].display !== 'Vital Signs') {
-	    found.push({display:elt.data.code.coding[0].display,
-			value:isValid(elt, elt => elt.data.valueQuantity) && elt.data.valueQuantity.value,
-			unit:isValid(elt,  elt => elt.data.valueQuantity) && elt.data.valueQuantity.unit,
+	 const displayStr = canonVitals(elt.data.code.coding[0].display);
+	 if (displayStr !== 'Vital Signs') {
+	    found.push({date:elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
+			display:displayStr,
+			value:isValid(elt, e => e.data.valueQuantity) && elt.data.valueQuantity.value,
+			unit:isValid(elt, e => e.data.valueQuantity) && elt.data.valueQuantity.unit,
 			components:elt.data.component, status:elt.data.status});
 	 }
       } catch (e) {};
    }
 
+   // Collect full set of series (by display string) to graph from resources
+   let series = {};
+   let match = FhirTransform.getPathItem(resources.transformed, '[*category=Vital Signs]');
+   for (const elt of match) {
+      try {
+	 // Don't graph Vital Signs "container" resources
+	 const displayStr = canonVitals(elt.data.code.coding[0].display);
+	 if (displayStr !== 'Vital Signs') {
+	    const xVal = elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate);
+	    if (elt.data.valueQuantity) {
+	       // Single data value
+	       const yVal = elt.data.valueQuantity.value;
+	       if (series.hasOwnProperty(displayStr)) {
+		  // Add to series
+		  series[displayStr].push({x: xVal, y: yVal});
+	       } else {
+		  // New series
+		  series[displayStr] = [{x: xVal, y: yVal}];
+	       }
+	    } else if (elt.data.component) {
+	       // Dual/pair data values
+	       const yVal = (elt.data.component[0].valueQuantity.value + elt.data.component[1].valueQuantity.value) / 2;
+	       const yVar = Math.abs(elt.data.component[1].valueQuantity.value - elt.data.component[0].valueQuantity.value);
+	       if (series.hasOwnProperty(displayStr)) {
+		  // Add to series
+		  series[displayStr].push({x: xVal, y: yVal, yVariance: yVar});
+	       } else {
+		  // New series
+		  series[displayStr] = [{x: xVal, y: yVal, yVariance: yVar}];
+	       }
+	    }
+	 }
+      } catch (e) {};
+   }
+
    if (found.length > 0) {
-      return found.sort((a, b) => stringCompare(a.display, b.display)).map((elt, index) => 
+      return found.sort((a, b) => stringCompare(a.display, b.display)).map((elt, index) => {
+	 let sortedSeries = series[elt.display] && series[elt.display].sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
+	 let thisValue = elt.value ? elt.value : (elt.components[0].valueQuantity.value + elt.components[1].valueQuantity.value)/2;
+	 return (
+	    <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	       <div className={className+'-display'}>{elt.display}</div>
+
+	       { elt.value && <div className={className+'-value1'}>{formatDPs(elt.value, 1)}</div> }
+	       { elt.unit && <div className={className+'-unit1'}>{elt.unit}</div> }
+
+	       { elt.components && <div className={className+'-value1'}>{elt.components[0].valueQuantity.value}</div> }
+	       { elt.components && <div className={className+'-unit1'}>{elt.components[0].valueQuantity.unit}</div> }
+	       { elt.components && <div className={className+'-label1'}>{trimVitalsLabels(elt.components[0].code.coding[0].display)}</div> }
+
+	       { elt.components && <div className={className+'-value2'}>{elt.components[1].valueQuantity.value}</div> }
+	       { elt.components && <div className={className+'-unit2'}>{elt.components[1].valueQuantity.unit}</div> }
+	       { elt.components && <div className={className+'-label2'}>{trimVitalsLabels(elt.components[1].code.coding[0].display)}</div> }
+
+	       { sortedSeries && <TimeSeries className={className} data={sortedSeries} highlights={[{x:elt.date, y:thisValue}]} /> }
+
+	       { elt.status && <div className={className+'-status-label'}>Status</div> }
+	       { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
+	    </div>
+	 );
+      });
+
+   } else {
+      return null;
+   }
+}
+
+export function renderEOB(matchingData, className) {
+   let found = [];
+   for (const elt of matchingData) {
+      try {
+	 found.push({totalCost: elt.data.totalCost, totalBenefit: elt.data.totalBenefit,
+		     claimType: elt.data.type, billablePeriod: elt.data.billablePeriod, status: elt.data.status});
+      } catch (e) {}
+   }
+
+   if (found.length > 0) {
+      return found.map((elt, index) => 
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
-	    <div className={className+'-display'}>{canonVitals(elt.display)}</div>
+	    <div className={className+'-billable-label'}>For the period</div>
+	    <div className={className+'-billable-value'}>{elt.billablePeriod.start}</div>
+	    <div className={className+'-billable-value-separator'}>to</div>
+	    <div className={className+'-billable-value2'}>{elt.billablePeriod.end}</div>
 
-	    { elt.value && <div className={className+'-value1'}>{formatDPs(elt.value, 1)}</div> }
-	    { elt.unit && <div className={className+'-unit1'}>{elt.unit}</div> }
+	    <div className={className+'-claim-type-label'}>Claim type</div>
+	    <div className={className+'-claim-type-value'}>{elt.claimType.coding[0].code}</div>
 
-	    { elt.components && <div className={className+'-value1'}>{elt.components[0].valueQuantity.value}</div> }
-	    { elt.components && <div className={className+'-unit1'}>{elt.components[0].valueQuantity.unit}</div> }
-	    { elt.components && <div className={className+'-label1'}>{trimVitalsLabels(elt.components[0].code.coding[0].display)}</div> }
-
-	    { elt.components && <div className={className+'-value2'}>{elt.components[1].valueQuantity.value}</div> }
-	    { elt.components && <div className={className+'-unit2'}>{elt.components[1].valueQuantity.unit}</div> }
-	    { elt.components && <div className={className+'-label2'}>{trimVitalsLabels(elt.components[1].code.coding[0].display)}</div> }
+	    <div className={className+'-cost-label'}>Total cost</div>
+	    <div className={className+'-cost-value'}>{elt.totalCost.value.toFixed(2)}</div>
+	    <div className={className+'-cost-currency'}>{elt.totalCost.code}</div>
+	
+	    <div className={className+'-benefit-label'}>Total benefit</div>
+	    <div className={className+'-benefit-value'}>{elt.totalBenefit.value.toFixed(2)}</div>
+	    <div className={className+'-benefit-currency'}>{elt.totalBenefit.code}</div>
 
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
@@ -340,78 +473,3 @@ export function renderVitals(matchingData, className) {
       return null;
    }
 }
-
-
-// export function renderSingleValue(matchingData, searchStrings, headerString) {
-//    let classNameBase = headerString.toLowerCase().replace(/ /g, '-').replace(/[()]/g, '');
-//    let found = [];
-//    for (const elt of matchingData) {
-//       try {
-// 	 for (const search of searchStrings) {
-// 	    if (elt.data.code.coding[0].display.toLowerCase() === search) {
-// 		found.push({value: elt.data.valueQuantity.value, unit: elt.data.valueQuantity.unit, status: elt.data.status});
-// 	    }
-// 	 }
-//       } catch (e) {}
-//    }
-
-//    if (found.length > 0) {
-//       return found.map((elt, index) => 
-// 	 <div className={classNameBase} key={index}>
-// 	    <div className={classNameBase+'-header'}>{headerString}</div>
-
-// 	    <div className={classNameBase+'-value'}>{formatDPs(elt.value,1)}</div>
-// 	    <div className={classNameBase+'-unit'}>{elt.unit}</div>
-
-// 	    <div className={classNameBase+'-status-label'}>Status</div>
-// 	    <div className={classNameBase+'-status-value'}>{elt.status}</div>
-// 	 </div>
-//       );
-//    } else {
-//       return null;
-//    }
-// }
-
-// export function renderPairValue(matchingData, searchStrings, component0search, component0label, component1label, headerString) {
-//    let classNameBase = headerString.toLowerCase().replace(/ /g, '-');
-//    let found = [];
-//    for (const elt of matchingData) {
-//       try {
-// 	 for (const search of searchStrings) {
-// 	    if (elt.data.code.coding[0].display.toLowerCase() === search) {
-// 	       let newElt = { unit: elt.data.component[0].valueQuantity.unit, status: elt.data.status };
-// 	       if (elt.data.component[0].code.coding[0].display === component0search) {
-// 		  newElt[component0label] = elt.data.component[0].valueQuantity.value;
-// 		  newElt[component1label] = elt.data.component[1].valueQuantity.value;
-// 		  found.push(newElt);
-// 	       } else {
-// 		  newElt[component0label] = elt.data.component[1].valueQuantity.value;
-// 		  newElt[component1label] = elt.data.component[0].valueQuantity.value;
-// 		  found.push(newElt);
-// 	       }
-// 	    }
-// 	 }
-//       } catch (e) {}
-//    }
-
-//    if (found.length > 0) {
-//       return found.map((elt, index) => 
-// 	 <div className={classNameBase} key={index}>
-// 	    <div className={classNameBase+'-header'}>{headerString}</div>
-
-// 	    <div className={classNameBase+'-value'}>{elt[component0label]}</div>
-// 	    <div className={classNameBase+'-unit'}>{elt.unit}</div>
-// 	    <div className={classNameBase+'-label'}>{component0label}</div>
-
-// 	    <div className={classNameBase+'-value'}>{elt[component1label]}</div>
-// 	    <div className={classNameBase+'-unit'}>{elt.unit}</div>
-// 	    <div className={classNameBase+'-label'}>{component1label}</div>
-
-// 	    <div className={classNameBase+'-status-label'}>Status</div>
-// 	    <div className={classNameBase+'-status-value'}>{elt.status}</div>
-// 	 </div>
-//       );
-//    } else {
-//       return null;
-//    }
-// }

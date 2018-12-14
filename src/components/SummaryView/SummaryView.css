@@ -1,0 +1,109 @@
+@charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
+
+
+/* Sync for Science Discovery SummaryView Stylesheet */
+/* v.01.03 Updated 12/10/2018 */
+
+.default-view {
+   position: fixed;
+   top:82px;
+   left:204px;
+   width:100%;
+   height:calc(100% - 62px - 12px);
+}
+
+.default-body-row {
+   display: flex;
+   flex-direction: row;
+   flex-basis: auto;
+}
+
+.default-body-property {
+   width:250px;
+	min-width: 250px;
+   padding-right:15px;
+   font-family:discovery-regular;
+   font-size:1.000rem;
+   font-style:italic;
+   text-align:right;
+	white-space: nowrap;
+}
+
+.default-body-value {
+   width:auto;
+   font-family:discovery-regular;
+   font-size:1.000rem;
+   text-align:left;
+}
+
+.default-providers-container {
+	display: grid;
+	width:600px;
+	margin:10px 0 0 0;
+}
+
+.default-providers-name {
+	grid-column: 1;
+	width:250px;
+	font-family:discovery-data-text;
+   font-size:1.000rem;
+   text-align:right;
+	white-space: nowrap;
+}
+
+.default-providers-count {
+	grid-column: 2;
+	width:auto;
+	font-family:discovery-data;
+   font-size:1.000rem;
+   text-align:center;
+	color:var(--data);
+	white-space: nowrap;
+}
+
+.default-providers-label1 {
+	grid-column: 3;
+	width:auto;
+	font-family:discovery-data-text;
+   font-size:1.000rem;
+   text-align:center;
+	white-space: nowrap;
+}
+
+.default-providers-min-date {
+	grid-column: 4;
+	width:auto;
+	font-family:discovery-data;
+   font-size:1.000rem;
+   text-align:right;
+	white-space: nowrap;
+	color:var(--data);
+}
+
+.default-providers-label2 {
+	grid-column: 5;
+	width:10px;
+	font-family:discovery-data-text;
+   font-size:1.000rem;
+   text-align:center;
+	white-space: nowrap;
+	padding:0 5px; 
+}
+
+.default-providers-max-date {
+	grid-column: 6;
+	width:auto;
+	font-family:discovery-data;
+   font-size:1.000rem;
+   text-align:left;
+	white-space: nowrap;
+	color:var(--data);
+}
+
+.default-providers-title {
+	font-family: discovery-bold;
+	border-bottom: solid 1px var(--discovery-blue);
+	margin:20px 0 0 0;
+	width:600px;
+}

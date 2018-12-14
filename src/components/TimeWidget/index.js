@@ -203,9 +203,9 @@ export default class TimeWidget extends Component {
 
       return (
          <div className='timeline-expanded'>
-	    <div className='timeline-shim' key='shim-1'/>
+	    <div className='timeline-shim-left' key='shim-1'/>
 	    {periods}
-	    <div className='timeline-shim' key='shim-2'/>
+	    <div className='timeline-shim-right' key='shim-2'/>
 	 </div>
       );
    }
@@ -232,10 +232,10 @@ export default class TimeWidget extends Component {
 			      dotClickFn={this.props.dotClickFn} />
 	          </SVGContainer>
 		  <Draggable axis='x' bounds={{left:0, right:this.state.rightX}} position={{x:this.state.leftX, y:0}} onStop={this.onLeftDragStop}>	       
-		     <div className='timeline-selector-left'></div>
+		     <div className={this.state.showExpanded ? 'timeline-selector-left-alt' : 'timeline-selector-left'}></div>
 		  </Draggable>
 		  <Draggable axis='x' bounds={{left:this.state.leftX, right:rightBound}} position={{x:this.state.rightX, y:0}} onStop={this.onRightDragStop}>
-		     <div className='timeline-selector-right'></div>
+		     <div className={this.state.showExpanded ? 'timeline-selector-right-alt' : 'timeline-selector-right'}></div>
 		  </Draggable>
 	       </div>
 	       { this.state.showExpanded && this.renderExpandedYears() }

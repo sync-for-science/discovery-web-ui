@@ -3,7 +3,7 @@
 @import '../../css/CategoryProvider.css';
 
 /* Sync for Science Discovery ProviderRollup Stylesheet */
-/* v.01.13 Updated 11/14/2018 */
+/* v.01.14 Updated 11/16/2018 */
 
 .provider-rollup {
 	@insert .category-provider-rollup;

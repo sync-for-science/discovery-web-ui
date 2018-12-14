@@ -2,47 +2,45 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery Search Stylesheet */
-/* v.01.08 Updated 11/14/2018 */
+/* v.01.10 Updated 12/05/2018 */
 
 .search {
    position:relative;
    display:flex;
    flex-direction:row;
    height:40px;
-	width:30%;
+   width:30%;
    align-items:center;
    margin:12px 0 0 0;
 }
 
-.search-button {
-   height:40px;
+.search-buttons {
+	height:40px;
    width:40px;
+	min-width: 40px;
    padding:0;
    margin:0 5px;
    background-color:transparent;
-   background-image:url(../../svg/icon-search-off.svg);
-   background-position:0 0;
+	background-position:0 0;
    background-repeat:no-repeat;
+	background-size: 40px 40px;
    border:0;
    cursor:pointer;
 }
 
+.search-button {
+   @insert search-buttons;
+   background-image:url(../../svg/icon-search-off.svg);
+}
+
 .search-button-cancel {
-   height:40px;
-   width:40px;
-   padding:0;
-   margin:0 5px;
-   background-color:transparent;
+   @insert search-buttons;
    background-image:url(../../svg/icon-search-cancel.svg);
-   background-position:0 0;
-   background-repeat:no-repeat;
-   border:0;
-   cursor:pointer;
 }
 
 .search-input {
    width:200px;
-   margin:0;
+   margin:0 10px 0 0;
    border:1px solid var(--blue-dark);
 	padding:0 0 0 5px;
    outline: none;

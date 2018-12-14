@@ -13,42 +13,7 @@ export default class DiscoveryModal extends Component {
    static propTypes = {
       isOpen: PropTypes.bool.isRequired,
       modalName: PropTypes.string.isRequired,
-      onClose: PropTypes.func.isRequired,
-      callbackFn: PropTypes.func.isRequired
-   }
-
-   //
-   // Reformat 'val' converting each newline into <br/>
-   // and return an array of elements.
-   //
-   formatValue(val) {
-      let res = [];
-      let key = 0;
-      for (var elt of val.split('\n')) {
-	 res.push(elt, <br key={key++} />);
-      }
-      return res;
-   }
-
-   //
-   // Format 'obj' (property-value pairs) as div-based table
-   //
-   objToModalBody(obj, classNamePrefix) {
-      let res = [];
-      let key = 0;
-      for (var prop in obj) {
-	 res.push(
-	    <div className={classNamePrefix+'-modal-body-row'} key={key++} >
-	       <div className={classNamePrefix+'-modal-body-property'}>
-		  {prop}
-	       </div>
-		  <div className={classNamePrefix+'-modal-body-value'}>
-		  {this.formatValue(obj[prop])}
-	       </div>
-	    </div>
-	 );	 
-      }
-      return res;
+      onClose: PropTypes.func.isRequired
    }
 
    modalClassNames = {
@@ -63,40 +28,38 @@ export default class DiscoveryModal extends Component {
 	 <Modal open={this.props.isOpen} onClose={() => this.props.onClose(this.props.modalName)} classNames={this.modalClassNames}>
 	    <h4 className="logo-modal-title">About Sync for Science Discovery</h4>
 	    <div className="logo-modal-body">
-	       	
-	       	<div className="logo-modal-body-row">
-		  		<div className="logo-modal-body-property">Version:</div>
-		  		<div className="logo-modal-body-value">Alpha 0.2.0</div>
-		  	</div>
-	       	<div className="logo-modal-body-row">
-		  		<div className="logo-modal-body-property">Project Lead:</div>
-		  		<div className="logo-modal-body-value">David Kreda</div>
-		  	</div>
-	       	<div className="logo-modal-body-row">
-		  		<div className="logo-modal-body-property">Project Development</div>
-		  		<div className="logo-modal-body-value">Steve Klein</div>
-		  	</div>
-	       	<div className="logo-modal-body-row">
-		  		<div className="logo-modal-body-property">UX and HTML/CSS:</div>
-		  		<div className="logo-modal-body-value">Bob Hires</div>
-		  	</div>
-		  	<div className="logo-modal-legal">
-		  	<div className="logo-modal-body-row">
-		  		Copyright © 2018 Sync for Science</div>
-			<div className="logo-modal-body-row">Sync for Science and &nbsp;<Link to='http://syncfor.science' target='_blank'>S4S</Link>&nbsp; are trademarks and/or service marks of the U.S. Department of Health and Human Services.</div> 
-		  	<div className="logo-modal-body-row">Sync for Science is funded as part of the Patient-Centered Information Commons (NIH Project 5U54HG007963-03) at Harvard Medical School.
-		  	</div></div> 
-	    </div>
-	 </Modal>
-      )
-   }
-
-   renderParticipantInfoModal() {
-      return (
-	 <Modal open={this.props.isOpen} onClose={() => this.props.onClose(this.props.modalName)} classNames={this.modalClassNames}>
-	    <h4 className="info-modal-title">Participant Info</h4>
-	    <div className="info-modal-body">
-	       { this.objToModalBody(this.props.callbackFn(this.props.modalName), 'info') }
+	       <div className="logo-modal-photo-row">
+		  <div className="logo-modal-photo-one"></div>
+		  <div className="logo-modal-photo-two"></div>
+		  <div className="logo-modal-photo-three"></div>
+	       </div>	
+	       <div className="logo-modal-body-row">
+		  <div className="logo-modal-body-property">Version:</div>
+		  <div className="logo-modal-body-value">Alpha 0.3.0</div>
+	       </div>
+	       <div className="logo-modal-body-row">
+		  <div className="logo-modal-body-property">Project Lead:</div>
+		  <div className="logo-modal-body-value">David Kreda</div>
+	       </div>
+	       <div className="logo-modal-body-row">
+		  <div className="logo-modal-body-property">Project Development</div>
+		  <div className="logo-modal-body-value">Steve Klein</div>
+	       </div>
+	       <div className="logo-modal-body-row">
+		  <div className="logo-modal-body-property">UX and HTML/CSS:</div>
+		  <div className="logo-modal-body-value">Bob Hires</div>
+	       </div>
+	       <div className="logo-modal-legal">
+		  <div className="logo-modal-body-row">
+		     Copyright © 2018 Sync for Science
+		  </div>
+		  <div className="logo-modal-body-row">
+		     Sync for Science and &nbsp;<a href='http://syncfor.science' target='_blank'>S4S</a>&nbsp; are trademarks and/or service marks of the U.S. Department of Health and Human Services.
+		  </div> 
+		  <div className="logo-modal-body-row">
+		     Sync for Science is funded as part of the Patient-Centered Information Commons (NIH Project 5U54HG007963-03) at Harvard Medical School.
+		  </div>
+	       </div> 
 	    </div>
 	 </Modal>
       )
@@ -107,11 +70,11 @@ export default class DiscoveryModal extends Component {
 	 <Modal open={this.props.isOpen} onClose={() => this.props.onClose(this.props.modalName)} classNames={this.modalClassNames}>
 	    <div className="help-modal-title">Discovery Guide</div>
 	    <div className="help-modal-body">
-		  	<div className="help-modal-content">
-		  		<div className="help-modal-header">Discovery Interface</div>
-		  		<div>
+	       <div className="help-modal-content">
+		  <div className="help-modal-header">Discovery Interface</div>
+		     <div>
 		  
-		  		</div>
+		     </div>
 		  		<ul>
 		  			<li className="help-modal-list-item">Top of Page Controls</li>
 		  			<li className="help-modal-list-item">Bottom of Page Controls</li>
@@ -316,8 +279,6 @@ export default class DiscoveryModal extends Component {
       switch (this.props.modalName) {
          case 'logoModal':
 	    return this.renderLogoModal();
-         case 'participantInfoModal':
-	    return this.renderParticipantInfoModal();
          case 'helpModal':
 	    return this.renderHelpModal();
          case 'downloadModal':

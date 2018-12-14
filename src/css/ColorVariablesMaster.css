@@ -53,9 +53,11 @@
 	
 	--white:rgb(255,255,255);
 	--black:rgb(0,0,0);
-	--gray-light:(200,200,200);
+	--black-translucent:rgba(0,0,0,0.25);
+	--gray-light:rgb(200,200,200);
+	--gray-light-translucent:rgba(200,200,200,0.20);
 	--gray-medium:rgb(167,168,170);
-	--gray-dark:rgb(125,125,125);
+	--gray-dark:rgb(30,30,30);
 	--blue-dark:rgb(0,26,114);
 	--category:rgb(1,166,170);
 	--provider:rgb(1,166,170);

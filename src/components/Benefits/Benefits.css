@@ -1,0 +1,90 @@
+@charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
+@import '../../css/ContentPanelGlobal.css';
+
+/* Sync for Science Discovery Benefits Stylesheet */
+/* v.01.03 Updated 12/06/2018 */
+
+.benefits-billable-label {
+	@insert .label;
+	display:flex;
+	padding:6px 0 0 0;   
+	grid-column:1;
+}
+
+.benefits-billable-value {
+	@insert .value;
+	width:auto;
+	grid-column:2/span 2;
+}
+
+.benefits-billable-value-separator {
+ 	@insert .label;
+	text-align: center;
+	padding:6px 0 0 0; 
+	grid-column: 4;
+}
+
+.benefits-billable-value2 {
+	@insert .value;
+	grid-column:5/span 6;
+}
+
+.benefits-claim-type-label {
+	@insert .label;
+	padding:6px 0 0 0; 
+	grid-column:1;
+}
+
+.benefits-claim-type-value {
+	@insert .value;
+	grid-column:2;
+}
+
+.benefits-cost-label {
+	@insert .label;
+	padding:6px 0 0 0; 
+	grid-column:1;
+}
+
+.benefits-cost-value {
+	@insert .value;
+	grid-column:2;
+}
+
+.benefits-cost-currency {
+	@insert .label;
+	text-align: left;
+	padding:6px 10px 0 0;
+	grid-column:3;
+}
+
+.benefits-benefit-label {
+	@insert .label;
+	padding:6px 0 0 0; 
+	grid-column:1;
+}
+
+.benefits-benefit-value {
+	@insert .value;
+	text-align: right;
+	grid-column:2;
+}
+
+.benefits-benefit-currency {
+	@insert .label;
+	padding:6px 10px 0 0; 
+	grid-column:3;
+}
+
+.benefits-status-label {
+	@insert .label;
+	padding:6px 0 0 0; 
+	grid-column:1;
+}
+
+.benefits-status-value {
+	@insert .value;
+	text-align: left;
+	grid-column:2;
+}

@@ -2,7 +2,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery TimeWidget Stylesheet */
-/* v.01.19 Updated 11/07/2018 */
+/* v.01.22 Updated 12/07/2018 */
 
 .time-widget {
    position: fixed;
@@ -11,8 +11,9 @@
    z-index:0;
    display:flex;
    flex-direction:row;
-   height:64px;
+   height:77px;
    width:auto;
+	min-width:1024px;
    margin:0; 
    padding: 0 20px;
    background-color:transparent;
@@ -64,6 +65,7 @@
    display:flex;
    flex-direction: column;
    width:inherit;
+	min-width:890px;
    height:64px;
    max-height: 64px;
    margin:0;
@@ -89,6 +91,16 @@
 .timeline-shim {
    min-width:10px;
    height:22px;
+}
+
+.timeline-shim-left {
+	@insert .timeline-shim;
+	border-right: 1px solid var(--data);
+}
+
+.timeline-shim-right {
+	@insert .timeline-shim;
+	border-left: 1px solid var(--data);
 }
 
 .timeline-full {
@@ -178,7 +190,7 @@
    background-color:transparent;
    background-repeat:no-repeat;
    background-position:center center;
-   background-size:14px;
+   background-size:20px;
    grid-column:1/span 40;
    grid-row: 1;
    cursor: pointer;
@@ -186,19 +198,31 @@
 
 .timeline-selector-left {
    @insert .timeline-selector;
-   background-image:url("../../svg/thumb-left.svg");
+   background-image:url("../../svg/thumb-left-02.svg");
    margin:0 0 0 -6px;
+}
+
+.timeline-selector-left-alt {
+   @insert .timeline-selector;
+   background-image:url("../../svg/thumb-left-02-alt.svg");
+   margin:3px 0 0 -6px;
 }
 
 .timeline-selector-right {
    @insert .timeline-selector;
-   background-image:url(../../svg/thumb-right.svg);
+   background-image:url(../../svg/thumb-right-02.svg);
    margin:0 0 0 4px;
+}
+
+.timeline-selector-right-alt {
+   @insert .timeline-selector;
+   background-image:url(../../svg/thumb-right-02-alt.svg);
+   margin:3px 0 0 4px;
 }
 
 .timeline-expanded {
    position:relative;
-   top:0px;
+   top:13px;
    left:0px;
    display:flex;
    flex-direction: row;
@@ -219,7 +243,6 @@
    height:22px;
    max-height: 22px;
    font-family:discovery-data-bold;
-/*   font-size:0.800rem; */
    font-size:0.750rem;
    color: var(--discovery-blue);
    margin:1px 0 0 0;

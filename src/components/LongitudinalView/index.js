@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 
 import './LongitudinalView.css';
 import FhirTransform from '../../FhirTransform.js';
-//import { getStyle, numericPart, unitPart, combine, cleanDates, normalizeDates } from '../../util.js';
 import { getStyle, combine, cleanDates, normalizeDates } from '../../util.js';
-//import { formatPatientName, formatPatientAddress, formatPatientMRN } from '../../fhirUtil.js';
 import TimeWidget from '../TimeWidget';
 import CategoryRollup from '../CategoryRollup';
 import Categories from '../Categories';
@@ -494,7 +492,8 @@ export default class LongitudinalView extends Component {
 	       }
 	    </div>
 	    <ContentPanel open={this.state.contentPanelIsOpen} onClose={() => this.setState({contentPanelIsOpen: false})} context={this.state.dotClickContext}
-			  catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled} nextPrevFn={this.onNextPrevClick} />
+			  catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled} nextPrevFn={this.onNextPrevClick}
+			  resources={this.props.resources} />
 	 </div>
       );
    }

@@ -2,7 +2,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery ParticipantList Stylesheet */
-/* v.01.09 Updated 10/22/2018 */
+/* v.01.10 Updated 11/16/2018 */
 
 .participant-list {
 	height: 100%;
@@ -18,8 +18,8 @@
 	min-height:60px;
 	width: 100%;
 	padding:0 20px;
-	border-bottom:3px solid var(--discovery-blue);
-	background-color: var(--discovery-gray);
+	border-bottom:3px solid var(--blue-dark);
+	background-color: var(--gray-medium);
 }
 
 .logo-box {
@@ -31,30 +31,26 @@
 	padding:0;
 }
 
-.logo-s4s-button-off {
+.logo-s4s-button {
 	height:60px;
 	width:220px;
 	border:none;
 	padding:0;
 	background-color:transparent;
-	background-image: url(../../svg/logo-s4s-off.svg);
 	background-size:220px 60px;
 	background-repeat:no-repeat;
 	outline: none;
 	cursor:none;
 }
 
+.logo-s4s-button-off {
+	@insert .logo-s4s-button;
+	background-image: url(../../svg/logo-s4s-off.svg);
+}
+
 .logo-s4s-button-on {
-	height:60px;
-	width:220px;
-	border:none;
-	padding:0px;
-	background-color:transparent;
+	@insert .logo-s4s-button;
 	background-image: url(../../svg/logo-s4s-on.svg);
-	background-size:220px 60px;
-	background-repeat:no-repeat;
-	outline: none;
-	cursor:none;
 }
 
 .participant-list-content {
@@ -71,8 +67,8 @@
 	font-family: discovery-bold;
 	font-size:1.200rem;
 	width:100%;
-	color:var(--discovery-blue);
-	border-bottom: 1px solid var(--discovery-blue);
+	color:var(--blue-dark);
+	border-bottom: 1px solid var(--blue-dark);
 	padding:0 0 5px 0;
 }
 
@@ -185,13 +181,13 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px var(--discovery-data-label); 
+    box-shadow: inset 0 0 5px var(--gray-dark); 
     border-radius:10px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: var(--discovery-blue); 
+    background: var(--blue-dark); 
     border-radius:10px;
 }
 

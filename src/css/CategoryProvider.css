@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Category and Provider CSS */
-/* v.01.05 Updated 11/14/2018 */
+/* v.01.06 Updated 12/05/2018 */
 
 .categories-providers {
 	height: auto;
@@ -99,6 +99,7 @@
 	align-items:center;
 	height:inherit;
 	width:100%;
+	min-width:840px;
 	margin:0;
 	padding:0 10px;
 	background-image:url(../../svg/horizontal-rule-1px-black.svg);

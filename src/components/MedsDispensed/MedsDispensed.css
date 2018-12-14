@@ -3,79 +3,48 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery MedsDispensed Stylesheet */
-/* v.01.13 Updated 10/22/2018 */
+/* v.01.14 Updated 11/15/2018 */
 
 .meds-dispensed-display {
 	@insert .content-panel-display;
 }
 
 .meds-dispensed-status-label {
-	height:auto;
+	@insert .label;
 	width:132px;
-	font-family:discovery-regular;
-	font-size:0.800rem;
-	text-align: right;
-	color: var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 0;
 	grid-column: 1;
 }
 
 .meds-dispensed-status-value {
-	height:auto;
-	width:auto;
-	font-family: discovery-data-text;
-	font-size:1.200rem;
-	text-align: left;
-	color: var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
+	@insert .value;
 	grid-column:2/ span 3;
 }
 
 .meds-dispensed-quantity {
-	height:auto;
-	width:auto;
+	@insert .value;
 	font-family: discovery-data;
-	font-size:1.200rem;
 	text-align: right;
-	color: var(--discovery-data);
-	white-space: nowrap;
-	padding:0;
 	grid-column:1;
 }
 .meds-dispensed-quantity-unit {
-	height:auto;
-	width:auto;
-	font-family: discovery-regular;
-	font-size:0.800rem;
+	@insert .label;
 	text-align: left;
-	color: var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 0;
 	grid-column: 2;
 }
 
 .meds-dispensed-supply {
-	height:auto;
-	width:auto;
+	@insert .value;
 	font-family: discovery-data;
-	font-size:1.200rem;
 	text-align: right;
-	color: var(--discovery-data);
-	white-space: nowrap;
 	padding:0 0 0 15px;
 	grid-column: 3;
 }
 
 .meds-dispensed-supply-unit {
-	height:auto;
-	width:auto;
-	font-family: discovery-regular;
-	font-size:0.800rem;
+	@insert .label;
 	text-align: left;
-	color: var(--discovery-data-label);
-	white-space: nowrap;
 	padding:6px 0 0 0;
 	grid-column: 4;
 }

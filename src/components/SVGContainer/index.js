@@ -13,6 +13,7 @@ export default class SVGContainer extends Component {
    static propTypes = {
       preserveAspectRatio: PropTypes.string,		// Default is 'xMidYMid meet' if not provided
       svgClassName: PropTypes.string.isRequired,
+      style: PropTypes.object,
       svgWidth: PropTypes.string.isRequired
    }
 
@@ -31,9 +32,9 @@ export default class SVGContainer extends Component {
 	    height = this.state.height,
 	    width = this.props.svgWidth,
 	    childrenWithSizeProps = React.Children.map(this.props.children,
-						       child => React.cloneElement(child, {width: width, height: height}));
+						       child => child && React.cloneElement(child, {width: width, height: height}));
       return (
-	 <div className={this.props.className}>
+	 <div className={this.props.className} style={this.props.style ? this.props.style : null}>
 	    <svg className={this.props.svgClassName} width={width} height={height} preserveAspectRatio={par} xmlns='http://www.w3.org/2000/svg'>
 	       { childrenWithSizeProps }
 	    </svg>

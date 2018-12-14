@@ -4,6 +4,7 @@ import Modal from 'react-responsive-modal';
 
 import './Search.css';
 import config from '../../config.js';
+import { ignoreCategories } from '../../util.js';
 import notInterestingFields from './notInterestingFields.js';
 import notInterestingWords from './notInterestingWords.js';
 import veryInterestingFields from './veryInterestingFields.js';
@@ -152,7 +153,7 @@ export default class Search extends Component {
 
       // Index the resources for this participant
       for (let elt of this.props.data) {
-	 if (elt.category !== 'Patient') {
+	 if (!ignoreCategories().includes(elt.category)) {
 	    this.walkItem(tree, elt.data, { provider: elt.provider, category: elt.category, date: elt.itemDate, veryInteresting: false });
 	 }
       }

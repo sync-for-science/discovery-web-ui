@@ -2,11 +2,12 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery Discovery Modal Stylesheet */
-/* v.01.14 Updated 11/15/2018 */
+/* v.01.16 Updated 11/29/2018 */
 
 /* --- General Modal Styles --- */
 
 /* Modal Overlay */
+
 
 .discovery-modal-overlay {
    position:fixed;
@@ -14,13 +15,12 @@
    left: 0;
    right: 0;
    bottom:10px;
-	z-index:1000;
 	display:flex;
    align-items:flex-start;
 	justify-content:center;
    padding:0;
-	background:var(--black);
-	opacity:025;
+	background:var(--black-translucent);
+	opacity:1.0;
 	overflow-y:auto;
    overflow-x:hidden;
 }
@@ -28,7 +28,8 @@
 /* General Modal Styles */
 
 .discovery-modal {
-	position:relative;
+	position:absolute;
+	z-index: 1001;
 	width:auto;
 	min-width:550px;
 	margin-top:70px;
@@ -37,8 +38,6 @@
 	border-radius:15px;
 	background-color: transparent;
 	background-clip: padding-box;
-	box-shadow:0 12px 15px 0 var(--black);
-	opacity:0.25;
 }
 
 /* Close Button */
@@ -56,7 +55,7 @@
 /* Close Icon */
 
 .discovery-modal-close-icon {
-	fill: var(--discovery-background);
+	fill: var(--white);
 }
 
 /* --- End Modal Styles --- */
@@ -115,6 +114,42 @@
 	@insert .modal-body-row;
 }
 
+.logo-modal-photo-row {
+	display:flex;
+	flex-direction: row;
+	justify-content: center;
+	width:auto;
+	height:155px;
+	margin: 0 0 10px 0;
+}
+
+.logo-modal-photo-one {
+	width:125px;
+	height:155px;
+	background-image:url("../../png/David-Kreda-sepia-cropped-small.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	margin:0 5px;
+}
+
+.logo-modal-photo-two {
+	width:125px;
+	height:155px;
+	background-image:url("../../png/Steve-Klein-sepia-cropped-small.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	margin:0 5px;
+}
+
+.logo-modal-photo-three {
+	width:125px;
+	height:155px;
+	background-image:url("../../png/Bob-Hires-sepia-cropped-small.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	margin:0 5px;
+}
+
 .logo-modal-body-property {
 	width:50%;
 	padding:0 15px 0 0;
@@ -133,7 +168,7 @@
 .logo-modal-legal {
 	margin:20px 0 0 0;
 	font-family:discovery-regular;
-	font-size:0.600rem;
+	font-size:0.750rem;
 }
 
 /* Participant Info Modal Styles */

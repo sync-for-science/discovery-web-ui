@@ -15,7 +15,8 @@ export default class CategoryRollup extends Component {
       svgWidth: PropTypes.string.isRequired,
       dotPositionsFn: PropTypes.func.isRequired,
       dotClickFn: PropTypes.func.isRequired,
-      expansionFn: PropTypes.func.isRequired
+      expansionFn: PropTypes.func.isRequired,
+      noDots: PropTypes.bool
    }
 
    state = {
@@ -33,10 +34,12 @@ export default class CategoryRollup extends Component {
 	    <div className={this.state.isExpanded ? 'category-rollup-nav-enabled' : 'category-rollup-nav-disabled'} onClick={this.handleTwistyClick} >
 	       Categories
 	    </div>
-	    <SVGContainer className='category-rollup-svg-container' svgClassName='category-rollup-svg' svgWidth={this.props.svgWidth}>
-	       <DotLine dotPositions={this.props.dotPositionsFn(this.constructor.name, 'Categories', true)}
-			context={ {parent:this.constructor.name, rowName:'Categories'} }
-			dotClickFn={this.props.dotClickFn} />
+	    <SVGContainer className='category-rollup-svg-container' style={this.props.noDots ? {backgroundImage:'none'} : null}
+			  svgClassName='category-rollup-svg' svgWidth={this.props.svgWidth}>
+	       { !this.props.noDots &&
+		 <DotLine dotPositions={this.props.dotPositionsFn(this.constructor.name, 'Categories', true)}
+			  context={ {parent:this.constructor.name, rowName:'Categories'} }
+			  dotClickFn={this.props.dotClickFn} /> }
 	    </SVGContainer>
 	 </div>
       )

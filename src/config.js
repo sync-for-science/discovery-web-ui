@@ -12,5 +12,8 @@ export default {
     maxSinglePeriods: 15,	// Maximum single years/months to show in timeline
 
     searchMaxLength: 200,
-    searchShowSearching: 10000	// Number of search references before showing "Searching..." in status
+    searchShowSearching: 10000,	// Number of search references before showing "Searching..." in status
+
+//    viewHelpCloseTime: 0,
+    viewHelpCloseTime: 15000	// msec
 }

@@ -3,61 +3,67 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery VitalSigns Stylesheet */
-/* v.01.18 Updated 11/14/2018 */
+/* v.01.19 Updated 11/16/2018 */
 
 .vital-signs-display {
-	@insert .content-panel-display;
+   @insert .content-panel-display;
 }
 
 .vital-signs-value1 {
-	@insert .value;
-	text-align: right;
-	width:132px;
-	grid-column:1;
+   @insert .value;
+   text-align: right;
+   width:132px;
+   grid-column:1;
 }
 
 .vital-signs-unit1 {
-	@insert .label;
-	text-align: left;
-	padding:4px 0 0 0;
-	grid-column:2;
+   @insert .label;
+   text-align: left;
+   padding:4px 0 0 0;
+   grid-column:2;
 }
 
 .vital-signs-label1 {
-	@insert .label;
-	text-align: left;
-	padding:4px 0 0 0;
-	grid-column:3;
+   @insert .label;
+   text-align: left;
+   padding:4px 0 0 0;
+   grid-column:3;
 }
 
 .vital-signs-value2 {
-	@insert .value;
-	text-align: right;
-	grid-column:1;
+   @insert .value;
+   text-align: right;
+   grid-column:1;
 }
 
 .vital-signs-unit2 {
-	@insert .label;
-	text-align: left;
-	padding:4px 0 0 0;
-	grid-column:2;
+   @insert .label;
+   text-align: left;
+   padding:4px 0 0 0;
+   grid-column:2;
 }
 
 .vital-signs-label2 {
-	@insert .label;
-	text-align: left;
-	padding:4px 0 0 0;
-	grid-column:3;
+   @insert .label;
+   text-align: left;
+   padding:4px 0 0 0;
+   grid-column:3;
 }
 
 .vital-signs-status-label {
-	@insert .label;
-	width:auto;
-	padding:6px 0 0 15px;
-	grid-column:1;
+   @insert .label;
+   width:auto;
+   padding:6px 0 0 15px;
+   grid-column:1;
 }
 
 .vital-signs-status-value {
-	@insert .value;
-	grid-column:2;
+   @insert .value;
+   grid-column:2;
+}
+
+.vital-signs-time-series {
+   padding:0 200px 0 0 ;
+	grid-column:40;
+	grid-row:1/6; 
 }

@@ -5,10 +5,12 @@ import Modal from 'react-responsive-modal';
 
 import './ContentPanel.css';
 import { getStyle, formatDate } from '../../util.js';
+import FhirTransform from '../../FhirTransform.js';
 
 import Allergies from '../Allergies';
 import Conditions from '../Conditions';
 import DocumentReferences from '../DocumentReferences';
+import Benefits from '../Benefits';
 import Immunizations from '../Immunizations';
 import LabResults from '../LabResults';
 import MedsAdministration from '../MedsAdministration';
@@ -39,7 +41,8 @@ export default class ContentPanel extends Component {
       }),
       catsEnabled: PropTypes.object.isRequired,
       provsEnabled: PropTypes.object.isRequired,
-      nextPrevFn: PropTypes.func.isRequired
+      nextPrevFn: PropTypes.func.isRequired,
+      resources: PropTypes.instanceOf(FhirTransform)
    }
 
    state = {
@@ -175,6 +178,10 @@ export default class ContentPanel extends Component {
       }
    }
 
+   catEnabled(cat) {
+      return this.props.catsEnabled[cat] === undefined || this.props.catsEnabled[cat];
+   }
+
    renderContents(context) {
       return (
 	 <div className='content-panel-inner'>
@@ -186,18 +193,21 @@ export default class ContentPanel extends Component {
 	       <button className='content-panel-inner-title-close-button' onClick={this.onClose} />
 	    </div>
 	    <div className='content-panel-inner-body'>
-	       <Allergies          className='allergies'      data={context.data} isEnabled={this.props.catsEnabled['Allergies']} />
-	       <Conditions         className='conditions'     data={context.data} isEnabled={this.props.catsEnabled['Conditions']} />
-	       <DocumentReferences className='doc-refs'       data={context.data} isEnabled={this.props.catsEnabled['Document References']} />
-	       <Immunizations      className='immunizations'  data={context.data} isEnabled={this.props.catsEnabled['Immunizations']} />
-	       <LabResults         className='lab-results'    data={context.data} isEnabled={this.props.catsEnabled['Lab Results']} />
-	       <MedsAdministration className='meds-admin'     data={context.data} isEnabled={this.props.catsEnabled['Meds Administration']} />
-	       <MedsDispensed      className='meds-dispensed' data={context.data} isEnabled={this.props.catsEnabled['Meds Dispensed']} />
-	       <MedsRequested      className='meds-requested' data={context.data} isEnabled={this.props.catsEnabled['Meds Requested']} />
-	       <MedsStatement      className='meds-statement' data={context.data} isEnabled={this.props.catsEnabled['Meds Statement']} />
-	       <Procedures         className='procedures'     data={context.data} isEnabled={this.props.catsEnabled['Procedures']} />
-	       <SocialHistory      className='social-history' data={context.data} isEnabled={this.props.catsEnabled['Social History']} />
-	       <VitalSigns         className='vital-signs'    data={context.data} isEnabled={this.props.catsEnabled['Vital Signs']} />
+	       <Allergies           className='allergies'      data={context.data} isEnabled={this.catEnabled('Allergies')} />
+	       <Benefits            className='benefits'       data={context.data} isEnabled={this.catEnabled('Benefits')} />
+	       <Conditions          className='conditions'     data={context.data} isEnabled={this.catEnabled('Conditions')} />
+	       <DocumentReferences  className='doc-refs'       data={context.data} isEnabled={this.catEnabled('Document References')} />
+	       <Immunizations       className='immunizations'  data={context.data} isEnabled={this.catEnabled('Immunizations')} />
+	       <LabResults          className='lab-results'    data={context.data} isEnabled={this.catEnabled('Lab Results')}
+		    resources={this.props.resources} />
+	       <MedsAdministration  className='meds-admin'     data={context.data} isEnabled={this.catEnabled('Meds Administration')} />
+	       <MedsDispensed       className='meds-dispensed' data={context.data} isEnabled={this.catEnabled('Meds Dispensed')} />
+	       <MedsRequested       className='meds-requested' data={context.data} isEnabled={this.catEnabled('Meds Requested')} />
+	       <MedsStatement       className='meds-statement' data={context.data} isEnabled={this.catEnabled('Meds Statement')} />
+	       <Procedures          className='procedures'     data={context.data} isEnabled={this.catEnabled('Procedures')} />
+	       <SocialHistory       className='social-history' data={context.data} isEnabled={this.catEnabled('Social History')} />
+	       <VitalSigns          className='vital-signs'    data={context.data} isEnabled={this.catEnabled('Vital Signs')}
+		    resources={this.props.resources} />
 
 	       <Modal open={this.state.payloadModalIsOpen} onClose={() => this.setState({payloadModalIsOpen: false})}>
 	          <pre className='content-panel-data'>

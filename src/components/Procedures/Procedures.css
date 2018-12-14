@@ -3,7 +3,7 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery Proceedures Stylesheet */
-/* v.01.17 Updated 11/14/2018 */
+/* v.01.17 Updated 11/16/2018 */
 
 .procedures-display {
 	@insert .content-panel-display;

@@ -1,0 +1,156 @@
+@charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
+
+/* Sync for Science Discovery CompareView Stylesheet */
+/* v.01.03 Updated 12/03/2018 */
+
+.compare-view {
+   position: fixed;
+   top:95px;
+   left:0;
+   width:100%;
+   height:calc(100% - 95px - 12px);
+}
+
+.compare-contents {
+   position: fixed;
+   top: 165px;
+   left: 210px;
+   min-height: calc(100% - 165px - 15px);
+   max-height: calc(100% - 165px - 15px);
+   min-width: calc(100% - 210px - 20px);
+   max-width: calc(100% - 210px - 20px);
+   background-color: var(--discovery-background);
+   white-space: pre-wrap;
+   display:flex;
+   flex-direction: column;
+   overflow-x: auto;
+   overflow-y: hidden;
+}
+
+.compare-matrix {
+   display:grid;
+	grid-template-columns: 300px repeat(30, 1fr);
+	grid-column-gap:0px;
+	grid-auto-flow: column;
+   height: auto;
+   overflow-y: scroll;
+	margin:0;
+	padding: 0 20px 0 20px;
+}
+
+.compare-cat-name {
+   height:20px;
+   margin:10px 0px;
+   font-family: discovery-bold;
+   font-size:1.000rem;
+   border-bottom:1px solid var(--blue-dark);
+   color: var(--blue-dark);
+   grid-column:1/span 40;
+}
+
+.compare-cat-name-disabled {
+   height:20px;
+   margin:10px 0px;
+   font-family: discovery-bold;
+   font-size:1.000rem;
+   border-bottom:1px solid var(--gray-medium);
+   color: var(--gray-medium);
+   grid-column:1/span 40;
+	
+}
+
+.compare-code-display {
+   height:auto;
+   width:270px;
+	max-width: 270px;
+   font-family:discovery-bold;
+   font-size:0.800rem;
+   text-align: left;
+   color: var(--gray-dark);
+   white-space:wrap;
+	word-wrap: break-word;
+   margin:0;
+   padding:5px 10px 5px 20px;
+	border-bottom:solid 1px var(--gray-light-translucent);
+   grid-column:1;
+	overflow:hidden; 
+}
+
+.compare-prov-count-even {
+   display:flex;
+	height:auto;
+   width:30px;
+   min-width: 30px;
+	max-width: 30px;
+	align-items:center;
+   font-family: discovery-data-text;
+   font-size:0.80rem;
+   text-align: left;
+   color: var(--data);
+   white-space: nowrap;
+	vertical-align: middle;
+	line-height: inherit;
+   padding:10px 0px 10px 0;
+	margin:0px;
+	border-bottom:solid 1px var(--gray-light-translucent);
+   background-color:var(--gray-light-translucent);
+	background-image:url(../../svg/checkmark.svg);
+	background-size:15px 15px;
+	background-repeat:no-repeat;
+	background-position: 10px center;
+	grid-column: auto;
+}
+
+.compare-prov-count-odd {
+   display:flex;
+   width:30px;
+   min-width: 30px;
+	max-width: 30px;
+	align-items:center;
+   font-family: discovery-data-text;
+   font-size:0.80rem;
+   text-align: left;
+   color: var(--data);
+   white-space: nowrap;
+	vertical-align: middle;
+	line-height:inherit;
+   padding:10px 0px 10px 0;
+	margin:0px;
+	border-bottom:solid 1px var(--gray-light-translucent);
+   background-color:var(--white);
+	background-image:url(../../svg/checkmark.svg);
+	background-size:15px 15px;
+	background-repeat:no-repeat;
+	background-position: 10px center;
+	grid-column: auto;
+}
+.compare-providers {
+   position: relative;
+   left:0;
+   bottom:0;
+   height:110px;
+	min-height: 110px;
+   display: flex;
+   flex-direction: row;
+   padding:0 0 0 280px;
+}
+
+.compare-prov-name {
+   height:170px;
+   width:35px;
+   min-width: 35px;
+	max-width: 35px;
+   font-family: discovery-bold;
+   font-size:0.90rem;
+   color: var(--data);
+   text-align: left;
+   white-space: nowrap;
+   padding:0;
+	margin:0;
+	transform: rotate(45deg);
+   overflow: visible;
+}
+
+
+

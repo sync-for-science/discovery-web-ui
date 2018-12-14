@@ -2,416 +2,492 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.18 Updated 11/14/2018 */
+/* v.01.23 Updated 12/09/2018 */
 
 .page-header {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index:1;
-	display:flex;
-	flex-direction:row;
-	height:60px;
-	width:100%;
-	margin:0; 
-	padding:0 20px;
-	border-bottom:2px  solid var(--blue-dark);
-	background-color:var(--gray-medium);
+   position: fixed;
+   top: 0;
+   left: 0;
+   z-index:1;
+   display:flex;
+   flex-direction:row;
+   height:60px;
+   width:100%;
+	min-width:1024px;
+   margin:0; 
+   padding:0 ;
+   border-bottom:2px  solid var(--blue-dark);
+   background-color:var(--gray-medium);
 }
 
 /* Logos */
 .logo-box {
-	display:flex;
-	align-items:center;
-	height:60px;
-	width:50%;
-	min-width:250px;
-	padding:0;
+   display:flex;
+   align-items:center;
+   height:60px;
+	width:40%;
+   min-width:230px;
+   padding:0;
+	margin:0 0 0 20px;
+}
+
+.logo-button-common {
+   height:60px;
+   border:none;
+   padding:0;
+   background-color:transparent;
+   background-repeat:no-repeat;
+   background-position:center center;
+   cursor: pointer;
 }
 
 .logo-s4s-button-off {
-	height:60px;
-	width:220px;
-	margin:0 20px 0 0;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image:url(../../svg/logo-s4s-3-off.svg);
-	background-size:220px 60px;
-	background-repeat:no-repeat;
-	cursor: pointer;
+   @insert .logo-button-common;
+   width:220px;
+   margin:0 20px 0 0;
+   background-image:url(../../svg/logo-s4s-3-off.svg);
+   background-size:220px 60px;
 }
 
 .logo-s4s-button-on {
-	height:60px;
-	width:220px;
-	margin:0 20px 0 0;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image: url(../../svg/logo-s4s-3-on.svg);
-	background-size:220px 60px;
-	background-repeat:no-repeat;
-	cursor:pointer;
+   @insert .logo-button-common;
+   width:220px;
+   margin:0 20px 0 0;
+   background-image: url(../../svg/logo-s4s-3-on.svg);
+   background-size:220px 60px;
 }
 
 .logo-harvard-button-off {
-	height:60px;
-	width:140px;
-	margin:0;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image:url(../../svg/logo-harvard-off.svg);
-	background-size:140px 40px;
-	background-repeat:no-repeat;
-	background-position:center center;
-	cursor:pointer;
+   @insert .logo-button-common;
+   width:140px;
+   background-image:url(../../svg/logo-harvard-off.svg);
+   background-size:140px 40px;
 }
 
 .logo-harvard-button-on {
-	height:60px;
-	width:140px;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image:url(../../svg/logo-harvard-on.svg);
-	background-size:140px 40px;
-	background-repeat:no-repeat;
-	background-position:center center;
-	cursor:pointer;
+   @insert .logo-button-common;
+   width:140px;
+   background-image:url(../../svg/logo-harvard-on.svg);
+   background-size:140px 40px;
 }
 
 .logo-harvard-dbmi-button-off {
-	height:60px;
-	width:260px;
-	margin:0 0 0 20px;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image:url(../../svg/logo-harvard-bmi-off.svg);
-	background-size:260px 40px;
-	background-repeat:no-repeat;
-	background-position:center center;
-	cursor:pointer;
+   @insert .logo-button-common;
+   width:260px;
+   margin:0 0 0 20px;
+   background-image:url(../../svg/logo-harvard-bmi-off.svg);
+   background-size:260px 40px;
 }
 
 .logo-harvard-dbmi-button-on {
-	height:60px;
-	width:260px;
-	margin:0 0 0 20px;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image:url(../../svg/logo-harvard-bmi-on.svg);
-	background-size:260px 40px;
-	background-repeat:no-repeat;
-	background-position: center center;
-	cursor:pointer;
+   @insert .logo-button-common;
+   width:260px;
+   margin:0 0 0 20px;
+   background-image:url(../../svg/logo-harvard-bmi-on.svg);
+   background-size:260px 40px;
 }
 
 .logo-cms-button-off {
-	height:60px;
-	width:120px;
-	margin:0 0 0 20px;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image: url(../../svg/logo-cms-off.svg);
-	background-size:120px 40px;
-	background-repeat:no-repeat;
-	background-position: center center;
-	cursor: pointer;
+   @insert .logo-button-common;
+   width:120px;
+   margin:0 0 0 20px;
+   background-image: url(../../svg/logo-cms-off.svg);
+   background-size:120px 40px;
 }
 
 .logo-csm-button-on {
-	height:60px;
-	width:120px;
-	margin:0 0 0 20px;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image:url(../../svg/logo-cms-on.svg);
-	background-size:120px 40px;
-	background-repeat:no-repeat;
-	background-position:center center;
-	cursor:pointer;
+   @insert .logo-button-common;
+   width:120px;
+   margin:0 0 0 20px;
+   background-image:url(../../svg/logo-cms-on.svg);
+   background-size:120px 40px;
 }
 
 .logo-nih-button-off {
-	height:60px;
-	width:220px;
-	margin:0 0 0 20px;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image:url(../../svg/logo-nih-off.svg);
-	background-size:200px 40px;
-	background-repeat:no-repeat;
-	background-position: center center;
-	cursor: pointer;
+   @insert .logo-button-common;
+   width:220px;
+   margin:0 0 0 20px;
+   background-image:url(../../svg/logo-nih-off.svg);
+   background-size:200px 40px;
 }
 
 .logo-nih-button-on {
-	height:60px;
-	width:220px;
-	margin:0 0 0 20px;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image:url(../../svg/logo-nih-on.svg);
-	background-size:200px 40px;
-	background-repeat:no-repeat;
-	background-position: center center;
-	cursor: pointer;
+   @insert .logo-button-common;
+   width:220px;
+   margin:0 0 0 20px;
+   background-image:url(../../svg/logo-nih-on.svg);
+   background-size:200px 40px;
 }
 
 .logo-ppm-button-off {
-	height:60px;
-	width:150px;
-	margin:0 0 0 20px;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image: url(../../svg/logo-ppm-off.svg);
-	background-size:150px 40px;
-	background-repeat:no-repeat;
-	background-position: center center;
-	cursor: pointer;
+   @insert .logo-button-common;
+   width:150px;
+   margin:0 0 0 20px;
+   background-image: url(../../svg/logo-ppm-off.svg);
+   background-size:150px 40px;
 }
 
 .logo-ppm-button-on {
-	height:60px;
-	width:150px;
-	margin:0 0 0 20px;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image: url(../../svg/logo-ppm-on.svg);
-	background-size:150px 40px;
-	background-repeat:no-repeat;
-	background-position: center center;
-	cursor: pointer;
+   @insert .logo-button-common;
+   width:150px;
+   margin:0 0 0 20px;
+   background-image: url(../../svg/logo-ppm-on.svg);
+   background-size:150px 40px;
 }
 
 .logo-all-of-us-button-off {
-	height:60px;
-	width:200px;
-	margin:0 20px 0 0;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image:url(../../svg/logo-all-of-us-off.svg);
-	background-size:200px 40px;
-	background-repeat:no-repeat;
-	background-position:center center;
-	cursor:pointer;
+   @insert .logo-button-common;
+   width:200px;
+   margin:0 20px 0 0;
+   background-image:url(../../svg/logo-all-of-us-off.svg);
+   background-size:200px 40px;
 }
 
 .logo-all-of-us-button-on {
-	height:60px;
-	width:200px;
-	margin:0 20px 0 0;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image:url(../../svg/logo-all-of-us-on.svg);
-	background-size:200px 40px;
-	background-repeat:no-repeat;
-	background-position:center center;
-	cursor:pointer;
+   @insert .logo-button-common;
+   width:200px;
+   margin:0 20px 0 0;
+   background-image:url(../../svg/logo-all-of-us-on.svg);
+   background-size:200px 40px;
 }
 
 .logo-va-button-off {
-	height:60px;
-	width:150px;
-	margin:0 0 0 20px;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image: url(../../svg/logo-va-health-off.svg);
-	background-size:150px 40px;
-	background-repeat:no-repeat;
-	background-position:center center;
-	cursor:pointer;
+   @insert .logo-button-common;
+   width:150px;
+   margin:0 0 0 20px;
+   background-image: url(../../svg/logo-va-health-off.svg);
+   background-size:150px 40px;
 }
 
 .logo-va-button-on {
-	height:60px;
-	width:150px;
-	margin:0 0 0 20px;
-	border:none;
-	padding:0;
-	background-color:transparent;
-	background-image:url(../../svg/logo-va-health-on.svg);
-	background-size:150px 40px;
+   @insert .logo-button-common;
+   width:150px;
+   margin:0 0 0 20px;
+   background-image:url(../../svg/logo-va-health-on.svg);
+   background-size:150px 40px;
+}
+
+
+/* View Controls */
+.view-controls-box {
+   display:flex;
+   flex-direction:row;
+   flex-wrap:nowrap;
+   align-items:center;
+   justify-content:flex-end;
+   height:60px;
+   width:160px;
+	min-width:160px;
+   padding:0 20px 0 0;
+}
+
+.view-button {
+	height:40px;
+	width:40px;
+	min-width: 40px;
+	background-size: 30px 30px;
 	background-repeat:no-repeat;
+	background-color: transparent;
 	background-position:center center;
+   margin:0;
+	border:none;
 	cursor:pointer;
+}
+
+.default-view-button-off {
+	@insert .view-button;
+	background-image:url("../../svg/view-icon-overview-off.svg");
+}
+
+.default-view-button-on {
+	@insert .view-button;
+	background-image:url("../../svg/view-icon-overview-on.svg");
+}
+
+.longitudinal-view-button-off {
+	@insert .view-button;
+	background-image:url("../../svg/view-icon-longitudinal-off.svg");
+}
+
+.longitudinal-view-button-on {
+   @insert .view-button;
+	background-image:url("../../svg/view-icon-longitudinal-on.svg");
+}
+
+.compare-view-button-off {
+	@insert .view-button;
+	background-image:url("../../svg/view-icon-comparison-off.svg");
+}
+
+.compare-view-button-on {
+   @insert .view-button;
+	background-image:url("../../svg/view-icon-comparison-on.svg");
+}
+
+.report-view-button-off {
+	@insert .view-button;
+	background-image:url("../../svg/view-icon-report-off.svg");
+}
+
+.report-view-button-on {
+   @insert .view-button;
+	background-image:url("../../svg/view-icon-report-on.svg");
+}
+
+
+/* View Help */
+.view-help-container {
+   position: fixed;
+   bottom:22px;
+   left:20px;
+   width:181px;
+   height:auto;
+   font-family:discovery-regular;
+   border:1.5px solid var(--blue-dark);
+   padding:0;
+	border:0 solid transparent;
+	background-color: transparent;
+	background-clip: padding-box;
+}
+
+.view-help-title-container {
+   width:178px;
+   height:25px;
+   min-height:25px;
+   align-items:center;
+	border:1.5px solid var(--blue-dark);
+	border-radius:10px 10px 0 0;
+	padding:0;
+	margin:0;
+	background-color:var(--blue-dark);
+}
+
+.view-help-title {
+   display: flex;
+   flex-direction: row;
+	height:25px;
+	width:178px;
+	margin:0;
+	align-items: center;
+	padding:0;
+	font-family: discovery-bold;
+	font-size:0.813rem; 
+	color:var(--white);
+	background-color: transparent;
+}
+
+.view-help-title-default-view {
+	width:140px;
+	background-image:url("../../svg/view-icon-overview-on.svg");
+	background-repeat:no-repeat;
+	background-size: 20px 20px;
+	background-position: 10px center;
+	padding: 0 0 0 40px;
+}
+
+.view-help-title-longitudinal-view {
+	width:70%;
+	background-image:url("../../svg/view-icon-longitudinal-on.svg");
+	background-repeat:no-repeat;
+	background-size: 20px 20px;
+	background-position: 10px center;
+	padding: 0 0 0 40px;
+}
+
+.view-help-title-compare-view {
+	width:70%;
+	background-image:url("../../svg/view-icon-comparison-on.svg");
+	background-repeat:no-repeat;
+	background-size: 20px 20px;
+	background-position: 10px center;
+	padding: 0 0 0 40px;
+}
+
+.view-help-title-report-view {
+	width:70%;
+	background-image:url("../../svg/view-icon-report-on.svg");
+	background-repeat:no-repeat;
+	background-size: 20px 20px;
+	background-position: 10px center;
+	padding: 0 0 0 40px;
+}
+
+.view-help-close-button {
+   display:flex;  
+   height:25px;
+   width:15px;
+   border:0;
+	margin:0 10px 0 0;
+   background-image:url(../../svg/close_icon.svg);
+   background-repeat:no-repeat;
+   background-color:transparent;
+   background-position:center center;
+   fill: white;
+   cursor: pointer;
+}
+
+.view-help-contents {
+   width:158px;
+   height:100px;
+   font-family:discovery-regular;
+   font-size:0.813rem;
+  	padding:5px 10px;
+	border:1.5px solid var(--blue-dark);  
+	border-radius:0 0 10px 10px;
+	margin:0;
+	background-color:var(--white);
+	overflow-y:auto;
+	overflow-x: hidden;
+	white-space: pre-wrap;
 }
 
 /* Header Controls */
 .header-controls-box {
-	display:flex;
-	flex-direction:row;
-	flex-wrap:nowrap;
-	align-items:center;
-	justify-content:flex-end;
-	height:60px;
-	width:calc(20% - 40px);
-	padding:0;
+   display:flex;
+   flex-direction:row;
+   flex-wrap:nowrap;
+   align-items:center;
+   justify-content:flex-end;
+   height:60px;
+   width:15%;
+	min-width:110px;
+   padding:0;
+   margin:0 20px 0 0;
 }
 			
 .text-size-smaller-button-off {
-	height:20px;
-	width:20px;
-	background-color:transparent;
-	background-image:url(../../svg/icon-text-size-smaller.svg);
-	background-position:5px 0;
-	background-repeat:no-repeat;
-	margin:17px -5px 0 0;
-	border:none;
-	cursor:pointer;
+   height:20px;
+   width:20px;
+   min-width:20px;
+   background-color:transparent;
+   background-image:url(../../svg/icon-text-size-smaller.svg);
+   background-position:5px 0;
+   background-repeat:no-repeat;
+   margin:17px -5px 0 0;
+   border:none;
+   cursor:pointer;
 }
 
 .text-size-larger-button-off {
-	height:40px;
-	width:40px;
-	background-color:transparent;
-	background-image:url(../../svg/icon-text-size-larger.svg);
-	background-position:0 0;
-	background-repeat:no-repeat;
-	margin:0 0 0 2px;
-	border:none;
-	cursor:pointer;
+   height:40px;
+   width:40px;
+   min-width:40px;
+   background-color:transparent;
+   background-image:url(../../svg/icon-text-size-larger.svg);
+   background-position:0 0;
+   background-repeat:no-repeat;
+   margin:0 0 0 2px;
+   border:none;
+   cursor:pointer;
 }
 
 .text-size-current {
-	font-family:discovery-data-bold;
-	font-size:0.900rem;
-	text-align:right; 
-	color:var(--blue);
-	padding:24px 0 0 0;
-	margin:0 40px 0 -8px;
+   font-family:discovery-data-bold;
+   font-size:0.900rem;
+   text-align:right; 
+   color:var(--blue-dark);
+   padding:24px 0 0 0;
+   margin:0 40px 0 -8px;
 }
 
 /* Header Menu */
 .header-menu-button {
-	height:25px;
-	width:25px;
-	background-color:transparent;
-	background-image:url(../../svg/icon-header-menu.svg);
-	background-position:0 0;
-	background-repeat:no-repeat;
-	margin:3px 0 0 10px;
-	border:0;
-	cursor:pointer;
+   height:25px;
+   width:25px;
+   min-width:25px;
+   background-color:transparent;
+   background-image:url(../../svg/icon-header-menu.svg);
+   background-position:0 0;
+   background-repeat:no-repeat;
+   margin:3px 0 0 10px;
+   border:0;
+   cursor:pointer;
 }
 
 .header-menu-button-open {
-	height:25px;
-	width:25px;
-	background-color:transparent;
-	background-image:url(../../svg/icon-header-menu-hover.svg);
-	background-position:0 0;
-	background-repeat:no-repeat;
-	margin:3px 0 0 10px;
-	border:0;
-	cursor:pointer;
+   height:25px;
+   width:25px;
+   background-color:transparent;
+   background-image:url(../../svg/icon-header-menu-hover.svg);
+   background-position:0 0;
+   background-repeat:no-repeat;
+   margin:3px 0 0 10px;
+   border:0;
+   cursor:pointer;
 }
 
 .header-menu {
-	position: absolute;
-	top: 42px;
-	right:20;
-	z-index: 3;
-	width:120px;
-	background-color:var(--white);
-	padding:10px;
-	border:1px  solid var(--blue-dark);
-	margin: 0 20px 0 0;
+   position: absolute;
+   top: 42px;
+   right:20;
+   z-index: 3;
+   width:120px;
+   background-color:var(--white);
+   padding:10px;
+   border:1px  solid var(--blue-dark);
+   margin: 0 20px 0 0;
+}
+
+.header-menu-item-common {
+   height:20px;
+   width:auto;
+   background-color:transparent;
+   background-position:5px 0;
+   background-repeat:no-repeat;
+   border:none;
+   cursor:pointer;
+   font-family:discovery-regular;
+   font-size:1.000rem;
 }
 
 .header-menu-info {
-	height:20px;
-	width:auto;
-	background-color:transparent;
-	background-image:url(../../svg/icon-participant-info-off.svg);
-	background-position:5px 0;
-	background-repeat:no-repeat;
-	padding:2px 0 0 30px;
-	margin:0 0 5px 0;
-	border:none;
-	cursor:pointer;
-	font-family:discovery-regular;
-	font-size:1.000rem;
+   @insert .header-menu-item-common;
+   background-image:url(../../svg/icon-participant-info-off.svg);
+   padding:2px 0 0 30px;
+   margin:0 0 5px 0;
 }
 
 .header-menu-info:hover {
    width:auto;
    background-color:var(--gray-medium);
-	opacity:0.4;
+   opacity:0.4;
 }
 
 .header-menu-help {
-	height:20px;
-	width:auto;
-	background-color:transparent;
-	background-image:url(../../svg/icon-help-off.svg);
-	background-position:5px 0;
-	background-repeat:no-repeat;
-	padding:0 0 0 30px;
-	margin:0 0 5px 0;
-	border:none;
-	cursor:pointer;
-	font-family:discovery-regular;
-	font-size:1.000rem;
+   @insert .header-menu-item-common;
+   background-image:url(../../svg/icon-help-off.svg);
+   padding:0 0 0 30px;
+   margin:0 0 5px 0;
 }
 
 .header-menu-help:hover {
- 	width:auto;
+   width:auto;
    background-color:var(--gray-medium);
-	opacity:0.4;
+   opacity:0.4;
 }
 
 .header-menu-download {
-	height:20px;
-	width:auto;
-	background-color:transparent;
-	background-image:url(../../svg/icon-download-off.svg);
-	background-position:5px 0;
-	background-repeat:no-repeat;
-	padding:0 0 0 30px;
-	margin:0 0 5px 0;
-	border:none;
-	cursor:pointer;
-	font-family:discovery-regular;
-	font-size:1.000rem;
+   @insert .header-menu-item-common;
+   background-image:url(../../svg/icon-download-off.svg);
+   padding:0 0 0 30px;
+   margin:0 0 5px 0;
 }
 
 .header-menu-download:hover {
- 	width:auto;
+   width:auto;
    background-color:var(--gray-medium);
-	opacity:0.4;
+   opacity:0.4;
 }
 
 .header-menu-print {
-	height:20px;
-	width:auto;
-	background-color:transparent;
-	background-image:url(../../svg/icon-print-off.svg);
-	background-position:5px 0;
-	background-repeat:no-repeat;
-	padding:0 0 0 30px;
-	margin:0;
-	border:none;
-	cursor:pointer;
-	font-family:discovery-regular;
-	font-size:1.000rem;
+   @insert .header-menu-item-common;
+   background-image:url(../../svg/icon-print-off.svg);
+   padding:0 0 0 30px;
+   margin:0;
 }
 
 .header-menu-print:hover {
-  	width:auto;
+   width:auto;
    background-color:var(--gray-medium);
-	opacity:0.4;
+   opacity:0.4;
 }
