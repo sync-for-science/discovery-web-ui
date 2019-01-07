@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './CompareView.css';
+import config from '../../config.js';
 import { isValid, inDateRange } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 import StandardFilters from '../StandardFilters';
@@ -126,25 +127,29 @@ export default class CompareView extends Component {
 	 if (!struct.hasOwnProperty(cat)) {
 	    // Add this category
 	    struct[cat] = [];
+//	    console.log('1 ' + cat + ' added');
 	 }
 
 	 let thisCat = struct[cat];
 	 let coding = this.getCoding(res);
-	 let thisCode = thisCat.filter(elt => elt.code === coding.code)[0];
+	 let thisCode = thisCat.find(elt => elt.code === coding.code);
 	 if (thisCode) {
 	    // Update previously added code
 	    let provs = thisCode.provs;
-	    let thisProv = provs.filter(elt => elt.provName === prov)[0];
+	    let thisProv = provs.find(elt => elt.provName === prov);
 	    if (thisProv) {
 	       // Update previously added prov
 	       thisProv.count++;
+//	       console.log('2 ' + cat + ' ' + thisCode.code + ' ' + thisCode.display + ': ' + thisProv.provName + ' ' + thisProv.count);
 	    } else {
 	       // Add new prov
 	       provs.push({ provName: prov, col: col, count: 1 });
+//	       console.log('3 ' + cat + ' ' + thisCode.code + ' ' + thisCode.display + ': ' + prov + ' 1');
 	    }
 	 } else {
 	    // Add new code
 	    thisCat.push({ code: coding.code, display: coding.display, provs: [{ provName: prov, col: col, count: 1 }] });
+//	    console.log('4 ' + cat + ' ' + coding.code + ' ' + coding.display + ': ' + prov + ' 1');
 	 }
       }
    }
@@ -165,9 +170,22 @@ export default class CompareView extends Component {
 	 if (isEnabled) {
 	    for (let thisCode of struct[catName]) {
 	       divs.push(<div className='compare-code-display' key={divs.length}>{thisCode.display}</div>);
-	       for (let thisProv of thisCode.provs) {
-		  divs.push(<div className={thisProv.col%2 === 0 ? 'compare-prov-count-even' : 'compare-prov-count-odd'}
-				 key={divs.length} style={{gridColumn: thisProv.col}}>{thisProv.count}</div>);
+//	       for (let thisProv of thisCode.provs) {
+//		  divs.push(<div className={thisProv.col%2 === 0 ? 'compare-prov-count-even' : 'compare-prov-count-odd'}
+//				 key={divs.length} style={{gridColumn: thisProv.col}}>{thisProv.count}</div>);
+//	       }
+	       let maxCount = thisCode.provs.reduce((acc, thisProv) => thisProv.count > acc ? thisProv.count : acc, 0);
+	       for (let provNum = 0; provNum < this.props.providers.length; provNum++) {
+		  let provName = this.props.providers[provNum];
+		  let thisProv = thisCode.provs.find(elt => elt.provName === provName);
+		  let thisHeight = thisProv ? config.compareViewMaxCountHeight * thisProv.count / maxCount : 0;
+		  divs.push(<div className={provNum%2 === 0 ? 'compare-prov-count-even' : 'compare-prov-count-odd'}
+				 key={divs.length} style={{gridColumn: provNum+2}}>
+			       <div className={provNum%2 === 0 ? 'compare-prov-count-contents-even' : 'compare-prov-count-contents-odd'}
+				    style={{height: thisHeight}}>
+			    {/*  {thisProv ? thisProv.count : null} */}
+			       </div>
+			    </div>);
 	       }
 	    }
 	 }

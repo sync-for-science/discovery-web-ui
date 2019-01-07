@@ -2,7 +2,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.23 Updated 12/09/2018 */
+/* v.01.27 Updated 12/26/2018 */
 
 .page-header {
    position: fixed;
@@ -15,9 +15,9 @@
    width:100%;
 	min-width:1024px;
    margin:0; 
-   padding:0 ;
-   border-bottom:2px  solid var(--blue-dark);
-   background-color:var(--gray-medium);
+   padding:0;
+   border-bottom:2px  solid var(--accent);
+   background-color:var(--blue-dark);
 }
 
 /* Logos */
@@ -25,10 +25,10 @@
    display:flex;
    align-items:center;
    height:60px;
-	width:40%;
-   min-width:230px;
-   padding:0;
-	margin:0 0 0 20px;
+	width:45%;
+   min-width:240px;
+   padding:0 0 0 20px;
+	margin:0;
 }
 
 .logo-button-common {
@@ -176,9 +176,10 @@
    align-items:center;
    justify-content:flex-end;
    height:60px;
-   width:160px;
+   width:15%;
 	min-width:160px;
-   padding:0 20px 0 0;
+   padding:0 20px;
+	margin:0;
 }
 
 .view-button {
@@ -349,10 +350,10 @@
    align-items:center;
    justify-content:flex-end;
    height:60px;
-   width:15%;
-	min-width:110px;
-   padding:0;
-   margin:0 20px 0 0;
+   width:10%;
+	min-width:120px;
+   padding:0 20px;
+   margin:0;
 }
 			
 .text-size-smaller-button-off {
@@ -363,7 +364,8 @@
    background-image:url(../../svg/icon-text-size-smaller.svg);
    background-position:5px 0;
    background-repeat:no-repeat;
-   margin:17px -5px 0 0;
+   margin:17px -5px 12px 0;
+	
    border:none;
    cursor:pointer;
 }
@@ -376,18 +378,20 @@
    background-image:url(../../svg/icon-text-size-larger.svg);
    background-position:0 0;
    background-repeat:no-repeat;
-   margin:0 0 0 2px;
+   margin:0 0 12px 2px;
+	
    border:none;
    cursor:pointer;
 }
 
 .text-size-current {
    font-family:discovery-data-bold;
-   font-size:0.900rem;
+   font-size:1.000rem;
+	font-weight:bold;
    text-align:right; 
-   color:var(--blue-dark);
-   padding:24px 0 0 0;
-   margin:0 40px 0 -8px;
+   color:var(--white-75percent);
+   padding:24px 0 15px 0;
+   margin:0 0 0 -8px;
 }
 
 /* Header Menu */
@@ -398,6 +402,7 @@
    background-color:transparent;
    background-image:url(../../svg/icon-header-menu.svg);
    background-position:0 0;
+	background-size: 25px 25px;
    background-repeat:no-repeat;
    margin:3px 0 0 10px;
    border:0;
@@ -407,9 +412,11 @@
 .header-menu-button-open {
    height:25px;
    width:25px;
+	min-width:25px;
    background-color:transparent;
    background-image:url(../../svg/icon-header-menu-hover.svg);
    background-position:0 0;
+	background-size: 25px 25px;
    background-repeat:no-repeat;
    margin:3px 0 0 10px;
    border:0;

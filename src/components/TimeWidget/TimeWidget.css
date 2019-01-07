@@ -2,7 +2,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery TimeWidget Stylesheet */
-/* v.01.22 Updated 12/07/2018 */
+/* v.01.24 Updated 12/20/2018 */
 
 .time-widget {
    position: fixed;
@@ -12,10 +12,10 @@
    display:flex;
    flex-direction:row;
    height:77px;
-   width:auto;
+   width:100%;
 	min-width:1024px;
    margin:0; 
-   padding: 0 20px;
+   padding:0;
    background-color:transparent;
 }
 
@@ -23,10 +23,11 @@
    display:flex;
    flex-direction: row;
    align-items: center; 
-   height:64px;
+   height:77px;
    width:184px;
    min-width:184px;
-   margin:0 10px 0 0px;
+	padding:0 10px 0 20px;
+   margin:0;
 }
 
 .calendar-button {
@@ -37,7 +38,8 @@
    background-position:0 0;
    background-repeat:no-repeat;
    border:0;
-   margin:0 0 0 8px;
+   margin:0;
+	padding:0 0 0 8px;
    cursor:pointer;
 }
 
@@ -54,7 +56,8 @@
 .date-range {
    font-family:discovery-data-bold;
    font-size:0.800rem;
-   line-height:100%;
+	font-weight: bold;
+   line-height:120%;
    color: var(--discovery-blue);
    margin:0 0 0 19px;
    white-space:nowrap;
@@ -64,12 +67,12 @@
 .timeline-controls {
    display:flex;
    flex-direction: column;
-   width:inherit;
-	min-width:890px;
+   width:100%;
+	min-width:810px;
    height:64px;
    max-height: 64px;
    margin:0;
-   padding:0;
+   padding:0 20px 0 0;
    background-color:transparent;
 }
 
@@ -121,6 +124,7 @@
 .timeline-full-active-single-years {
    @insert .timeline-full;
    font-family:discovery-data-bold;
+	font-weight:bold;
    color: var(--discovery-blue);
    background-image:url("../../svg/tickmark-black.svg");
 }
@@ -129,6 +133,7 @@
 .timeline-full-active-double-years {
    @insert .timeline-full;
    font-family:discovery-data-bold;
+	font-weight:bold;
    color: var(--discovery-blue);
    background-image:url("../../svg/tickmark-black.svg");
 }
@@ -185,12 +190,15 @@
 }
 
 .timeline-selector {
-   height:22px;
+   position: relative;
+	top:-21px;
+	height:52px;
    width:20px;
    background-color:transparent;
    background-repeat:no-repeat;
    background-position:center center;
-   background-size:20px;
+   background-size:20px 52px;
+	margin:-10px 0 0 0;
    grid-column:1/span 40;
    grid-row: 1;
    cursor: pointer;
@@ -198,25 +206,25 @@
 
 .timeline-selector-left {
    @insert .timeline-selector;
-   background-image:url("../../svg/thumb-left-02.svg");
+   background-image:url("../../svg/thumb-left-03.svg");
    margin:0 0 0 -6px;
 }
 
 .timeline-selector-left-alt {
    @insert .timeline-selector;
-   background-image:url("../../svg/thumb-left-02-alt.svg");
+   background-image:url("../../svg/thumb-left-03-alt.svg");
    margin:3px 0 0 -6px;
 }
 
 .timeline-selector-right {
    @insert .timeline-selector;
-   background-image:url(../../svg/thumb-right-02.svg);
+   background-image:url(../../svg/thumb-right-03.svg);
    margin:0 0 0 4px;
 }
 
 .timeline-selector-right-alt {
    @insert .timeline-selector;
-   background-image:url(../../svg/thumb-right-02-alt.svg);
+   background-image:url(../../svg/thumb-right-03-alt.svg);
    margin:3px 0 0 4px;
 }
 
@@ -243,6 +251,7 @@
    height:22px;
    max-height: 22px;
    font-family:discovery-data-bold;
+	font-weight:bold;
    font-size:0.750rem;
    color: var(--discovery-blue);
    margin:1px 0 0 0;
@@ -252,4 +261,15 @@
    background-size:2px 100%;
    background-repeat:repeat-y;
    overflow: visible;
+}
+
+.timeline-thumb-connector-svg {
+   position: relative;
+	top:-30px;
+	height: 3px;
+}
+
+.timeline-thumb-connector {
+   stroke: var(--data);
+   stroke-width: 3px;
 }

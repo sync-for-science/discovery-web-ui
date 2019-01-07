@@ -210,6 +210,20 @@ export default class TimeWidget extends Component {
       );
    }
 
+   renderThumbConnectors() {
+      const leftShimWidth = 10;		// Kluge: DOM elts not defined at the point we want to access its width
+      const rightShimWidth = 10;
+      return (
+	 <svg className='timeline-thumb-connector-svg' width={numericPart(this.props.timelineWidth)+leftShimWidth+rightShimWidth}
+						       preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg'>
+	    <line className='timeline-thumb-connector' key='0' x1={leftShimWidth} y1='0'
+							       x2={this.props.thumbLeft*numericPart(this.props.timelineWidth)+rightShimWidth} y2='0' />
+	    <line className='timeline-thumb-connector' key='1' x1={this.props.thumbRight*numericPart(this.props.timelineWidth)+leftShimWidth-1.5} y1='0'
+	  						       x2={numericPart(this.props.timelineWidth)+rightShimWidth+1.0} y2='0' />
+	 </svg> 
+      );
+   }
+
    render() {
       const rangeMin = formatDate(this.state.thumbDates ? this.state.thumbDates.minDate : this.props.startDate, true, true);
       const rangeMax = formatDate(this.state.thumbDates ? this.state.thumbDates.maxDate : this.props.endDate, true, true);
@@ -237,6 +251,7 @@ export default class TimeWidget extends Component {
 		  <Draggable axis='x' bounds={{left:this.state.leftX, right:rightBound}} position={{x:this.state.rightX, y:0}} onStop={this.onRightDragStop}>
 		     <div className={this.state.showExpanded ? 'timeline-selector-right-alt' : 'timeline-selector-right'}></div>
 		  </Draggable>
+		  { this.state.showExpanded && this.renderThumbConnectors() }
 	       </div>
 	       { this.state.showExpanded && this.renderExpandedYears() }
 	    </div>

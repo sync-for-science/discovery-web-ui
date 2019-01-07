@@ -51,12 +51,12 @@ export function formatPatientAddress(address) {
 	+ addr.country;
 }
 
-export function formatPatientMRN(identifier) {
+export function formatPatientMRN(identifier, maxLength) {
    let identElts = Array.isArray(identifier) ? identifier : [ identifier ];
    for (let elt of identElts) {
       try {
 	 if (elt.type.coding[0].code === 'MR') {
-	    return elt.value;
+	    return maxLength === 0 || elt.value.length <= maxLength ? elt.value : '...' + elt.value.substring(elt.value.length - maxLength);
 	 }
       } catch (e) {};
    }

@@ -3,7 +3,7 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery MedsDispensed Stylesheet */
-/* v.01.14 Updated 11/15/2018 */
+/* v.01.15 Updated 12/26/2018 */
 
 .meds-dispensed-display {
 	@insert .content-panel-display;

@@ -2,19 +2,18 @@
 
 
 /* Sync for Science Discovery ContentPanelGlobal Stylesheet */
-/* v.01.04 Updated 11/30/2018 */
+/* v.01.05 Updated 12/26/2018 */
 
 .content-panel-display {
 	height:auto;
 	width:auto;
-	min-width:260px;
 	font-family:discovery-data-text;
 	font-size:1.200rem;
 	text-align: left;
 	color:var(--data);
 	white-space: nowrap;
 	padding:0;
-	grid-column:1/span 4;
+	grid-column:1/span 39;
 }
 
 .label {

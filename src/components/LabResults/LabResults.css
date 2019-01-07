@@ -3,10 +3,12 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery LabResults Stylesheet */
-/* v.01.16 Updated 11/30/2018 */
+/* v.01.17 Updated 12/26/2018 */
 
 .lab-results-display {
    @insert .content-panel-display;
+	min-width: 50%;
+	grid-column: 1/span 20;
 }
 
 .lab-results-name {
@@ -16,6 +18,7 @@
 .lab-results-value {
    @insert .value;
    width:132px;
+	font-family: discovery-data;
    text-align: right;
    margin:0 0 0 5px;
    grid-column: 1;
@@ -25,10 +28,7 @@
    @insert .value;
    width:132px;
    text-align:right;
-//	font-style: italic;
-//	font-weight:bold;
 	color:var(--data);
-//	text-decoration: underline solid var(--data);
    margin:0 0 0 5px;
    grid-column: 1;
 	background-color:var(--gray-light);
@@ -39,7 +39,7 @@
 	width:55px;
 	min-width: 55px;
    text-align: left;
-   padding:6px 0 0 0;
+   padding:3px 0 0 0;
    grid-column: 2;
 }
 
@@ -109,7 +109,9 @@
 }
 
 .lab-results-time-series {
-   padding:0 200px 0 0 ;
-	grid-column:40;
+   min-width: 50%;
+	align-content: flex-end; 
+	padding:0 200px 0 0 ;
+	grid-column:21/40;
 	grid-row:1/6;
 }

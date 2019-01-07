@@ -3,14 +3,17 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery VitalSigns Stylesheet */
-/* v.01.19 Updated 11/16/2018 */
+/* v.01.20 Updated 12/26/2018 */
 
 .vital-signs-display {
    @insert .content-panel-display;
+	min-width:50%;
+	grid-column:1/span 20;
 }
 
 .vital-signs-value1 {
    @insert .value;
+	font-family: discovery-data;
    text-align: right;
    width:132px;
    grid-column:1;
@@ -32,6 +35,7 @@
 
 .vital-signs-value2 {
    @insert .value;
+	font-family: discovery-data;
    text-align: right;
    grid-column:1;
 }
@@ -63,7 +67,9 @@
 }
 
 .vital-signs-time-series {
-   padding:0 200px 0 0 ;
-	grid-column:40;
+   min-width:50%;
+	align-self: flex-end;
+	padding:0;
+	grid-column:21/span 40;
 	grid-row:1/6; 
 }

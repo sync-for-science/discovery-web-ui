@@ -2,7 +2,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery CompareView Stylesheet */
-/* v.01.03 Updated 12/03/2018 */
+/* v.01.04 Updated 12/28/2018 */
 
 .compare-view {
    position: fixed;
@@ -31,7 +31,7 @@
 .compare-matrix {
    display:grid;
 	grid-template-columns: 300px repeat(30, 1fr);
-	grid-column-gap:0px;
+	grid-column-gap:2px;
 	grid-auto-flow: column;
    height: auto;
    overflow-y: scroll;
@@ -61,12 +61,14 @@
 }
 
 .compare-code-display {
-   height:auto;
+   display:flex;
+	flex-direction: column;
+	justify-content: center;
    width:270px;
 	max-width: 270px;
    font-family:discovery-bold;
    font-size:0.800rem;
-   text-align: left;
+   text-align:left;
    color: var(--gray-dark);
    white-space:wrap;
 	word-wrap: break-word;
@@ -78,53 +80,91 @@
 }
 
 .compare-prov-count-even {
-   display:flex;
+  	position: relative;
+	bottom:0;
+	display:flex;
+	flex-direction: column;
+	justify-content:flex-end;
+	align-items:flex-end;
+	align-self: flex-end;
 	height:auto;
-   width:30px;
-   min-width: 30px;
-	max-width: 30px;
-	align-items:center;
+   width:38px;
+   min-width: 35px;
+   max-width: 35px;
    font-family: discovery-data-text;
    font-size:0.80rem;
    text-align: left;
    color: var(--data);
    white-space: nowrap;
-	vertical-align: middle;
-	line-height: inherit;
-   padding:10px 0px 10px 0;
-	margin:0px;
-	border-bottom:solid 1px var(--gray-light-translucent);
-   background-color:var(--gray-light-translucent);
-	background-image:url(../../svg/checkmark.svg);
-	background-size:15px 15px;
-	background-repeat:no-repeat;
-	background-position: 10px center;
-	grid-column: auto;
+   vertical-align: middle;
+   line-height:inherit;
+   padding:0;
+   margin:0px;
+   border-bottom:solid 1px var(--gray-light-translucent);
+// background-color:var(--gray-light-translucent);
+//	background-image:url(../../svg/checkmark.svg);
+//	background-size:15px 15px;
+//	background-repeat:no-repeat;
+//	background-position: 10px center;
+   grid-column:auto;
 }
 
 .compare-prov-count-odd {
-   display:flex;
-   width:30px;
-   min-width: 30px;
-	max-width: 30px;
-	align-items:center;
+   position: relative;
+	bottom:0;
+	display:flex;
+	flex-direction: column;
+	justify-content:flex-end;
+	align-items:flex-end;
+	align-self: flex-end;
+	height:auto;
+   width:38px;
+   min-width: 35px;
+   max-width: 35px;
    font-family: discovery-data-text;
    font-size:0.80rem;
    text-align: left;
    color: var(--data);
    white-space: nowrap;
-	vertical-align: middle;
-	line-height:inherit;
-   padding:10px 0px 10px 0;
-	margin:0px;
-	border-bottom:solid 1px var(--gray-light-translucent);
+   vertical-align: middle;
+   line-height:inherit;
+   padding:0;
+   margin:0px;
+   border-bottom:solid 1px var(--gray-light-translucent);
    background-color:var(--white);
-	background-image:url(../../svg/checkmark.svg);
-	background-size:15px 15px;
-	background-repeat:no-repeat;
-	background-position: 10px center;
-	grid-column: auto;
+//	background-image:url(../../svg/checkmark.svg);
+//	background-size:15px 15px;
+//	background-repeat:no-repeat;
+//	background-position: 10px center;
+   grid-column: auto;
 }
+
+.compare-prov-count-contents-even {
+   position: relative;
+	bottom:0;
+	display:flex;
+	flex-direction: column;
+	justify-content:center;
+	text-align: center;
+	background-color:var(--data);
+	width:100%;
+	margin:auto;
+	border-bottom:1px solid var(--data);
+}
+
+.compare-prov-count-contents-odd {
+   position: relative;
+	bottom:0;
+	display:flex;
+	flex-direction: column;
+	justify-content:center;
+	text-align: center;
+	width:100%;
+   background-color:var(--data);
+	margin:auto;
+	border-bottom:1px solid var(--data);
+}
+
 .compare-providers {
    position: relative;
    left:0;
@@ -134,13 +174,14 @@
    display: flex;
    flex-direction: row;
    padding:0 0 0 280px;
+	margin:-10px 0 0 0;
 }
 
 .compare-prov-name {
    height:170px;
-   width:35px;
-   min-width: 35px;
-	max-width: 35px;
+   width:37px;
+   min-width: 37px;
+	max-width: 37px;
    font-family: discovery-bold;
    font-size:0.90rem;
    color: var(--data);

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Modal from 'react-responsive-modal';
 
@@ -54,7 +53,7 @@ export default class DiscoveryModal extends Component {
 		     Copyright © 2018 Sync for Science
 		  </div>
 		  <div className="logo-modal-body-row">
-		     Sync for Science and &nbsp;<a href='http://syncfor.science' target='_blank'>S4S</a>&nbsp; are trademarks and/or service marks of the U.S. Department of Health and Human Services.
+		     Sync for Science and &nbsp;<a href='http://syncfor.science' target='_blank' rel='noopener noreferrer'>S4S</a>&nbsp; are trademarks and/or service marks of the U.S. Department of Health and Human Services.
 		  </div> 
 		  <div className="logo-modal-body-row">
 		     Sync for Science is funded as part of the Patient-Centered Information Commons (NIH Project 5U54HG007963-03) at Harvard Medical School.

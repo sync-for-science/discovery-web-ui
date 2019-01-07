@@ -3,7 +3,7 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery Allergies Stylesheet */
-/* v.01.16 Updated 11/14/2018 */
+/* v.01.18 Updated 11/26/2018 */
 
 .allergies-display {
 	@insert .content-panel-display;
@@ -12,7 +12,7 @@
 .allergies-clinical-status-label {
 	@insert .label;
 	width:132px;
-	padding:6px 0 0 0;
+	padding:5px 0 0 0;
 	grid-column:1;
 }
 
@@ -24,7 +24,7 @@
 .allergies-verification-status-label {
 	@insert .label;
 	width:132px;
-	padding:6px 0 0 0;
+	padding:5px 0 0 0;
 	grid-column:1;
 }
 

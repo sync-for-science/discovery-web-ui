@@ -2,7 +2,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery PageFooter Stylesheet */
-/* v.01.11 Updated 10/22/2018 */
+/* v.01.14 Updated 12/20/2018 */
 
 .page-footer {
 	position:fixed;
@@ -11,9 +11,9 @@
 	height:10px;
 	width:100%;
 	min-width:1024px;
-	border-top:2px  solid var(--blue-dark);
+	border-top:2px  solid var(--accent);
 	padding:0 20px;
-	background-color: var(--gray-medium);
+	background-color: var(--blue-dark);
 	display:flex;
    flex-direction:row;
 }
@@ -21,7 +21,7 @@
 .footer-snapshot-date {
    font-family:discovery-regular;
 	font-size:8px;
-	color:var(--blue-dark);
+	color:var(--white);
 	vertical-align:middle;
 	margin:1px 30px 0 auto;
 }

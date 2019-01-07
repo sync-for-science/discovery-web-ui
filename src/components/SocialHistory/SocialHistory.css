@@ -3,7 +3,7 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery Social History Stylesheet */
-/* v.01.12 Updated 11/16/2018 */
+/* v.01.14 Updated 12/26/2018 */
 
 .social-history-display {
 	@insert .content-panel-display;

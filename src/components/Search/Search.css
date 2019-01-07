@@ -2,26 +2,31 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery Search Stylesheet */
-/* v.01.10 Updated 12/05/2018 */
+/* v.01.14 Updated 12/20/2018 */
 
 .search {
    position:relative;
    display:flex;
+	justify-content: center;
    flex-direction:row;
    height:40px;
-   width:30%;
+   width:25%;
+	min-width:342px;
    align-items:center;
-   margin:12px 0 0 0;
+   margin:10px 0;
+	padding:0 20px 0 20px;
+	border-right:solid 1px var(--white-75percent);
+	border-left:solid 1px var(--white-75percent); 
 }
 
 .search-buttons {
 	height:40px;
-   width:40px;
-	min-width: 40px;
+   width:20%;
+	min-width:40px;
    padding:0;
-   margin:0 5px;
+   margin:0;
    background-color:transparent;
-	background-position:0 0;
+	background-position:right 0;
    background-repeat:no-repeat;
 	background-size: 40px 40px;
    border:0;
@@ -39,29 +44,36 @@
 }
 
 .search-input {
-   width:200px;
-   margin:0 10px 0 0;
-   border:1px solid var(--blue-dark);
+   width:60%;
+	min-width:208px;
+	height: 32px;
+   margin:0 10px 0 10px;
+   border:1px solid var(--white-75percent);
 	padding:0 0 0 5px;
+	font-family:discovery-data-text;
+   font-size:1.000rem;
+	font-weight:bold;
    outline: none;
 }
 
 .search-status {
-   width:80px;
+   width:30%;
+	min-width:92px; 
    height:20px;
-   padding:2px 0;
-   margin:5px 60px 0 0;
+   padding:9px 0 0 0;
+   margin:0;
    background-color:transparent;
    font-family:discovery-data-bold;
-   font-size:0.800rem;
-   color:var(--blue);
-	text-align:right;
+   font-size:.900rem;
+	font-weight:bold;
+   color:var(--white-75percent);
+	text-align:left;
    white-space:nowrap;
 }
 
 .search-results {
    position:absolute;
-   top:27px;
+   top:36px;
    left:50px;
 	width:195px;
    background-color:var(--white);
@@ -71,7 +83,7 @@
    border-left:1px solid var(--blue-dark);
    padding:5px;
    font-family:discovery-regular;
-   font-size:0.800rem;
+   font-size:.900rem;
    overflow:auto;
    overflow-x:hidden;
    max-height:300px;
@@ -90,7 +102,7 @@
    border-left:1px solid var(--blue-dark);
    padding:5px;
    font-family:discovery-regular;
-   font-size:0.800rem;
+   font-size:1.000rem;
    color:var(--gray-medium);
  }
 

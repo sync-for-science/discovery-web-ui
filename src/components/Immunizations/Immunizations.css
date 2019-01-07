@@ -3,7 +3,7 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery Immunizations Stylesheet */
-/* v.01.14 Updated 11/12/2018 */
+/* v.01.15 Updated 12/26/2018 */
 
 .immunizations-display {
 	@insert .content-panel-display;

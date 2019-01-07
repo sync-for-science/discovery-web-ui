@@ -3,7 +3,7 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery Conditions Stylesheet */
-/* v.01.13 Updated 11/14/2018 */
+/* v.01.14 Updated 12/26/2018 */
 
 .conditions-display {
 	@insert .content-panel-display;

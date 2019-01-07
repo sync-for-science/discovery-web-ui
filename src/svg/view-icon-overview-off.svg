@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 23.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 80 80" style="enable-background:new 0 0 80 80;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#001A72;}
-	.st1{fill:#FFFFFF;}
+	.st1{opacity:0.75;}
+	.st2{fill:#FFFFFF;}
 </style>
-<g id="Layer_1">
+<g>
 	<path class="st0" d="M63.8,79H16.2c-8.2,0-15-6.8-15-15V16.4c0-8.2,6.8-15,15-15h47.6c8.2,0,15,6.8,15,15V64
 		C78.8,72.2,72,79,63.8,79z"/>
 </g>
-<g id="Layer_2">
+<g>
 	<polygon class="st0" points="25.1,43.9 29.7,37.7 49,37.7 55.1,43.3 39.8,58.3 	"/>
-	<g>
-		<path class="st1" d="M55.1,25.8c0,10.1-6.7,18.7-15.3,18.7s-15.3-8.3-15.3-18.7c0-10.1,6.7-18.7,15.3-18.7
+	<g class="st1">
+		<path class="st2" d="M55.1,25.8c0,10.1-6.7,18.7-15.3,18.7s-15.3-8.3-15.3-18.7c0-10.1,6.7-18.7,15.3-18.7
 			C48.4,7.1,55.1,15.3,55.1,25.8z"/>
 		<g>
-			<path class="st1" d="M53.3,41.7L39.8,55.2L26.3,41.7C6.4,46.6,3,60.7,7.9,72.4h63.8C76.3,60.7,73.2,46.3,53.3,41.7z"/>
+			<path class="st2" d="M53.3,41.7L39.8,55.2L26.3,41.7C6.4,46.6,3,60.7,7.9,72.4h63.8C76.3,60.7,73.2,46.3,53.3,41.7z"/>
 		</g>
 	</g>
 </g>

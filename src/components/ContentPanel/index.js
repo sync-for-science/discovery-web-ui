@@ -186,6 +186,8 @@ export default class ContentPanel extends Component {
       return (
 	 <div className='content-panel-inner'>
 	    <div className='content-panel-inner-title'>
+			<button className={'content-panel-left-button'+(this.state.prevEnabled ? '' : '-off')} onClick={() => this.onNextPrev('prev')} />
+			<button className={'content-panel-right-button'+(this.state.nextEnabled ? '' : '-off')} onClick={() => this.onNextPrev('next')} />
 	       <button className='content-panel-inner-title-payload-button' onClick={() => !this.state.dragging && this.setState({payloadModalIsOpen: true})}>
 		  { formatDate(context.date, false, false) }
 	       </button>
@@ -225,10 +227,7 @@ export default class ContentPanel extends Component {
 			  bounds={{top:this.state.topBound, bottom:this.state.bottomBound}} onDrag={this.onDragStart} onStop={this.onDragStop}>
 	          <div className='content-panel' style={this.state.panelHeight ? {width:this.state.panelWidth, height:this.state.panelHeight}
 									       : {width:this.state.panelWidth}}>
-		     <div className='content-panel-left'>
-			<button className={'content-panel-left-button'+(this.state.prevEnabled ? '' : '-off')} onClick={() => this.onNextPrev('prev')} />
-			<button className={'content-panel-right-button'+(this.state.nextEnabled ? '' : '-off')} onClick={() => this.onNextPrev('next')} />
-		     </div>
+		    
 		     { this.renderContents(this.props.context) }
 	          </div>
 	       </Draggable>

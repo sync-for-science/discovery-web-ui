@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './SummaryView.css';
+import config from '../../config.js';
 import FhirTransform from '../../FhirTransform.js';
 import { formatPatientName, formatPatientAddress, formatPatientMRN } from '../../fhirUtil.js';
 import { formatDate } from '../../util.js';
@@ -74,6 +75,7 @@ export default class SummaryView extends Component {
       let now = new Date();
       let key = 0;
       for (let provName of this.props.providers) {
+	 let mrn = formatPatientMRN(this.props.resources.pathItem(`[*provider=${provName}][category=Patient].data.identifier`), config.summaryViewMaxMRNChars);
 	 let resColl = this.props.resources.pathItem(`[*provider=${provName}]`);
 	 let minDate = resColl.reduce((low, res) => {
 	    let date = res.itemDate && (res.itemDate instanceof Date ? res.itemDate : new Date(res.itemDate));
@@ -90,7 +92,8 @@ export default class SummaryView extends Component {
 	    <div className='default-providers-label1'   key={key++}>resources</div>,
 	    <div className='default-providers-min-date' key={key++}>{formatDate(minDate.toISOString(), true, true)}</div>,
 	    <div className='default-providers-label2'   key={key++}>to</div>,
-	    <div className='default-providers-max-date' key={key++}>{formatDate(maxDate.toISOString(), true, true)}</div>
+	    <div className='default-providers-max-date' key={key++}>{formatDate(maxDate.toISOString(), true, true)}</div>,
+	    <div className='default-providers-mrn'	key={key++}>{mrn}</div>
 	 );
       }
 
@@ -106,12 +109,12 @@ export default class SummaryView extends Component {
 					   Address: formatPatientAddress(this.props.resources.pathItem('[category=Patient].data.address')),
 					   Gender: this.props.resources.pathItem('[category=Patient].data.gender'),
 					   'Birth Date': this.props.resources.pathItem('[category=Patient].data.birthDate'),
-					   'Medical Record Number': formatPatientMRN(this.props.resources.pathItem('[category=Patient].data.identifier'))
 					 }
 				       : null;
 
       return (
 	 <div className='default-view'>
+	    <div className='default-data-owner-title'>Data Owner</div>
 	    { this.objToModalBody(chunk, 'default') }
 	    <div className='default-providers-title'>Providers</div>
 	    { this.renderProviders() }

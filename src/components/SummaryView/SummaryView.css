@@ -1,9 +1,10 @@
 @charset "UTF-8";
 @import '../../css/ColorVariablesMaster.css';
+@import '../../css/ContentPanelGlobal.css';
 
 
 /* Sync for Science Discovery SummaryView Stylesheet */
-/* v.01.03 Updated 12/10/2018 */
+/* v.01.06 Updated 12/31/2018 */
 
 .default-view {
    position: fixed;
@@ -20,18 +21,22 @@
 }
 
 .default-body-property {
-   width:250px;
+   @insert .label;
+	width:250px;
 	min-width: 250px;
-   padding-right:15px;
-   font-family:discovery-regular;
-   font-size:1.000rem;
+	font-size:1.000rem;
+	text-align: left;
+	margin:0 0 0 20px;
+   /*font-family:discovery-regular;
+   
    font-style:italic;
    text-align:right;
-	white-space: nowrap;
+	white-space: nowrap;*/
 }
 
 .default-body-value {
-   width:auto;
+   @insert .value;
+	width:auto;
    font-family:discovery-regular;
    font-size:1.000rem;
    text-align:left;
@@ -48,7 +53,9 @@
 	width:250px;
 	font-family:discovery-data-text;
    font-size:1.000rem;
-   text-align:right;
+   text-align:left;
+	font-weight: bold;
+	margin:0 0 0 20px;
 	white-space: nowrap;
 }
 
@@ -57,7 +64,8 @@
 	width:auto;
 	font-family:discovery-data;
    font-size:1.000rem;
-   text-align:center;
+   text-align:left;
+	margin:3px 0 0 0;
 	color:var(--data);
 	white-space: nowrap;
 }
@@ -68,6 +76,7 @@
 	font-family:discovery-data-text;
    font-size:1.000rem;
    text-align:center;
+	margin:0 0 0 5px;
 	white-space: nowrap;
 }
 
@@ -77,6 +86,7 @@
 	font-family:discovery-data;
    font-size:1.000rem;
    text-align:right;
+	margin:3px 0 0 20px;
 	white-space: nowrap;
 	color:var(--data);
 }
@@ -97,8 +107,16 @@
 	font-family:discovery-data;
    font-size:1.000rem;
    text-align:left;
+	margin:3px 0 0 5px;
 	white-space: nowrap;
 	color:var(--data);
+}
+
+.default-data-owner-title {
+	font-family: discovery-bold;
+	border-bottom: solid 1px var(--discovery-blue);
+	margin:20px 0 10px 0;
+	width:600px;
 }
 
 .default-providers-title {
@@ -106,4 +124,15 @@
 	border-bottom: solid 1px var(--discovery-blue);
 	margin:20px 0 0 0;
 	width:600px;
+}
+
+.default-providers-mrn {
+	font-family:discovery-data;
+   font-size:.800rem;
+//	font-weight:bold;
+	font-style:italic;
+	text-align:left;
+	margin:0 0 10px 20px;
+	color:var(--data);
+	grid-column: 1;
 }

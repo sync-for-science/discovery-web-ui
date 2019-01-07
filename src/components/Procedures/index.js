@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'axios';
+import axios from 'axios';
 
 import './Procedures.css';
 import '../ContentPanel/ContentPanel.css';
@@ -26,6 +26,8 @@ export default class Procedures extends Component {
       loadingRefs: 0
    }
 
+   AxiosCancelSource = axios.CancelToken.source();
+
    setMatchingData() {
       let match = FhirTransform.getPathItem(this.props.data, '[*category=Procedures]');
       if (match.length > 0) {
@@ -48,20 +50,28 @@ export default class Procedures extends Component {
       }
    }
 
+   componentWillUnmount() {
+      // Cancel any pending async gets
+      this.AxiosCancelSource.cancel('unmounting');
+   }
+
    // TODO: Handle multiple reason references per single procedure
    //       Move to fhirUtil.js (with callback for state management)
    resolveReasonReference(elt) {
       if (elt.data.reasonReference && elt.data.reasonReference[0] && !elt.data.reasonReference[0].code) {
 	 this.setState({loadingRefs: this.state.loadingRefs+1});
-	 get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.reasonReference[0].reference))
+	 axios.get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.reasonReference[0].reference),
+		   { cancelToken: this.AxiosCancelSource.token } )
 	    .then(response => {
 		// Add the de-referenced data to the reasonReference element
 		elt.data.reasonReference[0] = Object.assign(elt.data.reasonReference[0], response.data);
 		this.setState({loadingRefs: this.state.loadingRefs-1});
 	    })
-	    .catch(fetchError => {
-		console.log(fetchError);
-		this.setState({loadingRefs: this.state.loadingRefs-1});
+	    .catch(thrown => {
+		if (!axios.isCancel(thrown)) {
+		   console.log(thrown);
+		   this.setState({loadingRefs: this.state.loadingRefs-1});
+		}
 	    });
       }
    }

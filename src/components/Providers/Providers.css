@@ -7,7 +7,7 @@
 
 .providers {
 	@insert .categories-providers;
-	margin:10px 0 0 0;
+	margin:10px 20px 0 0;
 }
 
 .single-provider {

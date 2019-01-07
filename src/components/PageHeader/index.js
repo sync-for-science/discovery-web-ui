@@ -32,6 +32,7 @@ export default class PageHeader extends Component {
       menuIsOpen: false,
       currentViewName: null,
       viewHelpIsOpen: false,
+      viewHelpRemainingTime: 0
    }
 
    onKeydown = (event) => {
@@ -51,7 +52,7 @@ export default class PageHeader extends Component {
 
    componentWillUnmount() {
       window.removeEventListener('keydown', this.onKeydown);
-      this.clearViewHelpTimeout();
+      this.clearViewHelpInterval();
    }
 
    componentDidUpdate(prevProps, prevState) {
@@ -142,8 +143,8 @@ export default class PageHeader extends Component {
    }
 
    viewClick(viewName) {
-      // Clear previous timeout if still pending
-      this.clearViewHelpTimeout();
+      // Clear previous interval if still pending
+      this.clearViewHelpInterval();
 
       if (viewName !== this.state.currentViewName) {
 	 // Clicked different view
@@ -167,38 +168,49 @@ export default class PageHeader extends Component {
 	       break;
 	 }
 
-	 // Open help if closed then reset timer
+	 // Open help if closed then reset interval
 	 if (!this.state.viewHelpIsOpen) {
 	    this.setState( {viewHelpIsOpen: true} );
 	 }
-	 this.setViewHelpTimeout();
+	 this.setViewHelpInterval();
 
       } else {
 	 // Clicked same view -- toggle help
 	 if (!this.state.viewHelpIsOpen) {
-	    this.setViewHelpTimeout();
+	    this.setViewHelpInterval();
 	 }
 	 this.setState( {viewHelpIsOpen: !this.state.viewHelpIsOpen} );
       }
    }
 
-   setViewHelpTimeout() {
+   setViewHelpInterval() {
       if (config.viewHelpCloseTime > 0) {
-	 this.viewHelpPendingTimeout = setTimeout( () => this.setState( {viewHelpIsOpen: false} ), config.viewHelpCloseTime);
+	 this.viewHelpInterval = setInterval(
+	    () => {
+	       let remaining = this.state.viewHelpRemainingTime - 1;
+	       this.setState( {viewHelpRemainingTime: remaining} );
+	       if (remaining === 0) {
+		  this.setState( {viewHelpIsOpen: false} );
+		  this.clearViewHelpInterval();
+	       }
+	    }, 1000);
+
+      	 this.setState( {viewHelpRemainingTime: config.viewHelpCloseTime} );
       }
    }
 
-   clearViewHelpTimeout() {
-      if (this.viewHelpPendingTimeout) {
-	 clearTimeout(this.viewHelpPendingTimeout);
-	 this.viewHelpPendingTimeout = null;
+   clearViewHelpInterval() {
+      if (this.viewHelpInterval) {
+	 clearInterval(this.viewHelpInterval);
+	 this.viewHelpInterval = null;
+	 this.setState( {viewHelpRemainingTime: 0} );
       }
    }
 
    onCloseViewHelp = this.onCloseViewHelp.bind(this);
    onCloseViewHelp() {
       this.setState( {viewHelpIsOpen: false} );
-      this.clearViewHelpTimeout();
+      this.clearViewHelpInterval();
    }
 
    get viewHelpTitle() {
@@ -236,7 +248,8 @@ export default class PageHeader extends Component {
 	       <div className='view-help-title-container'>
 		  <div className='view-help-title'>
 		     <div className={this.viewHelpIconClass[this.state.currentViewName]}>
-			{ this.viewHelpTitle[this.state.currentViewName] } 
+			{ this.viewHelpTitle[this.state.currentViewName]
+			  + (config.viewHelpCloseCountdown ? ' (' + this.state.viewHelpRemainingTime + ' sec)' : '') } 
 		     </div>
 		     <button className='view-help-close-button' onClick={this.onCloseViewHelp} />
 	          </div>

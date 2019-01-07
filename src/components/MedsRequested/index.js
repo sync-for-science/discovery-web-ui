@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { get } from 'axios';
+import axios from 'axios';
 
 import './MedsRequested.css';
 import '../ContentPanel/ContentPanel.css';
@@ -25,6 +25,8 @@ export default class MedsRequested extends Component {
       matchingData: null,
       loadingRefs: 0
    }
+
+   AxiosCancelSource = axios.CancelToken.source();
 
    sortMeds(a, b) {
       return stringCompare(a.data.medicationCodeableConcept ? a.data.medicationCodeableConcept.coding[0].display : '',
@@ -59,10 +61,16 @@ export default class MedsRequested extends Component {
       }
    }
 
+   componentWillUnmount() {
+      // Cancel any pending async gets
+      this.AxiosCancelSource.cancel('unmounting');
+   }
+
    resolveMedicationReference(elt) {
       if (elt.data.medicationReference && !elt.data.medicationReference.code) {
 	 this.setState({loadingRefs: this.state.loadingRefs+1});
-	 get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.medicationReference.reference))
+	 axios.get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.medicationReference.reference),
+		   { cancelToken: this.AxiosCancelSource.token } )
 	    .then(response => {
 		// Add the de-referenced data to the medicationReference element AND create the medicationCodeableConcept element
 		elt.data.medicationReference = Object.assign(elt.data.medicationReference, response.data);
@@ -70,9 +78,11 @@ export default class MedsRequested extends Component {
 		this.setState({loadingRefs: this.state.loadingRefs-1,
 			       matchingData: this.state.matchingData.concat([elt]).sort(this.sortMeds)});
 	    })
-	    .catch(fetchError => {
-		console.log(fetchError);
-		this.setState({loadingRefs: this.state.loadingRefs-1});
+	    .catch(thrown => {
+		if (!axios.isCancel(thrown)) {
+		   console.log(thrown);
+		   this.setState({loadingRefs: this.state.loadingRefs-1});
+		}
 	    });
       } else {
 	 console.log('Missing medicationReference!');
@@ -84,15 +94,18 @@ export default class MedsRequested extends Component {
    resolveReasonReference(elt) {
       if (elt.data.reasonReference && elt.data.reasonReference[0] && !elt.data.reasonReference[0].code) {
 	 this.setState({loadingRefs: this.state.loadingRefs+1});
-	 get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.reasonReference[0].reference))
+	 axios.get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.reasonReference[0].reference),
+		   { cancelToken: this.AxiosCancelSource.token } )
 	    .then(response => {
 		// Add the de-referenced data to the reasonReference element
 		elt.data.reasonReference[0] = Object.assign(elt.data.reasonReference[0], response.data);
 		this.setState({loadingRefs: this.state.loadingRefs-1});
 	    })
-	    .catch(fetchError => {
-		console.log(fetchError);
-		this.setState({loadingRefs: this.state.loadingRefs-1});
+	    .catch(thrown => {
+		if (!axios.isCancel(thrown)) {
+		   console.log(thrown);
+		   this.setState({loadingRefs: this.state.loadingRefs-1});
+		}
 	    });
       }
    }
