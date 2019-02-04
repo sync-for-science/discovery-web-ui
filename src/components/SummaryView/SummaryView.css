@@ -4,14 +4,59 @@
 
 
 /* Sync for Science Discovery SummaryView Stylesheet */
-/* v.01.06 Updated 12/31/2018 */
+/* v.01.07 Updated 01/15/2019 */
 
 .default-view {
    position: fixed;
-   top:82px;
-   left:204px;
-   width:100%;
-   height:calc(100% - 62px - 12px);
+   top:62px;
+   left:214px;
+   width:calc(100% - 234px);
+   height:calc(100%);
+}
+
+.timeline-placeholder {
+	height:80px;
+	width:100%;
+	background-image: url("../../png/timeline-background-01.png");
+	background-repeat: repeat-x;
+	border-top:2px solid var(--white);
+	border-bottom:2px solid var(--white);
+}
+
+.default-view-title {
+	display: flex;
+   flex-direction: row;
+   width:calc(100% - 90px);
+   height:50px;
+   min-height:50px;
+   padding:0 20px 0 70px;
+	border-top:2px solid var(--accent);
+   background-color: var(--blue-dark);
+	background-image: url("../../svg/view-icon-overview-on.svg");
+	background-repeat: no-repeat;
+	background-position:20px 8px;
+	background-size:35px 35px;
+   font-family: discovery-data;
+   font-size: 1.000rem;
+   color:var(--white);
+   align-items: center;
+   justify-content:flex-start;
+}
+
+.default-view-title-name {
+	font-family:discovery-bold;
+   font-size:1.000rem;
+	color:var(--white);
+	margin:0;
+}
+
+.default-view-container {
+	height:calc(100% - 216px);
+	border-left:2px solid var(--discovery-blue);
+	border-right:2px solid var(--discovery-blue);
+	border-bottom:2px solid var(--discovery-blue);
+	padding:20px 20px 0 20px;
+	margin-top: -20px;
 }
 
 .default-body-row {
@@ -116,14 +161,14 @@
 	font-family: discovery-bold;
 	border-bottom: solid 1px var(--discovery-blue);
 	margin:20px 0 10px 0;
-	width:600px;
+	width:100%;
 }
 
 .default-providers-title {
 	font-family: discovery-bold;
 	border-bottom: solid 1px var(--discovery-blue);
 	margin:20px 0 0 0;
-	width:600px;
+	width:100%;
 }
 
 .default-providers-mrn {

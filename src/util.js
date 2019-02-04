@@ -40,11 +40,47 @@ export function formatDate(date, fillShortDates, surpressTime) {
       if (surpressTime) {
 	 return datePart;
       } else {
-	 let time = new Date(strDate).toLocaleTimeString('en-US', {timeZone:'UTC', timeZoneName:'short'}).replace('UTC','GMT');
+	 let time = new Date(strDate).toLocaleTimeString('en-US', {timeZone:'UTC', timeZoneName:'short'})
+				     .replace('UTC','GMT').replace(' PM', 'pm').replace(' AM', 'am');
 	 return datePart + ' ' + time;
       }
    }
 }
+
+export function formatAge(birthDate, ageDate, prefix) {
+      let DAY_MS = 24 * 60 * 60 * 1000;
+      let MAX_ONLY_DAYS = 21;     // Max age to show just as "days"
+      let MAX_ONLY_WEEKS = 10;    // Max age to show just as "weeks"
+      let DAYS_PER_WEEK = 7;
+      let AVG_DAYS_PER_MONTH = 30.4;
+
+      let startDate = new Date(birthDate);
+      let endDate = new Date(ageDate);
+
+      if (endDate < startDate) {
+	 return 'ALERT: Date is prior to birth';
+
+      } else if (endDate - startDate < DAY_MS) {
+	 return 'at birth';
+
+      } else {
+	 let diffDate = new Date(endDate - startDate);
+	 let years = diffDate.toISOString().slice(0,4) - 1970;
+	 let months = diffDate.getMonth();
+	 let days = diffDate.getDate();
+	 let weeks = Math.floor((months * AVG_DAYS_PER_MONTH + days) / DAYS_PER_WEEK);
+
+	 if (years === 0 && months === 0 && days <= MAX_ONLY_DAYS) {
+	    return prefix + days + (days === 1 ? ' day' : ' days');
+
+	 } else if (years === 0 && weeks <= MAX_ONLY_WEEKS) {
+	    return prefix + weeks + ' weeks';
+
+	 } else {
+	    return prefix + (years > 0 ? years + 'yr' : '') + (years > 0 && months > 0 ? ' ' : '') + (months > 0 ? months + 'mo' : '');
+	 }
+      }
+   }
 
 export function formatDPs(number, places) {
    const mult = Math.pow(10, places);
@@ -147,5 +183,5 @@ export function inDateRange(date, rangeLow, rangeHigh) {
 // Categories that currently aren't supported in views with the category selector
 export function ignoreCategories() {
       return ['Patient', 'Practitioner', 'List', 'Exams', 'Encounter', 'Questionnaire', 'QuestionnaireResponse',
-	      'Observation (Other)', 'DiagnosticReport', 'CarePlan', 'Medication', 'Organization', 'Goal'];
+	      'Observation (Other)', 'DiagnosticReport', 'CarePlan', 'Medication', 'Organization', 'Goal', 'Claim'];
 }

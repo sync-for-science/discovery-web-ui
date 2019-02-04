@@ -5,7 +5,7 @@ import './SummaryView.css';
 import config from '../../config.js';
 import FhirTransform from '../../FhirTransform.js';
 import { formatPatientName, formatPatientAddress, formatPatientMRN } from '../../fhirUtil.js';
-import { formatDate } from '../../util.js';
+import { formatDate, formatAge } from '../../util.js';
 
 //
 // Render the "Summary view" of the participant's data
@@ -105,19 +105,33 @@ export default class SummaryView extends Component {
    }
 
    render() {
-      let chunk = this.props.resources ? { Name: formatPatientName(this.props.resources.pathItem('[category=Patient].data.name')),
-					   Address: formatPatientAddress(this.props.resources.pathItem('[category=Patient].data.address')),
-					   Gender: this.props.resources.pathItem('[category=Patient].data.gender'),
-					   'Birth Date': this.props.resources.pathItem('[category=Patient].data.birthDate'),
-					 }
-				       : null;
+      let birthDate = this.props.resources.pathItem('[category=Patient].data.birthDate');
+      let dateOfDeath = this.props.resources.pathItem('[category=Patient].data.deceasedDateTime');
+
+      let chunk = { Name: formatPatientName(this.props.resources.pathItem('[category=Patient].data.name')),
+		    Gender: this.props.resources.pathItem('[category=Patient].data.gender')};
+      if (dateOfDeath) {
+	 chunk['Birth Date'] = birthDate;
+	 chunk['Date of Death'] = formatDate(dateOfDeath, true, false);
+	 chunk['Age at Death'] = formatAge(birthDate, dateOfDeath, '');
+      } else {
+//	 chunk['Implied Current Age'] = formatAge(birthDate, new Date(), '');
+	 chunk['Birth Date'] = birthDate;
+      }
+      chunk.Address = formatPatientAddress(this.props.resources.pathItem('[category=Patient].data.address'));
 
       return (
 	 <div className='default-view'>
-	    <div className='default-data-owner-title'>Data Owner</div>
-	    { this.objToModalBody(chunk, 'default') }
-	    <div className='default-providers-title'>Providers</div>
-	    { this.renderProviders() }
+	    <div className='timeline-placeholder'></div>
+	    <div className='default-view-title'>
+				<div className='default-view-title-name'>Summary</div>
+		 </div>
+	    <div className='default-view-container'>
+	       <div className='default-data-owner-title'>Person</div>
+	       { this.objToModalBody(chunk, 'default') }
+	       <div className='default-providers-title'>Providers</div>
+	       { this.renderProviders() }
+	    </div>
 	 </div>
       );
    }

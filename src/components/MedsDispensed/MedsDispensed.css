@@ -48,3 +48,15 @@
 	padding:6px 0 0 0;
 	grid-column: 4;
 }
+
+.meds-dispensed-provider-label {
+	@insert .label;
+	width:auto;
+	padding:6px 0 0 0;
+	grid-column:1;
+}
+
+.meds-dispensed-provider-value {
+	@insert .value;
+	grid-column:2;
+}

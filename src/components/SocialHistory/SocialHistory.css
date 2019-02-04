@@ -27,3 +27,14 @@
 	@insert .value;
 	grid-column:2;
 }
+.social-history-provider-label {
+	@insert .label;
+	width:auto;
+	padding:6px 0 0 0;
+	grid-column:1;
+}
+
+.social-history-provider-value {
+	@insert .value;
+	grid-column:2;
+}

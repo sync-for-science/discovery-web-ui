@@ -115,3 +115,15 @@
 	grid-column:21/40;
 	grid-row:1/6;
 }
+
+.lab-results-provider-label {
+	@insert .label;
+	width:auto;
+	padding:6px 0 0 0;
+	grid-column:1;
+}
+
+.lab-results-provider-value {
+	@insert .value;
+	grid-column:2;
+}

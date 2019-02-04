@@ -6,6 +6,8 @@ import Draggable from 'react-draggable';
 import './PageHeader.css';
 import config from '../../config.js';
 
+import { formatPatientName } from '../../fhirUtil.js';
+import FhirTransform from '../../FhirTransform.js';
 import Search from '../Search';
 
 //
@@ -21,7 +23,8 @@ export default class PageHeader extends Component {
       modalFn: PropTypes.func.isRequired,	// Callback to handle clicks on header icons
       viewFn: PropTypes.func.isRequired,	// Callback to handle view selection
       searchData: PropTypes.array,
-      searchCallback: PropTypes.func.isRequired
+      searchCallback: PropTypes.func.isRequired,
+      resources: PropTypes.instanceOf(FhirTransform)
    }
 
    state = {
@@ -270,12 +273,15 @@ export default class PageHeader extends Component {
 		   (logoClass,index) => <button className={logoClass+'-off'} key={logoClass+index} onClick={() => this.itemClick('logoModal')} /> )}
 	    </div>
 	    <div className='view-controls-box'>
-	      <button className='default-view-button-off' onClick={() => this.viewClick('summaryView')}></button>
 	      <button className='longitudinal-view-button-off' onClick={() => this.viewClick('longitudinalView')}></button>
-	      <button className='compare-view-button-off' onClick={() => this.viewClick('compareView')}></button>
 	      <button className='report-view-button-off' onClick={() => this.viewClick('reportView')}></button>
+	      <button className='compare-view-button-off' onClick={() => this.viewClick('compareView')}></button>
+	      <button className='default-view-button-off' onClick={() => this.viewClick('summaryView')}></button>
 	    </div>
 	    { this.state.viewHelpIsOpen && this.renderViewHelp() }
+	    <div className='patient-name'>
+	       { this.props.resources && formatPatientName(this.props.resources.pathItem('[category=Patient].data.name')) }
+	    </div>
 	    { this.props.searchData && <Search data={this.props.searchData} callback={this.props.searchCallback} />}
 	    <div className='header-controls-box'>
 	      {/* make highlight active/inactive first <button className={'inactive-light-'+(this.state.inactiveLight ? 'on' : 'off')}>Inactive</button> */}

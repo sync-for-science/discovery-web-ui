@@ -2,7 +2,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery Search Stylesheet */
-/* v.01.14 Updated 12/20/2018 */
+/* v.01.15 Updated 1/31/2019 */
 
 .search {
    position:relative;
@@ -15,7 +15,7 @@
    align-items:center;
    margin:10px 0;
 	padding:0 20px 0 20px;
-	border-right:solid 1px var(--white-75percent);
+//	border-right:solid 1px var(--white-75percent);
 	border-left:solid 1px var(--white-75percent); 
 }
 

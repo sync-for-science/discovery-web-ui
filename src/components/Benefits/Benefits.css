@@ -3,98 +3,154 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery Benefits Stylesheet */
-/* v.01.04 Updated 12/26/2018 */
+/* v.01.05 Updated 1/28/2019 */
 
 .benefits-billable-label {
-	@insert .label;
-	display:flex;
-	padding:3px 0 0 0;   
-	grid-column:1;
+   @insert .label;
+   display:flex;
+   padding:3px 0 0 0;   
+   grid-column:1;
 }
 
 .benefits-billable-value {
-	@insert .value;
-	font-family: discovery-data;
-	width:auto;
-	padding:0;
-	grid-column:2/span 2;
+   @insert .value;
+   font-family: discovery-data;
+   width:auto;
+   padding:0;
+   grid-column:2/span 2;
 }
 
 .benefits-billable-value-separator {
- 	@insert .label;
-	width:auto;
-	text-align: center;
-	padding:3px 0 0 0; 
-	grid-column: 4;
+   @insert .label;
+   width:auto;
+   text-align: center;
+   padding:3px 0 0 0; 
+   grid-column:4;
 }
 
 .benefits-billable-value2 {
-	@insert .value;
-	font-family: discovery-data;
-	width:auto;
-	grid-column:5/span 7;
+   @insert .value;
+   font-family: discovery-data;
+   width:auto;
+   grid-column:5/span 7;
 }
 
 .benefits-claim-type-label {
-	@insert .label;
-	padding:6px 0 0 0; 
-	grid-column:1;
+   @insert .label;
+   padding:6px 0 0 0; 
+   grid-column:1;
 }
 
 .benefits-claim-type-value {
-	@insert .value;
-	grid-column:2;
+   @insert .value;
+   grid-column:2/span 7;
 }
 
 .benefits-cost-label {
-	@insert .label;
-	padding:3px 0 0 0; 
-	grid-column:1;
+   @insert .label;
+   padding:3px 0 0 0; 
+   grid-column:1;
 }
 
 .benefits-cost-value {
-	@insert .value;
-	width:auto;
-	font-family: discovery-data;
-	text-align: right;
-	grid-column:2;
+   @insert .value;
+   width:auto;
+   font-family: discovery-data;
+   text-align: right;
+   grid-column:2;
 }
 
 .benefits-cost-currency {
-	@insert .label;
-	text-align: left;
-	padding:3px 10px 0 0;
-	grid-column:3;
+   @insert .label;
+   text-align: left;
+   padding:3px 10px 0 0;
+   grid-column:3;
 }
 
 .benefits-benefit-label {
-	@insert .label;
-	padding:3px 0 0 0; 
-	grid-column:1;
+   @insert .label;
+   padding:3px 0 0 0; 
+   grid-column:1;
 }
 
 .benefits-benefit-value {
-	@insert .value;
-	width: auto;
-	font-family: discovery-data;
-	text-align: right;
-	grid-column:2;
+   @insert .value;
+   width: auto;
+   font-family: discovery-data;
+   text-align: left;
+   grid-column:2/span 3;
 }
 
 .benefits-benefit-currency {
-	@insert .label;
-	padding:3px 10px 0 0; 
-	grid-column:3;
+   @insert .label;
+   padding:3px 10px 0 0; 
+   grid-column:3;
+}
+
+.benefits-contained-label-main {
+   @insert .label;
+   padding:3px 0 0 0; 
+   grid-column:1;
+}
+
+.benefits-contained-label-sub1 {
+   @insert .label;
+   padding:3px 0 0 0; 
+   text-align: left;
+   grid-column:2;
+}
+
+.benefits-contained-label-sub2 {
+   @insert .label;
+   padding:3px 0 0 0; 
+   text-align: left;
+   grid-column:2;
+}
+
+.benefits-contained-value1 {
+   @insert .value;
+   width: auto;
+   font-family: discovery-data;
+   text-align: left;
+   grid-column:2/span 3;
+}
+
+.benefits-contained-value2 {
+   @insert .value;
+   width: auto;
+   font-family: discovery-data;
+   text-align: left;
+   grid-column:3/span 3;
+}
+
+.benefits-contained-value3 {
+   @insert .value;
+   width: auto;
+   font-family: discovery-data;
+   text-align: left;
+   grid-column:3/span 3;
+}
+
+.benefits-provider-label {
+   @insert .label;
+   width:auto;
+   padding:6px 0 0 0;
+   grid-column:1;
+}
+
+.benefits-provider-value {
+   @insert .value;
+   grid-column:2/span 7;
 }
 
 .benefits-status-label {
-	@insert .label;
-	padding:6px 0 0 0; 
-	grid-column:1;
+   @insert .label;
+   padding:6px 0 0 0; 
+   grid-column:1;
 }
 
 .benefits-status-value {
-	@insert .value;
-	text-align: left;
-	grid-column:2;
+   @insert .value;
+   text-align: left;
+   grid-column:2;
 }

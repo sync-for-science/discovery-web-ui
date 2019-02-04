@@ -58,6 +58,14 @@ export default class LongitudinalView extends Component {
 
    componentDidMount() {
       this.updateSvgWidth();
+
+      // Open content panel with dot click context set to the latest date
+      this.setState({ dotClickContext: { parent: 'TimeWidget', rowName: 'Full', dotType: 'active',
+					 minDate: this.props.dates.minDate, maxDate: this.props.dates.maxDate,
+					 date: this.props.dates.maxDate,
+					 data: this.fetchDataForDot('TimeWidget', 'Full', this.props.dates.maxDate),
+					 position: this.props.dates.allDates[this.props.dates.allDates.length-1].position },
+		      contentPanelIsOpen: true });
    }
 
    componentDidUpdate(prevProps, prevState) {
@@ -82,14 +90,14 @@ export default class LongitudinalView extends Component {
 
    onKeydown = (event) => {
       if (event.key === 'ArrowLeft' && !this.state.contentPanelIsOpen) {
-//      if (event.key === 'ArrowLeft') {
-	 this.state.dotClickContext ? this.onNextPrevClick('prev') : this.onNextPrev('prev');
+//	 this.state.dotClickContext ? this.onNextPrevClick('prev') : this.onNextPrev('prev');
+	 this.onNextPrevClick('prev');
       } else if (event.key === 'ArrowRight' && !this.state.contentPanelIsOpen) {
-//      } else if (event.key === 'ArrowRight') {
-	 this.state.dotClickContext ? this.onNextPrevClick('next') : this.onNextPrev('next');
-      } else if (this.state.dotClickContext && event.key === 'Enter') {
-	 // Open content panel with (copy of) prior dot click context
-	 this.setState({ dotClickContext: Object.assign({}, this.state.dotClickContext) });
+//	 this.state.dotClickContext ? this.onNextPrevClick('next') : this.onNextPrev('next');
+	 this.onNextPrevClick('next');
+//      } else if (this.state.dotClickContext && event.key === 'Enter') {
+//	 // Open content panel with (copy of) prior dot click context
+//	 this.setState({ dotClickContext: Object.assign({}, this.state.dotClickContext) });
       }
    }
 
@@ -150,10 +158,12 @@ export default class LongitudinalView extends Component {
 	 let { startDate, endDate, allDates } = this.props.dates;
          let searchRefs = this.props.searchRefs;
 	 let dotClickContext = this.state.dotClickContext;
-	 let matchContext = dotClickContext && dotClickContext.parent === parent && dotClickContext.rowName === rowName;
+//	 let matchContext = dotClickContext && dotClickContext.parent === parent && dotClickContext.rowName === rowName;
+	 let matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget' ||
+						(dotClickContext.parent === parent && dotClickContext.rowName === rowName));
 	 let inactiveHighlightDots = matchContext && allDates.reduce((res, elt) =>
 							 ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
-								     ? this.includeDot(res, elt, 'inactive-highlight', parent === 'TimeWidget') : res, []);
+								? this.includeDot(res, elt, 'inactive-highlight', parent === 'TimeWidget') : res, []);
 	
 	 let activeHighlightDots = matchContext && allDates.reduce((res, elt) =>
 							 (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
@@ -175,9 +185,7 @@ export default class LongitudinalView extends Component {
 	       if (fetchAll) {
 		  return allDates;
 	       } else {
-		  return combine(//allDates.reduce((res, elt) => !this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'inactive') : res, []),
-				 allDates.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active') : res, []),
-//				 searchRefs.reduce((res, elt) => !this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'inactive-search') : res, []),
+		  return combine(allDates.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active') : res, []),
 				 searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active-search') : res, []),
 				 highlightDots);
 	       }
@@ -190,14 +198,10 @@ export default class LongitudinalView extends Component {
 	       if (fetchAll) {
 		  return provDateObjs;
 	       } else {
-		  return combine(//provDateObjs.reduce((res, elt) => !isEnabled || !this.isActiveTimeWidget(elt)
-//									? this.includeDot(res, elt, 'inactive') : res, []),
-				 provDateObjs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
+		  return combine(provDateObjs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
 									? this.includeDot(res, elt, 'inactive') : res, []),
 				 provDateObjs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
 									? this.includeDot(res, elt, 'active') : res, []),
-//				 provSearchRefs.reduce((res, elt) => !isEnabled || !this.isActiveTimeWidget(elt)
-//									? this.includeDot(res, elt, 'inactive-search') : res, []),
 				 provSearchRefs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
 									? this.includeDot(res, elt, 'inactive-search') : res, []),
 				 provSearchRefs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
@@ -213,14 +217,10 @@ export default class LongitudinalView extends Component {
 	       if (fetchAll) {
 		  return catDateObjs;
 	       } else {
-		  return combine(//catDateObjs.reduce((res, elt) => !isEnabled || !this.isActiveTimeWidget(elt)
-//									? this.includeDot(res, elt, 'inactive') : res, []),
-				 catDateObjs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
+		  return combine(catDateObjs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
 									? this.includeDot(res, elt, 'inactive') : res, []),
 				 catDateObjs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
 									? this.includeDot(res, elt, 'active') : res, []),
-//				 catSearchRefs.reduce((res, elt) => !isEnabled || !this.isActiveTimeWidget(elt)
-//									? this.includeDot(res, elt, 'inactive-search') : res, []),
 				 catSearchRefs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
 									? this.includeDot(res, elt, 'inactive-search') : res, []),
 				 catSearchRefs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
@@ -295,8 +295,8 @@ export default class LongitudinalView extends Component {
 //	      maxDate: this.props.dates.allDates.slice().reverse().find(elt => elt.position <= maxActivePos).date};
    }
 
-   //
-   // Handle next/prev arrow movements (no dotClickContext)
+   // [CURRENTLY NOT USED -- always a dotClickContext]
+   // Handle next/prev arrow movements (where there is no dotClickContext)
    //   direction:	'next' or 'prev'
    //
    onNextPrev = this.onNextPrev.bind(this);
@@ -339,7 +339,7 @@ export default class LongitudinalView extends Component {
    }
 
    //
-   // Handle ContentPanel next/prev button clicks
+   // Handle ContentPanel next/prev button clicks (with dotClickContext)
    //   direction:	'next' or 'prev'
    // Returns true if the button should be enabled, else false
    //
@@ -347,7 +347,7 @@ export default class LongitudinalView extends Component {
    onNextPrevClick (direction) {
       let thumbDistance = this.state.maxActivePos - this.state.minActivePos;
       let oldPosition = this.state.dotClickContext.position;
-      let newContext = this.state.dotClickContext;
+      let newContext = Object.assign({}, this.state.dotClickContext);
       let dates = this.fetchDotPositions(newContext.parent, newContext.rowName, true, true);
       let currDateIndex = dates.findIndex( elt => elt.date === newContext.date);
 
@@ -367,9 +367,11 @@ export default class LongitudinalView extends Component {
 	    newContext.date = dates[currDateIndex+1].date;
 	    newContext.position = dates[currDateIndex+1].position;
 	    ret = currDateIndex+1 < dates.length-1;
-	    // Adjust thumb positions
-	    let newMax = Math.min(1.0, this.state.maxActivePos + newContext.position - oldPosition);
-	    this.setState({ minActivePos: newMax - thumbDistance, maxActivePos: newMax });
+	    // Adjust thumb positions if current dot is in active range
+	    if (this.isActiveTimeWidget(this.state.dotClickContext)) {
+	       let newMax = Math.min(1.0, this.state.maxActivePos + newContext.position - oldPosition);
+	       this.setState({ minActivePos: newMax - thumbDistance, maxActivePos: newMax });
+	    }
 	 }
       } else {
 	 // 'prev'
@@ -380,9 +382,11 @@ export default class LongitudinalView extends Component {
 	    newContext.date = dates[currDateIndex-1].date;
 	    newContext.position = dates[currDateIndex-1].position;
 	    ret = currDateIndex-1 > 0;
-	    // Adjust thumb positions
-	    let newMin = Math.max(0.0, this.state.minActivePos + newContext.position - oldPosition);
-	    this.setState({ minActivePos: newMin, maxActivePos: newMin + thumbDistance });
+	    // Adjust thumb positions if current dot is in active range
+	    if (this.isActiveTimeWidget(this.state.dotClickContext)) {
+	       let newMin = Math.max(0.0, this.state.minActivePos + newContext.position - oldPosition);
+	       this.setState({ minActivePos: newMin, maxActivePos: newMin + thumbDistance });
+	    }
 	 }
       }
 
@@ -463,8 +467,8 @@ export default class LongitudinalView extends Component {
 			dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} />
 	    <div className='longitudinal-view-categories-and-providers'>
 	       <Categories>
-	          <CategoryRollup key='rollup' svgWidth={this.state.svgWidth}
-			          dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
+		  <CategoryRollup key='rollup' noDots={!this.state.timelineIsExpanded} svgWidth={this.state.svgWidth} dotPositionsFn={this.fetchDotPositions}
+				  dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
 	          { this.state.catsExpanded ? [
 		       <div className='longitudinal-view-category-nav-spacer-top' key='0' />,
 	               this.props.categories && this.props.categories.map(

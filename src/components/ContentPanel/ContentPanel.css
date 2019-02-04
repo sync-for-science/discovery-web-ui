@@ -2,63 +2,52 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery Content Panel Stylesheet */
-/* v.01.19 Updated 11/28/2018 */
+/* v.01.23 Updated 01/28/2019 */
 
 .content-panel {
    position: absolute;
-   left:220px;
-   display: flex;
-   flex-direction: row;
-   width: 85%;
-   max-width: 85%;
+   left:214px;
+   top:0;
+   width:calc(100% - 235px);
+   max-width:calc(100% - 235px);
    height:calc(100vh - 10.70rem);
-}
-
-.content-panel-left {
-   position:relative;
-   left:0;
-   display:flex; 
-   flex-direction:column;
-   align-content:center;
-   width:50px;
-   height:100%;
-   background-color:transparent;
-   padding:0;
-   margin:0;
 }
 
 .content-panel-button {
    height:36px;
    width:36px;
-	min-width:36px;
+   min-width:36px;
    background-color: transparent;
    background-repeat: no-repeat;
    background-position: center center;
-	background-size: 32px 32px;
+   background-size: 32px 32px;
    padding:0;
    margin:0;
    border: 0;
+   cursor: pointer;
 }
 
 .content-panel-left-button {
    @insert .content-panel-button;
    background-image: url(../../svg/arrow-datapanel-left-on.svg);
+   margin:0 0 0 20px;
 }
 
 .content-panel-left-button-off {
    @insert .content-panel-button;
    background-image: url(../../svg/arrow-datapanel-left-off.svg);
+   margin:0 0 0 20px;
 }
 
 .content-panel-right-button {
    @insert .content-panel-button;
-	margin:0 0 0 30px;
+   margin:0 10px 0 0;
    background-image: url(../../svg/arrow-datapanel-right-on.svg);
 }
 
 .content-panel-right-button-off {
    @insert .content-panel-button;
-	margin:0 0 0 30px;
+   margin:0 10px 0 0;
    background-image: url(../../svg/arrow-datapanel-right-off.svg);
 }
 
@@ -67,32 +56,40 @@
    left:0;
    display:flex;
    flex-direction: column;
-   height: 100%;
-	width:100%;
+   height:calc(100% - 1px);
+   width:calc(100% - 4px);
    background-color: var(--white);
    font-family:discovery-regular;
    font-size:1.000rem;
-   border:2px solid var(--blue-dark);
    padding:0;
 }
 
 .content-panel-inner-title {
    display: flex;
    flex-direction: row;
-   width: auto;
-   height:36px;
-   min-height:36px;
+   width:calc(100% - 36px);
+   height:50px;
+   min-height:50px;
+   max-height:50px;
    padding:0 20px;
    background-color: var(--blue-dark);
-   background-image: url(../../svg/icon-data-panel-title-bar.svg);
+   background-image: url("../../svg/view-icon-longitudinal-on.svg");
    background-repeat: no-repeat;
-   background-position:58px center;
-   background-size:24px 24px;
+   background-position:20px center;
+   background-size:35px 35px;
    font-family: discovery-data;
    font-size: 1.000rem;
    color:var(--white);
+   border-top:2px solid var(--accent);
    align-items: center;
    justify-content:flex-start;
+}
+
+.content-panel-view-name {
+   font-family:discovery-bold;
+   font-size:1.000rem;
+   color:var(--white);
+   margin:0 0 0 50px;
 }
 
 .content-panel-inner-title-payload-button {
@@ -101,14 +98,14 @@
    font-size:1.200rem;
    background-color:var(--blue-dark);
    color:var(--white);
-	white-space: nowrap;
+   white-space: nowrap;
 }
 
 .content-panel-inner-title-close-button {
    display:flex;
    height:36px;
    width:100%;
-	align-self: flex-end;
+   align-self: flex-end;
    border:0; 
    background-image:url(../../svg/close_icon.svg);
    background-repeat:no-repeat;
@@ -130,6 +127,9 @@
    overflow: auto;
    white-space: pre-wrap;
    padding:20px 0 0 0;
+   border-left:2px solid var(--blue-dark);
+   border-right:2px solid var(--blue-dark);
+   border-bottom:2px solid var(--blue-dark);
 }
 
 /* New consolidated styles start */
@@ -177,7 +177,7 @@
 .content-header {
    @insert .header;
    width:100%;
-	min-width: 90%;
+   min-width: 90%;
    border-bottom:1px solid var(--blue-dark);
    color: var(--blue-dark);
 }

@@ -3,7 +3,7 @@
 @import '../../css/CategoryProvider.css';
 
 /* Sync for Science Discovery Category Stylesheet */
-/* v.01.25 Updated 11/14/2018 */
+/* v.01.26 Updated 02/01/2019 */
 
 .category {
 	@insert .category-provider-row;
@@ -15,18 +15,33 @@
  
 .category-button-enabled {
 	@insert .category-provider-button;
-	background-color: var(--category);
-	border:1px solid var(--category);
+//	background-color: var(--category);
+//	border:1px solid var(--category);
 	font-family:discovery-bold;
-	color:var(--white);
+//	color:var(--white);
+	background-color: var(--white);
+//	border:1px solid var(--discovery-blue);
+	color:var(--discovery-blue);
+	padding:0 0 0 25px;
+	background-image: url("../../svg/checkmark-on.svg");
+	background-repeat: no-repeat;
+	outline:none;
+	border:0;
 }
 
 .category-button-disabled {
 	@insert .category-provider-button;
 	background-color: var(--white);
-	border:1px solid var(--category);
+//	border:1px solid var(--category);
 	font-family:discovery-regular;
-	color: var(--category);
+//	color: var(--category);
+//	border:1px solid var(--discovery-blue);
+	color: var(--discovery-blue);
+	padding:0 0 0 25px;
+	background-image: url("../../svg/checkmark-off.svg");
+	background-repeat: no-repeat;
+	outline:none;
+	border:0;
 }
 
 .category-svg-container {

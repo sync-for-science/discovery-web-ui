@@ -2,30 +2,69 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery CompareView Stylesheet */
-/* v.01.04 Updated 12/28/2018 */
+/* v.01.05 Updated 01/14/2018 */
 
 .compare-view {
    position: fixed;
-   top:95px;
-   left:0;
-   width:100%;
-   height:calc(100% - 95px - 12px);
+   top:146px;
+   left:214px;
+   width:calc(100% - 234px);
+	min-width:840px;
+   height:calc(100% - 75px - 12px);
+	margin:0;
+}
+
+.compare-title {
+	display: flex;
+   flex-direction: row;
+   width:calc(100% - 40px);
+   height:50px;
+   min-height:50px;
+   padding:0 20px 0 70px;
+	border-top:2px solid var(--accent);
+   background-color: var(--blue-dark);
+	background-image: url("../../svg/view-icon-comparison-on.svg");
+	background-repeat: no-repeat;
+	background-position:20px 8px;
+	background-size:35px 35px;
+   font-family: discovery-data;
+   font-size: 1.000rem;
+   color:var(--white);
+   align-items: center;
+   justify-content:flex-start;
+}
+
+.compare-title-name {
+	font-family:discovery-bold;
+   font-size:1.000rem;
+	color:var(--white);
+	margin:0;
+}
+
+.compare-title-patient-name {
+   font-family:discovery-data-bold;
+   font-size:1.200rem;
+   color:var(--white);
+   white-space: nowrap;
+   margin-left:35px;
 }
 
 .compare-contents {
    position: fixed;
-   top: 165px;
-   left: 210px;
-   min-height: calc(100% - 165px - 15px);
-   max-height: calc(100% - 165px - 15px);
-   min-width: calc(100% - 210px - 20px);
-   max-width: calc(100% - 210px - 20px);
+   top: 196px;
+   left: 214px;
+   min-height: calc(100% - 196px - 20px - 15px);
+   max-height: calc(100% - 196px - 20px - 15px);
+   min-width: calc(100% - 210px - 28px);
+   max-width: calc(100% - 210px - 28px);
    background-color: var(--discovery-background);
+	padding:20px 0 0 0;
    white-space: pre-wrap;
    display:flex;
    flex-direction: column;
-   overflow-x: auto;
-   overflow-y: hidden;
+   overflow-y:hidden;
+	overflow-x: hidden;
+	border:2px solid var(--discovery-blue);
 }
 
 .compare-matrix {
@@ -169,8 +208,8 @@
    position: relative;
    left:0;
    bottom:0;
-   height:110px;
-	min-height: 110px;
+   height:180px;
+	min-height:180px;
    display: flex;
    flex-direction: row;
    padding:0 0 0 280px;

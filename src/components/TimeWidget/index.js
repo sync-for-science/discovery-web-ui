@@ -62,21 +62,23 @@ export default class TimeWidget extends Component {
    onLeftDragStop = this.onLeftDragStop.bind(this);
    onLeftDragStop(e, data) {
       const width = numericPart(this.props.timelineWidth);
-      const showExpanded = data.x !== 0 || this.state.rightX !== numericPart(this.props.timelineWidth);
-//      let dates = this.props.setLeftRightFn(data.x/width, this.state.rightX/width);
-      this.props.setLeftRightFn(data.x/width, this.state.rightX/width, showExpanded);
-      let dates = {minDate: this.locToDate(data.x/width), maxDate: this.locToDate(this.state.rightX/width)};
-       this.setState({ leftX: data.x, thumbDates: dates, showExpanded: showExpanded });
+      const leftTarget = (data.x/width < config.timeWidgetThumbResetZone) ? 0 : data.x/width;
+      const showExpanded = leftTarget !== 0 || this.state.rightX !== numericPart(this.props.timelineWidth);
+
+      this.props.setLeftRightFn(leftTarget, this.state.rightX/width, showExpanded);
+      let dates = {minDate: this.locToDate(leftTarget), maxDate: this.locToDate(this.state.rightX/width)};
+      this.setState({ leftX: leftTarget*width, thumbDates: dates, showExpanded: showExpanded });
    }
 
    onRightDragStop = this.onRightDragStop.bind(this);
    onRightDragStop(e, data) {
       const width = numericPart(this.props.timelineWidth);
-      const showExpanded = this.state.leftX !== 0 || data.x !== numericPart(this.props.timelineWidth);
-//      let dates = this.props.setLeftRightFn(this.state.leftX/width, data.x/width);
-      this.props.setLeftRightFn(this.state.leftX/width, data.x/width, showExpanded);
-      let dates = {minDate: this.locToDate(this.state.leftX/width), maxDate: this.locToDate(data.x/width)};
-      this.setState({ rightX: data.x, thumbDates: dates, showExpanded: showExpanded });
+      const rightTarget = (data.x/width > 1.0 - config.timeWidgetThumbResetZone) ? 1.0 : data.x/width;
+      const showExpanded = this.state.leftX !== 0 || rightTarget*width !== numericPart(this.props.timelineWidth);
+
+      this.props.setLeftRightFn(this.state.leftX/width, rightTarget, showExpanded);
+      let dates = {minDate: this.locToDate(this.state.leftX/width), maxDate: this.locToDate(rightTarget)};
+      this.setState({ rightX: rightTarget*width, thumbDates: dates, showExpanded: showExpanded });
    }
 
    renderFullYears() {
@@ -210,20 +212,6 @@ export default class TimeWidget extends Component {
       );
    }
 
-   renderThumbConnectors() {
-      const leftShimWidth = 10;		// Kluge: DOM elts not defined at the point we want to access its width
-      const rightShimWidth = 10;
-      return (
-	 <svg className='timeline-thumb-connector-svg' width={numericPart(this.props.timelineWidth)+leftShimWidth+rightShimWidth}
-						       preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg'>
-	    <line className='timeline-thumb-connector' key='0' x1={leftShimWidth} y1='0'
-							       x2={this.props.thumbLeft*numericPart(this.props.timelineWidth)+rightShimWidth} y2='0' />
-	    <line className='timeline-thumb-connector' key='1' x1={this.props.thumbRight*numericPart(this.props.timelineWidth)+leftShimWidth-1.5} y1='0'
-	  						       x2={numericPart(this.props.timelineWidth)+rightShimWidth+1.0} y2='0' />
-	 </svg> 
-      );
-   }
-
    render() {
       const rangeMin = formatDate(this.state.thumbDates ? this.state.thumbDates.minDate : this.props.startDate, true, true);
       const rangeMax = formatDate(this.state.thumbDates ? this.state.thumbDates.maxDate : this.props.endDate, true, true);
@@ -238,20 +226,26 @@ export default class TimeWidget extends Component {
 	       </div>
 	    </div>
 	    <div className='timeline-controls' onDoubleClick={this.onDoubleClick.bind(this)}>
-	       { this.renderFullYears() }
 	       <div className='timeline-selection-box'> 
+		  <div className='timeline-selector-gradient-container'>
+		     <div className='timeline-selector-gradient-left' style={{width:this.state.leftX+'px'}} />
+		     <div className='timeline-selector-gradient-right'
+ 			  style={{left:this.state.rightX-this.state.leftX+'px', width:(numericPart(this.props.timelineWidth)-this.state.rightX)+'px'}} />
+		  </div>
+		  { this.renderFullYears() }
+	          <div className='timeline-selector-container'>
+		     <Draggable axis='x' bounds={{left:0, right:this.state.rightX-40}} position={{x:this.state.leftX, y:0}} onStop={this.onLeftDragStop}>
+		        <div className={this.state.leftX > 0 ? 'timeline-selector-left-alt' : 'timeline-selector-left'}></div>
+		     </Draggable>
+		     <Draggable axis='x' bounds={{left:this.state.leftX+40, right:rightBound}} position={{x:this.state.rightX, y:0}} onStop={this.onRightDragStop}>
+		        <div className={this.state.rightX < rightBound ? 'timeline-selector-right-alt' : 'timeline-selector-right'}></div>
+		     </Draggable>
+		  </div>
 	          <SVGContainer className='timeline-svg-container' svgClassName='timeline-svg' svgWidth={this.props.timelineWidth}>
 		     <DotLine dotPositions={this.props.dotPositionsFn('TimeWidget', 'Full', true)}
 			      context={ {parent:this.constructor.name, rowName:'Full'} }
 			      dotClickFn={this.props.dotClickFn} />
 	          </SVGContainer>
-		  <Draggable axis='x' bounds={{left:0, right:this.state.rightX}} position={{x:this.state.leftX, y:0}} onStop={this.onLeftDragStop}>	       
-		     <div className={this.state.showExpanded ? 'timeline-selector-left-alt' : 'timeline-selector-left'}></div>
-		  </Draggable>
-		  <Draggable axis='x' bounds={{left:this.state.leftX, right:rightBound}} position={{x:this.state.rightX, y:0}} onStop={this.onRightDragStop}>
-		     <div className={this.state.showExpanded ? 'timeline-selector-right-alt' : 'timeline-selector-right'}></div>
-		  </Draggable>
-		  { this.state.showExpanded && this.renderThumbConnectors() }
 	       </div>
 	       { this.state.showExpanded && this.renderExpandedYears() }
 	    </div>

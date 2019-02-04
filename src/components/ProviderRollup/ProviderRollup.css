@@ -3,7 +3,7 @@
 @import '../../css/CategoryProvider.css';
 
 /* Sync for Science Discovery ProviderRollup Stylesheet */
-/* v.01.14 Updated 11/16/2018 */
+/* v.01.15 Updated 02/01/2019 */
 
 .provider-rollup {
 	@insert .category-provider-rollup;
@@ -12,13 +12,15 @@
 .provider-rollup-nav-enabled {
 	@insert .category-provider-rollup-nav-enabled;
 	color:var(--white);
-	background-color:var(--provider);
+//	background-color:var(--provider);
+	background-color:var(--discovery-blue);
 }
 
 .provider-rollup-nav-disabled {
 	@insert .category-provider-rollup-nav-disabled;
 	color:var(--white);
-	background-color:var(--provider);
+//	background-color:var(--provider);
+	background-color:var(--discovery-blue);
 }
 
 .provider-rollup-svg-container {

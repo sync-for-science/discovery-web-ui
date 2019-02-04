@@ -18,5 +18,7 @@ export default {
    viewHelpCloseCountdown: false,	// true --> show countdown of remaining time before closing view help
 
    compareViewMaxCountHeight: 20,
-   summaryViewMaxMRNChars: 8
+   summaryViewMaxMRNChars: 8,
+
+   timeWidgetThumbResetZone: 0.0035	// Width of thumb "reset" zones in fraction of timeWidget width
 }

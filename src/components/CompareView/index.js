@@ -206,16 +206,21 @@ export default class CompareView extends Component {
    render() {
       let dispCategories = this.props.categories.filter(cat => !this.noCompareCategories.includes(cat));
       return (
-	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={dispCategories} providers={[]}
+	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={dispCategories} providers={this.props.providers}
 			  searchRefs={this.props.searchRefs} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}>
-	    <div className='compare-contents'>
-	       <div className='compare-matrix'>
-	          { this.renderMatrix() }
+	    <div className='compare-view'>
+	       <div className='compare-title'>
+		  <div className='compare-title-name'>Comparison</div>
 	       </div>
-	       <div className='compare-providers'>
-	          { this.renderProviders() }
+	       <div className='compare-contents'>
+		  <div className='compare-matrix'>
+		     { this.renderMatrix() }
+		  </div>
+		  <div className='compare-providers'>
+	             { this.renderProviders() }
+		  </div>
 	       </div>
-	    </div>
+	    </div>	
 	 </StandardFilters>
       );
    }

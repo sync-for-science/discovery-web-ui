@@ -2,7 +2,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.27 Updated 12/26/2018 */
+/* v.01.28 Updated 1/31/2019 */
 
 .page-header {
    position: fixed;
@@ -13,7 +13,7 @@
    flex-direction:row;
    height:60px;
    width:100%;
-	min-width:1024px;
+   min-width:1024px;
    margin:0; 
    padding:0;
    border-bottom:2px  solid var(--accent);
@@ -25,10 +25,10 @@
    display:flex;
    align-items:center;
    height:60px;
-	width:45%;
-   min-width:240px;
+   width:194px;
+   min-width:194px;
    padding:0 0 0 20px;
-	margin:0;
+   margin:0;
 }
 
 .logo-button-common {
@@ -37,24 +37,26 @@
    padding:0;
    background-color:transparent;
    background-repeat:no-repeat;
-   background-position:center center;
+   background-position:0 center;
    cursor: pointer;
 }
 
 .logo-s4s-button-off {
    @insert .logo-button-common;
-   width:220px;
+   width:194px;
    margin:0 20px 0 0;
    background-image:url(../../svg/logo-s4s-3-off.svg);
-   background-size:220px 60px;
+   background-size:210px 60px;
+//	background-position:0 0;
 }
 
 .logo-s4s-button-on {
    @insert .logo-button-common;
-   width:220px;
+   width:194px;
    margin:0 20px 0 0;
    background-image: url(../../svg/logo-s4s-3-on.svg);
-   background-size:220px 60px;
+   background-size:210px 60px;
+//	background-position:0 0;
 }
 
 .logo-harvard-button-off {
@@ -173,66 +175,67 @@
    display:flex;
    flex-direction:row;
    flex-wrap:nowrap;
-   align-items:center;
-   justify-content:flex-end;
-   height:60px;
+   align-items:left;
+   justify-content:flex-start;
+   height:40px;
    width:15%;
-	min-width:160px;
-   padding:0 20px;
-	margin:0;
+   min-width:160px;
+   padding:0 0 0 10px;
+   margin:10px 0;
+	border-left:1px solid var(--white-75percent);
 }
 
 .view-button {
-	height:40px;
-	width:40px;
-	min-width: 40px;
-	background-size: 30px 30px;
-	background-repeat:no-repeat;
-	background-color: transparent;
-	background-position:center center;
+   height:40px;
+   width:40px;
+   min-width: 40px;
+   background-size: 30px 30px;
+   background-repeat:no-repeat;
+   background-color: transparent;
+   background-position:center center;
    margin:0;
-	border:none;
-	cursor:pointer;
+   border:none;
+   cursor:pointer;
 }
 
 .default-view-button-off {
-	@insert .view-button;
-	background-image:url("../../svg/view-icon-overview-off.svg");
+   @insert .view-button;
+   background-image:url("../../svg/view-icon-overview-off.svg");
 }
 
 .default-view-button-on {
-	@insert .view-button;
-	background-image:url("../../svg/view-icon-overview-on.svg");
+   @insert .view-button;
+   background-image:url("../../svg/view-icon-overview-on.svg");
 }
 
 .longitudinal-view-button-off {
-	@insert .view-button;
-	background-image:url("../../svg/view-icon-longitudinal-off.svg");
+   @insert .view-button;
+   background-image:url("../../svg/view-icon-longitudinal-off.svg");
 }
 
 .longitudinal-view-button-on {
    @insert .view-button;
-	background-image:url("../../svg/view-icon-longitudinal-on.svg");
+   background-image:url("../../svg/view-icon-longitudinal-on.svg");
 }
 
 .compare-view-button-off {
-	@insert .view-button;
-	background-image:url("../../svg/view-icon-comparison-off.svg");
+   @insert .view-button;
+   background-image:url("../../svg/view-icon-comparison-off.svg");
 }
 
 .compare-view-button-on {
    @insert .view-button;
-	background-image:url("../../svg/view-icon-comparison-on.svg");
+   background-image:url("../../svg/view-icon-comparison-on.svg");
 }
 
 .report-view-button-off {
-	@insert .view-button;
-	background-image:url("../../svg/view-icon-report-off.svg");
+   @insert .view-button;
+   background-image:url("../../svg/view-icon-report-off.svg");
 }
 
 .report-view-button-on {
    @insert .view-button;
-	background-image:url("../../svg/view-icon-report-on.svg");
+   background-image:url("../../svg/view-icon-report-on.svg");
 }
 
 
@@ -246,9 +249,9 @@
    font-family:discovery-regular;
    border:1.5px solid var(--blue-dark);
    padding:0;
-	border:0 solid transparent;
-	background-color: transparent;
-	background-clip: padding-box;
+   border:0 solid transparent;
+   background-color: transparent;
+   background-clip: padding-box;
 }
 
 .view-help-title-container {
@@ -256,61 +259,61 @@
    height:25px;
    min-height:25px;
    align-items:center;
-	border:1.5px solid var(--blue-dark);
-	border-radius:10px 10px 0 0;
-	padding:0;
-	margin:0;
-	background-color:var(--blue-dark);
+   border:1.5px solid var(--blue-dark);
+   border-radius:10px 10px 0 0;
+   padding:0;
+   margin:0;
+   background-color:var(--blue-dark);
 }
 
 .view-help-title {
    display: flex;
    flex-direction: row;
-	height:25px;
-	width:178px;
-	margin:0;
-	align-items: center;
-	padding:0;
-	font-family: discovery-bold;
-	font-size:0.813rem; 
-	color:var(--white);
-	background-color: transparent;
+   height:25px;
+   width:178px;
+   margin:0;
+   align-items: center;
+   padding:0;
+   font-family: discovery-bold;
+   font-size:0.813rem; 
+   color:var(--white);
+   background-color: transparent;
 }
 
 .view-help-title-default-view {
-	width:140px;
-	background-image:url("../../svg/view-icon-overview-on.svg");
-	background-repeat:no-repeat;
-	background-size: 20px 20px;
-	background-position: 10px center;
-	padding: 0 0 0 40px;
+   width:140px;
+   background-image:url("../../svg/view-icon-overview-on.svg");
+   background-repeat:no-repeat;
+   background-size: 20px 20px;
+   background-position: 10px center;
+   padding: 0 0 0 40px;
 }
 
 .view-help-title-longitudinal-view {
-	width:70%;
-	background-image:url("../../svg/view-icon-longitudinal-on.svg");
-	background-repeat:no-repeat;
-	background-size: 20px 20px;
-	background-position: 10px center;
-	padding: 0 0 0 40px;
+   width:70%;
+   background-image:url("../../svg/view-icon-longitudinal-on.svg");
+   background-repeat:no-repeat;
+   background-size: 20px 20px;
+   background-position: 10px center;
+   padding: 0 0 0 40px;
 }
 
 .view-help-title-compare-view {
-	width:70%;
-	background-image:url("../../svg/view-icon-comparison-on.svg");
-	background-repeat:no-repeat;
-	background-size: 20px 20px;
-	background-position: 10px center;
-	padding: 0 0 0 40px;
+   width:70%;
+   background-image:url("../../svg/view-icon-comparison-on.svg");
+   background-repeat:no-repeat;
+   background-size: 20px 20px;
+   background-position: 10px center;
+   padding: 0 0 0 40px;
 }
 
 .view-help-title-report-view {
-	width:70%;
-	background-image:url("../../svg/view-icon-report-on.svg");
-	background-repeat:no-repeat;
-	background-size: 20px 20px;
-	background-position: 10px center;
-	padding: 0 0 0 40px;
+   width:70%;
+   background-image:url("../../svg/view-icon-report-on.svg");
+   background-repeat:no-repeat;
+   background-size: 20px 20px;
+   background-position: 10px center;
+   padding: 0 0 0 40px;
 }
 
 .view-help-close-button {
@@ -318,7 +321,7 @@
    height:25px;
    width:15px;
    border:0;
-	margin:0 10px 0 0;
+   margin:0 10px 0 0;
    background-image:url(../../svg/close_icon.svg);
    background-repeat:no-repeat;
    background-color:transparent;
@@ -332,14 +335,28 @@
    height:100px;
    font-family:discovery-regular;
    font-size:0.813rem;
-  	padding:5px 10px;
-	border:1.5px solid var(--blue-dark);  
-	border-radius:0 0 10px 10px;
-	margin:0;
-	background-color:var(--white);
-	overflow-y:auto;
-	overflow-x: hidden;
-	white-space: pre-wrap;
+   padding:5px 10px;
+   border:1.5px solid var(--blue-dark);  
+   border-radius:0 0 10px 10px;
+   margin:0;
+   background-color:var(--white);
+   overflow-y:auto;
+   overflow-x: hidden;
+   white-space: pre-wrap;
+}
+
+.patient-name {
+   display:flex;
+	height:60px;
+	width:45%;
+	align-items:center;
+	justify-content: flex-end;
+	font-family:discovery-data-bold;
+   font-size:1.200rem;
+	text-align:right;
+   color:var(--white);
+   white-space: nowrap;
+   margin:0 20px 0 0;
 }
 
 /* Header Controls */
@@ -351,7 +368,7 @@
    justify-content:flex-end;
    height:60px;
    width:10%;
-	min-width:120px;
+   min-width:120px;
    padding:0 20px;
    margin:0;
 }
@@ -387,11 +404,12 @@
 .text-size-current {
    font-family:discovery-data-bold;
    font-size:1.000rem;
-	font-weight:bold;
+   font-weight:bold;
    text-align:right; 
    color:var(--white-75percent);
    padding:24px 0 15px 0;
    margin:0 0 0 -8px;
+   cursor:pointer;
 }
 
 /* Header Menu */
@@ -402,7 +420,7 @@
    background-color:transparent;
    background-image:url(../../svg/icon-header-menu.svg);
    background-position:0 0;
-	background-size: 25px 25px;
+   background-size: 25px 25px;
    background-repeat:no-repeat;
    margin:3px 0 0 10px;
    border:0;
@@ -412,11 +430,11 @@
 .header-menu-button-open {
    height:25px;
    width:25px;
-	min-width:25px;
+   min-width:25px;
    background-color:transparent;
    background-image:url(../../svg/icon-header-menu-hover.svg);
    background-position:0 0;
-	background-size: 25px 25px;
+   background-size: 25px 25px;
    background-repeat:no-repeat;
    margin:3px 0 0 10px;
    border:0;

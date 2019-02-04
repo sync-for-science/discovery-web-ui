@@ -5,6 +5,11 @@ import FhirTransform from './FhirTransform.js';
 import { stringCompare, formatDate, formatDPs, isValid, titleCase } from './util.js';
 import TimeSeries from './components/TimeSeries';
 
+function dropFinalDigits(str) {
+   let firstDigitIndex = str.search(/[0-9]/);
+   return firstDigitIndex > 0 ? str.substring(0, firstDigitIndex) : str;
+}
+
 /*
  * Extracts a name string from the FHIR patient name object.
  *
@@ -28,8 +33,8 @@ export function formatPatientName(name) {
 
    return [
       prefix.map(elt => String(elt || '').trim()).join(' '),
-      given.map (elt => String(elt || '').trim()).join(' '),
-      family.map(elt => String(elt || '').trim()).join(' '),
+      dropFinalDigits(given.map (elt => String(elt || '').trim()).join(' ')),
+      dropFinalDigits(family.map(elt => String(elt || '').trim()).join(' ')),
       suffix.map(elt => String(elt || '').trim()).join(' ')
    ].filter(Boolean).join(' ').replace( /\s\s+/g, ' ' );
 }
@@ -68,7 +73,7 @@ export function renderAllergies(matchingData, className) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({code: elt.data.code, clinicalStatus: elt.data.clinicalStatus,
+	  found.push({provider: elt.provider, code: elt.data.code, clinicalStatus: elt.data.clinicalStatus,
 		      verificationStatus: elt.data.verificationStatus, type: elt.data.type, category: elt.data.category,
 		      criticality: elt.data.criticality, substance: elt.data.substance, reaction: elt.data.reaction});
       } catch (e) {}
@@ -78,6 +83,10 @@ export function renderAllergies(matchingData, className) {
       return found.map((elt, index) => 
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    { elt.code && <div className={className+'-display'}>{elt.code.coding[0].display}</div> }
+
+	    <div className={className+'-provider-label'}>Provider</div> 
+	    <div className={className+'-provider-value'}>{elt.provider}</div> 
+
 	    { elt.clinicalStatus && <div className={className+'-clinical-status-label'}>Clinical Status</div> }
 	    { elt.clinicalStatus && <div className={className+'-clinical-status-value'}>{elt.clinicalStatus}</div> }
 	    { elt.verificationStatus && <div className={className+'-verification-status-label'}>Verification Status</div> }
@@ -111,7 +120,7 @@ export function renderDisplay(matchingData, className) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({display: elt.data.code.coding[0].display, status: elt.data.status, clinicalStatus: elt.data.clinicalStatus,
+	  found.push({provider: elt.provider, display: elt.data.code.coding[0].display, status: elt.data.status, clinicalStatus: elt.data.clinicalStatus,
 		      verificationStatus: elt.data.verificationStatus, reason: elt.data.reasonReference, valueQuantity: elt.data.valueQuantity});
       } catch (e) {}
    }
@@ -137,6 +146,9 @@ export function renderDisplay(matchingData, className) {
 	    { isValid(elt, e => e.reason[0].assertedDate) &&
 	        <div className={className+'-asserted-value'}>{formatDate(elt.reason[0].assertedDate,false,false)}</div> }
 
+	    <div className={className+'-provider-label'}>Provider</div> 
+	    <div className={className+'-provider-value'}>{elt.provider}</div> 
+
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
 
@@ -156,7 +168,8 @@ export function renderImmunizations(matchingData, className) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({display: elt.data.vaccineCode.coding[0].display, status: elt.data.status, notGiven: elt.data.notGiven, wasNotGiven: elt.data.wasNotGiven,
+	  found.push({provider: elt.provider, display: elt.data.vaccineCode.coding[0].display, status: elt.data.status,
+		      notGiven: elt.data.notGiven, wasNotGiven: elt.data.wasNotGiven,
 		      reported: elt.data.reported, primarySource: elt.data.primarySource});
       } catch (e) {}
    }
@@ -165,8 +178,7 @@ export function renderImmunizations(matchingData, className) {
       return found.map((elt, index) => 
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
-	    { elt.status && <div className={className+'-status-label'}>Status</div> }
-	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
+
 	    { ((elt.notGiven !== undefined) || (elt.wasNotGiven !== undefined)) && <div className={className+'-given-label'}>Given</div> }
 	    { elt.notGiven !== undefined && <div className={className+'-given-value'}>{elt.notGiven ? 'false' : 'true'}</div> }
 	    { elt.wasNotGiven !== undefined && <div className={className+'-given-value'}>{elt.wasNotGiven ? 'false' : 'true'}</div> }
@@ -174,6 +186,12 @@ export function renderImmunizations(matchingData, className) {
 	    { elt.reported !== undefined && <div className={className+'-reported-value'}>{elt.reported ? 'true' : 'false'}</div> }
 	    { elt.primarySource !== undefined && <div className={className+'-primary-label'}>Primary Source</div> }
 	    { elt.primarySource !== undefined && <div className={className+'-primary-value'}>{elt.primarySource ? 'true' : 'false'}</div> }
+
+	    <div className={className+'-provider-label'}>Provider</div> 
+	    <div className={className+'-provider-value'}>{elt.provider}</div> 
+
+	    { elt.status && <div className={className+'-status-label'}>Status</div> }
+	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
 	 </div>
       );
    } else {
@@ -186,7 +204,7 @@ export function renderLabs(matchingData, className, resources) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	 found.push({date:elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
+	 found.push({provider: elt.provider, date:elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
 		     display: elt.data.code.coding[0].display,
 		     valueQuantity: elt.data.valueQuantity,
 		     valueString: elt.data.valueString,
@@ -253,6 +271,9 @@ export function renderLabs(matchingData, className, resources) {
 	       { elt.referenceRange && <div className={className+'-ref-value2'}>{elt.referenceRange[0].high.value}</div> }
 	       { elt.referenceRange && <div className={className+'-ref-unit2'}>{elt.referenceRange[0].high.unit}</div> }
 
+	       <div className={className+'-provider-label'}>Provider</div> 
+	       <div className={className+'-provider-value'}>{elt.provider}</div> 
+
 	       { elt.status && <div className={className+'-status-label'}>Status</div> }
 	       { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
 	    </div>
@@ -272,9 +293,9 @@ export function renderMeds(matchingData, className) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({display:elt.data.medicationCodeableConcept.coding[0].display, quantity:elt.data.quantity, daysSupply:elt.data.daysSupply,
-		      dosageInstruction:elt.data.dosageInstruction, dispenseRequest:elt.data.dispenseRequest, status:elt.data.status,
-		      reason:elt.data.reasonReference});
+	  found.push({provider: elt.provider, display:elt.data.medicationCodeableConcept.coding[0].display, quantity:elt.data.quantity,
+		      daysSupply:elt.data.daysSupply, dosageInstruction:elt.data.dosageInstruction, dispenseRequest:elt.data.dispenseRequest,
+		      status:elt.data.status, reason:elt.data.reasonReference});
       } catch (e) {};
    }
 
@@ -294,6 +315,9 @@ export function renderMeds(matchingData, className) {
 	    { isValid(elt, e => e.reason[0].assertedDate) && <div className={className+'-asserted-label'}>Asserted</div> }
 	    { isValid(elt, e => e.reason[0].assertedDate) &&
 	        <div className={className+'-asserted-value'}>{formatDate(elt.reason[0].assertedDate,false,false)}</div> }
+
+	    <div className={className+'-provider-label'}>Provider</div> 
+	    <div className={className+'-provider-value'}>{elt.provider}</div> 
 
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
@@ -325,7 +349,7 @@ export function renderSocialHistory(matchingData, className) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	 found.push({display: elt.data.code.coding[0].display, status: elt.data.status, value: elt.data.valueCodeableConcept.coding[0].display});
+	  found.push({provider: elt.provider, display: elt.data.code.coding[0].display, status: elt.data.status, value: elt.data.valueCodeableConcept.coding[0].display});
       } catch (e) {}
    }
 
@@ -334,6 +358,8 @@ export function renderSocialHistory(matchingData, className) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
 	    <div className={className+'-value'}>{elt.value}</div>
+	    <div className={className+'-provider-label'}>Provider</div> 
+	    <div className={className+'-provider-value'}>{elt.provider}</div> 
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
 	 </div>
@@ -361,7 +387,8 @@ export function renderVitals(matchingData, className, resources) {
 	 // Don't display Vital Signs "container" resources with related elements
 	 const displayStr = canonVitals(elt.data.code.coding[0].display);
 	 if (displayStr !== 'Vital Signs') {
-	    found.push({date:elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
+	    found.push({provider: elt.provider,
+			date: elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
 			display:displayStr,
 			value:isValid(elt, e => e.data.valueQuantity) && elt.data.valueQuantity.value,
 			unit:isValid(elt, e => e.data.valueQuantity) && elt.data.valueQuantity.unit,
@@ -416,15 +443,18 @@ export function renderVitals(matchingData, className, resources) {
 	       { elt.value && <div className={className+'-value1'}>{formatDPs(elt.value, 1)}</div> }
 	       { elt.unit && <div className={className+'-unit1'}>{elt.unit}</div> }
 
-	       { elt.components && <div className={className+'-value1'}>{elt.components[0].valueQuantity.value}</div> }
+	       { elt.components && <div className={className+'-value1'}>{formatDPs(elt.components[0].valueQuantity.value, 1)}</div> }
 	       { elt.components && <div className={className+'-unit1'}>{elt.components[0].valueQuantity.unit}</div> }
 	       { elt.components && <div className={className+'-label1'}>{trimVitalsLabels(elt.components[0].code.coding[0].display)}</div> }
 
-	       { elt.components && <div className={className+'-value2'}>{elt.components[1].valueQuantity.value}</div> }
+	       { elt.components && <div className={className+'-value2'}>{formatDPs(elt.components[1].valueQuantity.value, 1)}</div> }
 	       { elt.components && <div className={className+'-unit2'}>{elt.components[1].valueQuantity.unit}</div> }
 	       { elt.components && <div className={className+'-label2'}>{trimVitalsLabels(elt.components[1].code.coding[0].display)}</div> }
 
 	       { sortedSeries && <TimeSeries className={className} data={sortedSeries} highlights={[{x:elt.date, y:thisValue}]} /> }
+
+	       <div className={className+'-provider-label'}>Provider</div> 
+	       <div className={className+'-provider-value'}>{elt.provider}</div> 
 
 	       { elt.status && <div className={className+'-status-label'}>Status</div> }
 	       { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
@@ -437,12 +467,39 @@ export function renderVitals(matchingData, className, resources) {
    }
 }
 
+function renderContainedResource(res, className, index) {
+   let payload = [];
+   switch (res.resourceType) {
+      case 'Coverage':
+	 payload.push(<div className={className+'-contained-label-main'} key={index+'-1'}>Coverage</div>);
+	 payload.push(<div className={className+'-contained-value1'} key={index+'-2'}>{res.type.text}</div>);
+	 break;
+      case 'ReferralRequest':
+	 payload.push(<div className={className+'-contained-label-main'} key={index+'-1'}>Referral Request</div>);
+	 payload.push(<div className={className+'-contained-label-sub1'} key={index+'-2'}>Intent</div>);
+	 payload.push(<div className={className+'-contained-value2'} key={index+'-3'}>{res.intent}</div>);
+	 payload.push(<div className={className+'-contained-label-sub2'} key={index+'-4'}>Status</div>);
+	 payload.push(<div className={className+'-contained-value3'} key={index+'-5'}>{res.status}</div>);
+	 break;
+      default:
+	 payload.push(<div className={className+'-contained-label-main'} key={index+'-1'}>{res.resourceType}</div>);
+	 payload.push(<div className={className+'-contained-value1'} key={index+'-2'}>????</div>);
+	 break;
+   }
+   return payload;
+}
+
+function renderContained(contained, className) {
+    return contained.map((elt, index) => renderContainedResource(elt, className, index));
+}
+
 export function renderEOB(matchingData, className) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	 found.push({totalCost: elt.data.totalCost, totalBenefit: elt.data.totalBenefit,
-		     claimType: elt.data.type, billablePeriod: elt.data.billablePeriod, status: elt.data.status});
+	 found.push({provider: elt.provider, totalCost: elt.data.totalCost, totalBenefit: elt.data.totalBenefit,
+		     claimType: elt.data.type, billablePeriod: elt.data.billablePeriod, status: elt.data.status,
+		     contained: elt.data.contained});
       } catch (e) {}
    }
 
@@ -450,23 +507,28 @@ export function renderEOB(matchingData, className) {
       return found.map((elt, index) => 
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-billable-label'}>For the period</div>
-	    <div className={className+'-billable-value'}>{elt.billablePeriod.start}</div>
+	    <div className={className+'-billable-value'}>{formatDate(elt.billablePeriod.start, true, true)}</div>
 	    <div className={className+'-billable-value-separator'}>to</div>
-	    <div className={className+'-billable-value2'}>{elt.billablePeriod.end}</div>
+	    <div className={className+'-billable-value2'}>{formatDate(elt.billablePeriod.end, true, true)}</div>
 
 	    <div className={className+'-claim-type-label'}>Claim type</div>
-	    <div className={className+'-claim-type-value'}>{elt.claimType.coding[0].code}</div>
+	    <div className={className+'-claim-type-value'}>{elt.claimType.coding[0].display}</div>
 
 	    <div className={className+'-cost-label'}>Total cost</div>
 	    <div className={className+'-cost-value'}>{elt.totalCost.value.toFixed(2)}</div>
 	    <div className={className+'-cost-currency'}>{elt.totalCost.code}</div>
 	
 	    <div className={className+'-benefit-label'}>Total benefit</div>
-	    <div className={className+'-benefit-value'}>{elt.totalBenefit.value.toFixed(2)}</div>
-	    <div className={className+'-benefit-currency'}>{elt.totalBenefit.code}</div>
+	    <div className={className+'-benefit-value'}>{elt.totalBenefit ? elt.totalBenefit.value.toFixed(2) : 'unknown'}</div>
+	    <div className={className+'-benefit-currency'}>{elt.totalBenefit ? elt.totalBenefit.code : ''}</div>
+
+	    <div className={className+'-provider-label'}>Provider</div> 
+	    <div className={className+'-provider-value'}>{elt.provider}</div> 
 
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
+
+	    { elt.contained && renderContained(elt.contained, className) }
 	 </div>
       );
    } else {

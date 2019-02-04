@@ -4,7 +4,7 @@ import Draggable from 'react-draggable';
 import Modal from 'react-responsive-modal';
 
 import './ContentPanel.css';
-import { getStyle, formatDate } from '../../util.js';
+import { formatDate, formatAge } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 
 import Allergies from '../Allergies';
@@ -51,7 +51,6 @@ export default class ContentPanel extends Component {
       topBound: 0,
       bottomBound: 0,
       positionY: 0,
-      panelWidth: 0,
       panelHeight: 0,
       dragging: false,
       payloadModalIsOpen: false,
@@ -73,8 +72,9 @@ export default class ContentPanel extends Component {
 
    calcTopBound() {
       const headerTop = document.querySelector('.time-widget').getBoundingClientRect().top;
-      const spacerTop = document.querySelector('.longitudinal-view-category-nav-spacer-top').getBoundingClientRect().top;
-      return spacerTop - headerTop;
+//      const targetTop = document.querySelector('.longitudinal-view-category-nav-spacer-top').getBoundingClientRect().top;
+      const targetTop = document.querySelector('.longitudinal-view-categories-and-providers').getBoundingClientRect().top;
+      return targetTop - headerTop;
    }
 
    calcBottomBound() {
@@ -84,23 +84,18 @@ export default class ContentPanel extends Component {
    }
 
    updateDraggableOnMount = () => {
-      const svg = document.querySelector('.category-rollup-svg-container');
       const topBound = this.calcTopBound();
 
       this.setState( { topBound: topBound,
 		       positionY: topBound,
-		       bottomBound: this.calcBottomBound(),
-		       panelWidth: getStyle(svg, 'width') });
+		       bottomBound: this.calcBottomBound() });
    }
 
    updateDraggableOnResize = this.updateDraggableOnResize.bind(this);
    updateDraggableOnResize() {
-      const svg = document.querySelector('.category-rollup-svg-container');
-
       this.setState( { topBound: this.calcTopBound(),
 		       bottomBound: this.calcBottomBound(),
-		       windowHeight: window.innerHeight,
-		       panelWidth: getStyle(svg, 'width') });
+		       windowHeight: window.innerHeight });
 
       if (this.state.isOpen) {
 	 setTimeout(() => this.setState({ panelHeight: this.calcHeight() }), 250);	// Wait a bit before setting final panel height
@@ -127,8 +122,8 @@ export default class ContentPanel extends Component {
 	 this.onNextPrev('prev');
       } else if (this.state.isOpen && event.key === 'ArrowRight') {
 	 this.onNextPrev('next');
-      } else if (this.state.isOpen && event.key === 'Escape') {
-	 this.onClose();
+//      } else if (this.state.isOpen && event.key === 'Escape') {
+//	 this.onClose();
       }
    }
 
@@ -153,9 +148,9 @@ export default class ContentPanel extends Component {
 			 nextEnabled: this.props.context.date !== this.props.context.maxDate });
       }
 
-      if (this.props.open && this.props.catsEnabled !== prevProps.catsEnabled) {
-	 this.setState({ annunciator: 'Categories changed' });
-      }
+//      if (this.props.open && this.props.catsEnabled !== prevProps.catsEnabled) {
+//	 this.setState({ annunciator: 'Categories changed' });
+//      }
 
       if (this.props.open && this.props.context !== prevProps.context) {
 	 this.setState({ annunciator: null });
@@ -183,16 +178,18 @@ export default class ContentPanel extends Component {
    }
 
    renderContents(context) {
+      let birthDate = this.props.resources.pathItem('[category=Patient].data.birthDate');
       return (
 	 <div className='content-panel-inner'>
 	    <div className='content-panel-inner-title'>
+	      		<div className='content-panel-view-name'>Timeline</div>
 			<button className={'content-panel-left-button'+(this.state.prevEnabled ? '' : '-off')} onClick={() => this.onNextPrev('prev')} />
 			<button className={'content-panel-right-button'+(this.state.nextEnabled ? '' : '-off')} onClick={() => this.onNextPrev('next')} />
 	       <button className='content-panel-inner-title-payload-button' onClick={() => !this.state.dragging && this.setState({payloadModalIsOpen: true})}>
-		  { formatDate(context.date, false, false) }
+	          { formatDate(context.date, false, false) + ' / ' + formatAge(birthDate, context.date, ' at ') }
 	       </button>
 	       { this.state.annunciator && <div className='content-panel-annunciator'>{this.state.annunciator}</div> }
-	       <button className='content-panel-inner-title-close-button' onClick={this.onClose} />
+	  {/*	       <button className='content-panel-inner-title-close-button' onClick={this.onClose} /> */}
 	    </div>
 	    <div className='content-panel-inner-body'>
 	       <Allergies           className='allergies'      data={context.data} isEnabled={this.catEnabled('Allergies')} />
@@ -222,12 +219,12 @@ export default class ContentPanel extends Component {
    }
 
    render() {
+      // Dragging disabled by changing bounds.bottom to topBound (was bottomBound)
       return ( this.state.isOpen &&
 	       <Draggable axis='y' position={{x:0, y:this.state.positionY}} handle='.content-panel-inner-title'
-			  bounds={{top:this.state.topBound, bottom:this.state.bottomBound}} onDrag={this.onDragStart} onStop={this.onDragStop}>
-	          <div className='content-panel' style={this.state.panelHeight ? {width:this.state.panelWidth, height:this.state.panelHeight}
-									       : {width:this.state.panelWidth}}>
-		    
+			  bounds={{top:this.state.topBound, bottom:this.state.topBound}} onDrag={this.onDragStart} onStop={this.onDragStop}>
+	          <div className='content-panel' style={this.state.panelHeight ? {height:this.state.panelHeight}
+									       : {}}>
 		     { this.renderContents(this.props.context) }
 	          </div>
 	       </Draggable>

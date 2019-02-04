@@ -102,8 +102,13 @@ export default class ReportView extends Component {
       return (
 	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={this.props.categories} providers={this.props.providers}
 			  searchRefs={this.props.searchRefs} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}>
-	    <div className='report-contents'>
-	       { this.renderReport() }
+	    <div className='report-view'>
+	       <div className='report-title'>
+		  <div className='report-title-name'>Report</div>
+	       </div>
+	       <div className='report-contents'>
+		  { this.renderReport() }
+	       </div>
 	    </div>
 	 </StandardFilters>
       );

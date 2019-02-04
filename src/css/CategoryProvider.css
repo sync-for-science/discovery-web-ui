@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Category and Provider CSS */
-/* v.01.08 Updated 12/21/2018 */
+/* v.01.09 Updated 02/01/2019 */
 
 .categories-providers {
 	height: auto;
@@ -83,17 +83,20 @@
 
 .category-provider-button {
 	display:flex;
-	justify-content: center;
-	align-items: center;
+//	justify-content: center;
+//	align-items: center;
 	height: auto;
 	width:160px;
 	max-width:160px;
 	margin:3px auto;
-	border-radius:20px;
-	padding:0 0;
+//	border-radius:20px;
+	padding:0;
  	font-size:0.813rem;
 	white-space: nowrap;
 	cursor: pointer;
+	justify-content:flex-start;
+	align-items:left;
+	outline:none;
 }
 
 .category-provider-svg-container {

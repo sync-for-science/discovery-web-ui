@@ -87,3 +87,15 @@
 	@insert .value;
 	grid-column:4;
 }
+
+.allergies-provider-label {
+	@insert .label;
+	width:auto;
+	padding:6px 0 0 0;
+	grid-column:1;
+}
+
+.allergies-provider-value {
+	@insert .value;
+	grid-column:2;
+}

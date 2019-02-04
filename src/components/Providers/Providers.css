@@ -3,7 +3,7 @@
 @import '../../css/CategoryProvider.css';
 
 /* Sync for Science Discovery Providers Stylesheet */
-/* v.01.13 Updated 11/16/2018 */
+/* v.01.14 Updated 02/01/2019 */
 
 .providers {
 	@insert .categories-providers;
@@ -17,10 +17,11 @@
 	max-height:36px; 
 	min-width:184px;
 	max-width:184px;
-	background-color:var(--provider);
+//	background-color:var(--provider);
 	justify-content:center;
 	align-items:center;
 	margin:10px 0 0 20px;
+	background-color:var(--discovery-blue);
 }
 
 .single-provider-label {
