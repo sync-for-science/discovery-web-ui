@@ -8,10 +8,14 @@ import FhirTransform from '../../FhirTransform.js';
 import { renderImmunizations } from '../../fhirUtil.js';
 import { stringCompare, formatDate, isValid } from '../../util.js';
 
+import DiscoveryContext from '../DiscoveryContext';
+
 //
 // Display the 'Immunizations' category if there are matching resources
 //
 export default class Immunizations extends Component {
+
+   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       data: PropTypes.array.isRequired,
@@ -50,7 +54,7 @@ export default class Immunizations extends Component {
 		     <div className={this.props.isEnabled ? 'content-header' : 'content-header-disabled'}>Immunizations</div>
 	          </div>
 	          <div className='content-body'>
-		     { this.props.isEnabled && renderImmunizations(this.state.matchingData, this.props.className) }
+		     { this.props.isEnabled && renderImmunizations(this.state.matchingData, this.props.className, this.context) }
 	          </div>
 	       </div> );
    }

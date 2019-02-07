@@ -3,7 +3,7 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery VitalSigns Stylesheet */
-/* v.01.20 Updated 12/26/2018 */
+/* v.01.21 Updated 2/06/2019 */
 
 .vital-signs-display {
    @insert .content-panel-display;
@@ -83,5 +83,5 @@
 
 .vital-signs-provider-value {
 	@insert .value;
-	grid-column:2;
+	grid-column:2/span 3;
 }

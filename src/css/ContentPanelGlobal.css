@@ -17,22 +17,25 @@
 }
 
 .label {
-	height:auto;
+	height:1.200rem;
 	width:auto;
 	font-family:discovery-bold;
 	font-size:0.800rem;
 	text-align: right;
 	color: var(--gray-dark);
 	white-space: nowrap;
+	vertical-align:text-bottom;
 }
 
 .value {
-	height:auto;
+	height:1.200rem;
 	width:auto;
 	font-family: discovery-data-text;
 	font-size:1.200rem;
+	line-height:1.2;
 	color: var(--data);
 	text-align: left;
 	white-space: nowrap;
 	padding:0;
+	vertical-align:text-bottom;
 }

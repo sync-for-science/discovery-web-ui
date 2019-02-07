@@ -69,7 +69,7 @@ export function formatPatientMRN(identifier, maxLength) {
    return 'Unknown';
 }
 
-export function renderAllergies(matchingData, className) {
+export function renderAllergies(matchingData, className, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
@@ -80,12 +80,13 @@ export function renderAllergies(matchingData, className) {
    }
 
    if (found.length > 0) {
+      let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    { elt.code && <div className={className+'-display'}>{elt.code.coding[0].display}</div> }
 
-	    <div className={className+'-provider-label'}>Provider</div> 
-	    <div className={className+'-provider-value'}>{elt.provider}</div> 
+	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
+	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
 	    { elt.clinicalStatus && <div className={className+'-clinical-status-label'}>Clinical Status</div> }
 	    { elt.clinicalStatus && <div className={className+'-clinical-status-value'}>{elt.clinicalStatus}</div> }
@@ -116,7 +117,7 @@ export function renderAllergies(matchingData, className) {
 //
 // Used by Conditions, DocumentReferences, MedsAdministration, MedsStatement, Procedures
 //
-export function renderDisplay(matchingData, className) {
+export function renderDisplay(matchingData, className, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
@@ -126,6 +127,7 @@ export function renderDisplay(matchingData, className) {
    }
 
    if (found.length > 0) {
+      let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
@@ -146,8 +148,8 @@ export function renderDisplay(matchingData, className) {
 	    { isValid(elt, e => e.reason[0].assertedDate) &&
 	        <div className={className+'-asserted-value'}>{formatDate(elt.reason[0].assertedDate,false,false)}</div> }
 
-	    <div className={className+'-provider-label'}>Provider</div> 
-	    <div className={className+'-provider-value'}>{elt.provider}</div> 
+	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
+	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
@@ -164,7 +166,7 @@ export function renderDisplay(matchingData, className) {
    }
 }
 
-export function renderImmunizations(matchingData, className) {
+export function renderImmunizations(matchingData, className, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
@@ -175,6 +177,7 @@ export function renderImmunizations(matchingData, className) {
    }
 
    if (found.length > 0) {
+      let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
@@ -187,8 +190,8 @@ export function renderImmunizations(matchingData, className) {
 	    { elt.primarySource !== undefined && <div className={className+'-primary-label'}>Primary Source</div> }
 	    { elt.primarySource !== undefined && <div className={className+'-primary-value'}>{elt.primarySource ? 'true' : 'false'}</div> }
 
-	    <div className={className+'-provider-label'}>Provider</div> 
-	    <div className={className+'-provider-value'}>{elt.provider}</div> 
+	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
+	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
@@ -199,7 +202,7 @@ export function renderImmunizations(matchingData, className) {
    }
 }
 
-export function renderLabs(matchingData, className, resources) {
+export function renderLabs(matchingData, className, resources, appContext) {
    // Collect info to display from matchingData
    let found = [];
    for (const elt of matchingData) {
@@ -232,6 +235,7 @@ export function renderLabs(matchingData, className, resources) {
    }
 
    if (found.length > 0) {
+      let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => {
 	 let highlightValue = false;
 	 if (elt.referenceRange) {
@@ -271,8 +275,8 @@ export function renderLabs(matchingData, className, resources) {
 	       { elt.referenceRange && <div className={className+'-ref-value2'}>{elt.referenceRange[0].high.value}</div> }
 	       { elt.referenceRange && <div className={className+'-ref-unit2'}>{elt.referenceRange[0].high.unit}</div> }
 
-	       <div className={className+'-provider-label'}>Provider</div> 
-	       <div className={className+'-provider-value'}>{elt.provider}</div> 
+	       { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
+	       { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
 	       { elt.status && <div className={className+'-status-label'}>Status</div> }
 	       { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
@@ -289,7 +293,7 @@ export function renderLabs(matchingData, className, resources) {
 //
 // Used by MedsDispensed, MedsRequested
 //
-export function renderMeds(matchingData, className) {
+export function renderMeds(matchingData, className, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
@@ -300,6 +304,7 @@ export function renderMeds(matchingData, className) {
    }
 
    if (found.length > 0) {
+      let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
@@ -316,8 +321,8 @@ export function renderMeds(matchingData, className) {
 	    { isValid(elt, e => e.reason[0].assertedDate) &&
 	        <div className={className+'-asserted-value'}>{formatDate(elt.reason[0].assertedDate,false,false)}</div> }
 
-	    <div className={className+'-provider-label'}>Provider</div> 
-	    <div className={className+'-provider-value'}>{elt.provider}</div> 
+	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
+	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
@@ -345,7 +350,7 @@ export function renderMeds(matchingData, className) {
    }
 }
 
-export function renderSocialHistory(matchingData, className) {
+export function renderSocialHistory(matchingData, className, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
@@ -354,12 +359,13 @@ export function renderSocialHistory(matchingData, className) {
    }
 
    if (found.length > 0) {
+      let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
 	    <div className={className+'-value'}>{elt.value}</div>
-	    <div className={className+'-provider-label'}>Provider</div> 
-	    <div className={className+'-provider-value'}>{elt.provider}</div> 
+	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
+	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
 	 </div>
@@ -379,7 +385,7 @@ function canonVitals(display) {
    return titleCase(display.replace(/_/g, ' '));
 }
 
-export function renderVitals(matchingData, className, resources) {
+export function renderVitals(matchingData, className, resources, appContext) {
    // Collect info to display from matchingData
    let found = [];
    for (const elt of matchingData) {
@@ -433,6 +439,7 @@ export function renderVitals(matchingData, className, resources) {
    }
 
    if (found.length > 0) {
+      let isMultipleProviders = appContext.providers.length > 1;
       return found.sort((a, b) => stringCompare(a.display, b.display)).map((elt, index) => {
 	 let sortedSeries = series[elt.display] && series[elt.display].sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
 	 let thisValue = elt.value ? elt.value : (elt.components[0].valueQuantity.value + elt.components[1].valueQuantity.value)/2;
@@ -453,8 +460,8 @@ export function renderVitals(matchingData, className, resources) {
 
 	       { sortedSeries && <TimeSeries className={className} data={sortedSeries} highlights={[{x:elt.date, y:thisValue}]} /> }
 
-	       <div className={className+'-provider-label'}>Provider</div> 
-	       <div className={className+'-provider-value'}>{elt.provider}</div> 
+	       { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
+	       { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
 	       { elt.status && <div className={className+'-status-label'}>Status</div> }
 	       { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
@@ -493,7 +500,7 @@ function renderContained(contained, className) {
     return contained.map((elt, index) => renderContainedResource(elt, className, index));
 }
 
-export function renderEOB(matchingData, className) {
+export function renderEOB(matchingData, className, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
@@ -504,6 +511,7 @@ export function renderEOB(matchingData, className) {
    }
 
    if (found.length > 0) {
+      let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-billable-label'}>For the period</div>
@@ -522,8 +530,8 @@ export function renderEOB(matchingData, className) {
 	    <div className={className+'-benefit-value'}>{elt.totalBenefit ? elt.totalBenefit.value.toFixed(2) : 'unknown'}</div>
 	    <div className={className+'-benefit-currency'}>{elt.totalBenefit ? elt.totalBenefit.code : ''}</div>
 
-	    <div className={className+'-provider-label'}>Provider</div> 
-	    <div className={className+'-provider-value'}>{elt.provider}</div> 
+	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
+	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
 	    { elt.status && <div className={className+'-status-label'}>Status</div> }
 	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }

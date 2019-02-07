@@ -83,13 +83,13 @@
 
 .category-provider-button {
 	display:flex;
-//	justify-content: center;
-//	align-items: center;
+/*	justify-content: center;
+	align-items: center; */
 	height: auto;
 	width:160px;
 	max-width:160px;
 	margin:3px auto;
-//	border-radius:20px;
+/*	border-radius:20px; */
 	padding:0;
  	font-size:0.813rem;
 	white-space: nowrap;

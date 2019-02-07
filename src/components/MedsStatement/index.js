@@ -8,10 +8,14 @@ import FhirTransform from '../../FhirTransform.js';
 import { renderDisplay } from '../../fhirUtil.js';
 import { stringCompare, formatDate, isValid } from '../../util.js';
 
+import DiscoveryContext from '../DiscoveryContext';
+
 //
 // Display the 'Meds Statement' category if there are matching resources
 //
 export default class MedsStatement extends Component {
+
+   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       data: PropTypes.array.isRequired,
@@ -49,7 +53,7 @@ export default class MedsStatement extends Component {
 		     <div className={this.props.isEnabled ? 'content-header' : 'content-header-disabled'}>Meds Statement</div>
 	          </div>
 	          <div className='content-body'>
-		     { this.props.isEnabled && renderDisplay(this.state.matchingData, this.props.className) }
+		     { this.props.isEnabled && renderDisplay(this.state.matchingData, this.props.className, this.context) }
 	          </div>
 	       </div> );
    }

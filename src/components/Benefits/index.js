@@ -7,10 +7,14 @@ import FhirTransform from '../../FhirTransform.js';
 import { renderEOB } from '../../fhirUtil.js';
 import { formatDate, isValid } from '../../util.js';
 
+import DiscoveryContext from '../DiscoveryContext';
+
 //
 // Display the 'Benefits' category if there are matching resources
 //
 export default class Benefits extends Component {
+
+   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       data: PropTypes.array.isRequired,
@@ -47,7 +51,7 @@ export default class Benefits extends Component {
 		     <div className={this.props.isEnabled ? 'content-header' : 'content-header-disabled'}>Benefits</div>
 	          </div>
 	          <div className='content-body'>
-		     { this.props.isEnabled && renderEOB(this.state.matchingData, this.props.className) }
+		     { this.props.isEnabled && renderEOB(this.state.matchingData, this.props.className, this.context) }
 	          </div>
 	       </div> );
    }

@@ -272,6 +272,9 @@ export default class PageHeader extends Component {
 	       { this.state.logoClasses.map(
 		   (logoClass,index) => <button className={logoClass+'-off'} key={logoClass+index} onClick={() => this.itemClick('logoModal')} /> )}
 	    </div>
+		<div className='patient-name'>
+	       { this.props.resources && formatPatientName(this.props.resources.pathItem('[category=Patient].data.name')) }
+	    </div>
 	    <div className='view-controls-box'>
 	      <button className='longitudinal-view-button-off' onClick={() => this.viewClick('longitudinalView')}></button>
 	      <button className='report-view-button-off' onClick={() => this.viewClick('reportView')}></button>
@@ -279,9 +282,7 @@ export default class PageHeader extends Component {
 	      <button className='default-view-button-off' onClick={() => this.viewClick('summaryView')}></button>
 	    </div>
 	    { this.state.viewHelpIsOpen && this.renderViewHelp() }
-	    <div className='patient-name'>
-	       { this.props.resources && formatPatientName(this.props.resources.pathItem('[category=Patient].data.name')) }
-	    </div>
+	    
 	    { this.props.searchData && <Search data={this.props.searchData} callback={this.props.searchCallback} />}
 	    <div className='header-controls-box'>
 	      {/* make highlight active/inactive first <button className={'inactive-light-'+(this.state.inactiveLight ? 'on' : 'off')}>Inactive</button> */}

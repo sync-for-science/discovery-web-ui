@@ -140,11 +140,11 @@
    padding:0;
    margin:0px;
    border-bottom:solid 1px var(--gray-light-translucent);
-// background-color:var(--gray-light-translucent);
-//	background-image:url(../../svg/checkmark.svg);
-//	background-size:15px 15px;
-//	background-repeat:no-repeat;
-//	background-position: 10px center;
+/* background-color:var(--gray-light-translucent);
+	background-image:url(../../svg/checkmark.svg);
+	background-size:15px 15px;
+	background-repeat:no-repeat;
+	background-position: 10px center; */
    grid-column:auto;
 }
 
@@ -171,10 +171,10 @@
    margin:0px;
    border-bottom:solid 1px var(--gray-light-translucent);
    background-color:var(--white);
-//	background-image:url(../../svg/checkmark.svg);
-//	background-size:15px 15px;
-//	background-repeat:no-repeat;
-//	background-position: 10px center;
+/*	background-image:url(../../svg/checkmark.svg);
+	background-size:15px 15px;
+	background-repeat:no-repeat;
+	background-position: 10px center; */
    grid-column: auto;
 }
 

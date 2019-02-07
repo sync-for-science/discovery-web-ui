@@ -15,8 +15,8 @@
 
 .provider-button-enabled {
 	@insert .category-provider-button;
-//	border:1px solid var(--provider);
-//	background-color:var(--provider);
+/*	border:1px solid var(--provider);
+	background-color:var(--provider); */
 	font-family:discovery-bold;
 	color:var(--white);
 	background-color:var(--white);
@@ -31,10 +31,10 @@
 
 .provider-button-disabled {
 	@insert .category-provider-button;
-//	border:1px solid var(--provider);
+/*	border:1px solid var(--provider); */
 	background-color:var(--white);
 	font-family:discovery-regular;
-//	color:var(--provider);
+/*	color:var(--provider); */
 	color:var(--discovery-blue);
 	outline:none;
 	padding:0 0 0 25px;

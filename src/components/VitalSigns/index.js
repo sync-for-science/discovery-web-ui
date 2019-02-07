@@ -8,10 +8,14 @@ import FhirTransform from '../../FhirTransform.js';
 import { renderVitals } from '../../fhirUtil.js';
 import { formatDate, isValid } from '../../util.js';
 
+import DiscoveryContext from '../DiscoveryContext';
+
 //
 // Display the 'Vital Signs' category if there are matching resources
 //
 export default class VitalSigns extends Component {
+
+   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       data: PropTypes.array.isRequired,
@@ -49,7 +53,7 @@ export default class VitalSigns extends Component {
 		     <div className={this.props.isEnabled ? 'content-header' : 'content-header-disabled'}>Vital Signs</div>
 	          </div>
 	          <div className='content-body'>
-		     { this.props.isEnabled && renderVitals(this.state.matchingData, this.props.className, this.props.resources) }
+		     { this.props.isEnabled && renderVitals(this.state.matchingData, this.props.className, this.props.resources, this.context) }
 	          </div>
 	       </div> );
    }

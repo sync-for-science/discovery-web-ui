@@ -12,7 +12,7 @@
 .category-rollup-nav-enabled {
 	@insert .category-provider-rollup-nav-enabled;
 	color: var(--white);
-//	background-color: var(--category);
+/*	background-color: var(--category); */
 	border-top:2px solid var(--accent);
 	background-color: var(--discovery-blue);
 }
@@ -20,7 +20,7 @@
 .category-rollup-nav-disabled {
 	@insert .category-provider-rollup-nav-disabled;
 	color: var(--white);
-//	background-color: var(--category);
+/*	background-color: var(--category); */
 	background-color: var(--discovery-blue);
 }
 

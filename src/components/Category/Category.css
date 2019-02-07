@@ -15,12 +15,12 @@
  
 .category-button-enabled {
 	@insert .category-provider-button;
-//	background-color: var(--category);
-//	border:1px solid var(--category);
+/*	background-color: var(--category);
+	border:1px solid var(--category); */
 	font-family:discovery-bold;
-//	color:var(--white);
+/*	color:var(--white); */
 	background-color: var(--white);
-//	border:1px solid var(--discovery-blue);
+/*	border:1px solid var(--discovery-blue); */
 	color:var(--discovery-blue);
 	padding:0 0 0 25px;
 	background-image: url("../../svg/checkmark-on.svg");
@@ -32,10 +32,10 @@
 .category-button-disabled {
 	@insert .category-provider-button;
 	background-color: var(--white);
-//	border:1px solid var(--category);
+/*	border:1px solid var(--category); */
 	font-family:discovery-regular;
-//	color: var(--category);
-//	border:1px solid var(--discovery-blue);
+/*	color: var(--category);
+	border:1px solid var(--discovery-blue); */
 	color: var(--discovery-blue);
 	padding:0 0 0 25px;
 	background-image: url("../../svg/checkmark-off.svg");

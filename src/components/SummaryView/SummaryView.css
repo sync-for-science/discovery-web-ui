@@ -174,7 +174,7 @@
 .default-providers-mrn {
 	font-family:discovery-data;
    font-size:.800rem;
-//	font-weight:bold;
+/*	font-weight:bold; */
 	font-style:italic;
 	text-align:left;
 	margin:0 0 10px 20px;

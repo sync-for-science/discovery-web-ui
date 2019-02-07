@@ -59,8 +59,8 @@ export default class TimeWidget extends Component {
       return new Date(target).toISOString();
    }
 
-   onLeftDragStop = this.onLeftDragStop.bind(this);
-   onLeftDragStop(e, data) {
+   onLeftDrag = this.onLeftDrag.bind(this);
+   onLeftDrag(e, data) {
       const width = numericPart(this.props.timelineWidth);
       const leftTarget = (data.x/width < config.timeWidgetThumbResetZone) ? 0 : data.x/width;
       const showExpanded = leftTarget !== 0 || this.state.rightX !== numericPart(this.props.timelineWidth);
@@ -70,8 +70,8 @@ export default class TimeWidget extends Component {
       this.setState({ leftX: leftTarget*width, thumbDates: dates, showExpanded: showExpanded });
    }
 
-   onRightDragStop = this.onRightDragStop.bind(this);
-   onRightDragStop(e, data) {
+   onRightDrag = this.onRightDrag.bind(this);
+   onRightDrag(e, data) {
       const width = numericPart(this.props.timelineWidth);
       const rightTarget = (data.x/width > 1.0 - config.timeWidgetThumbResetZone) ? 1.0 : data.x/width;
       const showExpanded = this.state.leftX !== 0 || rightTarget*width !== numericPart(this.props.timelineWidth);
@@ -90,9 +90,9 @@ export default class TimeWidget extends Component {
       let years = [];
 
       for (let year = firstYear; year <= lastYear; year+=incr) {
-	 let className = year < thumbFirstYear || year > thumbLastYear ? 'timeline-full-inactive-years'
-								       : (this.state.showExpanded ? 'timeline-full-active-double-years'
-												  : 'timeline-full-active-single-years');
+	 let className = year < thumbFirstYear || year >= thumbLastYear ? 'timeline-full-inactive-years'
+									: (this.state.showExpanded ? 'timeline-full-active-double-years'
+												   : 'timeline-full-active-single-years');
 	 years.push(
 	    <div className={className} key={year} >
 	       {year}
@@ -234,10 +234,10 @@ export default class TimeWidget extends Component {
 		  </div>
 		  { this.renderFullYears() }
 	          <div className='timeline-selector-container'>
-		     <Draggable axis='x' bounds={{left:0, right:this.state.rightX-40}} position={{x:this.state.leftX, y:0}} onStop={this.onLeftDragStop}>
+		     <Draggable axis='x' bounds={{left:0, right:this.state.rightX-40}} position={{x:this.state.leftX, y:0}} onDrag={this.onLeftDrag}>
 		        <div className={this.state.leftX > 0 ? 'timeline-selector-left-alt' : 'timeline-selector-left'}></div>
 		     </Draggable>
-		     <Draggable axis='x' bounds={{left:this.state.leftX+40, right:rightBound}} position={{x:this.state.rightX, y:0}} onStop={this.onRightDragStop}>
+		     <Draggable axis='x' bounds={{left:this.state.leftX+40, right:rightBound}} position={{x:this.state.rightX, y:0}} onDrag={this.onRightDrag}>
 		        <div className={this.state.rightX < rightBound ? 'timeline-selector-right-alt' : 'timeline-selector-right'}></div>
 		     </Draggable>
 		  </div>

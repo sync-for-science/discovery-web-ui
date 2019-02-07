@@ -1,4 +1,9 @@
-Hack node_modules/react-scripts/config/webpack.config.dev.js to get postcss-insert, postcss-import working:
+
++-------------------------------------------------------------------------------------------------------+
+|           WARNING: The following changes MUST be made after any upgrade to react-scripts!!!           |
++-------------------------------------------------------------------------------------------------------+
+
+Hack node_modules/react-scripts/config/webpack.config.js to get postcss-insert, postcss-import working:
 
       // Options for PostCSS as we reference these options twice
       // Adds vendor prefixing based on your specified browser support in
@@ -19,5 +24,6 @@ Hack node_modules/react-scripts/config/webpack.config.dev.js to get postcss-inse
 	  require('postcss-import'),		<--- ADDED THIS LINE
 	  require('postcss-insert'),		<--- ADDED THIS LINE
         ],
+        sourceMap: isEnvProduction && shouldUseSourceMap,
       },
 

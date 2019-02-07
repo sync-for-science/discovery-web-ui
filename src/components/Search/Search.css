@@ -15,7 +15,7 @@
    align-items:center;
    margin:10px 0;
 	padding:0 20px 0 20px;
-//	border-right:solid 1px var(--white-75percent);
+/*	border-right:solid 1px var(--white-75percent); */
 	border-left:solid 1px var(--white-75percent); 
 }
 

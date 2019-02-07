@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './ReportView.css';
-import { inDateRange } from '../../util.js';
+import { inDateRange, unimplemented } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 import StandardFilters from '../StandardFilters';
 
@@ -19,6 +19,7 @@ import MedsStatement from '../MedsStatement';
 import Procedures from '../Procedures';
 import SocialHistory from '../SocialHistory';
 import VitalSigns from '../VitalSigns';
+import Unimplemented from '../Unimplemented';
 
 //
 // Render the "report view" of the participant's data
@@ -92,7 +93,8 @@ export default class ReportView extends Component {
 	    <Procedures          className='procedures'     key={divs.length+11} data={res} showDate={true} isEnabled={this.catEnabled('Procedures')} />,
 	    <SocialHistory       className='social-history' key={divs.length+12} data={res} showDate={true} isEnabled={this.catEnabled('Social History')} />,
 	    <VitalSigns          className='vital-signs'    key={divs.length+13} data={res} showDate={true} isEnabled={this.catEnabled('Vital Signs')}
-		 resources={this.props.resources} />
+		 resources={this.props.resources} />,
+	    <Unimplemented	 className='unimplemented'  key={divs.length+14} data={res} showDate={true} isEnabled={this.catEnabled(unimplemented())} />
 	 ]);
       }
       return divs;

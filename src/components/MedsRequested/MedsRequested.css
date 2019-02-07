@@ -3,7 +3,7 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery MedsRequested Stylesheet */
-/* v.01.15 Updated 12/26/2018 */
+/* v.01.16 Updated 2/06/2019 */
 
 .meds-requested-display {
 	@insert .content-panel-display;
@@ -23,10 +23,11 @@
 
 .meds-requested-dosage {
 	@insert .label;
-	font-family: discovery-data-text;
-	color: var(--data);
+/*	font-family: discovery-data-text;
+	color: var(--data); */
+	text-align: left;
 	padding:6px 0 0 0;
-	grid-column: 3;
+	grid-column: 3/span 4;
 }
 
 .meds-requested-start-label {
@@ -39,19 +40,19 @@
 	@insert .value;
 	font-family: discovery-data;
 	padding:0;
-	grid-column:2;
+	grid-column:2/span 3;
 }
 
 .meds-requested-repeat-label {
 	@insert .label;
 	padding:6px 0 0 15px;
-	grid-column: 3;
+	grid-column: 5;
 }
 
 .meds-requested-repeat-count {
 	@insert .value;
 	font-family: discovery-data;
-	grid-column: 4;
+	grid-column: 6;
 }
 
 .meds-requested-reason-label {
@@ -120,5 +121,5 @@
 
 .meds-requested-provider-value {
 	@insert .value;
-	grid-column:2;
+	grid-column:2/span 4;
 }

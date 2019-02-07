@@ -1,0 +1,22 @@
+@charset "UTF-8";
+@import '../../css/ColorVariablesMaster.css';
+@import '../../css/ContentPanelGlobal.css';
+
+/* Sync for Science Discovery Unimplemented Stylesheet */
+/* v.01.02 Updated 02/06/2019 */
+
+.unimplemented {
+   padding:0 0 5px 0;
+   margin:0 0 10px 0;
+   border-bottom:1px solid var(--white);
+}
+
+.unimplemented-label {
+/* font-family: discovery-data-text;
+ width:100px; */
+	margin-left:20px;
+	@insert .value;
+   text-align: left;
+   padding:4px 0 0 0;
+   grid-column:1;
+}

@@ -5,7 +5,8 @@ import { get } from 'axios';
 import './DiscoveryApp.css';
 import config from '../../config.js';
 import FhirTransform from '../../FhirTransform.js';
-import { cleanDates, normalizeDates, timelineIncrYears, ignoreCategories } from '../../util.js';
+import { cleanDates, normalizeDates, timelineIncrYears, ignoreCategories, unimplemented } from '../../util.js';
+import DiscoveryContext from '../DiscoveryContext';
 import PageHeader from '../PageHeader';
 import LongitudinalView from '../LongitudinalView';
 import SummaryView from '../SummaryView';
@@ -173,7 +174,7 @@ export default class DiscoveryApp extends Component {
 	 'Encounter':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Encounter]'),
 	 'Questionnaire':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Questionnaire]'),
 	 'QuestionnaireResponse':	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=QuestionnaireResponse]'),
-	 'Observation (Other)': 	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
+	 'Observation-Other':	 	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
 										       +'[*:isNotCategory(Laboratory)&:isNotCategory(laboratory)'
 										       + '&:isNotCategory(Vital Signs)&:isNotCategory(vital-signs)'
 										       + '&:isNotCategory(Social History)&:isNotCategory(procedure)'
@@ -307,7 +308,12 @@ export default class DiscoveryApp extends Component {
       let cats = {};
       if (this.state.resources) {
          for (let resource of this.state.resources.transformed) {
-	    if (!ignoreCategories().includes(resource.category)) {
+	    if (resource.category === 'Patient') {
+		 // Ignore
+	    } else if (ignoreCategories().includes(resource.category)) {
+	       // Add the "Unimplemented" category
+	       cats[unimplemented()] = null;
+	    } else {
 	       // Add the found category
 	       cats[resource.category] = null;
 	    }
@@ -368,18 +374,20 @@ export default class DiscoveryApp extends Component {
       }
 
       return (
-         <div className='discovery-app'>
-	    <PageHeader rawQueryString={this.props.location.search} modalIsOpen={this.state.modalIsOpen}
-			modalFn={ name => this.setState({ modalName: name, modalIsOpen: true }) }
-			viewFn={ name => this.setState({ currentView: name }) }
-			searchData={this.state.resources && this.state.resources.transformed}
-			searchCallback={this.searchCallback}
-			resources={this.state.resources} />
-	    { this.state.currentView && this.renderCurrentView() }
-	    <DiscoveryModal isOpen={this.state.modalIsOpen} modalName={this.state.modalName}
-			    onClose={ name => this.setState({ modalName: '', modalIsOpen: false })} />
-	    <PageFooter resources={this.state.resources} />
-	 </div>
+	 <DiscoveryContext.Provider value={{providers: this.providers}}>
+	    <div className='discovery-app'>
+	       <PageHeader rawQueryString={this.props.location.search} modalIsOpen={this.state.modalIsOpen}
+			   modalFn={ name => this.setState({ modalName: name, modalIsOpen: true }) }
+			   viewFn={ name => this.setState({ currentView: name }) }
+			   searchData={this.state.resources && this.state.resources.transformed}
+			   searchCallback={this.searchCallback}
+			   resources={this.state.resources} />
+	       { this.state.currentView && this.renderCurrentView() }
+	       <DiscoveryModal isOpen={this.state.modalIsOpen} modalName={this.state.modalName}
+			       onClose={ name => this.setState({ modalName: '', modalIsOpen: false })} />
+	       <PageFooter resources={this.state.resources} />
+	    </div>
+	 </DiscoveryContext.Provider>
       );
    }
 }

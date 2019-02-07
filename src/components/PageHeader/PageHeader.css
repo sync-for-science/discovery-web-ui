@@ -2,7 +2,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.28 Updated 1/31/2019 */
+/* v.01.29 Updated 2/04/2019 */
 
 .page-header {
    position: fixed;
@@ -47,7 +47,7 @@
    margin:0 20px 0 0;
    background-image:url(../../svg/logo-s4s-3-off.svg);
    background-size:210px 60px;
-//	background-position:0 0;
+/*	background-position:0 0; */
 }
 
 .logo-s4s-button-on {
@@ -56,7 +56,7 @@
    margin:0 20px 0 0;
    background-image: url(../../svg/logo-s4s-3-on.svg);
    background-size:210px 60px;
-//	background-position:0 0;
+/*	background-position:0 0; */
 }
 
 .logo-harvard-button-off {
@@ -178,7 +178,7 @@
    align-items:left;
    justify-content:flex-start;
    height:40px;
-   width:15%;
+   width:45%;
    min-width:160px;
    padding:0 0 0 10px;
    margin:10px 0;
@@ -196,6 +196,7 @@
    margin:0;
    border:none;
    cursor:pointer;
+	fill:red;
 }
 
 .default-view-button-off {
@@ -348,7 +349,7 @@
 .patient-name {
    display:flex;
 	height:60px;
-	width:45%;
+	width:auto;
 	align-items:center;
 	justify-content: flex-end;
 	font-family:discovery-data-bold;

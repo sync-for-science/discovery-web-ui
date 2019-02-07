@@ -3,7 +3,7 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery MedsDispensed Stylesheet */
-/* v.01.15 Updated 12/26/2018 */
+/* v.01.16 Updated 2/06/2019 */
 
 .meds-dispensed-display {
 	@insert .content-panel-display;
@@ -18,7 +18,7 @@
 
 .meds-dispensed-status-value {
 	@insert .value;
-	grid-column:2/ span 3;
+	grid-column:2/ span 5;
 }
 
 .meds-dispensed-quantity {
@@ -38,7 +38,7 @@
 	@insert .value;
 	font-family: discovery-data;
 	text-align: right;
-	padding:0 0 0 15px;
+	padding:0 0 0 5px;
 	grid-column: 3;
 }
 
@@ -58,5 +58,5 @@
 
 .meds-dispensed-provider-value {
 	@insert .value;
-	grid-column:2;
+	grid-column:2/span 4;
 }

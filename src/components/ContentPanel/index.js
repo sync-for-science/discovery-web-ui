@@ -4,7 +4,7 @@ import Draggable from 'react-draggable';
 import Modal from 'react-responsive-modal';
 
 import './ContentPanel.css';
-import { formatDate, formatAge } from '../../util.js';
+import { formatDate, formatAge, unimplemented } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 
 import Allergies from '../Allergies';
@@ -20,6 +20,7 @@ import MedsStatement from '../MedsStatement';
 import Procedures from '../Procedures';
 import SocialHistory from '../SocialHistory';
 import VitalSigns from '../VitalSigns';
+import Unimplemented from '../Unimplemented';
 
 
 //
@@ -207,6 +208,7 @@ export default class ContentPanel extends Component {
 	       <SocialHistory       className='social-history' data={context.data} isEnabled={this.catEnabled('Social History')} />
 	       <VitalSigns          className='vital-signs'    data={context.data} isEnabled={this.catEnabled('Vital Signs')}
 		    resources={this.props.resources} />
+	       <Unimplemented	    className='unimplemented'  data={context.data} isEnabled={this.catEnabled(unimplemented())} />
 
 	       <Modal open={this.state.payloadModalIsOpen} onClose={() => this.setState({payloadModalIsOpen: false})}>
 	          <pre className='content-panel-data'>
