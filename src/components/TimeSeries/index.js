@@ -24,9 +24,9 @@ export default class TimeSeries extends Component {
       let years = maxX.getFullYear() - minX.getFullYear() + 1;
 
       // TODO: some visualization when all data is the same date?
-      if (minX === maxX) {
-	 return null;
-      }
+//      if (minX === maxX) {
+//	 // something else
+//      }
 
       // TODO: fix kluge
       if (minY === maxY) {
@@ -57,9 +57,9 @@ export default class TimeSeries extends Component {
       let years = maxX.getFullYear() - minX.getFullYear() + 1;
 
       // TODO: some visualization when all data is the same date?
-      if (minX === maxX) {
-	 return null;
-      }
+//      if (minX === maxX) {
+//	 // something else
+//      }
 
       // TODO: better technique to set Y scale for this case?
       if (minY === maxY) {
@@ -73,12 +73,17 @@ export default class TimeSeries extends Component {
 	    <XAxis tickFormat={d => d.getFullYear()} tickTotal={years} />
 	    <YAxis />
 	    <LineMarkSeries data={this.props.data} size={3} />
-	    { this.props.highlights && <LineMarkSeries data={this.props.highlights} xDomain={[minX,maxX]} size={8} color='#8d3031' /> }
-	    { this.props.highlights && <LineMarkSeries data={this.props.highlights} xDomain={[minX,maxX]} size={5} color='white' /> }
-	    { this.props.highlights && <LineMarkSeries data={this.props.highlights} xDomain={[minX,maxX]} size={3.7} color='#01a6aa' /> }
+	    { this.props.highlights && <LineMarkSeries data={this.props.highlights} size={8} color='#8d3031' /> }
+	    { this.props.highlights && <LineMarkSeries data={this.props.highlights} size={5} color='white' /> }
+	    { this.props.highlights && <LineMarkSeries data={this.props.highlights} size={3.7} color='#01a6aa' /> }
 	 </XYPlot>
       );
    }
+
+//	    { this.props.highlights && <LineMarkSeries data={this.props.highlights} xDomain={[minX,maxX]} size={8} color='#8d3031' /> }
+//	    { this.props.highlights && <LineMarkSeries data={this.props.highlights} xDomain={[minX,maxX]} size={5} color='white' /> }
+//	    { this.props.highlights && <LineMarkSeries data={this.props.highlights} xDomain={[minX,maxX]} size={3.7} color='#01a6aa' /> }
+
 
    render() {
       if (this.props.data && this.props.data.length > 1) {

@@ -17,7 +17,7 @@
 .report-title {
    display: flex;
    flex-direction: row;
-   width:calc(100% - 40px);
+   width:calc(100% - 90px);
    height:50px;
    min-height:50px;
    padding:0 20px 0 70px;

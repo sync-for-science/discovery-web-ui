@@ -81,7 +81,8 @@
 
 .default-body-value {
    @insert .value;
-	width:auto;
+   height:auto;
+   width:auto;
    font-family:discovery-regular;
    font-size:1.000rem;
    text-align:left;

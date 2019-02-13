@@ -7,7 +7,8 @@
 .content-panel {
    position: absolute;
    left:214px;
-   top:0;
+/*   top:0; */
+   top:62px;
    width:calc(100% - 235px);
    max-width:calc(100% - 235px);
    height:calc(100vh - 10.70rem);
@@ -95,10 +96,11 @@
 .content-panel-inner-title-payload-button {
    border:0;
    font-family:discovery-data-bold;
-   font-size:1.200rem;
+   font-size:0.900rem;
    background-color:var(--blue-dark);
    color:var(--white);
    white-space: nowrap;
+	padding: 2px 0 0 0;
 }
 
 .content-panel-inner-title-close-button {
@@ -152,19 +154,20 @@
 
 .content-header-date {
 /*   @insert .header; */
-   width:10%;
+   width:auto;
 /*   min-width:135px; */
-   min-width:110px;
+   
    border-bottom:1px solid var(--blue-dark);
    font-family: discovery-data-bold;
    font-size: 0.900rem;
    color: var(--blue-dark);
    white-space: nowrap;
+	padding:4px 20px 0 0;
 }
 
 .content-header-date-disabled {
 /*   @insert .header; */
-   width:10%;
+   width:auto;
 /*   min-width:135px; */
    min-width:110px;
    border-bottom:1px solid var(--gray-medium);
@@ -172,6 +175,7 @@
    font-size: 0.900rem;
    color: var(--discovery-data-divider);
    white-space: nowrap;
+	padding:4px 20px 0 0;
 }
 
 .content-header {
@@ -180,6 +184,7 @@
    min-width: 90%;
    border-bottom:1px solid var(--blue-dark);
    color: var(--blue-dark);
+	padding:0 0 4px 0;
 }
 
 .content-header-disabled {

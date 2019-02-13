@@ -2,8 +2,9 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery LongitudinalView Stylesheet */
-/* v.01.07 Updated 01/08/2019 */
+/* v.01.07 Updated 02/13/2019 */
 
+/*
 .longitudinal-view {
 	position: fixed;
 	top:62px;
@@ -12,6 +13,7 @@
 	min-width: 1024px;
 	height:calc(100% - 62px - 12px);
 }
+*/
 
 .longitudinal-view-categories-and-providers {
 	position: fixed;

@@ -2,7 +2,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.29 Updated 2/04/2019 */
+/* v.01.30 Updated 2/11/2019 */
 
 .page-header {
    position: fixed;
@@ -178,7 +178,7 @@
    align-items:left;
    justify-content:flex-start;
    height:40px;
-   width:45%;
+   width:auto;
    min-width:160px;
    padding:0 0 0 10px;
    margin:10px 0;
@@ -349,15 +349,16 @@
 .patient-name {
    display:flex;
 	height:60px;
-	width:auto;
+	width:45%;
 	align-items:center;
-	justify-content: flex-end;
-	font-family:discovery-data-bold;
+	justify-content: flex-start;
+	font-family:discovery-regular;
    font-size:1.200rem;
-	text-align:right;
+	text-align:left;
    color:var(--white);
    white-space: nowrap;
-   margin:0 20px 0 0;
+	padding:5px 0 0 0;
+   margin:0 20px;
 }
 
 /* Header Controls */

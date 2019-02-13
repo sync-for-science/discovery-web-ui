@@ -39,10 +39,10 @@ export default class ContentPanel extends Component {
 	 maxDate: PropTypes.string.isRequired,
 	 date: PropTypes.string.isRequired,
 	 data: PropTypes.array
-      }),
+      }),				// required, but added dynamically by StandardFilters
       catsEnabled: PropTypes.object.isRequired,
       provsEnabled: PropTypes.object.isRequired,
-      nextPrevFn: PropTypes.func.isRequired,
+      nextPrevFn: PropTypes.func,	// required, but added dynamically by StandardFilters
       resources: PropTypes.instanceOf(FhirTransform)
    }
 
@@ -166,11 +166,15 @@ export default class ContentPanel extends Component {
 
    onNextPrev = this.onNextPrev.bind(this);
    onNextPrev(direction) {
-      const enabled = this.props.nextPrevFn(direction);
-      if (direction === 'prev') {
-	 this.setState({prevEnabled: enabled, nextEnabled: true, annunciator: null});
-      } else {
-	 this.setState({prevEnabled: true, nextEnabled: enabled, annunciator: null});
+      try {
+	 const enabled = this.props.nextPrevFn(direction);
+	 if (direction === 'prev') {
+	    this.setState({prevEnabled: enabled, nextEnabled: true, annunciator: null});
+	 } else {
+	    this.setState({prevEnabled: true, nextEnabled: enabled, annunciator: null});
+	 }
+      } catch (e) {
+	 console.log(`ContentPanel: ${e.message}`);
       }
    }
 
