@@ -1,16 +1,16 @@
 export default [
-   'date',
+   'assertedDate',
+   'authoredOn',
    'created',
-   'onsetDateTime',
+   'date',
+   'dateAsserted',
+   'dosageInstruction',
    'effectiveDateTime',
    'effectiveTimeDateTime',
    'effectiveTimePeriod',
-   'dateAsserted',
-   'assertedDate',
-   'recordedDate',
-   'authoredOn',
-   'whenHandedOver',
+   'onsetDateTime',
    'performedDateTime',
    'performedPeriod',
-   'dosageInstruction'
+   'recordedDate',
+   'whenHandedOver'
 ]

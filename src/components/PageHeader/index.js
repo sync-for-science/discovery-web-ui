@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Draggable from 'react-draggable';
@@ -15,7 +15,7 @@ import Search from '../Search';
 //    if there is a 'logos' query parameter, its comma-separated
 //    elements will be used as left-to-right logo css classes.
 //
-export default class PageHeader extends Component {
+export default class PageHeader extends React.Component {
 
    static propTypes = {
       rawQueryString: PropTypes.string.isRequired,
@@ -82,8 +82,17 @@ export default class PageHeader extends Component {
 	    case 'compareView':
 	       document.querySelector('.compare-view-button-on').className = 'compare-view-button-off';
 	       break;
-	    case 'reportView':
-	       document.querySelector('.report-view-button-on').className = 'report-view-button-off';
+//	    case 'reportView':
+//	       document.querySelector('.report-view-button-on').className = 'report-view-button-off';
+//	       break;
+	    case 'benefitsView':
+	       document.querySelector('.benefits-view-button-on').className = 'benefits-view-button-off';
+	       break;
+	    case 'consultView':
+	       document.querySelector('.consult-view-button-on').className = 'consult-view-button-off';
+	       break;
+	    case 'diabetesView':
+	       document.querySelector('.diabetes-view-button-on').className = 'diabetes-view-button-off';
 	       break;
 	    case 'summaryView':
 	    default:
@@ -162,8 +171,17 @@ export default class PageHeader extends Component {
 	    case 'compareView':
 	       document.querySelector('.compare-view-button-off').className = 'compare-view-button-on';
 	       break;
-	    case 'reportView':
-	       document.querySelector('.report-view-button-off').className = 'report-view-button-on';
+//	    case 'reportView':
+//	       document.querySelector('.report-view-button-off').className = 'report-view-button-on';
+//	       break;
+	    case 'benefitsView':
+	       document.querySelector('.benefits-view-button-off').className = 'benefits-view-button-on';
+	       break;
+	    case 'consultView':
+	       document.querySelector('.consult-view-button-off').className = 'consult-view-button-on';
+	       break;
+	    case 'diabetesView':
+	       document.querySelector('.diabetes-view-button-off').className = 'diabetes-view-button-on';
 	       break;
 	    case 'summaryView':
 	    default:
@@ -218,20 +236,28 @@ export default class PageHeader extends Component {
 
    get viewHelpTitle() {
       return {
-	 longitudinalView: 'Timeline',
+//	 longitudinalView: 'Timeline',
+	 longitudinalView: 'Report',
 	 compareView: 'Comparison',
-	 reportView: 'Report',
-	 summaryView: 'Summary'
+//	 reportView: 'Report',
+	 summaryView: 'Summary',
+	 benefitsView: 'Benefits',
+	 consultView: 'Consult',
+	 diabetesView: 'Diabetes'
       }
    }
 
    get viewHelpText() {
       return {
-	 longitudinalView: <div>The <b>Timeline</b> view shows a clickable dot for each date you have data.</div>,
+//	 longitudinalView: <div>The <b>Timeline</b> view shows a clickable dot for each date you have data.</div>,
+	 longitudinalView: <div>The <b>Report</b> view shows a clickable dot for each date you have data or lists all your data in date order.</div>,
 	 compareView: <div>The <b>Comparison</b> view lists each data item and which providers have the same data item.</div>,
-	 reportView: <div>The <b>Report</b> view lists all your data in date order.</div>,
+//	 reportView: <div>The <b>Report</b> view lists all your data in date order.</div>,
 	 summaryView: <div>The <b>Summary</b> view is an overview of your data. Details can be seen
-	      in the <b>Timeline</b>, <b>Compare</b>, and <b>Report</b> views.</div>
+	      in the <b>Report</b> and <b>Compare</b> views.</div>,
+	 benefitsView: <div>The <b>Benefits</b> view is ...</div>,
+	 consultView: <div>The <b>Consult</b> view is ...</div>,
+	 diabetesView: <div>The <b>Diabetes</b> view is ...</div>
       };
    }
 
@@ -239,8 +265,11 @@ export default class PageHeader extends Component {
       return {
 	 longitudinalView: 'view-help-title-longitudinal-view',
 	 compareView: 'view-help-title-compare-view',
-	 reportView: 'view-help-title-report-view',
-	 summaryView: 'view-help-title-default-view'
+//	 reportView: 'view-help-title-report-view',
+	 summaryView: 'view-help-title-default-view',
+	 benefitsView: 'view-help-title-benefits-view',
+	 consultView: 'view-help-title-consult-view',
+	 diabetesView: 'view-help-title-diabetes-view'
       };
    }
     
@@ -274,9 +303,12 @@ export default class PageHeader extends Component {
 	    </div>
 	    <div className='view-controls-box'>
 	      <button className='longitudinal-view-button-off' onClick={() => this.viewClick('longitudinalView')}></button>
-	      <button className='report-view-button-off' onClick={() => this.viewClick('reportView')}></button>
+	      {/*	      <button className='report-view-button-off' onClick={() => this.viewClick('reportView')}></button> */}
 	      <button className='compare-view-button-off' onClick={() => this.viewClick('compareView')}></button>
 	      <button className='default-view-button-off' onClick={() => this.viewClick('summaryView')}></button>
+	      <button className='benefits-view-button-off' onClick={() => this.viewClick('benefitsView')}></button>
+	      <button className='consult-view-button-off' onClick={() => this.viewClick('consultView')}></button>
+	      <button className='diabetes-view-button-off' onClick={() => this.viewClick('diabetesView')}></button>
 	    </div>
 	    { this.state.viewHelpIsOpen && this.renderViewHelp() }
 	    <div className='patient-name'>

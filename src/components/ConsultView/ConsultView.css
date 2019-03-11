@@ -1,0 +1,22 @@
+@charset "UTF-8";
+@import '../../css/ViewContainer.css';
+
+/* Sync for Science Discovery ConsultView Stylesheet */
+/* v.01.04 Updated 02/20/2019 */
+
+.consult-view {
+	@insert .view-container;
+}
+
+.consult-title {
+	@insert .view-title;
+	background-image: url("../../svg/view-icon-consult.svg");
+}
+
+.consult-title-name {
+   @insert .view-title-name;
+}
+
+.consult-contents {
+	@insert .view-contents;
+}

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { get } from 'axios';
 import queryString from 'query-string';
 
@@ -9,7 +9,7 @@ import config from '../../config.js';
 //
 // Render the list of participants
 //
-export default class ParticipantList extends Component {
+export default class ParticipantList extends React.Component {
 
    state = {
       participants: {},

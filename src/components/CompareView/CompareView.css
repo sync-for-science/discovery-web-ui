@@ -1,81 +1,44 @@
 @charset "UTF-8";
-@import '../../css/ColorVariablesMaster.css';
+@import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery CompareView Stylesheet */
-/* v.01.05 Updated 01/14/2018 */
+/* v.01.08 Updated 02/20/2019 */
 
 .compare-view {
-   position: fixed;
-   top:146px;
-   left:214px;
-   width:calc(100% - 234px);
-	min-width:840px;
-   height:calc(100% - 75px - 12px);
-	margin:0;
+	@insert .view-container;
 }
 
 .compare-title {
-	display: flex;
-   flex-direction: row;
-   width:calc(100% - 90px);
-   height:50px;
-   min-height:50px;
-   padding:0 20px 0 70px;
-	border-top:2px solid var(--accent);
-   background-color: var(--blue-dark);
+	@insert .view-title;
 	background-image: url("../../svg/view-icon-comparison-on.svg");
-	background-repeat: no-repeat;
-	background-position:20px 8px;
-	background-size:35px 35px;
-   font-family: discovery-data;
-   font-size: 1.000rem;
-   color:var(--white);
-   align-items: center;
-   justify-content:flex-start;
 }
 
 .compare-title-name {
-	font-family:discovery-bold;
-   font-size:1.000rem;
-	color:var(--white);
-	margin:0;
+   @insert .view-title-name;
 }
 
 .compare-title-patient-name {
-   font-family:discovery-data-bold;
-   font-size:1.200rem;
-   color:var(--white);
-   white-space: nowrap;
-   margin-left:35px;
+	@insert .view-title-patient-name;
 }
 
 .compare-contents {
-   position: fixed;
-   top: 196px;
-   left: 214px;
-   min-height: calc(100% - 196px - 20px - 15px);
-   max-height: calc(100% - 196px - 20px - 15px);
-   min-width: calc(100% - 210px - 28px);
-   max-width: calc(100% - 210px - 28px);
-   background-color: var(--discovery-background);
-	padding:20px 0 0 0;
-   white-space: pre-wrap;
-   display:flex;
-   flex-direction: column;
-   overflow-y:hidden;
-	overflow-x: hidden;
-	border:2px solid var(--discovery-blue);
+	@insert .view-contents;
+	height:calc(100% - 343px);
+	margin: 0 0 0 0;
+	overflow-y:hidden;
+   overflow-x: hidden;
+	padding-top: 0;
 }
 
 .compare-matrix {
    display:grid;
-	grid-template-columns: 300px repeat(30, 1fr);
-	grid-column-gap:2px;
-	grid-auto-flow: column;
+   grid-template-columns: 300px repeat(30, 1fr);
+   grid-column-gap:2px;
+   grid-auto-flow: column;
    height: auto;
    overflow-y: scroll;
-	margin:0;
-	padding: 0 20px 0 20px;
+   margin:0;
+   padding: 0 20px 0 20px;
 }
 
 .compare-cat-name {
@@ -96,37 +59,36 @@
    border-bottom:1px solid var(--gray-medium);
    color: var(--gray-medium);
    grid-column:1/span 40;
-	
 }
 
 .compare-code-display {
    display:flex;
-	flex-direction: column;
-	justify-content: center;
+   flex-direction: column;
+   justify-content: center;
    width:270px;
-	max-width: 270px;
+   max-width: 270px;
    font-family:discovery-bold;
    font-size:0.800rem;
    text-align:left;
    color: var(--gray-dark);
    white-space:wrap;
-	word-wrap: break-word;
+   word-wrap: break-word;
    margin:0;
    padding:5px 10px 5px 20px;
-	border-bottom:solid 1px var(--gray-light-translucent);
+   border-bottom:solid 1px var(--gray-light-translucent);
    grid-column:1;
-	overflow:hidden; 
+   overflow:hidden; 
 }
 
 .compare-prov-count-even {
-  	position: relative;
-	bottom:0;
-	display:flex;
-	flex-direction: column;
-	justify-content:flex-end;
-	align-items:flex-end;
-	align-self: flex-end;
-	height:auto;
+   position: relative;
+   bottom:0;
+   display:flex;
+   flex-direction: column;
+   justify-content:flex-end;
+   align-items:flex-end;
+   align-self: flex-end;
+   height:auto;
    width:38px;
    min-width: 35px;
    max-width: 35px;
@@ -141,22 +103,22 @@
    margin:0px;
    border-bottom:solid 1px var(--gray-light-translucent);
 /* background-color:var(--gray-light-translucent);
-	background-image:url(../../svg/checkmark.svg);
-	background-size:15px 15px;
-	background-repeat:no-repeat;
-	background-position: 10px center; */
+   background-image:url(../../svg/checkmark.svg);
+   background-size:15px 15px;
+   background-repeat:no-repeat;
+   background-position: 10px center; */
    grid-column:auto;
 }
 
 .compare-prov-count-odd {
    position: relative;
-	bottom:0;
-	display:flex;
-	flex-direction: column;
-	justify-content:flex-end;
-	align-items:flex-end;
-	align-self: flex-end;
-	height:auto;
+   bottom:0;
+   display:flex;
+   flex-direction: column;
+   justify-content:flex-end;
+   align-items:flex-end;
+   align-self: flex-end;
+   height:auto;
    width:38px;
    min-width: 35px;
    max-width: 35px;
@@ -172,36 +134,36 @@
    border-bottom:solid 1px var(--gray-light-translucent);
    background-color:var(--white);
 /*	background-image:url(../../svg/checkmark.svg);
-	background-size:15px 15px;
-	background-repeat:no-repeat;
-	background-position: 10px center; */
+   background-size:15px 15px;
+   background-repeat:no-repeat;
+   background-position: 10px center; */
    grid-column: auto;
 }
 
 .compare-prov-count-contents-even {
    position: relative;
-	bottom:0;
-	display:flex;
-	flex-direction: column;
-	justify-content:center;
-	text-align: center;
-	background-color:var(--data);
-	width:100%;
-	margin:auto;
-	border-bottom:1px solid var(--data);
+   bottom:0;
+   display:flex;
+   flex-direction: column;
+   justify-content:center;
+   text-align: center;
+   background-color:var(--data);
+   width:100%;
+   margin:auto;
+   border-bottom:1px solid var(--data);
 }
 
 .compare-prov-count-contents-odd {
    position: relative;
-	bottom:0;
-	display:flex;
-	flex-direction: column;
-	justify-content:center;
-	text-align: center;
-	width:100%;
+   bottom:0;
+   display:flex;
+   flex-direction: column;
+   justify-content:center;
+   text-align: center;
+   width:100%;
    background-color:var(--data);
-	margin:auto;
-	border-bottom:1px solid var(--data);
+   margin:auto;
+   border-bottom:1px solid var(--data);
 }
 
 .compare-providers {
@@ -209,28 +171,25 @@
    left:0;
    bottom:0;
    height:180px;
-	min-height:180px;
+   min-height:180px;
    display: flex;
    flex-direction: row;
    padding:0 0 0 280px;
-	margin:-10px 0 0 0;
+   margin:-10px 0 0 0;
 }
 
 .compare-prov-name {
    height:170px;
    width:37px;
    min-width: 37px;
-	max-width: 37px;
+   max-width: 37px;
    font-family: discovery-bold;
    font-size:0.90rem;
    color: var(--data);
    text-align: left;
    white-space: nowrap;
    padding:0;
-	margin:0;
-	transform: rotate(45deg);
+   margin:0;
+   transform: rotate(45deg);
    overflow: visible;
 }
-
-
-

@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import './StandardFilters.css';
 import FhirTransform from '../../FhirTransform.js';
-import { getStyle, combine, cleanDates, normalizeDates } from '../../util.js';
+import { getStyle, formatDate, combine, cleanDates, normalizeDates } from '../../util.js';
 import TimeWidget from '../TimeWidget';
 import CategoryRollup from '../CategoryRollup';
 import Categories from '../Categories';
@@ -12,10 +12,14 @@ import ProviderRollup from '../ProviderRollup';
 import Providers from '../Providers';
 import Provider from '../Provider';
 
+import DiscoveryContext from '../DiscoveryContext';
+
 //
 // Render the "container" for views of the participant's data
 //
-export default class StandardFilters extends Component {
+export default class StandardFilters extends React.Component {
+
+   static contextType = DiscoveryContext;		// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform),
@@ -31,13 +35,6 @@ export default class StandardFilters extends Component {
       }),
       categories: PropTypes.arrayOf(PropTypes.string),
       providers: PropTypes.arrayOf(PropTypes.string),
-      searchRefs: PropTypes.arrayOf(PropTypes.shape({	// Search results to highlight
-	 provider: PropTypes.string.isRequired,
-	 category: PropTypes.string.isRequired,
-	 date: PropTypes.string.isRequired,
-	 veryInteresting: PropTypes.bool.isRequired,
-	 position: PropTypes.number.isRequired
-      })),
       enabledFn: PropTypes.func.isRequired,
       dateRangeFn: PropTypes.func.isRequired,
       lastEvent: PropTypes.instanceOf(Event),
@@ -61,6 +58,7 @@ export default class StandardFilters extends Component {
       if (this.props.allowDotClick) {
 	 this.setState({ dotClickContext: { parent: 'TimeWidget', rowName: 'Full', dotType: 'active',
 					    minDate: this.props.dates.minDate, maxDate: this.props.dates.maxDate,
+					    allDates: this.props.dates.allDates,
 					    date: this.props.dates.maxDate,
 					    data: this.fetchDataForDot('TimeWidget', 'Full', this.props.dates.maxDate),
 					    position: this.props.dates.allDates[this.props.dates.allDates.length-1].position }});
@@ -70,22 +68,20 @@ export default class StandardFilters extends Component {
    componentDidUpdate(prevProps, prevState) {
       if (prevProps.lastEvent !== this.props.lastEvent) {
 	 switch (this.props.lastEvent.type) {
-	    case 'keydown':
-	       this.onKeydown(this.props.lastEvent);
-	       break;
 	    case 'resize':
 	    default:
 	       this.updateSvgWidth();
 	       break;
 	 }
-      }
-   }
-
-   onKeydown = (event) => {
-      if (event.key === 'ArrowLeft' && !this.state.contentPanelIsOpen) {
-	 this.onNextPrevClick('prev');
-      } else if (event.key === 'ArrowRight' && !this.state.contentPanelIsOpen) {
-	 this.onNextPrevClick('next');
+      } else if (this.context.searchRefs && this.context.searchRefs.length > 0) {
+	 // If most recent searchRef differs from currently highlighted dot, set dotClickContext
+	 let recentRef = this.context.searchRefs[0];
+	 if (recentRef.position !== this.state.dotClickContext.position) {
+	    let newContext = Object.assign({}, this.state.dotClickContext);
+	    newContext.date = recentRef.date;
+	    newContext.position = recentRef.position;
+	    this.setState({ dotClickContext: newContext });
+	 }
       }
    }
 
@@ -159,9 +155,6 @@ export default class StandardFilters extends Component {
       this.setState({ minActivePos: minActivePos,
 		      maxActivePos: maxActivePos,
 		      timelineIsExpanded: isExpanded });
-      // Return equivalent min/max dates
-//      return {minDate: this.props.dates.allDates.find(elt => elt.position >= minActivePos).date,
-//	      maxDate: this.props.dates.allDates.slice().reverse().find(elt => elt.position <= maxActivePos).date};
    }
 
    //
@@ -262,7 +255,30 @@ export default class StandardFilters extends Component {
       // Set state accordingly
       this.setState({ dotClickContext: newContext });
 
+      // Scroll date into view
+      let elt = document.getElementById(formatDate(newContext.date, true, true));
+      if (elt) {
+	 elt.scrollIntoView();
+      }
+
       return ret;
+   }
+
+   //
+   // Handle ContentPanel showAll button clicks
+   //   showAll: true or false
+   //
+   onShowAllClick = this.onShowAllClick.bind(this);
+   onShowAllClick (showAll) {
+      if (this.state.dotClickContext && showAll) {
+	 // Scroll date into view -- need to "yield" via setTimeout() for 'elt' to resolve correctly
+	 setTimeout(() => {
+	    let elt = document.getElementById(formatDate(this.state.dotClickContext.date, true, true));
+	    if (elt) {
+	       elt.scrollIntoView();
+	    }
+	 });
+      }
    }
 
    //
@@ -288,11 +304,17 @@ export default class StandardFilters extends Component {
 	 context.dotType = this.updateDotType(dotType, position, false);
 	 context.minDate = rowDates[0].date;
 	 context.maxDate = rowDates[rowDates.length-1].date;
+	 context.allDates = this.props.dates.allDates;
 	 context.date = date;
 	 context.position = position;
 	 context.data = this.fetchDataForDot(context.parent, context.rowName, context.date);
 
-	 this.setState({ dotClickContext: context, contentPanelIsOpen: true });
+	 this.setState({ dotClickContext: context });
+
+	 let elt = document.getElementById(formatDate(date, true, true));
+	 if (elt) {
+	    elt.scrollIntoView();
+	 }
       }
    }
 
@@ -321,11 +343,12 @@ export default class StandardFilters extends Component {
 	 return [];
       } else {
 	 let { startDate, endDate, allDates } = this.props.dates;
-         let searchRefs = this.props.searchRefs;
+//	 let searchRefs = this.props.searchRefs;
+	 let searchRefs = this.context.searchRefs;
 	 let dotClickContext = this.state.dotClickContext;
 //	 let matchContext = dotClickContext && dotClickContext.parent === parent && dotClickContext.rowName === rowName;
 	 let matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget' ||
-						(dotClickContext.parent === parent && dotClickContext.rowName === rowName));
+						  (dotClickContext.parent === parent && dotClickContext.rowName === rowName));
 	 let inactiveHighlightDots = matchContext && allDates.reduce((res, elt) =>
 							 ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
 								? this.includeDot(res, elt, 'inactive-highlight', parent === 'TimeWidget') : res, []);
@@ -416,13 +439,14 @@ export default class StandardFilters extends Component {
       }
    }
 
-   // TODO: handle noDots for LongitudinalView
+   // TODO: handle noDots for LongitudinalView???
    render() {
       let dates = this.props.dates;
       const extendedChildren = React.Children.map(this.props.children, child => {
 					if (child && child.type.name === 'ContentPanel') {
-					   // Add context, nextPrevFn props
-					   return React.cloneElement(child, {context: this.state.dotClickContext, nextPrevFn: this.onNextPrevClick});
+					   // Add context, nextPrevFn, showAllFn props
+					   return React.cloneElement(child, {context: this.state.dotClickContext,
+									     nextPrevFn: this.onNextPrevClick, showAllFn: this.onShowAllClick});
 					} else {
 					   return child;
 					}});
@@ -432,36 +456,29 @@ export default class StandardFilters extends Component {
 	    <TimeWidget startDate={dates ? dates.startDate : ''} endDate={dates ? dates.endDate : ''} thumbLeft={this.state.minActivePos}
 			thumbRight={this.state.maxActivePos} timelineWidth={this.state.svgWidth} setLeftRightFn={this.setLeftRight}
 			dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} />
-	    <div className='longitudinal-view-categories-and-providers'>
+	    <div className='standard-filters-categories-and-providers'>
 	       <Categories>
 		  <CategoryRollup key='rollup' svgWidth={this.state.svgWidth} noDots={!this.state.timelineIsExpanded}
 			          dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
 	          { this.state.catsExpanded ? [
-		       <div className='longitudinal-view-category-nav-spacer-top' key='0' />,
+		       <div className='standard-filters-category-nav-spacer-top' key='0' />,
 	               this.props.categories && this.props.categories.map(
 			  cat => <Category key={cat} svgWidth={this.state.svgWidth} categoryName={cat}
 					   dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} enabledFn={this.setEnabled} /> ),
-		       <div className='longitudinal-view-category-nav-spacer-bottom' key='1' />
+		       <div className='standard-filters-category-nav-spacer-bottom' key='1' />
 		  ] : null }
 	       </Categories>
-	       { this.props.providers.length === 0 ? null :
-		    this.props.providers.length > 1 ?
-		       <Providers>
-	                  <ProviderRollup key='rollup' svgWidth={this.state.svgWidth}
-					  dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
-		          { this.state.provsExpanded ? [
-		             <div className='longitudinal-view-provider-nav-spacer-top' key='0' />,
-		             this.props.providers.map(
-			        prov => <Provider key={prov} svgWidth={this.state.svgWidth} providerName={prov}
-					          dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} enabledFn={this.setEnabled} /> ),
-		             <div className='longitudinal-view-provider-nav-spacer-bottom' key='1' />
-		          ] : null }
-	               </Providers> :
-		       <div className='single-provider'>
-		          <div className='single-provider-label'>Provider</div>
-		          <div className='single-provider-name'>{this.props.providers && this.props.providers[0]}</div>
-		       </div>
-	       }
+	       <Providers>
+	          <ProviderRollup key='rollup' svgWidth={this.state.svgWidth}
+				  dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
+		  { this.state.provsExpanded ? [
+		      <div className='standard-filters-provider-nav-spacer-top' key='0' />,
+		      this.props.providers.map(
+			 prov => <Provider key={prov} svgWidth={this.state.svgWidth} providerName={prov}
+					   dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} enabledFn={this.setEnabled} /> ),
+		      <div className='standard-filters-provider-nav-spacer-bottom' key='1' />
+		  ] : null }
+	       </Providers>
 	    </div>
 	    { extendedChildren }
 	 </div>

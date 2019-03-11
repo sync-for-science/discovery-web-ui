@@ -3,7 +3,7 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery VitalSigns Stylesheet */
-/* v.01.21 Updated 2/06/2019 */
+/* v.01.22 Updated 2/14/2019 */
 
 .vital-signs-display {
    @insert .content-panel-display;
@@ -67,11 +67,11 @@
 }
 
 .vital-signs-time-series {
-   min-width:50%;
-	align-self: flex-end;
-	padding:0;
-	grid-column:21/span 40;
-	grid-row:1/6; 
+   min-width: 50%;
+	align-content: flex-end; 
+	padding:0 0 0 200px;
+	grid-column:39/40;
+	grid-row:1/6;
 }
 
 .vital-signs-provider-label {

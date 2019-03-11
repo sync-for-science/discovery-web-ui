@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import './CategoryRollup.css';
@@ -9,7 +9,7 @@ import DotLine from '../DotLine';
 //
 // Render the "rollup" category line of ParticipantDetail page
 //
-export default class CategoryRollup extends Component {
+export default class CategoryRollup extends React.Component {
 
    static propTypes = {
       svgWidth: PropTypes.string.isRequired,
@@ -32,7 +32,7 @@ export default class CategoryRollup extends Component {
       return (
 	 <div className='category-rollup'>
 	    <div className={this.state.isExpanded ? 'category-rollup-nav-enabled' : 'category-rollup-nav-disabled'} onClick={this.handleTwistyClick} >
-	       Categories
+	      {/*Categories*/}Show
 	    </div>
 	    <SVGContainer className='category-rollup-svg-container' style={this.props.noDots ? {backgroundImage:'none'} : null}
 			  svgClassName='category-rollup-svg' svgWidth={this.props.svgWidth}>

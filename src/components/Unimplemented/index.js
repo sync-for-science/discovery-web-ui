@@ -1,16 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import './Unimplemented.css';
 import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { stringCompare, formatDate, isValid, ignoreCategories } from '../../util.js';
+import { stringCompare, formatContentHeader, ignoreCategories } from '../../util.js';
+
+import DiscoveryContext from '../DiscoveryContext';
 
 //
 // Display the 'Unimplemented' categories if there are matching resources
 //
-export default class Unimplemented extends Component {
+export default class Unimplemented extends React.Component {
+
+   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       data: PropTypes.array.isRequired,
@@ -39,7 +43,6 @@ export default class Unimplemented extends Component {
    }
 
    render() {
-      let itemDate =  this.props.showDate && isValid(this.state, st => st.matchingData[0]) && formatDate(this.state.matchingData[0].itemDate, true, true);
       let renderedCats = [];
       return ( this.state.matchingData &&
 	       this.state.matchingData.map((elt, index) => {
@@ -49,11 +52,7 @@ export default class Unimplemented extends Component {
 		     renderedCats.push(elt.category);
 		     return (
 			<div className={this.props.className} key={index} >
-			   <div className='content-header-container' >
-		              { itemDate &&
-				<div className={this.props.isEnabled ? 'content-header-date' : 'content-header-date-disabled'}>{itemDate}</div> }
-		              <div className={this.props.isEnabled ? 'content-header' : 'content-header-disabled'}>{elt.category}</div>
-			   </div>
+			   { formatContentHeader(this.props.isEnabled, elt.category, this.state.matchingData[0].itemDate, this.context) }
 			   <div className='unimplemented-label'>
 			      { this.props.isEnabled && '[Not in S4S / currently unimplemented]' }
 			   </div>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import './Category.css';
@@ -9,7 +9,7 @@ import DotLine from '../DotLine';
 //
 // Render a category line of ParticipantDetail page
 //
-export default class Category extends Component {
+export default class Category extends React.Component {
 
    static propTypes = {
       categoryName: PropTypes.string.isRequired,

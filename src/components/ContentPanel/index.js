@@ -1,16 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import Modal from 'react-responsive-modal';
 
 import './ContentPanel.css';
-import { formatDate, formatAge, unimplemented } from '../../util.js';
+import config from '../../config.js';
+//import { formatDate, formatAge, inDateRange, unimplemented } from '../../util.js';
+import { inDateRange, unimplemented } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 
 import Allergies from '../Allergies';
+import Benefits from '../Benefits';
+import Claims from '../Claims';
 import Conditions from '../Conditions';
 import DocumentReferences from '../DocumentReferences';
-import Benefits from '../Benefits';
+import Encounters from '../Encounters';
 import Immunizations from '../Immunizations';
 import LabResults from '../LabResults';
 import MedsAdministration from '../MedsAdministration';
@@ -22,11 +26,17 @@ import SocialHistory from '../SocialHistory';
 import VitalSigns from '../VitalSigns';
 import Unimplemented from '../Unimplemented';
 
+import DiscoveryContext from '../DiscoveryContext';
+
+const SET_PANEL_HEIGHT_DELAY = 250;	// msec
+const CLEAR_DRAG_STATE_DELAY = 100;	// msec
 
 //
-// Render the content panel of ParticipantDetail page
+// Render the content panel for LongitudinalView, BenefitsView
 //
-export default class ContentPanel extends Component {
+export default class ContentPanel extends React.Component {
+
+   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       open: PropTypes.bool.isRequired,
@@ -35,6 +45,10 @@ export default class ContentPanel extends Component {
 	 parent: PropTypes.string.isRequired,
 	 rowName: PropTypes.string.isRequired,
 	 dotType: PropTypes.string.isRequired,
+	 allDates: PropTypes.arrayOf(PropTypes.shape({
+	    position: PropTypes.number.isRequired,
+	    date: PropTypes.string.isRequired
+	 })).isRequired,
 	 minDate: PropTypes.string.isRequired,
 	 maxDate: PropTypes.string.isRequired,
 	 date: PropTypes.string.isRequired,
@@ -43,7 +57,13 @@ export default class ContentPanel extends Component {
       catsEnabled: PropTypes.object.isRequired,
       provsEnabled: PropTypes.object.isRequired,
       nextPrevFn: PropTypes.func,	// required, but added dynamically by StandardFilters
-      resources: PropTypes.instanceOf(FhirTransform)
+      thumbLeftDate: PropTypes.string.isRequired,
+      thumbRightDate: PropTypes.string.isRequired,
+      viewName: PropTypes.string.isRequired,
+      resources: PropTypes.instanceOf(FhirTransform),
+      catsToDisplay: PropTypes.arrayOf(PropTypes.string),
+      showAllData: PropTypes.bool,
+      showAllFn: PropTypes.func		// added dynamically by StandardFilters
    }
 
    state = {
@@ -54,10 +74,17 @@ export default class ContentPanel extends Component {
       positionY: 0,
       panelHeight: 0,
       dragging: false,
+      lastDragUpdateTimestamp: 0,
       payloadModalIsOpen: false,
       prevEnabled: true,
       nextEnabled: true,
-      annunciator: null
+      annunciator: null,
+      showAllData: this.props.showAllData ? true : false,
+//      showDotLines: false,
+      showDotLines: true,
+      trimLevel: 'none',
+      trimLevelDirection: 'more',
+//      dateDisplay: 'dateOnly'
    }
 
    //
@@ -71,10 +98,14 @@ export default class ContentPanel extends Component {
       return Math.max(titleBarHeight, footer.getBoundingClientRect().top - panel.getBoundingClientRect().top - 5);
    }
 
+   setPanelHeight() {
+      setTimeout(() => this.setState({ panelHeight: this.calcHeight() }), SET_PANEL_HEIGHT_DELAY);	// Wait a bit before setting final panel height
+   }
+
    calcTopBound() {
       const headerTop = document.querySelector('.time-widget').getBoundingClientRect().top;
-//      const targetTop = document.querySelector('.longitudinal-view-category-nav-spacer-top').getBoundingClientRect().top;
-      const targetTop = document.querySelector('.longitudinal-view-categories-and-providers').getBoundingClientRect().top;
+//      const targetTop = document.querySelector('.standard-filters-category-nav-spacer-top').getBoundingClientRect().top;
+      const targetTop = document.querySelector('.standard-filters-categories-and-providers').getBoundingClientRect().top;
       return targetTop - headerTop;
    }
 
@@ -99,7 +130,7 @@ export default class ContentPanel extends Component {
 		       windowHeight: window.innerHeight });
 
       if (this.state.isOpen) {
-	 setTimeout(() => this.setState({ panelHeight: this.calcHeight() }), 250);	// Wait a bit before setting final panel height
+	 this.setPanelHeight();
       }
    }
 
@@ -107,15 +138,17 @@ export default class ContentPanel extends Component {
    // End external div location section
    //
 
-   onDragStart = (e, data) => {
-      this.setState({ dragging: true });
+   onDrag = (e, data) => {
+      if (e.timeStamp - this.state.lastDragUpdateTimestamp > config.contentPanelDragUpdateInterval) {
+	 this.setState({ dragging: true,
+			 lastDragUpdateTimestamp: e.timeStamp,
+			 positionY: data.y,
+			 panelHeight: this.calcHeight() });
+      }
    }
 
    onDragStop = (e, data) => {
-      this.setState({ positionY: data.y,
-		      panelHeight: this.calcHeight() });
-
-      setTimeout(() => this.setState({ dragging: false }), 250);	// Wait a bit before clearing drag state
+      setTimeout(() => this.setState({ dragging: false }), CLEAR_DRAG_STATE_DELAY);	// Wait a bit before clearing drag state
    }
 
    onKeydown = (event) => {
@@ -156,13 +189,17 @@ export default class ContentPanel extends Component {
       if (this.props.open && this.props.context !== prevProps.context) {
 	 this.setState({ annunciator: null });
       }
+
+      if (this.props.showAllFn && prevState.showAllData !== this.state.showAllData) {
+	 this.props.showAllFn(this.state.showAllData);
+      }
    }
 
-   onClose = this.onClose.bind(this);
-   onClose() {
-      this.setState({ isOpen:false, annunciator: null });
-      this.props.onClose();
-   }
+//   onClose = this.onClose.bind(this);
+//   onClose() {
+//      this.setState({ isOpen:false, annunciator: null });
+//      this.props.onClose();
+//   }
 
    onNextPrev = this.onNextPrev.bind(this);
    onNextPrev(direction) {
@@ -182,56 +219,169 @@ export default class ContentPanel extends Component {
       return this.props.catsEnabled[cat] === undefined || this.props.catsEnabled[cat];
    }
 
+   onShowHideLines = this.onShowHideLines.bind(this);
+   onShowHideLines() {
+      if (this.state.showDotLines) {
+	 // Hide dot lines
+	 this.setState({ showDotLines: !this.state.showDotLines,
+			 positionY: this.state.topBound });
+	 this.setPanelHeight();
+      } else {
+	 // Show dot lines
+	 this.setState({ showDotLines: !this.state.showDotLines });
+      }
+   }
+
+   onDoubleClick = this.onDoubleClick.bind(this);
+   onDoubleClick() {
+      // Reset panel position
+      this.setState({ positionY: this.state.topBound });
+      this.setPanelHeight();
+   }
+
+   copyReverse(arr) {
+      let revArr = [];	
+      for (let i = arr.length-1; i>=0; i--) {
+	  revArr.push(arr[i]);
+      }
+      return revArr;
+   }
+
+   renderDotOrAll() {
+//     let dates = this.state.showAllData ? (this.context.searchRefs.length > 0 ? this.context.searchRefs : this.props.context.allDates).filter(elt =>
+      let dates = this.state.showAllData ? (this.context.searchRefs.length > 0 ? this.context.searchRefs : this.copyReverse(this.props.context.allDates)).filter(elt =>
+										   inDateRange(elt.date, this.props.thumbLeftDate, this.props.thumbRightDate))
+					 : this.props.context.allDates.filter(elt => elt.date === this.props.context.date);
+      let showDate = this.state.showAllData;
+
+      let limitedResources = this.props.catsToDisplay ? this.props.resources.transformed.filter(elt => this.props.catsToDisplay.includes(elt.category))
+						      : this.props.resources.transformed;
+      let divs = [];
+      for (let thisDate of dates) {
+//	 let res = this.props.resources.pathItem(`[*itemDate=${thisDate.date}]`);
+	 let res = limitedResources.filter(elt => elt.itemDate === thisDate.date);
+	 if (res.length > 0) {
+	    divs = divs.concat([
+	       <Allergies           className='allergies'      key={divs.length+1}  data={res} showDate={showDate} isEnabled={this.catEnabled('Allergies')} />,
+	       <Benefits	    className='benefits'       key={divs.length+2}  data={res} showDate={showDate} isEnabled={this.catEnabled('Benefits')} />,
+	       <Claims		    className='claims'         key={divs.length+3}  data={res} showDate={showDate} isEnabled={this.catEnabled('Claims')} />,
+	       <Conditions          className='conditions'     key={divs.length+4}  data={res} showDate={showDate} isEnabled={this.catEnabled('Conditions')} />,
+	       <DocumentReferences  className='doc-refs'       key={divs.length+5}  data={res} showDate={showDate} isEnabled={this.catEnabled('Document References')} />,
+	       <Encounters          className='encounters'     key={divs.length+6}  data={res} showDate={showDate} isEnabled={this.catEnabled('Encounters')} />,
+	       <Immunizations       className='immunizations'  key={divs.length+7}  data={res} showDate={showDate} isEnabled={this.catEnabled('Immunizations')} />,
+	       <LabResults          className='lab-results'    key={divs.length+8}  data={res} showDate={showDate} isEnabled={this.catEnabled('Lab Results')}
+		    resources={this.props.resources} />,
+	       <MedsAdministration  className='meds-admin'     key={divs.length+9}  data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Administration')} />,
+	       <MedsDispensed       className='meds-dispensed' key={divs.length+10} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Dispensed')} />,
+	       <MedsRequested       className='meds-requested' key={divs.length+11} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Requested')} />,
+	       <MedsStatement       className='meds-statement' key={divs.length+12} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Statement')} />,
+	       <Procedures          className='procedures'     key={divs.length+13} data={res} showDate={showDate} isEnabled={this.catEnabled('Procedures')} />,
+	       <SocialHistory       className='social-history' key={divs.length+14} data={res} showDate={showDate} isEnabled={this.catEnabled('Social History')} />,
+	       <VitalSigns          className='vital-signs'    key={divs.length+15} data={res} showDate={showDate} isEnabled={this.catEnabled('Vital Signs')}
+		    resources={this.props.resources} />,
+	       <Unimplemented	    className='unimplemented'  key={divs.length+16} data={res} showDate={showDate} isEnabled={this.catEnabled(unimplemented())} />
+	    ]);
+	 }
+      }
+
+      if (divs.length === 0) {
+	 divs.push(<div className='content-panel-no-data' key='1'>[No matching data]</div>);
+      }
+
+      return (
+	 <div className='content-panel-inner-body'>
+	    { divs }
+	    <Modal open={this.state.payloadModalIsOpen} onClose={() => this.setState({payloadModalIsOpen: false})}>
+	       <pre className='content-panel-data'>
+		  { JSON.stringify(this.state.showAllData ? this.props.resources.transformed : this.props.context.data, null, 3) }
+	       </pre>
+	    </Modal>
+	 </div>
+      );
+   }
+
+   changeTrimLevel = this.changeTrimLevel.bind(this);
+   changeTrimLevel() {
+      switch(this.state.trimLevel) {
+	 case 'expected':
+	    this.state.trimLevelDirection === 'more' ? this.setState({ trimLevel: 'max', trimLevelDirection: 'less' })
+						     : this.setState({ trimLevel: 'none', trimLevelDirection: 'more' });
+	    break;
+
+	 default:
+	 case 'max':
+	 case 'none':
+	    this.setState({ trimLevel: 'expected' });
+	    break;
+      }	   
+   }
+
+//   changeDateDisplay = this.changeDateDisplay.bind(this);
+//   changeDateDisplay() {
+//      switch(this.state.dateDisplay) {
+//	 case 'dateTime':
+//	    this.setState({ dateDisplay: 'dateAge' });
+//	 break;
+//
+//	 case 'dateAge':
+//	    this.setState({ dateDisplay: 'dateOnly' });
+//	 break;
+//
+//	 default:
+//	 case 'dateOnly':
+//	    this.setState({ dateDisplay: 'dateTime' });
+//	 break;
+//      }
+//   }
+
    renderContents(context) {
-      let birthDate = this.props.resources.pathItem('[category=Patient].data.birthDate');
+//      let birthDate = this.props.resources.pathItem('[category=Patient].data.birthDate');
       return (
 	 <div className='content-panel-inner'>
 	    <div className='content-panel-inner-title'>
-	      		<div className='content-panel-view-name'>Timeline</div>
-			<button className={'content-panel-left-button'+(this.state.prevEnabled ? '' : '-off')} onClick={() => this.onNextPrev('prev')} />
-			<button className={'content-panel-right-button'+(this.state.nextEnabled ? '' : '-off')} onClick={() => this.onNextPrev('next')} />
-	       <button className='content-panel-inner-title-payload-button' onClick={() => !this.state.dragging && this.setState({payloadModalIsOpen: true})}>
-	          { formatDate(context.date, false, false) + ' / ' + formatAge(birthDate, context.date, ' at ') }
-	       </button>
-	       { this.state.annunciator && <div className='content-panel-annunciator'>{this.state.annunciator}</div> }
-	  {/*	       <button className='content-panel-inner-title-close-button' onClick={this.onClose} /> */}
+	       <div className='content-panel-inner-title-left'>
+		  <div className='content-panel-view-name'>{this.props.viewName}</div>
+		  <button className={'content-panel-left-button' + (this.state.prevEnabled ? '' : '-off')}
+			  onClick={() => this.onNextPrev('prev')} />
+	       	  <button className={'content-panel-right-button' + (this.state.nextEnabled ? '' : '-off')}
+			  onClick={() => this.onNextPrev('next')} />
+	       	  <button className={this.state.showAllData ? 'content-panel-all-button' : 'content-panel-dot-button'}
+			  onClick={() => this.setState({showAllData: !this.state.showAllData})} />
+	      {/*<button className={this.state.showDotLines ? 'content-panel-show-lines-button' : 'content-panel-hide-lines-button'}
+			 onClick={this.onShowHideLines} /> */}
+		  <button className={`content-panel-trim-${this.state.trimLevel}-button`} onClick={this.changeTrimLevel} />
+	      {/* <button className={`content-panel-${this.state.dateDisplay}-button`} onClick={this.changeDateDisplay}>
+		     {this.state.dateDisplay}
+		     </button> */}
+	       </div>
+	       <div className='content-panel-inner-title-center' onDoubleClick={this.onDoubleClick}>
+		  <button className={this.state.showDotLines ? 'content-panel-drag-button' : 'content-panel-no-drag-button'} />
+		  { this.state.annunciator && <div className='content-panel-annunciator'>{this.state.annunciator}</div> }
+	       </div>
+	       <div className='content-panel-inner-title-right'>
+		  <button className='content-panel-inner-title-payload-button' onClick={() => !this.state.dragging && this.setState({payloadModalIsOpen: true})}>
+		     {/* !this.state.showAllData && formatDate(context.date, false, false) + ' / ' + formatAge(birthDate, context.date, ' at ') */}
+		  </button>
+		  {/* <button className='content-panel-inner-title-close-button' onClick={this.onClose} /> */}
+	       </div>
 	    </div>
-	    <div className='content-panel-inner-body'>
-	       <Allergies           className='allergies'      data={context.data} isEnabled={this.catEnabled('Allergies')} />
-	       <Benefits            className='benefits'       data={context.data} isEnabled={this.catEnabled('Benefits')} />
-	       <Conditions          className='conditions'     data={context.data} isEnabled={this.catEnabled('Conditions')} />
-	       <DocumentReferences  className='doc-refs'       data={context.data} isEnabled={this.catEnabled('Document References')} />
-	       <Immunizations       className='immunizations'  data={context.data} isEnabled={this.catEnabled('Immunizations')} />
-	       <LabResults          className='lab-results'    data={context.data} isEnabled={this.catEnabled('Lab Results')}
-		    resources={this.props.resources} />
-	       <MedsAdministration  className='meds-admin'     data={context.data} isEnabled={this.catEnabled('Meds Administration')} />
-	       <MedsDispensed       className='meds-dispensed' data={context.data} isEnabled={this.catEnabled('Meds Dispensed')} />
-	       <MedsRequested       className='meds-requested' data={context.data} isEnabled={this.catEnabled('Meds Requested')} />
-	       <MedsStatement       className='meds-statement' data={context.data} isEnabled={this.catEnabled('Meds Statement')} />
-	       <Procedures          className='procedures'     data={context.data} isEnabled={this.catEnabled('Procedures')} />
-	       <SocialHistory       className='social-history' data={context.data} isEnabled={this.catEnabled('Social History')} />
-	       <VitalSigns          className='vital-signs'    data={context.data} isEnabled={this.catEnabled('Vital Signs')}
-		    resources={this.props.resources} />
-	       <Unimplemented	    className='unimplemented'  data={context.data} isEnabled={this.catEnabled(unimplemented())} />
-
-	       <Modal open={this.state.payloadModalIsOpen} onClose={() => this.setState({payloadModalIsOpen: false})}>
-	          <pre className='content-panel-data'>
-	             { JSON.stringify(context.data, null, 3) }
-	          </pre>
-	       </Modal>
-	    </div>
+	    { this.renderDotOrAll() }
 	 </div>
       );
    }
 
    render() {
-      // Dragging disabled by changing bounds.bottom to topBound (was bottomBound)
+      // Extend DiscoveryContext with trimLevel & dateDisplay (currently works / simpler than reassigning the extended context to DiscoveryContext.Provider)
+      this.context.trimLevel = this.state.trimLevel;
+//      this.context.dateDisplay = this.state.dateDisplay;
+
+      // Dragging enabled/disabled by changing bounds.bottom
       return ( this.state.isOpen &&
-	       <Draggable axis='y' position={{x:0, y:this.state.positionY}} handle='.content-panel-inner-title'
-			  bounds={{top:this.state.topBound, bottom:this.state.topBound}} onDrag={this.onDragStart} onStop={this.onDragStop}>
-	          <div className='content-panel' style={this.state.panelHeight ? {height:this.state.panelHeight}
-									       : {}}>
-		     { this.renderContents(this.props.context) }
+	       <Draggable axis='y' position={{x:0, y:this.state.positionY}} handle='.content-panel-inner-title-center'
+			  bounds={{top:this.state.topBound, bottom:this.state.showDotLines ? this.state.bottomBound : this.state.topBound}}
+			  onDrag={this.onDrag} onStop={this.onDragStop}>
+	          <div className='content-panel' style={this.state.panelHeight ? {height:this.state.panelHeight} : {}}>
+	             { this.renderContents(this.props.context) }
 	          </div>
 	       </Draggable>
       )

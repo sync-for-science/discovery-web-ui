@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import './LongitudinalView.css';
@@ -10,7 +10,7 @@ import ContentPanel from '../ContentPanel';
 //
 // Render the "longitudinal" (timeline) view of the participant's data
 //
-export default class LongitudinalView extends Component {
+export default class LongitudinalView extends React.Component {
 
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform),
@@ -26,25 +26,17 @@ export default class LongitudinalView extends Component {
       }),
       categories: PropTypes.arrayOf(PropTypes.string),
       providers: PropTypes.arrayOf(PropTypes.string),
-      searchRefs: PropTypes.arrayOf(PropTypes.shape({	// Search results to highlight
-	 provider: PropTypes.string.isRequired,
-	 category: PropTypes.string.isRequired,
-	 date: PropTypes.string.isRequired,
-	 veryInteresting: PropTypes.bool.isRequired,
-	 position: PropTypes.number.isRequired
-      })),
       lastEvent: PropTypes.instanceOf(Event)
    }
 
    state = {
       catsEnabled: {},		    // Enabled status of categories
       provsEnabled: {},		    // Enabled status of providers
-      minDate: this.props.dates.minDate,
-      maxDate: this.props.dates.maxDate,
+      thumbLeftDate: this.props.dates.minDate,
+      thumbRightDate: this.props.dates.maxDate,
       contentPanelIsOpen: false
    }
 
-// TODO: move to state init?
    componentDidMount() {
       this.setState({ contentPanelIsOpen: true });
    }
@@ -57,24 +49,22 @@ export default class LongitudinalView extends Component {
 
    setDateRange = this.setDateRange.bind(this);
    setDateRange(minDate, maxDate) {
-      this.setState({minDate: minDate, maxDate: maxDate});
+      this.setState({thumbLeftDate: minDate, thumbRightDate: maxDate});
    }
 
    onCloseContentPanel = () => {
       this.setState({ contentPanelIsOpen: false });
-      // TODO: why is this here???
-      this.props.contentPanelIsOpenFn(false);
    }
 
    render() {
       return (
 	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={this.props.categories} providers={this.props.providers}
-			  searchRefs={this.props.searchRefs} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}
-			  allowDotClick={true}>
+			  enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent} allowDotClick={true}>
 	    <ContentPanel open={this.state.contentPanelIsOpen} onClose={() => this.setState({contentPanelIsOpen: false})}
 			  catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
 			  // context, nextPrevFn props added in StandardFilters
-			  resources={this.props.resources} />
+			  thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
+			  resources={this.props.resources} viewName='Report' />
 	 </StandardFilters>
       );
    }

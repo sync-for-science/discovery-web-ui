@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, LineMarkSeries, LineSeries, WhiskerSeries} from 'react-vis';
 import 'react-vis/dist/style.css';
@@ -8,7 +8,7 @@ import './TimeSeries.css';
 //
 // Time series using react-vis
 //
-export default class TimeSeries extends Component {
+export default class TimeSeries extends React.Component {
 
    static propTypes = {
       data: PropTypes.array.isRequired,

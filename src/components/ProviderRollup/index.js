@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import './ProviderRollup.css';
 
-import SVGContainer from '../SVGContainer';
-import DotLine from '../DotLine';
+//import SVGContainer from '../SVGContainer';
+//import DotLine from '../DotLine';
 
 //
 // Render the "rollup" provider line of ParticipantDetail page
 //
-export default class ProviderRollup extends Component {
+export default class ProviderRollup extends React.Component {
 
    static propTypes = {
       svgWidth: PropTypes.string.isRequired,
@@ -31,13 +31,13 @@ export default class ProviderRollup extends Component {
       return (
 	 <div className='provider-rollup'>
 	    <div className={this.state.isExpanded ? 'provider-rollup-nav-enabled' : 'provider-rollup-nav-disabled'} onClick={this.handleTwistyClick} >
-	       Providers
+	      {/*Providers*/}For
 	    </div>
-	    <SVGContainer className='provider-rollup-svg-container' svgClassName='provider-rollup-svg' svgWidth={this.props.svgWidth}>
+	      {/* <SVGContainer className='provider-rollup-svg-container' svgClassName='provider-rollup-svg' svgWidth={this.props.svgWidth}>
 	       <DotLine dotPositions={this.props.dotPositionsFn(this.constructor.name, 'Providers', true)}
 			context={ {parent:this.constructor.name, rowName:'Providers'} }
 			dotClickFn={this.props.dotClickFn} />
-	    </SVGContainer>
+			</SVGContainer> */}
 	 </div>
       )
    }

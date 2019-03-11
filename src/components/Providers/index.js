@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import './Providers.css';
 
 //
 // Render the provider section of ParticipantDetail page
 //
-export default class Providers extends Component {
+export default class Providers extends React.Component {
 
    render() {
       return (

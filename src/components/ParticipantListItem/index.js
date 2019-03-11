@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -7,7 +7,7 @@ import './ParticipantListItem.css';
 //
 // Render info and link for a patient/participant
 //
-export default class ParticipantListItem extends Component
+export default class ParticipantListItem extends React.Component
 {
    static propTypes = {
       id: PropTypes.string,

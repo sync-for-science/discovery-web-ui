@@ -1,69 +1,75 @@
 @charset "UTF-8";
-@import '../../css/ColorVariablesMaster.css';
+@import 'ColorVariablesMaster.css';
 
-/* Sync for Science Discovery ReportView Stylesheet */
-/* v.01.05 Updated 01/14/2019 */
+/* Sync for Science Discovery ViewContainer Stylesheet */
+/* v.01.01 Updated 02/20/2019 */
 
-.report-view {
-   position: fixed;
+.view-container {
+	position: fixed;
    top:146px;
    left:214px;
    width:calc(100% - 234px);
    min-width:840px;
-   height:calc(100% - 75px - 12px);
+   height:calc(100% - 200px);
    margin:0;
 }
 
-.report-title {
-   display: flex;
+.view-title {
+	display: flex;
    flex-direction: row;
+	align-items: center;
+	justify-content:flex-start;
    width:calc(100% - 90px);
    height:50px;
    min-height:50px;
    padding:0 20px 0 70px;
-   border-top:2px solid var(--accent);
-   background-color: var(--blue-dark);
-   background-image: url("../../svg/view-icon-report-on.svg");
+   
    background-repeat: no-repeat;
    background-position:20px 8px;
    background-size:35px 35px;
    font-family: discovery-data;
    font-size: 1.000rem;
-   color:var(--white);
-   align-items: center;
-   justify-content:flex-start;
+  	color:var(--white);
+	border-top:2px solid var(--accent);
+   background-color: var(--blue-dark);
 }
 
-.report-title-name {
-   font-family:discovery-bold;
+.view-title-name {
+	font-family:discovery-bold;
    font-size:1.000rem;
    color:var(--white);
    margin:0;
 }
 
-.report-title-patient-name {
-   font-family:discovery-data-bold;
+.view-title-patient-name {
+	font-family:discovery-data-bold;
    font-size:1.200rem;
    color:var(--white);
    white-space: nowrap;
    margin-left:35px;
 }
 
-.report-contents {
+.view-contents {
    position: fixed;
    top: 196px;
    left: 214px;
+	display:flex;
+   flex-direction: column;
    min-height: calc(100% - 196px - 20px - 15px);
    max-height: calc(100% - 196px - 20px - 15px);
    min-width: calc(100% - 210px - 28px);
    max-width: calc(100% - 210px - 28px);
    background-color: var(--discovery-background);
    padding:20px 0 0 0;
+	border:2px solid var(--discovery-blue);
    white-space: pre-wrap;
-   display:flex;
-   flex-direction: column;
-
    overflow-y:auto;
    overflow-x: hidden;
-   border:2px solid var(--discovery-blue);
 }
+
+
+
+
+
+
+

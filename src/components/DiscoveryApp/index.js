@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { get } from 'axios';
 
@@ -6,19 +6,23 @@ import './DiscoveryApp.css';
 import config from '../../config.js';
 import FhirTransform from '../../FhirTransform.js';
 import { cleanDates, normalizeDates, timelineIncrYears, ignoreCategories, unimplemented } from '../../util.js';
-import DiscoveryContext from '../DiscoveryContext';
 import PageHeader from '../PageHeader';
 import LongitudinalView from '../LongitudinalView';
 import SummaryView from '../SummaryView';
 import CompareView from '../CompareView';
-import ReportView from '../ReportView';
+import BenefitsView from '../BenefitsView';
+import ConsultView from '../ConsultView';
+import DiabetesView from '../DiabetesView';
+//import ReportView from '../ReportView';
 import DiscoveryModal from '../DiscoveryModal';
 import PageFooter from '../PageFooter';
+
+import DiscoveryContext from '../DiscoveryContext';
 
 //
 // Render the top-level Discovery application page
 //
-export default class DiscoveryApp extends Component {
+export default class DiscoveryApp extends React.Component {
 
    static propTypes = {
       match: PropTypes.object
@@ -33,6 +37,8 @@ export default class DiscoveryApp extends Component {
 				//    maxDate	   Latest date we have data for this participant
 				//    endDate	   Dec 31 of maxDate's year
       searchRefs: [],		// Search results to highlight
+      searchMatchWords: [],	// Search results matching words
+      laserSearch: false,	// Laser Search enabled?
       isLoading: false,
       fetchError: null,		// Possible axios error object
       modalName: '',
@@ -165,13 +171,14 @@ export default class DiscoveryApp extends Component {
 	 'Document References':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=DocumentReference]'),
 	 'Allergies':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=AllergyIntolerance]'),
 	 'Benefits':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ExplanationOfBenefit]'),
+	 'Claims':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Claim]'),
+	 'Encounters':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Encounter]'),
 
 	 // Currently unsupported
 	 'Practitioner':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Practitioner]'),
 	 'List':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=List]'),
 	 'Exams':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
 										       +'[*:isCategory(Exam)|:isCategory(exam)]', this.queryOptions),
-	 'Encounter':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Encounter]'),
 	 'Questionnaire':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Questionnaire]'),
 	 'QuestionnaireResponse':	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=QuestionnaireResponse]'),
 	 'Observation-Other':	 	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
@@ -186,7 +193,6 @@ export default class DiscoveryApp extends Component {
 	 'Goal':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Goal]'),
 	 'Basic':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Basic]'),
 	 'ImmunizationRecommendation':	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImmunizationRecommendation]'),
-	 'Claim':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Claim]'),
 	 'ImagingStudy':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImagingStudy]')
       }
    }
@@ -240,11 +246,11 @@ export default class DiscoveryApp extends Component {
 	       date = item.date; 
 	       break;
 	    case 'CarePlan':
-	    case 'Encounter':
+	    case 'Encounters':
 	       date = item.period.start;
 	       break;
 	    case 'Benefits':
-	    case 'Claim':
+	    case 'Claims':
 	       date = item.billablePeriod.start;
 	       break;
 	    case 'ImagingStudy':
@@ -338,29 +344,44 @@ export default class DiscoveryApp extends Component {
    // Search callback function
    //
    searchCallback = this.searchCallback.bind(this);
-   searchCallback(refs) {
+   searchCallback(refs, matchWords, laserSearch) {
       let plusRefs = refs.map(ref => {
 	 ref.position = this.state.dates.allDates.find(elt => elt.date === ref.date).position;
 	 return ref;
       });
-      this.setState({searchRefs: plusRefs});
+      this.setState({ searchRefs: plusRefs, searchMatchWords: matchWords, laserSearch: laserSearch });
    }
 
    renderCurrentView() {
       switch(this.state.currentView) {
          case 'longitudinalView':
 	    return <LongitudinalView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
-				     searchRefs={this.state.searchRefs} lastEvent={this.state.lastEvent} />;
+				     lastEvent={this.state.lastEvent} />;
+
          case 'compareView':
 	    return <CompareView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
-				searchRefs={this.state.searchRefs} lastEvent={this.state.lastEvent} />;
-         case 'reportView':
-	    return <ReportView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
-			       searchRefs={this.state.searchRefs} lastEvent={this.state.lastEvent} />;
+				lastEvent={this.state.lastEvent} />;
+
+//         case 'reportView':
+//	    return <ReportView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
+//			       searchRefs={this.state.searchRefs} lastEvent={this.state.lastEvent} />;
+
+         case 'benefitsView':
+	    return <BenefitsView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
+				 lastEvent={this.state.lastEvent} />;
+
+         case 'consultView':
+	    return <ConsultView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
+				lastEvent={this.state.lastEvent} />;
+
+         case 'diabetesView':
+	    return <DiabetesView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
+				 lastEvent={this.state.lastEvent} />;
+
          case 'summaryView':
          default:
 	    return <SummaryView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
-			        searchRefs={this.state.searchRefs} lastEvent={this.state.lastEvent} />;
+			        lastEvent={this.state.lastEvent} />;
       }
    }
 
@@ -374,7 +395,8 @@ export default class DiscoveryApp extends Component {
       }
 
       return (
-	 <DiscoveryContext.Provider value={{providers: this.providers}}>
+	 <DiscoveryContext.Provider value={{providers: this.providers, laserSearch: this.state.laserSearch, resources: this.state.resources,
+					    searchRefs: this.state.searchRefs, searchMatchWords: this.state.searchMatchWords}}>
 	    <div className='discovery-app'>
 	       <PageHeader rawQueryString={this.props.location.search} modalIsOpen={this.state.modalIsOpen}
 			   modalFn={ name => this.setState({ modalName: name, modalIsOpen: true }) }

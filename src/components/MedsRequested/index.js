@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -8,14 +8,14 @@ import config from '../../config.js';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderMeds } from '../../fhirUtil.js';
-import { stringCompare, formatDate, isValid } from '../../util.js';
+import { stringCompare, formatContentHeader } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
 //
 // Display the 'Meds Requested' category if there are matching resources
 //
-export default class MedsRequested extends Component {
+export default class MedsRequested extends React.Component {
 
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
@@ -115,14 +115,9 @@ export default class MedsRequested extends Component {
    }
 
    render() {
-      let itemDate =  this.props.showDate && isValid(this.state, st => st.matchingData[0]) && formatDate(this.state.matchingData[0].itemDate, true, true);
-      return ( this.state.matchingData &&
+      return ( this.state.matchingData && this.state.matchingData.length > 0 &&
 	       <div className={this.props.className}>
-	          <div className='content-header-container'>
-		     { itemDate &&
-		       <div className={this.props.isEnabled ? 'content-header-date' : 'content-header-date-disabled'}>{itemDate}</div> }
-		     <div className={this.props.isEnabled ? 'content-header' : 'content-header-disabled'}>Meds Requested</div>
-	          </div>
+		  { formatContentHeader(this.props.isEnabled, 'Meds Requested', this.state.matchingData[0].itemDate, this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderMeds(this.state.matchingData, this.props.className, this.context) }
 	             { this.props.isEnabled && this.state.loadingRefs > 0 && <div className={this.props.className+'-loading'}>Loading ...</div> }

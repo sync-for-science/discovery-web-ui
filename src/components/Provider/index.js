@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import './Provider.css';
@@ -9,7 +9,7 @@ import DotLine from '../DotLine';
 //
 // Render a provider line of ParticipantDetail page
 //
-export default class Provider extends Component {
+export default class Provider extends React.Component {
 
    static propTypes = {
       providerName: PropTypes.string.isRequired,

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import './SVGContainer.css';
@@ -8,7 +8,7 @@ import { getStyle } from '../../util.js';
 // The container for a collection of SVG elements
 //    Gets height from the CSS class
 //
-export default class SVGContainer extends Component {
+export default class SVGContainer extends React.Component {
 
    static propTypes = {
       preserveAspectRatio: PropTypes.string,		// Default is 'xMidYMid meet' if not provided

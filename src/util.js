@@ -1,3 +1,7 @@
+import React from 'react';
+
+import './components/ContentPanel/ContentPanel.css';
+
 export function getStyle(oElm, css3Prop){
       try {
 	 if (window.getComputedStyle){
@@ -22,6 +26,18 @@ export function stringCompare(a, b) {
    }
 }
 
+export function formatTime(date) {
+   let strDate = date+'';
+   const tLoc = strDate.indexOf('T');
+   if (tLoc === -1) {
+      // No time
+      return '';
+   } else {
+      return new Date(strDate).toLocaleTimeString('en-US', {timeZone:'UTC', timeZoneName:'short'})
+			      .replace('UTC','GMT').replace(' PM', 'pm').replace(' AM', 'am');
+   }
+}
+
 export function formatDate(date, fillShortDates, surpressTime) {
    let strDate = date+'';
 
@@ -40,9 +56,7 @@ export function formatDate(date, fillShortDates, surpressTime) {
       if (surpressTime) {
 	 return datePart;
       } else {
-	 let time = new Date(strDate).toLocaleTimeString('en-US', {timeZone:'UTC', timeZoneName:'short'})
-				     .replace('UTC','GMT').replace(' PM', 'pm').replace(' AM', 'am');
-	 return datePart + ' ' + time;
+	 return datePart + ' ' + formatTime(date);
       }
    }
 }
@@ -82,11 +96,40 @@ export function formatAge(birthDate, ageDate, prefix) {
       }
    }
 
+export function formatContentHeader(isEnabled, category, itemDate, appContext) {
+   let dateOnly = formatDate(itemDate, true, true);
+   let timeOnly = formatTime(itemDate);
+   let dob = appContext.resources.pathItem('[category=Patient].data.birthDate');
+   let age = formatAge(dob, itemDate, '');
+
+//   return (
+//      <div className='content-header-container'>
+//	 <div className={isEnabled ? 'content-header-date' : 'content-header-date-disabled'} id={dateOnly}>{dateOnly}</div>
+//	 { appContext.dateDisplay === 'dateTime' &&
+//	      <div className={isEnabled ? 'content-header-time' : 'content-header-time-disabled'}>{timeOnly}</div> }
+//	 { appContext.dateDisplay === 'dateAge' &&
+//	      <div className={isEnabled ? 'content-header-age' : 'content-header-age-disabled'}>{age}</div> }
+//	   <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>{category}</div>
+//      </div>
+//   );
+
+   return (
+      <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} id={dateOnly}>
+	 <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>{category}</div>
+	 <div className={isEnabled ? 'content-header-date' : 'content-header-date-disabled'}>{dateOnly}</div>
+	 <div className={isEnabled ? 'content-header-time' : 'content-header-time-disabled'}>{timeOnly}</div>
+	   <div className={isEnabled ? 'content-header-age' : 'content-header-age-disabled'}>{`| age ${age}`}</div>
+	 <div className='content-header-padding'/>
+      </div>
+   );
+}
+
 export function formatDPs(number, places) {
    const mult = Math.pow(10, places);
    return parseFloat(Math.round(number * mult) / mult).toFixed(places);
 }
 
+// Is accessor(data) defined?
 export function isValid(data, accessor) {
    try {
       return accessor(data) !== undefined;
@@ -94,6 +137,21 @@ export function isValid(data, accessor) {
       return false;
    }
 }
+
+// If accessor(data) is defined return accessor(data) else return defaultVal
+export function tryWithDefault(data, accessor, defaultVal) {
+   try {
+      let accessorVal = accessor(data);
+      if (accessorVal === undefined) {
+	 return defaultVal;
+      } else {
+	 return accessorVal;
+      }
+   } catch (e) {
+      return defaultVal;
+   }
+}
+	
 
 // Acronyms that should be displayed all uppercase
 const acronyms = ['Bmi'];
@@ -183,9 +241,9 @@ export function inDateRange(date, rangeLow, rangeHigh) {
 // Categories that currently aren't supported in views with the category selector
 // *** Should match "Currently unsupported" list in DiscoveryApp/index.js:categoriesForProviderTemplate() ***
 export function ignoreCategories() {
-   return ['Patient', 'Practitioner', 'List', 'Exams', 'Encounter', 'Questionnaire', 'QuestionnaireResponse',
+   return ['Patient', 'Practitioner', 'List', 'Exams', 'Questionnaire', 'QuestionnaireResponse',
 	   'Observation-Other', 'DiagnosticReport', 'CarePlan', 'Medication', 'Organization', 'Goal', 'Basic',
-	   'ImmunizationRecommendation', 'Claim', 'ImagingStudy'];
+	   'ImmunizationRecommendation', 'ImagingStudy'];
 }
 
 // Text string representing all unsupported categories

@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Category and Provider CSS */
-/* v.01.10 Updated 02/11/2019 */
+/* v.01.12 Updated 02/20/2019 */
 
 .categories-providers {
 	height: auto;
@@ -27,9 +27,9 @@
 	align-items: center;
 	height:28px;
 	max-height:28px;
-	width:156px;
-	min-width:156px;
-	max-width: 156px;
+	width:50px;
+	min-width:50px;
+	max-width: 140px;
 	margin:0 10px 0 20px;
 	padding:0 0 0 28px;
 	background-image: url(../../svg/arrow-down-icon.svg);
@@ -39,6 +39,7 @@
 	font-family:discovery-bold;
 	font-size:0.813rem;
 	text-align:left;
+	border-radius: 0 20px 20px 0;
 }
 
 .category-provider-rollup-nav-disabled {
@@ -47,9 +48,9 @@
 	align-items: center;
 	height:28px;
 	max-height:28px;
-	width:156px;
-	min-width:156px;
-	max-width:156px;
+	width:140px;
+	min-width:140px;
+	max-width:140px;
 	margin:0 10px 0 20px;
 	padding:0 0 0 28px;
 	background-image: url(../../svg/arrow-right-icon.svg);
@@ -59,6 +60,7 @@
 	font-family:discovery-bold;
 	font-size:0.813rem;
 	text-align: left;
+	border-radius: 0 20px 20px 0;
 }
 
 .category-provider-row {

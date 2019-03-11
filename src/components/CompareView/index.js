@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import './CompareView.css';
 import config from '../../config.js';
-import { isValid, inDateRange } from '../../util.js';
+import { isValid, inDateRange, unimplemented } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 import StandardFilters from '../StandardFilters';
 
 //
 // Render the "compare view" of the participant's data
 //
-export default class CompareView extends Component {
+export default class CompareView extends React.Component {
 
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform),
@@ -26,13 +26,6 @@ export default class CompareView extends Component {
       }),
       categories: PropTypes.arrayOf(PropTypes.string).isRequired,
       providers: PropTypes.arrayOf(PropTypes.string).isRequired,
-      searchRefs: PropTypes.arrayOf(PropTypes.shape({	// Search results to highlight
-	 provider: PropTypes.string.isRequired,
-	 category: PropTypes.string.isRequired,
-	 date: PropTypes.string.isRequired,
-	 veryInteresting: PropTypes.bool.isRequired,
-	 position: PropTypes.number.isRequired
-      })),
       lastEvent: PropTypes.instanceOf(Event)
    }
 
@@ -92,7 +85,7 @@ export default class CompareView extends Component {
 
    // Categories we DON'T want to compare on
    get noCompareCategories() {
-      return ['Patient', 'Vital Signs', 'Benefits'];
+       return ['Patient', 'Vital Signs', 'Benefits', 'Claims', unimplemented()];
    }
 
    //
@@ -207,7 +200,7 @@ export default class CompareView extends Component {
       let dispCategories = this.props.categories.filter(cat => !this.noCompareCategories.includes(cat));
       return (
 	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={dispCategories} providers={this.props.providers}
-			  searchRefs={this.props.searchRefs} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}>
+			  enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}>
 	    <div className='compare-view'>
 	       <div className='compare-title'>
 		  <div className='compare-title-name'>Comparison</div>

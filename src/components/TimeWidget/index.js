@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 
@@ -14,7 +14,7 @@ const periodPadding = 5;	// .timeline-expanded-years: padding-left + padding-rig
 //
 // Render the time widget of ParticipantDetail page
 //
-export default class TimeWidget extends Component {
+export default class TimeWidget extends React.Component {
 
    static propTypes = {
       startDate: PropTypes.string.isRequired,		// Left-most date of the primary timeline

@@ -3,12 +3,12 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery Benefits Stylesheet */
-/* v.01.05 Updated 1/28/2019 */
+/* v.01.06 Updated 3/01/2019 */
 
 .benefits-billable-label {
    @insert .label;
-   display:flex;
-   padding:3px 0 0 0;   
+   text-align: right;
+   padding:4px 0 0 0;   
    grid-column:1;
 }
 
@@ -24,7 +24,7 @@
    @insert .label;
    width:auto;
    text-align: center;
-   padding:3px 0 0 0; 
+   padding:4px 0 0 0; 
    grid-column:4;
 }
 
@@ -43,7 +43,12 @@
 
 .benefits-claim-type-value {
    @insert .value;
-   grid-column:2/span 7;
+	display:flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+   grid-column:2/span 19;
+	
+	
 }
 
 .benefits-cost-label {
@@ -56,14 +61,14 @@
    @insert .value;
    width:auto;
    font-family: discovery-data;
-   text-align: right;
+   text-align: left;
    grid-column:2;
 }
 
 .benefits-cost-currency {
    @insert .label;
    text-align: left;
-   padding:3px 10px 0 0;
+   padding:4px 0 0 0;
    grid-column:3;
 }
 
@@ -77,15 +82,15 @@
    @insert .value;
    width: auto;
    font-family: discovery-data;
-   text-align: left;
-   grid-column:2/span 2;
+   text-align: right;
+   grid-column:2;
 }
 
 .benefits-benefit-currency {
    @insert .label;
    text-align: left;
    padding:3px 10px 0 0; 
-   grid-column:4;
+   grid-column:3;
 }
 
 .benefits-contained-label-main {
@@ -96,16 +101,16 @@
 
 .benefits-contained-label-sub1 {
    @insert .label;
-   padding:3px 0 0 0; 
-   text-align: left;
-   grid-column:2;
+   padding:4px 0 0 0; 
+   text-align: right;
+   grid-column:1;
 }
 
 .benefits-contained-label-sub2 {
    @insert .label;
-   padding:3px 0 0 0; 
-   text-align: left;
-   grid-column:2;
+   padding:4px 0 0 0; 
+   text-align: right;
+   grid-column:1;
 }
 
 .benefits-contained-value1 {
@@ -121,7 +126,7 @@
    width: auto;
    font-family: discovery-data;
    text-align: left;
-   grid-column:3/span 3;
+   grid-column:2/span 3;
 }
 
 .benefits-contained-value3 {
@@ -129,7 +134,7 @@
    width: auto;
    font-family: discovery-data;
    text-align: left;
-   grid-column:3/span 3;
+   grid-column:2/span 3;
 }
 
 .benefits-provider-label {
@@ -154,4 +159,28 @@
    @insert .value;
    text-align: left;
    grid-column:2;
+}
+
+.benefits-care-team-label {
+   @insert .label;
+   padding:6px 0 0 0; 
+   grid-column:1;
+}
+
+.benefits-care-team-value {
+   @insert .value;
+   text-align: left;
+   grid-column:2/span 2;
+}
+
+.benefits-diagnosis-label {
+   @insert .label;
+   padding:6px 0 0 0; 
+   grid-column:1;
+}
+
+.benefits-diagnosis-value {
+   @insert .value;
+   text-align: left;
+   grid-column:2/span 5;
 }

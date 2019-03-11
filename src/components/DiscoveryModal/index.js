@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-responsive-modal';
 
@@ -7,7 +7,7 @@ import './DiscoveryModal.css';
 //
 // Render Discovery modals
 //
-export default class DiscoveryModal extends Component {
+export default class DiscoveryModal extends React.Component {
 
    static propTypes = {
       isOpen: PropTypes.bool.isRequired,

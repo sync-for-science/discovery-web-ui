@@ -2,7 +2,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery PageFooter Stylesheet */
-/* v.01.14 Updated 12/20/2018 */
+/* v.01.15 Updated 2/14/2019 */
 
 .page-footer {
    position:fixed;
@@ -13,6 +13,7 @@
    min-width:1024px;
    border-top:2px  solid var(--accent);
    padding:0 20px;
+	margin:20px 0 0 0;
    background-color: var(--blue-dark);
    display:flex;
    flex-direction:row;

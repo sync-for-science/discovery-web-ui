@@ -2,8 +2,10 @@ import React from 'react';
 
 import './components/ContentPanel/ContentPanel.css';
 import FhirTransform from './FhirTransform.js';
-import { stringCompare, formatDate, formatDPs, isValid, titleCase } from './util.js';
+import { stringCompare, formatDate, formatDPs, isValid, tryWithDefault, titleCase } from './util.js';
 import TimeSeries from './components/TimeSeries';
+
+import CondDiv from './components/CondDiv';
 
 function dropFinalDigits(str) {
    let firstDigitIndex = str.search(/[0-9]/);
@@ -90,13 +92,18 @@ export function renderAllergies(matchingData, className, appContext) {
 
 	    { elt.clinicalStatus && <div className={className+'-clinical-status-label'}>Clinical Status</div> }
 	    { elt.clinicalStatus && <div className={className+'-clinical-status-value'}>{elt.clinicalStatus}</div> }
-	    { elt.verificationStatus && <div className={className+'-verification-status-label'}>Verification Status</div> }
-	    { elt.verificationStatus && <div className={className+'-verification-status-value'}>{elt.verificationStatus}</div> }
+
+	    <CondDiv check={elt.verificationStatus} expected={'confirmed'}>
+	       <div className={className+'-verification-status-label'}>Verification Status</div>
+	       <div className={className+'-verification-status-value'}>{elt.verificationStatus}</div>
+	    </CondDiv>
 
 	    { elt.type && <div className={className+'-type-label'}>Type</div> }
 	    { elt.type && <div className={className+'-type-value'}>{elt.type}</div> }
+
 	    { elt.category && <div className={className+'-category-label'}>Category</div> }
 	    { elt.category && <div className={className+'-category-value'}>{elt.category}</div> }
+
 	    { elt.criticality && <div className={className+'-criticality-label'}>Criticality</div> }
 	    { elt.criticality && <div className={className+'-criticality-value'}>{elt.criticality}</div> }
 
@@ -138,12 +145,15 @@ export function renderDisplay(matchingData, className, appContext) {
 
 	    { isValid(elt, e => e.reason[0].code) && <div className={className+'-reason-label'}>Reason</div> }
 	    { isValid(elt, e => e.reason[0].code) && <div className={className+'-reason-value'}>{elt.reason[0].code.coding[0].display}</div> } 
+
 	    { isValid(elt, e => e.reason[0].onsetDateTime) && <div className={className+'-onset-label'}>Onset</div> }
 	    { isValid(elt, e => e.reason[0].onsetDateTime) &&
 		<div className={className+'-onset-value'}>{formatDate(elt.reason[0].onsetDateTime,false,false)}</div> }
+
 	    { isValid(elt, e => e.reason[0].abatementDateTime) && <div className={className+'-abatement-label'}>Abatement</div> }
 	    { isValid(elt, e => e.reason[0].abatementDateTime) &&
 	        <div className={className+'-abatement-value'}>{formatDate(elt.reason[0].abatementDateTime,false,false)}</div> }
+
 	    { isValid(elt, e => e.reason[0].assertedDate) && <div className={className+'-asserted-label'}>Asserted</div> }
 	    { isValid(elt, e => e.reason[0].assertedDate) &&
 	        <div className={className+'-asserted-value'}>{formatDate(elt.reason[0].assertedDate,false,false)}</div> }
@@ -151,14 +161,18 @@ export function renderDisplay(matchingData, className, appContext) {
 	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
 	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
-	    { elt.status && <div className={className+'-status-label'}>Status</div> }
-	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
+	    <CondDiv check={elt.status} expected={['final', 'completed']}>
+	       <div className={className+'-status-label'}>Status</div>
+	       <div className={className+'-status-value'}>{elt.status}</div>
+	    </CondDiv>
 
 	    { elt.clinicalStatus && <div className={className+'-clinical-status-label'}>Clinical Status</div> }
 	    { elt.clinicalStatus && <div className={className+'-clinical-status-value'}>{elt.clinicalStatus}</div> }
 
-	    { elt.verificationStatus && <div className={className+'-verification-status-label'}>Verification Status</div> }
-	    { elt.verificationStatus && <div className={className+'-verification-status-value'}>{elt.verificationStatus}</div> }
+	    <CondDiv check={elt.verificationStatus} expected={'confirmed'}>
+	       <div className={className+'-verification-status-label'}>Verification Status</div>
+	       <div className={className+'-verification-status-value'}>{elt.verificationStatus}</div>
+	    </CondDiv>
 	 </div>
       );
    } else {
@@ -182,19 +196,29 @@ export function renderImmunizations(matchingData, className, appContext) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
 
-	    { ((elt.notGiven !== undefined) || (elt.wasNotGiven !== undefined)) && <div className={className+'-given-label'}>Given</div> }
-	    { elt.notGiven !== undefined && <div className={className+'-given-value'}>{elt.notGiven ? 'false' : 'true'}</div> }
-	    { elt.wasNotGiven !== undefined && <div className={className+'-given-value'}>{elt.wasNotGiven ? 'false' : 'true'}</div> }
-	    { elt.reported !== undefined && <div className={className+'-reported-label'}>Reported</div> }
-	    { elt.reported !== undefined && <div className={className+'-reported-value'}>{elt.reported ? 'true' : 'false'}</div> }
-	    { elt.primarySource !== undefined && <div className={className+'-primary-label'}>Primary Source</div> }
-	    { elt.primarySource !== undefined && <div className={className+'-primary-value'}>{elt.primarySource ? 'true' : 'false'}</div> }
+	    <CondDiv check={[elt.notGiven, elt.wasNotGiven]} expected={false}>
+	       <div className={className+'-given-label'}>Given</div>
+	       { elt.notGiven !== undefined && <div className={className+'-given-value'}>{elt.notGiven ? 'false' : 'true'}</div> }
+	       { elt.wasNotGiven !== undefined && <div className={className+'-given-value'}>{elt.wasNotGiven ? 'false' : 'true'}</div> }
+	    </CondDiv>
+
+	    <CondDiv check={elt.reported} expected={false}>
+	       <div className={className+'-reported-label'}>Reported</div>
+	       <div className={className+'-reported-value'}>{elt.reported ? 'true' : 'false'}</div>
+	    </CondDiv>
+
+	    <CondDiv check={elt.primarySource} expected={true}>
+	       <div className={className+'-primary-label'}>Primary Source</div>
+	       <div className={className+'-primary-value'}>{elt.primarySource ? 'true' : 'false'}</div>
+	    </CondDiv>
 
 	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
 	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
-	    { elt.status && <div className={className+'-status-label'}>Status</div> }
-	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
+	    <CondDiv check={elt.status} expected={['final', 'completed']}>
+	       <div className={className+'-status-label'}>Status</div>
+	       <div className={className+'-status-value'}>{elt.status}</div>
+	    </CondDiv>
 	 </div>
       );
    } else {
@@ -259,8 +283,11 @@ export function renderLabs(matchingData, className, resources, appContext) {
 	    <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	       <div className={className+'-display'}>{elt.display}</div>
 
-	       { elt.valueQuantity && <div className={className+(highlightValue?'-value-highlight':'-value')}>{formatDPs(elt.valueQuantity.value, 1)}</div> }
-	       { elt.valueQuantity && <div className={className+'-unit'}>{elt.valueQuantity.unit}</div> }
+	       {/* elt.valueQuantity && <div className={className+(highlightValue?'-value-highlight':'-value')}>{formatDPs(elt.valueQuantity.value, 1)}</div> */}
+	       {/* elt.valueQuantity && <div className={className+'-unit'}>{elt.valueQuantity.unit}</div> */}
+	       { elt.valueQuantity && <div className={className+'-value-label'}>Value</div> }
+	       { elt.valueQuantity && <div className={className+(highlightValue?'-value-highlight':'-value')}>
+						{formatDPs(elt.valueQuantity.value, 1)+' '+elt.valueQuantity.unit}</div> }
 
 	       { elt.valueString && <div className={className+'-value-label'}>Value</div> }
 	       { elt.valueString && <div className={className+'-value-string'}>{elt.valueString}</div> }
@@ -278,8 +305,10 @@ export function renderLabs(matchingData, className, resources, appContext) {
 	       { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
 	       { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
-	       { elt.status && <div className={className+'-status-label'}>Status</div> }
-	       { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
+	       <CondDiv check={elt.status} expected={'final'}>
+		  <div className={className+'-status-label'}>Status</div>
+		  <div className={className+'-status-value'}>{elt.status}</div>
+	       </CondDiv>
 	    </div>
 	 )}
       );
@@ -324,8 +353,10 @@ export function renderMeds(matchingData, className, appContext) {
 	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
 	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
-	    { elt.status && <div className={className+'-status-label'}>Status</div> }
-	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
+	    <CondDiv check={elt.status} expected={['active', 'completed']}>
+	       <div className={className+'-status-label'}>Status</div>
+	       <div className={className+'-status-value'}>{elt.status}</div>
+	    </CondDiv>
 
 	    { elt.quantity && <div className={className+'-quantity'}>{elt.quantity.value}</div> }
 	    { elt.quantity && <div className={className+'-quantity-unit'}>{elt.quantity.unit}</div> }
@@ -364,10 +395,50 @@ export function renderSocialHistory(matchingData, className, appContext) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className={className+'-display'}>{elt.display}</div>
 	    <div className={className+'-value'}>{elt.value}</div>
+
 	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
 	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
-	    { elt.status && <div className={className+'-status-label'}>Status</div> }
-	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
+
+	    <CondDiv check={elt.status} expected={'final'}>
+	       <div className={className+'-status-label'}>Status</div>
+	       <div className={className+'-status-value'}>{elt.status}</div>
+	    </CondDiv>
+	 </div>
+      );
+   } else {
+      return null;
+   }
+}
+
+export function renderEncounters(matchingData, className, appContext) {
+   let found = [];
+   for (const elt of matchingData) {
+      try {
+	  found.push({ provider: elt.provider, display: elt.data.type[0].coding[0].display, status: elt.data.status,
+		       date: elt.itemDate, class: elt.data.class.code, period: elt.data.period });
+      } catch (e) {}
+   }
+
+   if (found.length > 0) {
+      let isMultipleProviders = appContext.providers.length > 1;
+       debugger;
+      return found.map((elt, index) => 
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	    <div className={className+'-display'}>{elt.display}</div>
+
+	    { elt.period.start !== elt.period.end && <div className={className+'-ending-label'}>Ending</div> }
+	    { elt.period.start !== elt.period.end && <div className={className+'-ending-value'}>{formatDate(elt.period.end, true, false)}</div> }
+
+	    <div className={className+'-class-label'}>Class</div>
+	    <div className={className+'-class-value'}>{elt.class}</div>
+
+	    <CondDiv check={elt.status} expected={'finished'}>
+	       <div className={className+'-status-label'}>Status</div>
+	       <div className={className+'-status-value'}>{elt.status}</div>
+	    </CondDiv>
+
+	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
+	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 	 </div>
       );
    } else {
@@ -396,8 +467,8 @@ export function renderVitals(matchingData, className, resources, appContext) {
 	    found.push({provider: elt.provider,
 			date: elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
 			display:displayStr,
-			value:isValid(elt, e => e.data.valueQuantity) && elt.data.valueQuantity.value,
-			unit:isValid(elt, e => e.data.valueQuantity) && elt.data.valueQuantity.unit,
+			value:isValid(elt, e => e.data.valueQuantity) ? elt.data.valueQuantity.value : undefined,
+			unit:isValid(elt, e => e.data.valueQuantity) ? elt.data.valueQuantity.unit : undefined,
 			components:elt.data.component, status:elt.data.status});
 	 }
       } catch (e) {};
@@ -442,7 +513,12 @@ export function renderVitals(matchingData, className, resources, appContext) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.sort((a, b) => stringCompare(a.display, b.display)).map((elt, index) => {
 	 let sortedSeries = series[elt.display] && series[elt.display].sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
-	 let thisValue = elt.value ? elt.value : (elt.components[0].valueQuantity.value + elt.components[1].valueQuantity.value)/2;
+	 let thisValue = elt.value ? elt.value
+				   : tryWithDefault(elt, e => e.components[0].valueQuantity.value, 0)
+				     + tryWithDefault(elt, e => e.components[1].valueQuantity.value, 0);
+
+//				   : (isValid(elt, e => e.components[0].valueQuantity.value) ? elt.components[0].valueQuantity.value/2 : '?')
+//				     + (isValid(elt, e => e.components[1].valueQuantity.value) ? elt.components[1].valueQuantity.value/2 : '?');
 	 return (
 	    <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	       <div className={className+'-display'}>{elt.display}</div>
@@ -450,12 +526,16 @@ export function renderVitals(matchingData, className, resources, appContext) {
 	       { elt.value && <div className={className+'-value1'}>{formatDPs(elt.value, 1)}</div> }
 	       { elt.unit && <div className={className+'-unit1'}>{elt.unit}</div> }
 
-	       { elt.components && <div className={className+'-value1'}>{formatDPs(elt.components[0].valueQuantity.value, 1)}</div> }
-	       { elt.components && <div className={className+'-unit1'}>{elt.components[0].valueQuantity.unit}</div> }
+	       { elt.components && <div className={className+'-value1'}>
+			{ tryWithDefault(elt, e => formatDPs(e.components[0].valueQuantity.value, 1), '???')}</div> }
+	       { elt.components && <div className={className+'-unit1'}>
+			{ tryWithDefault(elt, e => e.components[0].valueQuantity.unit, '???')}</div> }
 	       { elt.components && <div className={className+'-label1'}>{trimVitalsLabels(elt.components[0].code.coding[0].display)}</div> }
 
-	       { elt.components && <div className={className+'-value2'}>{formatDPs(elt.components[1].valueQuantity.value, 1)}</div> }
-	       { elt.components && <div className={className+'-unit2'}>{elt.components[1].valueQuantity.unit}</div> }
+	       { elt.components && <div className={className+'-value2'}>
+			{ tryWithDefault(elt, e => formatDPs(e.components[1].valueQuantity.value,1), '???')}</div> }
+	       { elt.components && <div className={className+'-unit2'}>
+			{ tryWithDefault(elt, e => e.components[1].valueQuantity.unit, '???')}</div> }
 	       { elt.components && <div className={className+'-label2'}>{trimVitalsLabels(elt.components[1].code.coding[0].display)}</div> }
 
 	       { sortedSeries && <TimeSeries className={className} data={sortedSeries} highlights={[{x:elt.date, y:thisValue}]} /> }
@@ -463,8 +543,10 @@ export function renderVitals(matchingData, className, resources, appContext) {
 	       { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
 	       { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
-	       { elt.status && <div className={className+'-status-label'}>Status</div> }
-	       { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
+	       <CondDiv check={elt.status} expected={'final'}>
+	          <div className={className+'-status-label'}>Status</div>
+	          <div className={className+'-status-value'}>{elt.status}</div>
+	       </CondDiv>
 	    </div>
 	 );
       });
@@ -474,7 +556,7 @@ export function renderVitals(matchingData, className, resources, appContext) {
    }
 }
 
-function renderContainedResource(res, className, index) {
+function renderContainedResource(res, className, index, appContext) {
    let payload = [];
    switch (res.resourceType) {
       case 'Coverage':
@@ -483,10 +565,13 @@ function renderContainedResource(res, className, index) {
 	 break;
       case 'ReferralRequest':
 	 payload.push(<div className={className+'-contained-label-main'} key={index+'-1'}>Referral Request</div>);
-	 payload.push(<div className={className+'-contained-label-sub1'} key={index+'-2'}>Intent</div>);
-	 payload.push(<div className={className+'-contained-value2'} key={index+'-3'}>{res.intent}</div>);
-	 payload.push(<div className={className+'-contained-label-sub2'} key={index+'-4'}>Status</div>);
-	 payload.push(<div className={className+'-contained-value3'} key={index+'-5'}>{res.status}</div>);
+//	 payload.push(<div className={className+'-contained-label-sub1'} key={index+'-2'}>Intent</div>);
+//	 payload.push(<div className={className+'-contained-value2'} key={index+'-3'}>{res.intent}</div>);
+//         payload.push(<CondDiv check={res.status} expected={'completed'} key={index+'-4'}>
+//			<div className={className+'-contained-label-sub2'}>Status</div>
+//			<div className={className+'-contained-value3'}>{res.status}</div>
+//		      </CondDiv>);
+	 payload.push(<div className={className+'-contained-value1'} key={index+'-2'}>{res.status}</div>);
 	 break;
       default:
 	 payload.push(<div className={className+'-contained-label-main'} key={index+'-1'}>{res.resourceType}</div>);
@@ -496,17 +581,17 @@ function renderContainedResource(res, className, index) {
    return payload;
 }
 
-function renderContained(contained, className) {
-    return contained.map((elt, index) => renderContainedResource(elt, className, index));
+function renderContained(contained, className, appContext) {
+    return contained.map((elt, index) => renderContainedResource(elt, className, index, appContext));
 }
 
 export function renderEOB(matchingData, className, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	 found.push({provider: elt.provider, totalCost: elt.data.totalCost, totalBenefit: elt.data.totalBenefit,
-		     claimType: elt.data.type, billablePeriod: elt.data.billablePeriod, status: elt.data.status,
-		     contained: elt.data.contained});
+	 found.push({ provider: elt.provider, totalCost: elt.data.totalCost, totalBenefit: elt.data.totalBenefit,
+		      claimType: elt.data.type, billablePeriod: elt.data.billablePeriod, status: elt.data.status,
+		      contained: elt.data.contained, careTeam: elt.data.careTeam, diagnosis: elt.data.diagnosis });
       } catch (e) {}
    }
 
@@ -533,10 +618,64 @@ export function renderEOB(matchingData, className, appContext) {
 	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
 	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
 
-	    { elt.status && <div className={className+'-status-label'}>Status</div> }
-	    { elt.status && <div className={className+'-status-value'}>{elt.status}</div> }
+	    { isValid(elt, e => e.diagnosis[0].diagnosisReference.code) && <div className={className+'-diagnosis-label'}>Diagnosis</div> }
+	    { isValid(elt, e => e.diagnosis[0].diagnosisReference.code) &&
+		<div className={className+'-diagnosis-value'}>{elt.diagnosis[0].diagnosisReference.code.coding[0].display}</div> }
 
-	    { elt.contained && renderContained(elt.contained, className) }
+	    <CondDiv check={elt.status} expected={'active'}>
+	       <div className={className+'-status-label'}>Status</div>
+	       <div className={className+'-status-value'}>{elt.status}</div>
+	    </CondDiv>
+
+	    { isValid(elt, e => e.careTeam[0].role.coding[0].display) && <div className={className+'-care-team-label'}>Care Team Role</div> }
+	    { isValid(elt, e => e.careTeam[0].role.coding[0].display) && <div className={className+'-care-team-value'}>{elt.careTeam[0].role.coding[0].display}</div> }
+
+	    { elt.contained && renderContained(elt.contained, className, appContext) }
+	 </div>
+      );
+   } else {
+      return null;
+   }
+}
+
+export function renderClaims(matchingData, className, appContext) {
+   let found = [];
+   for (const elt of matchingData) {
+      try {
+	 found.push({ provider: elt.provider, total: elt.data.total, billablePeriod: elt.data.billablePeriod,
+		      status: elt.data.status, use: elt.data.use, diagnosis: elt.data.diagnosis });
+      } catch (e) {}
+   }
+
+   if (found.length > 0) {
+      let isMultipleProviders = appContext.providers.length > 1;
+      return found.map((elt, index) => 
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	    <div className={className+'-billable-label'}>For the period</div>
+	    <div className={className+'-billable-value'}>{formatDate(elt.billablePeriod.start, true, true)}</div>
+	    <div className={className+'-billable-value-separator'}>to</div>
+	    <div className={className+'-billable-value2'}>{formatDate(elt.billablePeriod.end, true, true)}</div>
+
+	    <div className={className+'-total-label'}>Total</div>
+	    <div className={className+'-total-value'}>{elt.total.value.toFixed(2)}</div>
+	    <div className={className+'-total-currency'}>{elt.total.code}</div>
+	
+	    { isMultipleProviders && <div className={className+'-provider-label'}>Provider</div> }
+	    { isMultipleProviders && <div className={className+'-provider-value'}>{elt.provider}</div> }
+
+	    { isValid(elt, e => e.diagnosis[0].diagnosisReference.code) && <div className={className+'-diagnosis-label'}>Diagnosis</div> }
+	    { isValid(elt, e => e.diagnosis[0].diagnosisReference.code) &&
+		<div className={className+'-diagnosis-value'}>{elt.diagnosis[0].diagnosisReference.code.coding[0].display}</div> }
+
+	    <CondDiv check={elt.status} expected={'active'}>
+	       <div className={className+'-status-label'}>Status</div>
+	       <div className={className+'-status-value'}>{elt.status}</div>
+	    </CondDiv>
+
+	    <CondDiv check={elt.use} expected={'complete'}>
+	       <div className={className+'-use-label'}>Use</div>
+	       <div className={className+'-use-value'}>{elt.use}</div>
+	    </CondDiv>
 	 </div>
       );
    } else {

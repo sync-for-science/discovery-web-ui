@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-responsive-modal';
 
@@ -12,7 +12,7 @@ import veryInterestingFields from './veryInterestingFields.js';
 //
 // Render the Search widget of ParticipantDetail page
 //
-export default class Search extends Component {
+export default class Search extends React.Component {
 
    static propTypes = {
       data: PropTypes.array.isRequired,
@@ -20,29 +20,47 @@ export default class Search extends Component {
    }
     
    state = {
+      searchIsOpen: false,
       searchFor: '',
       searchStatus: '',
       searchTerms: '',
       searchTree: null,
       searchResults: null,
       totalSearchRefs: 0,
-      dataModalIsOpen: false
+      dataModalIsOpen: false,
+      laserSearch: false
    }
 
    onKeydown = (event) => {
-      if (this.state.searchFor.length > 0 && event.key === 'Escape') {
-	 this.setState({searchFor: '', searchStatus: this.state.searchTerms, searchResults: null});
-	 this.props.callback([]);
+      if (this.state.searchIsOpen && event.key === 'Escape') {
+	 if (this.state.searchFor.length === 0) {
+	    this.setState({ searchIsOpen: false });
+	 } else {
+	    this.setState({ searchFor: '', searchStatus: this.state.searchTerms, searchResults: null });
+	 }
+	 this.props.callback([], [], this.state.laserSearch);
       }
    }
 
    componentDidMount() {
       window.addEventListener('keydown', this.onKeydown);
-      this.setState({searchStatus: 'Indexing...'}, () => setTimeout(this.indexData.bind(this), 10));
+      this.setState({ searchStatus: 'Indexing...' }, () => setTimeout(this.indexData.bind(this), 10));
    }
 
    componentWillUnmount() {
       window.removeEventListener('keydown', this.onKeydown);
+   }
+
+   toggleSearch = this.toggleSearch.bind(this);
+   toggleSearch() {
+      if (!this.state.searchIsOpen) {
+	 this.setState({ searchIsOpen: true },
+		       () => this.refs.textInput.focus() );
+      } else {
+	 // Cleanup
+	 this.setState({ searchIsOpen: false, searchStatus: this.state.searchTerms, searchFor: '', searchResults: null });
+	 this.props.callback([], [], this.state.laserSearch);
+      }
    }
 
    //
@@ -162,22 +180,26 @@ export default class Search extends Component {
       this.setState({ searchTree: tree, searchTerms: terms, searchStatus: terms, totalSearchRefs: totalRefs });
    }
 
+   //
+   // Collect array of references to participant resources matching 'searchFor'
+   //
+   // Each ref consists of:
+   //     .provider (string)
+   //     .category (string)
+   //     .date (string)
+   //     .veryInteresting (bool)
+   //     .position (number)
+   //
    collectRefs(searchFor) {
       let words = searchFor.split(' ');
       let refs = [];
       for (let word of words) {
-	 refs = refs.concat(this.findInTree(this.state.searchTree, 1, word, true))
+	 refs = refs.concat(this.findInTree(this.state.searchTree, 1, word, true));
       }
 
-      // Remove dups (these would work if there could only be one resource per distinct datetime)
-//      return refs.filter((elt, index, array) => array.indexOf(elt) === index);
-//      return Array.from(new Set(refs));
-
-      // Remove dups (unique across all ref content)
-//      return this.uniqueBy(refs, JSON.stringify);
-
       // Remove dups (unique category, date only)
-      return this.uniqueBy(refs, elt => elt.category+elt.date);
+      //   and return latest-first
+      return this.uniqueBy(refs, elt => elt.category+elt.date).sort((a, b) => new Date(b.date) - new Date(a.date));
    }
 
    uniqueBy(arr, keyFn) {
@@ -189,29 +211,56 @@ export default class Search extends Component {
    }
 
    //
+   // Collect array of words present in participant resources and matching 'searchFor'
+   //
+   collectMatchWords(searchFor) {
+      let words = searchFor.split(' ');
+      let matchWords = [];
+      for (let word of words) {
+	 matchWords = matchWords.concat(this.getSearchOptions(word));
+      }  
+
+      // Remove dups
+      return this.uniqueBy(matchWords, elt => elt);
+   }
+
+   //
    // Perform search and color dots accordingly    
    //
    searchLookup() {
       let refs = this.collectRefs(this.state.searchFor);
+      let matchWords = this.collectMatchWords(this.state.searchFor);
 
-      this.setState({searchResults: refs, searchStatus: refs.length + ' matches'});
+      this.setState({ searchResults: refs, searchStatus: refs.length + (refs.length === 1 ? ' match' : ' matches') });
 
       // Report search results to parent
-      this.props.callback(refs);
+      this.props.callback(refs, matchWords, this.state.laserSearch);
+   }
+
+   toggleLaserSearch = this.toggleLaserSearch.bind(this);
+   toggleLaserSearch() {
+      let refs = this.collectRefs(this.state.searchFor);
+      let matchWords = this.collectMatchWords(this.state.searchFor);
+
+      this.setState({ laserSearch: !this.state.laserSearch });
+
+      // Report state to parent
+      this.props.callback(refs, matchWords, !this.state.laserSearch);
    }
 
    //
    // Initiate/cancel search
    //
+   doSearch = this.doSearch.bind(this);
    doSearch() {
        if (this.state.searchFor === '') {
-	  this.props.callback([]);
+	  this.props.callback([], [], this.state.laserSearch);
 	  // TODO: show/select from prior searches
 	  return;
        } else if (this.state.searchResults) {
 	 // Reset for next search
 	 this.setState({searchResults: null, searchStatus: this.state.searchTerms, searchFor: ''});
-	 this.props.callback([]);
+	 this.props.callback([], [], this.state.laserSearch);
       } else if (this.state.totalSearchRefs > config.searchShowSearching) {
 	 // Slow search
 	 this.setState({searchStatus: 'Searching...'}, () => setTimeout(this.searchLookup.bind(this), 10));
@@ -219,13 +268,6 @@ export default class Search extends Component {
 	 // Regular/fast search
 	 this.searchLookup();
       }
-   }
-
-   //
-   // Display the full data payload for this participant
-   //
-   showData() {
-      this.setState({dataModalIsOpen: true});
    }
 
    //
@@ -294,6 +336,7 @@ export default class Search extends Component {
       }
    }
 
+   onInputChange = this.onInputChange.bind(this);
    onInputChange(event) {
        this.setState({searchFor: event.target.value, searchStatus: this.state.searchTerms, searchResults: null}, this.doSearch);
    }
@@ -301,16 +344,20 @@ export default class Search extends Component {
    render() {
       return (
 	 <div className='search'>
-	    	<button className={this.state.searchResults ? 'search-button-cancel' : 'search-button'} onClick={this.doSearch.bind(this)} />
-			<input className='search-input' type='text' ref='textInput' maxLength={config.searchMaxLength}
-		   placeholder='search terms' value={this.state.searchFor}
-		   onChange={this.onInputChange.bind(this)} />
-	    	<div className='search-status' onClick={this.showData.bind(this)}>{this.state.searchStatus}</div>
-			{ this.renderSearchOptions() }
-	    	<Modal open={this.state.dataModalIsOpen} onClose={() => this.setState({dataModalIsOpen: false})}>
-			<pre className='search-data'>
-	 		{ JSON.stringify(this.props.data, null, 3) }
-	   	</pre>
+	    { this.state.searchIsOpen && <input className='search-input' type='text' ref='textInput' maxLength={config.searchMaxLength}
+						placeholder='search terms' value={this.state.searchFor}
+						onChange={this.onInputChange} /> }
+	    { this.state.searchIsOpen && <div className='search-status' onClick={() => this.setState({dataModalIsOpen: true})}>{this.state.searchStatus}</div> }
+	    { this.renderSearchOptions() }
+	    { this.state.searchIsOpen && <button className={this.state.laserSearch ? 'search-laser-button-on' : 'search-laser-button-off'}
+						 onClick={this.toggleLaserSearch}>
+					    {/* this.state.laserSearch ? 'laser on' : 'laser off' */}
+					 </button> }
+	    <button className={this.state.searchIsOpen ? 'search-button-cancel' : 'search-button'} onClick={this.toggleSearch} />
+	    <Modal open={this.state.dataModalIsOpen} onClose={() => this.setState({dataModalIsOpen: false})}>
+	       <pre className='search-data'>
+		  { JSON.stringify(this.props.data, null, 3) }
+	       </pre>
 	    </Modal>
 	 </div>
       )

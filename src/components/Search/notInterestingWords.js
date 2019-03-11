@@ -1,8 +1,10 @@
 export default [
-   'with',
    'and',
-   'or',
+   'at',
+   'by',
+   'in',
    'of',
+   'or',
    'to',
-   'in'
+   'with'
 ]

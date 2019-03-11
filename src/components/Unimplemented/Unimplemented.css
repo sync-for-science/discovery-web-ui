@@ -3,7 +3,7 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery Unimplemented Stylesheet */
-/* v.01.03 Updated 02/13/2019 */
+/* v.01.04 Updated 03/04/2019 */
 
 .unimplemented {
    padding:0 0 5px 0;
@@ -12,9 +12,9 @@
 }
 
 .unimplemented-label {
-	@insert .value;
+   @insert .value;
    text-align: left;
    padding:4px 0 0 20px;
-	margin:0 0 0 20px;
+   margin:0 0 0 20px;
    grid-column:1;
 }

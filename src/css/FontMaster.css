@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+/* Sync for Science FontMaster Stylesheet */
+/* v.01.00  Updated 03/07/2019 */
+	
+/* Restructured fonts */
+
+@font-face {
+	font-family:'label';
+	src: url('../../fonts/GothamBook.otf');
+	format:('opentype');
+}
+
+@font-face {
+	font-family:'label-bold';
+	src: url('../../fonts/Gotham-Bold.otf');
+	format:('opentype');
+}
+
+@font-face {
+	font-family:'data-monospaced';
+	src: url('../../fonts/lucida-console.ttf');
+	format:('truetype');
+}
+
+@font-face {
+	font-family:'data-monospaced-bold';
+	src: url('../../fonts/lucida-console.ttf');
+	format:('truetype');
+}
+
+@font-face {
+	font-family:'data-text';
+	src: url('../../fonts/PragmaticaBook.otf');
+	format:('truetype');
+}
+
+/* Old Fonts 
+@font-face {
+	font-family:'discovery-regular';
+	src: url('../fonts/GothamBook.otf');
+	format:('opentype');
+}
+	
+@font-face {
+	font-family:'discovery-bold';
+	src: url('../fonts/GothamBook.otf');
+	format:('opentype');
+}
+
+@font-face {
+	font-family:'discovery-data';
+	src: url('../fonts/lucida-console.ttf');
+	format:('truetype');
+}
+
+@font-face {
+	font-family:'discovery-data-bold';
+	src: url('../fonts/lucida-console.ttf');
+	format:('truetype');
+}
+
+@font-face {
+	font-family:'discovery-data-text';
+	src: url('../fonts/PragmaticaBook.otf');
+	format:('truetype');
+}
+*/

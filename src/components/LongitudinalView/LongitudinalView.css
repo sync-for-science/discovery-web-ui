@@ -1,8 +1,9 @@
 @charset "UTF-8";
-@import '../../css/ColorVariablesMaster.css';
+/*@import '../../css/ColorVariablesMaster.css'; */
+@import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery LongitudinalView Stylesheet */
-/* v.01.07 Updated 02/13/2019 */
+/* v.01.09 Updated 02/19/2019 */
 
 /*
 .longitudinal-view {
@@ -15,6 +16,7 @@
 }
 */
 
+/*
 .longitudinal-view-categories-and-providers {
 	position: fixed;
 	top: 146px;
@@ -96,5 +98,4 @@
 	color:var(--white);
 	padding:0;
 }
-
-
+*/

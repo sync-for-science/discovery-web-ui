@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import './SummaryView.css';
@@ -10,7 +10,7 @@ import { formatDate, formatAge } from '../../util.js';
 //
 // Render the "Summary view" of the participant's data
 //
-export default class SummaryView extends Component {
+export default class SummaryView extends React.Component {
 
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform),
@@ -26,13 +26,6 @@ export default class SummaryView extends Component {
       }),
       categories: PropTypes.arrayOf(PropTypes.string).isRequired,
       providers: PropTypes.arrayOf(PropTypes.string).isRequired,
-      searchRefs: PropTypes.arrayOf(PropTypes.shape({	// Search results to highlight
-	 provider: PropTypes.string.isRequired,
-	 category: PropTypes.string.isRequired,
-	 date: PropTypes.string.isRequired,
-	 veryInteresting: PropTypes.bool.isRequired,
-	 position: PropTypes.number.isRequired
-      })),
       lastEvent: PropTypes.instanceOf(Event)
    }
 
@@ -124,8 +117,8 @@ export default class SummaryView extends Component {
 	 <div className='default-view'>
 	    <div className='timeline-placeholder'></div>
 	    <div className='default-view-title'>
-				<div className='default-view-title-name'>Summary</div>
-		 </div>
+	       <div className='default-view-title-name'>Summary</div>
+	    </div>
 	    <div className='default-view-container'>
 	       <div className='default-data-owner-title'>Person</div>
 	       { this.objToModalBody(chunk, 'default') }

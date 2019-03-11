@@ -22,7 +22,7 @@
 	font-family:discovery-bold;
 	font-size:0.800rem;
 	text-align: right;
-	color: var(--gray-dark);
+	color: var(--data);
 	white-space: nowrap;
 	vertical-align:text-bottom;
 }

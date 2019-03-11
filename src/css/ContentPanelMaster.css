@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+/* Sync for Science Discovery ContentPanelGlobal Stylesheet */
+/* v.01.00 Updated 3/07/2019 */
+
+.content-panel-display {
+	height:auto;
+	width:auto;
+	font-family:discovery-data-text;
+	font-size:1.200rem;
+	text-align: left;
+	color:var(--data);
+	white-space: nowrap;
+	padding:0 0 5px 20px;
+	grid-column:1/span 39;
+}

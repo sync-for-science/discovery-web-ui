@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import './DotLine.css';
@@ -9,7 +9,7 @@ import { numericPart, unitPart } from '../../util.js';
 //
 // Render a row of dots (within an SVGContainer)
 //
-export default class DotLine extends Component {
+export default class DotLine extends React.Component {
 
    static propTypes = {
       width: PropTypes.string,				 // Added via React.cloneElement() in <SVGContainer/>

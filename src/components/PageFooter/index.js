@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import './PageFooter.css';
@@ -14,7 +14,7 @@ try {
 //
 // Render the page footer of DiscoveryApp page
 //
-export default class PageFooter extends Component {
+export default class PageFooter extends React.Component {
 
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform)

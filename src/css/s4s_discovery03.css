@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Container Stylesheet 03 */
-/* v.03.32 Updated 11/20/2018 */
+/* v.03.33 Updated 03/07/2018 */
 	
 /* Global Elements */
 
@@ -27,9 +27,23 @@ button:focus {
 	
 @font-face {
 	font-family:'discovery-bold';
+	src: url('../fonts/GothamBook.otf');
+	format:('opentype');
+}
+
+/*
+@font-face {
+	font-family:'label-book';
+	src: url('../fonts/GothamBook.otf');
+	format:('opentype');
+}
+
+@font-face {
+	font-family:'label-bold';
 	src: url('../fonts/Gotham-Bold.otf');
 	format:('opentype');
 }
+*/
 
 @font-face {
 	font-family:'discovery-data';

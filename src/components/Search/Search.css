@@ -2,80 +2,88 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery Search Stylesheet */
-/* v.01.15 Updated 1/31/2019 */
+/* v.01.16 Updated 2/27/2019 */
 
 .search {
    position:relative;
    display:flex;
-	justify-content: center;
-   flex-direction:row;
+	flex-direction:row;
+   justify-content:flex-end;
    height:40px;
-   width:25%;
-	min-width:342px;
+   width:auto;
    align-items:center;
-   margin:10px 0;
-	padding:0 20px 0 20px;
-/*	border-right:solid 1px var(--white-75percent); */
-	border-left:solid 1px var(--white-75percent); 
+   margin:10px 0 0 auto;
+   padding:0 10px 0 0;
+   border-right:solid 1px var(--white-75percent); 
 }
 
 .search-buttons {
-	height:40px;
-   width:20%;
-	min-width:40px;
+   height:40px;
+   width:40px;
+   min-width:40px;
    padding:0;
    margin:0;
    background-color:transparent;
-	background-position:right 0;
+   background-position:center center;
    background-repeat:no-repeat;
-	background-size: 40px 40px;
+   background-size: 30px 30px;
    border:0;
    cursor:pointer;
 }
 
 .search-button {
    @insert search-buttons;
-   background-image:url(../../svg/icon-search-off.svg);
+   background-image:url("../../svg/search-button.svg");
 }
 
 .search-button-cancel {
    @insert search-buttons;
-   background-image:url(../../svg/icon-search-cancel.svg);
+   background-image:url("../../svg/search-button-cancel.svg");
+}
+
+.search-laser-button-on {
+	@insert search-buttons;
+	background-image:url("../../svg/search-button-laser-on.svg");
+}
+
+.search-laser-button-off {
+	@insert search-buttons;
+	background-image:url("../../svg/search-button-laser-off.svg");
 }
 
 .search-input {
    width:60%;
-	min-width:208px;
-	height: 32px;
-   margin:0 10px 0 10px;
+   min-width:208px;
+   height: 32px;
+   margin:0 10px 0 0;
    border:1px solid var(--white-75percent);
-	padding:0 0 0 5px;
-	font-family:discovery-data-text;
+   padding:0 0 0 5px;
+   font-family:discovery-data-text;
    font-size:1.000rem;
-	font-weight:bold;
+   font-weight:bold;
    outline: none;
 }
 
 .search-status {
    width:30%;
-	min-width:92px; 
+   min-width:92px; 
    height:20px;
    padding:9px 0 0 0;
    margin:0;
    background-color:transparent;
    font-family:discovery-data-bold;
    font-size:.900rem;
-	font-weight:bold;
+   font-weight:bold;
    color:var(--white-75percent);
-	text-align:left;
+   text-align:left;
    white-space:nowrap;
 }
 
 .search-results {
    position:absolute;
-   top:36px;
-   left:50px;
-	width:195px;
+   top:37px;
+   left:-0.5px;
+   width:204.5px;
    background-color:var(--white);
    border-top:1px solid var(--gray-medium);
    border-right:1px solid var(--blue-dark);
@@ -91,10 +99,10 @@
 
 .search-results-empty {
    position:absolute;
-   top:27px;
-   left:50px;
+   top:37px;
+   left:-0.5px;
    z-index:2;
-   width:195px;
+   width:204.5px;
    background-color:var(--white);
    border-top:1px solid var(--gray-medium);
    border-right:1px solid var(--blue-dark);
@@ -109,7 +117,7 @@
 .search-results-element:hover {
    cursor:pointer;
    background-color:var(--gray-medium);
-	opacity:0.4;
+   opacity:0.4;
 }
 
 .search-data {

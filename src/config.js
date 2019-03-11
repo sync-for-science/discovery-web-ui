@@ -20,5 +20,7 @@ export default {
    compareViewMaxCountHeight: 20,
    summaryViewMaxMRNChars: 8,
 
-   timeWidgetThumbResetZone: 0.0035	// Width of thumb "reset" zones in fraction of timeWidget width
+   timeWidgetThumbResetZone: 0.0035,	// Width of thumb "reset" zones in fraction of timeWidget width
+
+   contentPanelDragUpdateInterval: 0	// Msec between position updates during ContentPanel drag operations
 }
