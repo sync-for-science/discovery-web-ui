@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './Unimplemented.css';
 import '../ContentPanel/ContentPanel.css';
+import '../ContentPanel/ContentPanelCategories.css';
 
 import FhirTransform from '../../FhirTransform.js';
 import { stringCompare, formatContentHeader, ignoreCategories } from '../../util.js';
@@ -45,16 +45,22 @@ export default class Unimplemented extends React.Component {
    render() {
       let renderedCats = [];
       return ( this.state.matchingData &&
+	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
 	       this.state.matchingData.map((elt, index) => {
 		  if (renderedCats.includes(elt.category)) {
 		     return null;
 		  } else {
 		     renderedCats.push(elt.category);
 		     return (
-			<div className={this.props.className} key={index} >
+			<div className={this.props.className + ' category-container'} key={index} >
 			   { formatContentHeader(this.props.isEnabled, elt.category, this.state.matchingData[0].itemDate, this.context) }
-			   <div className='unimplemented-label'>
-			      { this.props.isEnabled && '[Not in S4S / currently unimplemented]' }
+			   <div className='content-body'>
+			      <div className='content-data'>
+				 <div className='unimplemented'>
+				    {/* this.props.isEnabled && '[Not in S4S / currently unimplemented]' */}
+				    { this.props.isEnabled && '[Pending]' }
+				 </div>
+			      </div>
 			   </div>
 			</div> );
 		  }

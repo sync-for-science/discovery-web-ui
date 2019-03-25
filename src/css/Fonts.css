@@ -1,0 +1,57 @@
+@charset "UTF-8";
+/* Sync for Science Font Stylesheet */
+/* v.01.02  Updated 03/25/2019 */
+
+@font-face {
+   font-family: 'header';
+   src: url( '../../fonts/GothamBook.otf');
+   format:( 'opentype');
+}
+
+@font-face {
+	font-family: 'header-bold';
+	src: url('../../fonts/GothamBold.otf');
+	format: ('opentype');
+}
+
+@font-face {
+	font-family: 'text';
+	src: url('../../fonts/GothamBook.otf');
+	format: ('opentype');
+}
+
+@font-face {
+	font-family: 'text-italic';
+	src: url('../../fonts/GothamBookItalic.otf');
+	format: ('opentype');
+}
+
+@font-face {
+	font-family: 'text-bold';
+	src: url('../../fonts/GothamBold.otf');
+	format: ('opentype');
+}
+
+@font-face {
+   font-family: 'label';
+   src: url('../../fonts/GothamBook.otf');
+   format: ('opentype');
+}
+
+@font-face {
+	font-family: 'data-number';
+   src: url('../../fonts/PragmaticaBook.otf');
+	format: ('opentype');
+}
+
+@font-face {
+	font-family: 'data-text';
+	src: url('../../fonts/PragmaticaBook.otf');
+	format: ('opentype');
+}
+
+@font-face {
+	font-family: 'data-text-medium';
+	src: url('../../fonts/PragmaticaMedium.ttf');
+	format: ('truetype');
+}

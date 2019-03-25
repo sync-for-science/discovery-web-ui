@@ -4,7 +4,7 @@ export default [
    'id',
    'meta',
    'reference',
-   'resourceType',
+//   'resourceType',
    'system',
    'url'
 ]

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './MedsStatement.css';
 import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
@@ -45,10 +44,11 @@ export default class MedsStatement extends React.Component {
 
    render() {
       return ( this.state.matchingData &&
-	       <div className={this.props.className}>
+	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
+	       <div className={this.props.className + ' category-container'}>
 		  { formatContentHeader(this.props.isEnabled, 'Meds Statement', this.state.matchingData[0].itemDate, this.context) }
 	          <div className='content-body'>
-		     { this.props.isEnabled && renderDisplay(this.state.matchingData, this.props.className, this.context) }
+		     { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Medication', this.context) }
 	          </div>
 	       </div> );
    }

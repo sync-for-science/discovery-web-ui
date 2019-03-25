@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './StandardFilters.css';
 import FhirTransform from '../../FhirTransform.js';
-import { getStyle, formatDate, combine, cleanDates, normalizeDates } from '../../util.js';
+import { getStyle, formatDate, numericPart, combine, cleanDates, normalizeDates } from '../../util.js';
 import TimeWidget from '../TimeWidget';
 import CategoryRollup from '../CategoryRollup';
 import Categories from '../Categories';
@@ -85,10 +85,23 @@ export default class StandardFilters extends React.Component {
       }
    }
 
-   // Kluge: following needs to know about lower-level SVG-related class
+   // Kluge: following needs to know about lower-level classes
    updateSvgWidth = (event) => {
-      const elt = document.querySelector('.category-rollup-svg-container');
-      this.setState({ svgWidth: getStyle(elt, 'width') });
+      const category = document.querySelector('.category');
+      const categoryNav = document.querySelector('.category-nav');
+
+//      category && console.log('category width: ' + category.getBoundingClientRect().width);
+//      categoryNav && console.log('categoryNav width: ' + categoryNav.getBoundingClientRect().width);
+//      categoryNav && console.log('categoryNav lmargin: ' + getStyle(categoryNav, 'margin-left'));
+//      categoryNav && console.log('categoryNav rmargin: ' + getStyle(categoryNav, 'margin-right'));
+
+      if (category && categoryNav) {
+	  let svgWidth = (category.getBoundingClientRect().width - categoryNav.getBoundingClientRect().width
+			  - numericPart(getStyle(categoryNav, 'margin-left')) - numericPart(getStyle(categoryNav, 'margin-right')))+ 'px';
+	  this.setState({ svgWidth: svgWidth });
+//	  console.log('svgWidth: ' + svgWidth);
+       }
+
    }
 
    //

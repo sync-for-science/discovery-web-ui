@@ -3,7 +3,7 @@
 @import '../../css/ContentPanelGlobal.css';
 
 /* Sync for Science Discovery Benefits Stylesheet */
-/* v.01.06 Updated 3/01/2019 */
+/* v.01.07 Updated 3/13/2019 */
 
 .benefits-billable-label {
    @insert .label;
@@ -44,11 +44,12 @@
 .benefits-claim-type-value {
    @insert .value;
 	display:flex;
+   height:auto;
 	flex-direction: row;
 	flex-wrap: wrap;
-   grid-column:2/span 19;
-	
-	
+   white-space: normal;
+   grid-column:2/span 12;
+   margin-bottom: 5px;
 }
 
 .benefits-cost-label {
@@ -171,6 +172,8 @@
    @insert .value;
    text-align: left;
    grid-column:2/span 2;
+   white-space: normal;
+   height:auto;
 }
 
 .benefits-diagnosis-label {

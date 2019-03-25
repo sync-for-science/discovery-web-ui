@@ -67,11 +67,8 @@
 }
 
 .vital-signs-time-series {
-   min-width: 50%;
-	align-content: flex-end; 
-	padding:0 0 0 200px;
-	grid-column:39/40;
-	grid-row:1/6;
+	padding:0 0 0 0;
+   width:inherit;
 }
 
 .vital-signs-provider-label {

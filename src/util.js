@@ -241,12 +241,13 @@ export function inDateRange(date, rangeLow, rangeHigh) {
 // Categories that currently aren't supported in views with the category selector
 // *** Should match "Currently unsupported" list in DiscoveryApp/index.js:categoriesForProviderTemplate() ***
 export function ignoreCategories() {
-   return ['Patient', 'Practitioner', 'List', 'Exams', 'Questionnaire', 'QuestionnaireResponse',
+   return ['Patient', 'Practitioner', 'List', 'Questionnaire', 'QuestionnaireResponse',
 	   'Observation-Other', 'DiagnosticReport', 'CarePlan', 'Medication', 'Organization', 'Goal', 'Basic',
 	   'ImmunizationRecommendation', 'ImagingStudy'];
 }
 
 // Text string representing all unsupported categories
 export function unimplemented() {
-    return '[Not in S4S]';
+//    return '[Not in S4S]';
+    return '[Pending]';
 }

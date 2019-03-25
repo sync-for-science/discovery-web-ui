@@ -43,7 +43,7 @@ button:focus {
 	src: url('../fonts/Gotham-Bold.otf');
 	format:('opentype');
 }
-*/
+
 
 @font-face {
 	font-family:'discovery-data';
@@ -62,6 +62,7 @@ button:focus {
 	src: url('../fonts/PragmaticaBook.otf');
 	format:('truetype');
 }
+*/
 
 /* Inserts 
 .category-button {

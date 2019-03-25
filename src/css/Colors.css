@@ -1,0 +1,79 @@
+@charset "UTF-8";
+/* Sync for Science Colors Stylesheet */
+/* v.01.01  Updated 03/19/2019 */
+
+:root {
+   
+   /* General Colors */
+   --primary-100: rgba(0,26,114,1.00);
+   --accent-100: rgba(255,199,14,1.00);
+   --accent-040: rgba(255,199,14,0.40);
+   --category-100: rgba(1,166,170,1.00);
+   --category-070: rgba(1,166,170,0.70);
+   --category-000: rgba(1,166,170,0.00);
+   --provider-100: rgba(1,166,170,1.00);
+
+   /* Whites */
+   --white-100: rgba(255,255,255,1.00);
+   --white-075: rgba(255,255,255,0.75);
+
+   /* Blacks */
+   --black-100: rgba(0,0,0,1.00);
+   --black-025: rgba(0,0,0,0.25);
+
+   /* Grays */
+   --gray-dark-100: rgba(30,30,30,1.00);
+   --gray-medium-100: rgba(167,168,170,1.00);
+   --gray-medium-060: rgba(167,168,170,0.60);
+   --gray-medium-040: rgba(167,168,170,0.40);
+   --gray-light-100: rgba(200,200,200,1.00);
+   --gray-light-020: rgba(200,200,200,0.20);
+
+   /* Miscelleous Colors */
+   --bluelight100: rgba(192,197,219,1.00);
+   --red100: rgba(255,20,20,1.00);
+   --reddark100: rgba(141,48,49,1.00);
+   --redmedium100: rgba(255,80,80,1.00);
+   --redlight100: rgba(255,160,160,1.00);
+
+   /* Data Colors */
+   --data: var(--reddark100);
+   --data-label: var(--graymedium100);
+   --data-divider: var(--graylight100);
+   --data-loading: var(--red100);
+
+   /* Interface Structure Colors */
+   --background: var(--white100);
+   --modal-shadow: var(--black025);
+
+   /* Category Colors */
+   --category: var(--category100);
+   --category-label-light: var(--white100);
+   --category-label-dark: var(--category100);
+	
+   /* Provider Colors */
+   --provider: var(--provider100);
+   --provider-label-light: var(--white100);
+   --provider-label-dark: var(--provider100);
+
+   /* Dot Colors */
+   --dots-active: var(--category070);
+   --dots-active-stroke: var(--white100);
+   --dots-active-search: var(--redlight100);
+   --dots-active-search-stroke: var(--white100);
+   --dots-active-highlight: var(--category100);
+   --dots-active-highlight-stroke: var(--white100);
+   --dots-active-highlight-search: var(--redmedium100);
+   --dots-active-highlight-search-stroke: var(--white100);
+   --dots-inactive: var(--graymedium060);
+   --dots-inactive-stroke: var(--white100);
+   --dots-inactive-search: var(--redlight100);
+   --dots-inactive-search-stroke: var(--white100);
+   --dots-inactive-highlight: var(--graymedium060);
+   --dots-inactive-highlight-stroke: var(--white100);
+   --dots-inactive-highlight-search: var(--redlight100);
+   --dots-inactive-highlight-search-stroke: var(--white100);
+   --dots-highlight-ring: var(--category000);
+   --dots-highlight-ring-stroke: var(--reddark100);
+	
+}

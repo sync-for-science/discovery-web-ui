@@ -1,9 +1,10 @@
 @charset "UTF-8";
-@import '../../css/ColorVariablesMaster.css';
+@import '../../css/Colors.css';
+/* @import '../../css/ColorVariablesMaster.css'; */
 @import '../../css/CategoryProvider.css';
 
 /* Sync for Science Discovery CategoryRollup Stylesheet */
-/* v.01.19 Updated 02/25/2019 */
+/* v.01.20 Updated 03/22/2019 */
 
 .category-rollup {
 	@insert .category-provider-rollup;
@@ -11,28 +12,30 @@
 
 .category-rollup-nav-enabled {
 	@insert .category-provider-rollup-nav-enabled;
-	color: var(--white);
-	background-color: var(--discovery-blue);
+	color: var(--white-100);
+	background-color: var(--primary-100);
 }
 
 .category-rollup-nav-disabled {
 	@insert .category-provider-rollup-nav-disabled;
-	color: var(--white);
-	background-color: var(--discovery-blue);
+	color: var(--white-100);
+	background-color: var(--primary-100);
 }
 
 .category-rollup-svg-container {
 	@insert .category-provider-svg-container;
-	position:fixed;
-	top:100px;
-	left:214px;
-	width:calc(100% - 235px);
-	margin:0;
-	padding:0;
-	background-color:transparent;
+	position: fixed;
+	top: 100px;
+	left: 214px;
+	width: calc(100% - 255px);
+/*	width: calc(100% - 245px);
+	background-color: transparent;
+	padding: 0 10px;
+	margin: 0; */
 }
 
 .category-rollup-svg {
 	@insert .category-provider-svg;
-	margin:0;
+	position: relative;
+	margin: 0;
 }

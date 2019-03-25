@@ -1,11 +1,14 @@
 @charset "UTF-8";
 @import '../../css/ColorVariablesMaster.css';
-@import '../../css/ContentPanelGlobal.css';
+
 @import '../../css/ViewContainer.css';
+@import '../../css/Fonts.css';
+@import '../../css/Colors.css';
+@import '../ContentPanel/ContentPanelCategories.css';
 
 
 /* Sync for Science Discovery SummaryView Stylesheet */
-/* v.01.09 Updated 02/19/2019 */
+/* v.01.10 Updated 03/21/2019 */
 
 
 .default-view {
@@ -27,8 +30,8 @@
 	width:100%;
 	background-image: url("../../png/timeline-background-01.png");
 	background-repeat: repeat-x;
-	border-top:2px solid var(--white);
-	border-bottom:2px solid var(--white);
+	border-top:2px solid var(--white-100);
+	border-bottom:2px solid var(--white-100);
 }
 
 .default-view-title {
@@ -38,31 +41,31 @@
    height:50px;
    min-height:50px;
    padding:0 20px 0 70px;
-	border-top:2px solid var(--accent);
-   background-color: var(--blue-dark);
+	border-top:2px solid var(--accent-100);
+   background-color: var(--primary-100);
 	background-image: url("../../svg/view-icon-overview-on.svg");
 	background-repeat: no-repeat;
 	background-position:20px 8px;
 	background-size:35px 35px;
-   font-family: discovery-data;
+   font-family: data-text;
    font-size: 1.000rem;
-   color:var(--white);
+   color:var(--white-100);
    align-items: center;
    justify-content:flex-start;
 }
 
 .default-view-title-name {
-	font-family:discovery-bold;
+	font-family:header-bold;
    font-size:1.000rem;
-	color:var(--white);
+	color:var(--white-100);
 	margin:0;
 }
 
 .default-view-container {
 	height:calc(100% - 223px);
-	border-left:2px solid var(--discovery-blue);
-	border-right:2px solid var(--discovery-blue);
-	border-bottom:2px solid var(--discovery-blue);
+	border-left:2px solid var(--primary-100);
+	border-right:2px solid var(--primary-100);
+	border-bottom:2px solid var(--primary-100);
 	padding:20px 20px 0 20px;
 	margin:-20px 0 0;
 }
@@ -74,7 +77,7 @@
 }
 
 .default-body-property {
-   @insert .label;
+ /*  @insert .label; */
 	width:250px;
 	min-width: 250px;
 	font-size:1.000rem;
@@ -83,10 +86,10 @@
 }
 
 .default-body-value {
-   @insert .value;
+/*   @insert .value; */
    height:auto;
    width:auto;
-   font-family:discovery-regular;
+   font-family:data-text;
    font-size:1.000rem;
    text-align:left;
 }
@@ -100,7 +103,7 @@
 .default-providers-name {
 	grid-column: 1;
 	width:250px;
-	font-family:discovery-data-text;
+	font-family:data-text;
    font-size:1.000rem;
    text-align:left;
 	font-weight: bold;
@@ -111,18 +114,18 @@
 .default-providers-count {
 	grid-column: 2;
 	width:auto;
-	font-family:discovery-data;
+	font-family:data-numbers;
    font-size:1.000rem;
    text-align:left;
 	margin:3px 0 0 0;
-	color:var(--data);
+	color:var(--data-text);
 	white-space: nowrap;
 }
 
 .default-providers-label1 {
 	grid-column: 3;
 	width:auto;
-	font-family:discovery-data-text;
+	font-family:data-text;
    font-size:1.000rem;
    text-align:center;
 	margin:0 0 0 5px;
@@ -132,7 +135,7 @@
 .default-providers-min-date {
 	grid-column: 4;
 	width:auto;
-	font-family:discovery-data;
+	font-family:data-text;
    font-size:1.000rem;
    text-align:right;
 	margin:3px 0 0 20px;
@@ -143,7 +146,7 @@
 .default-providers-label2 {
 	grid-column: 5;
 	width:10px;
-	font-family:discovery-data-text;
+	font-family:data-text;
    font-size:1.000rem;
    text-align:center;
 	white-space: nowrap;
@@ -153,7 +156,7 @@
 .default-providers-max-date {
 	grid-column: 6;
 	width:auto;
-	font-family:discovery-data;
+	font-family:data-numbers;
    font-size:1.000rem;
    text-align:left;
 	margin:3px 0 0 5px;
@@ -162,21 +165,21 @@
 }
 
 .default-data-owner-title {
-	font-family: discovery-bold;
+	font-family: data-text;
 	border-bottom: solid 1px var(--discovery-blue);
 	margin:20px 0 10px 0;
 	width:100%;
 }
 
 .default-providers-title {
-	font-family: discovery-bold;
+	font-family: header-bold;
 	border-bottom: solid 1px var(--discovery-blue);
 	margin:20px 0 0 0;
 	width:100%;
 }
 
 .default-providers-mrn {
-	font-family:discovery-data;
+	font-family:data-text;
    font-size:.800rem;
 	font-style:italic;
 	text-align:left;

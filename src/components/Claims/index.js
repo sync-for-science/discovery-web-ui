@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import './Claims.css';
+import '../ContentPanel/ContentPanel.css';
+
 import config from '../../config.js';
 
 import FhirTransform from '../../FhirTransform.js';
@@ -75,11 +76,12 @@ export default class Claims extends React.Component {
 
    render() {
       return ( this.state.matchingData && this.state.matchingData.length > 0 &&
-	       <div className={this.props.className}>
+	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
+	       <div className={this.props.className + ' category-container'}>
 		  { formatContentHeader(this.props.isEnabled, 'Claims', this.state.matchingData[0].itemDate, this.context) }
 	          <div className='content-body'>
-		     { this.props.isEnabled && renderClaims(this.state.matchingData, this.props.className, this.context) }
-	             { this.props.isEnabled && this.state.loadingRefs > 0 && <div className={this.props.className+'-loading'}>Loading ...</div> }
+		     { this.props.isEnabled && renderClaims(this.state.matchingData, this.context) }
+	             { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }
 	          </div>
 	       </div> );
    }

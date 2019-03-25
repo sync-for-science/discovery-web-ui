@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
-import Modal from 'react-responsive-modal';
 
 import './ContentPanel.css';
 import config from '../../config.js';
-//import { formatDate, formatAge, inDateRange, unimplemented } from '../../util.js';
-import { inDateRange, unimplemented } from '../../util.js';
+import { inDateRange, ignoreCategories, unimplemented } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 
 import Allergies from '../Allergies';
@@ -15,6 +13,7 @@ import Claims from '../Claims';
 import Conditions from '../Conditions';
 import DocumentReferences from '../DocumentReferences';
 import Encounters from '../Encounters';
+import Exams from '../Exams';
 import Immunizations from '../Immunizations';
 import LabResults from '../LabResults';
 import MedsAdministration from '../MedsAdministration';
@@ -75,16 +74,14 @@ export default class ContentPanel extends React.Component {
       panelHeight: 0,
       dragging: false,
       lastDragUpdateTimestamp: 0,
-      payloadModalIsOpen: false,
       prevEnabled: true,
       nextEnabled: true,
       annunciator: null,
       showAllData: this.props.showAllData ? true : false,
-//      showDotLines: false,
       showDotLines: true,
       trimLevel: 'none',
       trimLevelDirection: 'more',
-//      dateDisplay: 'dateOnly'
+      showJSON: false
    }
 
    //
@@ -216,7 +213,8 @@ export default class ContentPanel extends React.Component {
    }
 
    catEnabled(cat) {
-      return this.props.catsEnabled[cat] === undefined || this.props.catsEnabled[cat];
+      let testCat = ignoreCategories().includes(cat) ? unimplemented() : cat;	// Map unimplemented categories to the "Not in S4S" meta-category
+      return this.props.catsEnabled[testCat] === undefined || this.props.catsEnabled[testCat];
    }
 
    onShowHideLines = this.onShowHideLines.bind(this);
@@ -259,7 +257,7 @@ export default class ContentPanel extends React.Component {
       let divs = [];
       for (let thisDate of dates) {
 //	 let res = this.props.resources.pathItem(`[*itemDate=${thisDate.date}]`);
-	 let res = limitedResources.filter(elt => elt.itemDate === thisDate.date);
+	 let res = limitedResources.filter(elt => elt.itemDate === thisDate.date && (this.catEnabled(elt.category) || this.context.trimLevel === 'none'));
 	 if (res.length > 0) {
 	    divs = divs.concat([
 	       <Allergies           className='allergies'      key={divs.length+1}  data={res} showDate={showDate} isEnabled={this.catEnabled('Allergies')} />,
@@ -268,18 +266,19 @@ export default class ContentPanel extends React.Component {
 	       <Conditions          className='conditions'     key={divs.length+4}  data={res} showDate={showDate} isEnabled={this.catEnabled('Conditions')} />,
 	       <DocumentReferences  className='doc-refs'       key={divs.length+5}  data={res} showDate={showDate} isEnabled={this.catEnabled('Document References')} />,
 	       <Encounters          className='encounters'     key={divs.length+6}  data={res} showDate={showDate} isEnabled={this.catEnabled('Encounters')} />,
-	       <Immunizations       className='immunizations'  key={divs.length+7}  data={res} showDate={showDate} isEnabled={this.catEnabled('Immunizations')} />,
-	       <LabResults          className='lab-results'    key={divs.length+8}  data={res} showDate={showDate} isEnabled={this.catEnabled('Lab Results')}
+	       <Exams               className='exams'          key={divs.length+7}  data={res} showDate={showDate} isEnabled={this.catEnabled('Exams')} />,
+	       <Immunizations       className='immunizations'  key={divs.length+8}  data={res} showDate={showDate} isEnabled={this.catEnabled('Immunizations')} />,
+	       <LabResults          className='lab-results'    key={divs.length+9}  data={res} showDate={showDate} isEnabled={this.catEnabled('Lab Results')}
 		    resources={this.props.resources} />,
-	       <MedsAdministration  className='meds-admin'     key={divs.length+9}  data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Administration')} />,
-	       <MedsDispensed       className='meds-dispensed' key={divs.length+10} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Dispensed')} />,
-	       <MedsRequested       className='meds-requested' key={divs.length+11} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Requested')} />,
-	       <MedsStatement       className='meds-statement' key={divs.length+12} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Statement')} />,
-	       <Procedures          className='procedures'     key={divs.length+13} data={res} showDate={showDate} isEnabled={this.catEnabled('Procedures')} />,
-	       <SocialHistory       className='social-history' key={divs.length+14} data={res} showDate={showDate} isEnabled={this.catEnabled('Social History')} />,
-	       <VitalSigns          className='vital-signs'    key={divs.length+15} data={res} showDate={showDate} isEnabled={this.catEnabled('Vital Signs')}
+	       <MedsAdministration  className='meds-admin'     key={divs.length+10} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Administration')} />,
+	       <MedsDispensed       className='meds-dispensed' key={divs.length+11} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Dispensed')} />,
+	       <MedsRequested       className='meds-requested' key={divs.length+12} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Requested')} />,
+	       <MedsStatement       className='meds-statement' key={divs.length+13} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Statement')} />,
+	       <Procedures          className='procedures'     key={divs.length+14} data={res} showDate={showDate} isEnabled={this.catEnabled('Procedures')} />,
+	       <SocialHistory       className='social-history' key={divs.length+15} data={res} showDate={showDate} isEnabled={this.catEnabled('Social History')} />,
+	       <VitalSigns          className='vital-signs'    key={divs.length+16} data={res} showDate={showDate} isEnabled={this.catEnabled('Vital Signs')}
 		    resources={this.props.resources} />,
-	       <Unimplemented	    className='unimplemented'  key={divs.length+16} data={res} showDate={showDate} isEnabled={this.catEnabled(unimplemented())} />
+	       <Unimplemented	    className='unimplemented'  key={divs.length+17} data={res} showDate={showDate} isEnabled={this.catEnabled(unimplemented())} />
 	    ]);
 	 }
       }
@@ -290,12 +289,11 @@ export default class ContentPanel extends React.Component {
 
       return (
 	 <div className='content-panel-inner-body'>
-	    { divs }
-	    <Modal open={this.state.payloadModalIsOpen} onClose={() => this.setState({payloadModalIsOpen: false})}>
-	       <pre className='content-panel-data'>
-		  { JSON.stringify(this.state.showAllData ? this.props.resources.transformed : this.props.context.data, null, 3) }
-	       </pre>
-	    </Modal>
+	    { this.state.showJSON ? 
+		<pre className='content-panel-data'>
+		   { JSON.stringify(this.state.showAllData ? this.props.resources.transformed : this.props.context.data, null, 3) }
+		</pre>
+	      : divs }
 	 </div>
       );
    }
@@ -316,24 +314,6 @@ export default class ContentPanel extends React.Component {
       }	   
    }
 
-//   changeDateDisplay = this.changeDateDisplay.bind(this);
-//   changeDateDisplay() {
-//      switch(this.state.dateDisplay) {
-//	 case 'dateTime':
-//	    this.setState({ dateDisplay: 'dateAge' });
-//	 break;
-//
-//	 case 'dateAge':
-//	    this.setState({ dateDisplay: 'dateOnly' });
-//	 break;
-//
-//	 default:
-//	 case 'dateOnly':
-//	    this.setState({ dateDisplay: 'dateTime' });
-//	 break;
-//      }
-//   }
-
    renderContents(context) {
 //      let birthDate = this.props.resources.pathItem('[category=Patient].data.birthDate');
       return (
@@ -346,22 +326,18 @@ export default class ContentPanel extends React.Component {
 	       	  <button className={'content-panel-right-button' + (this.state.nextEnabled ? '' : '-off')}
 			  onClick={() => this.onNextPrev('next')} />
 	       	  <button className={this.state.showAllData ? 'content-panel-all-button' : 'content-panel-dot-button'}
-			  onClick={() => this.setState({showAllData: !this.state.showAllData})} />
-	      {/*<button className={this.state.showDotLines ? 'content-panel-show-lines-button' : 'content-panel-hide-lines-button'}
-			 onClick={this.onShowHideLines} /> */}
+			  onClick={() => this.setState( {showAllData: !this.state.showAllData} )} />
 		  <button className={`content-panel-trim-${this.state.trimLevel}-button`} onClick={this.changeTrimLevel} />
-	      {/* <button className={`content-panel-${this.state.dateDisplay}-button`} onClick={this.changeDateDisplay}>
-		     {this.state.dateDisplay}
-		     </button> */}
+		  <button className={'content-panel-json-button' + (this.state.showJSON ? '' : '-off')}
+			  onClick={() => this.setState( {showJSON: !this.state.showJSON} )} >  
+		     {'{;}'}
+		  </button>
 	       </div>
 	       <div className='content-panel-inner-title-center' onDoubleClick={this.onDoubleClick}>
 		  <button className={this.state.showDotLines ? 'content-panel-drag-button' : 'content-panel-no-drag-button'} />
 		  { this.state.annunciator && <div className='content-panel-annunciator'>{this.state.annunciator}</div> }
 	       </div>
 	       <div className='content-panel-inner-title-right'>
-		  <button className='content-panel-inner-title-payload-button' onClick={() => !this.state.dragging && this.setState({payloadModalIsOpen: true})}>
-		     {/* !this.state.showAllData && formatDate(context.date, false, false) + ' / ' + formatAge(birthDate, context.date, ' at ') */}
-		  </button>
 		  {/* <button className='content-panel-inner-title-close-button' onClick={this.onClose} /> */}
 	       </div>
 	    </div>
@@ -371,9 +347,8 @@ export default class ContentPanel extends React.Component {
    }
 
    render() {
-      // Extend DiscoveryContext with trimLevel & dateDisplay (currently works / simpler than reassigning the extended context to DiscoveryContext.Provider)
+      // Extend DiscoveryContext with trimLevel (currently works / simpler than reassigning the extended context to DiscoveryContext.Provider)
       this.context.trimLevel = this.state.trimLevel;
-//      this.context.dateDisplay = this.state.dateDisplay;
 
       // Dragging enabled/disabled by changing bounds.bottom
       return ( this.state.isOpen &&

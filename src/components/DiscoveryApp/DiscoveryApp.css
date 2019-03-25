@@ -4,6 +4,19 @@
 /* Sync for Science Discovery DiscoveryApp Stylesheet */
 /* v.01.02 Updated 12/05/2018 */
 
+body {
+	width:100%;
+	margin: 0;
+	padding: 0;
+	font-size: 16px;
+	background-color:white;
+	overflow:hidden;
+}
+
+button:focus {
+	outline: none;
+}
+
 .discovery-app {
    position: fixed;
    top: 0;

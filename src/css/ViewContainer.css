@@ -1,75 +1,67 @@
 @charset "UTF-8";
-@import 'ColorVariablesMaster.css';
+@import 'Colors.css';
 
 /* Sync for Science Discovery ViewContainer Stylesheet */
-/* v.01.01 Updated 02/20/2019 */
+/* v.01.02 Updated 03/07/2019 */
 
 .view-container {
 	position: fixed;
-   top:146px;
-   left:214px;
-   width:calc(100% - 234px);
-   min-width:840px;
-   height:calc(100% - 200px);
-   margin:0;
+   top: 146px;
+   left: 214px;
+   width: calc(100% - 234px);
+   min-width: 840px;
+   height: calc(100% - 200px);
+   margin: 0;
 }
 
 .view-title {
 	display: flex;
    flex-direction: row;
 	align-items: center;
-	justify-content:flex-start;
-   width:calc(100% - 90px);
-   height:50px;
-   min-height:50px;
-   padding:0 20px 0 70px;
-   
+	justify-content: flex-start;
+   width: calc(100% - 90px);
+   height: 50px;
+   min-height: 50px;
+   padding: 0 20px 0 70px;
    background-repeat: no-repeat;
-   background-position:20px 8px;
-   background-size:35px 35px;
-   font-family: discovery-data;
+   background-position: 20px 8px;
+   background-size: 35px 35px;
+   font-family: data-text;
    font-size: 1.000rem;
-  	color:var(--white);
-	border-top:2px solid var(--accent);
-   background-color: var(--blue-dark);
+  	color: var(--white-100);
+	border-top: 2px solid var(--accent-100);
+   background-color: var(--primary-100);
 }
 
 .view-title-name {
-	font-family:discovery-bold;
-   font-size:1.000rem;
-   color:var(--white);
-   margin:0;
+	font-family: header-bold;
+   font-size: 1.000rem;
+   color: var(--white-100);
+   margin: 0;
 }
 
 .view-title-patient-name {
-	font-family:discovery-data-bold;
-   font-size:1.200rem;
-   color:var(--white);
+	font-family: header-bold;
+   font-size: 1.200rem;
+   color: var(--white-100);
    white-space: nowrap;
-   margin-left:35px;
+   margin-left: 35px;
 }
 
 .view-contents {
    position: fixed;
    top: 196px;
    left: 214px;
-	display:flex;
+	display: flex;
    flex-direction: column;
    min-height: calc(100% - 196px - 20px - 15px);
    max-height: calc(100% - 196px - 20px - 15px);
    min-width: calc(100% - 210px - 28px);
    max-width: calc(100% - 210px - 28px);
-   background-color: var(--discovery-background);
-   padding:20px 0 0 0;
-	border:2px solid var(--discovery-blue);
+   background-color: var(--background);
+   padding: 20px 0 0 0;
+	border: 2px solid var(--primary-100);
    white-space: pre-wrap;
    overflow-y:auto;
    overflow-x: hidden;
 }
-
-
-
-
-
-
-

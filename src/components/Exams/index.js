@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { renderSocialHistory } from '../../fhirUtil.js';
+import { renderExams } from '../../fhirUtil.js';
 import { stringCompare, formatContentHeader } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
 //
-// Display the 'Social History' category if there are matching resources
+// Display the 'Exams' category if there are matching resources
 //
-export default class SocialHistory extends React.Component {
+export default class Exams extends React.Component {
 
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
@@ -27,7 +27,7 @@ export default class SocialHistory extends React.Component {
    }
 
    setMatchingData() {
-      let match = FhirTransform.getPathItem(this.props.data, '[*category=Social History]');
+      let match = FhirTransform.getPathItem(this.props.data, '[*category=Exams]');
       this.setState({ matchingData: match.length > 0 ? match.sort((a, b) => stringCompare(a.data.code.coding[0].display, b.data.code.coding[0].display))
 						     : null });
    }
@@ -46,10 +46,8 @@ export default class SocialHistory extends React.Component {
       return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
 	       <div className={this.props.className + ' category-container'}>
-		  { formatContentHeader(this.props.isEnabled, 'Social History', this.state.matchingData[0].itemDate, this.context) }
-	          <div className='content-body'>
-		     { this.props.isEnabled && renderSocialHistory(this.state.matchingData, this.context) }
-	          </div>
+		  { formatContentHeader(this.props.isEnabled, 'Exam', this.state.matchingData[0].itemDate, this.context) }
+		  { this.props.isEnabled && renderExams(this.state.matchingData, this.context) }
 	       </div> );
    }
 }

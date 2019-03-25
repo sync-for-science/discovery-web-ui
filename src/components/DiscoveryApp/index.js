@@ -173,12 +173,12 @@ export default class DiscoveryApp extends React.Component {
 	 'Benefits':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ExplanationOfBenefit]'),
 	 'Claims':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Claim]'),
 	 'Encounters':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Encounter]'),
+	 'Exams':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
+										       +'[*:isCategory(Exam)|:isCategory(exam)]', this.queryOptions),
 
 	 // Currently unsupported
 	 'Practitioner':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Practitioner]'),
 	 'List':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=List]'),
-	 'Exams':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
-										       +'[*:isCategory(Exam)|:isCategory(exam)]', this.queryOptions),
 	 'Questionnaire':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Questionnaire]'),
 	 'QuestionnaireResponse':	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=QuestionnaireResponse]'),
 	 'Observation-Other':	 	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'

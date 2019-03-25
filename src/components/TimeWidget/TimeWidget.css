@@ -187,9 +187,11 @@
    align-items:center;
    height:30px;
    max-height:30px;
-   width:inherit;
+/* width set via js */
+/*   width:inherit; */
    margin:0;
-   padding:0;
+   padding:0 10px;
+/*   padding:0; */
    background-image: url(../../svg/horizontal-rule-1px-black.svg);
    background-position:center;
    background-repeat: repeat-x;
@@ -279,8 +281,9 @@
 /* The offset to left/right of the timeline */
 .timeline-shim {
    position:relative;
-	top:-9px;
-	min-width:20px;
+   top:-9px;
+/*   min-width:20px; */
+   min-width:10px;
    height:40px;
 }
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './Encounters.css';
 import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
@@ -45,11 +44,10 @@ export default class Encounters extends React.Component {
 
    render() {
       return ( this.state.matchingData &&
-	       <div className={this.props.className}>
+	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
+	       <div className={this.props.className + ' category-container'}>
 		  { formatContentHeader(this.props.isEnabled, 'Encounter', this.state.matchingData[0].itemDate, this.context) }
-	          <div className='content-body'>
-		     { this.props.isEnabled && renderEncounters(this.state.matchingData, this.props.className, this.context) }
-	          </div>
+		  { this.props.isEnabled && renderEncounters(this.state.matchingData, this.context) }
 	       </div> );
    }
 }
