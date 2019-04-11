@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 
 import './CompareView.css';
 import config from '../../config.js';
-import { isValid, inDateRange, unimplemented } from '../../util.js';
+import { isValid, inDateRange } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 import StandardFilters from '../StandardFilters';
+import Unimplemented from '../Unimplemented';
 
 //
 // Render the "compare view" of the participant's data
@@ -85,7 +86,7 @@ export default class CompareView extends React.Component {
 
    // Categories we DON'T want to compare on
    get noCompareCategories() {
-       return ['Patient', 'Vital Signs', 'Benefits', 'Claims', unimplemented()];
+       return ['Patient', 'Vital Signs', 'Benefits', 'Claims', Unimplemented.catName];
    }
 
    //

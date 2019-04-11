@@ -26,6 +26,22 @@ export function stringCompare(a, b) {
    }
 }
 
+// Do arrays have the same contents, checking for element-by-element strict equality
+export function shallowEqArray(arr1, arr2) {
+   if (arr1.length !== arr2.length) {
+      return false;
+   } else {
+      for (let i = 0; i < arr1.length; i++) {
+	 if (arr1[i] !== arr2[i]) {
+	    return false;
+	 }
+      }
+      return true;
+   }
+}
+
+
+
 export function formatTime(date) {
    let strDate = date+'';
    const tLoc = strDate.indexOf('T');
@@ -56,7 +72,7 @@ export function formatDate(date, fillShortDates, surpressTime) {
       if (surpressTime) {
 	 return datePart;
       } else {
-	 return datePart + ' ' + formatTime(date);
+	 return datePart + '\u00a0\u00a0' + formatTime(date);
       }
    }
 }
@@ -75,7 +91,7 @@ export function formatAge(birthDate, ageDate, prefix) {
 	 return 'ALERT: Date is prior to birth';
 
       } else if (endDate - startDate < DAY_MS) {
-	 return 'at birth';
+	 return 'birth date';
 
       } else {
 	 let diffDate = new Date(endDate - startDate);
@@ -98,27 +114,15 @@ export function formatAge(birthDate, ageDate, prefix) {
 
 export function formatContentHeader(isEnabled, category, itemDate, appContext) {
    let dateOnly = formatDate(itemDate, true, true);
-   let timeOnly = formatTime(itemDate);
+   let dateWithTime = formatDate(itemDate, true, false);
    let dob = appContext.resources.pathItem('[category=Patient].data.birthDate');
-   let age = formatAge(dob, itemDate, '');
-
-//   return (
-//      <div className='content-header-container'>
-//	 <div className={isEnabled ? 'content-header-date' : 'content-header-date-disabled'} id={dateOnly}>{dateOnly}</div>
-//	 { appContext.dateDisplay === 'dateTime' &&
-//	      <div className={isEnabled ? 'content-header-time' : 'content-header-time-disabled'}>{timeOnly}</div> }
-//	 { appContext.dateDisplay === 'dateAge' &&
-//	      <div className={isEnabled ? 'content-header-age' : 'content-header-age-disabled'}>{age}</div> }
-//	   <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>{category}</div>
-//      </div>
-//   );
+   let age = formatAge(dob, itemDate, 'age ');
 
    return (
       <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} id={dateOnly}>
 	 <div className={isEnabled ? 'content-header' : 'content-header-disabled'}>{category}</div>
-	 <div className={isEnabled ? 'content-header-date' : 'content-header-date-disabled'}>{dateOnly}</div>
-	 <div className={isEnabled ? 'content-header-time' : 'content-header-time-disabled'}>{timeOnly}</div>
-	   <div className={isEnabled ? 'content-header-age' : 'content-header-age-disabled'}>{`| age ${age}`}</div>
+	   <div className={isEnabled ? 'content-header-date' : 'content-header-date-disabled'}>{dateWithTime}</div>
+	   <div className={isEnabled ? 'content-header-age' : 'content-header-age-disabled'}>|&nbsp; {age}</div>
 	 <div className='content-header-padding'/>
       </div>
    );
@@ -236,18 +240,4 @@ export function inDateRange(date, rangeLow, rangeHigh) {
    let rangeHighStr = (rangeHigh instanceof Date ? rangeHigh : new Date(rangeHigh)).toISOString().substring(0,10);
 
    return dateStr >= rangeLowStr && dateStr <= rangeHighStr;
-}
-
-// Categories that currently aren't supported in views with the category selector
-// *** Should match "Currently unsupported" list in DiscoveryApp/index.js:categoriesForProviderTemplate() ***
-export function ignoreCategories() {
-   return ['Patient', 'Practitioner', 'List', 'Questionnaire', 'QuestionnaireResponse',
-	   'Observation-Other', 'DiagnosticReport', 'CarePlan', 'Medication', 'Organization', 'Goal', 'Basic',
-	   'ImmunizationRecommendation', 'ImagingStudy'];
-}
-
-// Text string representing all unsupported categories
-export function unimplemented() {
-//    return '[Not in S4S]';
-    return '[Pending]';
 }

@@ -236,7 +236,7 @@ export function renderImmunizations(matchingData, appContext) {
    }
 }
 
-export function renderLabs(matchingData, resources, appContext) {
+export function renderLabs(matchingData, resources, dotClickFn, appContext) {
    // Collect info to display from matchingData
    let found = [];
    for (const elt of matchingData) {
@@ -260,10 +260,10 @@ export function renderLabs(matchingData, resources, appContext) {
 	 const yVal = elt.data.valueQuantity.value;
 	 if (series.hasOwnProperty(displayStr)) {
 	    // Add to series
-	    series[displayStr].push({x: xVal, y: yVal});
+	    series[displayStr].push({ provider: elt.provider, x: xVal, y: yVal });
 	 } else {
 	    // New series
-	    series[displayStr] = [{x: xVal, y: yVal}];
+	    series[displayStr] = [{ provider: elt.provider, x: xVal, y: yVal }];
 	 }
       } catch (e) {};
    }
@@ -286,7 +286,9 @@ export function renderLabs(matchingData, resources, appContext) {
 	    highlightValue = valueUnits === lowUnits && valueUnits === highUnits && (value < lowValue || value > highValue);
 	 }
 
-	 let sortedSeries = series[elt.display] && series[elt.display].sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
+	 // Select only values with matching provider and then sort
+	 let sortedSeries = series[elt.display] && series[elt.display].filter(e => e.provider === elt.provider)
+								      .sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
 	 let thisValue = elt.valueQuantity ? elt.valueQuantity.value : null;
 
 	 return (
@@ -320,7 +322,7 @@ export function renderLabs(matchingData, resources, appContext) {
 		  </CondDiv>
 	       </div>
 	       <div className='content-graph'>
-		  { sortedSeries && <TimeSeries measure={elt.display} data={sortedSeries} highlights={[{x:elt.date, y:thisValue}]} /> }
+		  { sortedSeries && <TimeSeries measure={elt.display} data={sortedSeries} highlights={[{x:elt.date, y:thisValue}]} dotClickFn={dotClickFn} /> }
 	       </div>
 	       <div className='content-extras'>
 		  {/* TODO: stuff goes here */}
@@ -485,7 +487,7 @@ function canonVitals(display) {
    return titleCase(display.replace(/_/g, ' '));
 }
 
-export function renderVitals(matchingData, resources, appContext) {
+export function renderVitals(matchingData, resources, dotClickFn, appContext) {
    // Collect info to display from matchingData
    let found = [];
    for (const elt of matchingData) {
@@ -498,7 +500,7 @@ export function renderVitals(matchingData, resources, appContext) {
 			display:displayStr,
 			value:isValid(elt, e => e.data.valueQuantity) ? elt.data.valueQuantity.value : undefined,
 			unit:isValid(elt, e => e.data.valueQuantity) ? elt.data.valueQuantity.unit : undefined,
-			components:elt.data.component, status:elt.data.status});
+			component:elt.data.component, status:elt.data.status});
 	 }
       } catch (e) {};
    }
@@ -517,21 +519,23 @@ export function renderVitals(matchingData, resources, appContext) {
 	       const yVal = elt.data.valueQuantity.value;
 	       if (series.hasOwnProperty(displayStr)) {
 		  // Add to series
-		  series[displayStr].push({x: xVal, y: yVal});
+		  series[displayStr].push({ provider: elt.provider, x: xVal, y: yVal });
 	       } else {
 		  // New series
-		  series[displayStr] = [{x: xVal, y: yVal}];
+		  series[displayStr] = [{ provider: elt.provider, x: xVal, y: yVal }];
 	       }
 	    } else if (elt.data.component) {
 	       // Dual/pair data values
-	       const yVal = (elt.data.component[0].valueQuantity.value + elt.data.component[1].valueQuantity.value) / 2;
-	       const yVar = Math.abs(elt.data.component[1].valueQuantity.value - elt.data.component[0].valueQuantity.value);
+	       const y1 = tryWithDefault(elt, e => e.data.component[0].valueQuantity.value, 0);
+	       const y2 = tryWithDefault(elt, e => e.data.component[1].valueQuantity.value, 0);
+	       const yVal = (y1 + y2) / 2;
+	       const yVar = Math.abs(y2 - y1);
 	       if (series.hasOwnProperty(displayStr)) {
 		  // Add to series
-		  series[displayStr].push({x: xVal, y: yVal, yVariance: yVar});
+		  series[displayStr].push({ provider: elt.provider, x: xVal, y: yVal, yVariance: yVar, y1: y1, y2: y2 });
 	       } else {
 		  // New series
-		  series[displayStr] = [{x: xVal, y: yVal, yVariance: yVar}];
+	          series[displayStr] = [{ provider: elt.provider, x: xVal, y: yVal, yVariance: yVar, y1: y1, y2: y2 }];
 	       }
 	    }
 	 }
@@ -541,10 +545,12 @@ export function renderVitals(matchingData, resources, appContext) {
    if (found.length > 0) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.sort((a, b) => stringCompare(a.display, b.display)).map((elt, index) => {
-	 let sortedSeries = series[elt.display] && series[elt.display].sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
+	 // Select only values with matching provider and then sort
+	 let sortedSeries = series[elt.display] && series[elt.display].filter(e => e.provider === elt.provider)
+								      .sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
 	 let thisValue = elt.value ? elt.value
-				   : (tryWithDefault(elt, e => e.components[0].valueQuantity.value, 0)
-				      + tryWithDefault(elt, e => e.components[1].valueQuantity.value, 0))/2;
+				   : (tryWithDefault(elt, e => e.component[0].valueQuantity.value, 0)
+				      + tryWithDefault(elt, e => e.component[1].valueQuantity.value, 0))/2;
 
 	 return (
 	    <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}
@@ -556,15 +562,15 @@ export function renderVitals(matchingData, resources, appContext) {
 		  { elt.value && <div className='col01 label'>Value</div> }
 	          { elt.value && <div className='col02 value-number'>{formatDPs(elt.value, 1) + ' ' + elt.unit}</div> }
 
-	          { elt.components && <div className='col01 label'>{trimVitalsLabels(elt.components[0].code.coding[0].display)}</div> }
-	          { elt.components && <div className='col02 value-number'>
-			{ tryWithDefault(elt, e => formatDPs(e.components[0].valueQuantity.value, 1), '???') + ' '
-			  + tryWithDefault(elt, e => e.components[0].valueQuantity.unit, '???')}</div> }
+	          { elt.component && <div className='col01 label'>{trimVitalsLabels(elt.component[0].code.coding[0].display)}</div> }
+	          { elt.component && <div className='col02 value-number'>
+			{ tryWithDefault(elt, e => formatDPs(e.component[0].valueQuantity.value, 1), '???') + ' '
+			  + tryWithDefault(elt, e => e.component[0].valueQuantity.unit, '???')}</div> }
 
-	          { elt.components && <div className='col01 label'>{trimVitalsLabels(elt.components[1].code.coding[0].display)}</div> }
-	          { elt.components && <div className='col02 value-number'>
-			{ tryWithDefault(elt, e => formatDPs(e.components[1].valueQuantity.value,1), '???') + ' '
-			  + tryWithDefault(elt, e => e.components[1].valueQuantity.unit, '???')}</div> }
+	          { elt.component && <div className='col01 label'>{trimVitalsLabels(elt.component[1].code.coding[0].display)}</div> }
+	          { elt.component && <div className='col02 value-number'>
+			{ tryWithDefault(elt, e => formatDPs(e.component[1].valueQuantity.value,1), '???') + ' '
+			  + tryWithDefault(elt, e => e.component[1].valueQuantity.unit, '???')}</div> }
 
 	          { isMultipleProviders && <div className='col01 label'>Provider</div> }
 	          { isMultipleProviders && <div className='col02 span07 value-text'>{elt.provider}</div> }
@@ -575,7 +581,7 @@ export function renderVitals(matchingData, resources, appContext) {
 	          </CondDiv>
 	       </div>
 	       <div className='content-graph'>
-		  { sortedSeries && <TimeSeries measure={elt.display} data={sortedSeries} highlights={[{x:elt.date, y:thisValue}]} /> }
+		  { sortedSeries && <TimeSeries measure={elt.display} data={sortedSeries} highlights={[{x:elt.date, y:thisValue}]} dotClickFn={dotClickFn} /> }
 	       </div>
 	       <div className='content-extras'>
 		  {/* TODO: stuff goes here */}

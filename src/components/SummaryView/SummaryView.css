@@ -8,66 +8,60 @@
 
 
 /* Sync for Science Discovery SummaryView Stylesheet */
-/* v.01.10 Updated 03/21/2019 */
+/* v.01.11 Updated 03/26/2019 */
 
 
 .default-view {
    position: fixed;
-   top:62px;
-   left:214px;
-   width:calc(100% - 234px);
-   height:calc(100%);
+   top: 62px;
+   left: 214px;
+   width: calc(100% - 234px);
+   height: calc(100%);
 }
-
-/*
-.default-view {
-	@insert .view-container;
-}
-*/
 
 .timeline-placeholder {
-	height:80px;
-	width:100%;
+	height: 80px;
+	width: 100%;
 	background-image: url("../../png/timeline-background-01.png");
 	background-repeat: repeat-x;
-	border-top:2px solid var(--white-100);
-	border-bottom:2px solid var(--white-100);
+	border-top: 2px solid var(--white-100);
+	border-bottom: 2px solid var(--white-100);
 }
 
 .default-view-title {
 	display: flex;
    flex-direction: row;
-   width:calc(100% - 90px);
-   height:50px;
-   min-height:50px;
-   padding:0 20px 0 70px;
-	border-top:2px solid var(--accent-100);
+   align-items: center;
+   justify-content:flex-start;
+   width: calc(100% - 90px);
+   height: 50px;
+   min-height: 50px;
+   font-family: data-text;
+   font-size: 1.000rem;
+   color: var(--white-100);
    background-color: var(--primary-100);
 	background-image: url("../../svg/view-icon-overview-on.svg");
 	background-repeat: no-repeat;
-	background-position:20px 8px;
-	background-size:35px 35px;
-   font-family: data-text;
-   font-size: 1.000rem;
-   color:var(--white-100);
-   align-items: center;
-   justify-content:flex-start;
+	background-position: 20px 8px;
+	background-size: 35px 35px;
+   padding: 0 20px 0 70px;
+	border-top: 2px solid var(--accent-100);
 }
 
 .default-view-title-name {
-	font-family:header-bold;
-   font-size:1.000rem;
-	color:var(--white-100);
-	margin:0;
+	font-family: header-bold;
+   font-size: 1.000rem;
+	color: var(--white-100);
+	margin: 0;
 }
 
 .default-view-container {
-	height:calc(100% - 223px);
-	border-left:2px solid var(--primary-100);
-	border-right:2px solid var(--primary-100);
-	border-bottom:2px solid var(--primary-100);
-	padding:20px 20px 0 20px;
-	margin:-20px 0 0;
+	height: calc(100% - 223px);
+   padding: 20px 20px 0 20px;
+	border-left: 2px solid var(--primary-100);
+	border-right: 2px solid var(--primary-100);
+	border-bottom: 2px solid var(--primary-100);
+	margin: -20px 0 0;
 }
 
 .default-body-row {
@@ -77,113 +71,111 @@
 }
 
 .default-body-property {
- /*  @insert .label; */
-	width:250px;
+	width: 250px;
 	min-width: 250px;
-	font-size:1.000rem;
+   font-family: text;
+	font-size: 1.000rem;
 	text-align: left;
-	margin:0 0 0 20px;
+	margin: 0 0 0 20px;
 }
 
 .default-body-value {
-/*   @insert .value; */
-   height:auto;
-   width:auto;
-   font-family:data-text;
-   font-size:1.000rem;
-   text-align:left;
+   height: auto;
+   width: auto;
+   font-family: data-text;
+   font-size: 1.000rem;
+   text-align: left;
 }
 
 .default-providers-container {
 	display: grid;
-	width:600px;
-	margin:10px 0 0 0;
+	width: 600px;
+	margin: 10px 0 0 0;
 }
 
 .default-providers-name {
 	grid-column: 1;
-	width:250px;
-	font-family:data-text;
-   font-size:1.000rem;
-   text-align:left;
-	font-weight: bold;
-	margin:0 0 0 20px;
+	width: 250px;
+	font-family: data-text-medium;
+   font-size: 1.000rem;
+   text-align: left;
+	margin: 0 0 0 20px;
 	white-space: nowrap;
 }
 
 .default-providers-count {
 	grid-column: 2;
-	width:auto;
-	font-family:data-numbers;
-   font-size:1.000rem;
-   text-align:left;
-	margin:3px 0 0 0;
-	color:var(--data-text);
+	width: auto;
+	font-family: data-number;
+   font-size: 1.000rem;
+   text-align: left;
+   color: var(--data-text);
+	margin: 3px 0 0 0;
 	white-space: nowrap;
 }
 
 .default-providers-label1 {
 	grid-column: 3;
-	width:auto;
-	font-family:data-text;
-   font-size:1.000rem;
-   text-align:center;
-	margin:0 0 0 5px;
+	width: auto;
+	font-family: data-text;
+   font-size: 1.000rem;
+   text-align: center;
+	margin: 0 0 0 5px;
 	white-space: nowrap;
 }
 
 .default-providers-min-date {
 	grid-column: 4;
 	width:auto;
-	font-family:data-text;
-   font-size:1.000rem;
-   text-align:right;
-	margin:3px 0 0 20px;
+	font-family: data-text;
+   font-size: 1.000rem;
+   text-align: right;
+   color: var(--data);
+	margin: 3px 0 0 20px;
 	white-space: nowrap;
-	color:var(--data);
 }
 
 .default-providers-label2 {
 	grid-column: 5;
-	width:10px;
-	font-family:data-text;
-   font-size:1.000rem;
-   text-align:center;
+	width: 10px;
+	font-family: data-text;
+   font-size: 1.000rem;
+   text-align: center;
+   padding: 0 5px;
 	white-space: nowrap;
-	padding:0 5px; 
 }
 
 .default-providers-max-date {
 	grid-column: 6;
-	width:auto;
-	font-family:data-numbers;
-   font-size:1.000rem;
-   text-align:left;
-	margin:3px 0 0 5px;
+	width: auto;
+	font-family: data-number;
+   font-size: 1.000rem;
+   text-align: left;
+   color: var(--data);
+	margin: 3px 0 0 5px;
 	white-space: nowrap;
-	color:var(--data);
 }
 
 .default-data-owner-title {
-	font-family: data-text;
-	border-bottom: solid 1px var(--discovery-blue);
-	margin:20px 0 10px 0;
 	width:100%;
+   font-family: header-bold;
+   color: var(--primary-100);
+	border-bottom: solid 1px var(--primary-100);
+	margin:20px 0 10px 0;
 }
 
 .default-providers-title {
-	font-family: header-bold;
-	border-bottom: solid 1px var(--discovery-blue);
-	margin:20px 0 0 0;
-	width:100%;
+	width: 100%;
+   font-family: header-bold;
+	border-bottom: solid 1px var(--primary-100);
+	margin: 20px 0 0 0;
 }
 
 .default-providers-mrn {
-	font-family:data-text;
-   font-size:.800rem;
-	font-style:italic;
-	text-align:left;
-	margin:0 0 10px 20px;
-	color:var(--data);
 	grid-column: 1;
+   font-family: text-italic;
+   font-size: .800rem;
+	text-align: left;
+   color: var(--data);
+	margin: 0 0 10px 20px;
 }

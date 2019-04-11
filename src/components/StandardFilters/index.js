@@ -38,7 +38,8 @@ export default class StandardFilters extends React.Component {
       enabledFn: PropTypes.func.isRequired,
       dateRangeFn: PropTypes.func.isRequired,
       lastEvent: PropTypes.instanceOf(Event),
-      allowDotClick: PropTypes.bool
+      allowDotClick: PropTypes.bool,
+      dotClickDate: PropTypes.string
    }
 
    state = {
@@ -73,6 +74,7 @@ export default class StandardFilters extends React.Component {
 	       this.updateSvgWidth();
 	       break;
 	 }
+
       } else if (this.context.searchRefs && this.context.searchRefs.length > 0) {
 	 // If most recent searchRef differs from currently highlighted dot, set dotClickContext
 	 let recentRef = this.context.searchRefs[0];
@@ -82,6 +84,16 @@ export default class StandardFilters extends React.Component {
 	    newContext.position = recentRef.position;
 	    this.setState({ dotClickContext: newContext });
 	 }
+
+      } else if (this.props.allowDotClick && prevProps.dotClickDate !== this.props.dotClickDate) {
+	 // Set dotClickContext from dot clicked in ContentPanel (via this.props.dotClickDate)
+	 let theDate = this.props.dates.allDates.find(elt => new Date(elt.date).getTime() === new Date(this.props.dotClickDate).getTime());
+	 this.setState({ dotClickContext: { parent: 'TimeWidget', rowName: 'Full', dotType: 'active',
+					    minDate: this.props.dates.minDate, maxDate: this.props.dates.maxDate,
+					    allDates: this.props.dates.allDates,
+					    date: theDate.date,
+					    data: this.fetchDataForDot('TimeWidget', 'Full', theDate.date),
+					    position: theDate.position }});
       }
    }
 

@@ -1,8 +1,10 @@
 @charset "UTF-8";
+@import '../../css/Fonts.css';
+@import '../../css/Colors.css';
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery DiabetesView Stylesheet */
-/* v.01.05 Updated 02/21/2019 */
+/* v.01.05 Updated 03/27/2019 */
 
 .diabetes-view {
 	@insert .view-container;

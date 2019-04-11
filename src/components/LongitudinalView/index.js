@@ -34,7 +34,8 @@ export default class LongitudinalView extends React.Component {
       provsEnabled: {},		    // Enabled status of providers
       thumbLeftDate: this.props.dates.minDate,
       thumbRightDate: this.props.dates.maxDate,
-      contentPanelIsOpen: false
+      contentPanelIsOpen: false,
+      dotClickDate: null	    // dot click from ContentPanel
    }
 
    componentDidMount() {
@@ -43,25 +44,31 @@ export default class LongitudinalView extends React.Component {
 
    setEnabled = this.setEnabled.bind(this);
    setEnabled(catsEnabled, provsEnabled) {
-      this.setState({catsEnabled: catsEnabled,
-		     provsEnabled: provsEnabled});
+      this.setState({ catsEnabled: catsEnabled,
+		      provsEnabled: provsEnabled });
    }
 
    setDateRange = this.setDateRange.bind(this);
    setDateRange(minDate, maxDate) {
-      this.setState({thumbLeftDate: minDate, thumbRightDate: maxDate});
+      this.setState({ thumbLeftDate: minDate, thumbRightDate: maxDate });
    }
 
    onCloseContentPanel = () => {
       this.setState({ contentPanelIsOpen: false });
    }
 
+   onDotClick = this.onDotClick.bind(this);
+   onDotClick(dotClickDate) {
+      this.setState({ dotClickDate: dotClickDate });
+   }
+
    render() {
       return (
 	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={this.props.categories} providers={this.props.providers}
-			  enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent} allowDotClick={true}>
+			  enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}
+			  allowDotClick={true} dotClickDate={this.state.dotClickDate} >
 	    <ContentPanel open={this.state.contentPanelIsOpen} onClose={() => this.setState({contentPanelIsOpen: false})}
-			  catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
+			  catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled} dotClickFn={this.onDotClick}
 			  // context, nextPrevFn props added in StandardFilters
 			  thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
 			  resources={this.props.resources} viewName='Report' />

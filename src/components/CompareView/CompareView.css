@@ -1,8 +1,10 @@
 @charset "UTF-8";
+@import '../../css/Fonts.css';
+@import '../../css/Colors.css';
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery CompareView Stylesheet */
-/* v.01.08 Updated 02/20/2019 */
+/* v.01.08 Updated 03/26/2019 */
 
 .compare-view {
 	@insert .view-container;
@@ -25,157 +27,148 @@
 	@insert .view-contents;
 	height:calc(100% - 343px);
 	margin: 0 0 0 0;
-	overflow-y:hidden;
+   padding-top: 0;
+	overflow-y: hidden;
    overflow-x: hidden;
-	padding-top: 0;
 }
 
 .compare-matrix {
-   display:grid;
+   display: grid;
    grid-template-columns: 300px repeat(30, 1fr);
-   grid-column-gap:2px;
+   grid-column-gap: 2px;
    grid-auto-flow: column;
    height: auto;
-   overflow-y: scroll;
-   margin:0;
+   background-color: var(--white-100); 
    padding: 0 20px 0 20px;
+   margin:0;
+   overflow-y: scroll;
 }
 
 .compare-cat-name {
-   height:20px;
-   margin:10px 0px;
-   font-family: discovery-bold;
-   font-size:1.000rem;
-   border-bottom:1px solid var(--blue-dark);
-   color: var(--blue-dark);
-   grid-column:1/span 40;
+   grid-column: 1/span 40;
+   height: 20px;
+   font-family: header-bold;
+   font-size: 1.000rem;
+   color: var(--primary-100);
+   border-bottom: 1px solid var(--primary-100);
+   margin: 10px 0px;
 }
 
 .compare-cat-name-disabled {
-   height:20px;
-   margin:10px 0px;
-   font-family: discovery-bold;
+   grid-column: 1/span 40;height:20px;
+   font-family: header-bold;
    font-size:1.000rem;
-   border-bottom:1px solid var(--gray-medium);
-   color: var(--gray-medium);
-   grid-column:1/span 40;
+   color: var(--gray-medium-100);
+   border-bottom:1px solid var(--gray-medium-100);
+   margin: 10px 0px;
 }
 
 .compare-code-display {
-   display:flex;
+   grid-column: 1;
+   display: flex;
    flex-direction: column;
    justify-content: center;
-   width:270px;
+   width: 270px;
    max-width: 270px;
-   font-family:discovery-bold;
-   font-size:0.800rem;
-   text-align:left;
-   color: var(--gray-dark);
-   white-space:wrap;
+   font-family: header-bold;
+   font-size: 0.800rem;
+   text-align: left;
+   color: var(--gray-dark-100);
+   padding: 5px 10px 5px 20px;
+   border-bottom: solid 1px var(--gray-light-020);
+   margin: 0;
+   white-space: wrap;
    word-wrap: break-word;
-   margin:0;
-   padding:5px 10px 5px 20px;
-   border-bottom:solid 1px var(--gray-light-translucent);
-   grid-column:1;
-   overflow:hidden; 
+   overflow: hidden; 
 }
 
 .compare-prov-count-even {
+   grid-column: auto;
    position: relative;
-   bottom:0;
-   display:flex;
+   bottom: 0;
+   display: flex;
    flex-direction: column;
-   justify-content:flex-end;
-   align-items:flex-end;
+   justify-content: flex-end;
+   align-items: flex-end;
    align-self: flex-end;
-   height:auto;
-   width:38px;
+   vertical-align: middle;
+   height: auto;
+   width: 38px;
    min-width: 35px;
    max-width: 35px;
-   font-family: discovery-data-text;
-   font-size:0.80rem;
+   font-family: data-text;
+   font-size: 0.80rem;
    text-align: left;
-   color: var(--data);
-   white-space: nowrap;
-   vertical-align: middle;
    line-height:inherit;
+   color: var(--data);
    padding:0;
-   margin:0px;
-   border-bottom:solid 1px var(--gray-light-translucent);
-/* background-color:var(--gray-light-translucent);
-   background-image:url(../../svg/checkmark.svg);
-   background-size:15px 15px;
-   background-repeat:no-repeat;
-   background-position: 10px center; */
-   grid-column:auto;
+   border-bottom: solid 1px var(--gray-light-020);
+   margin: 0px;
+   white-space: nowrap;
 }
 
 .compare-prov-count-odd {
+   grid-column: auto;
    position: relative;
-   bottom:0;
-   display:flex;
+   bottom: 0;
+   display: flex;
    flex-direction: column;
-   justify-content:flex-end;
-   align-items:flex-end;
+   justify-content: flex-end;
+   align-items: flex-end;
    align-self: flex-end;
-   height:auto;
-   width:38px;
+   vertical-align: middle;
+   height: auto;
+   width: 38px;
    min-width: 35px;
    max-width: 35px;
-   font-family: discovery-data-text;
+   font-family: data-text;
    font-size:0.80rem;
    text-align: left;
    color: var(--data);
-   white-space: nowrap;
-   vertical-align: middle;
    line-height:inherit;
    padding:0;
+   border-bottom:solid 1px var(--gray-light-020);
    margin:0px;
-   border-bottom:solid 1px var(--gray-light-translucent);
-   background-color:var(--white);
-/*	background-image:url(../../svg/checkmark.svg);
-   background-size:15px 15px;
-   background-repeat:no-repeat;
-   background-position: 10px center; */
-   grid-column: auto;
+   background-color:var(--white-100);
+   white-space: nowrap;
 }
 
 .compare-prov-count-contents-even {
    position: relative;
-   bottom:0;
-   display:flex;
+   bottom: 0;
+   display: flex;
    flex-direction: column;
-   justify-content:center;
+   justify-content: center;
+   width: 100%;
    text-align: center;
-   background-color:var(--data);
-   width:100%;
-   margin:auto;
-   border-bottom:1px solid var(--data);
+   background-color: var(--data);
+   border-bottom: 1px solid var(--data);
+   margin: auto;
 }
 
 .compare-prov-count-contents-odd {
    position: relative;
-   bottom:0;
-   display:flex;
+   bottom: 0;
+   display: flex;
    flex-direction: column;
-   justify-content:center;
+   justify-content: center;
+   width: 100%;
    text-align: center;
-   width:100%;
-   background-color:var(--data);
-   margin:auto;
-   border-bottom:1px solid var(--data);
+   background-color: var(--data);
+   border-bottom: 1px solid var(--data);
+   margin: auto;
 }
 
 .compare-providers {
    position: relative;
-   left:0;
-   bottom:0;
-   height:180px;
-   min-height:180px;
+   left: 0;
+   bottom: 0;
    display: flex;
    flex-direction: row;
-   padding:0 0 0 280px;
-   margin:-10px 0 0 0;
+   height: 180px;
+   min-height: 180px;
+   padding: 0 0 0 280px;
+   margin: -10px 0 0 0;
 }
 
 .compare-prov-name {
@@ -183,13 +176,13 @@
    width:37px;
    min-width: 37px;
    max-width: 37px;
-   font-family: discovery-bold;
-   font-size:0.90rem;
+   font-family: text-bold;
+   font-size: 0.90rem;
    color: var(--data);
    text-align: left;
+   padding: 0;
+   margin: 0;
    white-space: nowrap;
-   padding:0;
-   margin:0;
    transform: rotate(45deg);
    overflow: visible;
 }

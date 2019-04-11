@@ -14,6 +14,8 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class Exams extends React.Component {
 
+   static catName = 'Exams';
+    
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
@@ -45,7 +47,7 @@ export default class Exams extends React.Component {
    render() {
       return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
-	       <div className={this.props.className + ' category-container'}>
+	       <div className='exams category-container'>
 		  { formatContentHeader(this.props.isEnabled, 'Exam', this.state.matchingData[0].itemDate, this.context) }
 		  { this.props.isEnabled && renderExams(this.state.matchingData, this.context) }
 	       </div> );

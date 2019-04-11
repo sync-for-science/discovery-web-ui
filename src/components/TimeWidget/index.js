@@ -4,12 +4,10 @@ import Draggable from 'react-draggable';
 
 import './TimeWidget.css';
 import config from '../../config.js';
-import { formatDate, numericPart, timelineIncrYears } from '../../util.js';
+import { getStyle, formatDate, numericPart, timelineIncrYears } from '../../util.js';
 
 import SVGContainer from '../SVGContainer';
 import DotLine from '../DotLine';
-
-const periodPadding = 5;	// .timeline-expanded-years: padding-left + padding-right
 
 //
 // Render the time widget of ParticipantDetail page
@@ -34,15 +32,36 @@ export default class TimeWidget extends React.Component {
       showExpanded: false
    }
 
+   cacheSizes() {
+      if (!this.centerThumbWidth) {
+	 let centerThumb = document.querySelector('.timeline-selector-center');
+	 if (centerThumb) {
+	    this.centerThumbWidth = centerThumb.getBoundingClientRect().width;
+	 }	 
+      }
+      if (!this.cachedPeriodPadding) {
+	 let expanded = document.querySelector('.timeline-expanded-years');
+	 if (expanded) {
+	    this.cachedPeriodPadding = numericPart(getStyle(expanded, 'padding-left')) + numericPart(getStyle(expanded, 'padding-right'));
+	 }
+      }	   
+   }	
+
    componentDidUpdate(prevProps, prevState) {
       if (prevProps.timelineWidth !== this.props.timelineWidth || prevProps.thumbLeft !== this.props.thumbLeft) {
 	 this.setState({ leftX: this.props.thumbLeft * numericPart(this.props.timelineWidth),
 			 thumbDates: {minDate: this.locToDate(this.props.thumbLeft), maxDate: this.locToDate(this.props.thumbRight)} });
+	 this.cacheSizes();
       }
       if (prevProps.timelineWidth !== this.props.timelineWidth || prevProps.thumbRight !== this.props.thumbRight) {
 	 this.setState({ rightX: this.props.thumbRight * numericPart(this.props.timelineWidth),
 			 thumbDates: {minDate: this.locToDate(this.props.thumbLeft), maxDate: this.locToDate(this.props.thumbRight)} });
+	 this.cacheSizes();
       }
+   }
+
+   get periodPadding() {
+      return this.cachedPeriodPadding ? this.cachedPeriodPadding : 0;
    }
 
    // Reset thumbs
@@ -79,6 +98,19 @@ export default class TimeWidget extends React.Component {
       this.props.setLeftRightFn(this.state.leftX/width, rightTarget, showExpanded);
       let dates = {minDate: this.locToDate(this.state.leftX/width), maxDate: this.locToDate(rightTarget)};
       this.setState({ rightX: rightTarget*width, thumbDates: dates, showExpanded: showExpanded });
+   }
+
+   onCenterDrag = this.onCenterDrag.bind(this);
+   onCenterDrag(e, data) {
+      let oldCenterX = (this.state.leftX + this.state.rightX - this.centerThumbWidth)/2;
+      let delta = data.x - oldCenterX;
+      let newLeftX = this.state.leftX + delta;
+      let newRightX = this.state.rightX + delta;
+      let width = numericPart(this.props.timelineWidth);
+
+      this.props.setLeftRightFn(newLeftX/width, newRightX/width, true);
+      let dates = {minDate: this.locToDate(newLeftX/width), maxDate: this.locToDate(newRightX/width)};
+      this.setState({ leftX: newLeftX, rightX: newRightX, thumbDates: dates });
    }
 
    renderFullYears() {
@@ -130,7 +162,7 @@ export default class TimeWidget extends React.Component {
 
 	 const periodIncr = timelineIncrYears(expMinDate.toISOString(), expMaxDate.toISOString(), config.maxSinglePeriods);
 	 const expPeriods = (expMaxDate - expMinDate) / (yearMillis*periodIncr);
-	 const periodWidth = (fullWidth / expPeriods) - periodPadding;
+	 const periodWidth = (fullWidth / expPeriods) - this.periodPadding;
 
 	 const firstPeriodFrac = Math.min(1.0,(new Date((expFirstYear+periodIncr)+'-01-01') - expMinDate)/(yearMillis*periodIncr));
 	 const firstPeriodWidth = Math.round(firstPeriodFrac * periodWidth);
@@ -142,12 +174,12 @@ export default class TimeWidget extends React.Component {
 	       thisWidth = firstPeriodWidth;
 	    } else if ((periodIncr === 1 && year === expLastYear) ||
 		       (periodIncr > 1 && year+periodIncr >= expLastYear)) {
-	       thisWidth = fullWidth - cumWidth - periodPadding;	// Last period width
+	       thisWidth = fullWidth - cumWidth - this.periodPadding;	// Last period width
 	    } else {
 	       thisWidth = periodWidth
 	    }
 
-	    cumWidth += thisWidth + periodPadding;
+	    cumWidth += thisWidth + this.periodPadding;
 
 	    if (thisWidth > 0) {
 	       periods.push(
@@ -168,7 +200,7 @@ export default class TimeWidget extends React.Component {
 	 const daysInRange = (expMaxDate - expMinDate) / dayMillis;
 	 const monthsInRange = daysInRange / avgMonthDays;
 
-	 const avgMonthWidth = (fullWidth / monthsInRange) - periodPadding;
+	 const avgMonthWidth = (fullWidth / monthsInRange) - this.periodPadding;
 	 const firstMonthWidth = Math.max(0, avgMonthWidth * (avgMonthDays - expMinDate.getDate()) / avgMonthDays);
 
 	 const monthDate = expMinDate;
@@ -180,7 +212,7 @@ export default class TimeWidget extends React.Component {
  	    if (monthNum === 0) {
  	       thisWidth = firstMonthWidth;
  	    } else if (monthNum === expMonths-1) {
- 	       thisWidth = fullWidth - cumWidth - periodPadding;	// Last month width
+ 	       thisWidth = fullWidth - cumWidth - this.periodPadding;	// Last month width
  	    } else {
  	       thisWidth = avgMonthWidth;
  	    }
@@ -189,7 +221,7 @@ export default class TimeWidget extends React.Component {
 	    const monthLabel = monthNames[monthDate.getMonth()] + '-' + monthDate.getFullYear();
 	    const narrowMonthLabel = (monthDate.getMonth()+1) + '/' + monthDate.getFullYear();
 
-	    cumWidth += thisWidth + periodPadding;
+	    cumWidth += thisWidth + this.periodPadding;
 
  	    if (thisWidth > 0) {
  	       periods.push(
@@ -205,9 +237,9 @@ export default class TimeWidget extends React.Component {
 
       return (
          <div className='timeline-expanded'>
-	    <div className='timeline-shim-left' key='shim-1'/>
+	    <div className={'timeline-shim-left' + (this.state.leftX === 0 ? '' : '-alt')} key='shim-1'/>
 	    {periods}
-	    <div className='timeline-shim-right' key='shim-2'/>
+	    <div className={'timeline-shim-right' + (this.state.rightX === numericPart(this.props.timelineWidth) ? '' : '-alt')} key='shim-2'/>
 	 </div>
       );
    }
@@ -240,6 +272,12 @@ export default class TimeWidget extends React.Component {
 		     <Draggable axis='x' bounds={{left:this.state.leftX+40, right:rightBound}} position={{x:this.state.rightX, y:0}} onDrag={this.onRightDrag}>
 		        <div className={this.state.rightX < rightBound ? 'timeline-selector-right-alt' : 'timeline-selector-right'}></div>
 		     </Draggable>
+		     { this.state.showExpanded &&
+		       <Draggable axis='x' bounds={{left:(this.state.rightX-this.state.leftX-this.centerThumbWidth)/2,
+						    right:rightBound-this.centerThumbWidth-(this.state.rightX-this.state.leftX-this.centerThumbWidth)/2}}
+				  position={{x:(this.state.leftX+this.state.rightX-this.centerThumbWidth)/2, y:0}} onDrag={this.onCenterDrag}>
+			  <div className='timeline-selector-center' />
+		       </Draggable> }
 		  </div>
 	          <SVGContainer className='timeline-svg-container' svgClassName='timeline-svg' svgWidth={this.props.timelineWidth}>
 		     <DotLine dotPositions={this.props.dotPositionsFn('TimeWidget', 'Full', true)}

@@ -58,7 +58,7 @@
    max-height: calc(100% - 196px - 20px - 15px);
    min-width: calc(100% - 210px - 28px);
    max-width: calc(100% - 210px - 28px);
-   background-color: var(--background);
+   background-color: var(--white-100);
    padding: 20px 0 0 0;
 	border: 2px solid var(--primary-100);
    white-space: pre-wrap;

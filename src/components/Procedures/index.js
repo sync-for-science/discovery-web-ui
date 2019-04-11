@@ -7,7 +7,7 @@ import config from '../../config.js';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderDisplay } from '../../fhirUtil.js';
-import { stringCompare, formatContentHeader } from '../../util.js';
+import { stringCompare, shallowEqArray, formatContentHeader } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -16,6 +16,8 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class Procedures extends React.Component {
 
+   static catName = 'Procedures';
+			       
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
@@ -48,7 +50,7 @@ export default class Procedures extends React.Component {
    }
 
    componentDidUpdate(prevProps, prevState) {
-      if (prevProps.data !== this.props.data) {
+      if (!shallowEqArray(prevProps.data, this.props.data)) {
 	 this.setMatchingData();
       }
    }
@@ -80,9 +82,9 @@ export default class Procedures extends React.Component {
    }
 
    render() {
-      return ( this.state.matchingData && this.state.matchingData.length > 0 &&
+      return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
-	       <div className={this.props.className + ' category-container'}>
+	       <div className='procedures category-container'>
 		  { formatContentHeader(this.props.isEnabled, 'Procedures', this.state.matchingData[0].itemDate, this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Procedure', this.context) }

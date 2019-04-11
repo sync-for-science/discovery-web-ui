@@ -7,7 +7,7 @@ import config from '../../config.js';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderMeds } from '../../fhirUtil.js';
-import { stringCompare, formatContentHeader } from '../../util.js';
+import { stringCompare, shallowEqArray, formatContentHeader } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -16,6 +16,8 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class MedsRequested extends React.Component {
 
+   static catName = 'Meds Requested';
+    
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
@@ -38,9 +40,10 @@ export default class MedsRequested extends React.Component {
 
    setMatchingData() {
       let match = FhirTransform.getPathItem(this.props.data, '[*category=Meds Requested]');
+      let withCode = [];
+
       if (match.length > 0) {
-   	 let withCode = [];
-   	 for (var elt of match) {
+  	 for (let elt of match) {
    	    if (elt.data.medicationCodeableConcept) {
    	       withCode.push(elt);
    	    } else {
@@ -48,10 +51,9 @@ export default class MedsRequested extends React.Component {
    	    }
    	    this.resolveReasonReference(elt);
    	 }
-   	 this.setState({ matchingData: withCode.sort(this.sortMeds) });
-      } else {
-	 this.setState({ matchingData: null });
       }
+
+      this.setState({ matchingData: withCode.length > 0 ? withCode.sort(this.sortMeds) : null });
    }	
 
    componentDidMount() {
@@ -59,7 +61,7 @@ export default class MedsRequested extends React.Component {
    }
 
    componentDidUpdate(prevProps, prevState) {
-      if (prevProps.data !== this.props.data) {
+      if (!shallowEqArray(prevProps.data, this.props.data)) {
 	 this.setMatchingData();
       }
    }
@@ -78,8 +80,9 @@ export default class MedsRequested extends React.Component {
 		// Add the de-referenced data to the medicationReference element AND create the medicationCodeableConcept element
 		elt.data.medicationReference = Object.assign(elt.data.medicationReference, response.data);
 		elt.data.medicationCodeableConcept = response.data.code;
-		this.setState({loadingRefs: this.state.loadingRefs-1,
-			       matchingData: this.state.matchingData.concat([elt]).sort(this.sortMeds)});
+		this.setState({ loadingRefs: this.state.loadingRefs-1,
+			        matchingData: this.state.matchingData ? this.state.matchingData.concat([elt]).sort(this.sortMeds)
+								      : [ elt ] });
 	    })
 	    .catch(thrown => {
 		if (!axios.isCancel(thrown)) {
@@ -114,9 +117,9 @@ export default class MedsRequested extends React.Component {
    }
 
    render() {
-      return ( this.state.matchingData && this.state.matchingData.length > 0 &&
+      return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
-	       <div className={this.props.className + ' category-container'}>
+	       <div className='meds-requested category-container'>
 		  { formatContentHeader(this.props.isEnabled, 'Meds Requested', this.state.matchingData[0].itemDate, this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderMeds(this.state.matchingData, this.context) }

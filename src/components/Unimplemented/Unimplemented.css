@@ -1,20 +1,13 @@
 @charset "UTF-8";
-@import '../../css/ColorVariablesMaster.css';
-@import '../../css/ContentPanelGlobal.css';
+@import '../../css/Fonts.css';
+@import '../ContentPanel/ContentPanelCategories.css';
 
 /* Sync for Science Discovery Unimplemented Stylesheet */
-/* v.01.04 Updated 03/04/2019 */
+/* v.01.06 Updated 03/28/2019 */
 
-.unimplemented {
-   padding:0 0 5px 0;
-   margin:0 0 10px 0;
-   border-bottom:1px solid var(--white);
-}
-
-.unimplemented-label {
-   @insert .value;
-   text-align: left;
-   padding:4px 0 0 20px;
-   margin:0 0 0 20px;
-   grid-column:1;
+.unimplemented-value {
+   @insert .col01;
+   @insert .value-text;
+   font-size: .800rem;
+   margin: 3px 0 0 32px;
 }

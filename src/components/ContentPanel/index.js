@@ -4,7 +4,7 @@ import Draggable from 'react-draggable';
 
 import './ContentPanel.css';
 import config from '../../config.js';
-import { inDateRange, ignoreCategories, unimplemented } from '../../util.js';
+import { inDateRange } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 
 import Allergies from '../Allergies';
@@ -62,7 +62,8 @@ export default class ContentPanel extends React.Component {
       resources: PropTypes.instanceOf(FhirTransform),
       catsToDisplay: PropTypes.arrayOf(PropTypes.string),
       showAllData: PropTypes.bool,
-      showAllFn: PropTypes.func		// added dynamically by StandardFilters
+      showAllFn: PropTypes.func,	// added dynamically by StandardFilters
+      dotClickFn: PropTypes.func
    }
 
    state = {
@@ -81,7 +82,8 @@ export default class ContentPanel extends React.Component {
       showDotLines: true,
       trimLevel: 'none',
       trimLevelDirection: 'more',
-      showJSON: false
+      showJSON: false,
+      showAnnotation: false
    }
 
    //
@@ -213,10 +215,15 @@ export default class ContentPanel extends React.Component {
    }
 
    catEnabled(cat) {
-      let testCat = ignoreCategories().includes(cat) ? unimplemented() : cat;	// Map unimplemented categories to the "Not in S4S" meta-category
-      return this.props.catsEnabled[testCat] === undefined || this.props.catsEnabled[testCat];
+      // Map unimplemented categories to the "Unimplemented/Not in S4S" meta-category
+      let testCat = Unimplemented.unimplementedCats.includes(cat) ? Unimplemented.catName : cat;
+      return this.props.catsEnabled[testCat] || this.props.catsEnabled[testCat] === undefined;
    }
 
+   provEnabled(prov) {
+      return this.props.provsEnabled[prov] || this.props.provsEnabled[prov] === undefined;
+   }
+    
    onShowHideLines = this.onShowHideLines.bind(this);
    onShowHideLines() {
       if (this.state.showDotLines) {
@@ -245,40 +252,56 @@ export default class ContentPanel extends React.Component {
       return revArr;
    }
 
+   // Count resources in 'resArray' where their category is enabled
+   enabledResources(resArray) {
+      let count = 0;
+      for (let thisRes of resArray) {
+	 if (this.catEnabled(thisRes.category)) {
+	    count++;
+	 }
+      }
+      return count;
+   }
+
    renderDotOrAll() {
 //     let dates = this.state.showAllData ? (this.context.searchRefs.length > 0 ? this.context.searchRefs : this.props.context.allDates).filter(elt =>
-      let dates = this.state.showAllData ? (this.context.searchRefs.length > 0 ? this.context.searchRefs : this.copyReverse(this.props.context.allDates)).filter(elt =>
-										   inDateRange(elt.date, this.props.thumbLeftDate, this.props.thumbRightDate))
+      let dates = this.state.showAllData ? (this.context.searchRefs.length > 0 ? this.context.searchRefs
+									       : this.copyReverse(this.props.context.allDates)).filter(elt =>
+										    inDateRange(elt.date, this.props.thumbLeftDate, this.props.thumbRightDate))
 					 : this.props.context.allDates.filter(elt => elt.date === this.props.context.date);
       let showDate = this.state.showAllData;
 
       let limitedResources = this.props.catsToDisplay ? this.props.resources.transformed.filter(elt => this.props.catsToDisplay.includes(elt.category))
 						      : this.props.resources.transformed;
+      this.resTotal = 0;	// Keep track of displayed resources
+
       let divs = [];
       for (let thisDate of dates) {
 //	 let res = this.props.resources.pathItem(`[*itemDate=${thisDate.date}]`);
-	 let res = limitedResources.filter(elt => elt.itemDate === thisDate.date && (this.catEnabled(elt.category) || this.context.trimLevel === 'none'));
+	 let res = limitedResources.filter(elt => elt.itemDate === thisDate.date && this.provEnabled(elt.provider) &&
+						  (this.catEnabled(elt.category) || this.context.trimLevel === 'none'));
+	 this.resTotal += this.enabledResources(res);
 	 if (res.length > 0) {
 	    divs = divs.concat([
-	       <Allergies           className='allergies'      key={divs.length+1}  data={res} showDate={showDate} isEnabled={this.catEnabled('Allergies')} />,
-	       <Benefits	    className='benefits'       key={divs.length+2}  data={res} showDate={showDate} isEnabled={this.catEnabled('Benefits')} />,
-	       <Claims		    className='claims'         key={divs.length+3}  data={res} showDate={showDate} isEnabled={this.catEnabled('Claims')} />,
-	       <Conditions          className='conditions'     key={divs.length+4}  data={res} showDate={showDate} isEnabled={this.catEnabled('Conditions')} />,
-	       <DocumentReferences  className='doc-refs'       key={divs.length+5}  data={res} showDate={showDate} isEnabled={this.catEnabled('Document References')} />,
-	       <Encounters          className='encounters'     key={divs.length+6}  data={res} showDate={showDate} isEnabled={this.catEnabled('Encounters')} />,
-	       <Exams               className='exams'          key={divs.length+7}  data={res} showDate={showDate} isEnabled={this.catEnabled('Exams')} />,
-	       <Immunizations       className='immunizations'  key={divs.length+8}  data={res} showDate={showDate} isEnabled={this.catEnabled('Immunizations')} />,
-	       <LabResults          className='lab-results'    key={divs.length+9}  data={res} showDate={showDate} isEnabled={this.catEnabled('Lab Results')}
-		    resources={this.props.resources} />,
-	       <MedsAdministration  className='meds-admin'     key={divs.length+10} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Administration')} />,
-	       <MedsDispensed       className='meds-dispensed' key={divs.length+11} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Dispensed')} />,
-	       <MedsRequested       className='meds-requested' key={divs.length+12} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Requested')} />,
-	       <MedsStatement       className='meds-statement' key={divs.length+13} data={res} showDate={showDate} isEnabled={this.catEnabled('Meds Statement')} />,
-	       <Procedures          className='procedures'     key={divs.length+14} data={res} showDate={showDate} isEnabled={this.catEnabled('Procedures')} />,
-	       <SocialHistory       className='social-history' key={divs.length+15} data={res} showDate={showDate} isEnabled={this.catEnabled('Social History')} />,
-	       <VitalSigns          className='vital-signs'    key={divs.length+16} data={res} showDate={showDate} isEnabled={this.catEnabled('Vital Signs')}
-		    resources={this.props.resources} />,
-	       <Unimplemented	    className='unimplemented'  key={divs.length+17} data={res} showDate={showDate} isEnabled={this.catEnabled(unimplemented())} />
+	       <Allergies           key={'al'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(Allergies.catName)} />,
+	       <Benefits	    key={'be'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(Benefits.catName)} />,
+	       <Claims		    key={'cl'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(Claims.catName)} />,
+	       <Conditions          key={'co'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(Conditions.catName)} />,
+	       <DocumentReferences  key={'dr'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(DocumentReferences.catName)} />,
+	       <Encounters          key={'en'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(Encounters.catName)} />,
+	       <Exams               key={'ex'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(Exams.catName)} />,
+	       <Immunizations       key={'im'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(Immunizations.catName)} />,
+	       <LabResults          key={'lr'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(LabResults.catName)}
+		    resources={this.props.resources} dotClickFn={this.props.dotClickFn} />,
+	       <MedsAdministration  key={'ma'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(MedsAdministration.catName)} />,
+	       <MedsDispensed       key={'md'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(MedsDispensed.catName)} />,
+	       <MedsRequested       key={'mr'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(MedsRequested.catName)} />,
+	       <MedsStatement       key={'ms'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(MedsStatement.catName)} />,
+	       <Procedures          key={'pr'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(Procedures.catName)} />,
+	       <SocialHistory       key={'sh'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(SocialHistory.catName)} />,
+	       <VitalSigns          key={'vs'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(VitalSigns.catName)}
+		    resources={this.props.resources} dotClickFn={this.props.dotClickFn} />,
+	       <Unimplemented	    key={'un'+divs.length} data={res} showDate={showDate} isEnabled={this.catEnabled(Unimplemented.catName)} />
 	    ]);
 	 }
       }
@@ -316,6 +339,7 @@ export default class ContentPanel extends React.Component {
 
    renderContents(context) {
 //      let birthDate = this.props.resources.pathItem('[category=Patient].data.birthDate');
+      let contents = this.renderDotOrAll();	// Generate contents (and item count)
       return (
 	 <div className='content-panel-inner'>
 	    <div className='content-panel-inner-title'>
@@ -328,10 +352,10 @@ export default class ContentPanel extends React.Component {
 	       	  <button className={this.state.showAllData ? 'content-panel-all-button' : 'content-panel-dot-button'}
 			  onClick={() => this.setState( {showAllData: !this.state.showAllData} )} />
 		  <button className={`content-panel-trim-${this.state.trimLevel}-button`} onClick={this.changeTrimLevel} />
+		  <button className={'content-panel-annotation-button' + (this.state.showAnnotation ? '' : '-off')}
+			  onClick={() => this.setState( {showAnnotation: !this.state.showAnnotation} )} />
 		  <button className={'content-panel-json-button' + (this.state.showJSON ? '' : '-off')}
-			  onClick={() => this.setState( {showJSON: !this.state.showJSON} )} >  
-		     {'{;}'}
-		  </button>
+			  onClick={() => this.setState( {showJSON: !this.state.showJSON} )} />  
 	       </div>
 	       <div className='content-panel-inner-title-center' onDoubleClick={this.onDoubleClick}>
 		  <button className={this.state.showDotLines ? 'content-panel-drag-button' : 'content-panel-no-drag-button'} />
@@ -339,15 +363,18 @@ export default class ContentPanel extends React.Component {
 	       </div>
 	       <div className='content-panel-inner-title-right'>
 		  {/* <button className='content-panel-inner-title-close-button' onClick={this.onClose} /> */}
+		  <div className='content-panel-item-count'>
+		     { this.resTotal + ' data item' + (this.resTotal === 1 ? '' : 's') }
+		  </div>
 	       </div>
 	    </div>
-	    { this.renderDotOrAll() }
+	    { contents }
 	 </div>
       );
    }
 
    render() {
-      // Extend DiscoveryContext with trimLevel (currently works / simpler than reassigning the extended context to DiscoveryContext.Provider)
+      // Extend DiscoveryContext with trimLevel (simpler than reassigning the extended context to DiscoveryContext.Provider)
       this.context.trimLevel = this.state.trimLevel;
 
       // Dragging enabled/disabled by changing bounds.bottom

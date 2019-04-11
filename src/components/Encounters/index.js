@@ -14,6 +14,8 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class Encounters extends React.Component {
 
+   static catName = 'Encounters';
+    
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
@@ -26,10 +28,21 @@ export default class Encounters extends React.Component {
       matchingData: null
    }
 
+   encounterCompare(a, b) {
+      try {
+	 return stringCompare(a.data.type[0].coding[0].display, b.data.type[0].coding[0].display);
+      } catch (e) {};
+
+      try {
+	 return stringCompare(a.data.class.code, b.data.class.code);
+      } catch (e) {};
+
+      return 0;		// Assume equal
+   }
+
    setMatchingData() {
       let match = FhirTransform.getPathItem(this.props.data, '[*category=Encounters]');
-      this.setState({ matchingData: match.length > 0 ? match.sort((a, b) => stringCompare(a.data.type[0].coding[0].display, b.data.type[0].coding[0].display))
-						     : null });
+      this.setState({ matchingData: match.length > 0 ? match.sort(this.encounterCompare) : null });
    }
 
    componentDidMount() {
@@ -45,7 +58,7 @@ export default class Encounters extends React.Component {
    render() {
       return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
-	       <div className={this.props.className + ' category-container'}>
+	       <div className='encounters category-container'>
 		  { formatContentHeader(this.props.isEnabled, 'Encounter', this.state.matchingData[0].itemDate, this.context) }
 		  { this.props.isEnabled && renderEncounters(this.state.matchingData, this.context) }
 	       </div> );

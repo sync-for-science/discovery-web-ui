@@ -1,577 +1,539 @@
 @charset "UTF-8";
+@import '../../css/Colors.css';
+@import '../../css/Fonts.css';
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.32 Updated 2/20/2019 */
+/* v.01.33 Updated 03/26/2019 */
 
 .page-header {
    position: fixed;
    top: 0;
    left: 0;
-   z-index:1;
-   display:flex;
-   flex-direction:row;
-   height:60px;
-   width:100%;
-   min-width:1024px;
-   margin:0; 
-   padding:0;
-   border-bottom:2px  solid var(--accent);
-   background-color:var(--blue-dark);
+   z-index: 1;
+   display: flex;
+   flex-direction: row;
+   height: 60px;
+   width: 100%;
+   min-width: 1024px;
+   border-bottom: 2px  solid var(--accent-100);
+   background-color: var(--primary-100);
+   padding: 0;
+   margin: 0; 
 }
 
 /* Logos */
 .logo-box {
-   display:flex;
-   align-items:center;
-   height:60px;
-   width:194px;
-   min-width:194px;
-   padding:0 0 0 20px;
-   margin:0;
+   display: flex;
+   align-items: center;
+   height: 60px;
+   width: 194px;
+   min-width: 194px;
+   padding: 0 0 0 20px;
+   margin: 0;
 }
 
 .logo-button-common {
-   height:60px;
-   border:none;
-   padding:0;
-   background-color:transparent;
-   background-repeat:no-repeat;
-   background-position:0 center;
+   height: 60px;
+   background-color: transparent;
+   background-repeat: no-repeat;
+   background-position: 0 center;
+   padding: 0;
+   border: none;
    cursor: pointer;
 }
 
 .logo-s4s-button-off {
    @insert .logo-button-common;
-   width:194px;
-   margin:0 20px 0 0;
-   background-image:url(../../svg/logo-s4s-3-off.svg);
-   background-size:210px 60px;
-/*	background-position:0 0; */
+   width: 194px;
+   background-image: url(../../svg/logo-s4s-3-off.svg);
+   background-size: 210px 60px;
+   margin: 0 20px 0 0;
 }
 
 .logo-s4s-button-on {
    @insert .logo-button-common;
-   width:194px;
-   margin:0 20px 0 0;
+   width: 194px;
    background-image: url(../../svg/logo-s4s-3-on.svg);
-   background-size:210px 60px;
-/*	background-position:0 0; */
+   background-size: 210px 60px;
+   margin: 0 0 0 20px;
 }
 
 .logo-harvard-button-off {
    @insert .logo-button-common;
-   width:140px;
-   background-image:url(../../svg/logo-harvard-off.svg);
-   background-size:140px 40px;
+   width: 140px;
+   background-image: url(../../svg/logo-harvard-off.svg);
+   background-size:1 40px 40px;
+   margin: 0 20px 0 0;
 }
 
 .logo-harvard-button-on {
    @insert .logo-button-common;
-   width:140px;
-   background-image:url(../../svg/logo-harvard-on.svg);
-   background-size:140px 40px;
+   width: 140px;
+   background-image: url(../../svg/logo-harvard-on.svg);
+   background-size: 140px 40px;
+   margin: 0 20px 0 0;
 }
 
 .logo-harvard-dbmi-button-off {
    @insert .logo-button-common;
-   width:260px;
-   margin:0 0 0 20px;
-   background-image:url(../../svg/logo-harvard-bmi-off.svg);
-   background-size:260px 40px;
+   width: 260px;
+   background-image: url(../../svg/logo-harvard-bmi-off.svg);
+   background-size: 260px 40px;
 }
 
 .logo-harvard-dbmi-button-on {
    @insert .logo-button-common;
-   width:260px;
-   margin:0 0 0 20px;
-   background-image:url(../../svg/logo-harvard-bmi-on.svg);
-   background-size:260px 40px;
+   width: 260px;
+   background-image: url(../../svg/logo-harvard-bmi-on.svg);
+   background-size: 260px 40px;
 }
 
 .logo-cms-button-off {
    @insert .logo-button-common;
-   width:120px;
-   margin:0 0 0 20px;
+   width: 120px;
    background-image: url(../../svg/logo-cms-off.svg);
-   background-size:120px 40px;
+   background-size: 120px 40px;
 }
 
 .logo-csm-button-on {
    @insert .logo-button-common;
-   width:120px;
-   margin:0 0 0 20px;
-   background-image:url(../../svg/logo-cms-on.svg);
-   background-size:120px 40px;
+   width: 120px;
+   background-image: url(../../svg/logo-cms-on.svg);
+   background-size: 120px 40px;
 }
 
 .logo-nih-button-off {
    @insert .logo-button-common;
-   width:220px;
-   margin:0 0 0 20px;
-   background-image:url(../../svg/logo-nih-off.svg);
-   background-size:200px 40px;
+   width: 220px;
+   background-image: url(../../svg/logo-nih-off.svg);
+   background-size: 200px 40px;
 }
 
 .logo-nih-button-on {
    @insert .logo-button-common;
-   width:220px;
-   margin:0 0 0 20px;
-   background-image:url(../../svg/logo-nih-on.svg);
-   background-size:200px 40px;
+   width: 220px;
+   background-image: url(../../svg/logo-nih-on.svg);
+   background-size: 200px 40px;
 }
 
 .logo-ppm-button-off {
    @insert .logo-button-common;
-   width:150px;
-   margin:0 0 0 20px;
+   width: 150px;
    background-image: url(../../svg/logo-ppm-off.svg);
-   background-size:150px 40px;
+   background-size: 150px 40px;
 }
 
 .logo-ppm-button-on {
    @insert .logo-button-common;
-   width:150px;
-   margin:0 0 0 20px;
+   width: 150px;
    background-image: url(../../svg/logo-ppm-on.svg);
-   background-size:150px 40px;
+   background-size: 150px 40px;
 }
 
 .logo-all-of-us-button-off {
    @insert .logo-button-common;
-   width:200px;
-   margin:0 20px 0 0;
-   background-image:url(../../svg/logo-all-of-us-off.svg);
-   background-size:200px 40px;
+   width: 200px;
+   background-image: url(../../svg/logo-all-of-us-off.svg);
+   background-size: 200px 40px;
+   margin: 0 20px 0 0;
 }
 
 .logo-all-of-us-button-on {
    @insert .logo-button-common;
-   width:200px;
-   margin:0 20px 0 0;
-   background-image:url(../../svg/logo-all-of-us-on.svg);
-   background-size:200px 40px;
+   width: 200px;
+   background-image: url(../../svg/logo-all-of-us-on.svg);
+   background-size: 200px 40px;
+   margin: 0 20px 0 0;
 }
 
 .logo-va-button-off {
    @insert .logo-button-common;
-   width:150px;
-   margin:0 0 0 20px;
+   width: 150px;
    background-image: url(../../svg/logo-va-health-off.svg);
-   background-size:150px 40px;
+   background-size: 150px 40px;
 }
 
 .logo-va-button-on {
    @insert .logo-button-common;
-   width:150px;
-   margin:0 0 0 20px;
-   background-image:url(../../svg/logo-va-health-on.svg);
-   background-size:150px 40px;
+   width: 150px;
+   background-image: url(../../svg/logo-va-health-on.svg);
+   background-size: 150px 40px;
 }
 
 
 /* View Controls */
 .view-controls-box {
-   display:flex;
-   flex-direction:row;
-   flex-wrap:nowrap;
-   align-items:left;
-   justify-content:flex-start;
-   height:40px;
-   width:auto;
-   
-   padding:0 0 0 10px;
-   margin:10px 0;
-	border-left:1px solid var(--white-75percent);
+   display: flex;
+   flex-direction: row;
+   flex-wrap: nowrap;
+   align-items: left;
+   justify-content: flex-start;
+   height: 40px;
+   width: auto;
+   padding: 0 0 0 10px;
+   margin: 10px 0;
+	border-left: 1px solid var(--white-075);
 }
 
 .view-button {
-   height:40px;
-   width:40px;
+   height: 40px;
+   width: 40px;
    min-width: 40px;
    background-size: 30px 30px;
-   background-repeat:no-repeat;
+   background-repeat: no-repeat;
    background-color: transparent;
-   background-position:center center;
+   background-position: center center;
 	padding: 0 0 0 5px;
-   margin:0;
-   border:none;
-   cursor:pointer;
+   border: none;
+   margin: 0;
+   cursor: pointer;
 }
 
 .report-view-button-off {
    @insert .view-button;
-   background-image:url("../../svg/view-button-report-off.svg");
+   background-image: url("../../svg/view-button-report-off.svg");
 }
 
 .report-view-button-on {
    @insert .view-button;
-   background-image:url("../../svg/view-button-report-on.svg");
+   background-image: url("../../svg/view-button-report-on.svg");
 }
 
 .longitudinal-view-button-off {
    @insert .view-button;
-   background-image:url("../../svg/view-button-report-off.svg");
+   background-image: url("../../svg/view-button-report-off.svg");
 }
 
 .longitudinal-view-button-on {
    @insert .view-button;
-   background-image:url("../../svg/view-button-report-on.svg");
+   background-image: url("../../svg/view-button-report-on.svg");
 }
 
 .compare-view-button-off {
    @insert .view-button;
-   background-image:url("../../svg/view-button-comparison-off.svg");
+   background-image: url("../../svg/view-button-comparison-off.svg");
 }
 
 .compare-view-button-on {
    @insert .view-button;
-   background-image:url("../../svg/view-button-comparison-on.svg");
+   background-image: url("../../svg/view-button-comparison-on.svg");
 }
 
 .default-view-button-off {
    @insert .view-button;
-   background-image:url("../../svg/view-button-summary-off.svg");
+   background-image: url("../../svg/view-button-summary-off.svg");
 }
 
 .default-view-button-on {
    @insert .view-button;
-   background-image:url("../../svg/view-button-summary-on.svg");
+   background-image: url("../../svg/view-button-summary-on.svg");
 }
 .benefits-view-button-off {
    @insert .view-button;
-   background-image:url("../../svg/view-button-benefits-off.svg");
+   background-image: url("../../svg/view-button-benefits-off.svg");
 }
 
 .benefits-view-button-on {
    @insert .view-button;
-   background-image:url("../../svg/view-button-benefits-on.svg");
+   background-image: url("../../svg/view-button-benefits-on.svg");
 }
 
 .consult-view-button-off {
    @insert .view-button;
-   background-image:url("../../svg/view-button-consult-off.svg");
+   background-image: url("../../svg/view-button-consult-off.svg");
 }
 
 .consult-view-button-on {
    @insert .view-button;
-   background-image:url("../../svg/view-button-consult-on.svg");
+   background-image: url("../../svg/view-button-consult-on.svg");
 }
 
 .diabetes-view-button-off {
    @insert .view-button;
-   background-image:url("../../svg/view-button-diabetes-off.svg");
+   background-image: url("../../svg/view-button-diabetes-off.svg");
 }
 
 .diabetes-view-button-on {
    @insert .view-button;
-   background-image:url("../../svg/view-button-diabetes-on.svg");
+   background-image: url("../../svg/view-button-diabetes-on.svg");
 }
 
 
 /* View Help */
 .view-help-container {
    position: fixed;
-   bottom:22px;
-   left:20px;
-   width:181px;
-   height:auto;
-   font-family:discovery-regular;
-   border:1.5px solid var(--blue-dark);
-   padding:0;
-   border:0 solid transparent;
+   bottom: 22px;
+   left: 20px;
+   width: 181px;
+   height: auto;
+   font-family: text;
    background-color: transparent;
    background-clip: padding-box;
+   padding: 0;
 }
 
 .view-help-title-container {
-   width:178px;
-   height:25px;
-   min-height:25px;
-   align-items:center;
-   border:1.5px solid var(--blue-dark);
+   align-items: center;
+   width: 178px;
+   height: 25px;
+   min-height: 25px;
+   background-color:var(--primary-100);
+   padding: 0;
+   border: 1.5px solid var(--primary-100);
    border-radius:10px 10px 0 0;
-   padding:0;
    margin:0;
-   background-color:var(--blue-dark);
 }
 
 .view-help-title {
    display: flex;
    flex-direction: row;
-   height:25px;
-   width:178px;
-   margin:0;
+   height: 25px;
+   width: 178px;
+   margin: 0;
    align-items: center;
    padding:0;
-   font-family: discovery-bold;
-   font-size:0.813rem; 
-   color:var(--white);
+   font-family: header-bold;
+   font-size: 0.813rem; 
+   color: var(--white-100);
    background-color: transparent;
 }
 
-.view-help-title-default-view {
-   width:140px;
-   background-image:url("../../svg/view-icon-overview-on.svg");
-   background-repeat:no-repeat;
+.view-help-title-icon {
+   width: 70%;
+   background-repeat: no-repeat;
    background-size: 20px 20px;
    background-position: 10px center;
    padding: 0 0 0 40px;
+}
+
+.view-help-title-default-view {
+   @insert .view-help-title-icon;
+   width: 140px;
+   background-image: url("../../svg/view-icon-overview-on.svg");
 }
 
 .view-help-title-longitudinal-view {
-   width:70%;
-/*   background-image:url("../../svg/view-icon-longitudinal-on.svg"); */
-   background-image:url("../../svg/view-icon-report-on.svg");
-   background-repeat:no-repeat;
-   background-size: 20px 20px;
-   background-position: 10px center;
-   padding: 0 0 0 40px;
+   @insert .view-help-title-icon;
+   background-image: url("../../svg/view-icon-report-on.svg");
 }
 
 .view-help-title-compare-view {
-   width:70%;
-   background-image:url("../../svg/view-icon-comparison-on.svg");
-   background-repeat:no-repeat;
-   background-size: 20px 20px;
-   background-position: 10px center;
-   padding: 0 0 0 40px;
+   @insert .view-help-title-icon;
+   background-image: url("../../svg/view-icon-comparison-on.svg");
 }
 
 .view-help-title-report-view {
-   width:70%;
-   background-image:url("../../svg/view-icon-report-on.svg");
-   background-repeat:no-repeat;
-   background-size: 20px 20px;
-   background-position: 10px center;
-   padding: 0 0 0 40px;
+   @insert .view-help-title-icon;
+   background-image: url("../../svg/view-icon-report-on.svg");
 }
 
 .view-help-title-benefits-view {
-   width:70%;
-   background-image:url("../../svg/view-button-placeholder-on.svg");
-   background-repeat:no-repeat;
-   background-size: 20px 20px;
-   background-position: 10px center;
-   padding: 0 0 0 40px;
+   @insert .view-help-title-icon;
+   background-image: url("../../svg/view-button-placeholder-on.svg");
 }
 
 .view-help-title-consult-view {
-   width:70%;
-   background-image:url("../../svg/view-button-placeholder-on.svg");
-   background-repeat:no-repeat;
-   background-size: 20px 20px;
-   background-position: 10px center;
-   padding: 0 0 0 40px;
+   @insert .view-help-title-icon;
+   background-image: url("../../svg/view-button-placeholder-on.svg");
 }
 
 .view-help-title-diabetes-view {
-   width:70%;
-   background-image:url("../../svg/view-button-placeholder-on.svg");
-   background-repeat:no-repeat;
-   background-size: 20px 20px;
-   background-position: 10px center;
-   padding: 0 0 0 40px;
+   @insert .view-help-title-icon;
+   background-image: url("../../svg/view-button-placeholder-on.svg");
 }
 
 .view-help-close-button {
-   display:flex;  
-   height:25px;
-   width:15px;
-   border:0;
-   margin:0 10px 0 0;
-   background-image:url(../../svg/close_icon.svg);
-   background-repeat:no-repeat;
-   background-color:transparent;
-   background-position:center center;
-   fill: white;
+   display: flex;  
+   height: 25px;
+   width: 15px;
+   background-image: url(../../svg/close_icon.svg);
+   background-repeat: no-repeat;
+   background-color: transparent;
+   background-position: center center;
+   fill: var(--white-100);
+   border: 0;
+   margin: 0 10px 0 0;
    cursor: pointer;
 }
 
 .view-help-contents {
-   width:158px;
-   height:100px;
-   font-family:discovery-regular;
-   font-size:0.813rem;
-   padding:5px 10px;
-   border:1.5px solid var(--blue-dark);  
-   border-radius:0 0 10px 10px;
-   margin:0;
-   background-color:var(--white);
-   overflow-y:auto;
+   height: 100px;
+   width: 158px;
+   font-family: text;
+   font-size: 0.813rem;
+   background-color: var(--white-100);
+   padding: 5px 10px;
+   border: 1.5px solid var(--blue-dark);  
+   border-radius: 0 0 10px 10px;
+   margin: 0;
+   overflow-y: auto;
    overflow-x: hidden;
    white-space: pre-wrap;
 }
 
 .patient-name {
-   display:flex;
-	height:60px;
-	width:45%;
-	align-items:center;
+   display: flex;
+   align-items: center;
 	justify-content: flex-start;
-	font-family:discovery-regular;
-   font-size:1.200rem;
-	text-align:left;
-   color:var(--white);
+	height: 60px;
+	width: 45%;
+	font-family: text;
+   font-size: 1.200rem;
+	text-align: left;
+   color:var(--white-100);
    white-space: nowrap;
-	padding:5px 0 0 0;
-   margin:0 20px;
+	padding: 5px 0 0 0;
+   margin: 0 20px;
 }
 
 /* Header Controls */
 .header-controls-box {
-   display:flex;
-   flex-direction:row;
-   flex-wrap:nowrap;
-   align-items:center;
-   justify-content:flex-end;
-   height:60px;
-   width:auto;
-   min-width:130px;
-   padding:0 20px 0 10px;
-   margin:0;
+   display: flex;
+   flex-direction: row;
+   flex-wrap: nowrap;
+   align-items: center;
+   justify-content: flex-end;
+   height: 60px;
+   width: 138px;
+   min-width: 138px;
+   padding: 0 20px 0 10px;
+   margin: 0;
 }
 			
 .text-size-smaller-button-off {
-   height:20px;
-   width:20px;
-   min-width:20px;
-   background-color:transparent;
-   background-image:url(../../svg/icon-text-size-smaller.svg);
-   background-position:5px 0;
-   background-repeat:no-repeat;
-   margin:17px -5px 12px 0;
-	
-   border:none;
-   cursor:pointer;
+   height: 20px;
+   width: 20px;
+   min-width: 20px;
+   background-color: transparent;
+   background-image: url(../../svg/icon-text-size-smaller.svg);
+   background-position: 5px 0;
+   background-repeat: no-repeat;
+   border: none;
+   margin: 17px -5px 12px 0;
+	cursor: pointer;
 }
 
 .text-size-larger-button-off {
-   height:40px;
-   width:40px;
-   min-width:40px;
-   background-color:transparent;
-   background-image:url(../../svg/icon-text-size-larger.svg);
-   background-position:0 0;
-   background-repeat:no-repeat;
-   margin:0 0 12px 2px;
-	
-   border:none;
-   cursor:pointer;
+   height: 40px;
+   width: 40px;
+   min-width: 40px;
+   background-color: transparent;
+   background-image: url(../../svg/icon-text-size-larger.svg);
+   background-position: 0 0;
+   background-repeat: no-repeat;
+   border: none;
+   margin: 0 0 12px 2px;
+   cursor: pointer;
 }
 
 .text-size-current {
-   font-family:discovery-data-bold;
-   font-size:1.000rem;
-   font-weight:bold;
-   text-align:right; 
-   color:var(--white-75percent);
-   padding:24px 0 15px 0;
-   margin:0 0 0 -8px;
-   cursor:pointer;
+   font-family: header-bold;
+   font-size: 1.000rem;
+   text-align: right; 
+   color: var(--white-075);
+   padding: 24px 0 15px 0;
+   margin: 0 0 0 -8px;
+   cursor: pointer;
 }
 
 /* Header Menu */
 .header-menu-button {
-   height:40px;
-   width:40px;
-   min-width:40px;
-   background-color:transparent;
-   background-image:url(../../svg/icon-header-menu.svg);
-   background-position:center center;
+   height: 40px;
+   width: 40px;
+   min-width: 40px;
+   background-color: transparent;
+   background-image: url(../../svg/icon-header-menu.svg);
+   background-position: center center;
    background-size: 30px 30px;
-   background-repeat:no-repeat;
-   margin:0 0 0 10px;
-   border:0;
-   cursor:pointer;
+   background-repeat: no-repeat;
+   border: 0;
+   margin: 0 0 0 10px;
+   cursor: pointer;
 }
 
 .header-menu-button-open {
-   height:40px;
-   width:40px;
-   min-width:40px;
-   background-color:transparent;
-   background-image:url(../../svg/icon-header-menu-hover.svg);
-   background-position:center center;
+   height: 40px;
+   width: 40px;
+   min-width: 40px;
+   background-color: transparent;
+   background-image: url(../../svg/icon-header-menu-hover.svg);
+   background-position: center center;
    background-size: 30px 30px;
-   background-repeat:no-repeat;
-   margin:0 0 0 10px;
-   border:0;
-   cursor:pointer;
+   background-repeat: no-repeat;
+   border: 0;
+   margin: 0 0 0 10px;
+   cursor: pointer;
 }
 
 .header-menu {
    position: absolute;
    top: 42px;
-   right:20;
+   right: 20;
    z-index: 3;
-   width:120px;
-   background-color:var(--white);
-   padding:10px;
-   border:1px  solid var(--blue-dark);
+   width: 120px;
+   background-color: var(--white-100);
+   padding: 10px;
+   border: 1px solid var(--primary-100);
    margin: 0 20px 0 0;
 }
 
 .header-menu-item-common {
-   height:20px;
-   width:auto;
-   background-color:transparent;
-   background-position:5px 0;
-   background-repeat:no-repeat;
-   border:none;
-   cursor:pointer;
-   font-family:discovery-regular;
+   height: 20px;
+   width: auto;
+   font-family: text;
    font-size:1.000rem;
+   background-color: transparent;
+   background-position: 5px 0;
+   background-repeat: no-repeat;
+   border: none;
+   cursor:pointer;
 }
 
 .header-menu-info {
    @insert .header-menu-item-common;
-   background-image:url(../../svg/icon-participant-info-off.svg);
-   padding:2px 0 0 30px;
-   margin:0 0 5px 0;
+   background-image: url(../../svg/icon-participant-info-off.svg);
+   padding: 2px 0 0 30px;
+   margin: 0 0 5px 0;
 }
 
 .header-menu-info:hover {
-   width:auto;
-   background-color:var(--gray-medium);
-   opacity:0.4;
+   width: auto;
+   background-color: var(--gray-medium-040);
 }
 
 .header-menu-help {
    @insert .header-menu-item-common;
-   background-image:url(../../svg/icon-help-off.svg);
-   padding:0 0 0 30px;
-   margin:0 0 5px 0;
+   background-image: url(../../svg/icon-help-off.svg);
+   padding: 0 0 0 30px;
+   margin: 0 0 5px 0;
 }
 
 .header-menu-help:hover {
-   width:auto;
-   background-color:var(--gray-medium);
-   opacity:0.4;
+   width: auto;
+   background-color: var(--gray-medium-040);
 }
 
 .header-menu-download {
    @insert .header-menu-item-common;
-   background-image:url(../../svg/icon-download-off.svg);
-   padding:0 0 0 30px;
-   margin:0 0 5px 0;
+   background-image: url(../../svg/icon-download-off.svg);
+   padding: 0 0 0 30px;
+   margin: 0 0 5px 0;
 }
 
 .header-menu-download:hover {
-   width:auto;
-   background-color:var(--gray-medium);
-   opacity:0.4;
+   width: auto;
+   background-color: var(--gray-medium-040);
 }
 
 .header-menu-print {
    @insert .header-menu-item-common;
-   background-image:url(../../svg/icon-print-off.svg);
-   padding:0 0 0 30px;
-   margin:0;
+   background-image: url(../../svg/icon-print-off.svg);
+   padding: 0 0 0 30px;
+   margin: 0;
 }
 
 .header-menu-print:hover {
-   width:auto;
-   background-color:var(--gray-medium);
-   opacity:0.4;
+   width: auto;
+   background-color: var(--gray-medium-040);
 }

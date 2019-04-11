@@ -14,6 +14,8 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class Immunizations extends React.Component {
 
+   static catName = 'Immunizations';
+    
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
@@ -46,7 +48,7 @@ export default class Immunizations extends React.Component {
    render() {
       return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
-	       <div className={this.props.className + ' category-container'}>
+	       <div className='immunizations category-container'>
 		  { formatContentHeader(this.props.isEnabled, 'Immunizations', this.state.matchingData[0].itemDate, this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderImmunizations(this.state.matchingData, this.context) }

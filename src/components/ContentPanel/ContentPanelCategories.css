@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science ContentPanelCategories Stylesheet */
-/* v.01.02  Updated 03/19/2019 */
+/* v.01.03  Updated 03/27/2019 */
 
 @import '../../css/Fonts.css';
 @import '../../css/Colors.css';
@@ -28,9 +28,9 @@
 /* Grid Columns */
 .col01 {
 	grid-column: 1;
-   width: 80px;
-   min-width: 80px;
-   max-width: 80px;
+   width: 120px;
+   min-width: 120px;
+   max-width: 120px;
    padding: 0 0 0 32px;
    white-space: normal;
 }
@@ -58,16 +58,12 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	width: auto;
-   
-/*   height: 1.100rem; */
 	font-size: 0.800rem;
 	text-align: left;
-/*	line-height: 1.100rem; */
 	color: var(--data);
-	white-space: normal;
-/*	padding: 0.300rem 0 0 0; */
    padding-top: 0.300rem;
 	margin: 0;
+   white-space: normal;
 }
 
 .label {
@@ -86,7 +82,6 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	width: auto;
-   
 	font-size: 1.100rem;
 	line-height: 1.100rem;
 	color: var(--data);
@@ -97,16 +92,16 @@
 
 .value-number {
 	@insert .value-master;
+   height: 1.100rem;
 	font-family: data-number;
    white-space: nowrap;
-   height: 1.100rem;
 }
 
 .value-text {
 	@insert .value-master;
-	font-family: data-text;
+	height: auto;
+   font-family: data-text;
    white-space: normal;
-   height: auto;
 }
 
 .medium {
@@ -128,63 +123,9 @@
 }
 
 .highlight {
- /*  background-color: var(--accent-040); */
    background-image: url("../../svg/icon-out-of-gamut.svg");
    background-repeat: no-repeat;
    background-size: 20px 20px;
    padding: 2px 0 0 30px;
 }
 
-/* Content Styles - to be removed 031919 */
-
-/* Label Columns 
-.col01-label {
-	@insert .col01 .label;
-}
-
-.col03-label {
-	@insert .col03 .label;
-}
-
-/* Value Columns 
-.col02-value {
-	@insert .col02 .value-number;
-}
-
-.col02-value-text {
-	@insert .col02 .value-text;
-}
-
-.col02-value-span02 {
-	@insert .col02 .value-number .span02;
-}
-
-.col02-value-text-span02 {
-	@insert .col02 .value-text .span02 ;
-}
-
-.col02-value-span03 {
-	@insert .col02 .value-number .span03 ;
-}
-
-.col02-value-span05 {
-	@insert .col02 .value-number .span05 ;
-}
-
-.col02-value-span07 {
-	@insert .col02 .value-number .span07 ;
-}
-
-.col02-value-text-span12-wrap {
-	@insert .col02 .value-text .span12;
-}
-
-.col04-value-text {
-	@insert .col04 .value-text;
-}
-
-.col05-value-text-span07 {
-	@insert .col05 .value-text .span07 ;
-}
-
-*/

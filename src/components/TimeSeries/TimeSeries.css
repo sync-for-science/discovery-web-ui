@@ -1,0 +1,10 @@
+@charset "UTF-8";
+@import '../../css/Colors.css';
+@import '../../css/Fonts.css';
+
+/* Sync for Science Discovery TimeSeries Stylesheet */
+/* v.01.01 Updated 3/29/2019 */
+
+.mark {
+   cursor: pointer
+}

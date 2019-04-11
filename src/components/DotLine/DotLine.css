@@ -1,51 +1,49 @@
 @charset "UTF-8";
-@import '../../css/ColorVariablesMaster.css';
+@import '../../css/Colors.css';
 
 /* Sync for Science Discovery DotLine Stylesheet */
-/* v.01.08 Updated 11/15/2018 */
+/* v.01.08 Updated 3/27/2019 */
 
 .active-dots {
-   fill: var(--category);
-   stroke: var(--white);
-   opacity:0.6;
-   stroke-width:1px;
-   height:10px;
-   width:10px;
-   padding:6px 0;
+   height: 10px;
+   width: 10px;
+   fill: var(--category-060);
+   stroke: var(--white-060);
+   stroke-width: 1px;
+   padding: 6px 0;
    cursor: pointer;
    pointer-events: visible;
 }  
 
 .inactive-dots {
-   fill:var(--gray-medium);
-   stroke:var(--white);
-   opacity:0.6;
+   fill:var(--gray-medium-060);
+   stroke:var(--white-060);
    stroke-width:1px;
    cursor:pointer;
    pointer-events: visible;
 }
 
 .active-search-dots {
-   fill: var(--red-light);
-   stroke: var(--white);
-   stroke-width:1px;
+   fill: var(--red-light-100);
+   stroke: var(--white-100);
+   stroke-width: 1px;
    cursor: pointer;
    pointer-events: visible;
 }  
 
 .inactive-search-dots {
-   fill:var(--discovery-dots-inactive-search);
-   stroke:var(--white);
-   stroke-width:1px;
-   cursor:pointer;
+   fill: var(--dots-inactive-search);
+   stroke: var(--white-100);
+   stroke-width: 1px;
+   cursor: pointer;
    pointer-events: visible;
 }
 
 .highlight-ring-dots {
-   fill:var(--discovery-dots-highlight-ring);
-   stroke:var(--discovery-dots-highlight-ring-stroke);
-   stroke-width:3px;
-   overflow:visible;
-   cursor:pointer;
+   fill: var(--dots-highlight-ring);
+   stroke: var(--dots-highlight-ring-stroke);
+   stroke-width: 3px;
+   overflow: visible;
+   cursor: pointer;
    pointer-events: visible;
 }

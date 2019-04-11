@@ -8,7 +8,7 @@ import config from '../../config.js';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderEOB } from '../../fhirUtil.js';
-import { formatContentHeader, isValid } from '../../util.js';
+import { shallowEqArray, formatContentHeader, isValid } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -16,6 +16,8 @@ import DiscoveryContext from '../DiscoveryContext';
 // Display the 'Benefits' category if there are matching resources
 //
 export default class Benefits extends React.Component {
+
+   static catName = 'Benefits';
 
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
@@ -45,7 +47,7 @@ export default class Benefits extends React.Component {
    }
 
    componentDidUpdate(prevProps, prevState) {
-      if (prevProps.data !== this.props.data) {
+      if (!shallowEqArray(prevProps.data, this.props.data)) {
 	 this.setMatchingData();
       }
    }
@@ -75,9 +77,9 @@ export default class Benefits extends React.Component {
    }
 
    render() {
-      return ( this.state.matchingData && this.state.matchingData.length > 0 &&
+      return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
-	       <div className={this.props.className + ' category-container'}>
+	       <div className='benefits category-container'>
 		  { formatContentHeader(this.props.isEnabled, 'Benefits', this.state.matchingData[0].itemDate, this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderEOB(this.state.matchingData, this.context) }

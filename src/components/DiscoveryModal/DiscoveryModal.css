@@ -1,9 +1,9 @@
 @charset "UTF-8";
 @import '../../css/Colors.css';
-@import '../../css/ColorVariablesMaster.css';
+@import '../../css/Fonts.css';
 
 /* Sync for Science Discovery Discovery Modal Stylesheet */
-/* v.01.17 Updated 03/25/2019 */
+/* v.01.18 Updated 03/26/2019 */
 
 /* --- General Modal Styles --- */
 
@@ -19,8 +19,8 @@
 	display: flex;
    align-items: flex-start;
 	justify-content: center;
+   background: var(--black-025);
    padding: 0;
-	background: var(--black-025);
 	overflow-y: auto;
    overflow-x: hidden;
 }
@@ -32,12 +32,13 @@
 	z-index: 1001;
 	width: auto;
 	min-width: 550px;
-	margin-top: 70px;
-	padding: 0;
-	border: 0 solid transparent;
-	border-radius: 15px;
 	background-color: transparent;
 	background-clip: padding-box;
+   padding: 0;
+   border: 0 solid transparent;
+	border-radius: 15px;
+   margin-top: 70px;
+	
 }
 
 /* Close Button */
@@ -79,9 +80,9 @@
 }
 
 .modal-body {
-	width: auto;
-	min-width: 550px;
 	height: 300px;
+   width: auto;
+	min-width: 550px;
 	max-height: 300px;
 	background-color: var(--white-100);
 	padding: 20px;
@@ -119,41 +120,37 @@
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	width: auto;
 	height: 155px;
+   width: auto;
 	margin: 0 0 10px 0;
 }
 
-.logo-modal-photo-one {
-	width: 125px;
-	height: 155px;
-	background-image: url("../../png/David-Kreda-sepia-cropped-small.png");
-	background-repeat: no-repeat;
+.logo-modal-photo {
+   height: 155px;
+   width: 125px;
+   background-repeat: no-repeat;
 	background-size: cover;
 	margin: 0 5px;
+}
+
+.logo-modal-photo-one {
+	@insert .logo-modal-photo;
+	background-image: url("../../png/David-Kreda-sepia-cropped-small.png");
 }
 
 .logo-modal-photo-two {
-	width: 125px;
-	height: 155px;
+	@insert .logo-modal-photo;
 	background-image: url("../../png/Steve-Klein-sepia-cropped-small.png");
-	background-repeat: no-repeat;
-	background-size: cover;
-	margin: 0 5px;
 }
 
 .logo-modal-photo-three {
-	width: 125px;
-	height: 155px;
+	@insert .logo-modal-photo;
 	background-image: url("../../png/Bob-Hires-sepia-cropped-small.png");
-	background-repeat: no-repeat;
-	background-size: cover;
-	margin: 0 5px;
 }
 
 .logo-modal-body-property {
 	width: 50%;
-	font-family: header;
+	font-family: text;
 	font-size: 1.000rem; 
 	text-align: right;
    padding: 0 15px 0 0;
@@ -161,13 +158,13 @@
 
 .logo-modal-body-value {
 	width: 50%; 
+   font-family: text-bold;
+   font-size: 1.000rem;
 	text-align: left;
-	font-family: header-bold;
-	font-size: 1.000rem;
 }
 
 .logo-modal-legal {
-	font-family: header;
+	font-family: text;
 	font-size: 0.750rem;
    margin: 20px 0 0 0;
 }
@@ -191,16 +188,15 @@
 
 .info-modal-body-property {
 	width: 50%;
-	font-family: header;
+	font-family: text-italic;
 	font-size: 1.000rem;
-	font-style: italic;
 	text-align: right;
-   padding-right: 15px;
+   padding: 0 15px 0 0;
 }
 
 .info-modal-body-value {
 	width: 50%;
-	font-family: header;
+	font-family: text;
 	font-size: 1.000rem;
 	text-align: left;
 }
@@ -233,7 +229,7 @@
 }
 
 .help-modal-list-item {
-	font-family: header;
+	font-family: text;
 	font-size: 1.000rem;	
 }
 
@@ -245,9 +241,9 @@
 }
 
 .help-modal-subheader-content {
-	margin: 0 0 10px 40px;
 	font-family: header;
 	font-size: 0.800rem;
+   margin: 0 0 10px 40px;
 }
 
 .help-modal-body-row {
@@ -256,16 +252,15 @@
 
 .help-modal-body-property {
 	width: 50%;
-	padding: 0 15px 0 0;
-	font-family: header;
+	font-family: text-italic;
 	font-size: 1.000rem;
-	font-style: italic;
-	text-align: right;    
+	text-align: right; 
+   padding: 0 15px 0 0;
 }
 
 .help-modal-body-value {
 	width: 50%;    
-	font-family: header;
+	font-family: text;
 	font-size: 1.000rem;
 	text-align: left;  
 }
@@ -291,30 +286,29 @@
 
 .download-modal-body-property {
 	width: 50%;
-	font-family: header;
+	font-family: text-italic;
 	font-size: 1.000rem;
-	font-style: italic;
 	text-align: right; 
-   padding-right: 15px;
+   padding: 0 15px 0 0;
 }
 
 .download-modal-body-value {
 	width: 50%;
-	font-family: header;
+	font-family: text;
 	font-size: 1.000rem;
 	text-align: left;   
 }
 
 .download-modal-button {
 	width: 60%;
-	margin: 10px auto;
-	padding: 10px 0;
-	background-color: var(--primary-100);
 	font-family: header-bold;
 	font-size: 1.000rem;
-	color: var(--white);
-	border-radius: 25px;
 	text-align: center;
+   color: var(--white);
+   background-color: var(--primary-100);
+	padding: 10px 0;
+	border-radius: 25px;
+   margin: 10px auto;
 }
 
 .download-modal-cancel-button {
@@ -322,13 +316,13 @@
 }
 
 .download-modal-text-block {
-	font-family: header;
+	font-family: text;
 	font-size: 1.000rem;
 	margin: 20px 0 0;
 }
 
 .download-modal-text-bold {
-	font-family: header-bold;
+	font-family: text-bold;
 	font-size: 1.000rem;
 }
 
@@ -350,7 +344,7 @@
 
 .print-modal-body-property {
 	width: 50%;
-	font-family: header;
+	font-family: text;
 	font-size: 1.000rem;
 	font-style: italic;
 	text-align: right;
@@ -359,15 +353,15 @@
 
 .print-modal-body-value {
 	width: 50%;
-	font-family: header;
+	font-family: text;
 	font-size: 1.000rem;
 	text-align: left;    
 }
 
 .print-modal-button {
 	width: 60%;
-	background-color: var(--blue-dark);
-	font-family: header-bold;
+	background-color: var(--primary-100);
+	font-family: text-bold;
 	font-size: 1.000rem;
    text-align: center;
 	color: var(--white-100);
@@ -377,12 +371,12 @@
 }
 
 .print-modal-text-block {
-	font-family: header;
+	font-family: text;
 	font-size: 1.000rem;
 	margin: 20px 0 0;
 }
 
 .print-modal-text-bold {
-	font-family: header-bold;
+	font-family: text-bold;
 	font-size: 1.000rem;
 }

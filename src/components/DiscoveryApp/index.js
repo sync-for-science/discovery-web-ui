@@ -5,7 +5,7 @@ import { get } from 'axios';
 import './DiscoveryApp.css';
 import config from '../../config.js';
 import FhirTransform from '../../FhirTransform.js';
-import { cleanDates, normalizeDates, timelineIncrYears, ignoreCategories, unimplemented } from '../../util.js';
+import { cleanDates, normalizeDates, timelineIncrYears } from '../../util.js';
 import PageHeader from '../PageHeader';
 import LongitudinalView from '../LongitudinalView';
 import SummaryView from '../SummaryView';
@@ -15,6 +15,7 @@ import ConsultView from '../ConsultView';
 import DiabetesView from '../DiabetesView';
 //import ReportView from '../ReportView';
 import DiscoveryModal from '../DiscoveryModal';
+import Unimplemented from '../Unimplemented';
 import PageFooter from '../PageFooter';
 
 import DiscoveryContext from '../DiscoveryContext';
@@ -316,9 +317,9 @@ export default class DiscoveryApp extends React.Component {
          for (let resource of this.state.resources.transformed) {
 	    if (resource.category === 'Patient') {
 		 // Ignore
-	    } else if (ignoreCategories().includes(resource.category)) {
+	    } else if (Unimplemented.unimplementedCats.includes(resource.category)) {
 	       // Add the "Unimplemented" category
-	       cats[unimplemented()] = null;
+	       cats[Unimplemented.catName] = null;
 	    } else {
 	       // Add the found category
 	       cats[resource.category] = null;
