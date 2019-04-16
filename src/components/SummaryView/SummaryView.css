@@ -8,7 +8,7 @@
 
 
 /* Sync for Science Discovery SummaryView Stylesheet */
-/* v.01.11 Updated 03/26/2019 */
+/* v.01.12 Updated 04/15/2019 */
 
 
 .default-view {
@@ -62,6 +62,7 @@
 	border-right: 2px solid var(--primary-100);
 	border-bottom: 2px solid var(--primary-100);
 	margin: -20px 0 0;
+   overflow-y: scroll;
 }
 
 .default-body-row {
@@ -100,7 +101,7 @@
    font-size: 1.000rem;
    text-align: left;
 	margin: 0 0 0 20px;
-	white-space: nowrap;
+	white-space: wrap;
 }
 
 .default-providers-count {

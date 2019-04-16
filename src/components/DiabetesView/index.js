@@ -38,6 +38,14 @@ export default class DiabetesView extends React.Component {
 
    }
 
+   initialCats() {
+      let cats = {};
+      for (let cat of this.props.categories) {
+	 cats[cat] = true;
+      }
+      return cats
+   }
+
    setEnabled = this.setEnabled.bind(this);
    setEnabled(catsEnabled, provsEnabled) {
       this.setState({catsEnabled: catsEnabled,
@@ -52,14 +60,15 @@ export default class DiabetesView extends React.Component {
    render() {
       return (
 	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={this.props.categories} providers={this.props.providers}
-			  enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent} allowDotClick={true}>
+			  catsEnabled={this.initialCats()} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}
+			  allowDotClick={true}>
 	    <div className='diabetes-view'>
 	       <div className='diabetes-title'>
 		  <div className='diabetes-title-name'>Diabetes</div>
 	       </div>
 	       <div className='diabetes-contents'>
-		  Under development
-	       </div>
+             <div className='diabetes-placeholder'></div>
+         </div>
 	    </div>
 	 </StandardFilters>
       );

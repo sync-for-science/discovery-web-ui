@@ -40,10 +40,6 @@
    font-size: 1.000rem;
    color: var(--white-100);
    background-color: var(--primary-100); 
-   background-image: url("../../svg/view-icon-report-on.svg");
-   background-repeat: no-repeat;
-   background-position: 20px center;
-   background-size: 35px 35px;
    padding: 0 20px;
    border-top: 2px solid var(--accent-100);
    overflow: visible;
@@ -59,10 +55,10 @@
 }
 
 .content-panel-view-name {
+   width: 80px;
    font-family: header-bold;
    font-size: 1.000rem;
    color: var(--white-100);
-   margin: 0 0 0 50px;
 }
 
 .content-panel-button {
@@ -113,6 +109,7 @@
    background-image: url("../../svg/content-panel-button-all.svg");
 }
 
+/*
 .content-panel-hide-lines-button {
    @insert .content-panel-button;
    background-image: url("../../svg/view-button-placeholder-on.svg");
@@ -122,6 +119,7 @@
    @insert .content-panel-button;
    background-image: url("../../svg/view-button-placeholder-on.svg");
 }
+*/
 
 .content-panel-trim-none-button {
    @insert .content-panel-button;
@@ -415,8 +413,37 @@
    margin: 20px 0 0 20px;
 }
 
+/* Consult View highlight styles */
 
+.consult-highlight {
+   width: 100%;
+   border-top: var(--white-100) solid 1px;
+   border-bottom: var(--white-100) solid 1px;
+   font-family: header-bold;
+   font-size: 0.800rem;
+   color: white;
+   padding: 3px 5px 3px 5px;
+}    
 
+.consult-highlight-confirmed {
+   @insert .consult-highlight;
+   background-color: var(--confirmed);
+}
+
+.consult-highlight-likely {
+   @insert .consult-highlight;
+   background-color: var(--likely);
+}
+
+.consult-highlight-unlikely {
+   @insert .consult-highlight;
+   background-color: var(--unlikely);
+}
+
+.consult-highlight-disconfirmed {
+   @insert .consult-highlight;
+   background-color: var(--disconfirmed);
+}
 
 /* Scrollbar formatting */
 

@@ -59,11 +59,13 @@ export default class ContentPanel extends React.Component {
       thumbLeftDate: PropTypes.string.isRequired,
       thumbRightDate: PropTypes.string.isRequired,
       viewName: PropTypes.string.isRequired,
+      viewIconClass: PropTypes.string.isRequired,
       resources: PropTypes.instanceOf(FhirTransform),
       catsToDisplay: PropTypes.arrayOf(PropTypes.string),
       showAllData: PropTypes.bool,
       showAllFn: PropTypes.func,	// added dynamically by StandardFilters
-      dotClickFn: PropTypes.func
+      dotClickFn: PropTypes.func,
+      initialTrimLevel: PropTypes.string
    }
 
    state = {
@@ -80,7 +82,7 @@ export default class ContentPanel extends React.Component {
       annunciator: null,
       showAllData: this.props.showAllData ? true : false,
       showDotLines: true,
-      trimLevel: 'none',
+      trimLevel: this.props.initialTrimLevel ? this.props.initialTrimLevel: 'none',
       trimLevelDirection: 'more',
       showJSON: false,
       showAnnotation: false
@@ -103,7 +105,6 @@ export default class ContentPanel extends React.Component {
 
    calcTopBound() {
       const headerTop = document.querySelector('.time-widget').getBoundingClientRect().top;
-//      const targetTop = document.querySelector('.standard-filters-category-nav-spacer-top').getBoundingClientRect().top;
       const targetTop = document.querySelector('.standard-filters-categories-and-providers').getBoundingClientRect().top;
       return targetTop - headerTop;
    }
@@ -264,7 +265,6 @@ export default class ContentPanel extends React.Component {
    }
 
    renderDotOrAll() {
-//     let dates = this.state.showAllData ? (this.context.searchRefs.length > 0 ? this.context.searchRefs : this.props.context.allDates).filter(elt =>
       let dates = this.state.showAllData ? (this.context.searchRefs.length > 0 ? this.context.searchRefs
 									       : this.copyReverse(this.props.context.allDates)).filter(elt =>
 										    inDateRange(elt.date, this.props.thumbLeftDate, this.props.thumbRightDate))
@@ -277,7 +277,6 @@ export default class ContentPanel extends React.Component {
 
       let divs = [];
       for (let thisDate of dates) {
-//	 let res = this.props.resources.pathItem(`[*itemDate=${thisDate.date}]`);
 	 let res = limitedResources.filter(elt => elt.itemDate === thisDate.date && this.provEnabled(elt.provider) &&
 						  (this.catEnabled(elt.category) || this.context.trimLevel === 'none'));
 	 this.resTotal += this.enabledResources(res);
@@ -338,12 +337,12 @@ export default class ContentPanel extends React.Component {
    }
 
    renderContents(context) {
-//      let birthDate = this.props.resources.pathItem('[category=Patient].data.birthDate');
       let contents = this.renderDotOrAll();	// Generate contents (and item count)
       return (
 	 <div className='content-panel-inner'>
 	    <div className='content-panel-inner-title'>
 	       <div className='content-panel-inner-title-left'>
+		  <div className={this.props.viewIconClass}/>
 		  <div className='content-panel-view-name'>{this.props.viewName}</div>
 		  <button className={'content-panel-left-button' + (this.state.prevEnabled ? '' : '-off')}
 			  onClick={() => this.onNextPrev('prev')} />
@@ -376,6 +375,7 @@ export default class ContentPanel extends React.Component {
    render() {
       // Extend DiscoveryContext with trimLevel (simpler than reassigning the extended context to DiscoveryContext.Provider)
       this.context.trimLevel = this.state.trimLevel;
+      this.context.viewName = this.props.viewName;
 
       // Dragging enabled/disabled by changing bounds.bottom
       return ( this.state.isOpen &&

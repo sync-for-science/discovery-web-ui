@@ -238,10 +238,10 @@ export default class PageHeader extends React.Component {
       return {
 //	 longitudinalView: 'Timeline',
 	 longitudinalView: 'Report',
-	 compareView: 'Comparison',
+	 compareView: 'Compare',
 //	 reportView: 'Report',
 	 summaryView: 'Summary',
-	 benefitsView: 'Benefits',
+	 benefitsView: 'Financial',
 	 consultView: 'Consult',
 	 diabetesView: 'Diabetes'
       }
@@ -250,14 +250,13 @@ export default class PageHeader extends React.Component {
    get viewHelpText() {
       return {
 //	 longitudinalView: <div>The <b>Timeline</b> view shows a clickable dot for each date you have data.</div>,
-	 longitudinalView: <div>The <b>Report</b> view shows a clickable dot for each date you have data or lists all your data in date order.</div>,
-	 compareView: <div>The <b>Comparison</b> view lists each data item and which providers have the same data item.</div>,
+	 longitudinalView: <div>The <b>Report View</b> shows your data over time or for one point in time.</div>,
+	 compareView: <div>The <b>Compare View</b> shows your unique data by provider.</div>,
 //	 reportView: <div>The <b>Report</b> view lists all your data in date order.</div>,
-	 summaryView: <div>The <b>Summary</b> view is an overview of your data. Details can be seen
-	      in the <b>Report</b> and <b>Compare</b> views.</div>,
-	 benefitsView: <div>The <b>Benefits</b> view is ...</div>,
-	 consultView: <div>The <b>Consult</b> view is ...</div>,
-	 diabetesView: <div>The <b>Diabetes</b> view is ...</div>
+	 summaryView: <div>The <b>Summary View</b> shows an overview of your data.</div>,
+	 benefitsView: <div>The <b>Financial View</b> shows your benefits and claims data over time or for one point in time.</div>,
+	 consultView: <div>The <b>Consult View</b> shows a knowledge-annotated view of your conditions over time or for one point in time.</div>,
+	 diabetesView: <div>The <b>Diabetes View</b> shows data specific to this condition.</div>
       };
    }
 

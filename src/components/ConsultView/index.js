@@ -5,6 +5,8 @@ import './ConsultView.css';
 import FhirTransform from '../../FhirTransform.js';
 import StandardFilters from '../StandardFilters';
 
+import ContentPanel from '../ContentPanel';
+
 //
 // Render the Consult view of the participant's data
 //
@@ -28,39 +30,57 @@ export default class ConsultView extends React.Component {
    }
 
    state = {
-      catsEnabled: {},		    // Enabled status of categories
-      provsEnabled: {},		    // Enabled status of providers
+      catsEnabled: {},				// Enabled status of categories
+      provsEnabled: {},				// Enabled status of providers
       thumbLeftDate: this.props.dates.minDate,
-      thumbRightDate: this.props.dates.maxDate
+      thumbRightDate: this.props.dates.maxDate,
+      contentPanelIsOpen: false,
+      dotClickDate: null			// dot click from ContentPanel
    }
 
    componentDidMount() {
+      this.setState({ contentPanelIsOpen: true });
+   }
 
+   initialCats() {
+      let cats = {};
+      for (let cat of this.props.categories) {
+	 cats[cat] = ['Conditions'].includes(cat);
+      }
+      return cats
    }
 
    setEnabled = this.setEnabled.bind(this);
    setEnabled(catsEnabled, provsEnabled) {
-      this.setState({catsEnabled: catsEnabled,
-		     provsEnabled: provsEnabled});
+      this.setState({ catsEnabled: catsEnabled,
+		      provsEnabled: provsEnabled });
    }
 
    setDateRange = this.setDateRange.bind(this);
    setDateRange(minDate, maxDate) {
-      this.setState({thumbLeftDate: minDate, thumbRightDate: maxDate});
+      this.setState({ thumbLeftDate: minDate, thumbRightDate: maxDate });
+   }
+
+   onCloseContentPanel = () => {
+      this.setState({ contentPanelIsOpen: false });
+   }
+
+   onDotClick = this.onDotClick.bind(this);
+   onDotClick(dotClickDate) {
+      this.setState({ dotClickDate: dotClickDate });
    }
 
    render() {
       return (
 	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={this.props.categories} providers={this.props.providers}
-			  enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent} allowDotClick={true}>
-	    <div className='consult-view'>
-	       <div className='consult-title'>
-		  <div className='consult-title-name'>Consult</div>
-	       </div>
-	       <div className='consult-contents'>
-		  Under development
-	       </div>
-	    </div>
+			  catsEnabled={this.initialCats()} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}
+			  allowDotClick={true} dotClickDate={this.state.dotClickDate} >
+	    <ContentPanel open={this.state.contentPanelIsOpen} onClose={() => this.setState({contentPanelIsOpen: false})}
+			  catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled} dotClickFn={this.onDotClick}
+			  // context, nextPrevFn props added in StandardFilters
+			  thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
+			  resources={this.props.resources} viewName='Consult' viewIconClass='consult-view-icon'
+			  showAllData={true} initialTrimLevel='expected' />
 	 </StandardFilters>
       );
    }

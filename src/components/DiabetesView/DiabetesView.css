@@ -4,10 +4,11 @@
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery DiabetesView Stylesheet */
-/* v.01.05 Updated 03/27/2019 */
+/* v.01.07 Updated 04/15/2019 */
 
 .diabetes-view {
 	@insert .view-container;
+   margin: 0 0 0 0;
 }
 
 .diabetes-title {
@@ -21,4 +22,18 @@
 
 .diabetes-contents {
 	@insert .view-contents;
+   padding: 0 0 7px 0;
+   margin: 0;
+   overflow-y: scroll;
+}
+
+.diabetes-placeholder {
+   height: 400px; 
+   width: 400px;
+   background-image: url("../../png/disease-views-under-development-02.png");
+   background-repeat: no-repeat;
+   background-position: center center; 
+   background-size: cover;
+   margin:auto;
+   padding: 0 0 8px 0;
 }

@@ -34,7 +34,7 @@ export default class DiscoveryModal extends React.Component {
 	       </div>	
 	       <div className="logo-modal-body-row">
 		  <div className="logo-modal-body-property">Version:</div>
-		  <div className="logo-modal-body-value">Alpha 0.3.0</div>
+		  <div className="logo-modal-body-value">0.3 Alpha </div>
 	       </div>
 	       <div className="logo-modal-body-row">
 		  <div className="logo-modal-body-property">Project Lead:</div>
@@ -50,7 +50,7 @@ export default class DiscoveryModal extends React.Component {
 	       </div>
 	       <div className="logo-modal-legal">
 		  <div className="logo-modal-body-row">
-		     Copyright © 2018 Sync for Science
+		     Copyright © 2019 Sync for Science
 		  </div>
 		  <div className="logo-modal-body-row">
 		     Sync for Science and &nbsp;<a href='http://syncfor.science' target='_blank' rel='noopener noreferrer'>S4S</a>&nbsp; are trademarks and/or service marks of the U.S. Department of Health and Human Services.

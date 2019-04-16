@@ -1,9 +1,9 @@
 @charset "UTF-8";
-@import '../../css/ColorVariablesMaster.css';
+@import '../../css/Colors.css';
 @import '../../css/CategoryProvider.css';
 
 /* Sync for Science Discovery Providers Stylesheet */
-/* v.01.14 Updated 02/01/2019 */
+/* v.01.15 Updated 02/12/2019 */
 
 .providers {
 	@insert .categories-providers;
@@ -17,23 +17,22 @@
 	max-height:36px; 
 	min-width:184px;
 	max-width:184px;
-/*	background-color:var(--provider); */
 	justify-content:center;
 	align-items:center;
 	margin:10px 0 0 20px;
-	background-color:var(--discovery-blue);
+	background-color:var(--primary-100);
 }
 
 .single-provider-label {
 	font-family:discovery-bold;
 	font-size:0.750rem;
-	color:var(--white);
+	color:var(--white-100);
 	padding:0;
 }
 
 .single-provider-name {
 	font-family:discovery-data-bold;
 	font-size:0.750rem;
-	color:var(--white);
+	color:var(--white-100);
 	margin:0 0 0 10px;
 }

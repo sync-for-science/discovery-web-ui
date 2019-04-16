@@ -42,6 +42,14 @@ export default class LongitudinalView extends React.Component {
       this.setState({ contentPanelIsOpen: true });
    }
 
+   initialCats() {
+      let cats = {};
+      for (let cat of this.props.categories) {
+	 cats[cat] = true;
+      }
+      return cats
+   }
+
    setEnabled = this.setEnabled.bind(this);
    setEnabled(catsEnabled, provsEnabled) {
       this.setState({ catsEnabled: catsEnabled,
@@ -65,13 +73,13 @@ export default class LongitudinalView extends React.Component {
    render() {
       return (
 	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={this.props.categories} providers={this.props.providers}
-			  enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}
+			  catsEnabled={this.initialCats()} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}
 			  allowDotClick={true} dotClickDate={this.state.dotClickDate} >
 	    <ContentPanel open={this.state.contentPanelIsOpen} onClose={() => this.setState({contentPanelIsOpen: false})}
 			  catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled} dotClickFn={this.onDotClick}
 			  // context, nextPrevFn props added in StandardFilters
 			  thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
-			  resources={this.props.resources} viewName='Report' />
+			  resources={this.props.resources} viewName='Report' viewIconClass='longitudinal-view-icon' />
 	 </StandardFilters>
       );
    }

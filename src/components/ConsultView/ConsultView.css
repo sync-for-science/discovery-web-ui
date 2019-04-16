@@ -2,9 +2,9 @@
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery ConsultView Stylesheet */
-/* v.01.04 Updated 02/20/2019 */
+/* v.01.05 Updated 04/12/2019 */
 
-.consult-view {
+/* .consult-view {
 	@insert .view-container;
 }
 
@@ -19,4 +19,14 @@
 
 .consult-contents {
 	@insert .view-contents;
+}
+*/
+
+.consult-view-icon {
+   height: 50px;
+   min-width: 50px;
+   background-image: url("../../svg/view-icon-consult.svg");
+   background-repeat: no-repeat;
+   background-position: 0px center;
+   background-size: 35px 35px;
 }

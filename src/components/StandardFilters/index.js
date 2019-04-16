@@ -34,6 +34,7 @@ export default class StandardFilters extends React.Component {
 	 endDate: PropTypes.string.isRequired		// Dec 31 of last year of timeline tick periods
       }),
       categories: PropTypes.arrayOf(PropTypes.string),
+      catsEnabled: PropTypes.object,			// Initial state
       providers: PropTypes.arrayOf(PropTypes.string),
       enabledFn: PropTypes.func.isRequired,
       dateRangeFn: PropTypes.func.isRequired,
@@ -63,6 +64,10 @@ export default class StandardFilters extends React.Component {
 					    date: this.props.dates.maxDate,
 					    data: this.fetchDataForDot('TimeWidget', 'Full', this.props.dates.maxDate),
 					    position: this.props.dates.allDates[this.props.dates.allDates.length-1].position }});
+      }
+      if (this.props.catsEnabled) {
+	 this.setState({ catsEnabled: this.props.catsEnabled });
+	 this.props.enabledFn(this.props.catsEnabled, this.state.provsEnabled);
       }
    }
 
@@ -488,7 +493,7 @@ export default class StandardFilters extends React.Component {
 	          { this.state.catsExpanded ? [
 		       <div className='standard-filters-category-nav-spacer-top' key='0' />,
 	               this.props.categories && this.props.categories.map(
-			  cat => <Category key={cat} svgWidth={this.state.svgWidth} categoryName={cat}
+			   cat => <Category key={cat} svgWidth={this.state.svgWidth} categoryName={cat} isEnabled={this.props.catsEnabled[cat]}
 					   dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} enabledFn={this.setEnabled} /> ),
 		       <div className='standard-filters-category-nav-spacer-bottom' key='1' />
 		  ] : null }

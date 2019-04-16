@@ -19,9 +19,6 @@ export default class ParticipantListItem extends React.Component
       const id = this.props.id;
       const participant = this.props.participant;
       return [
-	 <div className='participant-list-item-flagged' key={'flagged-'+id}>
-	    {participant.flagged ? '*' : ''}
-	 </div>,
 	 <div className='participant-list-item-link' key={'link-'+id}>
 	    <Link to={'/participant/'+id+this.props.rawQueryString} target='_blank'>
 	       {participant.name+' ('+id+')'}

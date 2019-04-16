@@ -58,13 +58,15 @@ export default class BenefitsView extends React.Component {
 
    render() {
       return (
-	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={['Claims','Benefits']} providers={this.props.providers}
-			  enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent} allowDotClick={true}>
+	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={[ 'Claims', 'Benefits' ]} providers={this.props.providers}
+			  catsEnabled={{ Claims:true, Benefits:true }} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange}
+			  lastEvent={this.props.lastEvent} allowDotClick={true}>
 	    <ContentPanel open={this.state.contentPanelIsOpen} onClose={() => this.setState({contentPanelIsOpen: false})}
 			  catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
 			  // context, nextPrevFn, showAllFn props added in StandardFilters
 			  thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
-			  resources={this.props.resources} catsToDisplay={['Claims','Benefits']} viewName='Benefits' showAllData={true} />
+			  resources={this.props.resources} catsToDisplay={['Claims','Benefits']} viewName='Financial'
+			  viewIconClass='benefits-view-icon' showAllData={true} />
 	 </StandardFilters>
       );
    }

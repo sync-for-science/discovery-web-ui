@@ -4,7 +4,7 @@
 @import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.33 Updated 03/26/2019 */
+/* v.01.34 Updated 04/15/2019 */
 
 .page-header {
    position: fixed;
@@ -56,7 +56,7 @@
    width: 194px;
    background-image: url(../../svg/logo-s4s-3-on.svg);
    background-size: 210px 60px;
-   margin: 0 0 0 20px;
+   margin: 0 20px 0 0;
 }
 
 .logo-harvard-button-off {
@@ -288,19 +288,23 @@
 .view-help-title {
    display: flex;
    flex-direction: row;
+   align-items: center;
+   align-content: center;  
    height: 25px;
    width: 178px;
-   margin: 0;
-   align-items: center;
-   padding:0;
    font-family: header-bold;
    font-size: 0.813rem; 
    color: var(--white-100);
    background-color: transparent;
+   padding: 0;
+   margin: 0;
 }
 
 .view-help-title-icon {
+   display: flex;
+   align-items: center;
    width: 70%;
+   height: 25px;
    background-repeat: no-repeat;
    background-size: 20px 20px;
    background-position: 10px center;
@@ -316,6 +320,7 @@
 .view-help-title-longitudinal-view {
    @insert .view-help-title-icon;
    background-image: url("../../svg/view-icon-report-on.svg");
+   align-items: center;
 }
 
 .view-help-title-compare-view {
@@ -330,27 +335,30 @@
 
 .view-help-title-benefits-view {
    @insert .view-help-title-icon;
-   background-image: url("../../svg/view-button-placeholder-on.svg");
+   background-image: url("../../svg/view-icon-benefits.svg");
 }
 
 .view-help-title-consult-view {
    @insert .view-help-title-icon;
-   background-image: url("../../svg/view-button-placeholder-on.svg");
+   background-image: url("../../svg/view-icon-consult.svg");
 }
 
 .view-help-title-diabetes-view {
    @insert .view-help-title-icon;
-   background-image: url("../../svg/view-button-placeholder-on.svg");
+   background-image: url("../../svg/view-icon-diabetes.svg");
+   overflow: visible;
 }
 
 .view-help-close-button {
-   display: flex;  
+   display: flex;
+   align-content: center;
+   align-items: center;
    height: 25px;
    width: 15px;
    background-image: url(../../svg/close_icon.svg);
    background-repeat: no-repeat;
    background-color: transparent;
-   background-position: center center;
+   background-position: 0 7px;
    fill: var(--white-100);
    border: 0;
    margin: 0 10px 0 0;
@@ -370,6 +378,26 @@
    overflow-y: auto;
    overflow-x: hidden;
    white-space: pre-wrap;
+}
+
+.content-panel-icon-all {
+   height: 15px;
+   width: 15px;
+   background-image: url("../../svg/content-panel-button-all.svg");
+   background-repeat: no-repeat;
+   background-position: center center;
+   background-size:cover;
+   margin: 0;
+}
+
+.content-panel-icon-dot {
+   height: 15px;
+   width: 15px;
+   background-image: url("../../svg/content-panel-button-dot.svg");
+   background-repeat: no-repeat;
+   background-position: center center;
+   background-size:cover;
+   margin: 0 5px;
 }
 
 .patient-name {

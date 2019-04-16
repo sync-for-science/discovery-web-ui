@@ -16,15 +16,20 @@ export default class Category extends React.Component {
       svgWidth: PropTypes.string.isRequired,
       dotPositionsFn: PropTypes.func.isRequired,
       dotClickFn: PropTypes.func.isRequired,
-      enabledFn: PropTypes.func.isRequired
+      enabledFn: PropTypes.func.isRequired,
+      isEnabled: PropTypes.bool
    }
 
    state = {
-      isEnabled: true
+      isEnabled: false
    }
 
    componentDidMount() {
       window.addEventListener('keydown', this.onKeydown);
+      if (this.props.isEnabled !== undefined) {
+	 this.setState({ isEnabled: this.props.isEnabled });
+	 this.props.enabledFn('Category', this.props.categoryName, this.props.isEnabled);
+      }
    }
 
    componentWillUnmount() {

@@ -124,6 +124,68 @@ export function renderAllergies(matchingData, appContext) {
    }
 }
 
+
+var highlightDivisions = [ 1, 0.80, 0.50, 0.20, 0 ];
+var highlightDivisionNames = [ 'CONFIRMED', 'LIKELY', 'UNLIKELY', 'DISCONFIRMED' ];
+var highlightDivisionClasses = [ 'consult-highlight-confirmed', 'consult-highlight-likely', 'consult-highlight-unlikely', 'consult-highlight-disconfirmed' ];
+
+function probToDivision(prob) {
+   let cats = highlightDivisions.length - 1;
+   for (let i = 0; i < cats; i++) {
+      if (prob <= highlightDivisions[i] && prob > highlightDivisions[i+1]) {
+	 return i;
+      }
+   }
+   return 3;	// prob == 0 ends up here
+}    
+
+var consultCases = {
+   3001: {
+      Conditions: {
+	 418: [
+	    {
+	       prob: 0.90,
+	       source: 'MEDai'
+	    }
+	 ],
+	 438: [
+	    {
+	       prob: 0.32,
+	       source: 'Bill\'s Burgers'
+	    },
+	    {
+	       prob: 0.52,
+	       source: 'MEDai'
+	    }
+	 ],
+	 457: [
+	    {
+	       prob: 0.15,
+	       source: 'MEDai'
+	    }
+	 ]
+      },
+      Allergies: {
+      }
+   },
+   3002: {}
+}
+
+function consultText(appContext, elt) {
+   if (appContext.viewName === 'Consult' && isValid(consultCases, cC => cC[elt.participantId][elt.category][elt.resourceId])) {
+      let defList = consultCases[elt.participantId][elt.category][elt.resourceId];
+      let divs = [];
+      for (let def of defList) {
+	 let division = probToDivision(def.prob);
+	 let text = def.source + ':\u2002' + Math.trunc(def.prob * 100) + '% (' + highlightDivisionNames[division] + ')';
+	 divs.push(<div className={highlightDivisionClasses[division]} key={divs.length}>{text}</div>);
+      }
+      return divs;
+   } else {
+      return '';
+   }
+}
+
 //
 // renderDisplay()
 //
@@ -133,7 +195,8 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({provider: elt.provider, display: elt.data.code.coding[0].display, status: elt.data.status, clinicalStatus: elt.data.clinicalStatus,
+	 found.push({ provider: elt.provider, category: elt.category, participantId: elt.id, resourceId: elt.data.id,
+		      display: elt.data.code.coding[0].display, status: elt.data.status, clinicalStatus: elt.data.clinicalStatus,
 		      verificationStatus: elt.data.verificationStatus, reason: elt.data.reasonReference, valueQuantity: elt.data.valueQuantity});
       } catch (e) {}
    }
@@ -144,7 +207,7 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>{typeLabel}</div> }
-	       { elt.display && <div className='col02 value-text medium'>{elt.display}</div> }
+	       { elt.display && <div className='col02 value-text medium'>{elt.display}{consultText(appContext, elt)}</div> }
 
 	       { elt.valueQuantity && <div className='col01 label'>Result</div> }
 	       { elt.valueQuantity && <div className='col02 value-number'>{elt.valueQuantity.value + ' ' + elt.valueQuantity.unit}</div> }

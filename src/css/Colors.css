@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /* Sync for Science Colors Stylesheet */
-/* v.01.02  Updated 03/27/2019 */
+/* v.01.03  Updated 04/15/2019 */
 
 :root {
    
@@ -78,5 +78,11 @@
    --dots-inactive-highlight-search-stroke: var(--white-100);
    --dots-highlight-ring: var(--category-000);
    --dots-highlight-ring-stroke: var(--red-dark-100);
-	
+   
+   /*  */
+   --confirmed: rgba(0,153,53,1.0);
+   --likely: rgba(255,153,0,1.0);
+   --unlikely: rgba(153,0,153,1.0);
+   --disconfirmed: rgba(204,0,51,1.0);
+   
 }

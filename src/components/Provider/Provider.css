@@ -1,53 +1,63 @@
 @charset "UTF-8";
-@import '../../css/ColorVariablesMaster.css';
+@import '../../css/Colors.css';
 @import '../../css/CategoryProvider.css';
 
 /* Sync for Science Discovery Provider Stylesheet */
-/* v.01.19 Updated 02/01/2019 */
+/* v.01.20 Updated 04/12/2019 */
 
 .provider {
 	@insert .category-provider-row;
+   display: flex;
+   height: auto;
+   max-height: none;
 }
 
 .provider-nav {
 	@insert .category-provider-nav;
+   white-space: wrap;
 }
 
 .provider-button-enabled {
 	@insert .category-provider-button;
-/*	border:1px solid var(--provider);
-	background-color:var(--provider); */
 	font-family:discovery-bold;
 	color:var(--white);
-	background-color:var(--white);
-	color:var(--discovery-blue);
+   text-align: left;
+	background-color:var(--white-100);
+	color:var(--primary-100);
 	outline:none;
 	padding:0 0 0 25px;
 	background-image: url("../../svg/checkmark-on.svg");
 	background-repeat: no-repeat;
+   background-size: 22px 22px;
+   background-position: top left;
 	outline:none;
+   overflow: visible;
+   white-space: wrap;
 	border:0;
 }
 
 .provider-button-disabled {
 	@insert .category-provider-button;
-/*	border:1px solid var(--provider); */
-	background-color:var(--white);
+	background-color:var(--white-100);
 	font-family:discovery-regular;
-/*	color:var(--provider); */
-	color:var(--discovery-blue);
+   text-align: left;
+	color:var(--primary-100);
 	outline:none;
 	padding:0 0 0 25px;
 	background-image: url("../../svg/checkmark-off.svg");
 	background-repeat: no-repeat;
+   background-size: 22px 22px;
+   background-position: top left;
 	outline:none;
 	border:0;
 }
 
 .provider-svg-container {
 	@insert .category-provider-svg-container;
+   
 }
 
 .provider-svg {
 	@insert .category-provider-svg;
+   width: inherit;
 }

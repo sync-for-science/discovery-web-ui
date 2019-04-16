@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './CompareView.css';
-import config from '../../config.js';
+//import config from '../../config.js';
 import { isValid, inDateRange } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 import StandardFilters from '../StandardFilters';
 import Unimplemented from '../Unimplemented';
+import Sparkline from '../Sparkline';
 
 //
 // Render the "compare view" of the participant's data
@@ -32,13 +33,15 @@ export default class CompareView extends React.Component {
 
    state = {
       catsEnabled: {},
+      provsEnabled: {},
       minDate: this.props.dates.minDate,
       maxDate: this.props.dates.maxDate
    }
 
    setEnabled = this.setEnabled.bind(this);
    setEnabled(catsEnabled, provsEnabled) {
-      this.setState({catsEnabled: catsEnabled});
+      this.setState({ catsEnabled: catsEnabled,
+		      provsEnabled: provsEnabled });
    }
 
    setDateRange = this.setDateRange.bind(this);
@@ -86,11 +89,13 @@ export default class CompareView extends React.Component {
 
    // Categories we DON'T want to compare on
    get noCompareCategories() {
-       return ['Patient', 'Vital Signs', 'Benefits', 'Claims', Unimplemented.catName];
+       return ['Patient', 'Vital Signs', 'Benefits', 'Claims', 'Encounters', Unimplemented.catName];
    }
 
    //
-   // Resulting structure:
+   // collectUnique()
+   //
+   // Resulting structure ('struct'):
    // {
    //	cat1: [
    //      {
@@ -99,8 +104,10 @@ export default class CompareView extends React.Component {
    //         provs: [
    //            {
    //               provName: 'prov1',
-   //               col: col1,
-   //               count: count1
+   //               count: count1,
+   //		    minDate: 'date1',
+   //		    maxDate: 'date2',
+   //		    dates: [ {x: 'date', y: 0}, ... ]
    //            },
    //            ...
    //         ]
@@ -110,7 +117,7 @@ export default class CompareView extends React.Component {
    //   ...
    // }    
    //
-   collectUnique(struct, cat, prov, col) {
+   collectUnique(struct, cat, prov) {
       let resources = this.props.resources.pathItem(`[*category=${cat}][*provider=${prov}]`);
       for (let res of resources) {
 	 if (this.noCompareCategories.includes(res.category) ||
@@ -127,6 +134,8 @@ export default class CompareView extends React.Component {
 	 let thisCat = struct[cat];
 	 let coding = this.getCoding(res);
 	 let thisCode = thisCat.find(elt => elt.code === coding.code);
+	 let date = res.itemDate instanceof Date ? res.itemDate : new Date(res.itemDate);
+
 	 if (thisCode) {
 	    // Update previously added code
 	    let provs = thisCode.provs;
@@ -134,85 +143,85 @@ export default class CompareView extends React.Component {
 	    if (thisProv) {
 	       // Update previously added prov
 	       thisProv.count++;
+	       thisProv.minDate = date.getTime() < thisProv.minDate.getTime() ? date : thisProv.minDate;
+	       thisProv.maxDate = date.getTime() > thisProv.maxDate.getTime() ? date : thisProv.maxDate;
+	       thisProv.dates.push({x:date, y:0});
 //	       console.log('2 ' + cat + ' ' + thisCode.code + ' ' + thisCode.display + ': ' + thisProv.provName + ' ' + thisProv.count);
 	    } else {
 	       // Add new prov
-	       provs.push({ provName: prov, col: col, count: 1 });
+	       provs.push({ provName: prov, count: 1, minDate: date, maxDate: date, dates: [{x:date, y:0}] });
 //	       console.log('3 ' + cat + ' ' + thisCode.code + ' ' + thisCode.display + ': ' + prov + ' 1');
 	    }
 	 } else {
 	    // Add new code
-	    thisCat.push({ code: coding.code, display: coding.display, provs: [{ provName: prov, col: col, count: 1 }] });
+	    thisCat.push({ code: coding.code, display: coding.display, provs: [{ provName: prov, count: 1, minDate: date, maxDate: date, dates: [{x:date, y:0}] }] });
 //	    console.log('4 ' + cat + ' ' + coding.code + ' ' + coding.display + ': ' + prov + ' 1');
 	 }
       }
    }
     
-   renderMatrix() {
+   formatCount(count) {
+      return ' (' + count + (count === 1 ? ' time' : ' times') + ')';
+   }
+
+   renderContents() {
       let struct = {};
       for (let catName of this.props.categories) {
-	 let col = 2;
 	 for (let provName of this.props.providers) {
-	    this.collectUnique(struct, catName, provName, col++);
+	    if (this.state.provsEnabled[provName] !== false) {
+	       this.collectUnique(struct, catName, provName);
+	    }
 	 }
       }
-
+      
       let divs = [];
+      let minDate = new Date(this.props.dates.minDate);
+      let maxDate = new Date(this.props.dates.maxDate);
       for (let catName in struct) {
 	 const isEnabled = !this.state.catsEnabled.hasOwnProperty(catName) || this.state.catsEnabled[catName];
 	 divs.push(<div className={isEnabled ? 'compare-cat-name' : 'compare-cat-name-disabled'} key={divs.length}>{catName}</div>);
+              
 	 if (isEnabled) {
 	    for (let thisCode of struct[catName]) {
 	       divs.push(<div className='compare-code-display' key={divs.length}>{thisCode.display}</div>);
-//	       for (let thisProv of thisCode.provs) {
-//		  divs.push(<div className={thisProv.col%2 === 0 ? 'compare-prov-count-even' : 'compare-prov-count-odd'}
-//				 key={divs.length} style={{gridColumn: thisProv.col}}>{thisProv.count}</div>);
-//	       }
-	       let maxCount = thisCode.provs.reduce((acc, thisProv) => thisProv.count > acc ? thisProv.count : acc, 0);
-	       for (let provNum = 0; provNum < this.props.providers.length; provNum++) {
-		  let provName = this.props.providers[provNum];
-		  let thisProv = thisCode.provs.find(elt => elt.provName === provName);
-		  let thisHeight = thisProv ? config.compareViewMaxCountHeight * thisProv.count / maxCount : 0;
-		  divs.push(<div className={provNum%2 === 0 ? 'compare-prov-count-even' : 'compare-prov-count-odd'}
-				 key={divs.length} style={{gridColumn: provNum+2}}>
-			       <div className={provNum%2 === 0 ? 'compare-prov-count-contents-even' : 'compare-prov-count-contents-odd'}
-				    style={{height: thisHeight}}>
-			    {/*  {thisProv ? thisProv.count : null} */}
-			       </div>
+	       for (let thisProv of thisCode.provs) {
+		  divs.push(<div className='compare-data-row' key={divs.length}>
+			       <div className='compare-provider'>{thisProv.provName + this.formatCount(thisProv.count)}</div>
+			       <Sparkline className='compare-sparkline' minDate={minDate} maxDate={maxDate} data={thisProv.dates} clickFn={this.onClick} />
 			    </div>);
 	       }
 	    }
 	 }
       }
 
+      if (divs.length === 0) {
+	 divs.push(<div className='compare-no-data' key='1'>[No matching data]</div>);
+      }
+
       return divs;
    }
 
-   renderProviders() {
-      let divs = [];
-      let col = 2;
-      for (let provName of this.props.providers) {
-	 divs.push(<div className='compare-prov-name' key={divs.length} style={{gridColumn: col++}}>{provName}</div>);
+   catsToObj(cats) {
+      let catObj = {};
+      for (let cat of cats) {
+	 catObj[cat] = true;
       }
-      return divs;
+      return catObj;
    }
 
    render() {
-      let dispCategories = this.props.categories.filter(cat => !this.noCompareCategories.includes(cat));
+//      let dispCategories = this.props.categories.filter(cat => !this.noCompareCategories.includes(cat));
+      let dispCategories = ['Meds Dispensed', 'Meds Requested', 'Immunizations', 'Allergies', 'Conditions', 'Procedures', 'Lab Results', 'Social History'];
+//      let enCategories = this.props.categories.filter(cat => !this.noCompareCategories.includes(cat));
       return (
 	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={dispCategories} providers={this.props.providers}
-			  enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}>
+			  catsEnabled={this.catsToObj(dispCategories)} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}>
 	    <div className='compare-view'>
 	       <div className='compare-title'>
-		  <div className='compare-title-name'>Comparison</div>
+		  <div className='compare-title-name'>Compare</div>
 	       </div>
 	       <div className='compare-contents'>
-		  <div className='compare-matrix'>
-		     { this.renderMatrix() }
-		  </div>
-		  <div className='compare-providers'>
-	             { this.renderProviders() }
-		  </div>
+	          { this.renderContents() }
 	       </div>
 	    </div>	
 	 </StandardFilters>
