@@ -18,7 +18,7 @@ export default class ParticipantList extends React.Component {
       logoClasses: ['logo-s4s-button'],		// Parsed from query string 'logos=a,b,c'
       menuIsOpen: false,
       listNames: null,
-      currentList: 'all'
+      currentList: 'All'
    }
     
    componentDidMount() {
@@ -41,7 +41,7 @@ export default class ParticipantList extends React.Component {
 	    }
 	 }
       }
-      listNames.push('all');
+      listNames.push('All');
       return listNames;
    }
 
@@ -70,7 +70,7 @@ export default class ParticipantList extends React.Component {
       }
 
       for (let participantId in participants) {
-	 if (this.state.currentList === 'all' || participants[participantId].lists.includes(this.state.currentList)) {
+	 if (this.state.currentList === 'All' || participants[participantId].lists.includes(this.state.currentList)) {
 	    results.push(<ParticipantListItem key={participantId} id={participantId}
 					      participant={participants[participantId]} rawQueryString={this.props.location.search}/>);
 	 }
@@ -92,7 +92,7 @@ export default class ParticipantList extends React.Component {
 	    </div>
 		
 	    <div className='participant-list-content'>
-	      <div className='participant-list-title'>Select a Participant to View Details {this.state.currentList === 'all' ? '' : ' (' + this.state.currentList + ')'}</div>
+	      <div className='participant-list-title'>Select a Participant to View Details {this.state.currentList === 'All' ? '' : ' (' + this.state.currentList + ')'}</div>
 		  <div className="participant-list-content-data">
 		     <div className='participant-list-header-wrapper'>
 			<div className='participant-list-column-header-name-id'>Participant</div>

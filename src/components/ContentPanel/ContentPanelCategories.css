@@ -28,9 +28,9 @@
 /* Grid Columns */
 .col01 {
 	grid-column: 1;
-   width: 120px;
-   min-width: 120px;
-   max-width: 120px;
+   width: 6.75rem;
+   min-width: 6.75rem;
+   max-width: 6.75rem;
    padding: 0 0 0 32px;
    white-space: normal;
 }

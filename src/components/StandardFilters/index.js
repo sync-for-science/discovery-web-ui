@@ -36,8 +36,8 @@ export default class StandardFilters extends React.Component {
       categories: PropTypes.arrayOf(PropTypes.string),
       catsEnabled: PropTypes.object,			// Initial state
       providers: PropTypes.arrayOf(PropTypes.string),
-      enabledFn: PropTypes.func.isRequired,
-      dateRangeFn: PropTypes.func.isRequired,
+      enabledFn: PropTypes.func.isRequired,		// Callback to report changed category & provider enable/disable
+      dateRangeFn: PropTypes.func.isRequired,		// Callback to report changed thumb positions
       lastEvent: PropTypes.instanceOf(Event),
       allowDotClick: PropTypes.bool,
       dotClickDate: PropTypes.string

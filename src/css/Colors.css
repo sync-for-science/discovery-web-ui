@@ -80,9 +80,9 @@
    --dots-highlight-ring-stroke: var(--red-dark-100);
    
    /*  */
-   --confirmed: rgba(0,153,53,1.0);
-   --likely: rgba(255,153,0,1.0);
-   --unlikely: rgba(153,0,153,1.0);
-   --disconfirmed: rgba(204,0,51,1.0);
+   --confirmed: rgba(0,140,23,1.0);
+   --likely: rgba(127,191,0,1.0);
+   --unlikely: rgba(191,159,0,1.0);
+   --disconfirmed: rgba(166,55,0,1.0);
    
 }

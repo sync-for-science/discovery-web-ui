@@ -50,12 +50,14 @@ export default class LongitudinalView extends React.Component {
       return cats
    }
 
+   // Record enabled/disabled categories & providers as returned from StandardFilters
    setEnabled = this.setEnabled.bind(this);
    setEnabled(catsEnabled, provsEnabled) {
       this.setState({ catsEnabled: catsEnabled,
 		      provsEnabled: provsEnabled });
    }
 
+   // Record thumb positions as returned from StandardFilters
    setDateRange = this.setDateRange.bind(this);
    setDateRange(minDate, maxDate) {
       this.setState({ thumbLeftDate: minDate, thumbRightDate: maxDate });

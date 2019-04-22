@@ -14,7 +14,8 @@ export default {
    searchMaxLength: 200,
    searchShowSearching: 10000,		// Number of search references before showing "Searching..." in status
 
-   viewHelpCloseTime: 15,		// seconds before "auto-close" view help (0 --> no auto-close)
+//   viewHelpCloseTime: 15,		// seconds before "auto-close" view help (0 --> no auto-close)
+   viewHelpCloseTime: 5,		// seconds before "auto-close" view help (0 --> no auto-close)
    viewHelpCloseCountdown: false,	// true --> show countdown of remaining time before closing view help
 
    compareViewMaxCountHeight: 20,

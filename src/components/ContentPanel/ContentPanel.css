@@ -52,6 +52,7 @@
    align-items: center;
    justify-content: flex-start;
    width: 40%;
+   min-width: 400px;
 }
 
 .content-panel-view-name {
@@ -284,7 +285,8 @@
 /* Content Panel Header Styles */
 
 .header {
-   width: 176px;
+   width: 9.375rem;
+   max-width: 9.375rem;
    font-family: header-bold;
    font-size: 1.000rem;
    padding: 0 0 4px 0;
@@ -369,11 +371,11 @@
    grid-template-columns: repeat(2, minmax(min-content, 1fr));
    grid-column-gap: 10px;
    grid-row-gap: 5px;
-   grid-auto-rows: max-content;
+/*   grid-auto-rows: min-content; */
    height: auto;
-   width: 450px;
-   max-width: 450;
-   min-width: 450px;
+   width: 380px;
+   max-width: 380px;
+   min-width: 380px; 
    padding: 0;
    margin: 0 0 5px 0px;
 }

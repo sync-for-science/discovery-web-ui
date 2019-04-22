@@ -145,30 +145,45 @@ var consultCases = {
 	 418: [
 	    {
 	       prob: 0.90,
-	       source: 'MEDai'
+	       source: 'NLP AI, Inc'
 	    }
 	 ],
 	 438: [
 	    {
 	       prob: 0.32,
-	       source: 'Bill\'s Burgers'
+	       source: 'Benefits AI, Inc'
 	    },
 	    {
 	       prob: 0.52,
-	       source: 'MEDai'
+	       source: 'NLP AI, Inc'
 	    }
 	 ],
 	 457: [
 	    {
 	       prob: 0.15,
-	       source: 'MEDai'
+	       source: 'NLP AI, Inc'
 	    }
 	 ]
       },
       Allergies: {
       }
    },
-   3002: {}
+  3017: {
+      Conditions: {
+	 6459: [
+	    {
+	       prob: 1.00,
+	       source: 'Benefits AI, Inc'
+	    }
+	 ],
+	 6488: [
+	    {
+	       prob: 0.80,
+	       source: 'Labs  AI, Inc'
+	    }
+	 ]
+      }
+    }
 }
 
 function consultText(appContext, elt) {
@@ -177,7 +192,8 @@ function consultText(appContext, elt) {
       let divs = [];
       for (let def of defList) {
 	 let division = probToDivision(def.prob);
-	 let text = def.source + ':\u2002' + Math.trunc(def.prob * 100) + '% (' + highlightDivisionNames[division] + ')';
+//	 let text = def.source + ':\u2002' + Math.trunc(def.prob * 100) + '% (' + highlightDivisionNames[division] + ')';
+	 let text = def.source + ':\u2002' + Math.trunc(def.prob * 100) + '%';
 	 divs.push(<div className={highlightDivisionClasses[division]} key={divs.length}>{text}</div>);
       }
       return divs;
