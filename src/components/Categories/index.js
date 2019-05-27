@@ -1,15 +1,15 @@
 import React from 'react';
 
-import './Categories.css';
+import '../../css/Selector.css';
 
 //
-// Render the category section of ParticipantDetail page
+// Render the DiscoveryApp category filter section
 //
 export default class Categories extends React.Component {
 
    render() {
       return (
-	 <div className='categories'>
+	 <div className='selector-set'>
 	    { this.props.children }  
 	 </div>
       )

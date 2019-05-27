@@ -1,13 +1,9 @@
 @charset "UTF-8";
 
 /* Sync for Science ContentPanelCategories Stylesheet */
-/* v.01.03  Updated 03/27/2019 */
-
-@import '../../css/Fonts.css';
-@import '../../css/Colors.css';
+/* v.01.05  Updated 05/13/2019 */
 
 /* Flexbox Styles */
-
 .flexbox-row {
 	display: flex;
 	flex-direction: row;

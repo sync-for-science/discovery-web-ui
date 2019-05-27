@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './SVGContainer.css';
-import { getStyle } from '../../util.js';
+import { getStyle, checkQuerySelector } from '../../util.js';
 
 //
 // The container for a collection of SVG elements
@@ -23,7 +23,7 @@ export default class SVGContainer extends React.Component {
 
    componentDidMount() {
       const selector = this.props.className.split(' ').map(name => '.'+name).join(''),
-	    elt = document.querySelector(selector);
+	    elt = checkQuerySelector(selector);
       this.setState({ height: getStyle(elt, 'height') });
    }
 

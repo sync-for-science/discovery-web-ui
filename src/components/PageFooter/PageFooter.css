@@ -1,9 +1,7 @@
 @charset "UTF-8";
-@import '../../css/Colors.css';
-@import '../../css/Fonts.css';
 
 /* Sync for Science Discovery PageFooter Stylesheet */
-/* v.01.16 Updated 3/27/2019 */
+/* v.01.18 Updated 5/13/2019 */
 
 .page-footer {
    position: fixed;

@@ -1,9 +1,7 @@
 @charset "UTF-8";
-@import '../../css/Fonts.css';
-@import '../../css/Colors.css';
 
 /* Sync for Science Discovery Content Panel Stylesheet */
-/* v.01.36 Updated 03/27/2019 */
+/* v.01.38 Updated 05/13/2019 */
 
 /* Outer container */
 .content-panel {
@@ -109,18 +107,6 @@
    @insert .content-panel-button;
    background-image: url("../../svg/content-panel-button-all.svg");
 }
-
-/*
-.content-panel-hide-lines-button {
-   @insert .content-panel-button;
-   background-image: url("../../svg/view-button-placeholder-on.svg");
-}
-
-.content-panel-show-lines-button {
-   @insert .content-panel-button;
-   background-image: url("../../svg/view-button-placeholder-on.svg");
-}
-*/
 
 .content-panel-trim-none-button {
    @insert .content-panel-button;
@@ -371,7 +357,6 @@
    grid-template-columns: repeat(2, minmax(min-content, 1fr));
    grid-column-gap: 10px;
    grid-row-gap: 5px;
-/*   grid-auto-rows: min-content; */
    height: auto;
    width: 380px;
    max-width: 380px;

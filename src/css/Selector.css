@@ -1,0 +1,175 @@
+@charset "UTF-8";
+
+/* Sync for Science Discovery Selector CSS */
+/* v.01.03 Updated 05/20/2019 */
+
+.selector-set {
+   height: auto;
+   width: auto;
+   min-width: 1024px;
+   padding: 0;
+   margin: 0 20px 0 0;
+}
+
+.selector {
+   display: flex;
+   flex-direction: row;
+   min-height: 28px;
+   max-height: none;
+   width: 100%;
+   padding: 0;
+   margin: 0;
+}
+
+.selector-rollup {
+   display: flex;
+   flex-direction: row;
+   height: 28px;
+   max-height: 28px;
+   width: 100%;
+   padding: 0;
+   margin: 0;
+}
+
+/* .selector-rollup-enabled {
+   display: flex;
+   flex-direction: row;
+   height: 28px;
+   max-height: 28px;
+   width: 100%;
+   padding: 0;
+   margin: 0;
+} */
+
+/* Common for @insert */
+.selector-rollup-nav {
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   height: 28px;
+   max-height: 28px;
+   width: 50px;
+   min-width: 50px;
+   max-width: 140px;
+   font-family: header-bold;
+   font-size: 0.813rem;
+   color:var(--white-100);
+   text-align: left;
+   background-size: 18px 18px;
+   background-position: 4px 6px;
+   background-repeat: no-repeat;
+   background-color:var(--primary-100);
+   padding: 0 0 0 28px;
+   border-radius: 0 20px 20px 0;
+   margin: 0 10px 0 20px;
+}
+
+.selector-rollup-nav-enabled {
+   @insert .selector-rollup-nav;
+   background-image: url(../svg/arrow-down-icon.svg);
+}
+
+.selector-rollup-nav-disabled {
+   @insert .selector-rollup-nav;
+   background-image: url(../svg/arrow-right-icon.svg);
+}
+
+/* .selector-rollup-svg-container {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: inherit;
+   background-image: url(../svg/horizontal-rule-1px-black.svg);
+   background-position: center;
+   background-repeat: repeat-x;
+   background-clip: padding-box;
+   padding: 0 10px;
+   margin: 0;
+   overflow: hidden; 
+} */
+
+/* .selector-rollup-svg {
+   display:flex;
+   flex-direction: column;
+   align-items: flex-start;
+   width: inherit;
+   height: inherit;
+   overflow: visible;
+   
+   position: relative;
+   height: inherit;
+   overflow: visible;
+   margin: 0;
+} */
+
+.selector-nav {
+   display: flex;
+   justify-content: center;
+   height: auto;
+   width: 184px;
+   min-width: 184px;
+   text-align: center;
+   padding: 0;
+   margin:0 10px 0 20px;
+   cursor: default;
+}
+
+/* Common for @insert */
+.selector-button {
+   display: flex;
+   flex-direction: column;
+   justify-content:center;
+   align-items:left;
+   height: auto;
+   width: 180px;
+   max-width: 180px;
+   font-size:0.813rem;
+   text-align: left;
+   color: var(--primary-100);
+   background-color: var(--white-100);
+   background-repeat: no-repeat;
+   background-size: 22px 22px;
+   background-position: top left;
+   padding:0 0 0 25px;
+   border:0;
+   margin: 3px 0;
+   outline:none;
+   overflow: visible;
+   white-space: wrap;
+   cursor: pointer;
+}
+
+.selector-button-enabled {
+   @insert .selector-button;
+   font-family:text;
+   background-image: url("../svg/checkmark-on.svg");
+}
+
+.selector-button-disabled {
+   @insert .selector-button;
+   font-family:text;
+   background-image: url("../svg/checkmark-off.svg");
+}
+
+.selector-svg-container {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   min-height: 28px;
+   max-height: none;
+   width: 100%;
+   background-image: url(../svg/horizontal-rule-1px-black.svg);
+   background-position: center;
+   background-repeat: repeat-x;
+   background-clip: padding-box;
+   padding: 0 10px;
+   margin: 0;
+   overflow: hidden;
+}
+
+.selector-svg {
+   width: inherit; 
+   min-height: 28px;
+   max-height: none;
+   overflow: visible;
+}

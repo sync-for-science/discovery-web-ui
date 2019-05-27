@@ -4,7 +4,7 @@ import Draggable from 'react-draggable';
 
 import './ContentPanel.css';
 import config from '../../config.js';
-import { inDateRange } from '../../util.js';
+import { inDateRange, uniqueBy, logDiffs } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 
 import Allergies from '../Allergies';
@@ -35,27 +35,31 @@ const CLEAR_DRAG_STATE_DELAY = 100;	// msec
 //
 export default class ContentPanel extends React.Component {
 
+   static myName = 'ContentPanel';
+
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       open: PropTypes.bool.isRequired,
       onClose: PropTypes.func.isRequired,
       context: PropTypes.shape({
-	 parent: PropTypes.string.isRequired,
-	 rowName: PropTypes.string.isRequired,
-	 dotType: PropTypes.string.isRequired,
+	 parent: PropTypes.string,
+	 rowName: PropTypes.string,
+	 dotType: PropTypes.string,
 	 allDates: PropTypes.arrayOf(PropTypes.shape({
-	    position: PropTypes.number.isRequired,
-	    date: PropTypes.string.isRequired
-	 })).isRequired,
-	 minDate: PropTypes.string.isRequired,
-	 maxDate: PropTypes.string.isRequired,
-	 date: PropTypes.string.isRequired,
+	    position: PropTypes.number,
+	    date: PropTypes.string
+	 })),
+	 minDate: PropTypes.string,
+	 maxDate: PropTypes.string,
+	 startDate: PropTypes.string,
+	 endDate: PropTypes.string,
+	 date: PropTypes.string,
 	 data: PropTypes.array
-      }),				// required, but added dynamically by StandardFilters
+      }),				// added dynamically by StandardFilters
       catsEnabled: PropTypes.object.isRequired,
       provsEnabled: PropTypes.object.isRequired,
-      nextPrevFn: PropTypes.func,	// required, but added dynamically by StandardFilters
+      nextPrevFn: PropTypes.func,	// added dynamically by StandardFilters
       thumbLeftDate: PropTypes.string.isRequired,
       thumbRightDate: PropTypes.string.isRequired,
       viewName: PropTypes.string.isRequired,
@@ -80,7 +84,7 @@ export default class ContentPanel extends React.Component {
       prevEnabled: true,
       nextEnabled: true,
       annunciator: null,
-      showAllData: this.props.showAllData ? true : false,
+      showAllData: false,
       showDotLines: true,
       trimLevel: this.props.initialTrimLevel ? this.props.initialTrimLevel: 'none',
       trimLevelDirection: 'more',
@@ -94,7 +98,8 @@ export default class ContentPanel extends React.Component {
    calcHeight() {
       const footer = document.querySelector('.page-footer');
       const panel = document.querySelector('.content-panel');
-      const titleBarHeight = document.querySelector('.content-panel-inner-title').getBoundingClientRect().height;
+      const titleBar = document.querySelector('.content-panel-inner-title')
+      const titleBarHeight = titleBar ? titleBar.getBoundingClientRect().height : 0;
 
       return Math.max(titleBarHeight, footer.getBoundingClientRect().top - panel.getBoundingClientRect().top - 5);
    }
@@ -123,8 +128,7 @@ export default class ContentPanel extends React.Component {
 		       bottomBound: this.calcBottomBound() });
    }
 
-   updateDraggableOnResize = this.updateDraggableOnResize.bind(this);
-   updateDraggableOnResize() {
+   updateDraggableOnResize = () => {
       this.setState( { topBound: this.calcTopBound(),
 		       bottomBound: this.calcBottomBound(),
 		       windowHeight: window.innerHeight });
@@ -162,6 +166,10 @@ export default class ContentPanel extends React.Component {
    }
 
    componentDidMount() {
+      if (this.props.open) {
+	 this.setState({ isOpen: true }, () => this.setState({ panelHeight: this.calcHeight() }) );
+//	 this.setState({ isOpen: true });
+      }
       this.updateDraggableOnMount();
       window.addEventListener('resize', this.updateDraggableOnResize);
       window.addEventListener('keydown', this.onKeydown);
@@ -173,6 +181,19 @@ export default class ContentPanel extends React.Component {
    }
 
    componentDidUpdate(prevProps, prevState) {
+//      if (!prevState.isOpen && this.state.isOpen) {
+//	 this.setState({ panelHeight: this.calcHeight() });
+//	 this.setPanelHeight();
+//      }
+
+       if (prevProps !== this.props) {
+	  logDiffs('Props', prevProps, this.props);
+       }
+
+       if (prevState !== this.state) {
+	  logDiffs('State', prevState, this.state);
+       }
+
       if (!prevProps.open && this.props.open) {
 	 this.setState({ isOpen: true }, () => this.setState({ panelHeight: this.calcHeight() }) );
       } 
@@ -186,6 +207,10 @@ export default class ContentPanel extends React.Component {
 //	 this.setState({ annunciator: 'Categories changed' });
 //      }
 
+      if (this.props.showAllData !== prevProps.showAllData) {
+	 this.setState({ showAllData: this.props.showAllData });
+      }
+
       if (this.props.open && this.props.context !== prevProps.context) {
 	 this.setState({ annunciator: null });
       }
@@ -195,14 +220,12 @@ export default class ContentPanel extends React.Component {
       }
    }
 
-//   onClose = this.onClose.bind(this);
-//   onClose() {
+//   onClose = () => {
 //      this.setState({ isOpen:false, annunciator: null });
 //      this.props.onClose();
 //   }
 
-   onNextPrev = this.onNextPrev.bind(this);
-   onNextPrev(direction) {
+   onNextPrev = (direction) => {
       try {
 	 const enabled = this.props.nextPrevFn(direction);
 	 if (direction === 'prev') {
@@ -225,8 +248,7 @@ export default class ContentPanel extends React.Component {
       return this.props.provsEnabled[prov] || this.props.provsEnabled[prov] === undefined;
    }
     
-   onShowHideLines = this.onShowHideLines.bind(this);
-   onShowHideLines() {
+   onShowHideLines = () => {
       if (this.state.showDotLines) {
 	 // Hide dot lines
 	 this.setState({ showDotLines: !this.state.showDotLines,
@@ -238,8 +260,7 @@ export default class ContentPanel extends React.Component {
       }
    }
 
-   onDoubleClick = this.onDoubleClick.bind(this);
-   onDoubleClick() {
+   onDoubleClick = () => {
       // Reset panel position
       this.setState({ positionY: this.state.topBound });
       this.setPanelHeight();
@@ -265,9 +286,10 @@ export default class ContentPanel extends React.Component {
    }
 
    renderDotOrAll() {
-      let dates = this.state.showAllData ? (this.context.searchRefs.length > 0 ? this.context.searchRefs
+      let dates = this.state.showAllData ? (this.context.searchRefs.length > 0 ? uniqueBy(this.context.searchRefs, elt => elt.date)
 									       : this.copyReverse(this.props.context.allDates)).filter(elt =>
-										    inDateRange(elt.date, this.props.thumbLeftDate, this.props.thumbRightDate))
+										    inDateRange(elt.date, this.props.thumbLeftDate,
+													  this.props.thumbRightDate))
 					 : this.props.context.allDates.filter(elt => elt.date === this.props.context.date);
       let showDate = this.state.showAllData;
 
@@ -313,15 +335,15 @@ export default class ContentPanel extends React.Component {
 	 <div className='content-panel-inner-body'>
 	    { this.state.showJSON ? 
 		<pre className='content-panel-data'>
-		   { JSON.stringify(this.state.showAllData ? this.props.resources.transformed : this.props.context.data, null, 3) }
+		   { JSON.stringify(limitedResources.filter(elt => dates.some(e => e.date === elt.itemDate) && this.catEnabled(elt.category) &&
+								   this.provEnabled(elt.provider)), null, 3) }
 		</pre>
 	      : divs }
 	 </div>
       );
    }
 
-   changeTrimLevel = this.changeTrimLevel.bind(this);
-   changeTrimLevel() {
+   changeTrimLevel = () => {
       switch(this.state.trimLevel) {
 	 case 'expected':
 	    this.state.trimLevelDirection === 'more' ? this.setState({ trimLevel: 'max', trimLevelDirection: 'less' })
@@ -338,6 +360,7 @@ export default class ContentPanel extends React.Component {
 
    renderContents(context) {
       let contents = this.renderDotOrAll();	// Generate contents (and item count)
+
       return (
 	 <div className='content-panel-inner'>
 	    <div className='content-panel-inner-title'>
@@ -373,9 +396,11 @@ export default class ContentPanel extends React.Component {
    }
 
    render() {
-      // Extend DiscoveryContext with trimLevel (simpler than reassigning the extended context to DiscoveryContext.Provider)
+      // Extend DiscoveryContext with trimLevel & viewName (simpler than reassigning the extended context to DiscoveryContext.Provider)
       this.context.trimLevel = this.state.trimLevel;
       this.context.viewName = this.props.viewName;
+
+//      console.log('*** CP render: ' + (this.props.context ? this.props.context.date : this.props.context));
 
       // Dragging enabled/disabled by changing bounds.bottom
       return ( this.state.isOpen &&
@@ -383,7 +408,7 @@ export default class ContentPanel extends React.Component {
 			  bounds={{top:this.state.topBound, bottom:this.state.showDotLines ? this.state.bottomBound : this.state.topBound}}
 			  onDrag={this.onDrag} onStop={this.onDragStop}>
 	          <div className='content-panel' style={this.state.panelHeight ? {height:this.state.panelHeight} : {}}>
-	             { this.renderContents(this.props.context) }
+	             { this.props.resources && this.props.context && this.renderContents(this.props.context) }
 	          </div>
 	       </Draggable>
       )

@@ -7,15 +7,21 @@ import FhirTransform from '../../FhirTransform.js';
 import { formatPatientName, formatPatientAddress, formatPatientMRN } from '../../fhirUtil.js';
 import { formatDate, formatAge } from '../../util.js';
 
+import DiscoveryContext from '../DiscoveryContext';
+
 //
 // Render the "Summary view" of the participant's data
 //
 export default class SummaryView extends React.Component {
 
+   static myName = 'SummaryView';
+
+   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform),
       dates: PropTypes.shape({
-	    allDates: PropTypes.arrayOf(PropTypes.shape({
+	 allDates: PropTypes.arrayOf(PropTypes.shape({
 	    position: PropTypes.number.isRequired,
 	    date: PropTypes.string.isRequired
 	 })).isRequired,

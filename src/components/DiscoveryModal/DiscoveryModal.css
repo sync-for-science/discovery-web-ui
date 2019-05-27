@@ -1,15 +1,11 @@
 @charset "UTF-8";
-@import '../../css/Colors.css';
-@import '../../css/Fonts.css';
 
 /* Sync for Science Discovery Discovery Modal Stylesheet */
-/* v.01.18 Updated 03/26/2019 */
+/* v.01.20 Updated 05/13/2019 */
 
 /* --- General Modal Styles --- */
 
 /* Modal Overlay */
-
-
 .discovery-modal-overlay {
    position: fixed;
    top: 60px;
@@ -26,7 +22,6 @@
 }
 
 /* General Modal Styles */
-
 .discovery-modal {
 	position: absolute;
 	z-index: 1001;
@@ -42,7 +37,6 @@
 }
 
 /* Close Button */
-
 .discovery-modal-close-button {
    position: absolute;
    top: 10px;
@@ -54,13 +48,11 @@
 }
 
 /* Close Icon */
-
 .discovery-modal-close-icon {
 	fill: var(--white-100);
 }
 
 /* --- End Modal Styles --- */
-
 .modal-title {
 	display: flex;
    flex-direction: row;
@@ -100,7 +92,6 @@
 }
 
 /* Logo Modal Styles */
-
 .logo-modal-title {
 	@insert .modal-title;
 	background-image: url(../../svg/icon-modal-logo-discovery.svg);

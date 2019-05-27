@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './Category.css';
+import '../../css/Selector.css';
 
 import SVGContainer from '../SVGContainer';
 import DotLine from '../DotLine';
 
 //
-// Render a category line of ParticipantDetail page
+// Render a DiscoveryApp category line
 //
 export default class Category extends React.Component {
+
+   static myName = 'Category';
 
    static propTypes = {
       categoryName: PropTypes.string.isRequired,
@@ -28,7 +30,14 @@ export default class Category extends React.Component {
       window.addEventListener('keydown', this.onKeydown);
       if (this.props.isEnabled !== undefined) {
 	 this.setState({ isEnabled: this.props.isEnabled });
-	 this.props.enabledFn('Category', this.props.categoryName, this.props.isEnabled);
+//	 this.props.enabledFn(Category.myName, this.props.categoryName, this.props.isEnabled);
+      }
+   }
+
+   componentDidUpdate(prevProps, prevState) {
+      if (this.props.isEnabled !== prevProps.isEnabled) {
+	 this.setState({ isEnabled: this.props.isEnabled });
+//	 this.props.enabledFn(Category.myName, this.props.categoryName, this.props.isEnabled);
       }
    }
 
@@ -44,21 +53,21 @@ export default class Category extends React.Component {
    }
 
    handleButtonClick = () => {
-      this.props.enabledFn('Category', this.props.categoryName, !this.state.isEnabled);
+      this.props.enabledFn(Category.myName, this.props.categoryName, !this.state.isEnabled);
       this.setState({isEnabled: !this.state.isEnabled});
    }
 
    render() {
       return (
-	 <div className='category'>
-	    <div className='category-nav'>
-	       <button className={this.state.isEnabled ? 'category-button-enabled' : 'category-button-disabled'} onClick={this.handleButtonClick} >
+	 <div className='selector'>
+	    <div className='selector-nav'>
+	       <button className={this.state.isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={this.handleButtonClick} >
 	          { this.props.categoryName }
 	       </button>
 	    </div>
-	    <SVGContainer className='category-svg-container' svgClassName='category-svg' svgWidth={this.props.svgWidth}>
-	       <DotLine dotPositions={this.props.dotPositionsFn(this.constructor.name, this.props.categoryName, this.state.isEnabled)}
-			context={ {parent:this.constructor.name, rowName:this.props.categoryName} }
+	    <SVGContainer className='selector-svg-container' svgClassName='selector-svg' svgWidth={this.props.svgWidth}>
+	       <DotLine dotPositions={this.props.dotPositionsFn(Category.myName, this.props.categoryName, this.state.isEnabled)}
+			context={ {parent:Category.myName, rowName:this.props.categoryName} }
 			dotClickFn={this.props.dotClickFn} />
 	    </SVGContainer>
 	 </div>

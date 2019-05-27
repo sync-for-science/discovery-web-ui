@@ -18,8 +18,7 @@ export default class TimeSeries extends React.Component {
       dotClickFn: PropTypes.func
    }
 
-   handleDotClick = this.handleDotClick.bind(this);
-   handleDotClick(datapoint, event) {
+   handleDotClick = (datapoint, event) => {
       let dotDate = datapoint.x.toISOString();
       let formattedDotDate = formatDate(dotDate, true, true);
       this.props.dotClickFn && this.props.dotClickFn(dotDate);

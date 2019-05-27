@@ -1,8 +1,7 @@
 @charset "UTF-8";
-@import 'Colors.css';
 
 /* Sync for Science Discovery ViewContainer Stylesheet */
-/* v.01.02 Updated 03/07/2019 */
+/* v.01.03 Updated 05/13/2019 */
 
 .view-container {
 	position: fixed;

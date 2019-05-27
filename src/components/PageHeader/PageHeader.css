@@ -1,10 +1,7 @@
 @charset "UTF-8";
-@import '../../css/Colors.css';
-@import '../../css/Fonts.css';
-@import '../../css/ColorVariablesMaster.css';
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.34 Updated 04/15/2019 */
+/* v.01.36 Updated 05/13/2019 */
 
 .page-header {
    position: fixed;
@@ -372,7 +369,7 @@
    font-size: 0.813rem;
    background-color: var(--white-100);
    padding: 5px 10px;
-   border: 1.5px solid var(--blue-dark);  
+   border: 1.5px solid var(--primary-100);  
    border-radius: 0 0 10px 10px;
    margin: 0;
    overflow-y: auto;

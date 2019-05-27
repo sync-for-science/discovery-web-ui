@@ -241,3 +241,107 @@ export function inDateRange(date, rangeLow, rangeHigh) {
 
    return dateStr >= rangeLowStr && dateStr <= rangeHighStr;
 }
+
+// document.querySelector with check
+export function checkQuerySelector(sel) {
+   let elt = document.querySelector(sel);
+   if (elt) {
+      return elt;
+   } else {
+      console.log('checkQuerySelector -- cannot find: ' + sel);
+//      debugger;
+   }
+}
+
+//
+// Return elements of 'arr' that are unique according to 'keyFn'
+//
+export function uniqueBy(arr, keyFn) {
+   let seen = {};
+   return arr.filter( (elt, index) => {
+      try { 
+	 let key = keyFn(elt);
+	 return seen.hasOwnProperty(key) ? false : seen[key] = true;
+      } catch (e) {
+	 return false;
+      }
+   });
+}
+
+//
+// Log differences between two data structures ('was', 'now') to the console
+//
+export function logDiffs(label, was, now) {
+   switch (typeof was) {
+      case 'object':
+	 if (was instanceof Array) {
+	    // An array
+	    console.group(label);
+	       for (let i = 0; i < was.length; i++) {
+		  if (JSON.stringify(was[i]) !== JSON.stringify(now[i])) {
+		     // Element changed
+		     logDiffs(`[${i}]`, was[i], now[i]);
+		  }
+	       }
+	    console.groupEnd();
+	 } else if (was === null) {
+	    // null
+	    if (JSON.stringify(was) !== JSON.stringify(now)) {
+	       // Changed
+	       console.log(`${label}: ${was} --> ${now}`);
+	    }
+	 } else {
+	    // An object
+	    console.group(label);
+	       for (let attr in was) {
+		  if (now && now.hasOwnProperty(attr)) {
+		     // Property present in both objects
+		     if (JSON.stringify(was[attr]) !== JSON.stringify(now[attr])){
+			// Property changed
+			logDiffs(`.${attr}`, was[attr], now[attr]);
+		     }
+		  } else {
+		     // Only in 'was'
+		     console.log(`.${attr} --> undefined`);
+		  } 
+	       }
+	    console.groupEnd();
+	 }
+         break;
+
+      case 'function':
+	 if (was !== now) {
+	    // Function changed
+	    console.log(`Function ${label} changed.`);
+	 }
+	 break;
+
+      case 'string':
+      case 'number':
+      case 'boolean':
+      case 'undefined':
+	 if (was !== now) {
+	    console.log(`${label}: ${was} --> ${now}`);
+	 }
+         break;
+
+      default:
+	 break;
+   }
+
+   // Log object props only present in 'now'
+   if (typeof now === 'object' && now !== null && !(now instanceof Array)) {
+      console.group(label);
+	 for (let attr in now) {
+	    if (now.hasOwnProperty(attr)) {
+	       if (was && was.hasOwnProperty(attr)) {
+		  // Present in 'was' or both -- already reported
+	       } else {
+		  // Only in 'now'
+		  console.log(`.${attr} not previously set`); 
+	       }
+	    }
+	 }
+      console.groupEnd();
+   }
+}

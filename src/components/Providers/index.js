@@ -1,15 +1,16 @@
 import React from 'react';
 
-import './Providers.css';
+// import './Providers.css';
+import '../../css/Selector.css';
 
 //
-// Render the provider section of ParticipantDetail page
+// Render the DiscoveryApp provider filter section
 //
 export default class Providers extends React.Component {
 
    render() {
       return (
-	 <div className='providers'>
+	 <div className='selector-set'>
 	    { this.props.children }
 	 </div>
       )

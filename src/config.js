@@ -13,12 +13,12 @@ export default {
 
    searchMaxLength: 200,
    searchShowSearching: 10000,		// Number of search references before showing "Searching..." in status
+   searchMaxWordLength: 25,		// Don't index "words" longer than this (cheap GUID-like exclusion)
 
 //   viewHelpCloseTime: 15,		// seconds before "auto-close" view help (0 --> no auto-close)
    viewHelpCloseTime: 5,		// seconds before "auto-close" view help (0 --> no auto-close)
    viewHelpCloseCountdown: false,	// true --> show countdown of remaining time before closing view help
 
-   compareViewMaxCountHeight: 20,
    summaryViewMaxMRNChars: 8,
 
    timeWidgetThumbResetZone: 0.0035,	// Width of thumb "reset" zones in fraction of timeWidget width

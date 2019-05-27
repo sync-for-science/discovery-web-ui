@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './StandardFilters.css';
 import FhirTransform from '../../FhirTransform.js';
-import { getStyle, formatDate, numericPart, combine, cleanDates, normalizeDates } from '../../util.js';
+import { getStyle, formatDate, numericPart, combine, cleanDates, normalizeDates, checkQuerySelector } from '../../util.js';
 import TimeWidget from '../TimeWidget';
 import CategoryRollup from '../CategoryRollup';
 import Categories from '../Categories';
@@ -37,10 +37,11 @@ export default class StandardFilters extends React.Component {
       catsEnabled: PropTypes.object,			// Initial state
       providers: PropTypes.arrayOf(PropTypes.string),
       enabledFn: PropTypes.func.isRequired,		// Callback to report changed category & provider enable/disable
-      dateRangeFn: PropTypes.func.isRequired,		// Callback to report changed thumb positions
+      dateRangeFn: PropTypes.func,			// Optional callback to report changed thumb positions
       lastEvent: PropTypes.instanceOf(Event),
       allowDotClick: PropTypes.bool,
-      dotClickDate: PropTypes.string
+      dotClickDate: PropTypes.string,
+      hideFilters: PropTypes.bool
    }
 
    state = {
@@ -57,9 +58,10 @@ export default class StandardFilters extends React.Component {
 
    componentDidMount() {
       this.updateSvgWidth();
-      if (this.props.allowDotClick) {
+      if (this.props.dates && this.props.allowDotClick) {
 	 this.setState({ dotClickContext: { parent: 'TimeWidget', rowName: 'Full', dotType: 'active',
 					    minDate: this.props.dates.minDate, maxDate: this.props.dates.maxDate,
+					    startDate: this.props.dates.startDate, endDate: this.props.dates.endDate,
 					    allDates: this.props.dates.allDates,
 					    date: this.props.dates.maxDate,
 					    data: this.fetchDataForDot('TimeWidget', 'Full', this.props.dates.maxDate),
@@ -80,15 +82,16 @@ export default class StandardFilters extends React.Component {
 	       break;
 	 }
 
-      } else if (this.context.searchRefs && this.context.searchRefs.length > 0) {
-	 // If most recent searchRef differs from currently highlighted dot, set dotClickContext
-	 let recentRef = this.context.searchRefs[0];
-	 if (recentRef.position !== this.state.dotClickContext.position) {
-	    let newContext = Object.assign({}, this.state.dotClickContext);
-	    newContext.date = recentRef.date;
-	    newContext.position = recentRef.position;
-	    this.setState({ dotClickContext: newContext });
-	 }
+// TODO: not sure why this was here, but if enabled, next/prev and dot-click don't work w/ searchRefs
+//      } else if (this.context.searchRefs && this.context.searchRefs.length > 0) {
+//	 // If most recent searchRef differs from currently highlighted dot, set dotClickContext
+//	 let recentRef = this.context.searchRefs[0];
+//	 if (recentRef.position !== this.state.dotClickContext.position) {
+//	    let newContext = Object.assign({}, this.state.dotClickContext);
+//	    newContext.date = recentRef.date;
+//	    newContext.position = recentRef.position;
+//	    this.setState({ dotClickContext: newContext });
+//	 }
 
       } else if (this.props.allowDotClick && prevProps.dotClickDate !== this.props.dotClickDate) {
 	 // Set dotClickContext from dot clicked in ContentPanel (via this.props.dotClickDate)
@@ -104,13 +107,8 @@ export default class StandardFilters extends React.Component {
 
    // Kluge: following needs to know about lower-level classes
    updateSvgWidth = (event) => {
-      const category = document.querySelector('.category');
-      const categoryNav = document.querySelector('.category-nav');
-
-//      category && console.log('category width: ' + category.getBoundingClientRect().width);
-//      categoryNav && console.log('categoryNav width: ' + categoryNav.getBoundingClientRect().width);
-//      categoryNav && console.log('categoryNav lmargin: ' + getStyle(categoryNav, 'margin-left'));
-//      categoryNav && console.log('categoryNav rmargin: ' + getStyle(categoryNav, 'margin-right'));
+      const category = checkQuerySelector('.selector');
+      const categoryNav = checkQuerySelector('.selector-nav');
 
       if (category && categoryNav) {
 	  let svgWidth = (category.getBoundingClientRect().width - categoryNav.getBoundingClientRect().width
@@ -127,8 +125,7 @@ export default class StandardFilters extends React.Component {
    //   rowName:	<category-name>/<provider-name>
    //   isEnabled:	the current state to record
    //
-   setEnabled = this.setEnabled.bind(this);
-   setEnabled(parent, rowName, isEnabled) {
+   setEnabled = (parent, rowName, isEnabled) => {
       if (parent === 'Category') {
 	 if (this.state.catsEnabled[rowName] !== isEnabled) {
 	    let catsEnabled = Object.assign({}, this.state.catsEnabled, {[rowName]: isEnabled})
@@ -148,8 +145,7 @@ export default class StandardFilters extends React.Component {
    //
    // Is 'dot' in the TimeWidget's active range?
    //
-   isActiveTimeWidget = this.isActiveTimeWidget.bind(this);
-   isActiveTimeWidget(dot) {
+   isActiveTimeWidget = (dot) => {
       return dot.position >= this.state.minActivePos && dot.position <= this.state.maxActivePos;
    }
 
@@ -165,11 +161,16 @@ export default class StandardFilters extends React.Component {
       return result;
    }
 
+   // TODO: Move to util.js?
    locToDate(pos) {
-      let min = new Date(this.props.dates.startDate ? this.props.dates.startDate : 0).getTime();
-      let max = new Date(this.props.dates.endDate ? this.props.dates.endDate : 0).getTime();
-      let target = min + (max - min) * pos;
-      return new Date(target).toISOString();
+      if (this.props.dates) {
+	 let min = new Date(this.props.dates.startDate ? this.props.dates.startDate : 0).getTime();
+	 let max = new Date(this.props.dates.endDate ? this.props.dates.endDate : 0).getTime();
+	 let target = min + (max - min) * pos;
+	 return new Date(target).toISOString();
+      } else {
+	 return new Date().toISOString();
+      }
    }
 
    //
@@ -178,10 +179,11 @@ export default class StandardFilters extends React.Component {
    //   maxActivePos:	location [0..1] of right thumb
    //   isExpanded:	true if secondary (expanded) timeline visible
    //
-   setLeftRight = this.setLeftRight.bind(this);
-   setLeftRight(minActivePos, maxActivePos, isExpanded) {
+   setLeftRight = (minActivePos, maxActivePos, isExpanded) => {
 //      console.log('minPos: ' + minActivePos + '  maxPos: ' + maxActivePos);
-      this.props.dateRangeFn(this.locToDate(minActivePos), this.locToDate(maxActivePos));
+      let minDate = this.locToDate(minActivePos);
+      let maxDate = this.locToDate(maxActivePos);
+      this.props.dateRangeFn && this.props.dateRangeFn(minDate, maxDate);
       this.setState({ minActivePos: minActivePos,
 		      maxActivePos: maxActivePos,
 		      timelineIsExpanded: isExpanded });
@@ -232,8 +234,7 @@ export default class StandardFilters extends React.Component {
    //   direction:	'next' or 'prev'
    // Returns true if the button should be enabled, else false
    //
-   onNextPrevClick = this.onNextPrevClick.bind(this);
-   onNextPrevClick (direction) {
+   onNextPrevClick = (direction) => {
       let thumbDistance = this.state.maxActivePos - this.state.minActivePos;
       let oldPosition = this.state.dotClickContext.position;
       let newContext = Object.assign({}, this.state.dotClickContext);
@@ -298,8 +299,7 @@ export default class StandardFilters extends React.Component {
    // Handle ContentPanel showAll button clicks
    //   showAll: true or false
    //
-   onShowAllClick = this.onShowAllClick.bind(this);
-   onShowAllClick (showAll) {
+   onShowAllClick = (showAll) => {
       if (this.state.dotClickContext && showAll) {
 	 // Scroll date into view -- need to "yield" via setTimeout() for 'elt' to resolve correctly
 	 setTimeout(() => {
@@ -311,10 +311,28 @@ export default class StandardFilters extends React.Component {
       }
    }
 
+   // Handle Category/Provider Rollup double-click
+   //   parent:		'Category', 'Provider'
+   allOnOff = (parent) => {
+      if (parent === 'Category') {
+	 let numCats = this.props.categories.length;
+	 let numCatsEnabled = this.props.categories.filter(cat => this.state.catsEnabled[cat] || this.state.catsEnabled[cat] === undefined).length;
+	 let newCats = this.props.categories.reduce((res, cat) => { res[cat] = (numCatsEnabled !== numCats); return res; }, {});
+	 this.props.enabledFn(newCats, this.state.provsEnabled);
+	 this.setState({ catsEnabled: newCats });
+      } else {
+	 let numProvs = this.props.providers.length;
+	 let numProvsEnabled = this.props.providers.filter(prov => this.state.provsEnabled[prov] || this.state.provsEnabled[prov] === undefined).length;
+	 let newProvs = this.props.providers.reduce((res, prov) => { res[prov] = (numProvsEnabled !== numProvs); return res; }, {});
+	 this.props.enabledFn(this.state.catsEnabled, newProvs);
+	 this.setState({ provsEnabled: newProvs });
+      }
+   }
+
    //
    // Handle dot clicks
    //   context = {
-   //      parent:	   'CategoryRollup', 'Category', 'ProviderRollup', 'Provider', 'TimeWidget'
+   //      parent:	   'CategoryRoll', 'Category', 'ProviderRollup', 'Provider', 'TimeWidget'
    //      rowName:	   <category-name>/<provider-name>
    //      dotType:	   type of the clicked dot (added below)
    //      minDate:	   date of the first dot for this row
@@ -367,16 +385,13 @@ export default class StandardFilters extends React.Component {
    //   isEnabled:	'true' = render normally, 'false' = active dots become inactive
    //   fetchAll:	'true' = don't label dots with dotType, 'false' = label each dot with dotType
    //
-   fetchDotPositions = this.fetchDotPositions.bind(this);
-   fetchDotPositions(parent, rowName, isEnabled, fetchAll) {
+   fetchDotPositions = (parent, rowName, isEnabled, fetchAll) => {
       if (!this.props.resources || !this.props.dates || this.props.dates.allDates.length === 0) {
 	 return [];
       } else {
 	 let { startDate, endDate, allDates } = this.props.dates;
-//	 let searchRefs = this.props.searchRefs;
 	 let searchRefs = this.context.searchRefs;
 	 let dotClickContext = this.state.dotClickContext;
-//	 let matchContext = dotClickContext && dotClickContext.parent === parent && dotClickContext.rowName === rowName;
 	 let matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget' ||
 						  (dotClickContext.parent === parent && dotClickContext.rowName === rowName));
 	 let inactiveHighlightDots = matchContext && allDates.reduce((res, elt) =>
@@ -461,7 +476,7 @@ export default class StandardFilters extends React.Component {
 	       			 highlightDots);
 
 	       } else {	// TODO: currently not using this case
-		  alert('huh???');
+		  alert(`SF fetchDotPositions(): ${parent} ${rowName} (huh???)`);
 	       	  return combine(allDates.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active') : res, []),
 	       			 searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active-search') : res, []));
 	       }
@@ -471,40 +486,43 @@ export default class StandardFilters extends React.Component {
 
    // TODO: handle noDots for LongitudinalView???
    render() {
+//      console.log('SF render: ' + (this.state.dotClickContext ? this.state.dotClickContext.date : this.state.dotClickContext));
       let dates = this.props.dates;
       const extendedChildren = React.Children.map(this.props.children, child => {
-					if (child && child.type.name === 'ContentPanel') {
-					   // Add context, nextPrevFn, showAllFn props
-					   return React.cloneElement(child, {context: this.state.dotClickContext,
-									     nextPrevFn: this.onNextPrevClick, showAllFn: this.onShowAllClick});
-					} else {
-					   return child;
-					}});
+				 // Add context, nextPrevFn, showAllFn props
+				 return React.cloneElement(child, {context: this.state.dotClickContext,
+								   nextPrevFn: this.onNextPrevClick, showAllFn: this.onShowAllClick});
+			       });
 
-      return (
+      return this.props.hideFilters ?
+	 <div className='standard-filters'>
+	    { extendedChildren }
+         </div> :
          <div className='standard-filters'>
 	    <TimeWidget startDate={dates ? dates.startDate : ''} endDate={dates ? dates.endDate : ''} thumbLeft={this.state.minActivePos}
 			thumbRight={this.state.maxActivePos} timelineWidth={this.state.svgWidth} setLeftRightFn={this.setLeftRight}
 			dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} />
 	    <div className='standard-filters-categories-and-providers'>
 	       <Categories>
-		  <CategoryRollup key='rollup' svgWidth={this.state.svgWidth} noDots={!this.state.timelineIsExpanded}
-			          dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
+		  <CategoryRollup key='rollup' svgWidth={this.state.svgWidth} noDots={!this.state.timelineIsExpanded} isExpanded={this.state.catsExpanded}
+			          dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract}
+				  allOnOffFn={this.allOnOff} />
 	          { this.state.catsExpanded ? [
 		       <div className='standard-filters-category-nav-spacer-top' key='0' />,
 	               this.props.categories && this.props.categories.map(
-			   cat => <Category key={cat} svgWidth={this.state.svgWidth} categoryName={cat} isEnabled={this.props.catsEnabled[cat]}
+			  cat => <Category key={cat} svgWidth={this.state.svgWidth} categoryName={cat} isEnabled={this.state.catsEnabled[cat]}
 					   dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} enabledFn={this.setEnabled} /> ),
 		       <div className='standard-filters-category-nav-spacer-bottom' key='1' />
 		  ] : null }
 	       </Categories>
 	       <Providers>
-	          <ProviderRollup key='rollup' svgWidth={this.state.svgWidth}
-				  dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract} />
+	          <ProviderRollup key='rollup' svgWidth={this.state.svgWidth} isExpanded={this.state.provsExpanded}
+				  dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} expansionFn={this.onExpandContract}
+				  allOnOffFn={this.allOnOff} />
 		  { this.state.provsExpanded ? [
 		      <div className='standard-filters-provider-nav-spacer-top' key='0' />,
 		      this.props.providers.map(
-			 prov => <Provider key={prov} svgWidth={this.state.svgWidth} providerName={prov}
+			 prov => <Provider key={prov} svgWidth={this.state.svgWidth} providerName={prov} isEnabled={this.state.provsEnabled[prov]}
 					   dotPositionsFn={this.fetchDotPositions} dotClickFn={this.onDotClick} enabledFn={this.setEnabled} /> ),
 		      <div className='standard-filters-provider-nav-spacer-bottom' key='1' />
 		  ] : null }
@@ -512,6 +530,5 @@ export default class StandardFilters extends React.Component {
 	    </div>
 	    { extendedChildren }
 	 </div>
-      );
    }
 }

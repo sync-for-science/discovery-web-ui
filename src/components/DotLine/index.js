@@ -30,8 +30,7 @@ export default class DotLine extends React.Component {
    //
    // Accumulate array of svg <circle> elements for dots
    //
-   renderDot = this.renderDot.bind(this);
-   renderDot(result, dot, index) {
+   renderDot = (result, dot, index) => {
       // TODO: make consistent (need units?)
       const halfHeight = numericPart(this.props.height)/2 + unitPart(this.props.height);
 

@@ -10,9 +10,11 @@ import SVGContainer from '../SVGContainer';
 import DotLine from '../DotLine';
 
 //
-// Render the time widget of ParticipantDetail page
+// Render the DiscoveryApp Time Widget
 //
 export default class TimeWidget extends React.Component {
+
+   static myName = 'TimeWidget';
 
    static propTypes = {
       startDate: PropTypes.string.isRequired,		// Left-most date of the primary timeline
@@ -65,12 +67,13 @@ export default class TimeWidget extends React.Component {
    }
 
    // Reset thumbs
-   onDoubleClick() {
+   onDoubleClick = () => {
       this.props.setLeftRightFn(0.0, 1.0, false);
       this.setState({ leftX: 0.0, rightX: numericPart(this.props.timelineWidth), showExpanded: false,
 		      thumbDates: {minDate: this.props.startDate, maxDate: this.props.endDate} });
    }
 
+   // TODO: Move to util.js?
    locToDate(pos) {
       let min = new Date(this.props.startDate ? this.props.startDate : 0).getTime();
       let max = new Date(this.props.endDate ? this.props.endDate : 0).getTime();
@@ -78,8 +81,7 @@ export default class TimeWidget extends React.Component {
       return new Date(target).toISOString();
    }
 
-   onLeftDrag = this.onLeftDrag.bind(this);
-   onLeftDrag(e, data) {
+   onLeftDrag = (e, data) => {
       const width = numericPart(this.props.timelineWidth);
       const leftTarget = (data.x/width < config.timeWidgetThumbResetZone) ? 0 : data.x/width;
       const showExpanded = leftTarget !== 0 || this.state.rightX !== numericPart(this.props.timelineWidth);
@@ -89,8 +91,7 @@ export default class TimeWidget extends React.Component {
       this.setState({ leftX: leftTarget*width, thumbDates: dates, showExpanded: showExpanded });
    }
 
-   onRightDrag = this.onRightDrag.bind(this);
-   onRightDrag(e, data) {
+   onRightDrag = (e, data) => {
       const width = numericPart(this.props.timelineWidth);
       const rightTarget = (data.x/width > 1.0 - config.timeWidgetThumbResetZone) ? 1.0 : data.x/width;
       const showExpanded = this.state.leftX !== 0 || rightTarget*width !== numericPart(this.props.timelineWidth);
@@ -100,8 +101,7 @@ export default class TimeWidget extends React.Component {
       this.setState({ rightX: rightTarget*width, thumbDates: dates, showExpanded: showExpanded });
    }
 
-   onCenterDrag = this.onCenterDrag.bind(this);
-   onCenterDrag(e, data) {
+   onCenterDrag = (e, data) => {
       let oldCenterX = (this.state.leftX + this.state.rightX - this.centerThumbWidth)/2;
       let delta = data.x - oldCenterX;
       let newLeftX = this.state.leftX + delta;
@@ -257,7 +257,7 @@ export default class TimeWidget extends React.Component {
 		  {rangeMin}<br/>to<br/>{rangeMax}
 	       </div>
 	    </div>
-	    <div className='timeline-controls' onDoubleClick={this.onDoubleClick.bind(this)}>
+	    <div className='timeline-controls' onDoubleClick={this.onDoubleClick}>
 	       <div className='timeline-selection-box'> 
 		  <div className='timeline-selector-gradient-container'>
 		     <div className='timeline-selector-gradient-left' style={{width:this.state.leftX+'px'}} />
@@ -280,8 +280,8 @@ export default class TimeWidget extends React.Component {
 		       </Draggable> }
 		  </div>
 	          <SVGContainer className='timeline-svg-container' svgClassName='timeline-svg' svgWidth={this.props.timelineWidth}>
-		     <DotLine dotPositions={this.props.dotPositionsFn('TimeWidget', 'Full', true)}
-			      context={ {parent:this.constructor.name, rowName:'Full'} }
+		     <DotLine dotPositions={this.props.dotPositionsFn(TimeWidget.myName, 'Full', true)}
+			      context={ {parent:TimeWidget.myName, rowName:'Full'} }
 			      dotClickFn={this.props.dotClickFn} />
 	          </SVGContainer>
 	       </div>

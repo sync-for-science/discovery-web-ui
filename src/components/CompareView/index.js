@@ -5,19 +5,24 @@ import './CompareView.css';
 //import config from '../../config.js';
 import { isValid, inDateRange } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
-import StandardFilters from '../StandardFilters';
 import Unimplemented from '../Unimplemented';
 import Sparkline from '../Sparkline';
+
+import DiscoveryContext from '../DiscoveryContext';
 
 //
 // Render the "compare view" of the participant's data
 //
 export default class CompareView extends React.Component {
 
+   static myName = 'CompareView';
+
+   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform),
       dates: PropTypes.shape({
-	    allDates: PropTypes.arrayOf(PropTypes.shape({
+	 allDates: PropTypes.arrayOf(PropTypes.shape({
 	    position: PropTypes.number.isRequired,
 	    date: PropTypes.string.isRequired
 	 })).isRequired,
@@ -28,25 +33,11 @@ export default class CompareView extends React.Component {
       }),
       categories: PropTypes.arrayOf(PropTypes.string).isRequired,
       providers: PropTypes.arrayOf(PropTypes.string).isRequired,
+      catsEnabled: PropTypes.object.isRequired,
+      provsEnabled: PropTypes.object.isRequired,
+      thumbLeftDate: PropTypes.string.isRequired,
+      thumbRightDate: PropTypes.string.isRequired,
       lastEvent: PropTypes.instanceOf(Event)
-   }
-
-   state = {
-      catsEnabled: {},
-      provsEnabled: {},
-      minDate: this.props.dates.minDate,
-      maxDate: this.props.dates.maxDate
-   }
-
-   setEnabled = this.setEnabled.bind(this);
-   setEnabled(catsEnabled, provsEnabled) {
-      this.setState({ catsEnabled: catsEnabled,
-		      provsEnabled: provsEnabled });
-   }
-
-   setDateRange = this.setDateRange.bind(this);
-   setDateRange(minDate, maxDate) {
-      this.setState({minDate: minDate, maxDate: maxDate});
    }
 
    getCoding(res) {
@@ -121,7 +112,7 @@ export default class CompareView extends React.Component {
       let resources = this.props.resources.pathItem(`[*category=${cat}][*provider=${prov}]`);
       for (let res of resources) {
 	 if (this.noCompareCategories.includes(res.category) ||
-	     !inDateRange(res.itemDate, this.state.minDate, this.state.maxDate)) {
+	     !inDateRange(res.itemDate, this.props.thumbLeftDate, this.props.thumbRightDate)) {
 	    break;
 	 }
 
@@ -168,7 +159,7 @@ export default class CompareView extends React.Component {
       let struct = {};
       for (let catName of this.props.categories) {
 	 for (let provName of this.props.providers) {
-	    if (this.state.provsEnabled[provName] !== false) {
+	    if (this.props.provsEnabled[provName] !== false) {
 	       this.collectUnique(struct, catName, provName);
 	    }
 	 }
@@ -178,7 +169,7 @@ export default class CompareView extends React.Component {
       let minDate = new Date(this.props.dates.minDate);
       let maxDate = new Date(this.props.dates.maxDate);
       for (let catName in struct) {
-	 const isEnabled = !this.state.catsEnabled.hasOwnProperty(catName) || this.state.catsEnabled[catName];
+	 const isEnabled = !this.props.catsEnabled.hasOwnProperty(catName) || this.props.catsEnabled[catName];
 	 divs.push(<div className={isEnabled ? 'compare-cat-name' : 'compare-cat-name-disabled'} key={divs.length}>{catName}</div>);
               
 	 if (isEnabled) {
@@ -210,21 +201,15 @@ export default class CompareView extends React.Component {
    }
 
    render() {
-//      let dispCategories = this.props.categories.filter(cat => !this.noCompareCategories.includes(cat));
-      let dispCategories = ['Meds Dispensed', 'Meds Requested', 'Immunizations', 'Allergies', 'Conditions', 'Procedures', 'Lab Results', 'Social History'];
-//      let enCategories = this.props.categories.filter(cat => !this.noCompareCategories.includes(cat));
       return (
-	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={dispCategories} providers={this.props.providers}
-			  catsEnabled={this.catsToObj(dispCategories)} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}>
-	    <div className='compare-view'>
-	       <div className='compare-title'>
-		  <div className='compare-title-name'>Compare</div>
-	       </div>
-	       <div className='compare-contents'>
-	          { this.renderContents() }
-	       </div>
-	    </div>	
-	 </StandardFilters>
+	 <div className='compare-view'>
+	    <div className='compare-title'>
+	       <div className='compare-title-name'>Compare</div>
+	    </div>
+	    <div className='compare-contents'>
+	       { this.renderContents() }
+	    </div>
+	 </div>
       );
    }
 }

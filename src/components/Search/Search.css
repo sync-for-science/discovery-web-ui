@@ -1,9 +1,7 @@
 @charset "UTF-8";
-@import '../../css/Colors.css';
-@import '../../css/Fonts.css';
 
 /* Sync for Science Discovery Search Stylesheet */
-/* v.01.17 Updated 3/27/2019 */
+/* v.01.18 Updated 5/13/2019 */
 
 .search {
    position: relative;

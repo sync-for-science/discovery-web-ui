@@ -1,9 +1,7 @@
 @charset "UTF-8";
-@import '../../css/Colors.css';
-@import '../../css/Fonts.css';
 
 /* Sync for Science Discovery TimeWidget Stylesheet */
-/* v.01.36 Updated 04/03/2019 */
+/* v.01.37 Updated 05/13/2019 */
 
 .time-widget {
    position: fixed;

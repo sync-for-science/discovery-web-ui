@@ -1,41 +1,43 @@
 @charset "UTF-8";
-@import '../../css/Colors.css';
-/* @import '../../css/ColorVariablesMaster.css'; */
-@import '../../css/CategoryProvider.css';
+/* @import '../../css/Selector.css'; */
 
 /* Sync for Science Discovery CategoryRollup Stylesheet */
-/* v.01.20 Updated 03/22/2019 */
-
-.category-rollup {
-	@insert .category-provider-rollup;
-}
-
-.category-rollup-nav-enabled {
-	@insert .category-provider-rollup-nav-enabled;
-	color: var(--white-100);
-	background-color: var(--primary-100);
-}
-
-.category-rollup-nav-disabled {
-	@insert .category-provider-rollup-nav-disabled;
-	color: var(--white-100);
-	background-color: var(--primary-100);
-}
+/* v.01.24 Updated 05/20/2019 */
 
 .category-rollup-svg-container {
-	@insert .category-provider-svg-container;
-	position: fixed;
-	top: 100px;
-	left: 214px;
-	width: calc(100% - 255px);
-/*	width: calc(100% - 245px);
-	background-color: transparent;
-	padding: 0 10px;
-	margin: 0; */
+/*	@insert .category-provider-svg-container; */
+/*@insert .selector-svg-container;*/
+
+/* from .selector-svg-container */
+/* TODO: how to use .selector-svg-container? */
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: inherit;
+   max-height: 35px;
+   width: 100%; 
+   background-image: url(../../svg/horizontal-rule-1px-black.svg);
+   background-position: center;
+   background-repeat: repeat-x;
+   background-clip: padding-box;
+   padding: 0 10px;
+   margin: 0;
+   overflow: hidden; 
+
+   position: fixed;
+   top: 100px;
+   left: 214px;
+   width: calc(100% - 255px);
 }
 
 .category-rollup-svg {
-	@insert .category-provider-svg;
-	position: relative;
-	margin: 0;
+/*	@insert .category-provider-svg; */
+/*   @insert .selector-svg; */
+
+/* TODO: use .selector-svg??? */
+   height: inherit;
+   overflow: visible;
+
+   position: relative;
+   margin: 0;
 }

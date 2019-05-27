@@ -67,7 +67,9 @@ export function formatPatientMRN(identifier, maxLength) {
 	 if (elt.type.coding[0].code === 'MR') {
 	    return maxLength === 0 || elt.value.length <= maxLength ? elt.value : '...' + elt.value.substring(elt.value.length - maxLength);
 	 }
-      } catch (e) {};
+      } catch (e) {
+	  console.log('formatPatientMRN(): ' + e.message);
+      };
    }
 
    return 'Unknown';
@@ -77,10 +79,12 @@ export function renderAllergies(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({provider: elt.provider, code: elt.data.code, clinicalStatus: elt.data.clinicalStatus,
-		      verificationStatus: elt.data.verificationStatus, type: elt.data.type, category: elt.data.category,
-		      criticality: elt.data.criticality, substance: elt.data.substance, reaction: elt.data.reaction});
-      } catch (e) {}
+	  found.push({ provider: elt.provider, code: elt.data.code, clinicalStatus: elt.data.clinicalStatus,
+		       verificationStatus: elt.data.verificationStatus, type: elt.data.type, category: elt.data.category,
+		       criticality: elt.data.criticality, substance: elt.data.substance, reaction: elt.data.reaction });
+      } catch (e) {
+	  console.log('renderAllergies(): ' + e.message);
+      }
    }
 
    if (found.length > 0) {
@@ -126,7 +130,7 @@ export function renderAllergies(matchingData, appContext) {
 
 
 var highlightDivisions = [ 1, 0.80, 0.50, 0.20, 0 ];
-var highlightDivisionNames = [ 'CONFIRMED', 'LIKELY', 'UNLIKELY', 'DISCONFIRMED' ];
+//var highlightDivisionNames = [ 'CONFIRMED', 'LIKELY', 'UNLIKELY', 'DISCONFIRMED' ];
 var highlightDivisionClasses = [ 'consult-highlight-confirmed', 'consult-highlight-likely', 'consult-highlight-unlikely', 'consult-highlight-disconfirmed' ];
 
 function probToDivision(prob) {
@@ -213,8 +217,10 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
       try {
 	 found.push({ provider: elt.provider, category: elt.category, participantId: elt.id, resourceId: elt.data.id,
 		      display: elt.data.code.coding[0].display, status: elt.data.status, clinicalStatus: elt.data.clinicalStatus,
-		      verificationStatus: elt.data.verificationStatus, reason: elt.data.reasonReference, valueQuantity: elt.data.valueQuantity});
-      } catch (e) {}
+		      verificationStatus: elt.data.verificationStatus, reason: elt.data.reasonReference, valueQuantity: elt.data.valueQuantity });
+      } catch (e) {
+	 console.log('renderDisplay(): ' + e.message);
+      }
    }
 
    if (found.length > 0) {
@@ -270,10 +276,12 @@ export function renderImmunizations(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({provider: elt.provider, display: elt.data.vaccineCode.coding[0].display, status: elt.data.status,
-		      notGiven: elt.data.notGiven, wasNotGiven: elt.data.wasNotGiven,
-		      reported: elt.data.reported, primarySource: elt.data.primarySource});
-      } catch (e) {}
+	  found.push({ provider: elt.provider, display: elt.data.vaccineCode.coding[0].display, status: elt.data.status,
+		       notGiven: elt.data.notGiven, wasNotGiven: elt.data.wasNotGiven,
+		       reported: elt.data.reported, primarySource: elt.data.primarySource });
+      } catch (e) {
+	 console.log('renderImmunizations(): ' + e.message);
+      }
    }
 
    if (found.length > 0) {
@@ -320,13 +328,15 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	 found.push({provider: elt.provider, date:elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
-		     display: elt.data.code.coding[0].display,
-		     valueQuantity: elt.data.valueQuantity,
-		     valueString: elt.data.valueString,
-		     referenceRange: elt.data.referenceRange,
-		     status:elt.data.status});
-      } catch (e) {};
+	 found.push({ provider: elt.provider, date:elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
+		      display: elt.data.code.coding[0].display,
+		      valueQuantity: elt.data.valueQuantity,
+		      valueString: elt.data.valueString,
+		      referenceRange: elt.data.referenceRange,
+		      status:elt.data.status });
+      } catch (e) {
+	 console.log('renderLabs(): ' + e.message);
+      };
    }
 
    // Collect full set of series (by display string) to graph from resources
@@ -344,7 +354,9 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
 	    // New series
 	    series[displayStr] = [{ provider: elt.provider, x: xVal, y: yVal }];
 	 }
-      } catch (e) {};
+      } catch (e) {
+        console.log('renderLabs(): ' + e.message);
+      };
    }
 
    if (found.length > 0) {
@@ -423,10 +435,12 @@ export function renderMeds(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({provider: elt.provider, display:elt.data.medicationCodeableConcept.coding[0].display, quantity:elt.data.quantity,
+	 found.push({ provider: elt.provider, display:elt.data.medicationCodeableConcept.coding[0].display, quantity:elt.data.quantity,
 		      daysSupply:elt.data.daysSupply, dosageInstruction:elt.data.dosageInstruction, dispenseRequest:elt.data.dispenseRequest,
-		      status:elt.data.status, reason:elt.data.reasonReference});
-      } catch (e) {};
+		      status:elt.data.status, reason:elt.data.reasonReference });
+      } catch (e) {
+	 console.log('renderMeds(): ' + e.message);
+      };
    }
 
    if (found.length > 0) {
@@ -488,8 +502,11 @@ export function renderSocialHistory(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({provider: elt.provider, display: elt.data.code.coding[0].display, status: elt.data.status, value: elt.data.valueCodeableConcept.coding[0].display});
-      } catch (e) {}
+	 found.push({ provider: elt.provider, display: elt.data.code.coding[0].display, status: elt.data.status,
+		       value: elt.data.valueCodeableConcept.coding[0].display });
+      } catch (e) {
+	 console.log('renderSocialHistory(): ' + e.message);
+      }
    }
 
    if (found.length > 0) {
@@ -522,9 +539,11 @@ export function renderEncounters(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({ provider: elt.provider, display: tryWithDefault(elt, e => e.data.type[0].coding[0].display, null), status: elt.data.status,
-		       date: elt.itemDate, class: elt.data.class.code ? elt.data.class.code : elt.data.class, period: elt.data.period });
-      } catch (e) {}
+	 found.push({ provider: elt.provider, display: tryWithDefault(elt, e => e.data.type[0].coding[0].display, null), status: elt.data.status,
+		      date: elt.itemDate, class: elt.data.class.code ? elt.data.class.code : elt.data.class, period: elt.data.period });
+      } catch (e) {
+	 console.log('renderEncounters(): ' + e.message);
+      }
    }
 
    if (found.length > 0) {
@@ -574,14 +593,16 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
 	 // Don't display Vital Signs "container" resources with related elements
 	 const displayStr = canonVitals(elt.data.code.coding[0].display);
 	 if (displayStr !== 'Vital Signs') {
-	    found.push({provider: elt.provider,
-			date: elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
-			display:displayStr,
-			value:isValid(elt, e => e.data.valueQuantity) ? elt.data.valueQuantity.value : undefined,
-			unit:isValid(elt, e => e.data.valueQuantity) ? elt.data.valueQuantity.unit : undefined,
-			component:elt.data.component, status:elt.data.status});
+	    found.push({ provider: elt.provider,
+			 date: elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
+			 display:displayStr,
+			 value:isValid(elt, e => e.data.valueQuantity) ? elt.data.valueQuantity.value : undefined,
+			 unit:isValid(elt, e => e.data.valueQuantity) ? elt.data.valueQuantity.unit : undefined,
+			 component:elt.data.component, status:elt.data.status });
 	 }
-      } catch (e) {};
+      } catch (e) {
+	 console.log('renderVitals(): ' + e.message);
+      };
    }
 
    // Collect full set of series (by display string) to graph from resources
@@ -618,7 +639,9 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
 	       }
 	    }
 	 }
-      } catch (e) {};
+      } catch (e) {
+	 console.log('renderVitals(): ' + e.message);
+      };
    }
 
    if (found.length > 0) {
@@ -704,7 +727,9 @@ export function renderEOB(matchingData, appContext) {
 	 found.push({ provider: elt.provider, totalCost: elt.data.totalCost, totalBenefit: elt.data.totalBenefit,
 		      claimType: elt.data.type, billablePeriod: elt.data.billablePeriod, status: elt.data.status,
 		      contained: elt.data.contained, careTeam: elt.data.careTeam, diagnosis: elt.data.diagnosis });
-      } catch (e) {}
+      } catch (e) {
+	 console.log('renderEOB(): ' + e.message);
+      }
    }
 
    if (found.length > 0) {
@@ -759,7 +784,9 @@ export function renderClaims(matchingData, appContext) {
       try {
 	 found.push({ provider: elt.provider, total: elt.data.total, billablePeriod: elt.data.billablePeriod,
 		      status: elt.data.status, use: elt.data.use, diagnosis: elt.data.diagnosis });
-      } catch (e) {}
+      } catch (e) {
+	 console.log('renderclaims(): ' + e.message);
+      }
    }
 
    if (found.length > 0) {
@@ -805,9 +832,11 @@ export function renderExams(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({provider: elt.provider, display: elt.data.code.coding[0].display, status: elt.data.status,
-		      value: elt.data.valueQuantity.value, unit: elt.data.valueQuantity.unit});
-      } catch (e) {}
+	 found.push({ provider: elt.provider, display: elt.data.code.coding[0].display, status: elt.data.status,
+		      valueQuantity: elt.data.valueQuantity, valueConcept: elt.data.valueCodeableConcept });
+      } catch (e) {
+	 console.log('renderExams(): ' + e.message);
+      }
    }
 
    if (found.length > 0) {
@@ -818,8 +847,9 @@ export function renderExams(matchingData, appContext) {
 	       { elt.display && <div className='col01 label'>Type</div> }
 	       { elt.display && <div className='col02 value-text medium'>{elt.display}</div> }
 
-	       <div className='col01 label'>Value</div>
-	       <div className='col02 value-text'>{elt.value + ' ' + elt.unit}</div>
+	       { (elt.valueQuantity || elt.valueConcept) && <div className='col01 label'>Value</div> }
+	       { elt.valueQuantity && <div className='col02 value-text'>{elt.valueQuantity.value + ' ' + elt.valueQuantity.unit}</div> }
+	       { elt.valueConcept && <div className='col02 value-text'>{elt.valueConcept.coding[0].display}</div> }
 
 	       { isMultipleProviders && <div className='col01 label'>Provider</div> }
 	       { isMultipleProviders && <div className='col02 value-text'>{elt.provider}</div> }

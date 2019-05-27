@@ -1,9 +1,8 @@
 @charset "UTF-8";
-/* @import '../../css/ColorVariablesMaster.css'; */
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery StandardFilters Stylesheet */
-/* v.01.02 Updated 03/27/2019 */
+/* v.01.03 Updated 05/13/2019 */
 
 .standard-filters-categories-and-providers {
 	position: fixed;

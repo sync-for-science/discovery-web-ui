@@ -1,9 +1,7 @@
 @charset "UTF-8";
-@import '../../css/Colors.css';
-/* @import '../../css/ColorVariablesMaster.css'; */
 
 /* Sync for Science Discovery DiscoveryApp Stylesheet */
-/* v.01.03 Updated 3/27/2018 */
+/* v.01.05 Updated 5/13/2018 */
 
 body {
 	width: 100%;
@@ -30,4 +28,31 @@ button:focus {
    padding: 0;
    margin: 0;
    overflow-x: auto;
+}
+
+.longitudinal-view-icon {
+   height: 50px;
+   min-width: 50px;
+   background-image: url("../../svg/view-icon-report-on.svg");
+   background-repeat: no-repeat;
+   background-position: 0px center;
+   background-size: 35px 35px;
+}
+
+.benefits-view-icon {
+   height: 50px;
+   min-width: 50px;
+   background-image: url("../../svg/view-icon-benefits.svg");
+   background-repeat: no-repeat;
+   background-position: 0px center;
+   background-size: 35px 35px;
+}
+
+.consult-view-icon {
+   height: 50px;
+   min-width: 50px;
+   background-image: url("../../svg/view-icon-consult.svg");
+   background-repeat: no-repeat;
+   background-position: 0px center;
+   background-size: 35px 35px;
 }

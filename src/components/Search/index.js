@@ -5,32 +5,45 @@ import Unimplemented from '../Unimplemented';
 
 import './Search.css';
 import config from '../../config.js';
+import { uniqueBy } from '../../util.js';
 import notInterestingFields from './notInterestingFields.js';
 import notInterestingWords from './notInterestingWords.js';
 import veryInterestingFields from './veryInterestingFields.js';
 
 //
-// Render the Search widget of ParticipantDetail page
+// Render the DiscoveryApp Search Widget
 //
 export default class Search extends React.Component {
 
    static propTypes = {
-      data: PropTypes.array.isRequired,
-      callback: PropTypes.func.isRequired
+      data: PropTypes.array.isRequired,		// Data (resources) to index/search
+      callback: PropTypes.func.isRequired	// Return search results to parent
    }
     
    state = {
-      searchIsOpen: false,
-      searchFor: '',
-      searchStatus: '',
-      searchTerms: '',
-      searchTree: null,
-      searchResults: null,
-      totalSearchRefs: 0,
-      dataModalIsOpen: false,
-      laserSearch: false
+      searchIsOpen: false,	// Is the search input field displayed?
+      searchFor: '',		// Contents of the search input field
+      searchStatus: '',		// The displayed status string
+      searchTerms: '',		// Count of terms indexed ('nnn terms')
+      searchTree: null,		// The data structure resulting from data indexing
+      searchResults: null,	// Array of references to resources matching 'searchFor'
+      totalSearchRefs: 0,	// Count of all references for indexed terms
+      dataModalIsOpen: false,	// Is the dataModal open? (JSON data display) 
+      laserSearch: false	// Is laserSearch on? (only display data elements containing a search word)
    }
 
+   componentDidMount() {
+      window.addEventListener('keydown', this.onKeydown);
+      this.setState({ searchStatus: 'Indexing...' }, () => setTimeout(this.indexData, 10));
+   }
+
+   componentWillUnmount() {
+      window.removeEventListener('keydown', this.onKeydown);
+   }
+
+   //
+   // Handle Esc key (cancel search)
+   //
    onKeydown = (event) => {
       if (this.state.searchIsOpen && event.key === 'Escape') {
 	 if (this.state.searchFor.length === 0) {
@@ -42,31 +55,81 @@ export default class Search extends React.Component {
       }
    }
 
-   componentDidMount() {
-      window.addEventListener('keydown', this.onKeydown);
-      this.setState({ searchStatus: 'Indexing...' }, () => setTimeout(this.indexData.bind(this), 10));
+   //
+   // Index this participant's data when component loads
+   //
+    indexData = () => {
+      let tree = { match: '', complete: [], next: [], refs: [] };
+
+      // Index the resources for this participant
+      for (let elt of this.props.data) {
+	 if (elt.category !== 'Patient' && !Unimplemented.unimplementedCats.includes(elt.category)) {
+	    this.indexResource(tree, elt.data, { provider: elt.provider, category: elt.category, date: elt.itemDate, veryInteresting: false });
+	 }
+      }
+      let terms = tree.next.reduce((accum, elt) => accum + elt.complete.length, 0) + ' terms';
+      let totalRefs = tree.next.reduce((accum, elt) => accum + elt.refs.length, 0);
+      this.setState({ searchTree: tree, searchTerms: terms, searchStatus: terms, totalSearchRefs: totalRefs });
    }
 
-   componentWillUnmount() {
-      window.removeEventListener('keydown', this.onKeydown);
-   }
+   // Index this resource
+   indexResource(tree, res, dotRef) {
+      switch (typeof res) {
+         case 'object':
+	    if (res instanceof Array) {
+	       // An array
+	       for (let elt of res) {
+		  this.indexResource(tree, elt, dotRef);
+	       }
+	    } else if (res === null) {
+	       // Ignore
+	    } else {
+	       // An object
+	       for (let propName in res) {
+		  if (notInterestingFields.includes(propName)) {
+		     // Ignore
+		  } else if (veryInterestingFields.includes(propName)) {
+		     // Interesting
+		     dotRef.veryInteresting = true
+		     this.indexResource(tree, res[propName], dotRef);
+		  } else {
+		     this.indexResource(tree, res[propName], dotRef);
+		  }
+	       }
+	    }
+	    break;
 
-   toggleSearch = this.toggleSearch.bind(this);
-   toggleSearch() {
-      if (!this.state.searchIsOpen) {
-	 this.setState({ searchIsOpen: true },
-		       () => this.refs.textInput.focus() );
-      } else {
-	 // Cleanup
-	 this.setState({ searchIsOpen: false, searchStatus: this.state.searchTerms, searchFor: '', searchResults: null });
-	 this.props.callback([], [], this.state.laserSearch);
+         case 'string':
+	    let resStr = res+'';
+	    if (resStr === 'true' || resStr === 'false' || !isNaN(resStr)) {
+	       break;
+            }
+
+	    if (resStr.length > 0) {
+	       // Add each (space-delimited) word of the item (dropping commas, brackets) to the search tree
+	       for (let word of resStr.split(' ')) {
+		  let cleanWord = word.replace(',', '').replace('[', '').replace(']', '');
+		  if (cleanWord.length <= config.searchMaxWordLength && !notInterestingWords.includes(cleanWord.toLowerCase())) {
+		     this.addToTree(tree, 1, cleanWord, dotRef);
+		  }
+	       }
+	    }
+	    break;
+
+         case 'symbol':
+         case 'function':
+         case 'number':
+         case 'boolean':
+         default:
+	    // Ignore
+	    break;
       }
    }
 
    //
-   // Walk/extend the search tree
+   // Extend the search tree
    //
-   walkTree(tree, level, value, dotRef) {
+   addToTree(tree, level, value, dotRef) {
       let lcValue = value.toLowerCase();
       if (level > 1) {
 	 if (!tree.complete.find(elt => elt.toLowerCase() === lcValue)) {
@@ -89,7 +152,7 @@ export default class Search extends React.Component {
       let match = lcValue.substring(0, level);
       for (let next of tree.next) {
 	 if (next.match === match) {
-	     this.walkTree(next, level+1, value, dotRef);
+	     this.addToTree(next, level+1, value, dotRef);
 	     return;
 	 }
       }
@@ -97,117 +160,31 @@ export default class Search extends React.Component {
       // No match -- create a new branch
       let newBranch = { match: match, complete: [], next: [], refs: [] }; 
       tree.next.push(newBranch);
-      this.walkTree(newBranch, level+1, value, dotRef);
-   }
-
-   //
-   // Add this item to the search tree
-   //
-   addToTree(tree, value, dotRef) {
-//      console.log(value + ': ' + isVeryInteresting);
-
-      // Add each (space-delimited) word of the item (dropping commas, brackets) to the search tree
-      for (let word of value.split(' ')) {
-	 let cleanWord = word.replace(',', '').replace('[', '').replace(']', '');
-	 if (!notInterestingWords.includes(cleanWord.toLowerCase())) {
-	    this.walkTree(tree, 1, cleanWord, dotRef);
-	 }
-      }
-   }
-
-   walkItem(tree, item, dotRef) {
-      switch (typeof item) {
-         case 'object':
-	    if (item instanceof Array) {
-	       // An array
-	       for (let elt of item) {
-		  this.walkItem(tree, elt, dotRef);
-	       }
-	    } else if (item === null) {
-	       // Ignore
-	    } else {
-	       // An object
-	       for (let propName in item) {
-		  if (notInterestingFields.includes(propName)) {
-		     // Ignore
-		  } else if (veryInterestingFields.includes(propName)) {
-		     // Interesting
-		     dotRef.veryInteresting = true
-		     this.walkItem(tree, item[propName], dotRef);
-		  } else {
-		     this.walkItem(tree, item[propName], dotRef);
-		  }
-	       }
-	    }
-	    break;
-
-//         case 'number':
-//         case 'boolean':
-         case 'string':
-	    let itemStr = item+'';
-	    if (itemStr === 'true' || itemStr === 'false' || !isNaN(itemStr)) {
-	       break;
-            }
-
-	    if (itemStr.length > 0) {
-	       this.addToTree(tree, itemStr, dotRef);
-	    }
-	    break;
-
-         case 'symbol':
-         case 'function':
-         default:
-	    // Ignore
-	    break;
-      }
-   }
-
-   //
-   // Index this participant's data when component loads
-   //
-   indexData() {
-//      let tree = this.state.searchTree ? this.state.searchTree : { match: '', complete: [], next: [], refs: [] };
-      let tree = { match: '', complete: [], next: [], refs: [] };
-
-      // Index the resources for this participant
-      for (let elt of this.props.data) {
-	 if (elt.category !== 'Patient' && !Unimplemented.unimplementedCats.includes(elt.category)) {
-	    this.walkItem(tree, elt.data, { provider: elt.provider, category: elt.category, date: elt.itemDate, veryInteresting: false });
-	 }
-      }
-      let terms = tree.next.reduce((accum, elt) => accum + elt.complete.length, 0) + ' terms';
-      let totalRefs = tree.next.reduce((accum, elt) => accum + elt.refs.length, 0);
-      this.setState({ searchTree: tree, searchTerms: terms, searchStatus: terms, totalSearchRefs: totalRefs });
+      this.addToTree(newBranch, level+1, value, dotRef);
    }
 
    //
    // Collect array of references to participant resources matching 'searchFor'
    //
    // Each ref consists of:
-   //     .provider (string)
-   //     .category (string)
-   //     .date (string)
-   //     .veryInteresting (bool)
-   //     .position (number)
+   //     .provider (string)		resource's provider
+   //     .category (string)		resource's category
+   //     .date (string)		resource's date
+   //     .veryInteresting (bool)	is the field that contains a word in 'searchFor' considered "interesting"? [currently unused]
+   //     .position (number)		resource's timeline position [0..1]
    //
    collectRefs(searchFor) {
       let words = searchFor.split(' ');
       let refs = [];
       for (let word of words) {
-	 refs = refs.concat(this.findInTree(this.state.searchTree, 1, word, true));
+	 if (word) {
+	    refs = refs.concat(this.findInTree(this.state.searchTree, 1, word, true));
+	 }
       }
 
       // Remove dups (unique category, date only)
       //   and return latest-first
-      return this.uniqueBy(refs, elt => elt.category+elt.date).sort((a, b) => new Date(b.date) - new Date(a.date));
-   }
-
-   uniqueBy(arr, keyFn) {
-      let seen = {};
-      return arr.filter( elt => {
-	  let key = keyFn(elt);
-	  return seen.hasOwnProperty(key) ? false : seen[key] = true;
-      });
+      return uniqueBy(refs, elt => elt.category+elt.date).sort((a, b) => new Date(b.date) - new Date(a.date));
    }
 
    //
@@ -221,24 +198,10 @@ export default class Search extends React.Component {
       }  
 
       // Remove dups
-      return this.uniqueBy(matchWords, elt => elt);
+      return uniqueBy(matchWords, elt => elt);
    }
 
-   //
-   // Perform search and color dots accordingly    
-   //
-   searchLookup() {
-      let refs = this.collectRefs(this.state.searchFor);
-      let matchWords = this.collectMatchWords(this.state.searchFor);
-
-      this.setState({ searchResults: refs, searchStatus: refs.length + (refs.length === 1 ? ' match' : ' matches') });
-
-      // Report search results to parent
-      this.props.callback(refs, matchWords, this.state.laserSearch);
-   }
-
-   toggleLaserSearch = this.toggleLaserSearch.bind(this);
-   toggleLaserSearch() {
+   toggleLaserSearch = () => {
       let refs = this.collectRefs(this.state.searchFor);
       let matchWords = this.collectMatchWords(this.state.searchFor);
 
@@ -251,19 +214,18 @@ export default class Search extends React.Component {
    //
    // Initiate/cancel search
    //
-   doSearch = this.doSearch.bind(this);
-   doSearch() {
-       if (this.state.searchFor === '') {
-	  this.props.callback([], [], this.state.laserSearch);
-	  // TODO: show/select from prior searches
-	  return;
-       } else if (this.state.searchResults) {
+   doSearch = () => {
+      if (this.state.searchFor === '') {
+	 this.props.callback([], [], this.state.laserSearch);
+	 // TODO: show/select from prior searches
+	 return;
+      } else if (this.state.searchResults) {
 	 // Reset for next search
 	 this.setState({searchResults: null, searchStatus: this.state.searchTerms, searchFor: ''});
 	 this.props.callback([], [], this.state.laserSearch);
       } else if (this.state.totalSearchRefs > config.searchShowSearching) {
 	 // Slow search
-	 this.setState({searchStatus: 'Searching...'}, () => setTimeout(this.searchLookup.bind(this), 10));
+	 this.setState({searchStatus: 'Searching...'}, () => setTimeout(this.searchLookup, 10));
       } else {
 	 // Regular/fast search
 	 this.searchLookup();
@@ -271,21 +233,38 @@ export default class Search extends React.Component {
    }
 
    //
-   // Walk the search terms index tree looking for the matching completion/ref array
+   // Perform search and color dots accordingly    
    //
-   findInTree(tree, level, searchFor, getRefs) {
+   searchLookup = () => {
+      let refs = this.collectRefs(this.state.searchFor);
+      let matchWords = this.collectMatchWords(this.state.searchFor);
+
+      this.setState({ searchResults: refs, searchStatus: refs.length + (refs.length === 1 ? ' match' : ' matches') });
+
+      // Report search results to parent
+      this.props.callback(refs, matchWords, this.state.laserSearch);
+   }
+
+   //
+   // Walk the search terms index tree looking for the matching completion/ref array. Include counts per option if 'includeCounts' is true
+   //
+   findInTree(tree, level, searchFor, getRefs, includeCounts) {
       let match = searchFor.substring(0, level).toLowerCase();
 
       if (tree.match === match) {
-	 return getRefs ? tree.refs : tree.complete;
+	 return getRefs ? tree.ref
+			: includeCounts ? tree.complete.map(word => `${word} (${this.collectRefs(word).length})`)
+	  				: tree.complete;
       }
 
       for (let next of tree.next) {
 	 if (next.match === match) {
 	    if (next.match === searchFor.toLowerCase()) {
-	       return getRefs ? next.refs : next.complete;
+	       return getRefs ? next.refs
+			      : includeCounts ? next.complete.map(word => `${word} (${this.collectRefs(word).length})`)
+					      : next.complete;
 	    } else {
-	       return this.findInTree(next, level+1, searchFor, getRefs);
+	       return this.findInTree(next, level+1, searchFor, getRefs, includeCounts);
 	    }
 	 }
       }
@@ -294,33 +273,56 @@ export default class Search extends React.Component {
       return [];
    }
 
+   getCount(option) {
+      return option.substring(option.indexOf('(')+1, option.indexOf(')'));
+   }
+
    //
-   // Return completion options matching 'searchFor'
+   // Return completion options matching 'searchFor'. Include counts per option if 'includeCounts' is true
    //
-   getSearchOptions(searchFor) {
+   getSearchOptions(searchFor, includeCounts) {
       if (searchFor.length === 0) {
 	 // No 'searchFor' ==> no options
 	 return [];
       } else {     
-	 return this.findInTree(this.state.searchTree, 1, searchFor);
+	 let opts = this.findInTree(this.state.searchTree, 1, searchFor, null, includeCounts);
+	 if (includeCounts) {
+	    // Sort on counts
+	    return opts.sort((a,b) => this.getCount(b) - this.getCount(a));
+	 } else {
+	    return opts;
+	 }
       }
    }
     
    //
-   // An option was chosen...
+   // Open/close the search input field
    //
-   onClickOption(option, spaceLoc) {
-       this.setState({ searchFor: this.state.searchFor.substring(0, spaceLoc+1) + option, searchResults: null },
-		     () => {
-			 this.refs.textInput.focus();
-			 this.doSearch();
-		     });
+   toggleSearch = () => {
+      if (!this.state.searchIsOpen) {
+	 this.setState({ searchIsOpen: true },
+		       () => this.refs.textInput.focus() );
+      } else {
+	 // Cleanup
+	 this.setState({ searchIsOpen: false, searchStatus: this.state.searchTerms, searchFor: '', searchResults: null });
+	 this.props.callback([], [], this.state.laserSearch);
+      }
    }
 
+   //
+   // Update search results on change in search input field
+   //
+   onInputChange = (event) => {
+      this.setState({searchFor: event.target.value, searchStatus: this.state.searchTerms, searchResults: null}, this.doSearch);
+   }
+
+   //
+   // Display completion options for the current search input field
+   //
    renderSearchOptions() {
       let spaceLoc = this.state.searchFor.lastIndexOf(' ');
       let incrSearchFor = spaceLoc >= 0 ? this.state.searchFor.substring(spaceLoc+1) : this.state.searchFor;
-      let options = this.getSearchOptions(incrSearchFor);
+      let options = this.getSearchOptions(incrSearchFor, true);
 
        if (incrSearchFor.length === 0 || (options.length === 1 && options[0].toLowerCase() === incrSearchFor.toLowerCase())) {
 	 return null;
@@ -336,9 +338,16 @@ export default class Search extends React.Component {
       }
    }
 
-   onInputChange = this.onInputChange.bind(this);
-   onInputChange(event) {
-       this.setState({searchFor: event.target.value, searchStatus: this.state.searchTerms, searchResults: null}, this.doSearch);
+   //
+   // An option was chosen...
+   //
+   onClickOption(option, spaceLoc) {
+      let optionWord = option.substring(0, option.indexOf(' '));
+      this.setState({ searchFor: this.state.searchFor.substring(0, spaceLoc+1) + optionWord, searchResults: null },
+		    () => {
+		       this.refs.textInput.focus();
+		       this.doSearch();
+		    });
    }
 
    render() {

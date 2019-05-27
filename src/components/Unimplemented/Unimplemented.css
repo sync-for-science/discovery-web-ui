@@ -1,9 +1,8 @@
 @charset "UTF-8";
-@import '../../css/Fonts.css';
 @import '../ContentPanel/ContentPanelCategories.css';
 
 /* Sync for Science Discovery Unimplemented Stylesheet */
-/* v.01.06 Updated 03/28/2019 */
+/* v.01.07 Updated 05/13/2019 */
 
 .unimplemented-value {
    @insert .col01;

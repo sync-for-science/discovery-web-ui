@@ -3,12 +3,17 @@ import PropTypes from 'prop-types';
 
 import './DiabetesView.css';
 import FhirTransform from '../../FhirTransform.js';
-import StandardFilters from '../StandardFilters';
+
+import DiscoveryContext from '../DiscoveryContext';
 
 //
 // Render the Diabetes view of the participant's data
 //
 export default class DiabetesView extends React.Component {
+
+   static myName = 'DiabetesView';
+
+   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform),
@@ -22,55 +27,25 @@ export default class DiabetesView extends React.Component {
 	 maxDate: PropTypes.string.isRequired,		// Latest date we have data for this participant
 	 endDate: PropTypes.string.isRequired		// Dec 31 of last year of timeline tick periods
       }),
-      categories: PropTypes.arrayOf(PropTypes.string),
-      providers: PropTypes.arrayOf(PropTypes.string),
+      categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+      providers: PropTypes.arrayOf(PropTypes.string).isRequired,
+      catsEnabled: PropTypes.object.isRequired,
+      provsEnabled: PropTypes.object.isRequired,
+      thumbLeftDate: PropTypes.string.isRequired,
+      thumbRightDate: PropTypes.string.isRequired,
       lastEvent: PropTypes.instanceOf(Event)
-   }
-
-   state = {
-      catsEnabled: {},		    // Enabled status of categories
-      provsEnabled: {},		    // Enabled status of providers
-      thumbLeftDate: this.props.dates.minDate,
-      thumbRightDate: this.props.dates.maxDate
-   }
-
-   componentDidMount() {
-
-   }
-
-   initialCats() {
-      let cats = {};
-      for (let cat of this.props.categories) {
-	 cats[cat] = true;
-      }
-      return cats
-   }
-
-   setEnabled = this.setEnabled.bind(this);
-   setEnabled(catsEnabled, provsEnabled) {
-      this.setState({catsEnabled: catsEnabled,
-		     provsEnabled: provsEnabled});
-   }
-
-   setDateRange = this.setDateRange.bind(this);
-   setDateRange(minDate, maxDate) {
-      this.setState({thumbLeftDate: minDate, thumbRightDate: maxDate});
    }
 
    render() {
       return (
-	 <StandardFilters resources={this.props.resources} dates={this.props.dates} categories={this.props.categories} providers={this.props.providers}
-			  catsEnabled={this.initialCats()} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.props.lastEvent}
-			  allowDotClick={true}>
-	    <div className='diabetes-view'>
-	       <div className='diabetes-title'>
-		  <div className='diabetes-title-name'>Diabetes</div>
-	       </div>
-	       <div className='diabetes-contents'>
-             <div className='diabetes-placeholder'></div>
-         </div>
+	 <div className='diabetes-view'>
+	    <div className='diabetes-title'>
+	       <div className='diabetes-title-name'>Diabetes</div>
 	    </div>
-	 </StandardFilters>
+	    <div className='diabetes-contents'>
+               <div className='diabetes-placeholder'></div>
+            </div>
+	 </div>
       );
    }
 }

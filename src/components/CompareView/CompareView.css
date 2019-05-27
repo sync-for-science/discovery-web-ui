@@ -2,7 +2,7 @@
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery CompareView Stylesheet */
-/* v.01.10 Updated 04/15/2019 */
+/* v.01.11 Updated 04/24/2019 */
 
 .compare-view {
 	@insert .view-container;
@@ -32,20 +32,6 @@
 	overflow-y:scroll;
    overflow-x: hidden;
 }
-
-/*
-.compare-matrix {
-   display: grid;
-   grid-template-columns: 300px repeat(30, 1fr);
-   grid-column-gap: 2px;
-   grid-auto-flow: column;
-   height: auto;
-   background-color: var(--white-100); 
-   padding: 0 20px 0 20px;
-   margin:0;
-   overflow-y: scroll;
-}
-*/
 
 .compare-cat-name {
    grid-column: 1/span 40; 
@@ -102,113 +88,6 @@
 	text-align: left;
    font-family: data-text-medium;
 }
-
-/*
-.compare-prov-count-even {
-   grid-column: auto;
-   position: relative;
-   bottom: 0;
-   display: flex;
-   flex-direction: column;
-   justify-content: flex-end;
-   align-items: flex-end;
-   align-self: flex-end;
-   vertical-align: middle;
-   height: auto;
-   width: 38px;
-   min-width: 35px;
-   max-width: 35px;
-   font-family: data-text;
-   font-size: 0.80rem;
-   text-align: left;
-   line-height:inherit;
-   color: var(--data);
-   padding:0;
-   border-bottom: solid 1px var(--gray-light-020);
-   margin: 0px;
-   white-space: nowrap;
-}
-
-.compare-prov-count-odd {
-   grid-column: auto;
-   position: relative;
-   bottom: 0;
-   display: flex;
-   flex-direction: column;
-   justify-content: flex-end;
-   align-items: flex-end;
-   align-self: flex-end;
-   vertical-align: middle;
-   height: auto;
-   width: 38px;
-   min-width: 35px;
-   max-width: 35px;
-   font-family: data-text;
-   font-size:0.80rem;
-   text-align: left;
-   color: var(--data);
-   line-height:inherit;
-   padding:0;
-   border-bottom:solid 1px var(--gray-light-020);
-   margin:0px;
-   background-color:var(--white-100);
-   white-space: nowrap;
-}
-
-.compare-prov-count-contents-even {
-   position: relative;
-   bottom: 0;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   width: 100%;
-   text-align: center;
-   background-color: var(--data);
-   border-bottom: 1px solid var(--data);
-   margin: auto;
-}
-
-.compare-prov-count-contents-odd {
-   position: relative;
-   bottom: 0;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   width: 100%;
-   text-align: center;
-   background-color: var(--data);
-   border-bottom: 1px solid var(--data);
-   margin: auto;
-}
-
-.compare-providers {
-   position: relative;
-   left: 0;
-   bottom: 0;
-   display: flex;
-   flex-direction: row;
-   height: 180px;
-   min-height: 180px;
-   padding: 0 0 0 280px;
-   margin: -10px 0 0 0;
-}
-
-.compare-prov-name {
-   height:170px;
-   width:37px;
-   min-width: 37px;
-   max-width: 37px;
-   font-family: text-bold;
-   font-size: 0.90rem;
-   color: var(--data);
-   text-align: left;
-   padding: 0;
-   margin: 0;
-   white-space: nowrap;
-   transform: rotate(45deg);
-   overflow: visible;
-}
-*/
 
 .compare-no-data {
    margin: 10px 0 0 20px;

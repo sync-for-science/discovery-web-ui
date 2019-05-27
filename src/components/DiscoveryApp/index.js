@@ -7,13 +7,11 @@ import config from '../../config.js';
 import FhirTransform from '../../FhirTransform.js';
 import { cleanDates, normalizeDates, timelineIncrYears } from '../../util.js';
 import PageHeader from '../PageHeader';
-import LongitudinalView from '../LongitudinalView';
+import StandardFilters from '../StandardFilters';
+import ContentPanel from '../ContentPanel';
 import SummaryView from '../SummaryView';
 import CompareView from '../CompareView';
-import BenefitsView from '../BenefitsView';
-import ConsultView from '../ConsultView';
 import DiabetesView from '../DiabetesView';
-//import ReportView from '../ReportView';
 import DiscoveryModal from '../DiscoveryModal';
 import Unimplemented from '../Unimplemented';
 import PageFooter from '../PageFooter';
@@ -45,7 +43,10 @@ export default class DiscoveryApp extends React.Component {
       modalName: '',
       modalIsOpen: false,
       lastEvent: null,
-      currentView: null
+      currentView: null,
+      thumbLeftDate: null,
+      thumbRightDate: null,
+      dotClickDate: null	// dot click from ContentPanel
    }
 
    componentDidMount() {
@@ -82,6 +83,8 @@ export default class DiscoveryApp extends React.Component {
 
 	       this.setState({ resources: resources,
 			       dates: dates,
+			       thumbLeftDate: minDate,
+			       thumbRightDate: maxDate,
 			       isLoading: false })
 	    } else {
 		this.setState({ fetchError: { message: 'Invalid Participant ID' },
@@ -341,11 +344,20 @@ export default class DiscoveryApp extends React.Component {
       return Object.keys(provs).sort();
    }
 
+   setEnabled = (catsEnabled, provsEnabled) => {
+      this.setState({ catsEnabled: catsEnabled,
+		      provsEnabled: provsEnabled });
+   }
+
+   // Record thumb positions as returned from StandardFilters
+   setDateRange = (minDate, maxDate) => {
+      this.setState({ thumbLeftDate: minDate, thumbRightDate: maxDate });
+   }
+
    //
    // Search callback function
    //
-   searchCallback = this.searchCallback.bind(this);
-   searchCallback(refs, matchWords, laserSearch) {
+   searchCallback = (refs, matchWords, laserSearch) => {
       let plusRefs = refs.map(ref => {
 	 ref.position = this.state.dates.allDates.find(elt => elt.date === ref.date).position;
 	 return ref;
@@ -353,30 +365,44 @@ export default class DiscoveryApp extends React.Component {
       this.setState({ searchRefs: plusRefs, searchMatchWords: matchWords, laserSearch: laserSearch });
    }
 
+   onDotClick = (dotClickDate) => {
+      this.setState({ dotClickDate: dotClickDate });
+   }
+
    renderCurrentView() {
       switch(this.state.currentView) {
          case 'longitudinalView':
-	    return <LongitudinalView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
-				     lastEvent={this.state.lastEvent} />;
+	    return <ContentPanel open={true} onClose={() => {}}
+				 catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled} dotClickFn={this.onDotClick}
+				 // context, nextPrevFn, showAllFn added in StandardFilters
+				 thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
+				 resources={this.state.resources} viewName='Report' viewIconClass='longitudinal-view-icon' />
+
+         case 'benefitsView':
+	    return <ContentPanel open={true} onClose={() => {}}
+				 catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
+				 // context, nextPrevFn, showAllFn added in StandardFilters
+				 thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
+				 resources={this.state.resources} catsToDisplay={['Claims','Benefits']} viewName='Financial'
+				 viewIconClass='benefits-view-icon' showAllData={true} />
+
+         case 'consultView':
+	    return <ContentPanel open={true} onClose={() => {}}
+				 catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled} dotClickFn={this.onDotClick}
+				 // context, nextPrevFn, showAllFn added in StandardFilters
+				 thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
+				 resources={this.state.resources} viewName='Consult' viewIconClass='consult-view-icon'
+				 showAllData={true} initialTrimLevel='expected' />
 
          case 'compareView':
 	    return <CompareView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
-				lastEvent={this.state.lastEvent} />;
-
-//         case 'reportView':
-//	    return <ReportView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
-//			       searchRefs={this.state.searchRefs} lastEvent={this.state.lastEvent} />;
-
-         case 'benefitsView':
-	    return <BenefitsView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
-				 lastEvent={this.state.lastEvent} />;
-
-         case 'consultView':
-	    return <ConsultView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
+				catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
+				thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
 				lastEvent={this.state.lastEvent} />;
 
          case 'diabetesView':
 	    return <DiabetesView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
+				 catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
 				 lastEvent={this.state.lastEvent} />;
 
          case 'summaryView':
@@ -384,6 +410,35 @@ export default class DiscoveryApp extends React.Component {
 	    return <SummaryView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
 			        lastEvent={this.state.lastEvent} />;
       }
+   }
+
+   get viewCategories() {
+      switch (this.state.currentView) {
+	 case 'benefitsView':
+	    return ['Claims', 'Benefits'];
+
+	 case 'compareView':
+	    let compareCats = ['Allergies', 'Conditions', 'Immunizations', 'Lab Results', 'Meds Dispensed', 'Meds Requested', 'Procedures', 'Social History'];
+	    return this.categories.filter( elt => compareCats.includes(elt));
+
+	 default:
+	    return this.categories;
+      }
+   }
+
+   get initialCats() {
+      let cats = {};
+
+      for (let cat of this.categories) {
+	 if (this.state.currentView === 'consultView') {
+	    // only enable Conditions (if present)
+	    cats[cat] = cat === 'Conditions';
+	 } else {
+	    cats[cat] = true;
+	 }
+      }
+
+      return cats
    }
 
    render() {
@@ -405,7 +460,11 @@ export default class DiscoveryApp extends React.Component {
 			   searchData={this.state.resources && this.state.resources.transformed}
 			   searchCallback={this.searchCallback}
 			   resources={this.state.resources} />
-	       { this.state.currentView && this.renderCurrentView() }
+	       <StandardFilters resources={this.state.resources} dates={this.state.dates} categories={this.viewCategories} providers={this.providers}
+				catsEnabled={this.initialCats} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.state.lastEvent}
+				allowDotClick={true} dotClickDate={this.state.dotClickDate} hideFilters={this.state.currentView === 'summaryView'} >
+		  { this.state.currentView && this.renderCurrentView() }
+	       </StandardFilters> }
 	       <DiscoveryModal isOpen={this.state.modalIsOpen} modalName={this.state.modalName}
 			       onClose={ name => this.setState({ modalName: '', modalIsOpen: false })} />
 	       <PageFooter resources={this.state.resources} />

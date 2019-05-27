@@ -228,8 +228,7 @@ export default class PageHeader extends React.Component {
       }
    }
 
-   onCloseViewHelp = this.onCloseViewHelp.bind(this);
-   onCloseViewHelp() {
+   onCloseViewHelp = () => {
       this.setState( {viewHelpIsOpen: false} );
       this.clearViewHelpInterval();
    }
