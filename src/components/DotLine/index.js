@@ -15,10 +15,10 @@ export default class DotLine extends React.Component {
       width: PropTypes.string,				 // Added via React.cloneElement() in <SVGContainer/>
       height: PropTypes.string,				 // Added via React.cloneElement() in <SVGContainer/>
       dotPositions: PropTypes.arrayOf(PropTypes.shape({	 // Dots to be rendered
-         position: PropTypes.number.isRequired,		 //    Horizontal position (range: 0.0 - 1.0)
-	 date: PropTypes.string.isRequired,		 //    Associated date
-	 dotType: PropTypes.string.isRequired		 //    'active'/'inactive'/'active-highlight'/'inactive-highlight'
-							 //       'active-search'/'inactive-search'/'active-highlight-search'/'inactive-highlight-search'
+         position: PropTypes.number.isRequired,		 //   Horizontal position (range: 0.0 - 1.0)
+	 date: PropTypes.string.isRequired,		 //   Associated date
+	 dotType: PropTypes.string.isRequired		 //   'active'/'inactive'/'active-highlight'/'inactive-highlight'/'view-accent'/'view-accent-highlight'/
+							 //      'active-search'/'inactive-search'/'active-highlight-search'/'inactive-highlight-search'
       })).isRequired,
       context: PropTypes.shape({
 	 parent: PropTypes.string.isRequired,		 // Parent component name
@@ -67,6 +67,16 @@ export default class DotLine extends React.Component {
 
          case 'active-highlight-search':
 	    result.push(<circle className='active-search-dots' key={index} cx={dot.position*100+'%'} cy={halfHeight} r={config.normalDotRadius}
+				onClick={ this.props.dotClickFn ? e => this.props.dotClickFn(this.props.context, dot.date, dot.dotType) : null } />);
+	    break;
+
+         case 'view-accent':
+	    result.push(<circle className='view-accent-dots' key={index} cx={dot.position*100+'%'} cy={halfHeight} r={config.normalDotRadius}
+				onClick={ this.props.dotClickFn ? e => this.props.dotClickFn(this.props.context, dot.date, dot.dotType) : null } />);
+	    break;
+
+         case 'view-accent-highlight':
+	    result.push(<circle className='view-accent-dots' key={index} cx={dot.position*100+'%'} cy={halfHeight} r={config.normalDotRadius}
 				onClick={ this.props.dotClickFn ? e => this.props.dotClickFn(this.props.context, dot.date, dot.dotType) : null } />);
 	    break;
 

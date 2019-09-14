@@ -2,42 +2,30 @@
 /* @import '../../css/Selector.css'; */
 
 /* Sync for Science Discovery CategoryRollup Stylesheet */
-/* v.01.24 Updated 05/20/2019 */
+/* v.01.26 Updated 07/25/2019 */
 
 .category-rollup-svg-container {
-/*	@insert .category-provider-svg-container; */
-/*@insert .selector-svg-container;*/
-
-/* from .selector-svg-container */
-/* TODO: how to use .selector-svg-container? */
+   position: relative;
+   left: 0;
+   top: 0;
    display: flex;
    justify-content: center;
    align-items: center;
-   height: inherit;
-   max-height: 35px;
+   height: 60px;
+   max-height: 60px;
    width: 100%; 
-   background-image: url(../../svg/horizontal-rule-1px-black.svg);
+   background-image: url("../../svg/horizontal-rule-1px-blue-medium-100.svg");
    background-position: center;
    background-repeat: repeat-x;
    background-clip: padding-box;
    padding: 0 10px;
-   margin: 0;
+   margin: -70px 0 0 0;
    overflow: hidden; 
-
-   position: fixed;
-   top: 100px;
-   left: 214px;
-   width: calc(100% - 255px);
 }
 
-.category-rollup-svg {
-/*	@insert .category-provider-svg; */
-/*   @insert .selector-svg; */
-
-/* TODO: use .selector-svg??? */
+.category-rollup-svg { 
+   position: relative;
    height: inherit;
    overflow: visible;
-
-   position: relative;
    margin: 0;
 }

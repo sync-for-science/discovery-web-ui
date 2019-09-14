@@ -34,12 +34,15 @@ export default class Sparkline extends React.Component {
       // });
    }
 
+   // TODO: fix so that line color/width come from CSS
    render() {
       if (this.props.data && this.props.data.length > 0) {
 	 return (
-	    <XYPlot className={this.props.className} xType='time' width={200} height={15} xDomain={[this.props.minDate, this.props.maxDate]} onClick={this.handleClick} >
-	       <LineSeries className='line' data={[{x:this.props.minDate,y:0},{x:this.props.maxDate,y:0}]} />
-	       <MarkSeries className='mark' data={this.props.data} size={3.5} />
+	    <XYPlot className={this.props.className} xType='time' width={300} height={15}
+		    xDomain={[this.props.minDate, this.props.maxDate]} onClick={this.handleClick} >
+	       <LineSeries className={this.props.clickFn ? 'line' : 'line-noclick'} color='black' strokeWidth='0.5px'
+			   data={[{x:this.props.minDate,y:0},{x:this.props.maxDate,y:0}]} />
+	       <MarkSeries className={this.props.clickFn ? 'mark' : 'mark-noclick'} data={this.props.data} size={3.5} />
 	    </XYPlot>
 	 );
       } else {

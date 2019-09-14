@@ -58,13 +58,14 @@ export default class Search extends React.Component {
    //
    // Index this participant's data when component loads
    //
-    indexData = () => {
+   // TODO: remove some items from each dotRef (duplicates of resource)
+   indexData = () => {
       let tree = { match: '', complete: [], next: [], refs: [] };
 
       // Index the resources for this participant
-      for (let elt of this.props.data) {
-	 if (elt.category !== 'Patient' && !Unimplemented.unimplementedCats.includes(elt.category)) {
-	    this.indexResource(tree, elt.data, { provider: elt.provider, category: elt.category, date: elt.itemDate, veryInteresting: false });
+      for (let res of this.props.data) {
+	 if (res.category !== 'Patient' && !Unimplemented.unimplementedCats.includes(res.category)) {
+	    this.indexResource(tree, res.data, { resource: res, provider: res.provider, category: res.category, date: res.itemDate, veryInteresting: false });
 	 }
       }
       let terms = tree.next.reduce((accum, elt) => accum + elt.complete.length, 0) + ' terms';
@@ -167,6 +168,7 @@ export default class Search extends React.Component {
    // Collect array of references to participant resources matching 'searchFor'
    //
    // Each ref consists of:
+   //     .resource			the resource
    //     .provider (string)		resource's provider
    //     .category (string)		resource's category
    //     .date (string)		resource's date
@@ -182,9 +184,11 @@ export default class Search extends React.Component {
 	 }
       }
 
-      // Remove dups (unique category, date only)
+      // TODO: may need better defn of dup?
+
+      // Remove dups (unique category, date resource id only)
       //   and return latest-first
-      return uniqueBy(refs, elt => elt.category+elt.date).sort((a, b) => new Date(b.date) - new Date(a.date));
+      return uniqueBy(refs, ref => `${ref.category}_${ref.resource.id}_${ref.date}`).sort((a, b) => new Date(b.date) - new Date(a.date));
    }
 
    //

@@ -22,6 +22,15 @@
    pointer-events: visible;
 }
 
+.view-accent-dots {
+/*   fill:var(--???); */
+   fill: BlueViolet;
+   stroke:var(--white-060);
+   stroke-width:1px;
+   cursor:pointer;
+   pointer-events: visible;
+}
+
 .active-search-dots {
    fill: var(--red-light-100);
    stroke: var(--white-100);

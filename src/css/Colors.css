@@ -1,8 +1,285 @@
 @charset "UTF-8";
 /* Sync for Science Colors Stylesheet */
-/* v.01.03  Updated 04/15/2019 */
+/* v.01.08  Updated 09/04/2019 */
 
-:root {
+:root {  
+/* PART 01 - RGB STATES */
+/* GRAYS */   
+   /* Gray Neutral (GN) */
+      --white: rgb(255,255,255);    /* White */ 
+      --gn1: rgb(230,230,230);      /* 10% Gray */ 
+      --gn2: rgb(205,205,205);      /* 20% Gray */ 
+      --gn3: rgb(180,180,180);      /* 30% Gray */ 
+      --gn4: rgb(155,155,155);      /* 40% Gray */ 
+      --gn5: rgb(130,130,130);      /* 50% Gray */ 
+      --gn6: rgb(105,105,105);      /* 60% Gray */ 
+      --gn7: rgb(80,80,80);         /* 70% Gray */ 
+      --gn8: rgb(55,55,55);         /* 80% Gray */ 
+      --gn9: rgb(30,30,30);         /* 90% Gray */ 
+      --black: rgb(0,0,0);          /* Black */
+      --black25: rgba(0,0,0,0.25);  /* Black 25% opacity */
+   /* Gray Tint (GT) */ 
+      --gt1: rgb(233,237,244);      /* Blue Gray Light */ 
+      --gt2: rgb(124,130,143);      /* Blue Gray Medium */  
+      --gt3: rgb(166,183,217);      /* Blue Gray Medium Dark */  
+      --gt4: rgb(143,158,187);      /* Blue Gray Dark */  
+      --gt5: rgb(116,128,154);      /* Blue Gray Dark 2 */ 
+      --gt6: rgb(87,103,131);       /* Blue Gray Dark 3 */  
+      --gt7: rgb(,,);      /*  */  
+      --gt8: rgb(,,);      /*  */  
+      --gt9: rgb(,,);      /*  */  
+
+/* COLORS */
+   /* Color - Blue (CB) */ 
+      --cb1: rgb(,,);      /*  */ 
+      --cb2: rgb(,,);      /*  */  
+      --cb3: rgb(,,);      /*  */
+   /* Color - Aqua (CA) */ 
+      --ca1: rgb(65,151,198);      /* Aqua */ 
+      --ca2: rgb(,,);      /*  */  
+      --ca3: rgb(,,);      /*  */
+   /* Color - Orange (CO) */ 
+      --co1: rgb(215,140,20);      /* Orange */ 
+      --co2: rgb(228,198,106);     /* Light Orange */  
+      --co3: rgb(,,);      /*  */
+   /* Color - Red (CR) */
+      --cr1: rgb(,,);      /*  */ 
+      --cr2: rgb(,,);      /*  */  
+      --cr3: rgb(,,);      /*  */
+   
+/* PART 02 - COLOR STATES */  
+/* BACKGROUND-COLOR STATES */
+   /* Background  */
+      --background-header: var(--gt5);
+         /*.ViewContainer.css|.ContentPanel.css|.DiscoveryModal.css
+         .PageFooter.css|.PageHeader.css|.ParticipantList.css */
+      --background-header-control: var(--gt6);
+         /* .PageHeader.css*/
+      --background-header-content: var(--gt4);
+         /* .Summary.css*/
+      --background-application: var(--gt1);            
+         /* .DiscoveryApp.css|.PageHeader.css*/
+      --background-content: var(--white);              
+         /*  */
+      --background-data: var(--co1);                   
+         /*  */
+      --background-accent: var(--ca1);                 
+         /*  */
+   /* Background Highlight  */
+      --background-highlight-confirmed: var(--);       
+         /*  */
+      --background-highlight-disconfirmed: var(--);    
+         /*  */
+      --background-highlight-likely: var(--);          
+         /*  */
+      --background-highlight-unlikely: var(--);        
+         /*  */
+         
+   /* Background Interface  */
+      --background-scrollbar: var(--gt3);              
+         /*  */
+      --background-overlay: var(--black25);            
+         /* DiscoveryModal.css */
+         
+   /* Button */
+      --button: var(--gt4);                            
+         /*  */
+      --button-dark: var(--gt5);                            
+         /* ContentPanel.css |  */
+      --button-disabled: var(--gt2);                   
+         /*  */
+      --button-view: var(--gt1);                       
+         /*  */
+      --button-view-disabled: var(--gt5);              
+         /*  */
+         
+   /* Tile */
+      --tile: var(--gt1);                            
+         /* TilesView.css */
+      --tile-selected: var(--co2);                     
+         /* TilesView.css */
+      --tile-selected-last: var(--co1);                
+         /* TilesView.css */
+      --tile-area: var(--white);                
+         /* TilesView.css */
+         
+    /* Content */
+      --content-header: var(--gt4);                            
+         /* ContentPanel.css */
+      --content-header-disabled: var(--gt1);                            
+         /* ContentPanel.css */
+         
+/* FILL STATES */
+      --dot: var(--);                                  
+         /*  */
+      --dot-search: var(--);                           
+         /*  */
+      --dot-inactive: var(--);                         
+         /*  */
+      --dot-search-inactive: var(--);                  
+         /*  */
+      --dot-highlight: var(--);                        
+         /*  */
+         
+/* FONT-COLOR STATES */
+   /* Labels */
+      --label-white: var(--white);                          
+         /* Selector.css| */
+      --label-gray: var(--gt2);                          
+         /* SummaryView.css| */
+      --label-black: var(--black);                          
+         /* Selector.css| */
+      --label-button: var(--white);                          
+         /*  */
+      --label-button-disabled: var(--gt3);                 
+         /*  */
+      --label-button-view: var(--black);                     
+         /*  */
+      --label-button-view-disabled: var(--white);            
+         /*  */
+      --label-size: var(--);                            
+         /*  */
+      --label-size-disabled: var(--);                   
+         /*  */
+      --label-date: var(--);                            
+         /*  */
+      --label-date-deselected: var(--);                 
+         /*  */
+      --label-instructional: var(--);
+         /*  */
+      --label-data: var(--gt6);
+         /* ContentPanelCategories.css | */
+      --label-data-disabled: var(--gt3);
+         /* ContentPanel.css | */
+      --label-data-hidden: var(--);
+         /*  */
+      --label-participant: var(--black);
+         /*  */
+      --label-participant-white: var(--white);
+         /*  */
+      --label-title: var(--);
+         /*  */
+      --label-tile: var(--black);
+         /* TilesView.css */
+      --label-tile-selected: var(--black);
+         /* TilesView.css */
+      --label-tile-selected-last: var(--white);
+         /* TilesView.css */
+         
+   /* Text */
+      --text: var(--);
+         /*  */
+      --text-deselected: var(--);
+         /*  */
+      --text-accent: var(--);
+         /*  */
+      --text-accent-dark: var(--);
+         /*  */
+      --data: var(--black);
+         /*  */
+      --data-deselected: var(--);
+         /*  */
+         
+/* BORDER-COLOR STATES */
+      --separator-white: var(--);               
+         /*  */
+      --separator-light: var(--gt1);               
+         /* SummaryView.css */
+      --separator-dark: var(--gt4);               
+         /*  */
+      --border-modal: var(--);                        
+         /*  */
+      --border-accent: var(--);                        
+         /*  */
+         
+/* STROKE STATES */
+      --dot-stroke-active: var(--);                 
+         /*  */
+      --dot-stroke-inactive: var(--);               
+         /*  */
+      --dot-stroke-search-active: var(--);          
+         /*  */
+      --dot-stroke-search-inactive: var(--);        
+         /*  */
+      --dot-stroke-highlight: var(--);              
+         /*  */
+   
+/* PART 03 - Discontinued. Confirm and Remove. */  
+   
+/* Grayscale Pallet GS - 082119 */
+   --gs-000-100: rgba(255,255,255,1.00);
+   --gs-010-100: rgba(230,230,230,1.00);
+   --gs-020-100: rgba(204,204,204,1.00);
+   --gs-040-100: rgba(153,153,153,1.00);
+   --gs-050-100: rgba(127,127,127,1.00);
+   --gs-060-100: rgba(102,102,102,1.00);
+   --gs-080-100: rgba(51,51,51,1.00);
+   --gs-100-100: rgba(0,0,0,1.00);
+   --gs-100-025: rgba(0,0,0,0.25);
+   --gs-100-010: rgba(0,0,0,0.10);
+   
+/* Base Color Sets - 083019 */  
+/* Interface Neutral Solids */
+   --ins-000: rgb(255,255,255);      /* White */ 
+   --ins-010: rgb(230,230,230);      /* 10% Gray */ 
+   --ins-020: rgb(205,205,205);      /* 20% Gray */ 
+   --ins-030: rgb(180,180,180);      /* 30% Gray */ 
+   --ins-040: rgb(155,155,155);      /* 40% Gray */ 
+   --ins-050: rgb(130,130,130);      /* 50% Gray */ 
+   --ins-060: rgb(105,105,105);      /* 60% Gray */ 
+   --ins-070: rgb(80,80,80);         /* 70% Gray */ 
+   --ins-080: rgb(55,55,55);         /* 80% Gray */ 
+   --ins-090: rgb(30,30,30);         /* 90% Gray */ 
+   --ins-100: rgb(0,0,0);            /* Black */ 
+   
+/* Interface Neutral Translucents */  
+   --int-100-010: rgba(0,0,0,0.10);  /* Black 10% Opacity */
+   --int-100-025: rgba(0,0,0,0.25);  /* Black 25% Opacity */
+   
+/* Data Solids */ 
+   
+    
+/* Data Translucents */   
+   
+ 
+/* Top Level Color Abstractions - 083019 */
+/* Common Elements */
+ 
+/* Backgrounds */ 
+   --background-white: var(--ins-000);
+   --background-neutral-020: var(--ins-020);
+   --background-neutral-040: var(--ins-040);
+   
+/* Labels */
+   --label-white: var(--ins-000);
+   --label-neutral-050: var(--ins-050);
+   --label-black: var(--ins-100);
+   
+/* Interface Structure Colors */
+   --background: var(--gs-000-100);
+   --modal-shadow: var(--gs-100-025);
+
+   /* New UX Color Set - 060719 */
+   --black-100: rgba(34,34,34,1.00);
+   --black-025: rgba(34,34,34,0.25);
+   --gray-dark-100: rgba(163,177,204,1.00);
+   --gray-middle-100: rgba(197,201,214,1.00);
+   --gray-100: rgba(225,231,245,1.00); /* background, annotation box */
+   --gray-light-100: rgba(231,236,247,1.00); /* upper timeline background, lines between records, graph lines */
+   --blue-buttons-100: rgba(96,136,216,1.00);
+   --blue-dark-100: rgba(69,98,163,1.00);
+   --blue-dark-50: rgba(69,98,163,0.50);
+   --blue-medium-dark-100: rgba(104,150,224,1.00);
+   --blue-medium-100: rgba(96,136,216,1.00);
+   --blue-medium-50: rgba(96,136,216,0.50);
+   --blue-medium-light-100: rgba(125,172,255,1.00);
+   --aqua-100: rgba(80,178,220,1.00); /* record headers, time dots */
+   --aqua-dark-100: rgba(66,165,207,1.00); /* provider text, age text */
+   --orange-100: rgba(230,168,92,1.00);
+   --orange-dark-100: rgba(201,122,16,1.00); /* text */
+   --white-100: rgba(255,255,255,1.00);
+   --white-075: rgba(255,255,255,0.75);
+   --white-060: rgba(255,255,255,0.60);
    
    /* General Colors */
    --primary-100: rgba(0,26,114,1.00);
@@ -14,15 +291,6 @@
    --category-060: rgba(1,166,170,0.60);
    --category-000: rgba(1,166,170,0.00);
    --provider-100: rgba(1,166,170,1.00);
-
-   /* Whites */
-   --white-100: rgba(255,255,255,1.00);
-   --white-075: rgba(255,255,255,0.75);
-   --white-060: rgba(255,255,255,0.60);
-
-   /* Blacks */
-   --black-100: rgba(0,0,0,1.00);
-   --black-025: rgba(0,0,0,0.25);
 
    /* Grays */
    --gray-dark-100: rgba(30,30,30,1.00);
@@ -45,9 +313,7 @@
    --data-divider: var(--gray-light-100);
    --data-loading: var(--red-100);
 
-   /* Interface Structure Colors */
-   --background: var(--white-100);
-   --modal-shadow: var(--black-025);
+
 
    /* Category Colors */
    --category: var(--category-100);

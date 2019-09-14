@@ -1,13 +1,13 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery ViewContainer Stylesheet */
-/* v.01.03 Updated 05/13/2019 */
+/* v.01.08 Updated 09/06/2019 */
 
 .view-container {
 	position: fixed;
    top: 146px;
-   left: 214px;
-   width: calc(100% - 234px);
+   left: 160px;
+   width: calc(100% - 170px);
    min-width: 840px;
    height: calc(100% - 200px);
    margin: 0;
@@ -18,31 +18,27 @@
    flex-direction: row;
 	align-items: center;
 	justify-content: flex-start;
-   width: calc(100% - 90px);
-   height: 50px;
-   min-height: 50px;
-   padding: 0 20px 0 70px;
-   background-repeat: no-repeat;
-   background-position: 20px 8px;
-   background-size: 35px 35px;
+   width: 100%;
+   height: 38px;
+   min-height: 38px;
    font-family: data-text;
    font-size: 1.000rem;
-  	color: var(--white-100);
-	border-top: 2px solid var(--accent-100);
-   background-color: var(--primary-100);
+  	color: var(--gs-000-100);
+   background-color: var(--gt4);
+   padding: 0 20px 0 0;
 }
 
 .view-title-name {
 	font-family: header-bold;
    font-size: 1.000rem;
-   color: var(--white-100);
+   color: var(--gs-000-100);
    margin: 0;
 }
 
 .view-title-patient-name {
 	font-family: header-bold;
    font-size: 1.200rem;
-   color: var(--white-100);
+   color: var(--gs-000-100);
    white-space: nowrap;
    margin-left: 35px;
 }
@@ -50,17 +46,16 @@
 .view-contents {
    position: fixed;
    top: 196px;
-   left: 214px;
+   left: 160px;
 	display: flex;
    flex-direction: column;
    min-height: calc(100% - 196px - 20px - 15px);
    max-height: calc(100% - 196px - 20px - 15px);
-   width: calc(100% - 238px);
-   min-width: calc(100% - 238px);
-   max-width: calc(100% - 238px);
-   background-color: var(--white-100);
+   width: calc(100% - 170px);
+   min-width: calc(100% - 170px);
+   max-width: calc(100% - 170px);
+   background-color: var(--gs-000-100);
    padding: 20px 0 0 0;
-	border: 2px solid var(--primary-100);
    white-space: pre-wrap;
    overflow-y:auto;
    overflow-x: hidden;

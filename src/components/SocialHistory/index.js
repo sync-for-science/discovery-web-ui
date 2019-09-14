@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { renderSocialHistory } from '../../fhirUtil.js';
-import { stringCompare, formatContentHeader } from '../../util.js';
+import { renderSocialHistory, primaryTextValue } from '../../fhirUtil.js';
+import { Const, stringCompare, formatContentHeader } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -18,6 +18,20 @@ export default class SocialHistory extends React.Component {
 
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
+   static compareFn(a, b) {
+      return stringCompare(SocialHistory.primaryText(a), SocialHistory.primaryText(b));
+   }
+
+   static code(elt) {
+      return elt.data.code;		// LOINC
+   }
+
+   static primaryText(elt) {
+//      return elt.data.code.coding[0].display;
+//      return tryWithDefault(elt, elt => SocialHistory.code(elt).coding[0].display, Const.unknownValue);
+      return primaryTextValue(SocialHistory.code(elt));
+   }
+
    static propTypes = {
       data: PropTypes.array.isRequired,
       isEnabled: PropTypes.bool,
@@ -29,8 +43,8 @@ export default class SocialHistory extends React.Component {
    }
 
    setMatchingData() {
-      let match = FhirTransform.getPathItem(this.props.data, '[*category=Social History]');
-      this.setState({ matchingData: match.length > 0 ? match.sort((a, b) => stringCompare(a.data.code.coding[0].display, b.data.code.coding[0].display))
+      let match = FhirTransform.getPathItem(this.props.data, `[*category=${SocialHistory.catName}]`);
+      this.setState({ matchingData: match.length > 0 ? match.sort(SocialHistory.compareFn)
 						     : null });
    }
 
@@ -46,9 +60,9 @@ export default class SocialHistory extends React.Component {
 
    render() {
       return ( this.state.matchingData &&
-	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
+	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
 	       <div className='social-history category-container'>
-		  { formatContentHeader(this.props.isEnabled, 'Social History', this.state.matchingData[0].itemDate, this.context) }
+		  { formatContentHeader(this.props.isEnabled, SocialHistory.catName, this.state.matchingData[0], this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderSocialHistory(this.state.matchingData, this.context) }
 	          </div>

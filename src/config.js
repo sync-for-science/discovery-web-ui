@@ -15,6 +15,7 @@ export default {
    searchShowSearching: 10000,		// Number of search references before showing "Searching..." in status
    searchMaxWordLength: 25,		// Don't index "words" longer than this (cheap GUID-like exclusion)
 
+   showViewHelp: false,			// show view help?
 //   viewHelpCloseTime: 15,		// seconds before "auto-close" view help (0 --> no auto-close)
    viewHelpCloseTime: 5,		// seconds before "auto-close" view help (0 --> no auto-close)
    viewHelpCloseCountdown: false,	// true --> show countdown of remaining time before closing view help
@@ -23,5 +24,6 @@ export default {
 
    timeWidgetThumbResetZone: 0.0035,	// Width of thumb "reset" zones in fraction of timeWidget width
 
-   contentPanelDragUpdateInterval: 0	// Msec between position updates during ContentPanel drag operations
+   contentPanelDragUpdateInterval: 0,	// Msec between position updates during ContentPanel drag operations
+   contentPanelUseWindowing: 150	// min number of displayable resources to use virtual/windowed display
 }

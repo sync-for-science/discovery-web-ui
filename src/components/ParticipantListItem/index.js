@@ -34,7 +34,7 @@ export default class ParticipantListItem extends React.Component
 	    {participant.dateRange}
 	 </div>,
 	 <div className='participant-list-item-providers' key={'providers-'+id}>
-	    {participant.providers.length}
+	    {participant.providerCount ? participant.providerCount : participant.providers.length}
 	 </div>,
 	 <div className='participant-list-item-values' key={'values-'+id}>
 	    {participant.valueCount}

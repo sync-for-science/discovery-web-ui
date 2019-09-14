@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { renderAllergies } from '../../fhirUtil.js';
-import { stringCompare, formatContentHeader } from '../../util.js';
+import { renderAllergies, primaryTextValue } from '../../fhirUtil.js';
+import { Const, stringCompare, formatContentHeader, tryWithDefault } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -18,6 +18,25 @@ export default class Allergies extends React.Component {
 
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
+   static compareFn(a, b) {
+      return stringCompare(Allergies.primaryText(a), Allergies.primaryText(b));
+   }
+
+   static code(elt) {
+//      if (isValid(elt, elt => elt.data.code.coding[0])) {
+//	 return elt.data.code;				// SNOMED
+//      } else if (isValid(elt, elt => elt.data.substance.coding[0])) {
+//	 return elt.data.substance;			// NDFRT
+//      }
+      return tryWithDefault(elt, elt => elt.data.substance, tryWithDefault(elt, elt => elt.data.code, null));
+   }
+
+   static primaryText(elt) {
+//      return elt.data.code.coding[0].display;
+//      return tryWithDefault(elt, elt => Allergies.code(elt).coding[0].display, Const.unknownValue);
+      return primaryTextValue(Allergies.code(elt));
+   }
+
    static propTypes = {
       data: PropTypes.array.isRequired,
       isEnabled: PropTypes.bool,
@@ -29,8 +48,8 @@ export default class Allergies extends React.Component {
    }
 
    setMatchingData() {
-      let match = FhirTransform.getPathItem(this.props.data, '[*category=Allergies]');
-      this.setState({ matchingData: match.length > 0 ? match.sort((a, b) => stringCompare(a.data.code.coding[0].display, b.data.code.coding[0].display))
+      let match = FhirTransform.getPathItem(this.props.data, `[*category=${Allergies.catName}]`);
+      this.setState({ matchingData: match.length > 0 ? match.sort(Allergies.compareFn)
 						     : null });
    }
 
@@ -46,9 +65,9 @@ export default class Allergies extends React.Component {
 
    render() {
       return ( this.state.matchingData &&
-	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
+	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
 	       <div className='allergies category-container'>
-		  { formatContentHeader(this.props.isEnabled, 'Allergies', this.state.matchingData[0].itemDate, this.context) }
+		  { formatContentHeader(this.props.isEnabled, Allergies.catName, this.state.matchingData[0], this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderAllergies(this.state.matchingData, this.context) }
 	          </div>

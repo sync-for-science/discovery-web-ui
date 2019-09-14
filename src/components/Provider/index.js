@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import '../../css/Selector.css';
+import { titleCase } from '../../util.js';
 
 import SVGContainer from '../SVGContainer';
 import DotLine from '../DotLine';
@@ -62,7 +63,7 @@ export default class Provider extends React.Component {
 	 <div className='selector'>
 	    <div className='selector-nav'>
 	       <button className={this.state.isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={this.handleButtonClick} >
-	          { this.props.providerName }
+		  { titleCase(this.props.providerName) }
 	       </button>
 	    </div>
 	    <SVGContainer className='selector-svg-container' svgClassName='selector-svg' svgWidth={this.props.svgWidth}>

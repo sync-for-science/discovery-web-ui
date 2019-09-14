@@ -1,0 +1,221 @@
+@charset "UTF-8";
+@import '../../css/ViewContainer.css';
+
+/* Sync for Science Discovery TilesView Stylesheet */
+/* v.01.08 Updated 09/05/2019 */
+
+/* Tiles View - contains tiles view and content panel  */
+
+.tiles-view {
+   position: fixed;
+   top: 166px;
+   left: 160px;
+   height: calc(100% - 176px);
+   width: calc(100% - 170px);
+   min-width: 840px;
+   display:flex;
+   flex-direction: column; 
+   background-color: var(--tile-area);
+   margin: 0;
+}
+
+/* Tiles View Container  */
+/* Three column structure - left nav/content/right nav */
+
+.tiles-view-container {
+   display: flex;
+   flex-direction: row;
+   width: 100%;
+   overflow-x: scroll;
+   overflow-y: hidden;
+   background-color: var(--tile-area);
+   margin: 15px 0 10px 0;
+}
+
+/* Left navigation */
+
+.tiles-view-nav-left {
+   width: 20px;
+   height: 100%;
+   background-color: var(--tile-area);
+   padding: 2px 0 0 0;
+   margin: 0 5px 0 5px;
+}
+
+.tiles-view-nav-button {
+   width: 20px;
+   height: 32px;
+   background-size: 20px 32px;
+   background-repeat: no-repeat;
+   background-position: center;
+   background-color: var(--tile-area);
+   outline: none;
+   border: 0;
+}
+
+.tiles-view-nav-left-button-on {
+   @insert .tiles-view-nav-button;
+   background-image: url("../../svg/arrow-button-tiles-left-on.svg");
+}
+
+.tiles-view-nav-left-button-off {
+   @insert .tiles-view-nav-button;
+   background-image: url("../../svg/arrow-button-tiles-left-off.svg");
+}
+
+/* Content */
+
+.tiles-view-container-inner {
+   display: flex;
+   flex-direction: row;
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   overflow-y: hidden;
+   background-color: var(--tile-area);
+}
+
+/* Content column structure */
+
+/* WARNING: Update numVisibleCols() in index.js if change width/margin values!!! */
+.tiles-view-column-container {
+   width:146px;
+   min-width: 146px;
+   height: auto;
+   display: flex;
+   flex-direction: column;
+   background-color: var(--tile-area);
+   margin: 0 10px 0 0;
+   overflow-x: hidden;
+   overflow-y: visible;
+}
+
+.tiles-view-column-header {
+   display:flex;
+   flex-direction: row;
+   position: relative;
+   top: 0;
+   width: 100%;
+   min-width: 100%;
+   height: 28px;
+   min-height: 28px;
+   align-items: center;
+   font-family: header-bold;
+   font-size: 0.813rem;
+   line-height: 28px;
+   color: var(--label-black);
+   padding: 0 20px 0 0;
+   overflow: hidden;
+}
+
+.tiles-view-column-header-button {
+   width: 30px;
+   min-width: 30px;
+   height: 28px;
+   min-height: 28px;
+   background-color: var(--tile-area);
+   background-size: 15px 15px;
+   background-position: right center;
+   background-repeat: no-repeat;
+   padding: 0;
+   border: 0;
+   margin: 0 12px 0 auto;
+   outline: none;
+   cursor: pointer;
+}
+
+.tiles-view-column-header-button-all {
+   @insert .tiles-view-column-header-button;
+   background-image: url("../../svg/button-selected-all.svg");
+}
+
+.tiles-view-column-header-button-partial {
+   @insert .tiles-view-column-header-button;
+   background-image: url("../../svg/button-selected-partial.svg");
+}
+
+.tiles-view-column-header-button-none {
+   @insert .tiles-view-column-header-button;
+   background-image: url("../../svg/button-selected-none.svg");
+}
+
+.tiles-view-column-content {
+   display: flex;
+   flex-direction: column;
+   width: 146px;
+   max-width: 146px;
+   min-width: 146px;
+   height: auto;
+   overflow-y: auto;
+   overflow-x: hidden;
+}
+
+/* Tiles */
+.tile {
+   position: relative;
+   left: 0;
+   display: flex;
+   flex-direction: row;
+   flex: auto;
+   flex-shrink: 0;
+   width: 133px;
+   max-width: 133px;
+   height: auto;
+   min-height: 36px;
+   font-family: data-text;
+   font-size: 0.750rem;
+   line-height: normal;
+   text-align: left;
+   padding: 10px;
+   border: 0;
+   border-radius: 5px;
+   cursor: pointer;
+   white-space: inherit;
+   outline: none;
+
+   word-wrap: break-word;
+   box-sizing: border-box;
+}
+
+.tile-standard {
+   @insert .tile;
+   color: var(--label-tile);
+   background-color: var(--tile);
+   margin: 0 0 6px 0;
+}
+
+.tile-standard-selected {
+   @insert .tile;
+   color: var(--label-tile-selected);
+   background-color: var(--tile-selected);
+   margin: 0 0 6px 0;
+}
+
+.tile-standard-last {
+   @insert .tile;
+   font-family: header-bold;
+   color: var(--label-tile-selected-last);
+   background-color: var(--tile-selected-last);
+   margin: 0 0 6px 0;
+}
+
+/* Right navigation */
+.tiles-view-nav-right {
+   position: relative;
+   right: 0;
+   width: 20px;
+   height: 100%;
+   background-color: var(--tile-area);
+   padding: 2px 0 0 0;
+   margin: 0 5px 0 10px;
+}
+
+.tiles-view-nav-right-button-on {
+   @insert .tiles-view-nav-button;
+   background-image: url("../../svg/arrow-button-tiles-right-on.svg");
+}
+
+.tiles-view-nav-right-button-off {
+   @insert .tiles-view-nav-button;
+   background-image: url("../../svg/arrow-button-tiles-right-off.svg");
+}

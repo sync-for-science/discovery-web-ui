@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatDate } from '../../util.js';
+import { formatKeyDate } from '../../util.js';
 import {XYPlot, XAxis, YAxis, VerticalGridLines, HorizontalGridLines, LineSeries, MarkSeries, WhiskerSeries} from 'react-vis';
 import 'react-vis/dist/style.css';
 
@@ -20,7 +20,7 @@ export default class TimeSeries extends React.Component {
 
    handleDotClick = (datapoint, event) => {
       let dotDate = datapoint.x.toISOString();
-      let formattedDotDate = formatDate(dotDate, true, true);
+      let formattedDotDate = formatKeyDate(dotDate);
       this.props.dotClickFn && this.props.dotClickFn(dotDate);
       // Need to "yield" via setTimeout() for 'elt' to resolve correctly
       setTimeout(() => {

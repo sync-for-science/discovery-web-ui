@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { renderDisplay } from '../../fhirUtil.js';
-import { stringCompare, formatContentHeader } from '../../util.js';
+import { renderMedsStatement, primaryTextValue } from '../../fhirUtil.js';
+import { Const, stringCompare, formatContentHeader, tryWithDefault } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -18,6 +18,27 @@ export default class MedsStatement extends React.Component {
 			       
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
+   static compareFn(a, b) {
+      return stringCompare(MedsStatement.primaryText(a), MedsStatement.primaryText(b));
+   }
+
+   static code(elt) {
+//      return elt.data.code || elt.data.medicationCodeableConcept;
+      return tryWithDefault(elt, elt => elt.data.medicationCodeableConcept, tryWithDefault(elt, elt => elt.data.code, null));
+   }
+
+   static primaryText(elt) {
+      // if (elt.data.code) {
+      // 	 return elt.data.code.coding[0].display;
+      // } else if (elt.data.medicationCodeableConcept) {
+      // 	 return elt.data.medicationCodeableConcept.coding[0].display;
+      // } else {
+      // 	 return '';
+      // }
+//      return tryWithDefault(elt, elt => MedsStatement.code(elt).coding[0].display, Const.unknownValue);
+      return primaryTextValue(MedsStatement.code(elt));
+   }
+
    static propTypes = {
       data: PropTypes.array.isRequired,
       isEnabled: PropTypes.bool,
@@ -29,8 +50,8 @@ export default class MedsStatement extends React.Component {
    }
 
    setMatchingData() {
-      let match = FhirTransform.getPathItem(this.props.data, '[*category=Meds Statement]');
-      this.setState({ matchingData: match.length > 0 ? match.sort((a, b) => stringCompare(a.data.code.coding[0].display, b.data.code.coding[0].display))
+      let match = FhirTransform.getPathItem(this.props.data, `[*category=${MedsStatement.catName}]`);
+      this.setState({ matchingData: match.length > 0 ? match.sort(MedsStatement.compareFn)
 						     : null });
    }
 
@@ -46,11 +67,11 @@ export default class MedsStatement extends React.Component {
 
    render() {
       return ( this.state.matchingData &&
-	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
+	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
 	       <div className='meds-statement category-container'>
-		  { formatContentHeader(this.props.isEnabled, 'Meds Statement', this.state.matchingData[0].itemDate, this.context) }
+		  { formatContentHeader(this.props.isEnabled, MedsStatement.catName, this.state.matchingData[0], this.context) }
 	          <div className='content-body'>
-		     { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Medication', this.context) }
+		     { this.props.isEnabled && renderMedsStatement(this.state.matchingData, 'Medication', this.context) }
 	          </div>
 	       </div> );
    }

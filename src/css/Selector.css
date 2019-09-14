@@ -1,22 +1,22 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Selector CSS */
-/* v.01.03 Updated 05/20/2019 */
+/* v.01.10 Updated 09/03/2019 */
 
 .selector-set {
-   height: auto;
-   width: auto;
+   width: 100%;
    min-width: 1024px;
+   height: auto;
    padding: 0;
-   margin: 0 20px 0 0;
+   margin: 0;
 }
 
 .selector {
    display: flex;
    flex-direction: row;
+   width: 100%;
    min-height: 28px;
    max-height: none;
-   width: 100%;
    padding: 0;
    margin: 0;
 }
@@ -24,44 +24,37 @@
 .selector-rollup {
    display: flex;
    flex-direction: row;
-   height: 28px;
-   max-height: 28px;
-   width: 100%;
+   width: calc(100% - 20px);
+   height: 38px;
+   max-height: 38px;
    padding: 0;
-   margin: 0;
+   margin: 0 10px;
 }
-
-/* .selector-rollup-enabled {
-   display: flex;
-   flex-direction: row;
-   height: 28px;
-   max-height: 28px;
-   width: 100%;
-   padding: 0;
-   margin: 0;
-} */
 
 /* Common for @insert */
 .selector-rollup-nav {
    display: flex;
-   justify-content: flex-start;
-   align-items: center;
-   height: 28px;
-   max-height: 28px;
-   width: 50px;
-   min-width: 50px;
-   max-width: 140px;
+   flex-direction: row;
+   justify-content: center;
+   width: 100px;
+   min-width: 100px;
+   max-width: 100px;
+   height: 38px;
+   max-height: 38px;
    font-family: header-bold;
-   font-size: 0.813rem;
-   color:var(--white-100);
+   font-size: 1.00rem;
+   color:var(--label-black);
    text-align: left;
-   background-size: 18px 18px;
-   background-position: 4px 6px;
+   line-height: 38px;
+   background-size: 10px 10px;
+   background-position: 0px center;
    background-repeat: no-repeat;
-   background-color:var(--primary-100);
-   padding: 0 0 0 28px;
-   border-radius: 0 20px 20px 0;
-   margin: 0 10px 0 20px;
+   background-color:transparent;
+   padding: 0 15px 0 15px;
+   border: 0;
+   margin: 0;
+   outline: none;
+   cursor: pointer;
 }
 
 .selector-rollup-nav-enabled {
@@ -74,43 +67,50 @@
    background-image: url(../svg/arrow-right-icon.svg);
 }
 
-/* .selector-rollup-svg-container {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   height: inherit;
-   background-image: url(../svg/horizontal-rule-1px-black.svg);
-   background-position: center;
-   background-repeat: repeat-x;
-   background-clip: padding-box;
-   padding: 0 10px;
+.selector-rollup-nav-button {
+   width: 30px;
+   min-width: 30px;
+   height: 38px;
+   min-height: 38px;
+   background-color: transparent;
+   background-size: 15px 15px;
+/*   background-position: right center; */
+   background-position: center center;
+   background-repeat: no-repeat;
+   padding: 0;
+   border: 0;
+/*   margin: 0 0 0 auto; */
    margin: 0;
-   overflow: hidden; 
-} */
+   outline: none;
+   cursor: pointer;
+}
 
-/* .selector-rollup-svg {
-   display:flex;
-   flex-direction: column;
-   align-items: flex-start;
-   width: inherit;
-   height: inherit;
-   overflow: visible;
-   
-   position: relative;
-   height: inherit;
-   overflow: visible;
-   margin: 0;
-} */
+.selector-rollup-nav-button-all {
+   @insert .selector-rollup-nav-button;
+   background-image: url("../svg/button-selected-all.svg");
+}
+
+.selector-rollup-nav-button-partial {
+   @insert .selector-rollup-nav-button;
+   background-image: url("../svg/button-selected-partial.svg");
+}
+
+.selector-rollup-nav-button-none {
+   @insert .selector-rollup-nav-button;
+   background-image: url("../svg/button-selected-none.svg");
+}
 
 .selector-nav {
    display: flex;
    justify-content: center;
+   width: 140px;
+   min-width: 140px;
    height: auto;
-   width: 184px;
-   min-width: 184px;
    text-align: center;
+/* text-transform: lowercase; */
    padding: 0;
-   margin:0 10px 0 20px;
+   border-radius: 0 20px;
+   margin:0 10px 0 10px;
    cursor: default;
 }
 
@@ -118,21 +118,18 @@
 .selector-button {
    display: flex;
    flex-direction: column;
-   justify-content:center;
-   align-items:left;
+   justify-content: center;
+   align-items: left;
+   width: 160px;
+   max-width: 160px;
    height: auto;
-   width: 180px;
-   max-width: 180px;
-   font-size:0.813rem;
+   font-size:0.750rem;
    text-align: left;
-   color: var(--primary-100);
-   background-color: var(--white-100);
-   background-repeat: no-repeat;
-   background-size: 22px 22px;
-   background-position: top left;
-   padding:0 0 0 25px;
+   line-height: 0.750rem;
+   padding:4px 0 4px 10px;
    border:0;
-   margin: 3px 0;
+   border-radius: 0 20px 20px 0;
+   margin: 0 0 2px 0;
    outline:none;
    overflow: visible;
    white-space: wrap;
@@ -141,29 +138,32 @@
 
 .selector-button-enabled {
    @insert .selector-button;
-   font-family:text;
-   background-image: url("../svg/checkmark-on.svg");
+   font-family:text-bold;
+   color: var(--label-button);
+   background-color: var(--button);
 }
 
 .selector-button-disabled {
    @insert .selector-button;
-   font-family:text;
-   background-image: url("../svg/checkmark-off.svg");
+   font-family:text-semibold;
+   color: var(--gs-050-100);
+   background-color: var(--gs-020-100);
 }
 
 .selector-svg-container {
    display: flex;
    justify-content: center;
    align-items: center;
+   width: 100%;
    min-height: 28px;
    max-height: none;
-   width: 100%;
    background-image: url(../svg/horizontal-rule-1px-black.svg);
    background-position: center;
    background-repeat: repeat-x;
    background-clip: padding-box;
+   background-color: var(--white-100);
    padding: 0 10px;
-   margin: 0;
+   margin: 0 10px 0 0;
    overflow: hidden;
 }
 
@@ -172,4 +172,21 @@
    min-height: 28px;
    max-height: none;
    overflow: visible;
+}
+
+.selector-controls {
+   display:flex;
+   flex-direction: row;
+}
+
+.selector-controls-button {
+   
+}
+
+.selector-controls-button-select-all {
+   
+}
+
+.selector-controls-button-clear {
+   
 }

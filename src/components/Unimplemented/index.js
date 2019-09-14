@@ -6,7 +6,7 @@ import '../ContentPanel/ContentPanel.css';
 import '../ContentPanel/ContentPanelCategories.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { stringCompare, formatContentHeader } from '../../util.js';
+import { Const, stringCompare, formatContentHeader } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -21,9 +21,21 @@ export default class Unimplemented extends React.Component {
    // *** Should match "Currently unsupported" list in DiscoveryApp/index.js:categoriesForProviderTemplate() ***
    static unimplementedCats = ['Practitioner', 'List', 'Questionnaire', 'QuestionnaireResponse', 'Observation-Other',
 			       'DiagnosticReport', 'CarePlan', 'Medication', 'Organization', 'Goal', 'Basic',
-			       'ImmunizationRecommendation', 'ImagingStudy'];
+			       'ImmunizationRecommendation', 'ImagingStudy', 'Coverage', 'RelatedPerson'];
 
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+
+   static compareFn(a, b) {
+      return stringCompare(Unimplemented.primaryText(a), Unimplemented.primaryText(b));
+   }
+
+   static code(elt) {
+      return null;
+   }
+
+   static primaryText(elt) {
+      return elt.category;
+   }
 
    static propTypes = {
       data: PropTypes.array.isRequired,
@@ -38,7 +50,8 @@ export default class Unimplemented extends React.Component {
    setMatchingData() {
       let queryString = '[* ' + Unimplemented.unimplementedCats.map(cat => 'category='+cat).join(' | ') + ']';
       let match = FhirTransform.getPathItem(this.props.data, queryString);
-      this.setState({ matchingData: match.length > 0 ? match.sort((a, b) => stringCompare(a.category, b.category)) : null });
+//      this.setState({ matchingData: match.length > 0 ? match.sort((a, b) => stringCompare(a.category, b.category)) : null });
+      this.setState({ matchingData: match.length > 0 ? match.sort(Unimplemented.compareFn) : null });
    }
 
    componentDidMount() {
@@ -54,7 +67,7 @@ export default class Unimplemented extends React.Component {
    render() {
       let renderedCats = [];
       return ( this.state.matchingData &&
-	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
+	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
 	       this.state.matchingData.map((elt, index) => {
 		  if (renderedCats.includes(elt.category)) {
 		     return null;
@@ -62,7 +75,7 @@ export default class Unimplemented extends React.Component {
 		     renderedCats.push(elt.category);
 		     return (
 			<div className='unimplemented category-container' key={index} >
-			   { formatContentHeader(this.props.isEnabled, elt.category, this.state.matchingData[0].itemDate, this.context) }
+			   { formatContentHeader(this.props.isEnabled, elt.category, this.state.matchingData[0], this.context) }
 			   <div className='content-body'>
 			      <div className='content-container-last'>
 				 <div className='content-data'>

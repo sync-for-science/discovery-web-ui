@@ -6,7 +6,7 @@ import Draggable from 'react-draggable';
 import './PageHeader.css';
 import config from '../../config.js';
 
-import { formatPatientName } from '../../fhirUtil.js';
+//import { formatPatientName } from '../../fhirUtil.js';
 import FhirTransform from '../../FhirTransform.js';
 import Search from '../Search';
 
@@ -22,7 +22,6 @@ export default class PageHeader extends React.Component {
       modalIsOpen: PropTypes.bool.isRequired,
       modalFn: PropTypes.func.isRequired,	// Callback to handle clicks on header icons
       viewFn: PropTypes.func.isRequired,	// Callback to handle view selection
-      searchData: PropTypes.array,
       searchCallback: PropTypes.func.isRequired,
       resources: PropTypes.instanceOf(FhirTransform)
    }
@@ -40,7 +39,7 @@ export default class PageHeader extends React.Component {
 
    onKeydown = (event) => {
       if (this.state.menuIsOpen && event.key === 'Escape') {
-	 this.setState({menuIsOpen: false});
+	 this.setState({ menuIsOpen: false });
       }
    }
 
@@ -48,10 +47,11 @@ export default class PageHeader extends React.Component {
       window.addEventListener('keydown', this.onKeydown);
       const queryVals = queryString.parse(this.props.rawQueryString);
       if (queryVals.logos) {
-	  this.setState({logoClasses: queryVals.logos.split(',')});
+	  this.setState({ logoClasses: queryVals.logos.split(',') });
       }
-      this.viewClick('longitudinalView');	// Set initial/default view
-   }
+      this.viewClick('summaryView');	// Set initial/default view
+//      this.viewClick('reportView');	// Set initial/default view 
+  }
 
    componentWillUnmount() {
       window.removeEventListener('keydown', this.onKeydown);
@@ -70,29 +70,29 @@ export default class PageHeader extends React.Component {
 	    default:
 	       break;
 	 }
-	 this.setState({modalName: ''})
+	 this.setState({ modalName: '' })
       }
 
       if (prevState.currentViewName !== this.state.currentViewName && prevState.currentViewName) {
 	 // Turn "off" the previous button
 	 switch (prevState.currentViewName) {
-	    case 'longitudinalView':
+	    case 'reportView':
 	       document.querySelector('.longitudinal-view-button-on').className = 'longitudinal-view-button-off';
 	       break;
 	    case 'compareView':
 	       document.querySelector('.compare-view-button-on').className = 'compare-view-button-off';
 	       break;
-//	    case 'reportView':
-//	       document.querySelector('.report-view-button-on').className = 'report-view-button-off';
-//	       break;
-	    case 'benefitsView':
+	    case 'financialView':
 	       document.querySelector('.benefits-view-button-on').className = 'benefits-view-button-off';
 	       break;
-	    case 'consultView':
-	       document.querySelector('.consult-view-button-on').className = 'consult-view-button-off';
-	       break;
-	    case 'diabetesView':
-	       document.querySelector('.diabetes-view-button-on').className = 'diabetes-view-button-off';
+//	    case 'consultView':
+//	       document.querySelector('.consult-view-button-on').className = 'consult-view-button-off';
+//	       break;
+//	    case 'diabetesView':
+//	       document.querySelector('.diabetes-view-button-on').className = 'diabetes-view-button-off';
+//	       break;
+	    case 'tilesView':
+	       document.querySelector('.tiles-view-button-on').className = 'tiles-view-button-off';
 	       break;
 	    case 'summaryView':
 	    default:
@@ -111,25 +111,25 @@ export default class PageHeader extends React.Component {
 
       if (dir==='+' && size < config.maxTextSize) {
 	 size = size + config.textSizeStep;
-	 this.setState({currentTextSize: size});
+	 this.setState({ currentTextSize: size });
 	 document.documentElement.style.fontSize = size + 'rem';
 
       } else if (dir==='-' && size > config.minTextSize) {
 	 size = size - config.textSizeStep;
-	 this.setState({currentTextSize: size});
+	 this.setState({ currentTextSize: size });
 	 document.documentElement.style.fontSize = size + 'rem';
       }
    }
 
    resetTextSize() {
-      this.setState({currentTextSize: 1.0});
+      this.setState({ currentTextSize: 1.0 });
       document.documentElement.style.fontSize = '1.0rem';
    }
 
    itemClick(itemName) {
       if (!this.props.modalIsOpen) {
-	 this.setState({modalName: itemName});	// Record which button was clicked for subsequent close
-	 this.props.modalFn(itemName);		// Let parent know to open the modal
+	 this.setState({ modalName: itemName });	// Record which button was clicked for subsequent close
+	 this.props.modalFn(itemName);			// Let parent know to open the modal
 
 	 // Turn "on" the appropriate item
 	 switch (itemName) {
@@ -146,7 +146,7 @@ export default class PageHeader extends React.Component {
 
    renderMenu() {
       return (
-	 <div className='header-menu' onMouseLeave={() => this.setState({menuIsOpen: false})}>
+	 <div className='header-menu' onMouseLeave={() => this.setState({ menuIsOpen: false })}>
 	    <div className='header-menu-help'     onClick={() => this.itemClick('helpModal')}>Help</div>
 	    <div className='header-menu-download' onClick={() => this.itemClick('downloadModal')}>Download</div>
 	    <div className='header-menu-print'    onClick={() => this.itemClick('printModal')}>Print</div>
@@ -160,28 +160,28 @@ export default class PageHeader extends React.Component {
 
       if (viewName !== this.state.currentViewName) {
 	 // Clicked different view
-	 this.setState( {currentViewName: viewName} );
+	 this.setState({ currentViewName: viewName });
 	 this.props.viewFn(viewName);		// Let parent know which view was selected
 
 	 // Turn "on" the appropriate button
 	 switch (viewName) {
-	    case 'longitudinalView':
+	    case 'reportView':
 	       document.querySelector('.longitudinal-view-button-off').className = 'longitudinal-view-button-on';
 	       break;
 	    case 'compareView':
 	       document.querySelector('.compare-view-button-off').className = 'compare-view-button-on';
 	       break;
-//	    case 'reportView':
-//	       document.querySelector('.report-view-button-off').className = 'report-view-button-on';
-//	       break;
-	    case 'benefitsView':
+	    case 'financialView':
 	       document.querySelector('.benefits-view-button-off').className = 'benefits-view-button-on';
 	       break;
-	    case 'consultView':
-	       document.querySelector('.consult-view-button-off').className = 'consult-view-button-on';
-	       break;
-	    case 'diabetesView':
-	       document.querySelector('.diabetes-view-button-off').className = 'diabetes-view-button-on';
+//	    case 'consultView':
+//	       document.querySelector('.consult-view-button-off').className = 'consult-view-button-on';
+//	       break;
+//	    case 'diabetesView':
+//	       document.querySelector('.diabetes-view-button-off').className = 'diabetes-view-button-on';
+//	       break;
+	    case 'tilesView':
+	       document.querySelector('.tiles-view-button-off').className = 'tiles-view-button-on';
 	       break;
 	    case 'summaryView':
 	    default:
@@ -190,8 +190,8 @@ export default class PageHeader extends React.Component {
 	 }
 
 	 // Open help if closed then reset interval
-	 if (!this.state.viewHelpIsOpen) {
-	    this.setState( {viewHelpIsOpen: true} );
+	 if (config.showViewHelp && !this.state.viewHelpIsOpen) {
+	    this.setState({ viewHelpIsOpen: true });
 	 }
 	 this.setViewHelpInterval();
 
@@ -200,7 +200,7 @@ export default class PageHeader extends React.Component {
 	 if (!this.state.viewHelpIsOpen) {
 	    this.setViewHelpInterval();
 	 }
-	 this.setState( {viewHelpIsOpen: !this.state.viewHelpIsOpen} );
+	 this.setState({ viewHelpIsOpen: !this.state.viewHelpIsOpen });
       }
    }
 
@@ -209,14 +209,14 @@ export default class PageHeader extends React.Component {
 	 this.viewHelpInterval = setInterval(
 	    () => {
 	       let remaining = this.state.viewHelpRemainingTime - 1;
-	       this.setState( {viewHelpRemainingTime: remaining} );
+	       this.setState({ viewHelpRemainingTime: remaining });
 	       if (remaining === 0) {
-		  this.setState( {viewHelpIsOpen: false} );
+		  this.setState({ viewHelpIsOpen: false });
 		  this.clearViewHelpInterval();
 	       }
 	    }, 1000);
 
-      	 this.setState( {viewHelpRemainingTime: config.viewHelpCloseTime} );
+      	 this.setState({ viewHelpRemainingTime: config.viewHelpCloseTime });
       }
    }
 
@@ -224,50 +224,46 @@ export default class PageHeader extends React.Component {
       if (this.viewHelpInterval) {
 	 clearInterval(this.viewHelpInterval);
 	 this.viewHelpInterval = null;
-	 this.setState( {viewHelpRemainingTime: 0} );
+	 this.setState({ viewHelpRemainingTime: 0 });
       }
    }
 
    onCloseViewHelp = () => {
-      this.setState( {viewHelpIsOpen: false} );
+      this.setState({ viewHelpIsOpen: false });
       this.clearViewHelpInterval();
    }
 
-   get viewHelpTitle() {
-      return {
-//	 longitudinalView: 'Timeline',
-	 longitudinalView: 'Report',
-	 compareView: 'Compare',
-//	 reportView: 'Report',
-	 summaryView: 'Summary',
-	 benefitsView: 'Financial',
-	 consultView: 'Consult',
-	 diabetesView: 'Diabetes'
-      }
-   }
+//   get viewHelpTitle() {
+//      return {
+//	 reportView: '',
+////	 compareView: 'Compare',
+////	 summaryView: 'Summary',
+////	 financialView: 'Financial',
+////	 consultView: 'Consult',
+////	 diabetesView: 'Diabetes'
+//      }
+//   }
 
    get viewHelpText() {
       return {
-//	 longitudinalView: <div>The <b>Timeline</b> view shows a clickable dot for each date you have data.</div>,
-	 longitudinalView: <div>The <b>Report View</b> shows your data over time or for one point in time.</div>,
+//	 reportView: <div>The <b>Report View</b> shows your data over time or for one point in time.</div>,
+	 reportView: <div>The <b>Report View</b> shows your data over time.</div>,
 	 compareView: <div>The <b>Compare View</b> shows your unique data by provider.</div>,
-//	 reportView: <div>The <b>Report</b> view lists all your data in date order.</div>,
 	 summaryView: <div>The <b>Summary View</b> shows an overview of your data.</div>,
-	 benefitsView: <div>The <b>Financial View</b> shows your benefits and claims data over time or for one point in time.</div>,
-	 consultView: <div>The <b>Consult View</b> shows a knowledge-annotated view of your conditions over time or for one point in time.</div>,
-	 diabetesView: <div>The <b>Diabetes View</b> shows data specific to this condition.</div>
+	 financialView: <div>The <b>Financial View</b> shows your benefits and claims data over time or for one point in time.</div>,
+//	 consultView: <div>The <b>Consult View</b> shows a knowledge-annotated view of your conditions over time or for one point in time.</div>,
+//	 diabetesView: <div>The <b>Diabetes View</b> shows data specific to this condition.</div>
       };
    }
 
    get viewHelpIconClass() {
       return {
-	 longitudinalView: 'view-help-title-longitudinal-view',
+	 reportView: 'view-help-title-longitudinal-view',
 	 compareView: 'view-help-title-compare-view',
-//	 reportView: 'view-help-title-report-view',
 	 summaryView: 'view-help-title-default-view',
-	 benefitsView: 'view-help-title-benefits-view',
-	 consultView: 'view-help-title-consult-view',
-	 diabetesView: 'view-help-title-diabetes-view'
+	 financialView: 'view-help-title-benefits-view',
+//	 consultView: 'view-help-title-consult-view',
+//	 diabetesView: 'view-help-title-diabetes-view'
       };
    }
     
@@ -275,18 +271,19 @@ export default class PageHeader extends React.Component {
       return (
 	 <Draggable>
 	    <div className='view-help-container'>
-	       <div className='view-help-title-container'>
-		  <div className='view-help-title'>
+	      {/* <div className='view-help-title-container'>
+          <div className='view-help-title'>
 		     <div className={this.viewHelpIconClass[this.state.currentViewName]}>
 			{ this.viewHelpTitle[this.state.currentViewName]
 			  + (config.viewHelpCloseCountdown ? ' (' + this.state.viewHelpRemainingTime + ' sec)' : '') } 
 		     </div>
 		     <button className='view-help-close-button' onClick={this.onCloseViewHelp} />
-	          </div>
-	       </div>
+	          </div> 
+	       </div> */}
 	       <div className='view-help-contents'>
 		  { this.viewHelpText[this.state.currentViewName] }
-	       </div>
+         </div>
+         <div className='view-help-contents-icon'></div>
 	    </div>
 	 </Draggable>
       );
@@ -300,31 +297,35 @@ export default class PageHeader extends React.Component {
 		   (logoClass,index) => <button className={logoClass+'-off'} key={logoClass+index} onClick={() => this.itemClick('logoModal')} /> )}
 	    </div>
 	    <div className='view-controls-box'>
-	      <button className='longitudinal-view-button-off' onClick={() => this.viewClick('longitudinalView')}></button>
-	      {/*	      <button className='report-view-button-off' onClick={() => this.viewClick('reportView')}></button> */}
-	      <button className='compare-view-button-off' onClick={() => this.viewClick('compareView')}></button>
-	      <button className='default-view-button-off' onClick={() => this.viewClick('summaryView')}></button>
-	      <button className='benefits-view-button-off' onClick={() => this.viewClick('benefitsView')}></button>
-	      <button className='consult-view-button-off' onClick={() => this.viewClick('consultView')}></button>
-	      <button className='diabetes-view-button-off' onClick={() => this.viewClick('diabetesView')}></button>
+	       <button className='default-view-button-off' onClick={() => this.viewClick('summaryView')}>Summary</button>
+          <button className='tiles-view-button-off' onClick={() => this.viewClick('tilesView')}>Catalog</button>
+	       <button className='compare-view-button-off' onClick={() => this.viewClick('compareView')}>Compare</button>
+          <button className='longitudinal-view-button-off' onClick={() => this.viewClick('reportView')}>Timeline</button>
+	       <button className='benefits-view-button-off' onClick={() => this.viewClick('financialView')}>Payer</button>
+	       {/* <button className='consult-view-button-off' onClick={() => this.viewClick('consultView')}>Consult</button> */}
+	       {/* <button className='diabetes-view-button-off' onClick={() => this.viewClick('diabetesView')}>Conditions</button> */}
 	    </div>
 	    { this.state.viewHelpIsOpen && this.renderViewHelp() }
-	    <div className='patient-name'>
+	    {/* <div className='patient-name'>
 	       { this.props.resources && formatPatientName(this.props.resources.pathItem('[category=Patient].data.name')) }
-	    </div>
-	    { this.props.searchData && <Search data={this.props.searchData} callback={this.props.searchCallback} />}
+	     </div> */}
+	    { this.props.resources && <Search data={this.props.resources.transformed} callback={this.props.searchCallback} />}
 	    <div className='header-controls-box'>
-	      {/* make highlight active/inactive first <button className={'inactive-light-'+(this.state.inactiveLight ? 'on' : 'off')}>Inactive</button> */}
-	       <button className='text-size-smaller-button-off'	onClick={() => this.resizeText('-')} />
-	       <button className='text-size-larger-button-off'	onClick={() => this.resizeText('+')} />
-	       <div className='text-size-current'		onClick={() => this.resetTextSize()}>
-	         {Math.round(this.state.currentTextSize*100)}%
+	       {/* make highlight active/inactive first <button className={'inactive-light-'+(this.state.inactiveLight ? 'on' : 'off')}>Inactive</button> */}
+	       <button className='text-size-smaller-button-off'	onClick={() => this.resizeText('-')} >A</button>
+	       <div className='text-size-slider-container'>
+	          <div className='text-size-slider-button' />
 	       </div>
-
-	      <button className={this.state.menuIsOpen ? 'header-menu-button-open' : 'header-menu-button'}
-		      onClick={() => this.state.modalName === '' && this.setState({menuIsOpen: !this.state.menuIsOpen})} />
-	       { this.state.menuIsOpen && this.renderMenu() }
+	       <button className='text-size-larger-button-off'	onClick={() => this.resizeText('+')} >A</button>
 	    </div>
+	    {/* <div className='text-size-current'		onClick={() => this.resetTextSize()}>
+	         {Math.round(this.state.currentTextSize*100)}%
+	     </div> */}
+         
+	    {/* <button className={this.state.menuIsOpen ? 'header-menu-button-open' : 'header-menu-button'}
+			onClick={() => this.state.modalName === '' && this.setState({ menuIsOpen: !this.state.menuIsOpen })} />
+	        { this.state.menuIsOpen && this.renderMenu() } */}
+	    
 	 </div>
       )
    }

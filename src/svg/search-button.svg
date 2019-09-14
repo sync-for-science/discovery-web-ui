@@ -1,24 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 23.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 80 80" style="enable-background:new 0 0 80 80;" xml:space="preserve">
+<!-- Generator: Adobe Illustrator 23.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 15 15" style="enable-background:new 0 0 15 15;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#6975A8;}
-	.st1{display:none;fill:#FFFFFF;}
-	.st2{fill:#C0C5DB;}
+	.st0{opacity:0.75;fill:#FFFFFF;}
 </style>
-<g>
-	<path class="st0" d="M63.8,79H16.2c-8.2,0-15-6.8-15-15V16.4c0-8.2,6.8-15,15-15h47.6c8.2,0,15,6.8,15,15V64
-		C78.8,72.2,72,79,63.8,79z"/>
-	<polygon class="st1" points="75.8,40.2 49.9,20.3 49.9,33.6 30.1,33.6 30.1,20.3 4.2,40.2 30.1,60.1 30.1,46.4 49.9,46.4 
-		49.9,60.1 	"/>
-</g>
-<g id="Layer_4">
-	<circle id="White_Background_3_" class="st0" cx="51.2" cy="29.3" r="19.3"/>
-	<path id="Search_Button_Icon_2_" class="st2" d="M13.4,69.4L10,66c-0.6-0.6-0.6-1.7,0-2.3l21.9-19.9c0.6-0.6,1.4-0.6,2,0l1.7,1.7
-		c0.6,0.6,0.6,1.4,0,2L15.7,69.4C15.1,70,13.9,70,13.4,69.4z M70.6,29.3c0-11.1-9.1-20.2-20.2-20.2s-20.5,8.8-20.5,20.2
-		S38.9,49.5,50,49.5S70.6,40.4,70.6,29.3z M67.5,29.3c0,9.4-7.7,17.1-17.1,17.1s-17.1-7.7-17.1-17.1S41,12.2,50.4,12.2
-		S67.5,19.6,67.5,29.3z M56.4,16.1c-0.6,0-1.4,0-2,0c-9.7,0-17.4,7.7-17.4,17.4c0,0.6,0,1.4,0,2c-0.8-1.7-1.1-3.7-1.1-6
-		c0-8,6.6-14.5,14.5-14.5C52.4,14.7,54.4,15.3,56.4,16.1z"/>
-</g>
+<path class="st0" d="M9.1,0C5.9,0,3.2,2.6,3.2,5.9c0,1.4,0.5,2.7,1.3,3.7l-4,4L2,15l4.1-4.1C7,11.4,8,11.8,9.1,11.8
+	c3.2,0,5.9-2.6,5.9-5.9C15,2.6,12.4,0,9.1,0z M9.1,10.1c-2.4,0-4.3-1.9-4.3-4.3c0-2.4,1.9-4.3,4.3-4.3s4.3,1.9,4.3,4.3
+	C13.4,8.2,11.5,10.1,9.1,10.1z"/>
 </svg>

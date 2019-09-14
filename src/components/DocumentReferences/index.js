@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { renderDisplay } from '../../fhirUtil.js';
-import { stringCompare, formatContentHeader } from '../../util.js';
+import { renderDisplay, primaryTextValue } from '../../fhirUtil.js';
+import { Const, stringCompare, formatContentHeader } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -18,6 +18,20 @@ export default class DocumentReferences extends React.Component {
     
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
+   static compareFn(a, b) {
+      return stringCompare(DocumentReferences.primaryText(a), DocumentReferences.primaryText(b));
+   }
+
+   static code(elt) {
+      return elt.data.code;
+   }
+
+   static primaryText(elt) {
+//      return elt.data.code.coding[0].display;
+//      return tryWithDefault(elt, elt => DocumentReferences.code(elt).coding[0].display, Const.unknownValue);
+      return primaryTextValue(DocumentReferences.code(elt));
+   }
+
    static propTypes = {
       data: PropTypes.array.isRequired,
       isEnabled: PropTypes.bool,
@@ -29,8 +43,8 @@ export default class DocumentReferences extends React.Component {
    }
 
    setMatchingData() {
-      let match = FhirTransform.getPathItem(this.props.data, '[*category=Document References]');
-      this.setState({ matchingData: match.length > 0 ? match.sort((a, b) => stringCompare(a.data.code.coding[0].display, b.data.code.coding[0].display))
+      let match = FhirTransform.getPathItem(this.props.data, `[*category=${DocumentReferences.catName}]`);
+      this.setState({ matchingData: match.length > 0 ? match.sort(DocumentReferences.compareFn)
 						     : null });
    }	
 
@@ -46,9 +60,9 @@ export default class DocumentReferences extends React.Component {
 
    render() {
       return ( this.state.matchingData &&
-	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
+	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
 	       <div className='document-references category-container'>
-		  { formatContentHeader(this.props.isEnabled, 'Document References', this.state.matchingData[0].itemDate, this.context) }
+		  { formatContentHeader(this.props.isEnabled, DocumentReferences.catName, this.state.matchingData[0], this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Document', this.context) }
 	          </div>

@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science ContentPanelCategories Stylesheet */
-/* v.01.05  Updated 05/13/2019 */
+/* v.01.10  Updated 08/05/2019 */
 
 /* Flexbox Styles */
 .flexbox-row {
@@ -18,22 +18,25 @@
 /* Grid Styles */
 .grid {
 	display:grid;
-	grid-column-gap: 10px;
+	grid-column-gap: 20px;
 }
 
 /* Grid Columns */
 .col01 {
 	grid-column: 1;
-   width: 6.75rem;
-   min-width: 6.75rem;
-   max-width: 6.75rem;
-   padding: 0 0 0 32px;
+   width: auto;
+   height: 20px;
+   padding: 0;
    white-space: normal;
 }
 
 .col02 {
 	grid-column: 2;
-   min-width: 275px;
+   width: 18.750rem;
+ /*  max-width: 18.750rem; */
+   min-width: 18.750rem;
+   height: 20px;
+   padding: 0 0 0 0;
 }
 
 /* Content Panel Styles */
@@ -54,10 +57,12 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	width: auto;
-	font-size: 0.800rem;
+	font-size: 0.625rem;
 	text-align: left;
-	color: var(--data);
-   padding-top: 0.300rem;
+   text-transform: uppercase;
+   height: 1.250rem;
+	color: var(--label-data);
+   line-height: 1.250rem;
 	margin: 0;
    white-space: normal;
 }
@@ -78,30 +83,51 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	width: auto;
+   height: 1.250rem;
 	font-size: 1.100rem;
-	line-height: 1.100rem;
+	line-height: 1.250rem;
 	color: var(--data);
 	text-align: left;
 	padding: 0;
-	margin: 0.200rem 0 0 0;
+	margin: 0 0 0 0;
 }
 
 .value-number {
 	@insert .value-master;
-   height: 1.100rem;
+   height: auto;
 	font-family: data-number;
+   font-size: 0.813rem;
+   color: var(--black-100);
+   padding: 0 0 0 15px;
    white-space: nowrap;
 }
 
 .value-text {
 	@insert .value-master;
 	height: auto;
-   font-family: data-text;
+   font-family: data-text-semibold;
+   font-size: 0.813rem;
+   color: var(--black-100);
+   padding: 0 0 0 15px;
    white-space: normal;
 }
 
-.medium {
-   font-family: data-text-medium;
+
+/* .medium {
+   font-family: data-text-bold;
+   padding: 0 0 5px 0;
+} */
+
+.primary {
+   font-family: data-text-bold;
+   padding: 0 0 5px 15px;
+}
+
+.primary-accent {
+   font-family: data-text-bold;
+   padding: 0 0 5px 0;
+   color: white;
+   background-color: mediumaquamarine;
 }
 
 /* Text Alignment */

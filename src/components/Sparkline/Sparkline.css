@@ -7,6 +7,15 @@
 
 }
 
-.line {
+.mark-noclick {
+   cursor: default;
+}
 
+.line {
+   color: black;
+}
+
+.line-noclick {
+   stroke: black;
+   cursor: default;
 }

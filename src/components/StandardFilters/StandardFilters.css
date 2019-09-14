@@ -2,11 +2,19 @@
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery StandardFilters Stylesheet */
-/* v.01.03 Updated 05/13/2019 */
+/* v.01.05 Updated 08/21/2019 */
+
+.standard-filters {
+/*    position: fixed;
+    top: 46px;
+    left: -150px;
+    height: 100%;
+    width: 100%; */
+}
 
 .standard-filters-categories-and-providers {
 	position: fixed;
-	top: 146px;
+	top: 166px;
 	left: 0;
 	height: auto;
    width: 100%;
@@ -16,14 +24,46 @@
 	overflow: visible;
 }
 
-.standard-filters-category-nav-spacer-top {
-	height: 3px;
-	min-height: 3px;
-	width: 180px;
-	min-width: 182px;
+.standard-filters-category-nav-button-container {
+	display: flex;
+   flex-direction: row;
+   height: 36px;
+	min-height: 36px;
+	width: 146px;
+	min-width: 146px;
 	padding: 0;
-   margin: 0;
+   margin: 0 0 0 10px;
 	cursor: default;
+}
+
+.standard-filters-category-nav-button-select-all {
+   width: 80px;
+   height: 20px;
+   font-family: header-bold;
+   font-size: 0.750rem;
+   color: var(--blue-medium-100);
+   line-height: 20px;
+   background-color: var(--gs-000-100);
+   padding: 0;
+   border: none;
+   border-radius: 20px;
+   margin: 8px 0;
+   outline: none;
+}
+
+.standard-filters-category-nav-button-clear {
+   width: 56px;
+   height: 20px;
+   font-family: header-bold;
+   font-size: 0.750rem;
+   color: var(--blue-medium-100);
+   line-height: 20px;
+   background-color: var(--gs-000-100);
+   padding: 0;
+   border: none;
+   border-radius: 20px;
+   margin: 8px 5px 8px auto;
+   outline: none;
 }
 
 .standard-filters-category-nav-spacer-bottom {
@@ -42,6 +82,46 @@
 	min-width: 182px;
 	padding: 0;
    margin: 0;
+}
+
+.standard-filters-provider-nav-button-container {
+	display: flex;
+   flex-direction: row;
+   height: 36px;
+	min-height: 36px;
+	width: 146px;
+	min-width: 146px;
+	padding: 0;
+   margin: 0 0 0 10px;
+	cursor: default;
+}
+
+.standard-filters-provider-nav-button-select-all {
+   width: 80px;
+   height: 20px;
+   font-family: header-bold;
+   font-size: 0.750rem;
+   color: var(--blue-medium-100);
+   line-height: 20px;
+   background-color: var(--gs-000-100);
+   padding: 0;
+   border: none;
+   border-radius: 20px;
+   margin: 8px 0;
+}
+
+.standard-filters-provider-nav-button-clear {
+   width: 56px;
+   height: 20px;
+   font-family: header-bold;
+   font-size: 0.750rem;
+   color: var(--blue-medium-100);
+   line-height: 20px;
+   background-color: var(--gs-000-100);
+   padding: 0;
+   border: none;
+   border-radius: 20px;
+   margin: 8px 5px 8px auto;
 }
 
 .standard-filters-provider-nav-spacer-bottom {
@@ -82,6 +162,6 @@
 .standard-filters-single-provider-name{
 	font-family: text-bold;
 	font-size: 0.750rem;
-	color: var(--white-100);
+	color: var(--gs-000-100);
 	padding: 0;
 }

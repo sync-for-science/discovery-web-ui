@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { Const } from '../../util.js';
+
 import DiscoveryContext from '../DiscoveryContext';
 
 //
@@ -36,16 +38,16 @@ export default class CondDiv extends React.Component {
 
       switch (this.context.trimLevel) {
 	 // Unconditionally trim this element/value
-         case 'max':
+         case Const.trimMax:
 	    return true;
 
 	 // Only trim 'expected' (typical) values
-         case 'expected':
+         case Const.trimExpected:
 	    return checkValArray.some( checkVal => expectedArray.includes(checkVal) );
 
 	 // Unconditionally show this element/value
          default:
-         case 'none':
+         case Const.trimNone:
 	    return false;
       }
    }

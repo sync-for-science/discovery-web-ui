@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.36 Updated 05/13/2019 */
+/* v.01.46 Updated 09/05/2019 */
 
 .page-header {
    position: fixed;
@@ -10,12 +10,11 @@
    z-index: 1;
    display: flex;
    flex-direction: row;
-   height: 60px;
+   height: 46px;
    width: 100%;
    min-width: 1024px;
-   border-bottom: 2px  solid var(--accent-100);
-   background-color: var(--primary-100);
-   padding: 0;
+   background-color: var(--background-header);
+   padding: 0 10px 0 0;
    margin: 0; 
 }
 
@@ -23,15 +22,15 @@
 .logo-box {
    display: flex;
    align-items: center;
-   height: 60px;
-   width: 194px;
-   min-width: 194px;
-   padding: 0 0 0 20px;
-   margin: 0;
+   height: 46px;
+   width: 140px;
+   min-width: 140px;
+   padding: 0;
+   margin: 0 10px;
 }
 
 .logo-button-common {
-   height: 60px;
+   height: 46px;
    background-color: transparent;
    background-repeat: no-repeat;
    background-position: 0 center;
@@ -42,25 +41,27 @@
 
 .logo-s4s-button-off {
    @insert .logo-button-common;
-   width: 194px;
-   background-image: url(../../svg/logo-s4s-3-off.svg);
-   background-size: 210px 60px;
-   margin: 0 20px 0 0;
+   width: 140px;
+   background-image: url(../../svg/logo-s4s-4-off.svg);
+   background-size: 115px 22px;
+   background-position: center;
+   margin: 0;
 }
 
 .logo-s4s-button-on {
    @insert .logo-button-common;
-   width: 194px;
-   background-image: url(../../svg/logo-s4s-3-on.svg);
-   background-size: 210px 60px;
-   margin: 0 20px 0 0;
+   width: 140px;
+   background-image: url(../../svg/logo-s4s-4-on.svg);
+   background-size: 115px 22px;
+   background-position: center;
+   margin: 0;
 }
 
 .logo-harvard-button-off {
    @insert .logo-button-common;
    width: 140px;
    background-image: url(../../svg/logo-harvard-off.svg);
-   background-size:1 40px 40px;
+   background-size: 40px 40px;
    margin: 0 20px 0 0;
 }
 
@@ -166,103 +167,121 @@
    flex-wrap: nowrap;
    align-items: left;
    justify-content: flex-start;
-   height: 40px;
+   height: 42px;
    width: auto;
-   padding: 0 0 0 10px;
-   margin: 10px 0;
-	border-left: 1px solid var(--white-075);
+   padding: 0;
+   margin: 4px 0 0 0;
+   border: 0;
 }
 
 .view-button {
-   height: 40px;
-   width: 40px;
-   min-width: 40px;
-   background-size: 30px 30px;
-   background-repeat: no-repeat;
-   background-color: transparent;
-   background-position: center center;
-	padding: 0 0 0 5px;
+   height: 38px;
+   width: 4.50rem; 
+   min-width: 4.50rem;
+   font-family: header-bold;
+   font-size: 0.875rem;
+   color: var(--label-button-view-disabled);
+   padding: 0;
    border: none;
+   border-radius: 5px;
    margin: 0;
    cursor: pointer;
 }
 
 .report-view-button-off {
    @insert .view-button;
-   background-image: url("../../svg/view-button-report-off.svg");
+   background-color: transparent;
 }
 
 .report-view-button-on {
    @insert .view-button;
-   background-image: url("../../svg/view-button-report-on.svg");
+   background-color: var(--button-view);
+   color: var(--label-button-view);
 }
 
 .longitudinal-view-button-off {
    @insert .view-button;
-   background-image: url("../../svg/view-button-report-off.svg");
+   background-color: transparent;
 }
 
 .longitudinal-view-button-on {
    @insert .view-button;
-   background-image: url("../../svg/view-button-report-on.svg");
+   background-color: var(--button-view);
+   color: var(--label-button-view);
 }
 
 .compare-view-button-off {
    @insert .view-button;
-   background-image: url("../../svg/view-button-comparison-off.svg");
+   background-color: transparent;
 }
 
 .compare-view-button-on {
    @insert .view-button;
-   background-image: url("../../svg/view-button-comparison-on.svg");
+   background-color: var(--button-view);
+   color: var(--label-button-view);
 }
 
 .default-view-button-off {
    @insert .view-button;
-   background-image: url("../../svg/view-button-summary-off.svg");
+   background-color: transparent;
 }
 
 .default-view-button-on {
    @insert .view-button;
-   background-image: url("../../svg/view-button-summary-on.svg");
+   background-color: var(--button-view);
+   color: var(--label-button-view);
 }
 .benefits-view-button-off {
    @insert .view-button;
-   background-image: url("../../svg/view-button-benefits-off.svg");
+   background-color: transparent;
 }
 
 .benefits-view-button-on {
    @insert .view-button;
-   background-image: url("../../svg/view-button-benefits-on.svg");
+   background-color: var(--button-view);
+   color: var(--label-button-view);
+}
+
+.tiles-view-button-off {
+   @insert .view-button;
+   background-color: transparent;
+}
+
+.tiles-view-button-on {
+   @insert .view-button;
+   background-color: var(--button-view);
+   color: var(--label-button-view);
 }
 
 .consult-view-button-off {
    @insert .view-button;
-   background-image: url("../../svg/view-button-consult-off.svg");
+   background-color: transparent;
 }
 
 .consult-view-button-on {
    @insert .view-button;
-   background-image: url("../../svg/view-button-consult-on.svg");
+   background-color: var(--button-view);
+   color: var(--label-button-view);
 }
 
 .diabetes-view-button-off {
    @insert .view-button;
-   background-image: url("../../svg/view-button-diabetes-off.svg");
+   background-color: transparent;
 }
 
 .diabetes-view-button-on {
    @insert .view-button;
-   background-image: url("../../svg/view-button-diabetes-on.svg");
+   background-color: var(--button-view);
+   color: var(--label-button-view);
 }
 
 
 /* View Help */
 .view-help-container {
    position: fixed;
-   bottom: 22px;
-   left: 20px;
-   width: 181px;
+   top: 56px;
+   left: 10px;
+   width: 140px;
    height: auto;
    font-family: text;
    background-color: transparent;
@@ -271,83 +290,87 @@
 }
 
 .view-help-title-container {
-   align-items: center;
-   width: 178px;
+/* align-items: center;
+   width: 140px;
+   width: 178px; 
    height: 25px;
-   min-height: 25px;
+   min-height: 25px; 
+   height: 0;
+   min-height: 0;
    background-color:var(--primary-100);
    padding: 0;
    border: 1.5px solid var(--primary-100);
    border-radius:10px 10px 0 0;
-   margin:0;
+   margin:0; */
 }
 
 .view-help-title {
-   display: flex;
+/* display: flex;
    flex-direction: row;
    align-items: center;
    align-content: center;  
    height: 25px;
-   width: 178px;
+   width: 140px;
+   width: 178px; 
    font-family: header-bold;
    font-size: 0.813rem; 
    color: var(--white-100);
    background-color: transparent;
    padding: 0;
-   margin: 0;
+   margin: 0; */
 }
 
 .view-help-title-icon {
-   display: flex;
+ /*display: flex;
    align-items: center;
-   width: 70%;
+   width: 70%; 
    height: 25px;
    background-repeat: no-repeat;
    background-size: 20px 20px;
    background-position: 10px center;
-   padding: 0 0 0 40px;
+   padding: 0 0 0 40px; */
 }
 
 .view-help-title-default-view {
    @insert .view-help-title-icon;
-   width: 140px;
-   background-image: url("../../svg/view-icon-overview-on.svg");
+/* width: 140px;
+   background-image: url("../../svg/view-icon-overview-on.svg"); */
 }
 
 .view-help-title-longitudinal-view {
    @insert .view-help-title-icon;
-   background-image: url("../../svg/view-icon-report-on.svg");
-   align-items: center;
+/* background-image: url("../../svg/view-icon-report-on.svg");
+   align-items: center; */
 }
 
 .view-help-title-compare-view {
    @insert .view-help-title-icon;
-   background-image: url("../../svg/view-icon-comparison-on.svg");
+/* background-image: url("../../svg/view-icon-comparison-on.svg"); */
 }
 
 .view-help-title-report-view {
    @insert .view-help-title-icon;
-   background-image: url("../../svg/view-icon-report-on.svg");
+/* background-image: url("../../svg/view-icon-report-on.svg"); */
 }
 
 .view-help-title-benefits-view {
    @insert .view-help-title-icon;
-   background-image: url("../../svg/view-icon-benefits.svg");
+/* background-image: url("../../svg/view-icon-benefits.svg"); */
 }
 
 .view-help-title-consult-view {
    @insert .view-help-title-icon;
-   background-image: url("../../svg/view-icon-consult.svg");
+/* background-image: url("../../svg/view-icon-consult.svg"); */
 }
 
 .view-help-title-diabetes-view {
    @insert .view-help-title-icon;
-   background-image: url("../../svg/view-icon-diabetes.svg");
+/* background-image: url("../../svg/view-icon-diabetes.svg"); */
    overflow: visible;
 }
 
 .view-help-close-button {
-   display: flex;
+/* display: flex;
    align-content: center;
    align-items: center;
    height: 25px;
@@ -359,22 +382,33 @@
    fill: var(--white-100);
    border: 0;
    margin: 0 10px 0 0;
-   cursor: pointer;
+   cursor: pointer; */
 }
 
 .view-help-contents {
-   height: 100px;
-   width: 158px;
+   height: 90px;
+   width: 130px;
    font-family: text;
-   font-size: 0.813rem;
-   background-color: var(--white-100);
-   padding: 5px 10px;
-   border: 1.5px solid var(--primary-100);  
-   border-radius: 0 0 10px 10px;
+   font-size: 0.625rem;
+   color: var(--label-button);
+   background-color: var(--background-header);
+   padding: 5px 5px;
+   border-radius: 5px 5px 5px 5px;
    margin: 0;
-   overflow-y: auto;
+   overflow-y: hidden;
    overflow-x: hidden;
    white-space: pre-wrap;
+}
+
+.view-help-contents-icon {
+   height: 22px;
+   width: 140px;
+   background-color: transparent;
+   background-image: url("../../svg/help-icon.svg");
+   background-size: 22px 22px;
+   background-repeat: no-repeat;
+   background-position: right center;
+   margin: -11px 0 0;
 }
 
 .content-panel-icon-all {
@@ -406,7 +440,7 @@
 	font-family: text;
    font-size: 1.200rem;
 	text-align: left;
-   color:var(--white-100);
+   color:var(--label-participant);
    white-space: nowrap;
 	padding: 5px 0 0 0;
    margin: 0 20px;
@@ -419,46 +453,78 @@
    flex-wrap: nowrap;
    align-items: center;
    justify-content: flex-end;
-   height: 60px;
-   width: 138px;
-   min-width: 138px;
-   padding: 0 20px 0 10px;
-   margin: 0;
+   height: 20px;
+   width: 84px;
+   min-width: 84px;
+   padding: 0;
+   background-color: var(--background-header-control);
+   background-image: url("../../svg/text-scale-background.svg");
+   background-position: center center;
+   background-size: 40px auto;
+   background-repeat: no-repeat;
+   border-radius: 20px; 
+   margin: 13px 10px 13px 20px;
 }
 			
 .text-size-smaller-button-off {
+   width: 22px;
+   min-width: 22px;
    height: 20px;
-   width: 20px;
-   min-width: 20px;
+   font-family: text-semibold;
+   font-size: 12px;
+   color: var(--gs-020-100);
+   text-align: left;
    background-color: transparent;
-   background-image: url(../../svg/icon-text-size-smaller.svg);
-   background-position: 5px 0;
-   background-repeat: no-repeat;
+   padding: 0 0 0 5px;
    border: none;
-   margin: 17px -5px 12px 0;
+   margin: 13px 0 13px 0;
 	cursor: pointer;
 }
 
-.text-size-larger-button-off {
-   height: 40px;
+.text-size-slider-container {
+   height: 20px;
    width: 40px;
    min-width: 40px;
-   background-color: transparent;
-   background-image: url(../../svg/icon-text-size-larger.svg);
-   background-position: 0 0;
+}
+
+.text-size-slider-button {
+   height: 20px;
+   width: 8px;
+   min-width: 8px;
+   background-image: url("../../svg/text-size-slider-button.svg");
    background-repeat: no-repeat;
+   background-position: center;
+   margin: 0 auto;
+}
+
+.text-size-larger-button-off {
+   width: 22px;
+   min-width: 22px;
+   height: 20px;
+   font-family: text-semibold;
+   line-height: 20px;
+   color: var(--gs-020-100);
+   font-size: 18px;
+   text-align: right;
+   background-color: transparent;
+   padding: 0 5px 0 0;
    border: none;
-   margin: 0 0 12px 2px;
+   margin: 13px 0 13px 0;
    cursor: pointer;
 }
 
 .text-size-current {
-   font-family: header-bold;
-   font-size: 1.000rem;
-   text-align: right; 
-   color: var(--white-075);
-   padding: 24px 0 15px 0;
-   margin: 0 0 0 -8px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   height: 20px;
+   font-family: text-semibold;
+   font-size: 0.625rem;
+   text-align: right;
+   line-height: 20px;
+   color: var(--gs-100-100);
+   padding: 0;
+   margin: 13px 10px 13px 5px;
    cursor: pointer;
 }
 

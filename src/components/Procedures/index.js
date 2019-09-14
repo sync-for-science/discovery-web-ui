@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
+//import axios from 'axios';
 
 import '../ContentPanel/ContentPanel.css';
-import config from '../../config.js';
+//import config from '../../config.js';
 
 import FhirTransform from '../../FhirTransform.js';
-import { renderDisplay } from '../../fhirUtil.js';
-import { stringCompare, shallowEqArray, formatContentHeader } from '../../util.js';
+import { renderDisplay, resolveReasonReference, primaryTextValue } from '../../fhirUtil.js';
+import { Const, stringCompare, shallowEqArray, formatContentHeader, tryWithDefault } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -20,6 +20,21 @@ export default class Procedures extends React.Component {
 			       
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
+   static compareFn(a, b) {
+      return stringCompare(Procedures.primaryText(a), Procedures.primaryText(b));
+   }
+
+   static code(elt) {
+//      return elt.data.code;		// SNOMED
+      return tryWithDefault(elt, elt => elt.data.valueCodeableConcept, tryWithDefault(elt, elt => elt.data.code, null));
+   }
+
+   static primaryText(elt) {
+//      return elt.data.code.coding[0].display;
+//      return tryWithDefault(elt, elt => Procedures.code(elt).coding[0].display, Const.unknownValue);
+      return primaryTextValue(Procedures.code(elt));
+   }
+
    static propTypes = {
       data: PropTypes.array.isRequired,
       isEnabled: PropTypes.bool,
@@ -31,14 +46,14 @@ export default class Procedures extends React.Component {
       loadingRefs: 0
    }
 
-   AxiosCancelSource = axios.CancelToken.source();
+//   AxiosCancelSource = axios.CancelToken.source();
 
    setMatchingData() {
-      let match = FhirTransform.getPathItem(this.props.data, '[*category=Procedures]');
+      let match = FhirTransform.getPathItem(this.props.data, `[*category=${Procedures.catName}]`);
       if (match.length > 0) {
-	 this.setState({ matchingData: match.sort((a, b) => stringCompare(a.data.code.coding[0].display, b.data.code.coding[0].display)) });
+	 this.setState({ matchingData: match.sort(Procedures.compareFn) });
 	 for (var elt of match) {
-	    this.resolveReasonReference(elt);
+	    resolveReasonReference(elt, this.context);
 	 }
       } else {
 	 this.setState({ matchingData: null });
@@ -55,37 +70,37 @@ export default class Procedures extends React.Component {
       }
    }
 
-   componentWillUnmount() {
-      // Cancel any pending async gets
-      this.AxiosCancelSource.cancel('unmounting');
-   }
+//   componentWillUnmount() {
+//      // Cancel any pending async gets
+//      this.AxiosCancelSource.cancel('unmounting');
+//   }
 
    // TODO: Handle multiple reason references per single procedure
    //       Move to fhirUtil.js (with callback for state management)
-   resolveReasonReference(elt) {
-      if (elt.data.reasonReference && elt.data.reasonReference[0] && !elt.data.reasonReference[0].code) {
-	 this.setState({loadingRefs: this.state.loadingRefs+1});
-	 axios.get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.reasonReference[0].reference),
-		   { cancelToken: this.AxiosCancelSource.token } )
-	    .then(response => {
-		// Add the de-referenced data to the reasonReference element
-		elt.data.reasonReference[0] = Object.assign(elt.data.reasonReference[0], response.data);
-		this.setState({loadingRefs: this.state.loadingRefs-1});
-	    })
-	    .catch(thrown => {
-		if (!axios.isCancel(thrown)) {
-		   console.log(thrown);
-		   this.setState({loadingRefs: this.state.loadingRefs-1});
-		}
-	    });
-      }
-   }
+   // OLDresolveReasonReference(elt) {
+   //    if (elt.data.reasonReference && elt.data.reasonReference[0] && !elt.data.reasonReference[0].code) {
+   // 	 this.setState({loadingRefs: this.state.loadingRefs+1});
+   // 	 axios.get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.reasonReference[0].reference),
+   // 		   { cancelToken: this.AxiosCancelSource.token } )
+   // 	    .then(response => {
+   // 		// Add the de-referenced data to the reasonReference element
+   // 		elt.data.reasonReference[0] = Object.assign(elt.data.reasonReference[0], response.data);
+   // 		this.setState({loadingRefs: this.state.loadingRefs-1});
+   // 	    })
+   // 	    .catch(thrown => {
+   // 		if (!axios.isCancel(thrown)) {
+   // 		   console.log(thrown);
+   // 		   this.setState({loadingRefs: this.state.loadingRefs-1});
+   // 		}
+   // 	    });
+   //    }
+   // }
 
    render() {
       return ( this.state.matchingData &&
-	       (this.props.isEnabled || this.context.trimLevel==='none') &&	// Don't show this category (at all) if disabled and trim set
+	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
 	       <div className='procedures category-container'>
-		  { formatContentHeader(this.props.isEnabled, 'Procedures', this.state.matchingData[0].itemDate, this.context) }
+		  { formatContentHeader(this.props.isEnabled, Procedures.catName, this.state.matchingData[0], this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Procedure', this.context) }
 		     { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }

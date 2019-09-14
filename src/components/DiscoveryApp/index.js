@@ -12,6 +12,7 @@ import ContentPanel from '../ContentPanel';
 import SummaryView from '../SummaryView';
 import CompareView from '../CompareView';
 import DiabetesView from '../DiabetesView';
+import TilesView from '../TilesView';
 import DiscoveryModal from '../DiscoveryModal';
 import Unimplemented from '../Unimplemented';
 import PageFooter from '../PageFooter';
@@ -29,6 +30,7 @@ export default class DiscoveryApp extends React.Component {
 
    state = {
       resources: null,		// Will be set to an instance of FhirTransform
+      totalResCount: null,	// Number of resources excluding Patient resources
       dates: null,		// Collection of dates for views:
 				//    allDates
 				//    minDate	   Earliest date we have data for this participant
@@ -38,6 +40,7 @@ export default class DiscoveryApp extends React.Component {
       searchRefs: [],		// Search results to highlight
       searchMatchWords: [],	// Search results matching words
       laserSearch: false,	// Laser Search enabled?
+      viewAccentDates: [],
       isLoading: false,
       fetchError: null,		// Possible axios error object
       modalName: '',
@@ -46,7 +49,22 @@ export default class DiscoveryApp extends React.Component {
       currentView: null,
       thumbLeftDate: null,
       thumbRightDate: null,
-      dotClickDate: null	// dot click from ContentPanel
+      dotClickDate: null,	// dot click from ContentPanel
+      catsEnabled: null,
+      provsEnabled: null,
+      providers: [],
+
+      // Shared Global Context
+      updateGlobalContext: (updates) => this.setState(updates),
+      savedCatsEnabled: null,		  // StandardFilters & CategoryRollup
+      savedProvsEnabled: null,		  // StandardFilters & ProviderRollup
+      savedSelectedTiles: null,		  // TilesView
+      lastTileSelected: null,		  // TilesView
+      lastSavedSelectedTiles: null,	  // TilesView
+      highlightedResources: null,	  // TilesView & CompareView
+      savedSelectedUniqueItems: null,	  // CompareView
+      lastUniqueItemSelected: null,	  // CompareView
+      lastSavedSelectedUniqueItems: null  // CompareView
    }
 
    componentDidMount() {
@@ -85,7 +103,10 @@ export default class DiscoveryApp extends React.Component {
 			       dates: dates,
 			       thumbLeftDate: minDate,
 			       thumbRightDate: maxDate,
-			       isLoading: false })
+			       isLoading: false },
+			     () => this.setState({ providers: this.providers,
+						   totalResCount: this.state.resources.transformed.filter(elt => elt.category !== 'Patient').length
+						 }) )
 	    } else {
 		this.setState({ fetchError: { message: 'Invalid Participant ID' },
 				isLoading: false })
@@ -197,7 +218,9 @@ export default class DiscoveryApp extends React.Component {
 	 'Goal':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Goal]'),
 	 'Basic':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Basic]'),
 	 'ImmunizationRecommendation':	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImmunizationRecommendation]'),
-	 'ImagingStudy':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImagingStudy]')
+	 'ImagingStudy':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImagingStudy]'),
+	 'Coverage':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Coverage]'),
+	 'RelatedPerson':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=RelatedPerson]')
       }
    }
 
@@ -210,8 +233,12 @@ export default class DiscoveryApp extends React.Component {
 	       break;
 	    case 'Lab Results':
 	    case 'Vital Signs':
+	    case 'DiagnosticReport':
 	       date = item.effectiveDateTime;
 	       break;
+	    case 'Observation-Other':
+	       date = item.effectiveDateTime ? item.effectiveDateTime : null;
+	       break
 	    case 'Social History':
 	       date = new Date().toISOString().substring(0,10);		// Use today's date
 	       break;
@@ -234,6 +261,7 @@ export default class DiscoveryApp extends React.Component {
 													       : item.effectiveTimePeriod.end);
 	       break;
 	    case 'Immunizations':
+	    case 'List':
 	       date = item.date;
 	       break;
 	    case 'Procedures':
@@ -246,11 +274,9 @@ export default class DiscoveryApp extends React.Component {
 	    case 'Allergies':
 	       date = item.recordedDate || item.assertedDate;
 	       break;
-	    case 'List':
-	       date = item.date; 
-	       break;
 	    case 'CarePlan':
 	    case 'Encounters':
+	    case 'Coverage':
 	       date = item.period.start;
 	       break;
 	    case 'Benefits':
@@ -260,6 +286,7 @@ export default class DiscoveryApp extends React.Component {
 	    case 'ImagingStudy':
 	       date = item.started;
 	       break;
+
 	    default:
 	       return null;	// Items without a date
 	 }
@@ -369,33 +396,67 @@ export default class DiscoveryApp extends React.Component {
       this.setState({ dotClickDate: dotClickDate });
    }
 
+   calcContentPanelTopBound() {
+      try {
+	 const headerBot = document.querySelector('.time-widget').getBoundingClientRect().top;
+	 const targetTop = document.querySelector('.standard-filters-categories-and-providers').getBoundingClientRect().top;
+	 console.log('Top Bound: ' + (targetTop - headerBot));
+	 return targetTop - headerBot;
+      } catch (e) {
+	 return 0;
+      }
+   }
+
+   calcContentPanelBottomBound() {
+      try {
+	 const footTop = document.querySelector('.page-footer').getBoundingClientRect().top;
+	 const headerBot = document.querySelector('.time-widget').getBoundingClientRect().bottom;
+	 console.log('Bottom Bound: ' + (footTop - headerBot + 26));
+	 return footTop - headerBot + 26;
+      } catch (e) {
+	 return 0;
+      }
+   }
+
+   viewAccentCallback = (dates) => {
+      this.setState({ viewAccentDates: dates });
+   }
+
    renderCurrentView() {
       switch(this.state.currentView) {
-         case 'longitudinalView':
-	    return <ContentPanel open={true} onClose={() => {}}
-				 catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled} dotClickFn={this.onDotClick}
-				 // context, nextPrevFn, showAllFn added in StandardFilters
+         case 'reportView':
+	    return <ContentPanel open={true} catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled} dotClickFn={this.onDotClick}
+				 containerClassName='content-panel-absolute'
+				 topBoundFn={this.calcContentPanelTopBound} bottomBoundFn={this.calcContentPanelBottomBound}
+				 // context, nextPrevFn added in StandardFilters
 				 thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
-				 resources={this.state.resources} viewName='Report' viewIconClass='longitudinal-view-icon' />
+				 resources={this.state.resources} totalResCount={this.state.totalResCount}
+				 viewName='Report' viewIconClass='longitudinal-view-icon' />
 
-         case 'benefitsView':
-	    return <ContentPanel open={true} onClose={() => {}}
-				 catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
-				 // context, nextPrevFn, showAllFn added in StandardFilters
+         case 'financialView':
+	    return <ContentPanel open={true} catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
+				 containerClassName='content-panel-absolute'
+				 topBoundFn={this.calcContentPanelTopBound} bottomBoundFn={this.calcContentPanelBottomBound}
+				 // context, nextPrevFn added in StandardFilters
 				 thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
-				 resources={this.state.resources} catsToDisplay={['Claims','Benefits']} viewName='Financial'
+				 resources={this.state.resources} totalResCount={this.state.totalResCount}
+				 catsToDisplay={['Benefits', 'Claims']} viewName='Financial'
 				 viewIconClass='benefits-view-icon' showAllData={true} />
 
          case 'consultView':
-	    return <ContentPanel open={true} onClose={() => {}}
-				 catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled} dotClickFn={this.onDotClick}
-				 // context, nextPrevFn, showAllFn added in StandardFilters
+	    return <ContentPanel open={true} catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled} dotClickFn={this.onDotClick}
+				 containerClassName='content-panel-absolute'
+				 topBoundFn={this.calcContentPanelTopBound} bottomBoundFn={this.calcContentPanelBottomBound}
+				 // context, nextPrevFn added in StandardFilters
 				 thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
-				 resources={this.state.resources} viewName='Consult' viewIconClass='consult-view-icon'
+				 resources={this.state.resources} totalResCount={this.state.totalResCount}
+				 viewName='Consult' viewIconClass='consult-view-icon'
 				 showAllData={true} initialTrimLevel='expected' />
 
          case 'compareView':
-	    return <CompareView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
+	    return <CompareView resources={this.state.resources} totalResCount={this.state.totalResCount}
+				dates={this.state.dates} categories={this.categories} providers={this.providers}
+				viewAccentCallback={this.viewAccentCallback}
 				catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
 				thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
 				lastEvent={this.state.lastEvent} />;
@@ -404,6 +465,14 @@ export default class DiscoveryApp extends React.Component {
 	    return <DiabetesView resources={this.state.resources} dates={this.state.dates} categories={this.categories} providers={this.providers}
 				 catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
 				 lastEvent={this.state.lastEvent} />;
+
+	 case 'tilesView':
+	    return <TilesView resources={this.state.resources} totalResCount={this.state.totalResCount}
+			      dates={this.state.dates} categories={this.categories} providers={this.providers}
+			      viewAccentCallback={this.viewAccentCallback}
+			      catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
+			      thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
+			      lastEvent={this.state.lastEvent} />;
 
          case 'summaryView':
          default:
@@ -414,12 +483,18 @@ export default class DiscoveryApp extends React.Component {
 
    get viewCategories() {
       switch (this.state.currentView) {
-	 case 'benefitsView':
+	 case 'financialView':
 	    return ['Claims', 'Benefits'];
 
 	 case 'compareView':
-	    let compareCats = ['Allergies', 'Conditions', 'Immunizations', 'Lab Results', 'Meds Dispensed', 'Meds Requested', 'Procedures', 'Social History'];
+	    let compareCats = ['Allergies', 'Conditions', 'Encounters', 'Exams', 'Immunizations', 'Lab Results',
+			       'Meds Dispensed', 'Meds Requested', 'Procedures', 'Vital Signs', 'Social History'];
 	    return this.categories.filter( elt => compareCats.includes(elt));
+
+	 case 'tilesView':
+	    let tilesCats = ['Allergies', 'Conditions', 'Encounters', 'Exams', 'Immunizations', 'Lab Results',
+			     'Meds Dispensed', 'Meds Requested', 'Procedures', 'Vital Signs', 'Social History'];
+	    return this.categories.filter( elt => tilesCats.includes(elt));
 
 	 default:
 	    return this.categories;
@@ -441,6 +516,11 @@ export default class DiscoveryApp extends React.Component {
       return cats
    }
 
+   get initialProvs() {
+      let goo = this.providers.reduce((res, prov) => { res[prov] = true; return res; }, {});
+      return goo
+   }
+
    render() {
       if (this.state.fetchError) {
 	 return <p>{ 'DiscoveryApp: ' + this.state.fetchError.message }</p>;
@@ -451,20 +531,19 @@ export default class DiscoveryApp extends React.Component {
       }
 
       return (
-	 <DiscoveryContext.Provider value={{providers: this.providers, laserSearch: this.state.laserSearch, resources: this.state.resources,
-					    searchRefs: this.state.searchRefs, searchMatchWords: this.state.searchMatchWords}}>
+	 <DiscoveryContext.Provider value={ this.state }>
 	    <div className='discovery-app'>
 	       <PageHeader rawQueryString={this.props.location.search} modalIsOpen={this.state.modalIsOpen}
 			   modalFn={ name => this.setState({ modalName: name, modalIsOpen: true }) }
 			   viewFn={ name => this.setState({ currentView: name }) }
-			   searchData={this.state.resources && this.state.resources.transformed}
 			   searchCallback={this.searchCallback}
 			   resources={this.state.resources} />
-	       <StandardFilters resources={this.state.resources} dates={this.state.dates} categories={this.viewCategories} providers={this.providers}
-				catsEnabled={this.initialCats} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} lastEvent={this.state.lastEvent}
-				allowDotClick={true} dotClickDate={this.state.dotClickDate} hideFilters={this.state.currentView === 'summaryView'} >
+	       <StandardFilters resources={this.state.resources} dates={this.state.dates} categories={this.viewCategories} catsEnabled={this.initialCats} 
+				providers={this.providers} provsEnabled={this.initialProvs} enabledFn={this.setEnabled} dateRangeFn={this.setDateRange} 
+				lastEvent={this.state.lastEvent} allowDotClick={!['compareView', 'tilesView'].includes(this.state.currentView)}
+				dotClickDate={this.state.dotClickDate} >
 		  { this.state.currentView && this.renderCurrentView() }
-	       </StandardFilters> }
+	       </StandardFilters>
 	       <DiscoveryModal isOpen={this.state.modalIsOpen} modalName={this.state.modalName}
 			       onClose={ name => this.setState({ modalName: '', modalIsOpen: false })} />
 	       <PageFooter resources={this.state.resources} />

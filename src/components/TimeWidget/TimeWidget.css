@@ -1,34 +1,32 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery TimeWidget Stylesheet */
-/* v.01.37 Updated 05/13/2019 */
+/* v.01.41 Updated 07/03/2019 */
 
 .time-widget {
    position: fixed;
-   top: 62px;
+   top: 56px;
    left: 0;
    z-index: 0;
    display: flex;
    flex-direction: row;
-   height: 80px;
    width: 100%;
    min-width: 1024px;
+   height: 100px;
    background-color: transparent; 
    padding: 0;
-   border-top: 2px solid var(--white-100);
-   border-bottom: 2px solid var(--white-100);
    margin: 0;
    overflow: visible;
 }
 
 .calendar-daterange-box {
    display: flex;
-   flex-direction: row;
-   align-items: center; 
-   height: 80px;
-   width: 184px;
-   min-width: 184px;
-   padding: 0 10px 0 20px;
+   flex-direction: column;
+   align-items: flex-start; 
+   width: 140px;
+   min-width: 140px;
+   height: 103px;
+   padding: 0 10px;
    margin: 0;
 }
 
@@ -45,41 +43,92 @@
    cursor: pointer;
 }
 
-.calendar-button-off {
-   @insert .calendar-button;
-   background-image: url(../../svg/calendar_icon.svg);
-}
-
-.calendar-button-on {
-   @insert .calendar-button;
-   background-image: url(../../svg/calendar_icon.svg);
-}
-
 .date-range {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   width: inherit;
    font-family: data-text-medium;
    font-size: 0.700rem;
    line-height: 120%;
-   text-align: center;
-   color: var(--primary-100);
-   margin: 0 0 0 19px;
+   text-align: right;
+   color: var(--gs-100-100);
+   margin: 0 0 0 0;
    white-space: nowrap;
-   
+}
+
+.date-range-row {
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-end;
+   align-items: flex-end;
+   width: 140px;
+   height: 20px;
+   font-family: text-semibold;
+   font-size: .500rem;
+   line-height: 20px;
+   padding: 0 0 0 0;
+   margin: 0 0 3px 0;
+}
+
+.date-range-data {
+   width: 60px;
+   height: 20px;
+   align-items: center;
+   font-family: text;
+   font-size: 11px;
+   line-height: 20px;
+   background-color: var(--gs-000-100);
+   padding: 0 10px;
+   border-radius: 20px;
+   margin: 0 0 0 8px;
+}
+
+.participant-name {
+   font-family: text;
+   font-size: 1.10rem;
+   text-align: left;
+   line-height: 120%;
+   white-space: normal;
+   color: var(--label-participant);
+   margin: 10px 0 0 0;
+   padding-left: 8px;
+   border-left: 2px solid var(--gt5);
+}
+
+.timeline-help {
+   display: flex;
+   position: relative;
+   top: 47px;
+   left: 10px;
+   width: 100%;
+   height: 54px;
+   max-height: 54px;
+   background-color: white;
+}
+
+.timeline-help-col {
+   width: 33%;
+   padding: 3px 8px;
+   font-family: data-text;
+   font-size: 0.750rem;
+   color: var(--gs-100-100);
+   border-right: 1px solid var(--separator-light);
 }
 
 .timeline-controls {
    display: flex;
    flex-direction: column;
-   width: calc(100% - 235px);
+   width: calc(100% - 170px);
    min-width: 810px;
-   height: 80px;
-   max-height: 80px;
+   height: 100px;
+   max-height: 100px;
    background-color: transparent;
-   background-image: url("../../png/timeline-background-01.png");
+   background-image: url("../../png/timeline-background-03.png");
    background-position: 0 0;
    background-repeat: repeat-x;
-   background-size: 100px 80px;
    padding: 0;
-   margin: 0;
+   margin: 0; 
 }
 
 .timeline-selection-box {
@@ -87,8 +136,8 @@
    top: 0;
    left: 0;
    width: auto;
-   height: 30px;
-   max-height: 30px;
+   height: 40px;
+   max-height: 40px;
    background-color: transparent;
    padding: 0;
    margin: 0;
@@ -96,46 +145,57 @@
 }
 
 .timeline-selector-gradient-container {
+   position: relative;
+   top: 0;
+   left: 0;
+   width: auto;   
    display: flex;
    flex-direction: row;
-   height: 41px;
+   height: 40px;
 }
 
 .timeline-selector-gradient-left {
    height: inherit;
-	background-color: var(--primary-040);
+   background-color: var(--gs-100-010);
    margin: 0;
 }
 
 .timeline-selector-gradient-right {
    position: relative;
    height: inherit;
-	background-color: var(--primary-040);
-   margin: 0 40px 0 0;
+   background-color: var(--gs-100-025);
+   margin: 0 -15px 0 -15px;
 }
 
 .timeline {
+   position: relative;
+   top: 0;
+   left: 0;
+   width: auto;
    display: flex;
    flex-direction: row;
    flex-wrap: nowrap;
    align-items: initial;
    width: 100%;
-   height: 30px;
-   min-height: 30px;
-   max-height: 30px;
+   height: 40px;
+   min-height: 40px;
+   max-height: 40px;
    background-color: transparent;
    padding: 0 0 0 0;
-   margin: -42px 0 0 0;
+   margin: -40px 0 0 0;
 }	
 
 .timeline-full {
+   position: relative;
+   left: 0;
+   top: 0;
    width: 100%;
-   height: 24px;
-   max-height: 24px;
-   font-size: 0.800rem;
+   height: 26px;
+   max-height: 26px;
+   font-size: 0.750rem;
    background-position: left bottom;
-   background-size: 2px 100%;
-   background-repeat: repeat-y;
+   background-size: 2px 50%;
+   background-repeat: no-repeat;
    background-color: transparent; 
    padding: 0 0 0 5px;
    margin: 0 0 0 -1px;
@@ -145,45 +205,59 @@
 /* The full (top) timeline years inside the thumbs when the expanded (bottom) timeline ISN’T showing */
 .timeline-full-active-single-years {
    @insert .timeline-full;
-   font-family: data-text-medium;
-   color: var(--primary-100);
-   background-image: url("../../svg/tickmark-black.svg");
-   margin: 8px 0 0;
+   height: 23px;
+   max-height: 23px;
+   font-family: data-text-light;
+   font-size: 0.625rem;
+   color: var(--gs-050-100);
+   background-image: url("../../svg/tickmark-blue-medium-100.svg");
+   padding: 3px 0 0 5px;
+   margin: 0 0 14px 0;
 }
 
 /* The full (top) timeline years inside the thumbs when the expanded (bottom timeline IS showing */
 .timeline-full-active-double-years {
    @insert .timeline-full;
-   font-family: data-text-medium;
-   color: var(--primary-100);
-   background-image: url("../../svg/tickmark-black.svg");
-   margin: 8px 0 0 0;
+   height: 23px;
+   max-height: 23px;
+   font-family: data-text-light;
+   font-size: 0.625rem;
+   color: var(--blue-dark-50);
+   background-image: url("../../svg/tickmark-blue-medium-100.svg");
+   padding: 3px 0 0 5px;
+   margin: 0;
 }
 
 /* The full (top) timeline years outside the thumbs */
 .timeline-full-inactive-years {
    @insert .timeline-full;
-   font-family: data-text-medium;
-   color: var(--black-100);
-   background-image: url("../../svg/tickmark-gray.svg");
-   margin: 8px 0 0 0;
+   height: 23px;
+   max-height: 23px;
+   font-family: data-text-light;
+   font-size: 0.625rem;
+   color: var(--blue-dark-50);
+   background-image: url("../../svg/tickmark-blue-medium-100.svg");
+   padding: 3px 0 0 5px;
+   margin: 0 0 14px 0;
 }
 
 .timeline-svg-container {
    position: relative;
-   top: -56px;
+   top: 0;
+   left: 0;
    display: flex;
    justify-content: center;
+   width: calc(100% - 30px);
    align-items: center;
-   height: 30px;
-   max-height:30px;
-   background-image: url(../../svg/horizontal-rule-1px-black.svg);
-   background-position: center;
+   height: 40px;
+   max-height:40px;
+   background-image: url("../../svg/horizontal-rule-1px-blue-medium-100.svg");  
+   background-position: 0px 19px;
    background-repeat: repeat-x;
    background-clip: padding-box;
    background-color: transparent;
-   padding: 0 10px;
-   margin: 0;
+   padding: 0 10px 0 10px;
+   margin: -40px 0 0 0;
    overflow: hidden;
    pointer-events: none;
 }
@@ -191,143 +265,149 @@
 .timeline-svg {
    position: relative;
    left: 0;
-   height: 30px;
-   max-height: 30px;
+   top: 0;
+   height: 34px;
+   max-height: 34px;
    padding: 0;
+   margin: 6px 0 0 0;
    overflow: visible;
    pointer-events:none;
 }
 
 .timeline-selector-container {
    position: relative;
-   top: -31px;
+   top: 0;
    display: flex;
    flex-direction: row;
-   width: calc(100% - 0px);
-   height: 42px;
+   width: 100%;
+   height: 40px;
    margin: 0;
+   margin: -40px 0 0 0;
 }
 
 .timeline-selector {
    position: relative;
-   height: 41px;
-   width: 10px;
-   min-width: 10px;
+   top: 0;
+   width: 22px;
+   min-width: 22px;
+   height: 40px;
    background-color: transparent;
    background-repeat: no-repeat;
    background-position: center center;
-   background-size: cover;
-   margin: 2px 0 0 0;
+   background-size: 20px 28px;
+   margin: 0;
    cursor: col-resize;
 }
 
 .timeline-selector-left {
    @insert .timeline-selector;
-   background-image: url("../../svg/bracket-left-top-04.svg");
+   background-image: url("../../svg/bracket-left-top-05.svg");
+   background-position: left bottom;
+   border-left: 2px solid var(--gs-040-100);
    margin-left: -1.0px;
 }
 
 .timeline-selector-left-alt {
    @insert .timeline-selector;
-   background-image: url("../../svg/bracket-left-top-alt-04.svg");
+   background-image: url("../../svg/bracket-left-top-05.svg");
+   background-position: left bottom;
+   border-left: 2px solid var(--gs-040-100);
    margin-left: -1.0px;
 }
 
 .timeline-selector-center {
-   width: 40px;
-   height: 10px;
+   width: 30px;
+   height: 12px;
    background-color:transparent;
-   background-image: url("../../svg/bracket-center-01.svg");
+   background-image: url("../../svg/bracket-center-02.svg");
    background-position: center;
    background-repeat: no-repeat;
-   background-size: cover 10px;
-   margin: 0;
+   background-size: cover;
+   margin: -5px 0 0 0;
    cursor: col-resize;
 }
 
 .timeline-selector-right {
    @insert .timeline-selector;
-   background-image: url("../../svg/bracket-right-top-04.svg");
-   margin-left: -19px;
+   background-image: url("../../svg/bracket-right-top-05.svg");
+   background-position: right bottom;
+   padding: 0;
+   border-right: 2px solid var(--gs-040-100);
+   margin-left: -57px;
 }
 
 .timeline-selector-right-alt {
    @insert .timeline-selector;
-   background-image: url("../../svg/bracket-right-top-alt-04.svg");
-   margin-left: -19px;
+   background-image: url("../../svg/bracket-right-top-05.svg");
+   background-position: right bottom;
+   border-right: 2px solid var(--gs-040-100);
+   margin-left: -57px;
 }
 
 .timeline-expanded {
    position: relative;
-   top: 20px;
+   top: 0px;
    left: 0px;
    display: flex;
    flex-direction: row;
    flex-wrap: nowrap;
    align-items: initial;
-   width: calc(100% - 0px);
-   height: 30px;
-   max-height: 30px;
-   background-color: transparent;
+   width: calc(100% - 4px);
+   height: 60px;
+   max-height: 60px;
+   background-color: var(--white-100);
    padding: 0;
+   border-left: solid 2px var(--gs-040-100);
+   border-right: solid 2px var(--gs-040-100);
    margin: 0;
 }
 
 /* The offset to left/right of the timeline */
 .timeline-shim {
    position: relative;
-   top: -9px;
-   min-width: 10px;
-   height: 40px;
+   top: 0;
+   min-width: 0;
+   height: 60px;
 }
 
 .timeline-shim-left {
    @insert .timeline-shim;
-   background-image: url("../../svg/bracket-left-bottom-04.svg");
-   background-size: cover;
    margin: 0;
    
 }
 
 .timeline-shim-left-alt {
    @insert .timeline-shim;
-   background-image: url("../../svg/bracket-left-bottom-alt-04.svg");
-   background-size: cover;
    margin: 0;
-   
 }
 
 .timeline-shim-right {
    @insert .timeline-shim;
-   background-image: url("../../svg/bracket-right-bottom-04.svg");
-   background-size: cover;
    margin: 0 -1px 0 0;
 }
 
 .timeline-shim-right-alt {
    @insert .timeline-shim;
-   background-image: url("../../svg/bracket-right-bottom-alt-04.svg");
-   background-size: cover;
    margin: 0 -1px 0 0;
 }
 
 /* The expanded (bottom timeline years */
 .timeline-expanded-years {
    display: flex;
-   flex-direction: row;
-   align-self: flex-end;
-   align-content: flex-end;
-   align-items: flex-end;
-   height: 35px;
-   max-height: 30px;
-   font-family: data-text-medium;
-   font-size: 0.90rem;
-   color: var(--primary-100);
-   background-image: url("../../svg/tickmark-black-expanded.svg");
+   flex-direction: column;
+   align-self: flex-start;
+   align-content: flex-start;
+   align-items: flex-start;
+   height: 55px;
+   max-height: 55px;
+   font-family: data-text-light;
+   font-size: 0.688rem;
+   color: var(--blue-dark-100);
+   background-image: url("../../svg/tickmark-blue-medium-100.svg");
    background-position: top left;
    background-size: 2px 30px;
    background-repeat: no-repeat;
-   padding: 0 0 5px 5px;
-   margin: -24px 0 0 0;
+   padding: 0 0 0 5px;
+   margin: 5px 0 0 0;
    overflow: visible;
 }
