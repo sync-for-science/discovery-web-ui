@@ -8,6 +8,7 @@ import { Const, stringCompare, formatDisplayDate, formatKeyDate, formatDPs, isVa
 import TimeSeries from './components/TimeSeries';
 
 import CondDiv from './components/CondDiv';
+import HighlightDiv from './components/HighlightDiv';
 
 function dropFinalDigits(str) {
    let firstDigitIndex = str.search(/[0-9]/);
@@ -102,7 +103,7 @@ export function renderAllergies(matchingData, appContext) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>Allergy</div> }
-	       { elt.display && <div className='col02 value-text primary'>{elt.display}</div> }
+	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
 
 	       { isMultipleProviders && <div className='col01 label'>Provider</div> }
 	       { isMultipleProviders && <div className='col02 value-text'>{titleCase(elt.provider)}</div> }
@@ -240,7 +241,9 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>{typeLabel}</div> }
-	       { elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> }
+	       {/* elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> */}
+	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>
+		   {elt.display}{consultText(appContext, elt)}</HighlightDiv> }
 
 	       { elt.valueQuantity && <div className='col01 label'>Result</div> }
 	       { elt.valueQuantity && <div className='col02 value-number'>{elt.valueQuantity.value + ' ' + elt.valueQuantity.unit}</div> }
@@ -303,7 +306,9 @@ export function renderMedsStatement(matchingData, typeLabel, appContext) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>{typeLabel}</div> }
-	       { elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> }
+	       {/* elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> */}
+	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>
+		   {elt.display}{consultText(appContext, elt)}</HighlightDiv> }
 
 	       { elt.valueQuantity && <div className='col01 label'>Result</div> }
 	       { elt.valueQuantity && <div className='col02 value-number'>{elt.valueQuantity.value + ' ' + elt.valueQuantity.unit}</div> }
@@ -372,7 +377,7 @@ export function renderImmunizations(matchingData, appContext) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>Vaccine</div> }
-	       { elt.display && <div className='col02 value-text primary'>{elt.display}</div> }
+	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
 
 	       <CondDiv check={[elt.notGiven, elt.wasNotGiven]} expected={false}>
 		  <div className='col01 label'>Given</div>
@@ -470,7 +475,7 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
 		 id={formatKeyDate(elt.date.toISOString()) + '-' + elt.display}>
 	       <div className='content-data'>
 		  { elt.display && <div className='col01 label'>Measure</div> }
-		  { elt.display && <div className='col02 value-text primary'>{elt.display}</div> }
+		  { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
 
 		  { elt.valueQuantity && <div className='col01 label'>Value</div> }
 		  { elt.valueQuantity && <div className={'col02 value-number' + (highlightValue ? ' highlight' : '')}>
@@ -535,7 +540,7 @@ export function renderMeds(matchingData, appContext) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>Medication</div> }
-	       { elt.display && <div className='col02 value-text primary'>{elt.display}</div> }
+	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
 
 	       { isValid(elt, e => e.reason[0].code) && <div className='col01 label'>Reason</div> }
 	       { isValid(elt, e => e.reason[0].code) && <div className='col02 value-text'>{elt.reason[0].code.coding[0].display}</div> } 
@@ -604,7 +609,7 @@ export function renderSocialHistory(matchingData, appContext) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>Type</div> }
-	       { elt.display && <div className='col02 value-text primary'>{elt.display}</div> }
+	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
 
 	       <div className='col01 label'>Value</div>
 	       <div className='col02 value-text'>{elt.value}</div>
@@ -643,7 +648,7 @@ export function renderEncounters(matchingData, appContext) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className='content-data'>	       
 	       { elt.display && <div className='col01 label'>Type</div> }
-	       { elt.display && <div className='col02 value-text primary'>{elt.display}</div> }
+	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
 
 	       { elt.period.start !== elt.period.end && <div className='col01 label'>Ending</div> }
 	       { elt.period.start !== elt.period.end && <div className='col02 value-text'>{formatDisplayDate(elt.period.end, true, false)}</div> }
@@ -752,7 +757,7 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
 		 id={formatKeyDate(elt.date.toISOString()) + '-' + elt.display}>
 	       <div className='content-data'>
 		  { elt.display && <div className='col01 label'>Measure</div> }
-		  { elt.display && <div className='col02 value-text primary'>{elt.display}</div> }
+		  { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
 
 		  { elt.value && <div className='col01 label'>Value</div> }
 	          { elt.value && <div className='col02 value-number'>{formatDPs(elt.value, 1) + ' ' + elt.unit}</div> }
@@ -831,7 +836,7 @@ export function renderEOB(matchingData, appContext) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className='content-data'>
 	       <div className='col01 label'>Claim type</div>
-	       <div className='col02 value-text primary'>{elt.claimType.coding[0].display}</div>
+	       <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.claimType.coding[0].display}</HighlightDiv>
 
 	       <div className='col01 label'>Period</div>
 	       <div className='col02 value-text'>
@@ -941,7 +946,8 @@ export function renderExams(matchingData, appContext) {
 	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>Type</div> }
-	       { elt.display && <div className='col02 value-text primary'>{elt.display}</div> }
+	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
+
 
 	       { (elt.valueQuantity || elt.valueConcept) && <div className='col01 label'>Value</div> }
 	       { elt.valueQuantity && <div className='col02 value-text'>{elt.valueQuantity.value + ' ' + elt.valueQuantity.unit}</div> }

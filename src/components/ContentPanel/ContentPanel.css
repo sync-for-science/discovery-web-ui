@@ -45,9 +45,9 @@
    justify-content:flex-start;
    align-items: center;
    width: inherit;
-   height: 38px;
-   min-height: 38px;
-   max-height: 38px;
+   height: 30px;
+   min-height: 30px;
+   max-height: 30px;
    font-family: data;
    font-size: 1.000rem;
    color: var(--label-white);
@@ -119,11 +119,11 @@
    flex-direction: column;
    align-items: center;
    justify-content: center;
-   width: 200px;
-   height: 38px;
-   background-color: var(--button-dark);
+   width: 63px;
+   height: 30px;
+   background-color: transparent;
    border: solid 0px var(--button-dark); 
-   border-radius: 10px; 
+/*   border-radius: 10px; */
    cursor: row-resize;
 }
 
@@ -131,15 +131,15 @@
    @insert .content-panel-button;
    position: relative;
    z-index: 10;
-   height: 38px;
+   height: 30px;
    width: 63px;
    background-color: transparent;
-   background-image: url("../../svg/content-panel-drag-button.svg");
+   background-image: url("../../svg/content-panel-drag-button-2.svg");
    background-position: top center;
    background-size: 63px 20px;
    padding: 0;
    border: 0;
-   margin: -27px auto 0 auto;
+   margin: 0 auto 0 auto;
    cursor: row-resize;
 }
 
@@ -163,7 +163,7 @@
 }
 
 .content-panel-show-details-button {
-   width: 60px;
+   width: 4.750rem;
    height: 20px;
    font-family: data-text;
    font-size: 0.750rem;
@@ -348,12 +348,13 @@
 
 .content-header {
    @insert .header;
-   width: 100px;
+   width: 8.75rem;
    height: 30px;
    background-color: var(--content-header);
-   color: var(--label-white);
+   color: var(--label-black);
    font-size: 0.813rem;
    line-height: 30px;
+   white-space: nowrap;
    padding: 0 0 0 20px;
    margin: 0 0 0 0;
 }
@@ -366,6 +367,7 @@
    color: var(--label-white);
    font-size: 0.813rem;
    line-height: 30px;
+   
 /*   padding: 0 0 0 15px;
    margin: 0 0 0 7.50rem; */
    padding: 0 0 0 20px;
@@ -443,7 +445,7 @@
 
 .content-data {
    display: grid;
-   grid-template-columns: 5.625rem auto auto auto auto auto;
+   grid-template-columns: 8.125rem auto auto auto auto auto;
    grid-column-gap: 10px;
    grid-row-gap: 5px;
    width: auto;
@@ -485,8 +487,9 @@
 .content-panel-no-data {
    grid-column: 1;
    text-align: left;
-   padding: 4px 0 0 20px;
-   margin: 20px 0 0 20px;
+   font-family: text-italic;
+   padding: 4px 0 0 18px;
+   margin: 10px 0 0 20px;
 }
 
 /* Consult View highlight styles */
@@ -541,7 +544,7 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-   background:var(--gs-010-100); 
+   background:var(--gt3); 
 }
 
 /* Handle on hover */

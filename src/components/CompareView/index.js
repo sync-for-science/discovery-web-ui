@@ -69,7 +69,9 @@ export default class CompareView extends React.Component {
    componentWillUnmount() {
       this.props.viewAccentCallback([]);	// Clear accent dots
       this.context.updateGlobalContext({ savedSelectedUniqueItems: this.state.selectedUniqueItems,
-				         lastUniqueItemSelected: this.state.lastUniqueItemSelected });	// Save selected, last selected unique items
+				         lastUniqueItemSelected: this.state.lastUniqueItemSelected,	// Save selected, last selected unique items
+					 highlightedResources: [],
+					 lastHighlightedResources: [] });				// Clear highlights
    }
 
    componentDidUpdate(prevProps, prevState) {
@@ -258,18 +260,31 @@ export default class CompareView extends React.Component {
 							    this.hyphenate(this.getCoding(res).display) === display);
    }
 
+   // Get all resources from selectedUniqueItems
+   allSelectedUniqueItemResources(selectedUniqueItems) {
+      let resArray = [];
+      for (let catName of Object.keys(selectedUniqueItems)) {
+	 for (let displayStr of Object.keys(selectedUniqueItems[catName])) {
+	    resArray = resArray.concat(selectedUniqueItems[catName][displayStr])
+	 }
+      }
+
+      return resArray;
+   }
+
    onUniqueItemClick = (e) => {
-      let newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);	// copy selected unique item obj
+      let newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);	// copy selected unique items obj
       let uniqueItemId = this.parseUniqueItemId(e.target.id);
       let matchingUniqueItemResources = null
 
       if (this.isUniqueItemSelected(uniqueItemId.catName, uniqueItemId.display)) {
-	 // Clear selection of the clicked unique item
+	 // Clear selection of the just-clicked unique item
 	 delete newSelectedUniqueItems[uniqueItemId.catName][uniqueItemId.display];
 	 // Clear lastUniqueItemSelected if matches
 	 if (this.state.lastUniqueItemSelected && this.state.lastUniqueItemSelected.catName === uniqueItemId.catName &&
 	     this.state.lastUniqueItemSelected.display === uniqueItemId.display) {
-	    this.context.updateGlobalContext({ highlightedResources: [] });
+	    this.context.updateGlobalContext({ highlightedResources: [],
+					       lastHighlightedResources: [] });
 	    this.setState({ lastUniqueItemSelected: null });
 	 }
 
@@ -280,7 +295,9 @@ export default class CompareView extends React.Component {
 	 }
 	 matchingUniqueItemResources = this.matchingUniqueItemResources(uniqueItemId.catName, uniqueItemId.display);
 	 newSelectedUniqueItems[uniqueItemId.catName][uniqueItemId.display] = matchingUniqueItemResources;
-	 this.context.updateGlobalContext({ highlightedResources: matchingUniqueItemResources });
+//	 this.context.updateGlobalContext({ highlightedResources: matchingUniqueItemResources });
+	 this.context.updateGlobalContext({ highlightedResources: this.allSelectedUniqueItemResources(newSelectedUniqueItems),
+					    lastHighlightedResources: matchingUniqueItemResources });
 	 let newDate = matchingUniqueItemResources[0].itemDate;
 	 let newContext = Object.assign(this.state.context, { date: newDate,
 							      position: normalizeDates([newDate], this.state.context.minDate, this.state.context.maxDate)[0],
@@ -410,9 +427,9 @@ export default class CompareView extends React.Component {
 	 );
       }
 
-      if (divs.length === 0) {
-	 divs.push(<div className='compare-no-data' key='1'>[No matching data]</div>);
-      }
+//      if (divs.length === 0) {
+//	 divs.push(<div className='compare-no-data' key='1'>[No matching data]</div>);
+//      }
 
       return divs;
    }
@@ -444,7 +461,7 @@ export default class CompareView extends React.Component {
 			  context={this.state.context} nextPrevFn={this.props.nextPrevFn}
 			  thumbLeftDate={this.props.thumbLeftDate} thumbRightDate={this.props.thumbRightDate}
 			  resources={this.selectedUniqueItemResources()} totalResCount={this.props.totalResCount}
-			  viewName='Compare' viewIconClass='compare-view-icon' tileSort={true} noResultDisplay='[No items selected]' />
+			  viewName='Compare' viewIconClass='compare-view-icon' tileSort={true} noResultDisplay='Please select a Card above' />
 	 </div>
       );
    }

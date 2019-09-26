@@ -73,14 +73,18 @@ export default class TilesView extends React.Component {
    componentWillUnmount() {
       this.props.viewAccentCallback([]);	// Clear accent dots
       this.context.updateGlobalContext({ savedSelectedTiles: this.state.selectedTiles,
-				         lastTileSelected: this.state.lastTileSelected });	// Save selected tiles, last tile selected
+				         lastTileSelected: this.state.lastTileSelected,		// Save selected tiles, last tile selected
+					 highlightedResources: [],
+					 lastHighlightedResources: [] });			// Clear highlights
+
       window.removeEventListener('resize', this.onResize);
    }
 
    componentDidUpdate(prevProps, prevState) {
       // TODO: only on explicit changes?
       if (notEqJSON(prevProps, this.props)) {
-	 this.setState({ uniqueStruct: this.buildUniqueStruct() });
+	 this.setState({ uniqueStruct: this.buildUniqueStruct() },
+		       this.setState({ numVisibleCols: this.numVisibleCols() }));
       }
       // TODO: only on explicit changes?
       if (notEqJSON(prevState, this.state)) {
@@ -238,7 +242,7 @@ export default class TilesView extends React.Component {
 
    numVisibleCols() {
       const numCols = Object.keys(this.state.uniqueStruct).length;
-      const colWidth = 156;	// NOTE: DOM isn't fully built when we need this. Value MUST match tiles-view-column-container width (including margins)
+      const colWidth = 185;	// NOTE: DOM isn't fully built when we need this. Value MUST match tiles-view-column-container width (including margins)
       const container = document.querySelector('.tiles-view-container-inner');
       return container ? Math.min(numCols, Math.trunc(container.clientWidth / colWidth)) : 0;
    }
@@ -273,6 +277,18 @@ export default class TilesView extends React.Component {
 							    this.hyphenate(this.getCoding(res).display) === display);
    }
 
+   // Get all resources from selectedUniqueItems
+   allSelectedTileResources(selectedTiles) {
+      let resArray = [];
+      for (let catName of Object.keys(selectedTiles)) {
+	 for (let displayStr of Object.keys(selectedTiles[catName])) {
+	    resArray = resArray.concat(selectedTiles[catName][displayStr])
+	 }
+      }
+
+      return resArray;
+   }
+
    onTileClick(e) {
       let newSelectedTiles = Object.assign({}, this.state.selectedTiles);	// copy selected tiles obj
       let tileId = this.parseTileId(e.target.id);
@@ -283,7 +299,8 @@ export default class TilesView extends React.Component {
 	 delete newSelectedTiles[tileId.catName][tileId.display];
 	 // Clear lastTileSelected if matches
 	 if (this.state.lastTileSelected && this.state.lastTileSelected.catName === tileId.catName && this.state.lastTileSelected.display === tileId.display) {
-	    this.context.updateGlobalContext({ highlightedResources: [] });
+	    this.context.updateGlobalContext({ highlightedResources: [],
+					       lastHighlightedResources: [] });
 	    this.setState({ lastTileSelected: null });
 	 }
 
@@ -294,7 +311,9 @@ export default class TilesView extends React.Component {
 	 }
 	 matchingTileResources = this.matchingTileResources(tileId.catName, tileId.display);
 	 newSelectedTiles[tileId.catName][tileId.display] = matchingTileResources;
-	 this.context.updateGlobalContext({ highlightedResources: matchingTileResources });
+//	 this.context.updateGlobalContext({ highlightedResources: matchingTileResources });
+	 this.context.updateGlobalContext({ highlightedResources: this.allSelectedTileResources(newSelectedTiles),
+					    lastHighlightedResources: matchingTileResources });
 	 let newDate = matchingTileResources[0].itemDate;
 	 let newContext = Object.assign(this.state.context, { date: newDate,
 							      position: normalizeDates([newDate], this.state.context.minDate, this.state.context.maxDate)[0],
@@ -449,7 +468,8 @@ export default class TilesView extends React.Component {
 
    renderTileColumns() {
       let cols = [];
-      for (let catName of Object.keys(this.state.uniqueStruct).slice(this.state.firstTileColNum, this.state.firstTileColNum + this.state.numVisibleCols)) {
+      // TODO: should be able to get this.state.numVisibleCols instead of calcing.... (state update issue)
+      for (let catName of Object.keys(this.state.uniqueStruct).slice(this.state.firstTileColNum, this.state.firstTileColNum + this.numVisibleCols())) {
 	 cols.push(
 	    <div className={this.hyphenate(catName) + ' tiles-view-column-container'} key={catName}>
 	       <div className='tiles-view-column-header'>
@@ -511,7 +531,7 @@ export default class TilesView extends React.Component {
 			  context={this.state.context} nextPrevFn={this.props.nextPrevFn}
 			  thumbLeftDate={this.props.thumbLeftDate} thumbRightDate={this.props.thumbRightDate}
 			  resources={this.selectedTileResources()} totalResCount={this.props.totalResCount}
-			  viewName='Tiles' viewIconClass='tiles-view-icon' tileSort={true} noResultDisplay='[No tiles selected]' />
+			  viewName='Tiles' viewIconClass='tiles-view-icon' tileSort={true} noResultDisplay='Please select a Card above' />
 	 </div>
       );
    }

@@ -22,7 +22,8 @@
       --gt1: rgb(233,237,244);      /* Blue Gray Light */ 
       --gt2: rgb(124,130,143);      /* Blue Gray Medium */  
       --gt3: rgb(166,183,217);      /* Blue Gray Medium Dark */  
-      --gt4: rgb(143,158,187);      /* Blue Gray Dark */  
+      --gt4: rgb(143,158,187);      /* Blue Gray Dark */ 
+      --gt4-trans: rgba(143,158,187,.40);      /* Blue Gray Dark */ 
       --gt5: rgb(116,128,154);      /* Blue Gray Dark 2 */ 
       --gt6: rgb(87,103,131);       /* Blue Gray Dark 3 */  
       --gt7: rgb(,,);      /*  */  
@@ -104,7 +105,9 @@
          /* TilesView.css */
          
     /* Content */
-      --content-header: var(--gt4);                            
+      --content-header-old: var(--gt4);                            
+         /* ContentPanel.css */
+      --content-header: var(--gt4-trans);                            
          /* ContentPanel.css */
       --content-header-disabled: var(--gt1);                            
          /* ContentPanel.css */

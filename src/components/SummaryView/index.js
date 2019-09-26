@@ -144,28 +144,28 @@ export default class SummaryView extends React.Component {
             </div>
        </div>
 	    <div className='view-info-container'>
-	       <div className='view-info-graphic'/>
+	       <div className='view-info-graphic-catalog'/>
 	       <div className='view-info-text'>
 		  <b>Catalog</b> lists your unique clinical data by type.
 	       </div>
 	    </div>
 
 	    <div className='view-info-container'>
-	       <div className='view-info-graphic'/>
+	       <div className='view-info-graphic-compare'/>
 	       <div className='view-info-text'>
 		  <b>Compare</b> shows which providers have records of your unique clinical data.
 	       </div>
 	    </div>
 
 	    <div className='view-info-container'>
-	       <div className='view-info-graphic'/>
+	       <div className='view-info-graphic-timeline'/>
 	       <div className='view-info-text'>
 		  <b>Timeline</b> shows your detailed clinical and payer data over time.
 	       </div>
 	    </div>
 
 	    <div className='view-info-container'>
-	       <div className='view-info-graphic'/>
+	       <div className='view-info-graphic-payer'/>
 	       <div className='view-info-text'>
 		  <b>Payer</b> presents your claims and benefits data.
 	       </div>

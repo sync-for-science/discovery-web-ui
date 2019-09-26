@@ -61,7 +61,8 @@ export default class DiscoveryApp extends React.Component {
       savedSelectedTiles: null,		  // TilesView
       lastTileSelected: null,		  // TilesView
       lastSavedSelectedTiles: null,	  // TilesView
-      highlightedResources: null,	  // TilesView & CompareView
+      highlightedResources: [],		  // TilesView & CompareView
+      lastHighlightedResources: [],	  // TilesView & CompareView
       savedSelectedUniqueItems: null,	  // CompareView
       lastUniqueItemSelected: null,	  // CompareView
       lastSavedSelectedUniqueItems: null  // CompareView

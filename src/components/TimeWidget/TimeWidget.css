@@ -113,7 +113,38 @@
    font-family: data-text;
    font-size: 0.750rem;
    color: var(--gs-100-100);
+/*   border-right: 1px solid var(--separator-light); */
+}
+
+.timeline-help-col-1 {
+   @insert .timeline-help-col;
+}
+
+.timeline-help-col-2 {
+   @insert .timeline-help-col;
+}
+
+.timeline-help-col-3 {
+   @insert .timeline-help-col;
+}
+
+.timeline-help-col-after {
+   content: "";
+   display: block;
+   position: absolute;
+   height: 42px;
+   top: 6px;
    border-right: 1px solid var(--separator-light);
+}
+
+.timeline-help-col-1::after {
+   @insert .timeline-help-col-after;
+   left: 33.33%;
+}
+
+.timeline-help-col-2::after {
+   @insert .timeline-help-col-after;
+   left: 66.66%;
 }
 
 .timeline-controls {

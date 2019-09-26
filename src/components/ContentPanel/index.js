@@ -477,8 +477,23 @@ export default class ContentPanel extends React.Component {
       return classFromCat(elt.category).primaryText(elt);
    }
 
+   noneEnabled(obj) {
+      for (let propName of Object.keys(obj)) {
+	 if (obj[propName]) {
+	    return false;
+	 }
+      }
+      return true;
+   }
+
    get noResultDisplay() {
-       return this.props.noResultDisplay ? this.props.noResultDisplay : '[No matching data]';
+      if (this.noneEnabled(this.props.catsEnabled)) {
+	 return 'Please select a Record type';
+      } else if (this.noneEnabled(this.props.provsEnabled)) {
+	 return 'Please select a Provider';
+      } else {
+	 return this.props.noResultDisplay ? this.props.noResultDisplay : '[No matching data]';
+      }
    }
 
    renderAltDisplay() {
@@ -701,7 +716,7 @@ export default class ContentPanel extends React.Component {
          <div className='content-panel-item-count'>
 		     {/* this.state.currResources.length + ' record' + (this.state.currResources.length === 1 ? '' : 's') */}
 		     {/* `${this.state.currResources.length} record${this.state.currResources.length === 1 ? '' : 's'}` */}
-		     { `${this.state.currResources.length} of ${this.props.totalResCount} record${this.props.totalResCount === 1 ? '' : 's'}` }
+		     { `Displaying ${this.state.currResources.length} of ${this.props.totalResCount} record${this.props.totalResCount === 1 ? '' : 's'}` }
 		  </div>                
                          
 		  <button className={'content-panel-left-button' + (this.state.prevEnabled ? '' : '-off')}
@@ -709,7 +724,7 @@ export default class ContentPanel extends React.Component {
 	       	  <button className={'content-panel-right-button' + (this.state.nextEnabled ? '' : '-off')}
 			  onClick={() => this.onNextPrev('next')} />
          <button className='content-panel-show-details-button' onClick={this.toggleTrimLevel}>
-		     {this.state.trimLevel===Const.trimNone ? 'Less' : 'More'}
+		     {this.state.trimLevel===Const.trimNone ? 'Show Less' : 'Show More'}
 		  </button>               
                          
 	       	  {/* <button className={this.state.showAllData ? 'content-panel-all-button' : 'content-panel-dot-button'}

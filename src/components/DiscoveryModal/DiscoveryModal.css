@@ -27,6 +27,7 @@
 	z-index: 1001;
 	width: auto;
 	min-width: 550px;
+   height: auto;
 	background-color: transparent;
 	background-clip: padding-box;
    padding: 0;
@@ -39,7 +40,7 @@
 /* Close Button */
 .discovery-modal-close-button {
    position: absolute;
-   top: 10px;
+   top: 5px;
    right: 14px;
 	display: flex;
    background-color: transparent;
@@ -60,30 +61,30 @@
 	height: 37px;
 	width: auto;
 	min-width: 550px;
-	background-color: var(--gs-060-100);
+	background-color: var(--background-header);
 	background-repeat: no-repeat;
 	font-family: header-bold;
 	font-size: 1.000rem;
    line-height: 37px;
 	color: var(--white-100);
    padding: 0 0 0 50px;
-	border: 1px solid var(--gs-060-100);
+	border: 1px solid var(--background-header);
 	border-radius: 10px 10px 0 0;
    margin: 0;
 }
 
 .modal-body {
-	height: 300px;
+	height: 350px;
    width: auto;
-	min-width: 550px;
-	max-height: 300px;
+	min-width: 520px;
+	max-height: 520px;
 	background-color: var(--gs-000-100);
 	padding: 20px;
    border: 2px solid var(--gs-060-100);
    border-top: none;
 	border-radius: 0 0 10px 10px;
 	margin: 0;
-	overflow-y: scroll;
+	overflow-y: hidden;
 	overflow-x: hidden;
 }
 

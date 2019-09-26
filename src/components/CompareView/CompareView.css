@@ -45,18 +45,20 @@
    width: 100%;
    max-height: 30px;
    padding: 0;
-   border-top: solid var(--separator-dark) 1px;
+   border-top: solid var(--gt4-trans) 1px;
    margin: 10px 20px 10px 0;
 }
 
 .compare-view-title {
    @insert .view-title;
-   width: 100px;
+   width: 8.375rem;
    height: 30px;
    min-height: 30px;
    font-family: header-bold;
    font-size: 0.813rem;
+   color: var(--label-black);
    padding: 0 0 0 20px;
+   background-color: var(--gt4-trans);
 }
 
 .compare-view-unique-item-container {
@@ -120,7 +122,7 @@
    padding: 10px;
    border: 0;
    border-radius: 5px;
-   color: var(--label-tile-selected-last);
+   color: var(--label-black);
    background-color: var(--tile-selected-last);
    margin: 0 0 10px 20px;
 }

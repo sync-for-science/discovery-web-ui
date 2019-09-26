@@ -119,13 +119,15 @@
 } */
 
 .primary {
+   display: flex;
+   
    font-family: data-text-bold;
-   padding: 0 0 5px 15px;
+   padding: 0 15px 0 15px;
 }
 
 .primary-accent {
    font-family: data-text-bold;
-   padding: 0 0 5px 0;
+   padding: 0 15px 0 0;
    color: white;
    background-color: mediumaquamarine;
 }

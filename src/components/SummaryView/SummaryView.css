@@ -73,9 +73,28 @@
 .view-info-graphic {
    width: 115px;
    min-width: 115px;
-   background-image: url("../../svg/summary-icon-placeholder.svg");
    background-repeat: no-repeat;
    background-position: right;
+}
+
+.view-info-graphic-catalog {
+   @insert .view-info-graphic;
+   background-image: url("../../svg/summary-icon-catalog.svg");
+}
+
+.view-info-graphic-compare {
+   @insert .view-info-graphic;
+   background-image: url("../../svg/summary-icon-compare.svg");
+}
+
+.view-info-graphic-timeline {
+   @insert .view-info-graphic;
+   background-image: url("../../svg/summary-icon-timeline.svg");
+}
+
+.view-info-graphic-payer {
+   @insert .view-info-graphic;
+   background-image: url("../../svg/summary-icon-payer.svg");
 }
 
 .view-info-text {
@@ -297,6 +316,7 @@
 
 .record-newest {
    width: auto;
+   min-width: 32px;
    margin: 0 15px 0 35px;
 }
 

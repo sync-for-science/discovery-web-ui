@@ -275,6 +275,12 @@
    color: var(--label-button-view);
 }
 
+.view-button-no-op {
+   @insert .view-button;
+   width: 90px;
+   background-color: transparent;
+   color: rgba(255, 255, 255, 0.5);
+}
 
 /* View Help */
 .view-help-container {

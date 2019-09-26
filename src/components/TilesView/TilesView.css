@@ -79,8 +79,8 @@
 
 /* WARNING: Update numVisibleCols() in index.js if change width/margin values!!! */
 .tiles-view-column-container {
-   width:146px;
-   min-width: 146px;
+   width:175px;
+   min-width: 175px;
    height: auto;
    display: flex;
    flex-direction: column;
@@ -96,7 +96,7 @@
    position: relative;
    top: 0;
    width: 100%;
-   min-width: 100%;
+   min-width: 146px;
    height: 28px;
    min-height: 28px;
    align-items: center;
@@ -104,7 +104,10 @@
    font-size: 0.813rem;
    line-height: 28px;
    color: var(--label-black);
-   padding: 0 20px 0 0;
+   padding: 0 20px 0 10px;
+   background-color: var(--gt4-trans);
+   margin: 0 0 5px 0;
+   white-space: nowrap;
    overflow: hidden;
 }
 
@@ -113,13 +116,13 @@
    min-width: 30px;
    height: 28px;
    min-height: 28px;
-   background-color: var(--tile-area);
+   background-color: transparent;
    background-size: 15px 15px;
    background-position: right center;
    background-repeat: no-repeat;
    padding: 0;
    border: 0;
-   margin: 0 12px 0 auto;
+   margin: 0 21px 0 auto;
    outline: none;
    cursor: pointer;
 }
@@ -142,9 +145,9 @@
 .tiles-view-column-content {
    display: flex;
    flex-direction: column;
-   width: 146px;
-   max-width: 146px;
-   min-width: 146px;
+   width: 175px;
+   max-width: 175px;
+   min-width: 175px;
    height: auto;
    overflow-y: auto;
    overflow-x: hidden;
@@ -158,8 +161,8 @@
    flex-direction: row;
    flex: auto;
    flex-shrink: 0;
-   width: 133px;
-   max-width: 133px;
+   width: 162px;
+   max-width: 162px;
    height: auto;
    min-height: 36px;
    font-family: data-text;
@@ -194,7 +197,7 @@
 .tile-standard-last {
    @insert .tile;
    font-family: header-bold;
-   color: var(--label-tile-selected-last);
+   color: var(--label-black);
    background-color: var(--tile-selected-last);
    margin: 0 0 6px 0;
 }

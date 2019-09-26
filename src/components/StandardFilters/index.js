@@ -365,6 +365,12 @@ export default class StandardFilters extends React.Component {
 						   res.push({ dotType: 'view-accent', date: date, position: normalizeDates([date], startDate, endDate)[0] });
 						   return res
 						}, []);
+//	// TODO: to use, need to build highlightedResources on Tiles/Compare load	  
+//	 let viewAccentRefs = this.context.highlightedResources ? this.context.highlightedResources.reduce((result, res) => {
+//						let date = res.itemDate;
+//						result.push({ dotType: 'view-accent', date: date, position: normalizeDates([date], startDate, endDate)[0] });
+//						return result;
+//					     }, []) : [];
 
 	 let dotClickContext = this.state.dotClickContext;
 	 let matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget' ||

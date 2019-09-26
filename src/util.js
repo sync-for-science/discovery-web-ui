@@ -145,13 +145,15 @@ export function formatAge(birthDate, ageDate, prefix) {
    }
 }
 
-// TODO: cleanup when determine not to show disabled header
+// TODO: cleanup when determine not to show disabled header, eliminate header highlight
 export function formatContentHeader(isEnabled, category, res, appContext) {
    let dateOnly = formatKeyDate(res.itemDate);
    let dateWithTime = res.itemDate ? formatDisplayDate(res.itemDate, true, false) : '<no date>';
    let dob = appContext.resources.pathItem('[category=Patient].data.birthDate');
    let age = formatAge(dob, res.itemDate, 'age ');
-   let highlight = appContext.highlightedResources && appContext.highlightedResources.some(elt => elt.category === category  && elt.itemDate === res.itemDate);
+//   let highlight = appContext.highlightedResources && 
+//		   appContext.highlightedResources.some(elt => elt.category === category  && elt.itemDate === res.itemDate);
+   let highlight = false;
 
    return !isEnabled ? null : (
       <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} id={dateOnly} data-fhir={fhirKey(res)}>
