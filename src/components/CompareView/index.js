@@ -49,10 +49,11 @@ export default class CompareView extends React.Component {
 
    state = {
       context: this.props.context,
-      uniqueStruct: this.buildUniqueStruct(),
+      uniqueStruct: {},
       selectedUniqueItems: {},
       lastUniqueItemSelected: null,
-      topBound: 0
+      topBound: 0,
+      onlyMultisource: false
    }
 
    componentDidMount() {
@@ -62,8 +63,13 @@ export default class CompareView extends React.Component {
       }
 
       if (this.context.lastUniqueItemSelected) {
-	 this.setState({ lastUniqueItemSelected: this.context.lastUniqueItemSelected });
+	 let last = this.context.lastUniqueItemSelected;
+	 this.setState({ lastUniqueItemSelected: last });
+	 this.context.updateGlobalContext({ lastHighlightedResources: this.matchingUniqueItemResources(last.catName, last.display) });
       }
+
+      this.setState({ onlyMultisource: this.context.onlyMultisource },
+		    this.setState({ uniqueStruct: this.buildUniqueStruct() }));
    }
 
    componentWillUnmount() {
@@ -76,9 +82,10 @@ export default class CompareView extends React.Component {
 
    componentDidUpdate(prevProps, prevState) {
       // TODO: only on explicit changes?
-      if (notEqJSON(prevProps, this.props)) {
+      if (notEqJSON(prevProps, this.props) || prevState.onlyMultisource !== this.state.onlyMultisource) {
 	 this.setState({ uniqueStruct: this.buildUniqueStruct() });
       }
+
       // TODO: only on explicit changes?
       if (notEqJSON(prevState, this.state)) {
 	 let scroller = document.querySelector('.compare-view-scroller');
@@ -224,6 +231,19 @@ export default class CompareView extends React.Component {
 	    }
 	 }
       }
+
+      // Possibly prune if onlyMultisource
+      if (this.state.onlyMultisource) {
+	 for (let cat in struct) {
+	    let pruned = struct[cat].filter(elt => elt.provs.length > 1);
+	    if (pruned.length > 0) {
+	       struct[cat] = pruned;
+	    } else {
+	       delete struct[cat];
+	    }
+	 }
+      }
+
       return struct;
    }
 
@@ -295,7 +315,6 @@ export default class CompareView extends React.Component {
 	 }
 	 matchingUniqueItemResources = this.matchingUniqueItemResources(uniqueItemId.catName, uniqueItemId.display);
 	 newSelectedUniqueItems[uniqueItemId.catName][uniqueItemId.display] = matchingUniqueItemResources;
-//	 this.context.updateGlobalContext({ highlightedResources: matchingUniqueItemResources });
 	 this.context.updateGlobalContext({ highlightedResources: this.allSelectedUniqueItemResources(newSelectedUniqueItems),
 					    lastHighlightedResources: matchingUniqueItemResources });
 	 let newDate = matchingUniqueItemResources[0].itemDate;
@@ -359,8 +378,6 @@ export default class CompareView extends React.Component {
    }		 
 
    formatCount(count, onePre, onePost, multiPre, multiPost) {
-//      return ' (' + count + (count === 1 ? ' time' : ' times') + ')';
-//      return count === 1 ? '' : ` (${count} times)`;
        return (count === 1) ? onePre + onePost : multiPre + count + multiPost;
    }
 
@@ -427,10 +444,6 @@ export default class CompareView extends React.Component {
 	 );
       }
 
-//      if (divs.length === 0) {
-//	 divs.push(<div className='compare-no-data' key='1'>[No matching data]</div>);
-//      }
-
       return divs;
    }
 
@@ -446,9 +459,21 @@ export default class CompareView extends React.Component {
       return new FhirTransform(resArray, (data) => data);
    }
 
+   onlyMultisourceChange = (event) => {
+//      console.log('multisource change: ' + event.target.checked);
+      this.setState({ onlyMultisource: event.target.checked });
+      this.context.updateGlobalContext({ onlyMultisource: event.target.checked });
+   }
+
    render() {
       return (
 	 <div className='compare-view'>  
+	    <div className='compare-view-header'>
+	       <label className='compare-view-multisource-label'>
+		  <input className='compare-view-multisource-check' type='checkbox' checked={this.state.onlyMultisource} onChange={this.onlyMultisourceChange}/>
+		  Show only multi-sourced
+	       </label>
+	    </div>
 	    <div className='compare-view-scroller'>
 	       <div className='compare-view-all-unique-items'>
 		  { this.renderUniqueItems() }
@@ -461,7 +486,8 @@ export default class CompareView extends React.Component {
 			  context={this.state.context} nextPrevFn={this.props.nextPrevFn}
 			  thumbLeftDate={this.props.thumbLeftDate} thumbRightDate={this.props.thumbRightDate}
 			  resources={this.selectedUniqueItemResources()} totalResCount={this.props.totalResCount}
-			  viewName='Compare' viewIconClass='compare-view-icon' tileSort={true} noResultDisplay='Please select a Card above' />
+			  viewName='Compare' viewIconClass='compare-view-icon' tileSort={true}
+			  noResultDisplay={Object.keys(this.state.selectedUniqueItems).length > 0 ? 'No matching data' : 'Please select a Card above'} />
 	 </div>
       );
    }

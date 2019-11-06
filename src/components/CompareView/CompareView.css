@@ -2,7 +2,7 @@
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery CompareView Stylesheet */
-/* v.01.17 Updated 09/10/2019 */
+/* v.01.19 Updated 10/14/2019 */
 
 .compare-view {
    @insert .view-container;
@@ -31,6 +31,32 @@
 
 }
 
+.compare-view-header {
+   display: flex;
+   flex-direction: row;
+   justify-content:flex-start;
+   width: 100%;
+   height: 30px;
+   line-height: 30px;
+   font-family: data-text;
+   font-size: 0.750rem;
+   color: var(--label-white);
+   background-color: var(--background-header-content); 
+}
+
+.compare-view-multisource-check {
+   position: relative;
+   top: 3px;
+   cursor: pointer;
+}
+
+.compare-view-multisource-label {
+   position: relative;
+   top: -0.5px;
+   margin-left: 20px;
+   cursor: pointer;
+}
+
 .compare-view-category-container {
    position: relative;
    top: 0;
@@ -45,7 +71,7 @@
    width: 100%;
    max-height: 30px;
    padding: 0;
-   border-top: solid var(--gt4-trans) 1px;
+   border-top: solid var(--separator-dark-translucent) 1px;
    margin: 10px 20px 10px 0;
 }
 
@@ -58,7 +84,7 @@
    font-size: 0.813rem;
    color: var(--label-black);
    padding: 0 0 0 20px;
-   background-color: var(--gt4-trans);
+   background-color: var(--background-header-content);
 }
 
 .compare-view-unique-item-container {
@@ -70,7 +96,7 @@
    width: 100%;
    /* height: calc(100% - 38px); */
    margin: 0;
-   background-color: var(--white-100);
+   background-color: var(--background-content);
    padding: 0;
    overflow-x: hidden;
    overflow-y: hidden;
@@ -89,7 +115,7 @@
    padding: 10px;
    border: 0;
    border-radius: 5px;
-   background-color: var(--gt1);
+   background-color: var(--background-application);
    margin: 0 0 10px 20px;
 }
 

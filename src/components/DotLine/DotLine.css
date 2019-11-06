@@ -1,14 +1,13 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery DotLine Stylesheet */
-/* v.01.09 Updated 5/13/2019 */
+/* v.01.11 Updated 10/28/2019 */
 
 .active-dots {
    height: 10px;
    width: 10px;
-/* fill: var(--category-060); */
-   fill: var(--gt3);
-   stroke: var(--white-060);
+   fill: var(--dot);
+   stroke: var(--dot-stroke);
    stroke-width: 1px;
    padding: 6px 0;
    cursor: pointer;
@@ -16,26 +15,24 @@
 }  
 
 .inactive-dots {
-/* fill:var(--gray-medium-060); */
-   fill: rgba(155,155,155,0.15);
-   stroke:var(--white-060);
+   fill: var(--dot-inactive);
+   stroke: var(--dot-stroke);
    stroke-width:1px;
    cursor:pointer;
    pointer-events: visible;
 }
 
 .view-accent-dots {
-/*   fill:var(--???); */
    fill: var(--tile-selected-last);
-   stroke:var(--white-060);
+   stroke:var(--dot-stroke);
    stroke-width:1px;
    cursor:pointer;
    pointer-events: visible;
 }
 
 .active-search-dots {
-   fill: var(--red-100);
-   stroke: var(--white-100);
+   fill: var(--dot-search);
+   stroke: var(--dot-search-stroke);
    stroke-width: 1px;
    cursor: pointer;
    pointer-events: visible;
@@ -43,7 +40,7 @@
 
 .inactive-search-dots {
    fill: rgba(255,20,20,0.10);
-   stroke: var(--white-100);
+   stroke: var(--dot-stroke);
    stroke-width: 1px;
    cursor: pointer;
    pointer-events: visible;

@@ -67,6 +67,24 @@ export function shallowEqArray(arr1, arr2) {
    }
 }
 
+// Do arrays have the same contents, checking for element-by-element stringify equality
+export function stringifyEqArray(arr1, arr2) {
+   try {
+      if (arr1.length !== arr2.length) {
+	 return false;
+      } else {
+	 for (let i = 0; i < arr1.length; i++) {
+	    if (arr1[i] !== arr2[i] && JSON.stringify(arr1[i]) !== JSON.stringify(arr2[i])) {
+	       return false;
+	    }
+	 }
+	 return true;
+      }
+   } catch (e) {
+      return false;
+   }
+}
+
 export function formatDisplayDate(date, fillShortDates, surpressTime) {
    let strDate = date+'';
    let locale = 'en-US';

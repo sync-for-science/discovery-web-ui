@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+/* Sync for Science Discovery Annotation Stylesheet */
+/* v.01.05 Updated 10/16/2019 */
+
+.annotation-container {
+   z-index: 20;		/* allow annotations to get mouse events "through" the virtual window scroller */
+}
+
+.annotation-common {
+   width: 12rem;
+   min-width: 12rem;
+/*   max-width: 30%; */
+/*   min-width: 30%; */
+   min-height: calc(100% - 35px);
+   max-height: calc(100% - 35px);
+   overflow: auto;
+}
+
+.annotation {
+   @insert .annotation-common;
+   background-color: var(--background-annotation);	/* lighter version of var(--gt1) */
+   white-space: pre-wrap;
+}
+
+.annotation-empty {
+   @insert .annotation-common;
+}
+
+.annotation-buttons-container {
+   width: 12rem;
+   min-width: 12rem;
+   padding-bottom: 5px;
+}
+
+.annotation-button {
+   margin-right: 10px;
+   cursor: pointer;
+}
+
+.annotation-button-disabled {
+   margin-right: 10px;
+   opacity: 0.6;
+}

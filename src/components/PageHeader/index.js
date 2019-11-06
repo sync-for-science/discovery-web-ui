@@ -10,12 +10,16 @@ import config from '../../config.js';
 import FhirTransform from '../../FhirTransform.js';
 import Search from '../Search';
 
+import DiscoveryContext from '../DiscoveryContext';
+
 //
 // Render the page header of DiscoveryApp page
 //    if there is a 'logos' query parameter, its comma-separated
 //    elements will be used as left-to-right logo css classes.
 //
 export default class PageHeader extends React.Component {
+
+   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       rawQueryString: PropTypes.string.isRequired,
@@ -34,7 +38,8 @@ export default class PageHeader extends React.Component {
       menuIsOpen: false,
       currentViewName: null,
       viewHelpIsOpen: false,
-      viewHelpRemainingTime: 0
+      viewHelpRemainingTime: 0,
+      themesMenuIsOpen: false
    }
 
    onKeydown = (event) => {
@@ -43,7 +48,16 @@ export default class PageHeader extends React.Component {
       }
    }
 
+   loadThemes() {
+      fetch('/themes/themes.json')
+	 .then(response => response.json())
+	 .then(data => {
+	    this.themes = data;
+	 });
+   }
+
    componentDidMount() {
+      this.loadThemes();
       window.addEventListener('keydown', this.onKeydown);
       const queryVals = queryString.parse(this.props.rawQueryString);
       if (queryVals.logos) {
@@ -146,12 +160,39 @@ export default class PageHeader extends React.Component {
 
    renderMenu() {
       return (
-	 <div className='header-menu' onMouseLeave={() => this.setState({ menuIsOpen: false })}>
+	 <div className='header-menu' onMouseLeave={() => !this.state.themesMenuIsOpen && this.setState({ menuIsOpen: false })}>
 	    <div className='header-menu-help'     onClick={() => this.itemClick('helpModal')}>Help</div>
-	    <div className='header-menu-download' onClick={() => this.itemClick('downloadModal')}>Download</div>
-	    <div className='header-menu-print'    onClick={() => this.itemClick('printModal')}>Print</div>
+	    {/* <div className='header-menu-download' onClick={() => this.itemClick('downloadModal')}>Download</div>
+	    <div className='header-menu-print'    onClick={() => this.itemClick('printModal')}>Print</div> */}
+	    <div className='header-menu-theme'    onClick={() => this.setState({ themesMenuIsOpen: true })}>Theme &nbsp;&#9654;</div>
 	 </div>
       );
+   }
+
+   renderThemesMenu() {
+      return (
+	 <div className='header-submenu' onMouseLeave={() => this.setState({ menuIsOpen: false, themesMenuIsOpen: false })}>
+	     { this.renderThemes() }
+	 </div>
+      );
+   }
+
+   renderThemes() {
+      let divs = [];
+      if (this.themes) {
+	 for (let theme of this.themes) {
+	    // If no theme is set mark the (hopefully) one theme with isDefault === true as the current selected theme
+	    let divClass = !this.context.themeName ? (theme.isDefault ? 'header-menu-subitem-selected' : 'header-menu-subitem') 
+					           : (this.context.themeName === theme.name ? 'header-menu-subitem-selected' : 'header-menu-subitem');
+	    divs.push(<div className={divClass} key={theme.name} onClick={() => this.themeClick(theme.name)}>{theme.name}</div>);
+	 }
+      }
+      return divs;
+   }
+
+   themeClick(themeName) {
+      this.setState({ menuIsOpen: false, themesMenuIsOpen: false });
+      this.context.updateGlobalContext({ themeName: themeName });
    }
 
    viewClick(viewName) {
@@ -298,12 +339,12 @@ export default class PageHeader extends React.Component {
 	    </div>
 	    <div className='view-controls-box'>
 	       <button className='default-view-button-off' onClick={() => this.viewClick('summaryView')}>Summary</button>
-          <button className='tiles-view-button-off' onClick={() => this.viewClick('tilesView')}>Catalog</button>
+	       <button className='tiles-view-button-off' onClick={() => this.viewClick('tilesView')}>Catalog</button>
 	       <button className='compare-view-button-off' onClick={() => this.viewClick('compareView')}>Compare</button>
-          <button className='longitudinal-view-button-off' onClick={() => this.viewClick('reportView')}>Timeline</button>
+	       <button className='longitudinal-view-button-off' onClick={() => this.viewClick('reportView')}>Timeline</button>
 	       <button className='benefits-view-button-off' onClick={() => this.viewClick('financialView')}>Payer</button>
-          <button className='view-button-no-op'>Annotations</button>
-          <button className='view-button-no-op'>Conditions</button>
+	       <button className='view-button-no-op'>Collections</button>
+	       <button className='view-button-no-op'>Pathfinder</button>
 	       {/* <button className='consult-view-button-off' onClick={() => this.viewClick('consultView')}>Consult</button> */}
 	       {/* <button className='diabetes-view-button-off' onClick={() => this.viewClick('diabetesView')}>Conditions</button> */}
 	    </div>
@@ -324,10 +365,10 @@ export default class PageHeader extends React.Component {
 	         {Math.round(this.state.currentTextSize*100)}%
 	     </div> */}
          
-	    {/* <button className={this.state.menuIsOpen ? 'header-menu-button-open' : 'header-menu-button'}
-			onClick={() => this.state.modalName === '' && this.setState({ menuIsOpen: !this.state.menuIsOpen })} />
-	        { this.state.menuIsOpen && this.renderMenu() } */}
-	    
+	    <button className={this.state.menuIsOpen ? 'header-menu-button-open' : 'header-menu-button'}
+		    onClick={() => this.state.modalName === '' && this.setState({ menuIsOpen: !this.state.menuIsOpen })} />
+	    { this.state.menuIsOpen && this.renderMenu() }
+	    { this.state.themesMenuIsOpen && this.renderThemesMenu() }
 	 </div>
       )
    }

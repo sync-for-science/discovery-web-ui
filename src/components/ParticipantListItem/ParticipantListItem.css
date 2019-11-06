@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery ParticipantListItem Stylesheet */
-/* v.01.12 Updated 5/13/2019 */
+/* v.01.13 Updated 10/08/2019 */
 
 .participant-list-item {
 	font-family: text;
@@ -92,11 +92,11 @@
 }
 
 a:link {
-	color: var(--primary-100);
+	color: var(--text-link);
 	text-decoration: none;
 }
 
 a:hover {
-	color: var(--primary-100);
+	color: var(--text-hover);
 	text-decoration: underline;
 }

@@ -6,7 +6,7 @@ import '../ContentPanel/ContentPanel.css';
 import '../ContentPanel/ContentPanelCategories.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { Const, stringCompare, formatContentHeader } from '../../util.js';
+import { Const, stringCompare, stringifyEqArray, formatContentHeader } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -50,8 +50,19 @@ export default class Unimplemented extends React.Component {
    setMatchingData() {
       let queryString = '[* ' + Unimplemented.unimplementedCats.map(cat => 'category='+cat).join(' | ') + ']';
       let match = FhirTransform.getPathItem(this.props.data, queryString);
-//      this.setState({ matchingData: match.length > 0 ? match.sort((a, b) => stringCompare(a.category, b.category)) : null });
-      this.setState({ matchingData: match.length > 0 ? match.sort(Unimplemented.compareFn) : null });
+//      this.setState({ matchingData: match.length > 0 ? match.sort(Unimplemented.compareFn) : null });
+
+      if (match.length === 0 && this.state.matchingData && this.state.matchingData.length !== 0) {
+	 // Clear prior matchingData
+	 this.setState({ matchingData: null });
+
+      } else if (match.length > 0) {
+	 let sorted = match.sort(Unimplemented.compareFn);
+	 if (!stringifyEqArray(sorted, this.state.matchingData)) {
+	    // Set new matchingData
+	    this.setState({ matchingData: sorted });
+	 }
+      }
    }
 
    componentDidMount() {
@@ -59,7 +70,8 @@ export default class Unimplemented extends React.Component {
    }
 
    componentDidUpdate(prevProps, prevState) {
-      if (prevProps.data !== this.props.data) {
+//      if (prevProps.data !== this.props.data) {
+      if (!stringifyEqArray(prevProps.data, this.props.data)) {
 	 this.setMatchingData();
       }
    }

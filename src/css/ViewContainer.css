@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery ViewContainer Stylesheet */
-/* v.01.08 Updated 09/06/2019 */
+/* v.01.09 Updated 10/07/2019 */
 
 .view-container {
 	position: fixed;
@@ -23,22 +23,22 @@
    min-height: 38px;
    font-family: data-text;
    font-size: 1.000rem;
-  	color: var(--gs-000-100);
-   background-color: var(--gt4);
+  	color: var(--label-white);
+   background-color: var(--background-header-content);
    padding: 0 20px 0 0;
 }
 
 .view-title-name {
 	font-family: header-bold;
    font-size: 1.000rem;
-   color: var(--gs-000-100);
+   color: var(--label-white);
    margin: 0;
 }
 
 .view-title-patient-name {
 	font-family: header-bold;
    font-size: 1.200rem;
-   color: var(--gs-000-100);
+   color: var(--label-white);
    white-space: nowrap;
    margin-left: 35px;
 }
@@ -54,7 +54,7 @@
    width: calc(100% - 170px);
    min-width: calc(100% - 170px);
    max-width: calc(100% - 170px);
-   background-color: var(--gs-000-100);
+   background-color: var(--background-content);
    padding: 20px 0 0 0;
    white-space: pre-wrap;
    overflow-y:auto;

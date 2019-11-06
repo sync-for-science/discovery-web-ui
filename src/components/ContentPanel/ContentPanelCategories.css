@@ -34,7 +34,8 @@
 	grid-column: 2;
    width: 18.750rem;
  /*  max-width: 18.750rem; */
-   min-width: 18.750rem;
+/*   min-width: 18.750rem; */
+   min-width: 14.000rem;
    height: 20px;
    padding: 0 0 0 0;
 }

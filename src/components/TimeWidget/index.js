@@ -273,7 +273,9 @@ export default class TimeWidget extends React.Component {
 		  <b>Timeline</b> shows your detailed clinical and payer data over time. “What data is there about me?”
 	       </div>,
 	       <div className='timeline-help-col-2' key='2'><b>Select</b> a dot on the Time Bar (above) to scroll to details for that day.  </div>,
-	       <div className='timeline-help-col-3' key='3'><b>Adjust</b> Records, Providers, and Time Bar controls to narrow or widen data shown.</div>
+	       <div className='timeline-help-col-3' key='3'>
+		  <b>Adjust</b> Records or Providers (left), and Time Bar controls (above) to narrow or widen data shown.
+	       </div>
 	    ];
 
 	 case 'compareView':
@@ -282,7 +284,9 @@ export default class TimeWidget extends React.Component {
 		  <b>Compare</b> shows which providers have records of your unique clinical data. “Which provider knows this about me?”
 	       </div>,
 	       <div className='timeline-help-col-2' key='2'><b>See/hide</b> details by selecting or deselecting Cards. </div>,
-	       <div className='timeline-help-col-3' key='3'><b>Adjust</b> Records, Providers, and Time Bar controls to narrow or widen data shown.</div>
+	       <div className='timeline-help-col-3' key='3'>
+		  <b>Adjust</b> Records or Providers (left), and Time Bar controls (above) to narrow or widen data shown.
+	       </div>
 	    ];
 
 	 case 'financialView':
@@ -291,14 +295,18 @@ export default class TimeWidget extends React.Component {
 		  <b>Payer</b> presents your claims and benefits data. “What health care service data is there about me?”
 	       </div>,
 	       <div className='timeline-help-col-2' key='2'><b>Select</b> a dot on the Time Bar (above) to scroll to details for that day.  </div>,
-	       <div className='timeline-help-col-3' key='3'><b>Adjust</b> Records, Providers, and Time Bar controls to narrow or widen data shown.</div>
+	       <div className='timeline-help-col-3' key='3'>
+		  <b>Adjust</b> Records or Providers (left), and Time Bar controls (above) to narrow or widen data shown.
+	       </div>
 	    ];
 
 	 case 'tilesView':
 	    return [
 	       <div className='timeline-help-col-1' key='1'><b>Catalog</b> lists your unique clinical data by type. “What is known about me?”</div>,
 	       <div className='timeline-help-col-2' key='2'><b>See/hide</b> details by selecting or deselecting Cards.  </div>,
-	       <div className='timeline-help-col-3' key='3'><b>Adjust</b> Records, Providers, and Time Bar controls to narrow or widen data shown.</div>
+	       <div className='timeline-help-col-3' key='3'>
+		  <b>Adjust</b> Records or Providers (left), and Time Bar controls (above) to narrow or widen data shown.
+	       </div>
 	    ];
 
 	 default:

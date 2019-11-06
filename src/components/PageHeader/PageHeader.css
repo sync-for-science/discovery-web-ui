@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery PageHeader Stylesheet */
-/* v.01.46 Updated 09/05/2019 */
+/* v.01.47 Updated 10/14/2019 */
 
 .page-header {
    position: fixed;
@@ -23,6 +23,8 @@
    display: flex;
    align-items: center;
    height: 46px;
+   max-height: 46px;
+   min-height: 46px;
    width: 140px;
    min-width: 140px;
    padding: 0;
@@ -31,6 +33,7 @@
 
 .logo-button-common {
    height: 46px;
+   max-height: 46px;
    background-color: transparent;
    background-repeat: no-repeat;
    background-position: 0 center;
@@ -42,6 +45,7 @@
 .logo-s4s-button-off {
    @insert .logo-button-common;
    width: 140px;
+   max-height: 46px;
    background-image: url(../../svg/logo-s4s-4-off.svg);
    background-size: 115px 22px;
    background-position: center;
@@ -51,6 +55,7 @@
 .logo-s4s-button-on {
    @insert .logo-button-common;
    width: 140px;
+   max-height: 46px;
    background-image: url(../../svg/logo-s4s-4-on.svg);
    background-size: 115px 22px;
    background-position: center;
@@ -320,7 +325,7 @@
    width: 178px; 
    font-family: header-bold;
    font-size: 0.813rem; 
-   color: var(--white-100);
+   color: var(--label-white);
    background-color: transparent;
    padding: 0;
    margin: 0; */
@@ -385,7 +390,7 @@
    background-repeat: no-repeat;
    background-color: transparent;
    background-position: 0 7px;
-   fill: var(--white-100);
+   fill: var(--label-white);
    border: 0;
    margin: 0 10px 0 0;
    cursor: pointer; */
@@ -478,7 +483,7 @@
    height: 20px;
    font-family: text-semibold;
    font-size: 12px;
-   color: var(--gs-020-100);
+   color: var(--label-size);
    text-align: left;
    background-color: transparent;
    padding: 0 0 0 5px;
@@ -509,7 +514,7 @@
    height: 20px;
    font-family: text-semibold;
    line-height: 20px;
-   color: var(--gs-020-100);
+   color: var(--label-size);
    font-size: 18px;
    text-align: right;
    background-color: transparent;
@@ -528,7 +533,7 @@
    font-size: 0.625rem;
    text-align: right;
    line-height: 20px;
-   color: var(--gs-100-100);
+   color: var(--label-white);
    padding: 0;
    margin: 13px 10px 13px 5px;
    cursor: pointer;
@@ -536,7 +541,7 @@
 
 /* Header Menu */
 .header-menu-button {
-   height: 40px;
+   height: 46px;
    width: 40px;
    min-width: 40px;
    background-color: transparent;
@@ -545,12 +550,12 @@
    background-size: 30px 30px;
    background-repeat: no-repeat;
    border: 0;
-   margin: 0 0 0 10px;
+   margin: 0 5px 0 10px;
    cursor: pointer;
 }
 
 .header-menu-button-open {
-   height: 40px;
+   height: 46px;
    width: 40px;
    min-width: 40px;
    background-color: transparent;
@@ -559,19 +564,19 @@
    background-size: 30px 30px;
    background-repeat: no-repeat;
    border: 0;
-   margin: 0 0 0 10px;
+   margin: 0 5px 0 10px;
    cursor: pointer;
 }
 
 .header-menu {
    position: absolute;
-   top: 42px;
-   right: 20;
+   top: 46px;
+   right: -2px;
    z-index: 3;
    width: 120px;
-   background-color: var(--white-100);
+   background-color: var(--background-content);
    padding: 10px;
-   border: 1px solid var(--primary-100);
+   border: 1px solid var(--border-modal);
    margin: 0 20px 0 0;
 }
 
@@ -596,7 +601,7 @@
 
 .header-menu-info:hover {
    width: auto;
-   background-color: var(--gray-medium-040);
+   background-color: var(--background-menu-hover);
 }
 
 .header-menu-help {
@@ -608,7 +613,7 @@
 
 .header-menu-help:hover {
    width: auto;
-   background-color: var(--gray-medium-040);
+   background-color: var(--background-menu-hover);
 }
 
 .header-menu-download {
@@ -627,10 +632,55 @@
    @insert .header-menu-item-common;
    background-image: url(../../svg/icon-print-off.svg);
    padding: 0 0 0 30px;
-   margin: 0;
+/*   margin: 0; */
+   margin: 0 0 5px 0;
 }
 
 .header-menu-print:hover {
    width: auto;
-   background-color: var(--gray-medium-040);
+   background-color: var(--background-menu-hover);
+}
+
+.header-menu-theme {
+   @insert .header-menu-item-common;
+/*   background-image: url(../../svg/icon-print-off.svg); */
+   padding: 0 0 0 30px;
+   margin: 0;
+}
+
+.header-menu-theme:hover {
+   width: auto;
+   background-color: var(--background-menu-hover);
+}
+
+.header-submenu {
+   position: absolute;
+   top: 111px;
+   right: -2px;
+   z-index: 3;
+   width: 120px;
+   background-color: var(--background-content);
+   padding: 5px 10px;
+   border: 1px solid var(--border-modal);
+   margin: 0 20px 0 0;
+}
+
+.header-menu-subitem {
+   @insert .header-menu-item-common;
+/*   background-image: url(../../svg/icon-print-off.svg); */
+   padding: 0 0 0 30px;
+   margin: 0;
+}
+
+.header-menu-subitem-selected {
+   @insert .header-menu-item-common;
+/*   background-image: url(../../svg/icon-print-off.svg); */
+   background-color: var(--button-view);	/* TODO: replace with left checkmark background image */
+   padding: 0 0 0 30px;
+   margin: 0;
+}
+
+.header-menu-subitem:hover {
+   width: auto;
+   background-color: var(--background-menu-hover);
 }

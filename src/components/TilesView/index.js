@@ -49,11 +49,12 @@ export default class TilesView extends React.Component {
       firstTileColNum: 0,
       leftColNavEnabled: true,
       rightColNavEnabled: true,
-      uniqueStruct: this.buildUniqueStruct(),
+      uniqueStruct: {},
       numVisibleCols: 0,
       selectedTiles: {},
       lastTileSelected: null,
-      topBound: 0
+      topBound: 0,
+      onlyMultisource: false
    }
 
    componentDidMount() {
@@ -66,8 +67,13 @@ export default class TilesView extends React.Component {
       }
 
       if (this.context.lastTileSelected) {
-	 this.setState({ lastTileSelected: this.context.lastTileSelected });
+	 let last = this.context.lastTileSelected;
+	 this.setState({ lastTileSelected: last });
+	 this.context.updateGlobalContext({ lastHighlightedResources: this.matchingTileResources(last.catName, last.display) });
       }
+
+      this.setState({ onlyMultisource: this.context.onlyMultisource },
+		    this.setState({ uniqueStruct: this.buildUniqueStruct() }));
    }
 
    componentWillUnmount() {
@@ -82,10 +88,11 @@ export default class TilesView extends React.Component {
 
    componentDidUpdate(prevProps, prevState) {
       // TODO: only on explicit changes?
-      if (notEqJSON(prevProps, this.props)) {
+      if (notEqJSON(prevProps, this.props) || prevState.onlyMultisource !== this.state.onlyMultisource) {
 	 this.setState({ uniqueStruct: this.buildUniqueStruct() },
 		       this.setState({ numVisibleCols: this.numVisibleCols() }));
       }
+
       // TODO: only on explicit changes?
       if (notEqJSON(prevState, this.state)) {
 	 let container = document.querySelector('.tiles-view-container');
@@ -142,8 +149,6 @@ export default class TilesView extends React.Component {
    getCoding(res) {
       let codeObj = classFromCat(res.category).code(res);
       let code = tryWithDefault(codeObj, codeObj => codeObj.coding[0].code, tryWithDefault(codeObj, codeObj => codeObj.code, '????'));
-//      let display = tryWithDefault(codeObj, codeObj => codeObj.coding[0].display,
-//					    tryWithDefault(codeObj, codeObj => codeObj.text, tryWithDefault(codeObj, codeObj => codeObj.display, '????')));
       let display = primaryTextValue(codeObj);
       return { code, display };
    }
@@ -237,6 +242,19 @@ export default class TilesView extends React.Component {
 	    }
 	 }
       }
+
+      // Possibly prune if onlyMultisource
+      if (this.state.onlyMultisource) {
+	 for (let cat in struct) {
+	    let pruned = struct[cat].filter(elt => elt.provs.length > 1);
+	    if (pruned.length > 0) {
+	       struct[cat] = pruned;
+	    } else {
+	       delete struct[cat];
+	    }
+	 }
+      }
+
       return struct;
    }
 
@@ -311,7 +329,6 @@ export default class TilesView extends React.Component {
 	 }
 	 matchingTileResources = this.matchingTileResources(tileId.catName, tileId.display);
 	 newSelectedTiles[tileId.catName][tileId.display] = matchingTileResources;
-//	 this.context.updateGlobalContext({ highlightedResources: matchingTileResources });
 	 this.context.updateGlobalContext({ highlightedResources: this.allSelectedTileResources(newSelectedTiles),
 					    lastHighlightedResources: matchingTileResources });
 	 let newDate = matchingTileResources[0].itemDate;
@@ -447,10 +464,6 @@ export default class TilesView extends React.Component {
 
    renderTiles(catName) {
       let tiles = [];
-//      for (let catInst of this.state.uniqueStruct[catName].sort((a, b) => {
-//					let dispA = a.display.toUpperCase();
-//					let dispB = b.display.toUpperCase();
-//					return dispA < dispB ? -1 : (dispA > dispB ? 1 : 0)} )) {
       for (let catInst of this.state.uniqueStruct[catName].sort((a, b) => stringCompare(a.display, b.display))) {
 	 let tileIdStr = this.tileId(catName, catInst.display);
 	 let tileId = this.parseTileId(tileIdStr);
@@ -468,7 +481,7 @@ export default class TilesView extends React.Component {
 
    renderTileColumns() {
       let cols = [];
-      // TODO: should be able to get this.state.numVisibleCols instead of calcing.... (state update issue)
+      // TODO: should be able to get this.state.numVisibleCols instead of calc.... (state update issue)
       for (let catName of Object.keys(this.state.uniqueStruct).slice(this.state.firstTileColNum, this.state.firstTileColNum + this.numVisibleCols())) {
 	 cols.push(
 	    <div className={this.hyphenate(catName) + ' tiles-view-column-container'} key={catName}>
@@ -507,10 +520,22 @@ export default class TilesView extends React.Component {
       }
    }
 
+   onlyMultisourceChange = (event) => {
+//      console.log('multisource change: ' + event.target.checked);
+      this.setState({ onlyMultisource: event.target.checked });
+      this.context.updateGlobalContext({ onlyMultisource: event.target.checked });
+   }
+
    render() {
       let maxFirstTileColNum = Object.keys(this.state.uniqueStruct).length - this.state.numVisibleCols;
       return (
 	 <div className='tiles-view'>  
+	    <div className='tiles-view-header'>
+	       <label className='tiles-view-multisource-label'>
+		  <input className='tiles-view-multisource-check' type='checkbox' checked={this.state.onlyMultisource} onChange={this.onlyMultisourceChange}/>
+		  Show only multi-sourced
+	       </label>
+	    </div>
 	    <div className='tiles-view-container'>
 	       <div className='tiles-view-nav-left'>
 		  <button className={this.state.firstTileColNum > 0 ? 'tiles-view-nav-left-button-on' : 'tiles-view-nav-left-button-off'}
@@ -531,7 +556,8 @@ export default class TilesView extends React.Component {
 			  context={this.state.context} nextPrevFn={this.props.nextPrevFn}
 			  thumbLeftDate={this.props.thumbLeftDate} thumbRightDate={this.props.thumbRightDate}
 			  resources={this.selectedTileResources()} totalResCount={this.props.totalResCount}
-			  viewName='Tiles' viewIconClass='tiles-view-icon' tileSort={true} noResultDisplay='Please select a Card above' />
+			  viewName='Tiles' viewIconClass='tiles-view-icon' tileSort={true}
+			  noResultDisplay={Object.keys(this.state.selectedTiles).length > 0 ? 'No matching data' : 'Please select a Card above'} />
 	 </div>
       );
    }

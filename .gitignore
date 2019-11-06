@@ -24,3 +24,10 @@ yarn-error.log*
 # old stuff
 /src/OLD
 /src/components/ParticipantDetail/OLD
+
+# in process
+\#*\#
+
+# eval
+src/components/ContentPanel/ListView*
+src/components/ContentPanel/withScreenDimensions*

@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Content Panel Stylesheet */
-/* v.01.51 Updated 09/05/2019 */
+/* v.01.52 Updated 10/14/2019 */
 
 /* Outer container */
 .content-panel-tiles-view {
@@ -112,6 +112,24 @@
    margin: 9px 10px 9px 0;
 }
 
+.check-only-annotated-check {
+   position: relative;
+   top: 3px;
+/*   margin-left: 15px; */
+   font-family: data-text;
+   font-size: 0.750rem;
+   cursor: pointer;
+}
+
+.check-only-annotated-label {
+   position: relative;
+   top: -0.5px;
+   font-family: data-text;
+   font-size: 0.750rem;
+   margin-left: 15px;
+   cursor: pointer;
+}
+
 /* Title bar center - drag controls,  */
 
 .content-panel-inner-title-center {
@@ -174,7 +192,8 @@
    padding: 0;
    border: solid 0px var(--button-dark);
    border-radius: 15px;
-   margin: 9px auto 9px 10px;
+/*   margin: 9px auto 9px 10px; */
+   margin: 9px 0 9px 10px;
 }
 
 .content-panel-hide-details-button {
@@ -188,7 +207,8 @@
    background-color: var(--button-dark);
    padding: 0;
    border-radius: 15px;
-   margin: 14px auto 14px 10px;
+/*   margin: 14px auto 14px 10px; */
+   margin: 14px 0 14px 10px;
 }
 
 .content-panel-json-button {
@@ -307,7 +327,8 @@
 
 .content-header-container {
    @insert .content-header-box;
-   border-top: solid 1px var(--content-header);
+/*   border-top: solid 1px var(--content-header); */
+   border-top: solid 1px var(--content-header-old);
    margin: 0 0 12px 0;
 }
 
@@ -435,12 +456,12 @@
 
 .content-container {
    @insert .container;
-   border-bottom: 1px solid var(--gray-light-100);
+   border-bottom: 1px solid var(--separator-light);
 }
 
 .content-container-last {
    @insert .container;
-   border-bottom: 1px solid var(--white-100);
+   border-bottom: 1px solid var(--separator-white);
 }
 
 .content-data {
@@ -460,24 +481,24 @@
    display: flex;
    flex-direction: row;
    align-items: flex-end;
-   width: 35%;
-   max-width: 35%;
-   min-width: 35%;
+/*   width: 30%;
+   max-width: 30%;
+   min-width: 30%; */
+   width: auto;
 }
 
 .content-extras {
-   width: 25%;
-   max-width: 25%;
-   min-width: 25%;
-   
+   display: flex;
+   flex-direction: row;
+/*   width: 20%;
+   max-width: 20%;
+   min-width: 20%; */
+   width: auto;
+   margin-left: 20px;
 }
 
 .explanation {
-   
-}
-
-.annotation {
-   
+  
 }
 
 .content-panel-data {
@@ -500,28 +521,28 @@
    font-size: 0.800rem;
    color: white;
    padding: 3px 5px 3px 5px;
-   border-top: var(--white-100) solid 1px;
-   border-bottom: var(--white-100) solid 1px;
+   border-top: var(--separator-white) solid 1px;
+   border-bottom: var(--separator-white) solid 1px;
 }    
 
 .consult-highlight-confirmed {
    @insert .consult-highlight;
-   background-color: var(--confirmed);
+   background-color: var(--background-highlight-confirmed);
 }
 
 .consult-highlight-likely {
    @insert .consult-highlight;
-   background-color: var(--likely);
+   background-color: var(--background-highlight-likely);
 }
 
 .consult-highlight-unlikely {
    @insert .consult-highlight;
-   background-color: var(--unlikely);
+   background-color: var(--background-highlight-unlikely);
 }
 
 .consult-highlight-disconfirmed {
    @insert .consult-highlight;
-   background-color: var(--disconfirmed);
+   background-color: var(--background-highlight-disconfirmed);
 }
 
 /* Scrollbar formatting */
@@ -529,7 +550,7 @@
 /* width */
 ::-webkit-scrollbar {
    width: 8px;
-   background-color: var(--gs-000-100);
+   background-color: var(--background-content);
    background-image: url("../../svg/scrollbar-background-01.svg");
    background-repeat: repeat-y;
    background-position: center;
@@ -538,7 +559,7 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-   box-shadow: 0 0 0 var(--gs-000-100);
+   box-shadow: 0 0 0 var(--background-content);
    border-radius:0; 
 }
 

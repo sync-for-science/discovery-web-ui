@@ -26,6 +26,8 @@ import SocialHistory from '../SocialHistory';
 import VitalSigns from '../VitalSigns';
 import Unimplemented from '../Unimplemented';
 
+import ListView from './ListView';
+
 import DiscoveryContext from '../DiscoveryContext';
 
 const SET_PANEL_HEIGHT_DELAY = 250;	// msec
@@ -100,14 +102,15 @@ export default class ContentPanel extends React.Component {
       trimLevel: this.props.initialTrimLevel ? this.props.initialTrimLevel : Const.trimNone,
 //      trimLevelDirection: 'more',
       showJSON: false,
-      showAnnotation: false,
-      displayVer: 0,
+//      showAnnotation: false,
+//      displayVer: 0,
       scrollFraction: 0,			// Scroll thumb location
       scrollHeight: 0,				// Height of content-panel-inner-body-scroller div
       currResources: null,
       contentHeight: 0,				// Height of content-panel-inner-body div
       initialPositionYFn: null,
-      datesAscending: false			// display dates in ascending order?
+      datesAscending: false,			// display dates in ascending order?
+      onlyAnnotated: false
    }
 
    //
@@ -119,7 +122,7 @@ export default class ContentPanel extends React.Component {
       const titleBar = document.querySelector('.content-panel-inner-title')
       const titleBarHeight = titleBar ? titleBar.clientHeight : 0;
 
-      return Math.max(titleBarHeight, footer.getBoundingClientRect().top - panel.getBoundingClientRect().top - 5);
+      return Math.max(titleBarHeight, footer && panel ? footer.getBoundingClientRect().top - panel.getBoundingClientRect().top - 5 : 0);
    }
 
    calcContentHeight() {
@@ -218,7 +221,9 @@ export default class ContentPanel extends React.Component {
 	 this.setState({ isOpen: true }, () => this.setPanelHeights() );
       }
 
-      this.calcCurrResources();
+      this.setState({ onlyAnnotated: this.context.onlyAnnotated },
+		    this.calcCurrResources());
+
       this.updateDraggableOnMount();
       window.addEventListener('resize', this.updateDraggableOnResize);
       window.addEventListener('keydown', this.onKeydown);
@@ -242,9 +247,10 @@ export default class ContentPanel extends React.Component {
       if (notEqJSON(prevState, this.state)) {
 	 window.logDiffs && logDiffs('State', prevState, this.state);
 	 if (prevState.isOpen !== this.state.isOpen ||
-	     prevState.currResources !== this.state.currResources ||
-	     prevState.showAllData !== this.state.showAllData ||
-	     prevState.trimLevel !== this.state.trimLevel) {
+	    prevState.currResources !== this.state.currResources ||
+	    prevState.showAllData !== this.state.showAllData ||
+	    prevState.trimLevel !== this.state.trimLevel ||
+	    prevState.onlyAnnotated !== this.state.onlyAnnotated) {
 	    this.calcCurrResources();
 	 }
       }
@@ -362,7 +368,7 @@ export default class ContentPanel extends React.Component {
    }
 
    // 
-   //  Collect an array of resources matching catsToDisplay, search state, thumb positions, and showAllDate.
+   //  Collect an array of resources matching catsToDisplay, search state, thumb positions, showAllDate, and onlyAnnotated.
    //
    //  props.tileSort === false:
    //    Sorted by date descending (if state.datesAscending === false), then category ascending, then category-specific order
@@ -378,10 +384,14 @@ export default class ContentPanel extends React.Component {
       let limitedResources = this.props.catsToDisplay ? this.props.resources.transformed.filter(res => this.props.catsToDisplay.includes(res.category) &&
 												       res.category !== 'Patient' &&
 												       this.catEnabled(res.category) &&
-												       this.provEnabled(res.provider))
+												       this.provEnabled(res.provider) &&
+												       (!this.state.onlyAnnotated || (res.data.discoveryAnnotation &&
+													res.data.discoveryAnnotation.annotationHistory)))
 						      : this.props.resources.transformed.filter(res => res.category !== 'Patient' &&
 												       this.catEnabled(res.category) &&
-												       this.provEnabled(res.provider));
+												       this.provEnabled(res.provider) &&
+												       (!this.state.onlyAnnotated || (res.data.discoveryAnnotation &&
+													res.data.discoveryAnnotation.annotationHistory)));
 
       if (this.state.showAllData && this.context.searchRefs.length > 0) {
 	 arr = this.sortResources(this.context.searchRefs.map(ref => ref.resource));
@@ -493,6 +503,29 @@ export default class ContentPanel extends React.Component {
 	 return 'Please select a Provider';
       } else {
 	 return this.props.noResultDisplay ? this.props.noResultDisplay : '[No matching data]';
+      }
+   }
+
+   renderItemForListView = (item) => {
+//      debugger;
+      let goo = this.renderItems([item.item]);
+      return goo;
+   }
+
+   NEWrenderAltDisplay() {
+      if (this.state.showJSON) {
+	 return (
+	    <div className='content-panel-inner-body'>
+	       <pre className='content-panel-data'>
+		  { JSON.stringify(this.state.currResources, null, 3) }
+	       </pre>
+	    </div>
+	 );
+
+      } else {
+	 return (
+	    <ListView data={this.state.currResources} renderItem={this.renderItemForListView} emptyText='[Nothing to show...]' />
+	 )
       }
    }
 
@@ -698,9 +731,18 @@ export default class ContentPanel extends React.Component {
       this.setState({ trimLevel: this.state.trimLevel === Const.trimNone ? Const.trimExpected : Const.trimNone });
    }
 
+   onlyAnnotatedChange = (event) => {
+//      console.log('annotated change: ' + event.target.checked);
+      this.setState({ onlyAnnotated: event.target.checked });
+      this.context.updateGlobalContext({ onlyAnnotated: event.target.checked });
+   }
+
    renderContents(context) {
-      // Temp: don't use virtual window rendering for Tiles/Compare views
-      let contents = !this.state.currResources || this.props.tileSort ||
+//      // Temp: don't use virtual window rendering for Tiles/Compare views
+//      let contents = !this.state.currResources || this.props.tileSort ||
+//		     this.state.currResources.length < config.contentPanelUseWindowing ? this.renderDotOrAll() : this.renderAltDisplay();
+      // Use virtual window rendering for all views (20191105)
+      let contents = !this.state.currResources ||
 		     this.state.currResources.length < config.contentPanelUseWindowing ? this.renderDotOrAll() : this.renderAltDisplay();
 
       return (
@@ -713,7 +755,7 @@ export default class ContentPanel extends React.Component {
 		     { this.props.resources && formatPatientName(this.props.resources.pathItem('[category=Patient].data.name')) }
 		  </div> */}
          
-         <div className='content-panel-item-count'>
+		  <div className='content-panel-item-count'>
 		     {/* this.state.currResources.length + ' record' + (this.state.currResources.length === 1 ? '' : 's') */}
 		     {/* `${this.state.currResources.length} record${this.state.currResources.length === 1 ? '' : 's'}` */}
 		     { `Displaying ${this.state.currResources.length} of ${this.props.totalResCount} record${this.props.totalResCount === 1 ? '' : 's'}` }
@@ -723,10 +765,15 @@ export default class ContentPanel extends React.Component {
 			  onClick={() => this.onNextPrev('prev')} />
 	       	  <button className={'content-panel-right-button' + (this.state.nextEnabled ? '' : '-off')}
 			  onClick={() => this.onNextPrev('next')} />
-         <button className='content-panel-show-details-button' onClick={this.toggleTrimLevel}>
+		  <button className='content-panel-show-details-button' onClick={this.toggleTrimLevel}>
 		     {this.state.trimLevel===Const.trimNone ? 'Show Less' : 'Show More'}
 		  </button>               
                          
+		  <label className='check-only-annotated-label'>
+		     <input className='check-only-annotated-check' type='checkbox' checked={this.state.onlyAnnotated} onChange={this.onlyAnnotatedChange}/>
+		     Show only annotated
+		  </label>
+
 	       	  {/* <button className={this.state.showAllData ? 'content-panel-all-button' : 'content-panel-dot-button'}
 			  onClick={() => this.setState({ showAllData: !this.state.showAllData })} /> */}
 		  {/* <button className={`content-panel-trim-${this.state.trimLevel}-button`} onClick={this.changeTrimLevel} /> */}
@@ -763,7 +810,7 @@ export default class ContentPanel extends React.Component {
    }
 
    render() {
-      // Locally extend DiscoveryContext with trimLevel & viewName (simpler than reassigning the extended context to DiscoveryContext.Provider)
+      // Locally extend DiscoveryContext with trimLevel & viewName (hack)
       this.context.trimLevel = this.state.trimLevel;
       this.context.viewName = this.props.viewName;
 // TODO: following needs to be moved to mount/update

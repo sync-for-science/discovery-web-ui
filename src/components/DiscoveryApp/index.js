@@ -56,6 +56,7 @@ export default class DiscoveryApp extends React.Component {
 
       // Shared Global Context
       updateGlobalContext: (updates) => this.setState(updates),
+      themeName: null,		  	  // PageHeader
       savedCatsEnabled: null,		  // StandardFilters & CategoryRollup
       savedProvsEnabled: null,		  // StandardFilters & ProviderRollup
       savedSelectedTiles: null,		  // TilesView
@@ -63,9 +64,11 @@ export default class DiscoveryApp extends React.Component {
       lastSavedSelectedTiles: null,	  // TilesView
       highlightedResources: [],		  // TilesView & CompareView
       lastHighlightedResources: [],	  // TilesView & CompareView
+      onlyMultisource: false,		  // TilesView & CompareView
       savedSelectedUniqueItems: null,	  // CompareView
       lastUniqueItemSelected: null,	  // CompareView
-      lastSavedSelectedUniqueItems: null  // CompareView
+      lastSavedSelectedUniqueItems: null, // CompareView
+      onlyAnnotated: false		  // ContentPanel
    }
 
    componentDidMount() {
@@ -188,7 +191,13 @@ export default class DiscoveryApp extends React.Component {
 	 'Social History':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
 										       +'[*:isCategory(Social History)]', this.queryOptions),
 	 'Meds Statement':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationStatement]'),
+
 	 'Meds Requested':      	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationOrder|resourceType=MedicationRequest]'),
+//	 'Meds Requested':      	e => e.entry.reduce((res, elt) => {
+//					       (elt.resource.resourceType === 'MedicationOrder' ||
+//						elt.resource.resourceType === 'MedicationRequest') && res.push(elt.resource);
+//					       return res }, []),
+
 	 'Meds Dispensed':      	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationDispense]'),
 	 'Meds Administration':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationAdministration]'),
 	 'Immunizations':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Immunization]'),
@@ -518,8 +527,7 @@ export default class DiscoveryApp extends React.Component {
    }
 
    get initialProvs() {
-      let goo = this.providers.reduce((res, prov) => { res[prov] = true; return res; }, {});
-      return goo
+      return this.providers.reduce((res, prov) => { res[prov] = true; return res; }, {});
    }
 
    render() {
@@ -533,6 +541,7 @@ export default class DiscoveryApp extends React.Component {
 
       return (
 	 <DiscoveryContext.Provider value={ this.state }>
+	    { this.state.themeName && <link rel='stylesheet' type='text/css' href={`/themes/${this.state.themeName}.css`} /> }
 	    <div className='discovery-app'>
 	       <PageHeader rawQueryString={this.props.location.search} modalIsOpen={this.state.modalIsOpen}
 			   modalFn={ name => this.setState({ modalName: name, modalIsOpen: true }) }

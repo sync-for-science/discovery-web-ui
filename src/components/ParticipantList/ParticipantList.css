@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery ParticipantList Stylesheet */
-/* v.01.14 Updated 05/13/2019 */
+/* v.01.15 Updated 10/08/2019 */
 
 .participant-list {
    height: 100%;
@@ -16,15 +16,15 @@
    height: 60px;
    min-height: 60px;
    width: 100%;
-   background-color: var(--primary-100);
+   background-color: var(--background-header);
    padding: 0 20px;
-   border-bottom: 3px solid var(--accent-100);
 }
 
 .logo-box {
    display: flex;
    align-items: center;
    height: 60px;
+   min-height: 60px;
    width: 220px;
    min-width: 220px;
    padding: 0;
@@ -55,20 +55,22 @@
 .participant-list-content {
    z-index: -1;
    position: absolute;
-   top: 94px;
+   top: 61px;
    display: flex;
-   flex-direction:column;
+   flex-direction: column;
    height: 100%;
    width: 95%;
-   padding: 0 2.5%;
+   background-color: var(--background-content);
+   padding: 15px;
+   margin: 15px 20px;
 }
 
 .participant-list-title {
    width: 100%;
    font-family: header-bold;
    font-size: 1.200rem;
-   color:var(--primary-100);
-   border-bottom: 1px solid var(--primary-100);
+   color:var(--label-title);
+   border-bottom: 1px solid var(--border-accent);
    padding: 0 0 5px 0;
 }
 
@@ -90,7 +92,7 @@
 .participant-list-column-header {
    height: auto;
    font-family: header-bold;
-   color: var(--primary-100);
+   color: var(--label-title);
    font-size: 1.000rem;
    padding: 10px 0 5px 5px;
    white-space: nowrap;
@@ -168,8 +170,9 @@
    background-position: center center;
    background-size: 30px 30px;
    background-repeat: no-repeat;
+   padding: 0;
    border: 0;
-   margin: 10px 0 0 0;
+   margin: 10px 0 10px 0;
    cursor: pointer;
 }
 
@@ -182,8 +185,9 @@
    background-position: center center;
    background-size: 30px 30px;
    background-repeat: no-repeat;
+   padding: 0;
    border: 0;
-   margin: 10px 0 0 0;
+   margin: 10px 0 10px 0;
    cursor: pointer;
 }
 
@@ -193,7 +197,7 @@
    left: 240px;
    z-index: 1;
    width: 120px;
-   background-color: var(--white-100);
+   background-color: var(--background-content);
    padding: 10px;
    border: 1px solid var(--primary-100);
    margin: 0 20px 0 0;
@@ -204,7 +208,7 @@
    width: auto;
    font-family: text;
    font-size:1.000rem;
-   background-color: var(--white-100);
+   background-color: var(--background-content);
    background-position: 5px 0;
    background-repeat: no-repeat;
    border: none;
@@ -215,24 +219,8 @@
 
 .participant-list-menu-item:hover {
    width: auto;
-   background-color: var(--gray-medium-040);
+   background-color: var(--background-menu-hover);
 }
 
 
-/* width */
-::-webkit-scrollbar {
-   width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-   box-shadow: inset 0 0 5px var(--gray-dark-100); 
-   border-radius: 10px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-   background: var(--primary-100); 
-   border-radius: 10px;
-}
 

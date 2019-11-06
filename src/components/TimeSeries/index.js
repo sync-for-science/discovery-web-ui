@@ -59,7 +59,7 @@ export default class TimeSeries extends React.Component {
 
       return (
 	 // Make yDomain ~5% larger than whiskers
-	 <XYPlot xType='time' width={400} height={120} yDomain={[minY-maxVar/1.9, maxY+maxVar/1.9]}>
+	 <XYPlot xType='time' width={350} height={120} yDomain={[minY-maxVar/1.9, maxY+maxVar/1.9]}>
 	    <VerticalGridLines />
 	    <HorizontalGridLines />
 	    <XAxis tickFormat={d => d.getFullYear()} tickTotal={years} />
@@ -94,7 +94,7 @@ export default class TimeSeries extends React.Component {
       }
 
       return (
-	 <XYPlot xType='time' width={400} height={120} yDomain={[minY,maxY]}>
+	 <XYPlot xType='time' width={350} height={120} yDomain={[minY,maxY]}>
 	    <VerticalGridLines />
 	    <HorizontalGridLines />
 	    <XAxis tickFormat={d => d.getFullYear()} tickTotal={years} />

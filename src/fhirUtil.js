@@ -10,6 +10,8 @@ import TimeSeries from './components/TimeSeries';
 import CondDiv from './components/CondDiv';
 import HighlightDiv from './components/HighlightDiv';
 
+import Annotation from './components/Annotation';
+
 function dropFinalDigits(str) {
    let firstDigitIndex = str.search(/[0-9]/);
    return firstDigitIndex > 0 ? str.substring(0, firstDigitIndex) : str;
@@ -89,7 +91,7 @@ export function renderAllergies(matchingData, appContext) {
 //		       criticality: elt.data.criticality, substance: elt.data.substance, reaction: elt.data.reaction });
 	  found.push({ provider: elt.provider, clinicalStatus: elt.data.clinicalStatus,
 //		       display: elt.data.code ? elt.data.code.coding[0].display : elt.data.substance.coding[0].display, 
-		       display: classFromCat(elt.category).primaryText(elt),
+		       display: classFromCat(elt.category).primaryText(elt), annotation: Annotation.info(elt),
 		       verificationStatus: elt.data.verificationStatus, type: elt.data.type, category: elt.data.category,
 		       criticality: elt.data.criticality, substance: elt.data.substance, reaction: elt.data.reaction });
       } catch (e) {
@@ -130,6 +132,10 @@ export function renderAllergies(matchingData, appContext) {
 
 	       { elt.reaction && <div className='col01 label'>Reaction</div> }
 	       { elt.reaction && <div className='col02 value-text'>{elt.reaction[0].manifestation[0].coding[0].display}</div> }
+	    </div>
+	    <div className='content-graph' />
+	    <div className='content-extras'>
+	       <Annotation annotation={elt.annotation} />
 	    </div>
 	 </div>
       );
@@ -227,7 +233,7 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
       try {
 	 found.push({ provider: elt.provider, category: elt.category, participantId: elt.id, resourceId: elt.data.id,
 //		      display: elt.data.code.coding[0].display,
-		      display: classFromCat(elt.category).primaryText(elt),
+		      display: classFromCat(elt.category).primaryText(elt), annotation: Annotation.info(elt),
 		      status: elt.data.status, clinicalStatus: elt.data.clinicalStatus,
 		      verificationStatus: elt.data.verificationStatus, reason: elt.data.reasonReference, valueQuantity: elt.data.valueQuantity });
       } catch (e) {
@@ -279,6 +285,11 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
 		  <div className='col02 value-text'>{elt.verificationStatus}</div>
 	       </CondDiv>
 	    </div>
+
+	    <div className='content-graph' />
+	    <div className='content-extras'>
+	       <Annotation annotation={elt.annotation} />
+	    </div>
 	 </div>
       );
    } else {
@@ -292,7 +303,7 @@ export function renderMedsStatement(matchingData, typeLabel, appContext) {
       try {
 	 found.push({ provider: elt.provider, category: elt.category, participantId: elt.id, resourceId: elt.data.id,
 //		      display: elt.data.code ? elt.data.coding[0].display : elt.data.medicationCodeableConcept.coding[0].display,
-		      display: classFromCat(elt.category).primaryText(elt),
+		      display: classFromCat(elt.category).primaryText(elt), annotation: Annotation.info(elt),
 		      taken: elt.data.taken, status: elt.data.status, clinicalStatus: elt.data.clinicalStatus,
 		      verificationStatus: elt.data.verificationStatus, reason: elt.data.reasonReference, valueQuantity: elt.data.valueQuantity });
       } catch (e) {
@@ -349,6 +360,11 @@ export function renderMedsStatement(matchingData, typeLabel, appContext) {
 		  <div className='col02 value-text'>{elt.verificationStatus}</div>
 	       </CondDiv>
 	    </div>
+
+	    <div className='content-graph' />
+	    <div className='content-extras'>
+	       <Annotation annotation={elt.annotation} />
+	    </div>
 	 </div>
       );
    } else {
@@ -363,7 +379,7 @@ export function renderImmunizations(matchingData, appContext) {
 	  found.push({ provider: elt.provider, id: elt.data.id,
 //		       display: elt.data.vaccineCode.coding[0].display,
 		       display: classFromCat(elt.category).primaryText(elt),
-		       status: elt.data.status,
+		       status: elt.data.status, annotation: Annotation.info(elt),
 		       notGiven: elt.data.notGiven, wasNotGiven: elt.data.wasNotGiven,
 		       reported: elt.data.reported, primarySource: elt.data.primarySource });
       } catch (e) {
@@ -403,6 +419,11 @@ export function renderImmunizations(matchingData, appContext) {
 		  <div className='col02 value-text'>{elt.status}</div>
 	       </CondDiv>
 	    </div>
+
+	    <div className='content-graph' />
+	    <div className='content-extras'>
+	       <Annotation annotation={elt.annotation} />
+	    </div>
 	 </div>
       );
    } else {
@@ -421,7 +442,7 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
 		      valueQuantity: elt.data.valueQuantity,
 		      valueString: elt.data.valueString,
 		      referenceRange: elt.data.referenceRange,
-		      status:elt.data.status });
+		      status: elt.data.status, annotation: Annotation.info(elt) });
       } catch (e) {
 	 console.log('renderLabs(): ' + e.message);
       };
@@ -504,7 +525,7 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
 		  { sortedSeries && <TimeSeries measure={elt.display} data={sortedSeries} highlights={[{x:elt.date, y:thisValue}]} dotClickFn={dotClickFn} /> }
 	       </div>
 	       <div className='content-extras'>
-		  {/* TODO: stuff goes here */}
+		  <Annotation annotation={elt.annotation} />
 	       </div>
 	    </div>
 	 )}
@@ -528,7 +549,7 @@ export function renderMeds(matchingData, appContext) {
 		      display: classFromCat(elt.category).primaryText(elt),
 		      quantity: elt.data.quantity,
 		      daysSupply: elt.data.daysSupply, dosageInstruction: elt.data.dosageInstruction, dispenseRequest: elt.data.dispenseRequest,
-		      status: elt.data.status, reason: elt.data.reasonReference });
+		      status: elt.data.status, reason: elt.data.reasonReference, annotation: Annotation.info(elt) });
       } catch (e) {
 	 console.log('renderMeds(): ' + e.message);
       };
@@ -582,6 +603,10 @@ export function renderMeds(matchingData, appContext) {
 	       { isValid(elt, e => e.dispenseRequest.numberOfRepeatsAllowed) &&
 		   <div className='col02 value-text'>{elt.dispenseRequest.numberOfRepeatsAllowed}</div> }
 	    </div>
+	    <div className='content-graph' />
+	    <div className='content-extras'>
+	       <Annotation annotation={elt.annotation} />
+	    </div>
 	 </div>
       );
    } else {
@@ -596,7 +621,7 @@ export function renderSocialHistory(matchingData, appContext) {
 	 found.push({ provider: elt.provider,
 //		      display: elt.data.code.coding[0].display,
 		      display: classFromCat(elt.category).primaryText(elt),
-		      status: elt.data.status,
+		      status: elt.data.status, annotation: Annotation.info(elt),
 		      value: elt.data.valueCodeableConcept.coding[0].display });
       } catch (e) {
 	 console.log('renderSocialHistory(): ' + e.message);
@@ -622,6 +647,11 @@ export function renderSocialHistory(matchingData, appContext) {
 		  <div className='col02 value-text'>{elt.status}</div>
 	       </CondDiv>
 	    </div>
+
+	    <div className='content-graph' />
+	    <div className='content-extras'>
+	       <Annotation annotation={elt.annotation} />
+	    </div>
 	 </div>
       );
    } else {
@@ -635,7 +665,7 @@ export function renderEncounters(matchingData, appContext) {
       try {
 	 found.push({ provider: elt.provider,  status: elt.data.status,
 //		      display: tryWithDefault(elt, e => e.data.type[0].coding[0].display, tryWithDefault(elt, e => e.data.type[0].text, null)),
-		      display: classFromCat(elt.category).primaryText(elt),
+		      display: classFromCat(elt.category).primaryText(elt), annotation: Annotation.info(elt),
 		      date: elt.itemDate, class: elt.data.class.code ? elt.data.class.code : elt.data.class, period: elt.data.period });
       } catch (e) {
 	 console.log('renderEncounters(): ' + e.message);
@@ -663,6 +693,11 @@ export function renderEncounters(matchingData, appContext) {
 
 	       { isMultipleProviders && <div className='col01 label'>Provider</div> }
 	       { isMultipleProviders && <div className='col02 value-text'>{titleCase(elt.provider)}</div> }
+	    </div>
+
+	    <div className='content-graph' />
+	    <div className='content-extras'>
+	       <Annotation annotation={elt.annotation} />
 	    </div>
 	 </div>
       );
@@ -693,7 +728,7 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
 	 if (displayStr !== 'Vital Signs') {
 	    found.push({ provider: elt.provider,
 			 date: elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
-			 display:displayStr,
+			 display:displayStr, annotation: Annotation.info(elt),
 			 value:isValid(elt, e => e.data.valueQuantity) ? elt.data.valueQuantity.value : undefined,
 			 unit:isValid(elt, e => e.data.valueQuantity) ? elt.data.valueQuantity.unit : undefined,
 			 component:elt.data.component, status:elt.data.status });
@@ -784,7 +819,7 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
 		  { sortedSeries && <TimeSeries measure={elt.display} data={sortedSeries} highlights={[{x:elt.date, y:thisValue}]} dotClickFn={dotClickFn} /> }
 	       </div>
 	       <div className='content-extras'>
-		  {/* TODO: stuff goes here */}
+	          <Annotation annotation={elt.annotation} />
 	       </div>
 	    </div>
 	 );
@@ -824,7 +859,7 @@ export function renderEOB(matchingData, appContext) {
       try {
 	 found.push({ provider: elt.provider, totalCost: elt.data.totalCost, totalBenefit: elt.data.totalBenefit,
 		      claimType: elt.data.type, billablePeriod: elt.data.billablePeriod, status: elt.data.status,
-		      contained: elt.data.contained, careTeam: elt.data.careTeam, diagnosis: elt.data.diagnosis });
+		      contained: elt.data.contained, careTeam: elt.data.careTeam, diagnosis: elt.data.diagnosis, annotation: Annotation.info(elt) });
       } catch (e) {
 	 console.log('renderEOB(): ' + e.message);
       }
@@ -869,6 +904,11 @@ export function renderEOB(matchingData, appContext) {
 
 	       { elt.contained && renderContained(elt.contained, appContext) }
 	    </div>
+
+	    <div className='content-graph' />
+	    <div className='content-extras'>
+	       <Annotation annotation={elt.annotation} />
+	    </div>
 	 </div>
       );
    } else {
@@ -881,7 +921,7 @@ export function renderClaims(matchingData, appContext) {
    for (const elt of matchingData) {
       try {
 	 found.push({ provider: elt.provider, total: elt.data.total, billablePeriod: elt.data.billablePeriod,
-		      status: elt.data.status, use: elt.data.use, diagnosis: elt.data.diagnosis });
+		      status: elt.data.status, use: elt.data.use, diagnosis: elt.data.diagnosis, annotation: Annotation.info(elt) });
       } catch (e) {
 	 console.log('renderClaims(): ' + e.message);
       }
@@ -919,6 +959,11 @@ export function renderClaims(matchingData, appContext) {
 		  <div className='col02 value-text'>{elt.use}</div>
 	       </CondDiv>
 	    </div>
+
+	    <div className='content-graph' />
+	    <div className='content-extras'>
+	       <Annotation annotation={elt.annotation} />
+	    </div>
 	 </div>
       );
    } else {
@@ -933,7 +978,7 @@ export function renderExams(matchingData, appContext) {
 	 found.push({ provider: elt.provider,
 //		      display: elt.data.code.coding[0].display,
 		      display: classFromCat(elt.category).primaryText(elt),
-		      status: elt.data.status,
+		      status: elt.data.status, annotation: Annotation.info(elt),
 		      valueQuantity: elt.data.valueQuantity, valueConcept: elt.data.valueCodeableConcept });
       } catch (e) {
 	 console.log('renderExams(): ' + e.message);
@@ -960,6 +1005,11 @@ export function renderExams(matchingData, appContext) {
 		  <div className='col01 label'>Status</div>
 		  <div className='col02 value-text'>{elt.status}</div>
 	       </CondDiv>
+	    </div>
+
+	    <div className='content-graph' />
+	    <div className='content-extras'>
+	       <Annotation annotation={elt.annotation} />
 	    </div>
 	 </div>
       );
