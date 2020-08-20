@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Content Panel Stylesheet */
-/* v.01.52 Updated 10/14/2019 */
+/* v.01.54 Updated 01/07/2020 */
 
 /* Outer container */
 .content-panel-tiles-view {
@@ -53,6 +53,7 @@
    color: var(--label-white);
    background-color: var(--background-header-content); 
    padding: 0;
+   border-top: solid 1px var(--separator-white);
    overflow: visible;
 }
 
@@ -63,6 +64,9 @@
    flex-direction: row;
    align-items: center;
    justify-content: flex-start;
+   height: 30px;
+   min-height: 30px;
+   max-height: 30px;
    width: 50%;
    min-width: 400px;
 }
@@ -112,21 +116,29 @@
    margin: 9px 10px 9px 0;
 }
 
-.check-only-annotated-check {
-   position: relative;
-   top: 3px;
-/*   margin-left: 15px; */
+.check-only-annotated-label {
+   display: flex;
+   flex-direction: row;
+   height: 30px;
+   min-height: 30px;
+   max-height: 30px;
    font-family: data-text;
    font-size: 0.750rem;
+   line-height: 30px;
+   vertical-align: middle;
+   margin: 0 0 0 auto;
    cursor: pointer;
 }
 
-.check-only-annotated-label {
-   position: relative;
-   top: -0.5px;
+.check-only-annotated-check {
+/*   height: 30px;
+   min-height: 30px;
+   max-height: 30px;
    font-family: data-text;
-   font-size: 0.750rem;
-   margin-left: 15px;
+   font-size: 0.750rem; */
+   width: 14px;
+   height: 14px;
+   margin: 9px 4px 0 0;
    cursor: pointer;
 }
 
@@ -139,6 +151,8 @@
    justify-content: center;
    width: 63px;
    height: 30px;
+   min-height: 30px;
+   max-height: 30px;
    background-color: transparent;
    border: solid 0px var(--button-dark); 
 /*   border-radius: 10px; */
@@ -149,15 +163,16 @@
    @insert .content-panel-button;
    position: relative;
    z-index: 10;
-   height: 30px;
+   height: 20px;
    width: 63px;
-   background-color: transparent;
+   background-color: var(--button-dark);
    background-image: url("../../svg/content-panel-drag-button-2.svg");
    background-position: top center;
    background-size: 63px 20px;
    padding: 0;
    border: 0;
-   margin: 0 auto 0 auto;
+   border-radius: 5px;
+   margin: 5px auto 5px auto;
    cursor: row-resize;
 }
 
@@ -178,6 +193,9 @@
    flex-direction: row;
    align-content: flex-end;
    width: 50%;
+   height: 30px;
+   min-height: 30px;
+   max-height: 30px;
 }
 
 .content-panel-show-details-button {
@@ -192,8 +210,8 @@
    padding: 0;
    border: solid 0px var(--button-dark);
    border-radius: 15px;
-/*   margin: 9px auto 9px 10px; */
    margin: 9px 0 9px 10px;
+   cursor: pointer; 
 }
 
 .content-panel-hide-details-button {
@@ -207,28 +225,31 @@
    background-color: var(--button-dark);
    padding: 0;
    border-radius: 15px;
-/*   margin: 14px auto 14px 10px; */
    margin: 14px 0 14px 10px;
 }
 
 .content-panel-json-button {
    @insert .content-panel-button;
+   position: absolute;			/* push to far right */
+   right: 0;
    width: 38px;
-   height: 38px;
- /*  background-image: url("../../svg/json-button-on-02.svg");  */
+   height: 30px;
+   min-height: 30px;
+   max-height: 30px;
    background-size: 38px 20px;
    background-color: transparent;
-   margin: 0 10px 0 auto;
+   margin: 0 10px 0 10px;
 }
 
 .content-panel-json-button-off {
    @insert .content-panel-button;
+   position: absolute;			/* push to far right */
+   right: 0;
    width: 38px;
-   height: 38px;
- /*  background-image: url("../../svg/json-button-off-02.svg"); */
+   height: 30px;
    background-size: 38px 20px;
    background-color: transparent;
-   margin: 0 10px 0 auto;
+   margin: 0 10px 0 105px;
 }
 
 .content-panel-print-button-on {
@@ -284,13 +305,13 @@
 }
 
 .content-panel-inner-body-alt {
-   position: absolute;
+   position: relative;
    display: flex;
    flex-direction: column;
 /* height: calc(100% - 69px); */
    width: 100%;
    height: inherit;
-   top: 38px;
+   top: 0;
    font-family: text;
    font-size: 1.000rem;
    margin: 5px 5px 0 0;
@@ -299,12 +320,15 @@
 }
 
 .content-panel-inner-body-alt-container {
+   position: absolute;
    height: auto;
-   width: auto;
+   width: 100%;
 }
 
 .content-panel-inner-body-scroll {
-   height: 100%;
+   position:absolute;
+   top: 31px;
+   height: calc(100% - 30px);		/* adjust for height of .content-panel-inner-title */
  /*  width: calc(100% + 3px); */
    width: inherit;
    overflow-y: scroll;
@@ -328,7 +352,7 @@
 .content-header-container {
    @insert .content-header-box;
 /*   border-top: solid 1px var(--content-header); */
-   border-top: solid 1px var(--content-header-old);
+   border-bottom: solid 1px var(--content-header-old);
    margin: 0 0 12px 0;
 }
 
@@ -466,13 +490,13 @@
 
 .content-data {
    display: grid;
-   grid-template-columns: 8.125rem auto auto auto auto auto;
+   grid-template-columns: 8.125rem auto;
    grid-column-gap: 10px;
-   grid-row-gap: 5px;
-   width: auto;
-   max-width: auto;
-   min-width: auto; 
-   height: auto;
+   grid-row-gap: 0;
+   width: 40%;
+   max-width: 40%;
+   min-width: 40%; 
+/*   height: auto; */
    padding: 0;
    margin: 0 0 5px 0px;
 }
@@ -481,20 +505,23 @@
    display: flex;
    flex-direction: row;
    align-items: flex-end;
-/*   width: 30%;
-   max-width: 30%;
-   min-width: 30%; */
-   width: auto;
+   width: 35%;
+   max-width: 35%;
+   min-width: 35%;
+   margin: 0;
 }
 
 .content-extras {
+ /*  position: relative;
+   right: 0;
+   top: 0; */
    display: flex;
    flex-direction: row;
-/*   width: 20%;
-   max-width: 20%;
-   min-width: 20%; */
-   width: auto;
-   margin-left: 20px;
+   justify-content: flex-end;
+   width: 25%;
+   max-width: 25%;
+   min-width: 25%;
+   margin: 0;
 }
 
 .explanation {
@@ -565,12 +592,14 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-   background:var(--gt3); 
+   background:var(--background-scrollbar-thumb);
+   border-radius: 20px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-   background:var(--gs-010-100); 
+   background:var(--background-scrollbar-thumb-hover);
+   border-radius: 20px;
 }
 
 /* Depreciated Styles - Remove? */

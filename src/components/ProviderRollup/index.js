@@ -21,7 +21,7 @@ export default class ProviderRollup extends React.Component {
    static propTypes = {
       svgWidth: PropTypes.string.isRequired,
       dotPositionsFn: PropTypes.func.isRequired,
-      dotClickFn: PropTypes.func.isRequired,
+      dotClickFn: PropTypes.func,
       isExpanded: PropTypes.bool.isRequired,
       expansionFn: PropTypes.func.isRequired,
       provsEnabledFn: PropTypes.func.isRequired,		// Callback to report changed provider enable/disable

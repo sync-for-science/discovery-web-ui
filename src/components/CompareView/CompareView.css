@@ -2,7 +2,7 @@
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery CompareView Stylesheet */
-/* v.01.19 Updated 10/14/2019 */
+/* v.01.21 Updated 01/08/2020 */
 
 .compare-view {
    @insert .view-container;
@@ -19,7 +19,7 @@
 .compare-view-scroller {
    position: relative;
    top: 0;
-   height: auto;
+   height: inherit;
 /*   display: flex;
    flex-direction: column; */
    margin: 0 0 20px 0;
@@ -28,7 +28,11 @@
 
 .compare-view-all-unique-items {
 
+}
 
+.compare-view-all-unique-items-empty {
+   font-family: text-italic;
+   margin: 25px 0px 0px 30px;
 }
 
 .compare-view-header {
@@ -41,12 +45,48 @@
    font-family: data-text;
    font-size: 0.750rem;
    color: var(--label-white);
-   background-color: var(--background-header-content); 
+   background-color: var(--background-header-content);
+   border-bottom: solid 1px var(--separator-white);
+}
+
+.compare-view-header-button {
+   width: 80px;
+   height: 16px;
+   max-height: 16px;
+   font-family: label-bold;
+   font-size: 12px;
+   text-align: center;
+   line-height: 14px;
+   border-radius: 20px;
+   padding: 3px 0 0 0;
+   background-color: var(--button-date-range);
+   margin: auto 0 auto 20px;
+   outline: none;
+   border: solid 0px transparent;
+}
+
+.compare-view-header-button-clear {
+   @insert .compare-view-header-button;
+   color: var(--label-gray-light);
+   cursor: default;
+}
+
+.compare-view-header-button-clear-selected {
+   @insert .compare-view-header-button;
+   color: var(--label-white);
+   cursor: pointer;
+}
+
+.compare-view-header-button-clear-selected:active {
+   background-color: var(--button-disabled-dark);
 }
 
 .compare-view-multisource-check {
    position: relative;
-   top: 3px;
+   top: 4px;
+   width: 14px;
+   height: 14px;
+   margin-right: 5px;
    cursor: pointer;
 }
 
@@ -68,23 +108,26 @@
 .compare-view-title-container {
    display: flex;
    flex-direction: row;
-   width: 100%;
+/*   width: 100%; */
+   width: 9.5rem;
    max-height: 30px;
    padding: 0;
    border-top: solid var(--separator-dark-translucent) 1px;
    margin: 10px 20px 10px 0;
+   background-color: var(--background-header-content);
 }
 
 .compare-view-title {
    @insert .view-title;
-   width: 8.375rem;
+/*   width: 8.375rem; */
+   width: 5.9rem;
    height: 30px;
    min-height: 30px;
    font-family: header-bold;
    font-size: 0.813rem;
    color: var(--label-black);
    padding: 0 0 0 20px;
-   background-color: var(--background-header-content);
+/*   background-color: var(--background-header-content); */
 }
 
 .compare-view-unique-item-container {
@@ -103,6 +146,37 @@
    
 }
 
+.compare-view-category-header-button {
+   width: 30px;
+   min-width: 30px;
+   height: 28px;
+   min-height: 28px;
+   background-color: transparent;
+   background-size: 15px 15px;
+   background-position: right center;
+   background-repeat: no-repeat;
+   padding: 0;
+   border: 0;
+/*   margin: 0 21px 0 auto; */
+   outline: none;
+   cursor: pointer;
+}
+
+.compare-view-category-header-button-all {
+   @insert .compare-view-category-header-button;
+   background-image: url("../../svg/compare-button-selected-all.svg");
+}
+
+.compare-view-category-header-button-partial {
+   @insert .compare-view-category-header-button;
+   background-image: url("../../svg/compare-button-selected-partial.svg");
+}
+
+.compare-view-category-header-button-none {
+   @insert .compare-view-category-header-button;
+   background-image: url("../../svg/compare-button-selected-none.svg");
+}
+
 .compare-view-record-button {
    width: 133px;
    max-width: 133px;
@@ -117,6 +191,7 @@
    border-radius: 5px;
    background-color: var(--background-application);
    margin: 0 0 10px 20px;
+   cursor: pointer;
 }
 
 .compare-view-record-button-selected {
@@ -198,4 +273,5 @@
    font-size: 0.750rem;
    text-align: left;
    margin: 0 0 0 15px;
+   user-select: none;
 }

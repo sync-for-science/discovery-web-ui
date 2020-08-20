@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /* Sync for Science Colors Stylesheet */
-/* v.01.13  Updated 10/28/2019 */
+/* v.01.14  Updated 12/02/2019 */
 
 :root {  
 /* COLOR THEME
@@ -15,6 +15,9 @@
       --gn3: rgb(180,180,180);            /* 30% Gray */ 
       --gn4: rgb(155,155,155);            /* 40% Gray */ 
       --gn4-15: rgba(155,155,155,.15);    /* 40% Gray 15% opacity */ 
+      --gn4-25: rgba(155,155,155,.25);    /* 40% Gray 25% opacity */ 
+      --gn4-40: rgba(155,155,155,.40);    /* 40% Gray 40% opacity */
+      --gn4-50: rgba(155,155,155,.50);    /* 40% Gray 50% opacity */ 
       --gn5: rgb(130,130,130);      /* 50% Gray */ 
       --gn6: rgb(105,105,105);      /* 60% Gray */ 
       --gn7: rgb(80,80,80);         /* 70% Gray */ 
@@ -32,18 +35,19 @@
       --gt4-40: rgba(143,158,187,.40);     /* Blue Gray Dark 40% opacity */ 
       --gt5: rgb(116,128,154);             /* Blue Gray Dark 2 */ 
       --gt6: rgb(87,103,131);              /* Blue Gray Dark 3 */  
-      --gt7: rgb(,,);                      /*  */  
+      --gt7: rgb(226,231,244);                      /*  */  
       --gt8: rgb(,,);                      /*  */  
       --gt9: rgb(,,);                       /*  */  
 
 /* COLORS */
    /* Color - Blue (CB) */ 
-      --cb1: rgb(,,);      /*  */ 
+      --cb1: rgb(69,98,163);      /*  */ 
       --cb2: rgb(,,);      /*  */  
       --cb3: rgb(,,);      /*  */
    /* Color - Aqua (CA) */ 
       --ca1: rgb(65,151,198);      /* Aqua */ 
-      --ca2: rgb(,,);      /*  */  
+      --ca2: rgb(1,166,170);      /*  */ 
+      --ca2-70: rgba(1,166,170,0.7);      /*  */ 
       --ca3: rgb(,,);      /*  */
    /* Color - Green (CG) */
       --cg1: rgb(0,140,23);      /*  */ 
@@ -60,7 +64,9 @@
    /* Color - Red (CR) */
       --cr1: rgb(166,55,0);      /*  */ 
       --cr2: rgb(255,20,20);      /*  */  
-      --cr3: rgb(,,);      /*  */
+      --cr3: rgb(141,48,49);      /*  */
+      --cr4: rgb(255,160,160);      /*  */
+      --cr5: rgb(255,10,10);      /*  */
    
 /* COLOR MAPS */
    
@@ -84,6 +90,14 @@
       --background-accent: var(--ca1);                 
          /*  */
       --background-annotation: var(--gt1-40);                 
+         /*  */
+      --background-timeline: var(--gt7);                 
+         /*  */
+      --background-timeline-selector: var(--gn4-50);                 
+         /*  */
+      --background-scrollbar-thumb: var(--gt4);                 
+         /*  */
+      --background-scrollbar-thumb-hover: var(--gn5);                 
          /*  */
    
    /* Background Highlight  */
@@ -109,9 +123,15 @@
          /* ContentPanel.css |  */
       --button-disabled: var(--gt2);                   
          /*  */
+      --button-disabled-dark: var(--gt3);                   
+         /*  */
       --button-view: var(--gt1);                       
          /*  */
       --button-view-disabled: var(--gt5);              
+         /*  */
+      --button-date-range: var(--gt5);              
+         /*  */
+      --button-date-range-disabled: var(--gt3);              
          /*  */
          
    /* Tile */
@@ -138,11 +158,15 @@
          /* Selector.css| */
       --label-gray: var(--gt2);                          
          /* SummaryView.css| */
+      --label-gray-light: var(--gt1);                          
+         /* SummaryView.css| */
       --label-black: var(--black);                          
          /* Selector.css| */
       --label-button: var(--white);                          
          /*  */
       --label-button-disabled: var(--gt3);                 
+         /*  */
+      --label-button-disabled-dark: var(--gt1);                 
          /*  */
       --label-button-view: var(--black);                     
          /*  */
@@ -152,7 +176,9 @@
          /*  */
       --label-size-disabled: var(--);                   
          /*  */
-      --label-date: var(--);                            
+      --label-date: var(--black);                            
+         /*  */
+      --label-date-inactive: var(--gn5);                            
          /*  */
       --label-date-deselected: var(--);                 
          /*  */
@@ -202,6 +228,8 @@
          /* SummaryView.css */
       --separator-dark: var(--gt4);               
          /*  */
+      --separator-red: var(--cr5);               
+         /*  */
       --separator-dark-translucent: var(--gt4-40);               
          /*  */
       --border-modal: var(--gt4);                        
@@ -210,33 +238,27 @@
          /*  */
          
 /* FILL COLOR MAPS */
-      --dot: var(--gt3);                                  
-         /*  */
-      --dot-stroke: var(--white-60);                        
-         /*  */   
-      --dot-search: var(--cr2);                           
-         /*  */
-      --dot-search-stroke: var(--white);                           
-         /*  */
-      --dot-inactive: var(--gn4-15);                         
-         /*  */
-      --dot-search-inactive: var(--);                  
-         /*  */
-      --dot-highlight: var(--);                        
-         /*  */
-      
-         
-/* DOT STROKE COLOR MAPS */
-      --dot-stroke-active: var(--);                 
-         /*  */
-      --dot-stroke-inactive: var(--);               
-         /*  */
-      --dot-stroke-search-active: var(--);          
-         /*  */
-      --dot-stroke-search-inactive: var(--);        
-         /*  */
-      --dot-stroke-highlight: var(--);              
-         /*  */
+      --dots-active: var(--ca2-70);                                  
+      --dots-active-stroke: var(--white);                        
+      --dots-active-search: var(--cr4);                           
+      --dots-active-search-stroke: var(--white);                           
+      --dots-active-highlight: var(--cr3);
+      --dots-active-highlight-stroke: var(--white);
+      --dots-active-highlight-search: var();
+      --dots-active-highlight-search-stroke: var(--white);
+      --dots-inactive: var(--gn4-15); 
+      --dots-inactive-stroke: var(--white); 
+      --dots-content-inactive: var(--gn4-25); 
+      --dots-content-inactive-stroke: var(--white); 
+      --dots-inactive-search: var();
+      --dots-inactive-search-stroke: var(--white);
+      --dots-inactive-highlight: var(--gn4);
+      --dots-inactive-highlight-stroke: var(--white);
+      --dots-inactive-highlight-search: var(--cr4);
+      --dots-inactive-highlight-search-stroke: var(--white);
+      --dots-highlight-ring: transparent;
+/*      --dots-highlight-ring-stroke: var(--cr3); */
+      --dots-highlight-ring-stroke: var(--co1);
    
 /* PART 03 - Discontinued. Confirm and Remove. */  
    

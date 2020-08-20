@@ -5,7 +5,7 @@ import { get } from 'axios';
 import './DiscoveryApp.css';
 import config from '../../config.js';
 import FhirTransform from '../../FhirTransform.js';
-import { cleanDates, normalizeDates, timelineIncrYears } from '../../util.js';
+import { tryWithDefault, cleanDates, normalizeDates, timelineIncrYears } from '../../util.js';
 import PageHeader from '../PageHeader';
 import StandardFilters from '../StandardFilters';
 import ContentPanel from '../ContentPanel';
@@ -40,7 +40,6 @@ export default class DiscoveryApp extends React.Component {
       searchRefs: [],		// Search results to highlight
       searchMatchWords: [],	// Search results matching words
       laserSearch: false,	// Laser Search enabled?
-      viewAccentDates: [],
       isLoading: false,
       fetchError: null,		// Possible axios error object
       modalName: '',
@@ -56,18 +55,21 @@ export default class DiscoveryApp extends React.Component {
 
       // Shared Global Context
       updateGlobalContext: (updates) => this.setState(updates),
+
       themeName: null,		  	  // PageHeader
+
       savedCatsEnabled: null,		  // StandardFilters & CategoryRollup
       savedProvsEnabled: null,		  // StandardFilters & ProviderRollup
-      savedSelectedTiles: null,		  // TilesView
-      lastTileSelected: null,		  // TilesView
-      lastSavedSelectedTiles: null,	  // TilesView
+
+      lastTileSelected: null,		  // TilesView & CompareView
+      savedSelectedTiles: null,		  // TilesView & CompareView
+      lastSavedSelectedTiles: null,	  // TilesView & CompareView
+      viewAccentDates: [],		  // TilesView & CompareView
+      viewLastAccentDates: [],		  // TilesView & CompareView
       highlightedResources: [],		  // TilesView & CompareView
       lastHighlightedResources: [],	  // TilesView & CompareView
       onlyMultisource: false,		  // TilesView & CompareView
-      savedSelectedUniqueItems: null,	  // CompareView
-      lastUniqueItemSelected: null,	  // CompareView
-      lastSavedSelectedUniqueItems: null, // CompareView
+
       onlyAnnotated: false		  // ContentPanel
    }
 
@@ -77,8 +79,12 @@ export default class DiscoveryApp extends React.Component {
 
       this.setState({ isLoading: true });
 
+      // Check for uploaded data
+      const dataUrl = this.props.match.params.id ? config.serverUrl + '/data/download/' + this.props.match.params.id
+						 : config.serverUrl + '/participants/' + this.props.match.params.index;
+
       // Get the merged dataset and transform it using topTemplate
-      get(config.serverUrl + '/participants/' + this.props.match.params.index)
+      get(dataUrl)
          .then(response => {
 	    // Non-empty response?
 	    if (Object.getOwnPropertyNames(response.data).length !== 0) {
@@ -203,6 +209,7 @@ export default class DiscoveryApp extends React.Component {
 	 'Immunizations':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Immunization]'),
 	 'Procedures':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Procedure]').concat(
 					        FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation][*:isCategory(procedure)]', this.queryOptions)),
+	 'Procedure Requests':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ProcedureRequest]'),
 	 'Document References':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=DocumentReference]'),
 	 'Allergies':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=AllergyIntolerance]'),
 	 'Benefits':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ExplanationOfBenefit]'),
@@ -215,22 +222,23 @@ export default class DiscoveryApp extends React.Component {
 	 'Practitioner':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Practitioner]'),
 	 'List':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=List]'),
 	 'Questionnaire':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Questionnaire]'),
-	 'QuestionnaireResponse':	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=QuestionnaireResponse]'),
+	 'Questionnaire Response':	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=QuestionnaireResponse]'),
 	 'Observation-Other':	 	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
 										       +'[*:isNotCategory(Laboratory)&:isNotCategory(laboratory)'
 										       + '&:isNotCategory(Vital Signs)&:isNotCategory(vital-signs)'
 										       + '&:isNotCategory(Social History)&:isNotCategory(procedure)'
 										       + '&:isNotCategory(Exam)&:isNotCategory(exam)]', this.queryOptions),
-	 'DiagnosticReport':    	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=DiagnosticReport]'),
-	 'CarePlan':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=CarePlan]'),
+	 'Diagnostic Report':    	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=DiagnosticReport]'),
+	 'Care Plan':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=CarePlan]'),
 	 'Medication':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Medication]'),
 	 'Organization':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Organization]'),
 	 'Goal':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Goal]'),
 	 'Basic':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Basic]'),
-	 'ImmunizationRecommendation':	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImmunizationRecommendation]'),
-	 'ImagingStudy':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImagingStudy]'),
+	 'Immunization Recommendation':	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImmunizationRecommendation]'),
+	 'Imaging Study':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImagingStudy]'),
 	 'Coverage':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Coverage]'),
-	 'RelatedPerson':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=RelatedPerson]')
+	 'Related Person':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=RelatedPerson]'),
+	 'Device':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Device]')
       }
    }
 
@@ -239,11 +247,11 @@ export default class DiscoveryApp extends React.Component {
       try {
 	 switch (category) {
 	    case 'Conditions':
-	       date = item.onsetDateTime;
+	       date = item.onsetDateTime || item.dateRecorded;
 	       break;
 	    case 'Lab Results':
 	    case 'Vital Signs':
-	    case 'DiagnosticReport':
+	    case 'Diagnostic Report':
 	       date = item.effectiveDateTime;
 	       break;
 	    case 'Observation-Other':
@@ -253,14 +261,13 @@ export default class DiscoveryApp extends React.Component {
 	       date = new Date().toISOString().substring(0,10);		// Use today's date
 	       break;
 	    case 'Meds Statement':
-	       date = item.dateAsserted;
+	       date = tryWithDefault(item, item => item.dateAsserted,
+				     tryWithDefault(item, item => item.effectivePeriod.start,
+						    tryWithDefault(item, item => item.dosage[0].timing.repeat.boundsPeriod.start, null)));
 	       break;
 	    case 'Meds Requested':
-	       try {
-		  date = item.dosageInstruction[0].timing.repeat.boundsPeriod.start;
-	       } catch (e) {
-		  date = item.authoredOn;
-	       }
+	       date = tryWithDefault(item, item => item.dosageInstruction[0].timing.repeat.boundsPeriod.start, 
+				     tryWithDefault(item, item => item.authoredOn, item.dateWritten));
 	       break;
 	    case 'Meds Dispensed':
 	       date = item.whenHandedOver;
@@ -274,6 +281,9 @@ export default class DiscoveryApp extends React.Component {
 	    case 'List':
 	       date = item.date;
 	       break;
+	    case 'Procedure Requests':
+	       date = item.orderedOn || item.scheduledDateTime;
+	       break;
 	    case 'Procedures':
 	    case 'Exams': 
 	       date = item.performedDateTime || item.effectiveDateTime || (item.performedPeriod ? item.performedPeriod.start : null);
@@ -284,7 +294,7 @@ export default class DiscoveryApp extends React.Component {
 	    case 'Allergies':
 	       date = item.recordedDate || item.assertedDate;
 	       break;
-	    case 'CarePlan':
+	    case 'Care Plan':
 	    case 'Encounters':
 	    case 'Coverage':
 	       date = item.period.start;
@@ -293,7 +303,7 @@ export default class DiscoveryApp extends React.Component {
 	    case 'Claims':
 	       date = item.billablePeriod.start;
 	       break;
-	    case 'ImagingStudy':
+	    case 'Imaging Study':
 	       date = item.started;
 	       break;
 
@@ -428,10 +438,6 @@ export default class DiscoveryApp extends React.Component {
       }
    }
 
-   viewAccentCallback = (dates) => {
-      this.setState({ viewAccentDates: dates });
-   }
-
    renderCurrentView() {
       switch(this.state.currentView) {
          case 'reportView':
@@ -466,7 +472,6 @@ export default class DiscoveryApp extends React.Component {
          case 'compareView':
 	    return <CompareView resources={this.state.resources} totalResCount={this.state.totalResCount}
 				dates={this.state.dates} categories={this.categories} providers={this.providers}
-				viewAccentCallback={this.viewAccentCallback}
 				catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
 				thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
 				lastEvent={this.state.lastEvent} />;
@@ -479,7 +484,6 @@ export default class DiscoveryApp extends React.Component {
 	 case 'tilesView':
 	    return <TilesView resources={this.state.resources} totalResCount={this.state.totalResCount}
 			      dates={this.state.dates} categories={this.categories} providers={this.providers}
-			      viewAccentCallback={this.viewAccentCallback}
 			      catsEnabled={this.state.catsEnabled} provsEnabled={this.state.provsEnabled}
 			      thumbLeftDate={this.state.thumbLeftDate} thumbRightDate={this.state.thumbRightDate}
 			      lastEvent={this.state.lastEvent} />;
@@ -496,15 +500,15 @@ export default class DiscoveryApp extends React.Component {
 	 case 'financialView':
 	    return ['Claims', 'Benefits'];
 
-	 case 'compareView':
-	    let compareCats = ['Allergies', 'Conditions', 'Encounters', 'Exams', 'Immunizations', 'Lab Results',
-			       'Meds Dispensed', 'Meds Requested', 'Procedures', 'Vital Signs', 'Social History'];
-	    return this.categories.filter( elt => compareCats.includes(elt));
+//	 case 'compareView':
+//	    let compareCats = ['Allergies', 'Conditions', 'Encounters', 'Exams', 'Immunizations', 'Lab Results',
+//			       'Meds Dispensed', 'Meds Requested', 'Procedures', 'Vital Signs', 'Social History'];
+//	    return this.categories.filter( elt => compareCats.includes(elt));
 
-	 case 'tilesView':
-	    let tilesCats = ['Allergies', 'Conditions', 'Encounters', 'Exams', 'Immunizations', 'Lab Results',
-			     'Meds Dispensed', 'Meds Requested', 'Procedures', 'Vital Signs', 'Social History'];
-	    return this.categories.filter( elt => tilesCats.includes(elt));
+//	 case 'tilesView':
+//	    let tilesCats = ['Allergies', 'Conditions', 'Encounters', 'Exams', 'Immunizations', 'Lab Results',
+//			     'Meds Dispensed', 'Meds Requested', 'Procedures', 'Vital Signs', 'Social History'];
+//	    return this.categories.filter( elt => tilesCats.includes(elt));
 
 	 default:
 	    return this.categories;

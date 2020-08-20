@@ -1,5 +1,5 @@
 export default {
-   serverUrl: 'http://data.discovery.cingulata.us',
+   serverUrl: 'DATA',
    timeout: 5000,			// msec
 
    normalDotRadius: '5px',
@@ -25,5 +25,21 @@ export default {
    timeWidgetThumbResetZone: 0.0035,	// Width of thumb "reset" zones in fraction of timeWidget width
 
    contentPanelDragUpdateInterval: 0,	// Msec between position updates during ContentPanel drag operations
-   contentPanelUseWindowing: 150	// min number of displayable resources to use virtual/windowed display
+   contentPanelUseWindowing: 200,	// min number of displayable resources to use virtual/windowed display
+
+   // Enabled/disabled items
+   enableSearch: false,
+   enableMenu: false,
+   enableTextSizing: false,
+
+   enablePayer: false,
+   enableCollections: false,
+   enablePathfinder: false,
+   enableConsult: false,
+   enableDiabetes: false,
+
+   enableContentPanelLeftRight: false,
+   enableShowLess: false,
+   enableReportedMultProvs: false,
+   enableOnlyRecordsWithNotes: false,
 }

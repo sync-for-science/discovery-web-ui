@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Selector CSS */
-/* v.01.11 Updated 10/07/2019 */
+/* v.01.13 Updated 11/14/2019 */
 
 .selector-set {
    width: 100%;
@@ -74,13 +74,11 @@
    min-height: 38px;
    background-color: transparent;
    background-size: 15px 15px;
-/*   background-position: right center; */
    background-position: center center;
    background-repeat: no-repeat;
    padding: 0;
    border: 0;
-/*   margin: 0 0 0 auto; */
-   margin: 0;
+   margin: 0 20px 0 0;
    outline: none;
    cursor: pointer;
 }
@@ -140,14 +138,14 @@
    @insert .selector-button;
    font-family:text-bold;
    color: var(--label-button);
-   background-color: var(--button);
+   background-color: var(--button-dark);
 }
 
 .selector-button-disabled {
    @insert .selector-button;
    font-family:text-semibold;
-   color: var(--label-button-disabled);
-   background-color: var(--button-disabled);
+   color: var(--label-button-disabled-dark);
+   background-color: var(--button-disabled-dark);
 }
 
 .selector-svg-container {
@@ -157,12 +155,12 @@
    width: 100%;
    min-height: 28px;
    max-height: none;
-   background-image: url(../svg/horizontal-rule-1px-black.svg);
+    background-image: url(../svg/horizontal-rule-1px-black.svg); 
    background-position: center;
    background-repeat: repeat-x;
    background-clip: padding-box;
    background-color: var(--background-content);
-   padding: 0 10px;
+   padding: 0;
    margin: 0 10px 0 0;
    overflow: hidden;
 }

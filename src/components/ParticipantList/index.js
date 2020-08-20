@@ -35,9 +35,11 @@ export default class ParticipantList extends React.Component {
    generateListNames(participants) {
       let listNames = [];
       for (let participantId in participants) {
-	 for (let listName of participants[participantId].lists) {
-	    if (!listNames.includes(listName)) {
-	       listNames.push(listName);
+	 if (participants[participantId].lists) {
+	    for (let listName of participants[participantId].lists) {
+	       if (!listNames.includes(listName)) {
+		  listNames.push(listName);
+	       }
 	    }
 	 }
       }
@@ -70,7 +72,7 @@ export default class ParticipantList extends React.Component {
       }
 
       for (let participantId in participants) {
-	 if (this.state.currentList === 'All' || participants[participantId].lists.includes(this.state.currentList)) {
+	 if (this.state.currentList === 'All' || (participants[participantId].lists && participants[participantId].lists.includes(this.state.currentList))) {
 	    results.push(<ParticipantListItem key={participantId} id={participantId}
 					      participant={participants[participantId]} rawQueryString={this.props.location.search}/>);
 	 }

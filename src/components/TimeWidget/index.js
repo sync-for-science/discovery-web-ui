@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
+import moment from 'moment';
 
 import './TimeWidget.css';
 import config from '../../config.js';
@@ -31,14 +32,65 @@ export default class TimeWidget extends React.Component {
       timelineWidth: PropTypes.string.isRequired,
       setLeftRightFn: PropTypes.func.isRequired,	// Communicate thumb movement to parent
       dotPositionsFn: PropTypes.func.isRequired,	// Get dot positions from parent
-      dotClickFn: PropTypes.func.isRequired,		// Communicate dot click to parent
+      dotClickFn: PropTypes.func,			// Communicate dot click to parent
+      dotContext: PropTypes.object			// The last clicked dot (or null)
    }
     
    state = {
       leftX: this.props.thumbLeft * numericPart(this.props.timelineWidth),
       rightX: this.props.thumbRight * numericPart(this.props.timelineWidth),
-      thumbDates: {minDate: this.locToDate(this.props.thumbLeft), maxDate: this.locToDate(this.props.thumbRight)},
-      showExpanded: false
+      thumbDates: {minDate: this.posToDate(this.props.thumbLeft), maxDate: this.posToDate(this.props.thumbRight)},
+      showExpanded: false,
+      rangeButton: 'ALL'
+   }
+
+   // Define range button characteristics
+   ranges = {
+      ALL: {
+	 label: 'All',
+	 minPos: 0,
+	 maxPos: 1
+      },
+
+      '10YRS': {
+	 label: '10 years',
+	 halfSize: 5,
+	 halfSizeUnit: 'years',
+	 fullSize: 10,
+	 fullSizeUnit: 'years'
+      },
+
+      '5YRS': {
+	 label: '5 years',
+	 halfSize: 30,
+	 halfSizeUnit: 'months',
+	 fullSize: 5,
+	 fullSizeUnit: 'years'
+      },
+
+      '1YR': {
+	 label: '1 year',
+	 halfSize: 6,
+	 halfSizeUnit: 'months',
+	 fullSize: 1,
+	 fullSizeUnit: 'year'
+      },
+
+      '6MOS': {
+	 label: '6 months',
+	 halfSize: 3,
+	 halfSizeUnit: 'months',
+	 fullSize: 6,
+	 fullSizeUnit: 'months'
+      },
+
+      '1MO': {
+	 label: '1 month',
+	 halfSize: 15,
+	 halfSizeUnit: 'days',
+	 fullSize: 1,
+	 fullSizeUnit: 'month'
+      }
    }
 
    cacheSizes() {
@@ -59,50 +111,30 @@ export default class TimeWidget extends React.Component {
    componentDidUpdate(prevProps, prevState) {
       if (prevProps.timelineWidth !== this.props.timelineWidth || prevProps.thumbLeft !== this.props.thumbLeft) {
 	 this.setState({ leftX: this.props.thumbLeft * numericPart(this.props.timelineWidth),
-			 thumbDates: {minDate: this.locToDate(this.props.thumbLeft), maxDate: this.locToDate(this.props.thumbRight)} });
+			 thumbDates: {minDate: this.posToDate(this.props.thumbLeft), maxDate: this.posToDate(this.props.thumbRight)} });
 	 this.cacheSizes();
       }
       if (prevProps.timelineWidth !== this.props.timelineWidth || prevProps.thumbRight !== this.props.thumbRight) {
 	 this.setState({ rightX: this.props.thumbRight * numericPart(this.props.timelineWidth),
-			 thumbDates: {minDate: this.locToDate(this.props.thumbLeft), maxDate: this.locToDate(this.props.thumbRight)} });
+			 thumbDates: {minDate: this.posToDate(this.props.thumbLeft), maxDate: this.posToDate(this.props.thumbRight)} });
 	 this.cacheSizes();
       }
    }
 
-   // Reset thumbs
-   onDoubleClick = () => {
-      this.props.setLeftRightFn(0.0, 1.0, false);
-      this.setState({ leftX: 0.0, rightX: numericPart(this.props.timelineWidth), showExpanded: false,
-		      thumbDates: {minDate: this.props.startDate, maxDate: this.props.endDate} });
-   }
-
    // TODO: Move to util.js?
-   locToDate(pos) {
+   posToDate(pos) {
       let min = new Date(this.props.startDate ? this.props.startDate : 0).getTime();
       let max = new Date(this.props.endDate ? this.props.endDate : 0).getTime();
       let target = min + (max - min) * pos;
       return new Date(target).toISOString();
    }
 
-   onLeftDrag = (e, data) => {
-      console.log('onLeftDrag: ' + data.x);
-      const width = numericPart(this.props.timelineWidth);
-      const leftTarget = (data.x/width < config.timeWidgetThumbResetZone) ? 0 : data.x/width;
-      const showExpanded = leftTarget !== 0 || this.state.rightX !== numericPart(this.props.timelineWidth);
-
-      this.props.setLeftRightFn(leftTarget, this.state.rightX/width, showExpanded);
-      let dates = {minDate: this.locToDate(leftTarget), maxDate: this.locToDate(this.state.rightX/width)};
-      this.setState({ leftX: leftTarget*width, thumbDates: dates, showExpanded: showExpanded });
-   }
-
-   onRightDrag = (e, data) => {
-      const width = numericPart(this.props.timelineWidth);
-      const rightTarget = (data.x/width > 1.0 - config.timeWidgetThumbResetZone) ? 1.0 : data.x/width;
-      const showExpanded = this.state.leftX !== 0 || rightTarget*width !== numericPart(this.props.timelineWidth);
-
-      this.props.setLeftRightFn(this.state.leftX/width, rightTarget, showExpanded);
-      let dates = {minDate: this.locToDate(this.state.leftX/width), maxDate: this.locToDate(rightTarget)};
-      this.setState({ rightX: rightTarget*width, thumbDates: dates, showExpanded: showExpanded });
+   // TODO: Move to util.js?
+   dateToPos(dateStr) {
+      let min = new Date(this.props.startDate ? this.props.startDate : 0).getTime();
+      let max = new Date(this.props.endDate ? this.props.endDate : 0).getTime();
+      let target = new Date(dateStr).getTime();
+      return (target - min) / (max - min);
    }
 
    onCenterDrag = (e, data) => {
@@ -113,7 +145,7 @@ export default class TimeWidget extends React.Component {
       let width = numericPart(this.props.timelineWidth);
 
       this.props.setLeftRightFn(newLeftX/width, newRightX/width, true);
-      let dates = {minDate: this.locToDate(newLeftX/width), maxDate: this.locToDate(newRightX/width)};
+      let dates = {minDate: this.posToDate(newLeftX/width), maxDate: this.posToDate(newRightX/width)};
       this.setState({ leftX: newLeftX, rightX: newRightX, thumbDates: dates });
    }
 
@@ -248,65 +280,35 @@ export default class TimeWidget extends React.Component {
       );
    }
 
-   // // Assumes 'date' object or ISO format string
-   // formatLocalDate(date) {
-   //    // Add month & day if missing
-   //    let strDate = date+'';
-   //    strDate = strDate.length === 4 ? strDate += '-01' : strDate;
-   //    strDate = strDate.length === 7 ? strDate += '-01' : strDate;
-
-   //    // Strip time, if present
-   //    const tLoc = strDate.indexOf('T');
-   //    if (tLoc !== -1) {
-   // 	 strDate = strDate.substring(0, tLoc);
-   //    }
-
-   //    return new Date(strDate.replace(/-/g, '/')).toLocaleDateString();		// Force local "input" date
-   // }
-
    // TODO: collect following from individual view components?
    showHelp() {
       switch (this.context.currentView) {
 	 case 'reportView':
 	    return [
-	       <div className='timeline-help-col-1' key='1'>
-		  <b>Timeline</b> shows your detailed clinical and payer data over time. “What data is there about me?”
-	       </div>,
-	       <div className='timeline-help-col-2' key='2'><b>Select</b> a dot on the Time Bar (above) to scroll to details for that day.  </div>,
-	       <div className='timeline-help-col-3' key='3'>
-		  <b>Adjust</b> Records or Providers (left), and Time Bar controls (above) to narrow or widen data shown.
-	       </div>
-	    ];
-
-	 case 'compareView':
-	    return [
-	       <div className='timeline-help-col-1' key='1'>
-		  <b>Compare</b> shows which providers have records of your unique clinical data. “Which provider knows this about me?”
-	       </div>,
-	       <div className='timeline-help-col-2' key='2'><b>See/hide</b> details by selecting or deselecting Cards. </div>,
-	       <div className='timeline-help-col-3' key='3'>
-		  <b>Adjust</b> Records or Providers (left), and Time Bar controls (above) to narrow or widen data shown.
-	       </div>
+	       <div className='timeline-help-col-1' key='1'>Shows your detailed data by date and time.</div>,
+	       <div className='timeline-help-col-2' key='2'>Select a dot to scroll to data for that date and time.</div>,
+	       <div className='timeline-help-col-3' key='3'>Adjust Records, Providers, or Time to change data shown.</div>
 	    ];
 
 	 case 'financialView':
 	    return [
-	       <div className='timeline-help-col-1' key='1'>
-		  <b>Payer</b> presents your claims and benefits data. “What health care service data is there about me?”
-	       </div>,
-	       <div className='timeline-help-col-2' key='2'><b>Select</b> a dot on the Time Bar (above) to scroll to details for that day.  </div>,
-	       <div className='timeline-help-col-3' key='3'>
-		  <b>Adjust</b> Records or Providers (left), and Time Bar controls (above) to narrow or widen data shown.
-	       </div>
+	       <div className='timeline-help-col-1' key='1'>Shows your claims and benefits data by date and time.</div>,
+	       <div className='timeline-help-col-2' key='2'>Select a dot to scroll to data for that date and time.</div>,
+	       <div className='timeline-help-col-3' key='3'>Adjust Records, Providers, or Time to change data shown.</div>
 	    ];
 
 	 case 'tilesView':
 	    return [
-	       <div className='timeline-help-col-1' key='1'><b>Catalog</b> lists your unique clinical data by type. “What is known about me?”</div>,
-	       <div className='timeline-help-col-2' key='2'><b>See/hide</b> details by selecting or deselecting Cards.  </div>,
-	       <div className='timeline-help-col-3' key='3'>
-		  <b>Adjust</b> Records or Providers (left), and Time Bar controls (above) to narrow or widen data shown.
-	       </div>
+	       <div className='timeline-help-col-1' key='1'>Cards summarize your unique data by Record type.</div>,
+	       <div className='timeline-help-col-2' key='2'>Select Cards to see your detailed data.</div>,
+	       <div className='timeline-help-col-3' key='3'>Adjust Records, Providers, or Time to change data shown.</div>
+	    ];
+
+	 case 'compareView':
+	    return [
+	       <div className='timeline-help-col-1' key='1'>Cards summarize your unique data by Record type and Provider.</div>,
+	       <div className='timeline-help-col-2' key='2'>Select Cards to see your detailed data.</div>,
+	       <div className='timeline-help-col-3' key='3'>Adjust Records, Providers, or Time to change data shown.</div>
 	    ];
 
 	 default:
@@ -314,63 +316,103 @@ export default class TimeWidget extends React.Component {
       }	   
    }
 
+   setRange(rangeTag, centerDate) {
+//      console.log(`Range: ${rangeTag}  CenterDate: ${centerDate}`);
+      let range = this.ranges[rangeTag];
+      let minPos = range.minPos !== undefined ? range.minPos
+					      : this.dateToPos(moment(centerDate).subtract(range.halfSize, range.halfSizeUnit).format());
+      let maxPos = range.maxPos !== undefined ? range.maxPos
+					      : this.dateToPos(moment(centerDate).add(range.halfSize, range.halfSizeUnit).format());
+
+      // Adjust window if extends beyond min/max dates
+      if (maxPos > 1) {
+	 maxPos = 1;
+	 minPos = this.dateToPos(moment(this.props.endDate).subtract(range.fullSize, range.fullSizeUnit).format());
+      } else if (minPos < 0) {
+	 minPos = 0;
+	 maxPos = this.dateToPos(moment(this.props.startDate).add(range.fullSize, range.fullSizeUnit).format());
+      }
+
+      let showExpanded = minPos !== 0 || maxPos !== 1;
+      let thumbDates = {minDate: this.posToDate(minPos), maxDate: this.posToDate(maxPos)};
+      let width = numericPart(this.props.timelineWidth);
+      this.props.setLeftRightFn(minPos, maxPos, showExpanded);
+      this.setState({ leftX: minPos*width, rightX: maxPos*width, thumbDates, showExpanded });
+   }
+
+   dotInRange(width) {
+      let dotX = this.props.dotContext.position * width;
+      return this.state.leftX <= dotX && this.state.rightX >= dotX;
+   }
+
+   onRangeClick(range) {
+      let width = numericPart(this.props.timelineWidth);
+      let centerDate = this.dotInRange(width) ? this.props.dotContext.date					// last dot clicked
+					      : this.posToDate((this.state.leftX+this.state.rightX)/(2*width));	// center of current range
+
+      this.setState({ rangeButton: range });
+      this.setRange(range, centerDate);
+   }
+
+   onDotClick = (context, date, dotType) => {
+      this.setRange(this.state.rangeButton, date);
+      this.props.dotClickFn(context, date, dotType);
+   }
+
+   renderRangeButtons() {
+      let buttons = [];
+      let key=0;
+      for (let range in this.ranges) {
+	  buttons.push(<button className={this.state.rangeButton===range ? 'date-range-button-on' : 'date-range-button-off'}
+			       key={key++} onClick={() => this.onRangeClick(range)}>{this.ranges[range].label}</button>);
+      }
+      return buttons;
+   }
+
    render() {
-//      const rangeMin = this.formatLocalDate(this.state.thumbDates ? this.state.thumbDates.minDate : this.props.startDate);
-//      const rangeMax = this.formatLocalDate(this.state.thumbDates ? this.state.thumbDates.maxDate : this.props.endDate);
-//      const rangeMin = formatDisplayDate(this.state.showExpanded ? this.state.thumbDates.minDate : this.props.minDate, true, true);
-//      const rangeMax = formatDisplayDate(this.state.showExpanded ? this.state.thumbDates.maxDate : this.props.maxDate, true, true);
-      const rangeMin = formatDisplayDate(this.props.thumbLeft !== 0 ? this.state.thumbDates.minDate : this.props.minDate, true, true);
-      const rangeMax = formatDisplayDate(this.props.thumbRight !== 1 ? this.state.thumbDates.maxDate : this.props.maxDate, true, true);
+//      const rangeMin = formatDisplayDate(this.props.thumbLeft !== 0 ? this.state.thumbDates.minDate : this.props.minDate, true, true);
+//      const rangeMax = formatDisplayDate(this.props.thumbRight !== 1 ? this.state.thumbDates.maxDate : this.props.maxDate, true, true);
+      const rangeMin = formatDisplayDate(this.props.thumbLeft !== 0 ? this.state.thumbDates.minDate : this.props.startDate, true, true);
+      const rangeMax = formatDisplayDate(this.props.thumbRight !== 1 ? this.state.thumbDates.maxDate : this.props.endDate, true, true);
       const rightBound = numericPart(this.props.timelineWidth);
+      const rightGradientWidth = numericPart(this.props.timelineWidth) - this.state.rightX;
 
       return (
 	 <div className='time-widget'>
-	    <div className='calendar-daterange-box'>
-              {/*<button className='calendar-button-off' /> */}
-	       <div className='date-range'>
-		  <div className='date-range-row'>FROM 
-		     <div className='date-range-data'>{rangeMin}</div>
-		  </div>
-		  <div className='date-range-row'>TO 
-		     <div className='date-range-data'>{rangeMax}</div>
-		  </div>
-		  <div className='participant-name'>
-		     { this.context.resources && formatPatientName(this.context.resources.pathItem('[category=Patient].data.name')) }
-		  </div>
-	       </div>
+	    <div className='participant-name'>
+	       { this.context.resources && formatPatientName(this.context.resources.pathItem('[category=Patient].data.name')) }
 	    </div>
-	    <div className='timeline-controls' onDoubleClick={this.onDoubleClick}>
-	       <div className='timeline-selection-box'> 
+	    <div className='timeline-controls'>
+	       <div className='timeline-tbd-container'>
 		  <div className='timeline-selector-gradient-container'>
-		     <div className='timeline-selector-gradient-left' style={{width:this.state.leftX+'px'}} />
-		     <div className='timeline-selector-gradient-right'
- 			  style={{left:this.state.rightX-this.state.leftX+'px', width:(numericPart(this.props.timelineWidth)-this.state.rightX)+'px'}} />
+		     { this.state.leftX > 0 && <div className='timeline-selector-gradient-left' style={{width:this.state.leftX+'px'}} /> }
+		     { rightGradientWidth > 0 && <div className='timeline-selector-gradient-right'
+			  style={{left:this.state.rightX-this.state.leftX+'px', width:rightGradientWidth+'px'}} /> }
 		  </div>
 		  { this.renderFullYears() }
-	          <div className='timeline-selector-container'>
-		     <Draggable axis='x' bounds={{left:0, right:this.state.rightX-40}} position={{x:this.state.leftX, y:0}} onDrag={this.onLeftDrag}>
-		        <div className={this.state.leftX > 0 ? 'timeline-selector-left-alt' : 'timeline-selector-left'}></div>
-		     </Draggable>
-		     <Draggable axis='x' bounds={{left:this.state.leftX+40, right:rightBound}} position={{x:this.state.rightX, y:0}} onDrag={this.onRightDrag}>
-		        <div className={this.state.rightX < rightBound ? 'timeline-selector-right-alt' : 'timeline-selector-right'}></div>
-		     </Draggable>
-		     { this.state.showExpanded &&
-		       <Draggable axis='x' bounds={{left:(this.state.rightX-this.state.leftX-this.centerThumbWidth)/2,
-						    right:rightBound-this.centerThumbWidth-(this.state.rightX-this.state.leftX-this.centerThumbWidth)/2}}
-				  position={{x:(this.state.leftX+this.state.rightX-this.centerThumbWidth)/2, y:0}} onDrag={this.onCenterDrag}>
-			  <div className='timeline-selector-center' />
-		       </Draggable> }
-		     { !this.state.showExpanded &&
-		       <div className='timeline-help'>
-			  { this.showHelp() }
-		       </div> }
-		  </div>
-	          <SVGContainer className='timeline-svg-container' svgClassName='timeline-svg' svgWidth={this.props.timelineWidth}>
+		  <SVGContainer className='timeline-svg-container' svgClassName='timeline-svg' svgWidth={this.props.timelineWidth}>
 		     <DotLine dotPositions={this.props.dotPositionsFn(TimeWidget.myName, 'Full', true)}
 			      context={ {parent:TimeWidget.myName, rowName:'Full'} }
-			      dotClickFn={this.props.dotClickFn} />
-	          </SVGContainer>
+			      dotClickFn={this.props.dotClickFn ? this.onDotClick : null} />
+		  </SVGContainer>
 	       </div>
+	       <div className='timeline-range-controls'>
+		  <div className={this.state.showExpanded ? 'date-range-data-left-focused' : 'date-range-data-left'}> {rangeMin}</div>
+		  <div className='timeline-button-container'>
+		     { this.renderRangeButtons() }
+		  </div>
+		  <div className={this.state.showExpanded ? 'date-range-data-right-focused' : 'date-range-data-right'}> {rangeMax}</div>
+	       </div>
+	       { this.state.showExpanded &&
+		 <Draggable axis='x' bounds={{left:(this.state.rightX-this.state.leftX-this.centerThumbWidth)/2,
+					      right:rightBound-this.centerThumbWidth-(this.state.rightX-this.state.leftX-this.centerThumbWidth)/2}}
+			    position={{x:(this.state.leftX+this.state.rightX-this.centerThumbWidth)/2, y:0}} onDrag={this.onCenterDrag}>
+		    <div className='timeline-selector-center' />
+		 </Draggable> }
+	       { !this.state.showExpanded &&
+		 <div className='timeline-help'>
+		    { this.showHelp() }
+		 </div> }
 	       { this.state.showExpanded && this.renderExpandedYears() }
 	    </div>
 	 </div>  

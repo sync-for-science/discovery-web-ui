@@ -1,11 +1,10 @@
 [Unit]
-Description=S4S Discovery Demo
+Description=S4S Discovery
 StartLimitInterval=0
 
 [Service]
 Type=simple
-WorkingDirectory=/home/sklein/discovery-demo
-Environment=PORT=3001
+WorkingDirectory=WORKINGDIR
 ExecStart=/usr/bin/npm start
 Restart=always
 RestartSec=3

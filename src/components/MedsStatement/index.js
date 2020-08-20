@@ -5,7 +5,7 @@ import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderMedsStatement, primaryTextValue } from '../../fhirUtil.js';
-import { Const, stringCompare, formatContentHeader, tryWithDefault } from '../../util.js';
+import { Const, stringCompare, formatKey, formatContentHeader, tryWithDefault } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -66,10 +66,11 @@ export default class MedsStatement extends React.Component {
    }
 
    render() {
+      let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
-	       <div className='meds-statement category-container'>
-		  { formatContentHeader(this.props.isEnabled, MedsStatement.catName, this.state.matchingData[0], this.context) }
+	       <div className='meds-statement category-container' id={formatKey(firstRes)}>
+		  { formatContentHeader(this.props.isEnabled, MedsStatement.catName, firstRes, this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderMedsStatement(this.state.matchingData, 'Medication', this.context) }
 	          </div>

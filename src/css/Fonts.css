@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /* Sync for Science Font Stylesheet */
-/* v.01.14  Updated 09/05/2019 */
+/* v.01.15  Updated 11/25/2019 */
 
 @font-face {
    font-family: 'header';
@@ -60,6 +60,12 @@
    font-family: 'label-semibold';
    src: url('../fonts/NunitoSans-SemiBold.ttf');
    format: ('truetype');
+}
+
+@font-face {
+	font-family: 'label-bold';
+	src: url('../fonts/NunitoSans-Bold.ttf');
+	format: ('truetype');
 }
 
 @font-face {

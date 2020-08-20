@@ -82,15 +82,16 @@ export function fhirKey(elt) {
    return elt.provider + '/' + elt.data.id;
 }
 
+export function resKey(elt) {
+   let id = elt.resourceId || elt.data.id;
+   return elt.provider + '/' + id;
+}
+
 export function renderAllergies(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-//	  found.push({ provider: elt.provider, code: elt.data.code, clinicalStatus: elt.data.clinicalStatus,
-//		       verificationStatus: elt.data.verificationStatus, type: elt.data.type, category: elt.data.category,
-//		       criticality: elt.data.criticality, substance: elt.data.substance, reaction: elt.data.reaction });
-	  found.push({ provider: elt.provider, clinicalStatus: elt.data.clinicalStatus,
-//		       display: elt.data.code ? elt.data.code.coding[0].display : elt.data.substance.coding[0].display, 
+	  found.push({ provider: elt.provider, clinicalStatus: elt.data.clinicalStatus, resourceId: elt.data.id,
 		       display: classFromCat(elt.category).primaryText(elt), annotation: Annotation.info(elt),
 		       verificationStatus: elt.data.verificationStatus, type: elt.data.type, category: elt.data.category,
 		       criticality: elt.data.criticality, substance: elt.data.substance, reaction: elt.data.reaction });
@@ -102,7 +103,7 @@ export function renderAllergies(matchingData, appContext) {
    if (found.length > 0) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>Allergy</div> }
 	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
@@ -131,7 +132,10 @@ export function renderAllergies(matchingData, appContext) {
 	       { elt.substance && <div className='col02 value-text'>{elt.substance.coding[0].display}</div> }
 
 	       { elt.reaction && <div className='col01 label'>Reaction</div> }
-	       { elt.reaction && <div className='col02 value-text'>{elt.reaction[0].manifestation[0].coding[0].display}</div> }
+	       { elt.reaction && <div className='col02 value-text'>
+		   { tryWithDefault(elt, elt => elt.reaction[0].manifestation[0].coding[0].display,
+				   tryWithDefault(elt, elt => elt.reaction[0].manifestation[0].text, Const.unknownValue)) }
+		 </div> }
 	    </div>
 	    <div className='content-graph' />
 	    <div className='content-extras'>
@@ -225,16 +229,16 @@ function consultText(appContext, elt) {
 //
 // renderDisplay()
 //
-// Used by Conditions, DocumentReferences, MedsAdministration, Procedures
+// Used by Conditions, DocumentReferences, MedsAdministration, Procedures, ProcedureRequests
 //
 export function renderDisplay(matchingData, typeLabel, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
 	 found.push({ provider: elt.provider, category: elt.category, participantId: elt.id, resourceId: elt.data.id,
-//		      display: elt.data.code.coding[0].display,
 		      display: classFromCat(elt.category).primaryText(elt), annotation: Annotation.info(elt),
-		      status: elt.data.status, clinicalStatus: elt.data.clinicalStatus,
+		      status: elt.data.status, clinicalStatus: elt.data.clinicalStatus, abatement: elt.data.abatementDateTime,
+		      orderedBy: tryWithDefault(elt, elt => elt.data.orderer.display, undefined),
 		      verificationStatus: elt.data.verificationStatus, reason: elt.data.reasonReference, valueQuantity: elt.data.valueQuantity });
       } catch (e) {
 	 console.log('renderDisplay(): ' + e.message);
@@ -244,7 +248,7 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
    if (found.length > 0) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>{typeLabel}</div> }
 	       {/* elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> */}
@@ -264,6 +268,12 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
 	       { isValid(elt, e => e.reason[0].abatementDateTime) && <div className='col01 label'>Abatement</div> }
 	       { isValid(elt, e => e.reason[0].abatementDateTime) &&
 		   <div className='col02 value-text'>{formatDisplayDate(elt.reason[0].abatementDateTime, false, false)}</div> }
+
+	       { elt.abatement && <div className='col01 label'>Abatement</div> }
+	       { elt.abatement && <div className='col02 value-text'>{formatDisplayDate(elt.abatement, false, false)}</div> }
+
+	       { elt.orderedBy && <div className='col01 label'>Ordered By</div> }
+	       { elt.orderedBy && <div className='col02 value-text'>{elt.orderedBy}</div> }
 
 	       { isValid(elt, e => e.reason[0].assertedDate) && <div className='col01 label'>Asserted</div> }
 	       { isValid(elt, e => e.reason[0].assertedDate) &&
@@ -302,7 +312,6 @@ export function renderMedsStatement(matchingData, typeLabel, appContext) {
    for (const elt of matchingData) {
       try {
 	 found.push({ provider: elt.provider, category: elt.category, participantId: elt.id, resourceId: elt.data.id,
-//		      display: elt.data.code ? elt.data.coding[0].display : elt.data.medicationCodeableConcept.coding[0].display,
 		      display: classFromCat(elt.category).primaryText(elt), annotation: Annotation.info(elt),
 		      taken: elt.data.taken, status: elt.data.status, clinicalStatus: elt.data.clinicalStatus,
 		      verificationStatus: elt.data.verificationStatus, reason: elt.data.reasonReference, valueQuantity: elt.data.valueQuantity });
@@ -314,7 +323,7 @@ export function renderMedsStatement(matchingData, typeLabel, appContext) {
    if (found.length > 0) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>{typeLabel}</div> }
 	       {/* elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> */}
@@ -376,8 +385,7 @@ export function renderImmunizations(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	  found.push({ provider: elt.provider, id: elt.data.id,
-//		       display: elt.data.vaccineCode.coding[0].display,
+	  found.push({ provider: elt.provider, id: elt.data.id, resourceId: elt.data.id,
 		       display: classFromCat(elt.category).primaryText(elt),
 		       status: elt.data.status, annotation: Annotation.info(elt),
 		       notGiven: elt.data.notGiven, wasNotGiven: elt.data.wasNotGiven,
@@ -390,7 +398,7 @@ export function renderImmunizations(matchingData, appContext) {
    if (found.length > 0) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>Vaccine</div> }
 	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
@@ -436,9 +444,9 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	 found.push({ provider: elt.provider, date:elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
-//		      display: elt.data.code.coding[0].display,
+	 found.push({ provider: elt.provider, date:elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate), resourceId: elt.data.id,
 		      display: classFromCat(elt.category).primaryText(elt),
+		      valueRatio: elt.data.valueRatio,
 		      valueQuantity: elt.data.valueQuantity,
 		      valueString: elt.data.valueString,
 		      referenceRange: elt.data.referenceRange,
@@ -472,18 +480,36 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => {
 	 let highlightValue = false;
+	 let value = tryWithDefault(elt, elt => elt.valueQuantity.value, null);
+	 let valueUnits = tryWithDefault(elt, elt => elt.valueQuantity.unit, null);
+	 let valueRatioDisplay = elt.valueRatio ? elt.valueRatio.numerator.value + ' / ' + elt.valueRatio.denominator.value : null;
+
+	 let refRangeLabel;
+	 let refRange;
+
 	 if (elt.referenceRange) {
-	    let value = elt.valueQuantity.value;
-	    let valueUnits = elt.valueQuantity.unit;
+	    try {
+	       refRangeLabel = elt.referenceRange[0].meaning.coding[0].display;
+	    } catch (e) {
+	       refRangeLabel = 'Reference Range';
+	    }
 
-	    let lowValue = elt.referenceRange[0].low.value;
-	    let lowUnits = elt.referenceRange[0].low.unit;
+	    try {
+	       let lowValue = elt.referenceRange[0].low.value;
+	       let lowUnits = elt.referenceRange[0].low.unit;
 
-	    let highValue = elt.referenceRange[0].high.value;
-	    let highUnits = elt.referenceRange[0].high.unit;
+	       let highValue = elt.referenceRange[0].high.value;
+	       let highUnits = elt.referenceRange[0].high.unit;
 
-	    // Highlight the measured value if outside of the reference range
-	    highlightValue = valueUnits === lowUnits && valueUnits === highUnits && (value < lowValue || value > highValue);
+	       // Construct reference range
+	       refRange = lowValue + (lowUnits && lowUnits !== highUnits ? ' ' + lowUnits : '') + ' - ' + highValue + (highUnits ? ' ' + highUnits : '');
+
+	       // Highlight the measured value if outside of the reference range
+	       highlightValue = valueUnits === lowUnits && valueUnits === highUnits && (value < lowValue || value > highValue);
+
+	    } catch (e) {
+	       refRange = elt.referenceRange.text;
+	    }
 	 }
 
 	 // Select only values with matching provider and then sort
@@ -493,7 +519,7 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
 
 	 return (
 	    <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}
-		 id={formatKeyDate(elt.date.toISOString()) + '-' + elt.display}>
+		 id={formatKeyDate(elt.date.toISOString()) + '-' + elt.display} data-res={resKey(elt)}>
 	       <div className='content-data'>
 		  { elt.display && <div className='col01 label'>Measure</div> }
 		  { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
@@ -502,16 +528,14 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
 		  { elt.valueQuantity && <div className={'col02 value-number' + (highlightValue ? ' highlight' : '')}>
 			{formatDPs(elt.valueQuantity.value, 1) + (elt.valueQuantity.unit ? ' ' + elt.valueQuantity.unit : '') }</div> }
 
+	          { valueRatioDisplay && <div className='col01 label'>Value Ratio</div> }
+	          { valueRatioDisplay && <div className='col02 value-number'>{valueRatioDisplay}</div> }
+
 		  { elt.valueString && <div className='col01 label'>Value</div> }
 		  { elt.valueString && <div className='col02 value-text'>{elt.valueString}</div> }
 
-		  { elt.referenceRange && <div className='col01 label'>{elt.referenceRange[0].meaning.coding[0].display}</div> }
-		  { elt.referenceRange && <div className='col02 value-text'>
-			{ elt.referenceRange[0].low.value
-			  + (elt.referenceRange[0].low.unit && elt.referenceRange[0].low.unit !== elt.referenceRange[0].high.unit ? ' ' + elt.referenceRange[0].low.unit : '')
-			  + ' - '
-			  + elt.referenceRange[0].high.value
-			  + (elt.referenceRange[0].high.unit ? ' ' + elt.referenceRange[0].high.unit : '') } </div> }
+		  { elt.referenceRange && <div className='col01 label'>{refRangeLabel}</div> }
+		  { elt.referenceRange && <div className='col02 value-text'>{refRange}</div> }
 
 		  { isMultipleProviders && <div className='col01 label'>Provider</div> }
 		  { isMultipleProviders && <div className='col02 value-text'>{titleCase(elt.provider)}</div> }
@@ -544,8 +568,7 @@ export function renderMeds(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	 found.push({ provider: elt.provider,
-//		      display: elt.data.medicationCodeableConcept.coding[0].display,
+	 found.push({ provider: elt.provider, resourceId: elt.data.id,
 		      display: classFromCat(elt.category).primaryText(elt),
 		      quantity: elt.data.quantity,
 		      daysSupply: elt.data.daysSupply, dosageInstruction: elt.data.dosageInstruction, dispenseRequest: elt.data.dispenseRequest,
@@ -558,7 +581,7 @@ export function renderMeds(matchingData, appContext) {
    if (found.length > 0) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>Medication</div> }
 	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
@@ -597,7 +620,7 @@ export function renderMeds(matchingData, appContext) {
 
 	       { isValid(elt, e => e.dosageInstruction[0].timing.repeat.boundsPeriod.start) && <div className='col01 label'>Starting on</div> }
 	       { isValid(elt, e => e.dosageInstruction[0].timing.repeat.boundsPeriod.start) &&
-		   <div className='col02 value-text'>{elt.dosageInstruction[0].timing.repeat.boundsPeriod.start}</div> }
+		   <div className='col02 value-text'>{formatDisplayDate(elt.dosageInstruction[0].timing.repeat.boundsPeriod.start, true, true)}</div> }
 
 	       { isValid(elt, e => e.dispenseRequest.numberOfRepeatsAllowed) && <div className='col01 label'>Refills</div> }
 	       { isValid(elt, e => e.dispenseRequest.numberOfRepeatsAllowed) &&
@@ -618,8 +641,7 @@ export function renderSocialHistory(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	 found.push({ provider: elt.provider,
-//		      display: elt.data.code.coding[0].display,
+	 found.push({ provider: elt.provider, resourceId: elt.data.id,
 		      display: classFromCat(elt.category).primaryText(elt),
 		      status: elt.data.status, annotation: Annotation.info(elt),
 		      value: elt.data.valueCodeableConcept.coding[0].display });
@@ -631,7 +653,7 @@ export function renderSocialHistory(matchingData, appContext) {
    if (found.length > 0) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>Type</div> }
 	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
@@ -663,8 +685,7 @@ export function renderEncounters(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	 found.push({ provider: elt.provider,  status: elt.data.status,
-//		      display: tryWithDefault(elt, e => e.data.type[0].coding[0].display, tryWithDefault(elt, e => e.data.type[0].text, null)),
+	 found.push({ provider: elt.provider,  status: elt.data.status, resourceId: elt.data.id,
 		      display: classFromCat(elt.category).primaryText(elt), annotation: Annotation.info(elt),
 		      date: elt.itemDate, class: elt.data.class.code ? elt.data.class.code : elt.data.class, period: elt.data.period });
       } catch (e) {
@@ -675,7 +696,7 @@ export function renderEncounters(matchingData, appContext) {
    if (found.length > 0) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
 	    <div className='content-data'>	       
 	       { elt.display && <div className='col01 label'>Type</div> }
 	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
@@ -706,6 +727,37 @@ export function renderEncounters(matchingData, appContext) {
    }
 }
 
+export function renderUnimplemented(matchingData, appContext) {
+   let found = [];
+   for (const elt of matchingData) {
+      try {
+	  found.push({ provider: elt.provider,  category: elt.category, resourceId: elt.data.id });
+      } catch (e) {
+	 console.log('renderUnimplemented(): ' + e.message);
+      }
+   }
+
+   if (found.length > 0) {
+      let isMultipleProviders = appContext.providers.length > 1;
+      return found.map((elt, index) => 
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
+	    <div className='content-data'>	       
+	       <div className='col01 label'>{elt.category}</div>
+	       <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>Pending</HighlightDiv>
+
+	       { isMultipleProviders && <div className='col01 label'>Provider</div> }
+	       { isMultipleProviders && <div className='col02 value-text'>{titleCase(elt.provider)}</div> }
+	    </div>
+
+	    <div className='content-graph' />
+	    <div className='content-extras' />
+	 </div>
+      );
+   } else {
+      return null;
+   }
+}
+
 // Remove extraneous words from vital signs labels
 function trimVitalsLabels(label) {
    return label.replace(/blood/gi, '').replace(/pressure/gi, '');
@@ -722,11 +774,10 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
    for (const elt of matchingData) {
       try {
 	 // Don't display Vital Signs "container" resources with related elements
-//	 const displayStr = canonVitals(elt.data.code.coding[0].display);
 	 const displayStr = canonVitals(classFromCat(elt.category).primaryText(elt));
 
 	 if (displayStr !== 'Vital Signs') {
-	    found.push({ provider: elt.provider,
+	    found.push({ provider: elt.provider, resourceId: elt.data.id,
 			 date: elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
 			 display:displayStr, annotation: Annotation.info(elt),
 			 value:isValid(elt, e => e.data.valueQuantity) ? elt.data.valueQuantity.value : undefined,
@@ -789,7 +840,7 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
 
 	 return (
 	    <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}
-		 id={formatKeyDate(elt.date.toISOString()) + '-' + elt.display}>
+		 id={formatKeyDate(elt.date.toISOString()) + '-' + elt.display} data-res={resKey(elt)}>
 	       <div className='content-data'>
 		  { elt.display && <div className='col01 label'>Measure</div> }
 		  { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
@@ -799,13 +850,13 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
 
 	          { elt.component && <div className='col01 label'>{trimVitalsLabels(elt.component[0].code.coding[0].display)}</div> }
 	          { elt.component && <div className='col02 value-number'>
-			{ tryWithDefault(elt, e => formatDPs(e.component[0].valueQuantity.value, 1), '???') + ' '
-			  + tryWithDefault(elt, e => e.component[0].valueQuantity.unit, '???')}</div> }
+			{ tryWithDefault(elt, e => formatDPs(e.component[0].valueQuantity.value, 1), Const.unknownValue) + ' '
+			  + tryWithDefault(elt, e => e.component[0].valueQuantity.unit, Const.unknownValue)}</div> }
 
 	          { elt.component && <div className='col01 label'>{trimVitalsLabels(elt.component[1].code.coding[0].display)}</div> }
 	          { elt.component && <div className='col02 value-number'>
-			{ tryWithDefault(elt, e => formatDPs(e.component[1].valueQuantity.value,1), '???') + ' '
-			  + tryWithDefault(elt, e => e.component[1].valueQuantity.unit, '???')}</div> }
+			{ tryWithDefault(elt, e => formatDPs(e.component[1].valueQuantity.value,1), Const.unknownValue) + ' '
+			  + tryWithDefault(elt, e => e.component[1].valueQuantity.unit, Const.unknownValue)}</div> }
 
 	          { isMultipleProviders && <div className='col01 label'>Provider</div> }
 	          { isMultipleProviders && <div className='col02 span07 value-text'>{titleCase(elt.provider)}</div> }
@@ -843,7 +894,7 @@ function renderContainedResource(res, index, appContext) {
 	 break;
       default:
 	 payload.push(<div className='col01 label' key={index+'-1'}>{res.resourceType}</div>);
-	 payload.push(<div className='col02 value-text' key={index+'-2'}>????</div>);
+	 payload.push(<div className='col02 value-text' key={index+'-2'}>{Const.unknownValue}</div>);
 	 break;
    }
    return payload;
@@ -857,7 +908,7 @@ export function renderEOB(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	 found.push({ provider: elt.provider, totalCost: elt.data.totalCost, totalBenefit: elt.data.totalBenefit,
+	 found.push({ provider: elt.provider, totalCost: elt.data.totalCost, totalBenefit: elt.data.totalBenefit, resourceId: elt.data.id,
 		      claimType: elt.data.type, billablePeriod: elt.data.billablePeriod, status: elt.data.status,
 		      contained: elt.data.contained, careTeam: elt.data.careTeam, diagnosis: elt.data.diagnosis, annotation: Annotation.info(elt) });
       } catch (e) {
@@ -868,7 +919,7 @@ export function renderEOB(matchingData, appContext) {
    if (found.length > 0) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
 	    <div className='content-data'>
 	       <div className='col01 label'>Claim type</div>
 	       <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.claimType.coding[0].display}</HighlightDiv>
@@ -920,7 +971,7 @@ export function renderClaims(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	 found.push({ provider: elt.provider, total: elt.data.total, billablePeriod: elt.data.billablePeriod,
+	 found.push({ provider: elt.provider, total: elt.data.total, billablePeriod: elt.data.billablePeriod, resourceId: elt.data.id,
 		      status: elt.data.status, use: elt.data.use, diagnosis: elt.data.diagnosis, annotation: Annotation.info(elt) });
       } catch (e) {
 	 console.log('renderClaims(): ' + e.message);
@@ -930,14 +981,14 @@ export function renderClaims(matchingData, appContext) {
    if (found.length > 0) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
 	    <div className='content-data'>
 	       <div className='col01 label'>Period</div>
-	       <div className='col02 value-text primary'>
+	       <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>
 		  { formatDisplayDate(elt.billablePeriod.start, true, true) }
 		  &nbsp;&nbsp;&mdash;&nbsp;
 		  { formatDisplayDate(elt.billablePeriod.end, true, true) }
-	       </div>
+	       </HighlightDiv>
 
 	       <div className='col01 label'>Total</div>
 	       <div className='col02 value-number'>{elt.total.value.toFixed(2) + ' ' + elt.total.code}</div>
@@ -975,8 +1026,7 @@ export function renderExams(matchingData, appContext) {
    let found = [];
    for (const elt of matchingData) {
       try {
-	 found.push({ provider: elt.provider,
-//		      display: elt.data.code.coding[0].display,
+	 found.push({ provider: elt.provider, resourceId: elt.data.id,
 		      display: classFromCat(elt.category).primaryText(elt),
 		      status: elt.data.status, annotation: Annotation.info(elt),
 		      valueQuantity: elt.data.valueQuantity, valueConcept: elt.data.valueCodeableConcept });
@@ -988,7 +1038,7 @@ export function renderExams(matchingData, appContext) {
    if (found.length > 0) {
       let isMultipleProviders = appContext.providers.length > 1;
       return found.map((elt, index) => 
-	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index}>
+	 <div className={index < found.length-1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
 	    <div className='content-data'>
 	       { elt.display && <div className='col01 label'>Type</div> }
 	       { elt.display && <HighlightDiv className='col02 value-text primary' matchingResources={matchingData}>{elt.display}</HighlightDiv> }
@@ -1063,7 +1113,7 @@ export function resolveMedicationReference(elt, appContext) {
       let [refCat, refId] = elt.data.medicationReference.reference.split('/');
       let res = appContext.resources.transformed.find(res => res.provider === elt.provider && res.category === refCat && res.data.id === refId);
 
-      // Add the de-referenced data to the medicationReference element AND create the medicationCodeableConcept element
+      // Add the de-referenced data to the medicationReference element and create the medicationCodeableConcept element
       if (res) {
 	 elt.data.medicationReference = Object.assign(elt.data.medicationReference, res.data);
       } else {

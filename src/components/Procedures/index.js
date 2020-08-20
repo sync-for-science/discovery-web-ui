@@ -7,7 +7,7 @@ import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderDisplay, resolveReasonReference, primaryTextValue } from '../../fhirUtil.js';
-import { Const, stringCompare, shallowEqArray, formatContentHeader, tryWithDefault } from '../../util.js';
+import { Const, stringCompare, shallowEqArray, formatKey, formatContentHeader, tryWithDefault } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -97,10 +97,11 @@ export default class Procedures extends React.Component {
    // }
 
    render() {
+      let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
-	       <div className='procedures category-container'>
-		  { formatContentHeader(this.props.isEnabled, Procedures.catName, this.state.matchingData[0], this.context) }
+	       <div className='procedures category-container' id={formatKey(firstRes)}>
+		  { formatContentHeader(this.props.isEnabled, Procedures.catName, firstRes, this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Procedure', this.context) }
 		     { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }

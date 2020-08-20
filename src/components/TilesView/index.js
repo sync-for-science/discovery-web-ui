@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './TilesView.css';
-import { getStyle, stringCompare, tryWithDefault, numericPart, normalizeDates, inDateRange, uniqueBy, notEqJSON, classFromCat } from '../../util.js';
+import config from '../../config.js';
+import { Const, getStyle, stringCompare, tryWithDefault, numericPart, inDateRange, uniqueBy, notEqJSON, classFromCat } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 import { fhirKey, primaryTextValue } from '../../fhirUtil.js'
 
@@ -39,7 +40,6 @@ export default class TilesView extends React.Component {
       provsEnabled: PropTypes.object.isRequired,
       thumbLeftDate: PropTypes.string.isRequired,
       thumbRightDate: PropTypes.string.isRequired,
-      viewAccentCallback: PropTypes.func.isRequired,
       lastEvent: PropTypes.instanceOf(Event)
       // context, nextPrevFn added in StandardFilters
    }
@@ -58,28 +58,32 @@ export default class TilesView extends React.Component {
    }
 
    componentDidMount() {
-      this.setState({ numVisibleCols: this.numVisibleCols() });
       window.addEventListener('resize', this.onResize);
 
       if (this.context.savedSelectedTiles) {
 	 this.setState({ selectedTiles: this.context.savedSelectedTiles });
-	 this.props.viewAccentCallback(this.viewAccentDatesFromSelected(this.context.savedSelectedTiles));
+	 this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(this.context.savedSelectedTiles) });
       }
 
       if (this.context.lastTileSelected) {
 	 let last = this.context.lastTileSelected;
 	 this.setState({ lastTileSelected: last });
-	 this.context.updateGlobalContext({ lastHighlightedResources: this.matchingTileResources(last.catName, last.display) });
+
+	 let lastResources = this.matchingTileResources(last);
+	 this.context.updateGlobalContext({ lastHighlightedResources: lastResources,
+					    viewLastAccentDates: this.uniqueDatesFromResources(lastResources) });
       }
 
       this.setState({ onlyMultisource: this.context.onlyMultisource },
-		    this.setState({ uniqueStruct: this.buildUniqueStruct() }));
+		    () => this.setState({ uniqueStruct: this.buildUniqueStruct() },
+					() => this.setState({ numVisibleCols: this.numVisibleCols() }) ));
    }
 
    componentWillUnmount() {
-      this.props.viewAccentCallback([]);	// Clear accent dots
       this.context.updateGlobalContext({ savedSelectedTiles: this.state.selectedTiles,
 				         lastTileSelected: this.state.lastTileSelected,		// Save selected tiles, last tile selected
+					 viewAccentDates: [],
+					 viewLastAccentDates: [],
 					 highlightedResources: [],
 					 lastHighlightedResources: [] });			// Clear highlights
 
@@ -87,10 +91,11 @@ export default class TilesView extends React.Component {
    }
 
    componentDidUpdate(prevProps, prevState) {
+      debugger;
       // TODO: only on explicit changes?
       if (notEqJSON(prevProps, this.props) || prevState.onlyMultisource !== this.state.onlyMultisource) {
 	 this.setState({ uniqueStruct: this.buildUniqueStruct() },
-		       this.setState({ numVisibleCols: this.numVisibleCols() }));
+		       () => this.setState({ firstTileColNum: 0, numVisibleCols: this.numVisibleCols() }));
       }
 
       // TODO: only on explicit changes?
@@ -101,14 +106,28 @@ export default class TilesView extends React.Component {
 	    this.setState({ topBound: numericPart(getStyle(container, 'margin-top')) + header.clientHeight });
 	 }
       }
+
+      // Kluge: get saved tile state if not set in mount (and then clear)
+      if (this.context.savedSelectedTiles && Object.keys(this.context.savedSelectedTiles).length > 0 &&
+	  this.state.selectedTiles && Object.keys(this.state.selectedTiles).length === 0) {
+	 this.setState({ selectedTiles: this.context.savedSelectedTiles });
+	 this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(this.context.savedSelectedTiles),
+					    savedSelectedTiles: {} });
+      }
+
+      if (this.context.lastTileSelected && !this.state.lastTileSelected) {
+	 let last = this.context.lastTileSelected;
+	 this.setState({ lastTileSelected: last });
+
+	 let lastResources = this.matchingTileResources(last);
+	 this.context.updateGlobalContext({ lastHighlightedResources: lastResources,
+					    viewLastAccentDates: this.uniqueDatesFromResources(lastResources),
+					    lastTileSelected: null });
+      }
    }
 
    onResize = () => {
       this.setState({ numVisibleCols: this.numVisibleCols() });
-   }
-
-   onDotClick = (context, date, dotType) => {
-
    }
 
    contentPanelBottomBound() {
@@ -131,8 +150,8 @@ export default class TilesView extends React.Component {
       // Reset any prior size adjustment
       container.style = 'height:""';
 
-      if (container.clientHeight > tilesView.clientHeight/2) {
-	 container.style = `height:${tilesView.clientHeight/2}px;`;
+      if (container.clientHeight > tilesView.clientHeight/1.6) {
+	 container.style = `height:${tilesView.clientHeight/1.6}px;`;
       }
 
       return container.clientHeight + 25;	// TODO: correct margin sizes
@@ -150,12 +169,12 @@ export default class TilesView extends React.Component {
       let codeObj = classFromCat(res.category).code(res);
       let code = tryWithDefault(codeObj, codeObj => codeObj.coding[0].code, tryWithDefault(codeObj, codeObj => codeObj.code, '????'));
       let display = primaryTextValue(codeObj);
-      return { code, display };
+      return { code, display: display === Const.unknownValue ? 'All ' + res.category : display };
    }
 
    // Categories we DON'T want to collect	[FROM CompareView]
    get noCollectCategories() {
-       return ['Patient', 'Benefits', 'Claims', Unimplemented.catName];
+       return ['Patient'];
    }
 
    //
@@ -166,6 +185,7 @@ export default class TilesView extends React.Component {
    //	cat1: [
    //      {
    //         display: 'disp1',
+   //         trueCategory: 'category',
    //         codes: ['code1', 'code2', ...],
    //         provs: [
    //            {
@@ -184,11 +204,13 @@ export default class TilesView extends React.Component {
    // }    
    //
    collectUnique(struct, cat, prov) {
-      let resources = this.props.resources.pathItem(`[*category=${cat}][*provider=${prov}]`);
+      let resources = cat === Unimplemented.catName ? this.props.resources.transformed.filter(res => Unimplemented.unimplementedCats.includes(res.category) &&
+												     res.provider === prov)
+						    : this.props.resources.pathItem(`[*category=${cat}][*provider=${prov}]`);
       for (let res of resources) {
 	 if (this.noCollectCategories.includes(res.category) ||
-	    !inDateRange(res.itemDate, this.props.thumbLeftDate, this.props.thumbRightDate)) {
-	    break;
+	     !inDateRange(res.itemDate, this.props.thumbLeftDate, this.props.thumbRightDate)) {
+	    continue;	// Ignore this resource
 	 }
 
 	 if (!struct.hasOwnProperty(cat)) {
@@ -198,7 +220,8 @@ export default class TilesView extends React.Component {
 	 }
 
 	 let thisCat = struct[cat];
-	 let coding = this.getCoding(res);
+	 let coding = cat === Unimplemented.catName ? { code: res.category, display: 'All ' + res.category }
+						    : this.getCoding(res);
 	 let thisDisplay = thisCat.find(elt => elt.display === coding.display);
 	 let date = res.itemDate instanceof Date ? res.itemDate : new Date(res.itemDate);
 
@@ -224,7 +247,7 @@ export default class TilesView extends React.Component {
 	    }
 	 } else {
 	    // Add new display value
-	    thisCat.push({ display: coding.display, codes: [coding.code],
+	    thisCat.push({ display: coding.display, trueCategory: res.category, codes: [coding.code],
 			   provs: [{ provName: prov, count: 1, minDate: date, maxDate: date, dates: [{x:date, y:0}] }] });
 //	    console.log('4 ' + cat + ' ' + coding.code + ' ' + coding.display + ': ' + prov + ' 1');
 	 }
@@ -259,23 +282,40 @@ export default class TilesView extends React.Component {
    }
 
    numVisibleCols() {
-      const numCols = Object.keys(this.state.uniqueStruct).length;
-      const colWidth = 185;	// NOTE: DOM isn't fully built when we need this. Value MUST match tiles-view-column-container width (including margins)
       const container = document.querySelector('.tiles-view-container-inner');
-      return container ? Math.min(numCols, Math.trunc(container.clientWidth / colWidth)) : 0;
+      if (!container) {
+	 return 0;
+
+      } else {
+	 const minFractionalColWidth = 15;
+	 const numCols = Object.keys(this.state.uniqueStruct).length;
+	 const colWidth = 175;					// Values MUST match tiles-view-column-container width and margins (px)
+	 const colRightMargin = 10;
+	 const totalColWidth = colWidth + colRightMargin;	// NOTE: DOM isn't fully built when we need this
+	 const containerWidth = container.clientWidth + colRightMargin;	// Browser doesn't "count" last margin
+	 const visibleCols = containerWidth / totalColWidth;
+	 const wholeCols = Math.trunc(visibleCols);
+	 const fractionalCol = visibleCols - wholeCols;
+	 const fractionalColWidth = fractionalCol * totalColWidth;	// px
+//	 console.log('#### containerWidth: ' + containerWidth);
+//	 console.log('#### visibleCols:    ' + visibleCols.toFixed(3));
+//	 console.log('#### fracColWidth:   ' + fractionalColWidth.toFixed(3));
+
+	 return Math.min(numCols, fractionalColWidth < minFractionalColWidth ? wholeCols : containerWidth / totalColWidth);
+      }
    }
 
    hyphenate(name) {
       return name.toLowerCase().replace(/ /g, '-');
    }
 
-   tileId(catName, display) {
-      return this.hyphenate(catName) + ' ' + this.hyphenate(display);
+   tileId(catName, display, trueCategory) {
+      return this.hyphenate(catName) + ' ' + this.hyphenate(display) + ' ' + trueCategory;
    }
 
    parseTileId(id) {
       let idParts = id.split(' ');
-      return { catName: idParts[0], display: idParts[1] };
+      return { catName: idParts[0], display: idParts[1], trueCategory: idParts.slice(2).join(' ') };
    }
 
    isTileSelected(catName, display) {
@@ -290,9 +330,15 @@ export default class TilesView extends React.Component {
       return this.state.lastTileSelected && (this.state.lastTileSelected.catName === catName) && (this.state.lastTileSelected.display === display);
    }
 
-   matchingTileResources(catName, display) {
-      return this.props.resources.transformed.filter(res => this.hyphenate(res.category) === catName &&
-							    this.hyphenate(this.getCoding(res).display) === display);
+   matchingTileResources(tileId) {
+      let res = this.props.resources.transformed.filter(res => this.hyphenate(res.category) === tileId.catName &&
+							       this.hyphenate(this.getCoding(res).display) === tileId.display);
+      if (res.length === 0) {
+	 // Kluge for 'other'
+	 res = this.props.resources.transformed.filter(res => res.category === tileId.trueCategory);
+      }
+
+      return res;
    }
 
    // Get all resources from selectedUniqueItems
@@ -311,37 +357,41 @@ export default class TilesView extends React.Component {
       let newSelectedTiles = Object.assign({}, this.state.selectedTiles);	// copy selected tiles obj
       let tileId = this.parseTileId(e.target.id);
       let matchingTileResources = null;
+      let clearedPrevSelected = false;
 
       if (this.isTileSelected(tileId.catName, tileId.display)) {
-	 // Clear selection of the clicked tile
-	 delete newSelectedTiles[tileId.catName][tileId.display];
-	 // Clear lastTileSelected if matches
-	 if (this.state.lastTileSelected && this.state.lastTileSelected.catName === tileId.catName && this.state.lastTileSelected.display === tileId.display) {
-	    this.context.updateGlobalContext({ highlightedResources: [],
-					       lastHighlightedResources: [] });
-	    this.setState({ lastTileSelected: null });
+	 if (Object.keys(newSelectedTiles[tileId.catName]).length === 1) {
+	    // Delete category
+	    delete newSelectedTiles[tileId.catName];
+	 } else {
+	    // Clear selection of the just-clicked tile
+	    delete newSelectedTiles[tileId.catName][tileId.display];
 	 }
+	 clearedPrevSelected = true;
+	 this.context.updateGlobalContext({ highlightedResources: [],		// Used by HighlightDiv
+					    lastHighlightedResources: [] });	//
+	 this.setState({ lastTileSelected: null });
 
       } else {
 	 // Select the clicked tile
 	 if (!newSelectedTiles[tileId.catName]) {
 	    newSelectedTiles[tileId.catName] = {};
 	 }
-	 matchingTileResources = this.matchingTileResources(tileId.catName, tileId.display);
+	 matchingTileResources = this.matchingTileResources(tileId);
 	 newSelectedTiles[tileId.catName][tileId.display] = matchingTileResources;
-	 this.context.updateGlobalContext({ highlightedResources: this.allSelectedTileResources(newSelectedTiles),
-					    lastHighlightedResources: matchingTileResources });
-	 let newDate = matchingTileResources[0].itemDate;
-	 let newContext = Object.assign(this.state.context, { date: newDate,
-							      position: normalizeDates([newDate], this.state.context.minDate, this.state.context.maxDate)[0],
-							      dotType: 'active' });
+	 this.context.updateGlobalContext({ highlightedResources: this.allSelectedTileResources(newSelectedTiles),	// Used by HighlightDiv
+					    lastHighlightedResources: matchingTileResources });				//
+//	 let newDate = matchingTileResources[0].itemDate;
+//	 let newContext = Object.assign(this.state.context, { date: newDate,
+//							      position: normalizeDates([newDate], this.state.context.minDate, this.state.context.maxDate)[0],
+//							      dotType: 'active' });
 	 this.setState({ lastTileSelected: tileId,
-			 context: newContext
+//			 context: newContext
 		       });
       }
 
       // If all/no tiles are now selected for this category, clear lastSavedSelectedTiles for this category
-      let selectedTilesForCatCount = Object.keys(newSelectedTiles[tileId.catName]).length;
+      let selectedTilesForCatCount = newSelectedTiles[tileId.catName] ? Object.keys(newSelectedTiles[tileId.catName]).length : 0;
       // TODO: following is inefficient -- consider converting uniqueStruct to use "hyphenated" category names
       let tilesForCatCount = this.state.uniqueStruct[Object.keys(this.state.uniqueStruct).find(key => this.hyphenate(key) === tileId.catName)].length;
       if (this.context.lastSavedSelectedTiles && (selectedTilesForCatCount === 0 || selectedTilesForCatCount === tilesForCatCount)) {
@@ -351,8 +401,10 @@ export default class TilesView extends React.Component {
       }
 
       this.setState({ selectedTiles: newSelectedTiles });
-      this.props.viewAccentCallback(this.viewAccentDatesFromSelected(newSelectedTiles));
+      this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedTiles),
+					 viewLastAccentDates: clearedPrevSelected ? [] : this.uniqueDatesFromResources(this.matchingTileResources(tileId)) });
 
+      // Scroll to the latest resource of the clicked tile
       if (matchingTileResources) {
 	 let latest = matchingTileResources.reduce((latest, elt) => new Date(elt.itemDate) > new Date(latest.itemDate) ? elt : latest,
 						   matchingTileResources[0]);
@@ -369,12 +421,21 @@ export default class TilesView extends React.Component {
       }
    }
 
+   // Get unique dates from resources
+   uniqueDatesFromResources(resArray) {
+      let dates = resArray.reduce((acc, res) => { acc.push(res.itemDate); return acc; }, []);
+      return uniqueBy(dates, elt => elt);
+   }
+
    // Get unique dates from selectedTiles
+   // TODO: delete & replace calls with uniqueDatesFromResources(allSelectedTileResources(selectedTiles))
    viewAccentDatesFromSelected(selectedTiles) {
       let dateArray = [];
-      for (let catName of Object.keys(selectedTiles)) {
-	 for (let displayStr of Object.keys(selectedTiles[catName])) {
-	    dateArray = dateArray.concat(selectedTiles[catName][displayStr].reduce((acc, res) => { acc.push(res.itemDate); return acc; }, []));
+      if (selectedTiles) {
+	 for (let catName of Object.keys(selectedTiles)) {
+	    for (let displayStr of Object.keys(selectedTiles[catName])) {
+	       dateArray = dateArray.concat(selectedTiles[catName][displayStr].reduce((acc, res) => { acc.push(res.itemDate); return acc; }, []));
+	    }
 	 }
       }
 
@@ -393,7 +454,7 @@ export default class TilesView extends React.Component {
 	 if (this.context.lastSavedSelectedTiles && this.context.lastSavedSelectedTiles[hCatName]) {
 	    // --> prior saved partial
 	    this.setState({ selectedTiles: this.context.lastSavedSelectedTiles });
-	    this.props.viewAccentCallback(this.viewAccentDatesFromSelected(this.context.lastSavedSelectedTiles));
+	    this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(this.context.lastSavedSelectedTiles) });
 
 	 } else {
 	    // --> all selected
@@ -403,10 +464,10 @@ export default class TilesView extends React.Component {
 	    }
 	    for (let tile1 of this.state.uniqueStruct[catName]) {
 	       let hDisplay1 = this.hyphenate(tile1.display);
-	       newSelectedTiles[hCatName][hDisplay1] = this.matchingTileResources(hCatName, hDisplay1);
+	       newSelectedTiles[hCatName][hDisplay1] = this.matchingTileResources({ catName:hCatName, display:hDisplay1, trueCategory:tile1.trueCategory });
 	    }
 	    this.setState({ selectedTiles: newSelectedTiles });
-	    this.props.viewAccentCallback(this.viewAccentDatesFromSelected(newSelectedTiles));
+	    this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedTiles) });
 	 }
 
       } else if (selectedCount < tilesForCatCount) {
@@ -418,10 +479,11 @@ export default class TilesView extends React.Component {
 	 }
 	 for (let tile2 of this.state.uniqueStruct[catName]) {
 	    let hDisplay2 = this.hyphenate(tile2.display);
-	    newSelectedTiles[hCatName][hDisplay2] = this.matchingTileResources(hCatName, hDisplay2);
+	    newSelectedTiles[hCatName][hDisplay2] = this.matchingTileResources({ catName:hCatName, display:hDisplay2, trueCategory:tile2.trueCategory });
 	 }
 	 this.setState({ selectedTiles: newSelectedTiles });
-	 this.props.viewAccentCallback(this.viewAccentDatesFromSelected(newSelectedTiles));
+	 this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedTiles),
+					    viewLastAccentDates: [] });
 	 // Clear lastTileSelected if matches
 	 if (this.state.lastTileSelected && this.state.lastTileSelected.catName === hCatName) {
 	    this.context.updateGlobalContext({ highlightedResources: [] });
@@ -433,7 +495,8 @@ export default class TilesView extends React.Component {
 	 newSelectedTiles = Object.assign({}, this.state.selectedTiles);	// copy selected tiles obj
 	 delete newSelectedTiles[hCatName]
 	 this.setState({ selectedTiles: newSelectedTiles });
-	 this.props.viewAccentCallback(this.viewAccentDatesFromSelected(newSelectedTiles));
+	 this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedTiles),
+					    viewLastAccentDates: [] });
 	 // Clear lastTileSelected if matches
 	 if (this.state.lastTileSelected && this.state.lastTileSelected.catName === hCatName) {
 	    this.context.updateGlobalContext({ highlightedResources: [] });
@@ -462,10 +525,29 @@ export default class TilesView extends React.Component {
       return 'tiles-view-column-header-button-all';
    }
 
+   noneEnabled(obj) {
+      for (let propName of Object.keys(obj)) {
+	 if (obj[propName]) {
+	    return false;
+	 }
+      }
+      return true;
+   }
+
+   get noResultDisplay() {
+      if (this.noneEnabled(this.props.catsEnabled)) {
+	 return 'No Record type is selected';
+      } else if (this.noneEnabled(this.props.provsEnabled)) {
+	 return 'No Provider is selected';
+      } else {
+	 return this.props.noResultDisplay ? this.props.noResultDisplay : 'No data found for the selected Records, Providers, and Time period';
+      }
+   }
+
    renderTiles(catName) {
       let tiles = [];
       for (let catInst of this.state.uniqueStruct[catName].sort((a, b) => stringCompare(a.display, b.display))) {
-	 let tileIdStr = this.tileId(catName, catInst.display);
+	 let tileIdStr = this.tileId(catName, catInst.display, catInst.trueCategory);
 	 let tileId = this.parseTileId(tileIdStr);
 	 let count = catInst.provs.reduce((accum, prov) => accum + prov.count, 0);
 			      
@@ -481,8 +563,8 @@ export default class TilesView extends React.Component {
 
    renderTileColumns() {
       let cols = [];
-      // TODO: should be able to get this.state.numVisibleCols instead of calc.... (state update issue)
-      for (let catName of Object.keys(this.state.uniqueStruct).slice(this.state.firstTileColNum, this.state.firstTileColNum + this.numVisibleCols())) {
+      for (let catName of Object.keys(this.state.uniqueStruct).slice(this.state.firstTileColNum,
+								     this.state.firstTileColNum + Math.ceil(this.state.numVisibleCols))) {
 	 cols.push(
 	    <div className={this.hyphenate(catName) + ' tiles-view-column-container'} key={catName}>
 	       <div className='tiles-view-column-header'>
@@ -496,6 +578,14 @@ export default class TilesView extends React.Component {
 	 );
       }
 
+      if (cols.length === 0) {
+	 cols.push(
+	    <div className='tiles-view-container-inner-empty' key='1'>
+	       { this.noResultDisplay }
+	    </div>
+	 );
+      }
+
       return cols;
    }
 
@@ -504,7 +594,11 @@ export default class TilesView extends React.Component {
       let resArray = this.props.resources.transformed.filter(elt => elt.category === 'Patient');
       for (let catName of Object.keys(this.state.selectedTiles)) {
 	 for (let displayStr of Object.keys(this.state.selectedTiles[catName])) {
-	    resArray = resArray.concat(this.state.selectedTiles[catName][displayStr]);
+	    if (!this.state.onlyMultisource ||
+		(this.state.onlyMultisource &&		// more than one provider?
+		 this.state.selectedTiles[catName][displayStr].reduce((provs, res) => provs.add(res.provider), new Set()).size > 1)) {
+	       resArray = resArray.concat(this.state.selectedTiles[catName][displayStr]);
+	    }
 	 }
       }
 
@@ -515,8 +609,8 @@ export default class TilesView extends React.Component {
       if (dir === 'left') {
 	 this.setState({ firstTileColNum: Math.max(0, this.state.firstTileColNum - 1) });
       } else {
-	  let maxFirstTileColNum = Object.keys(this.state.uniqueStruct).length - this.state.numVisibleCols;
-	  this.setState({ firstTileColNum: Math.min(maxFirstTileColNum, this.state.firstTileColNum + 1) });
+	 let maxFirstTileColNum = Object.keys(this.state.uniqueStruct).length - Math.trunc(this.state.numVisibleCols);
+	 this.setState({ firstTileColNum: Math.min(maxFirstTileColNum, this.state.firstTileColNum + 1) });
       }
    }
 
@@ -526,30 +620,45 @@ export default class TilesView extends React.Component {
       this.context.updateGlobalContext({ onlyMultisource: event.target.checked });
    }
 
+   onClearClick = () => {
+      this.setState({ selectedTiles: {},
+		      lastTileSelected: null });
+      this.context.updateGlobalContext({ viewAccentDates: [],
+					 viewLastAccentDates: [],
+				         highlightedResources: [] });
+   }
+
    render() {
-      let maxFirstTileColNum = Object.keys(this.state.uniqueStruct).length - this.state.numVisibleCols;
+      let maxFirstTileColNum = Object.keys(this.state.uniqueStruct).length - Math.trunc(this.state.numVisibleCols);
+      let tileSelected = Object.keys(this.state.selectedTiles).length > 0;
+      console.log('numVis: ' + this.state.numVisibleCols + ' maxFirst: ' + maxFirstTileColNum + ' first: ' + this.state.firstTileColNum);
       return (
 	 <div className='tiles-view'>  
 	    <div className='tiles-view-header'>
-	       <label className='tiles-view-multisource-label'>
-		  <input className='tiles-view-multisource-check' type='checkbox' checked={this.state.onlyMultisource} onChange={this.onlyMultisourceChange}/>
-		  Show only multi-sourced
-	       </label>
+	       <div className={tileSelected ? 'tiles-view-header-button-clear-selected' : 'tiles-view-header-button-clear'}
+		    onClick={this.onClearClick}>Clear</div>
+	       { config.enableReportedMultProvs && <label className='tiles-view-multisource-label'>
+		    <input className='tiles-view-multisource-check' type='checkbox' checked={this.state.onlyMultisource} onChange={this.onlyMultisourceChange}/>
+		    Reported by multiple providers
+		 </label> }
 	    </div>
 	    <div className='tiles-view-container'>
-	       <div className='tiles-view-nav-left'>
+	       { Object.keys(this.state.uniqueStruct).length > 0 && <div className='tiles-view-nav-left'>
 		  <button className={this.state.firstTileColNum > 0 ? 'tiles-view-nav-left-button-on' : 'tiles-view-nav-left-button-off'}
-			  onClick={() => this.onNavClick('left')}/>
-	       </div>
+			  onClick={() => this.onNavClick('left')} />
+		  {/* this.state.firstTileColNum > 0 && <button className='tiles-view-nav-left-button-on' onClick={() => this.onNavClick('left')}/> */}
+	       </div> }
 	       <div className='tiles-view-container-inner'>
 		  { this.renderTileColumns() }
 	       </div>
-	       <div className='tiles-view-nav-right'>
+	       { Object.keys(this.state.uniqueStruct).length > 0 && <div className='tiles-view-nav-right'>
 		  <button className={this.state.firstTileColNum < maxFirstTileColNum ? 'tiles-view-nav-right-button-on' : 'tiles-view-nav-right-button-off'}
-			  onClick={() => this.onNavClick('right')}/>
-	       </div>
+			  onClick={() => this.onNavClick('right')} />
+		  {/* this.state.firstTileColNum < maxFirstTileColNum && <button className='tiles-view-nav-right-button-on'
+										 onClick={() => this.onNavClick('right')}/> */}
+	       </div> }
 	    </div>
-	    <ContentPanel open={true} catsEnabled={this.props.catsEnabled} provsEnabled={this.props.provsEnabled} dotClickFn={this.onDotClick}
+	    <ContentPanel open={true} catsEnabled={this.props.catsEnabled} provsEnabled={this.props.provsEnabled}
 			  containerClassName='content-panel-tiles-view'
 			  topBoundFn={() => this.state.topBound} bottomBoundFn={this.contentPanelBottomBound}
 			  initialPositionYFn={this.initialPositionY.bind(this)} onResizeFn={this.onContentPanelResize.bind(this)}
@@ -557,7 +666,7 @@ export default class TilesView extends React.Component {
 			  thumbLeftDate={this.props.thumbLeftDate} thumbRightDate={this.props.thumbRightDate}
 			  resources={this.selectedTileResources()} totalResCount={this.props.totalResCount}
 			  viewName='Tiles' viewIconClass='tiles-view-icon' tileSort={true}
-			  noResultDisplay={Object.keys(this.state.selectedTiles).length > 0 ? 'No matching data' : 'Please select a Card above'} />
+			  noResultDisplay={Object.keys(this.state.uniqueStruct).length > 0 ? 'No Card is selected' : 'No data to display'} />
 	 </div>
       );
    }

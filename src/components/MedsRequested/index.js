@@ -7,7 +7,7 @@ import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderMeds, resolveReasonReference, resolveMedicationReference, primaryTextValue } from '../../fhirUtil.js';
-import { Const, stringCompare, shallowEqArray, formatContentHeader, tryWithDefault } from '../../util.js';
+import { Const, stringCompare, shallowEqArray, formatKey, formatContentHeader, tryWithDefault } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -48,13 +48,24 @@ export default class MedsRequested extends React.Component {
 
 //   AxiosCancelSource = axios.CancelToken.source();
 
+   tweakMedsRequested(elt) {
+      if (elt.data.medicationReference.display) {
+	 // Mark medicationReference and create minimal medicationCodeableConcept element
+	 elt.data.medicationReference = Object.assign(elt.data.medicationReference, { code: Const.unknownValue });
+	 elt.data.medicationCodeableConcept = { coding: [{ code: Const.unknownValue, display: elt.data.medicationReference.display }] };
+	 return true;
+      } else {
+	 return false;
+      }
+   }
+
    setMatchingData() {
       let match = FhirTransform.getPathItem(this.props.data, `[*category=${MedsRequested.catName}]`);
       let withCode = [];
 
       if (match.length > 0) {
   	 for (let elt of match) {
-   	    if (elt.data.medicationCodeableConcept) {
+	    if (elt.data.medicationCodeableConcept || this.tweakMedsRequested(elt)) {
    	       withCode.push(elt);
    	    } else if (resolveMedicationReference(elt, this.context)) {
 	       this.setState({ matchingData: this.state.matchingData ? this.state.matchingData.concat([elt]).sort(this.sortMeds) : [ elt ] });
@@ -137,10 +148,11 @@ export default class MedsRequested extends React.Component {
    // }
 
    render() {
+      let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
-	       <div className='meds-requested category-container'>
-		  { formatContentHeader(this.props.isEnabled, MedsRequested.catName, this.state.matchingData[0], this.context) }
+	       <div className='meds-requested category-container' id={formatKey(firstRes)}>
+		  { formatContentHeader(this.props.isEnabled, MedsRequested.catName, firstRes, this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderMeds(this.state.matchingData, this.context) }
 	             { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }

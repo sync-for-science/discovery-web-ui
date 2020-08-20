@@ -34,7 +34,7 @@ export default class DiscoveryModal extends React.Component {
 	       </div>	
 	       <div className="logo-modal-body-row">
 		  <div className="logo-modal-body-property">Version:</div>
-		  <div className="logo-modal-body-value">0.4 Alpha </div>
+		  <div className="logo-modal-body-value">Alpha 0.8 (User Test) </div>
 	       </div>
 	       <div className="logo-modal-body-row">
 		  <div className="logo-modal-body-property">Project Lead:</div>

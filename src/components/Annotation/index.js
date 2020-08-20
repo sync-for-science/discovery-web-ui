@@ -132,7 +132,7 @@ export default class Annotation extends React.Component {
       let isText = annotation.annotationHistory ? this.cleanText(annotation.annotationHistory[annotation.annotationHistory.length - 1].annotationText) : null;
       return <div className='annotation-container'>
 		<div className='annotation-buttons-container'>
-		   { !this.state.inEdit && <button className='annotation-button' onClick={this.editAnnotation}>edit</button> }
+		   { !this.state.inEdit && <button className='annotation-button' onClick={this.editAnnotation}>{isText ? 'Edit My Note' : 'Add Note'}</button> }
 		   {  this.state.inEdit && <button className={this.state.changed ? 'annotation-button' : 'annotation-button-disabled'}
 						   onClick={this.saveAnnotation}>save</button> }
 		   {  this.state.inEdit && <button className='annotation-button' onClick={this.cancelEditAnnotation}>cancel</button> }

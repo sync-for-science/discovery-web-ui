@@ -33,11 +33,10 @@
 .col02 {
 	grid-column: 2;
    width: 18.750rem;
- /*  max-width: 18.750rem; */
-/*   min-width: 18.750rem; */
    min-width: 14.000rem;
    height: 20px;
-   padding: 0 0 0 0;
+   max-height: auto;
+   padding: 0;
 }
 
 /* Content Panel Styles */
@@ -61,7 +60,7 @@
 	font-size: 0.625rem;
 	text-align: left;
    text-transform: uppercase;
-   height: 1.250rem;
+   height: auto;
 	color: var(--label-data);
    line-height: 1.250rem;
 	margin: 0;

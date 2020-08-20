@@ -16,6 +16,7 @@ import MedsDispensed from './components/MedsDispensed';
 import MedsRequested from './components/MedsRequested';
 import MedsStatement from './components/MedsStatement';
 import Procedures from './components/Procedures';
+import ProcedureRequests from './components/ProcedureRequests';
 import SocialHistory from './components/SocialHistory';
 import VitalSigns from './components/VitalSigns';
 import Unimplemented from './components/Unimplemented';
@@ -28,6 +29,8 @@ export let Const = {
    trimExpected: 'expected',
    trimMax: 'max'
 }
+
+const noDate = '<no date>';
 
 export function getStyle(oElm, css3Prop){
       try {
@@ -125,6 +128,19 @@ export function formatKeyDate(date) {
    }
 }
 
+// XXXX
+//export function formatKey(date, category, provider) {
+//   return `${formatKeyDate(date)}_${category}_${provider}`;
+//}
+
+//export function formatKey(res) {
+//   return `${formatKeyDate(res.itemDate)}_${res.category}_${res.provider}_${res.data.id}`;
+//}
+
+export function formatKey(res) {
+   return `${formatKeyDate(res.itemDate)}_${res.category}`;
+}
+
 export function formatAge(birthDate, ageDate, prefix) {
    let DAY_MS = 24 * 60 * 60 * 1000;
    let MAX_ONLY_DAYS = 21;     // Max age to show just as "days"
@@ -165,16 +181,18 @@ export function formatAge(birthDate, ageDate, prefix) {
 
 // TODO: cleanup when determine not to show disabled header, eliminate header highlight
 export function formatContentHeader(isEnabled, category, res, appContext) {
-   let dateOnly = formatKeyDate(res.itemDate);
-   let dateWithTime = res.itemDate ? formatDisplayDate(res.itemDate, true, false) : '<no date>';
+//   let dateOnly = formatKeyDate(res.itemDate);
+   let dateWithTime = res.itemDate ? formatDisplayDate(res.itemDate, true, false) : noDate;
    let dob = appContext.resources.pathItem('[category=Patient].data.birthDate');
    let age = formatAge(dob, res.itemDate, 'age ');
 //   let highlight = appContext.highlightedResources && 
 //		   appContext.highlightedResources.some(elt => elt.category === category  && elt.itemDate === res.itemDate);
    let highlight = false;
 
+//      <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} id={dateOnly} data-fhir={fhirKey(res)}>
+
    return !isEnabled ? null : (
-      <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} id={dateOnly} data-fhir={fhirKey(res)}>
+      <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} data-fhir={fhirKey(res)}>
 	 <div className={isEnabled ? (highlight ? 'content-header-highlight' : 'content-header') : 'content-header-disabled'}>{category}</div>
 	 <div className={isEnabled ? 'content-header-date' : 'content-header-date-disabled'}>{dateWithTime}</div>
 	 { appContext.trimLevel === Const.trimNone && age &&
@@ -486,6 +504,8 @@ export function classFromCat(cat) {
 	  return MedsStatement;
        case Procedures.catName:
 	  return Procedures;
+       case ProcedureRequests.catName:
+	  return ProcedureRequests;
        case SocialHistory.catName:
 	  return SocialHistory;
        case VitalSigns.catName:
@@ -510,4 +530,18 @@ export function groupBy(arr, keyFn) {
       }
    }
    return groups;
+}
+
+//
+// Return the date portion of an ISO date string
+//
+export function dateOnly(date) {
+   return date ? date.split('T')[0] : noDate;
+}
+
+//
+// Deebug console print control function
+//
+export function debPrint(tag) {
+   return window.debPrint && window.debPrint[tag];
 }

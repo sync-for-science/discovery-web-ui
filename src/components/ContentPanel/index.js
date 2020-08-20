@@ -4,9 +4,9 @@ import Draggable from 'react-draggable';
 
 import './ContentPanel.css';
 import config from '../../config.js';
-import { Const, stringCompare, formatKeyDate, formatDPs, notEqJSON, logDiffs, classFromCat, groupBy } from '../../util.js';
-//import { formatPatientName } from '../../fhirUtil.js';
+import { Const, stringCompare, formatKey, formatDPs, inDateRange, notEqJSON, logDiffs, classFromCat, groupBy, dateOnly } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
+import { resKey } from '../../fhirUtil.js';
 
 import Allergies from '../Allergies';
 import Benefits from '../Benefits';
@@ -22,6 +22,7 @@ import MedsDispensed from '../MedsDispensed';
 import MedsRequested from '../MedsRequested';
 import MedsStatement from '../MedsStatement';
 import Procedures from '../Procedures';
+import ProcedureRequests from '../ProcedureRequests';
 import SocialHistory from '../SocialHistory';
 import VitalSigns from '../VitalSigns';
 import Unimplemented from '../Unimplemented';
@@ -31,6 +32,7 @@ import ListView from './ListView';
 import DiscoveryContext from '../DiscoveryContext';
 
 const SET_PANEL_HEIGHT_DELAY = 250;	// msec
+const SCROLL_TO_RES_DELAY = 25;		// msec
 
 //
 // Render the content panel for ReportView, FinancialView, TilesView
@@ -39,6 +41,7 @@ const SET_PANEL_HEIGHT_DELAY = 250;	// msec
 //       supports variable height elements, e.g. (when finished):
 //       https://github.com/bvaughn/react-window/issues/6
 //
+
 export default class ContentPanel extends React.Component {
 
    static myName = 'ContentPanel';
@@ -74,7 +77,6 @@ export default class ContentPanel extends React.Component {
       totalResCount: PropTypes.number,
       catsToDisplay: PropTypes.arrayOf(PropTypes.string),
       showAllData: PropTypes.bool,
-//      showAllFn: PropTypes.func,	// added dynamically by StandardFilters
       dotClickFn: PropTypes.func,
       initialTrimLevel: PropTypes.string,
       containerClassName: PropTypes.string.isRequired,
@@ -87,36 +89,52 @@ export default class ContentPanel extends React.Component {
    }
 
    state = {
+      openPhase: null,
       isOpen: false,
-      windowHeight: window.innerHeight,		// Height of rendered area of the browser window
+
+      panelHeight: 0,				// Height of top-level container
+      contentHeight: 0,				// Height of content-panel-inner-body(-alt) div
       positionY: 0,
-      panelHeight: 0,				// Height of XXX
       dragging: false,
       lastDragUpdateTimestamp: 0,
       prevEnabled: true,
       nextEnabled: true,
-      annunciator: null,
 //      showAllData: false,
       showAllData: true,
       showDotLines: true,
       trimLevel: this.props.initialTrimLevel ? this.props.initialTrimLevel : Const.trimNone,
-//      trimLevelDirection: 'more',
       showJSON: false,
 //      showAnnotation: false,
-//      displayVer: 0,
-      scrollFraction: 0,			// Scroll thumb location
-      scrollHeight: 0,				// Height of content-panel-inner-body-scroller div
+
       currResources: null,
-      contentHeight: 0,				// Height of content-panel-inner-body div
-      initialPositionYFn: null,
-      datesAscending: false,			// display dates in ascending order?
+      updateResourcesPhase: null,
+
+//      pageResource: null,			// Center/midpoint resource index for the currently active "page"
+      pageResource: 0,				// Center/midpoint resource index for the currently active "page"
+      pageResourceY: 0,				// The matching scroll offset in .content-panel-inner-body-scroller for 'pageResource'
+      scrollToContextPhase: null,
+      scrollToResPhase: null,
+      doScrollToRes: null,
+      dotClickPhase: null,
+
+//      initialPositionYFn: null,
+      datesAscending: false,			// Display dates in ascending order?
       onlyAnnotated: false
    }
+
+   // Refs
+   resContainer = React.createRef();		// .content-panel-inner-body-alt-container
+   scrollDiv = React.createRef();		// .content-panel-inner-body-scroll
+   scrollerDiv = React.createRef();		// .content-panel-inner-body-scroller
+
+   // Non-(React)tracked state vars
+   debounceTimer = null;
+   lastScrollDivScrollTop = null;
 
    //
    // Kluge: following functions violate locality/independence by needing to know absolute locations of divs in other components
    //
-   calcHeight() {
+   calcPanelHeight() {
       const footer = document.querySelector('.page-footer');
       const panel = document.querySelector('.' + this.props.containerClassName);
       const titleBar = document.querySelector('.content-panel-inner-title')
@@ -126,7 +144,6 @@ export default class ContentPanel extends React.Component {
    }
 
    calcContentHeight() {
-//      let innerContent = document.querySelector(this.state.displayVer === 1 ? '.content-panel-inner-body-alt' : '.content-panel-inner-body');
       let innerContent = document.querySelector('.content-panel-inner-body') || document.querySelector('.content-panel-inner-body-alt');
       let innerContentHeight = innerContent ? innerContent.clientHeight : 0;
 
@@ -137,12 +154,12 @@ export default class ContentPanel extends React.Component {
 
    setPanelHeights() {
       // Wait a bit before setting final panel heights
-      setTimeout(() => this.setState({ panelHeight: this.calcHeight() },
-				     () => this.setState({ contentHeight: this.calcContentHeight() })), SET_PANEL_HEIGHT_DELAY);
+      setTimeout(() => this.setState({ panelHeight: this.calcPanelHeight(),
+				       contentHeight: this.calcContentHeight() }), SET_PANEL_HEIGHT_DELAY);
    }
 
    //
-   // End external div location section
+   // End of external div location section
    //
 
    updateDraggableOnMount = () => {
@@ -150,12 +167,6 @@ export default class ContentPanel extends React.Component {
    }
 
    updateDraggableOnResize = () => {
-//      this.setState({ topBound: this.calcTopBound(),
-//		      bottomBound: this.calcBottomBound(),
-//		      windowHeight: window.innerHeight });
-
-      this.setState({ windowHeight: window.innerHeight });
-
       if (this.state.isOpen) {
 	 this.setPanelHeights();
       }
@@ -163,11 +174,11 @@ export default class ContentPanel extends React.Component {
 
    onDrag = (e, data) => {
       if (e.timeStamp - this.state.lastDragUpdateTimestamp > config.contentPanelDragUpdateInterval) {
-	 console.log('ON DRAG: ' + data.y + ' --> ' + this.calcHeight() + 'px');
+	 console.log('ON DRAG: ' + data.y + ' --> ' + this.calcPanelHeight() + 'px');
 	 this.setState({ dragging: true,
 			 lastDragUpdateTimestamp: e.timeStamp,
 			 positionY: data.y,
-			 panelHeight: this.calcHeight() });
+			 panelHeight: this.calcPanelHeight() });
 
 	 this.props.onResizeFn && this.props.onResizeFn();
       }
@@ -178,7 +189,7 @@ export default class ContentPanel extends React.Component {
       this.setState({ dragging: false,
 		      lastDragUpdateTimestamp: e.timeStamp,
 		      positionY: data.y,
-		      panelHeight: this.calcHeight() });
+		      panelHeight: this.calcPanelHeight() });
 
       this.props.onResizeFn && this.props.onResizeFn();
    }
@@ -196,11 +207,11 @@ export default class ContentPanel extends React.Component {
 
 	    case 'ArrowUp':
 	    case 'ArrowDown':
-	       const scrollDiv = document.querySelector('.content-panel-inner-body-scroll');
-	       if (scrollDiv) {
-		  let scrollBump = 200;
-		  let newScrollYVal = Math.max(0, scrollDiv.scrollTop + (event.key === 'ArrowDown' ? scrollBump : -scrollBump));
-		  scrollDiv.scrollTo(0, newScrollYVal);
+	       if (this.scrollDiv.current) {
+		  let scrollBump = 150;		// TODO: get from config
+		  let newScrollYVal = Math.max(0, this.scrollDiv.current.scrollTop + (event.key === 'ArrowDown' ? scrollBump : -scrollBump));
+		  console.log(event.key + ' --> scrollTo: ' + newScrollYVal);
+		  this.scrollDiv.current.scrollTo(0, newScrollYVal);
 	       }
 	       break;
 
@@ -214,15 +225,104 @@ export default class ContentPanel extends React.Component {
       }
    }
 
-   componentDidMount() {
-//      this.listRef = React.createRef();
+   manageOpenSeq() {
+      switch (this.state.openPhase) {
+	 case null:	// Initial state
+	    if (this.props.open) {
+	       this.setState({ isOpen: true,
+			       openPhase: 'setPanels' });
+	    }
+	    break;
 
-      if (this.props.open) {
-	 this.setState({ isOpen: true }, () => this.setPanelHeights() );
+	 case 'setPanels':
+	    this.setPanelHeights();
+	    this.setState({ openPhase: 'open' });
+	    break;
+
+	 case 'open':	// Terminal state
+	 default:
+	    break;
       }
+   }
 
-      this.setState({ onlyAnnotated: this.context.onlyAnnotated },
-		    this.calcCurrResources());
+   manageUpdateResourcesSeq(update) {
+      switch (this.state.updateResourcesPhase) {
+	 case null:	// Initial/terminal state
+	 default:
+	    if (update) {
+	       this.setState({ currResources: this.calcCurrResources(),
+			       updateResourcesPhase: 'p2' });
+	    }
+	    break;
+
+	 case 'p2':
+	    this.highlightResourcesFromClickedDot();
+//	    let resIndex = this.targetResIndex(this.props.context);
+	    this.setState({ // pageResource: resIndex,
+			    updateResourcesPhase: null });
+	    break;
+      }
+   }
+
+// #### 
+   manageScrollToContextSeq(doScroll) {
+      switch (this.state.scrollToContextPhase) {
+	 case null:	// Initial/terminal state
+	 default:
+	    if (doScroll) {
+	       this.scrollToContext(this.props.context);
+	       this.setState({ scrollToContextPhase: this.isVirtualDisplay() ? 'didScrollToContext' : null });
+	    }
+	    break;
+
+	 case 'didScrollToContext':
+	    this.setState({ doScrollToRes: this.targetResIndex(this.props.context),
+			    scrollToContextPhase: 'wait' });
+	    break;
+
+	 case 'wait':
+	    // Wait for sequence to be completed by onScroll()
+	    break;
+      }
+   }
+
+   manageScrollToResSeq() {
+      let isNewPage;
+      switch (this.state.scrollToResPhase) {
+	 case null:	// Initial/terminal state
+	 default:
+	    if (this.state.doScrollToRes) {
+	       isNewPage = this.scrollToRes(this.state.doScrollToRes);
+	       this.setState({ scrollToResPhase: isNewPage ? 'didScrollToRes' : null });
+	    }
+	    break;
+
+	 case 'didScrollToRes':
+	    let intId = setInterval(() => {
+	       // TODO: not clear why check doScrollToRes is necessary (should be no scrollToRes() calls after reset doScrollToRes)
+	       if (this.state.doScrollToRes) {
+		  isNewPage = this.scrollToRes(this.state.doScrollToRes);
+		  console.log('scrollToRes...');
+		  if (!isNewPage) {
+		     // Resource is now visible in the DOM
+		     console.log('scrollToRes...visible');
+		     clearInterval(intId);
+	             this.setState({ doScrollToRes: null,
+				     scrollToResPhase: null });
+		  }
+	       }
+	    }, SCROLL_TO_RES_DELAY);
+	    break;
+      }
+   }
+
+   componentDidMount() {
+      this.manageOpenSeq();
+      this.manageUpdateResourcesSeq(true);
+
+//      this.setState({ onlyAnnotated: this.context.onlyAnnotated },
+//		    () => this.setState({ currResources: this.calcCurrResources() }));
+      this.setState({ onlyAnnotated: this.context.onlyAnnotated });
 
       this.updateDraggableOnMount();
       window.addEventListener('resize', this.updateDraggableOnResize);
@@ -234,97 +334,151 @@ export default class ContentPanel extends React.Component {
       window.removeEventListener('keydown', this.onKeydown);
    }
 
-   componentDidUpdate(prevProps, prevState) {
+   // For views with clickable dots (and displayed resources), highlight resources matching the date of the current dot
+   highlightResourcesFromClickedDot() {
+      //TODO: is dotClickFn correct here?
+      if (this.props.dotClickFn && this.props.context) {
+	 let dotResources = this.props.resources.transformed.filter(res => res.itemDate &&
+									   dateOnly(res.itemDate) === dateOnly(this.props.context.date));
+	 this.context.updateGlobalContext({ lastHighlightedResources: dotResources });
+      }
+   }
+
+   shouldComponentUpdate(nextProps, nextState) {
+      if (this.state.scrollToContextPhase === 'didScrollToContext' && nextState.scrollToContextPhase === null) {
+	 // Don't update on final scroll to context seq change
+	 return false;
+      } else if (notEqJSON(this.props, nextProps)) {
+	 // Prop change
+	 window.logDiffs && logDiffs('Props', this.props, nextProps);
+	 return true;
+      } else if (notEqJSON(this.state, nextState)) {
+	 // State change
+	 window.logDiffs && logDiffs('State', this.state, nextState);
+	 return true;
+      } else {
+	 // No change
+	 return false;
+      }
+   }
+
+   static getDerivedStateFromProps(props, state) {
+      return null;
+   }
+
+   getSnapshotBeforeUpdate(prevProps, prevState) {
+      // Capture info from the DOM before it is updated
+      // Return value is passed as 'snapshot' to componentDidUpdate()
+      logDiffs('Props', prevProps, this.props);
+      logDiffs('State', prevState, this.state);
+      return null;
+   }
+
+   componentDidUpdate(prevProps, prevState, snapshot) {
       console.log('componentDidUpdate() START');
+      window.logDiffs && logDiffs('Props', prevProps, this.props);
+      window.logDiffs && logDiffs('State', prevState, this.state);
 
-      // TODO: only on explicit changes?
+      let doUpdateResources = notEqJSON(prevProps, this.props) ||
+			      prevState.showAllData !== this.state.showAllData ||
+			      prevState.trimLevel !== this.state.trimLevel ||
+			      prevState.onlyAnnotated !== this.state.onlyAnnotated;
+
+      this.manageOpenSeq();
+      this.manageUpdateResourcesSeq(doUpdateResources);
+      this.manageScrollToContextSeq(this.props.context.date !== prevProps.context.date);
+      this.manageScrollToResSeq();
+
       if (notEqJSON(prevProps, this.props)) {
-	 window.logDiffs && logDiffs('Props', prevProps, this.props);
-	 this.calcCurrResources();
-      }
-
-      // TODO: only on explicit changes?
-      if (notEqJSON(prevState, this.state)) {
-	 window.logDiffs && logDiffs('State', prevState, this.state);
-	 if (prevState.isOpen !== this.state.isOpen ||
-	    prevState.currResources !== this.state.currResources ||
-	    prevState.showAllData !== this.state.showAllData ||
-	    prevState.trimLevel !== this.state.trimLevel ||
-	    prevState.onlyAnnotated !== this.state.onlyAnnotated) {
-	    this.calcCurrResources();
-	 }
-      }
-
-      // Kluge to delay setting positionY
-      if (this.props.initialPositionYFn && !this.state.initialPositionYFn) {
-	 this.setState({ positionY: this.props.initialPositionYFn ? this.props.initialPositionYFn() : this.props.topBoundFn(),
-		         initialPositionYFn: this.props.initialPositionYFn });
-      }
-
-      if (!prevProps.open && this.props.open) {
-	 this.setState({ isOpen: true }, () => this.setPanelHeights() );
-      } 
-
-      if (prevProps.context !== this.props.context) {
 	 this.setState({ prevEnabled: this.props.context.date !== this.props.context.minDate,
 			 nextEnabled: this.props.context.date !== this.props.context.maxDate });
-	 // Wait for scrolling to be setup
-	 setTimeout(() => this.scrollToDate(this.props.context.date));
-      }
-
-      if (prevState.showAllData !== this.state.showAllData && this.state.showAllData) {
-	 // Wait for scrolling to be setup
-	  setTimeout(() => this.scrollToDate(this.props.context.date));
-      }
-
-//      if (this.props.open && this.props.catsEnabled !== prevProps.catsEnabled) {
-//	 this.setState({ annunciator: 'Categories changed' });
-//      }
-
-//      if (this.props.showAllData !== prevProps.showAllData) {
-//	 this.setState({ showAllData: this.props.showAllData });
-//      }
-
-      if (this.props.open && this.props.context !== prevProps.context) {
-	 this.setState({ annunciator: null });
-      }
-
-//      if (this.props.showAllFn && prevState.showAllData !== this.state.showAllData) {
-//	 this.props.showAllFn(this.state.showAllData);
-//      }
+      }    
 
       console.log('componentDidUpdate() END');
    }
 
+// ####
+   scrollToRes(targetResIndex) {
+      let isNewPage = false;
+      if (targetResIndex >= 0) {
+//	 debugger;
+	 let res = this.state.currResources[targetResIndex];
+	 console.log('scrollToRes: ' + targetResIndex + ' ' + res.itemDate.substring(0, 10) + ' ' + res.category);
+	 let catKey = formatKey(res);
+	 let catContainer = document.getElementById(catKey);
+	 let body = catContainer && catContainer.getElementsByClassName('content-body')[0];
+	 let targetKey = resKey(res);
+	 let target = body && body.querySelector(`[data-res="${targetKey}"]`);
+	 if (this.scrollDiv.current && target) {
+	    console.log('scrollToRes: resource in focus (' + catContainer.offsetTop + 'px)');
+	    this.scrollDiv.current.scrollTop = catContainer.offsetTop + this.state.pageResourceY;   // + pageResourceY so thumb is at correct location
 
-   inScrollToDate = false;
+	    this.setContainerTop(-catContainer.offsetTop);	// Show target resource at top of container
 
-   //
-   // Find the first element matching 'date' in currResources and scroll to it
-   //
-   scrollToDate(date) {
-      console.log('scrollToDate: ' + date);
-      const scrollDiv = document.querySelector('.content-panel-inner-body-scroll');
-      const scrollerDiv = document.querySelector('.content-panel-inner-body-scroller');
-
-      if (scrollDiv && scrollerDiv && this.state.currResources) {
-	 let minResIndex = this.state.currResources.findIndex(elt => elt.itemDate === date);	// find date in currResources
-	 let newScrollFraction = minResIndex / (this.state.currResources.length - 1);
-	 let newScrollYVal = newScrollFraction * (scrollerDiv.clientHeight - scrollDiv.clientHeight);
-
-	 let inScrollToDateInterval = 50; // msec
-	 this.inScrollToDate = true;
-	 scrollDiv.scrollTo(0, newScrollYVal)
-	 // Clear 'inScrollToDate' after delay for render
-	 setTimeout((cpThis) => { cpThis.inScrollToDate = false; }, inScrollToDateInterval, this);
-	  
-      } else {
-	 let elt = document.getElementById(formatKeyDate(date));
-	 if (elt) {
-	    elt.scrollIntoView();
 	 } else {
-	    console.log('scrollToDate ???');
+	    console.log('scrollToRes: resource NOT in focus');
+	    isNewPage = true;
+	    // Set state.pageResource to center current page on 'targetResIndex'
+	    if (this.state.pageResource !== targetResIndex) {
+	       this.setState({ pageResource: targetResIndex });	// Only set the first time, not when wait for DOM update
+	    }
 	 }
+      } else {
+	 console.log('scrollToRes: resource NOT FOUND');
+      }
+
+      return isNewPage;
+   }
+
+   //
+   //  Determine the index of the target resource in currResources from 'context'
+   //
+   targetResIndex(context) {
+      let targetDate = dateOnly(context.date);
+      switch (context.parent) {
+	 case 'TimeWidget':
+	    return this.state.currResources.findIndex(elt => dateOnly(elt.itemDate) === targetDate);	// find date in currResources
+
+	 case 'Category':
+	    return this.state.currResources.findIndex(elt => dateOnly(elt.itemDate) === targetDate &&	// find date+category in currResources
+							     elt.category === context.rowName);
+
+	 case 'Provider':
+	    return this.state.currResources.findIndex(elt => dateOnly(elt.itemDate) === targetDate &&	// find date+provider in currResources
+							     elt.provider === context.rowName);
+
+	 default:
+	    return -1;
+      }
+   }
+
+// ####
+   //
+   // Find the first element matching 'context' in currResources and scroll to it
+   //
+   scrollToContext(context) {
+      console.log(`scrollToContext: ${context.parent}:${context.rowName}  ${context.date}`);
+
+      let targetResIndex = this.targetResIndex(context);
+      if (this.scrollDiv.current && this.scrollerDiv.current && this.state.currResources && targetResIndex >= 0) {
+	 let newScrollFraction = this.state.currResources && this.state.currResources.length === 0 ? 0 : targetResIndex / this.state.currResources.length;
+	 let newScrollYVal = newScrollFraction * (this.scrollerDiv.current.clientHeight - this.scrollDiv.current.clientHeight);
+	 if (newScrollYVal !== this.scrollDiv.current.scrollTop) {
+	    this.setState({ pageResourceY: newScrollYVal });
+	 }
+	  
+      } else if (this.state.currResources && targetResIndex >= 0) {
+	 let targetRes = this.state.currResources[targetResIndex];
+	 let key = formatKey(targetRes);
+	 let elt = document.getElementById(key);
+	 if (elt) {
+	    elt.parentNode.scrollTop = elt.offsetTop - 30;	// content-header height
+	 } else {
+	    console.log('scrollToContext ???');
+	 }
+
+      } else {
+	 console.log('scrollToContext: no matching resources');
       }
    }
 
@@ -376,7 +530,7 @@ export default class ContentPanel extends React.Component {
    //  props.tileSort === true:
    //    Sorted by category ascending, then primary display item ascending, then date descending (if state.datesAscending === false)
    //
-   //  Sets state.currResources
+   //  @@@Sets state.currResources
    //
    calcCurrResources() {
       let arr = [];
@@ -385,11 +539,15 @@ export default class ContentPanel extends React.Component {
 												       res.category !== 'Patient' &&
 												       this.catEnabled(res.category) &&
 												       this.provEnabled(res.provider) &&
+												       inDateRange(res.itemDate, this.props.thumbLeftDate,
+														   this.props.thumbRightDate) &&
 												       (!this.state.onlyAnnotated || (res.data.discoveryAnnotation &&
 													res.data.discoveryAnnotation.annotationHistory)))
 						      : this.props.resources.transformed.filter(res => res.category !== 'Patient' &&
 												       this.catEnabled(res.category) &&
 												       this.provEnabled(res.provider) &&
+												       inDateRange(res.itemDate, this.props.thumbLeftDate,
+														   this.props.thumbRightDate) &&
 												       (!this.state.onlyAnnotated || (res.data.discoveryAnnotation &&
 													res.data.discoveryAnnotation.annotationHistory)));
 
@@ -403,18 +561,14 @@ export default class ContentPanel extends React.Component {
 	 arr = this.sortResources(limitedResources.filter(res => res.itemDate === this.props.context.date));
       }       
 
+      console.log('Resources: ' + arr.length);
       console.log('calcCurrResources() - END: ' + new Date().getTime());
 
-      // Reset scrollbar if used
-      const scrollDiv = document.querySelector('.content-panel-inner-body-scroll');
-      scrollDiv && scrollDiv.scrollTo(0, 0);
-
-      // TODO: only set currResources (clean up elsewhere)
-      this.setState({ currResources: arr });
+      return arr;
    }
 
 //   onClose = () => {
-//      this.setState({ isOpen:false, annunciator: null });
+//      this.setState({ isOpen:false });
 //      this.props.onClose();
 //   }
 
@@ -422,9 +576,9 @@ export default class ContentPanel extends React.Component {
       try {
 	 const enabled = this.props.nextPrevFn(direction);
 	 if (direction === 'prev') {
-	    this.setState({ prevEnabled: enabled, nextEnabled: true, annunciator: null });
+	    this.setState({ prevEnabled: enabled, nextEnabled: true });
 	 } else {
-	    this.setState({ prevEnabled: true, nextEnabled: enabled, annunciator: null });
+	    this.setState({ prevEnabled: true, nextEnabled: enabled });
 	 }
       } catch (e) {
 	 console.log(`ContentPanel - onNextPrev(): ${e.message}`);
@@ -445,7 +599,6 @@ export default class ContentPanel extends React.Component {
       if (this.state.showDotLines) {
 	 // Hide dot lines
 	 this.setState({ showDotLines: !this.state.showDotLines,
-//			 positionY: this.state.topBound });
 			 positionY: this.props.topBoundFn() });
 	 this.setPanelHeights();
       } else {
@@ -498,16 +651,15 @@ export default class ContentPanel extends React.Component {
 
    get noResultDisplay() {
       if (this.noneEnabled(this.props.catsEnabled)) {
-	 return 'Please select a Record type';
+	 return 'No Record type is selected';
       } else if (this.noneEnabled(this.props.provsEnabled)) {
-	 return 'Please select a Provider';
+	 return 'No Provider is selected';
       } else {
-	 return this.props.noResultDisplay ? this.props.noResultDisplay : '[No matching data]';
+	 return this.props.noResultDisplay ? this.props.noResultDisplay : 'No matching data';
       }
    }
 
    renderItemForListView = (item) => {
-//      debugger;
       let goo = this.renderItems([item.item]);
       return goo;
    }
@@ -529,6 +681,10 @@ export default class ContentPanel extends React.Component {
       }
    }
 
+   get altScrollFraction() {
+      return this.scrollDiv.current ? this.scrollDiv.current.scrollTop / (this.scrollDiv.current.scrollHeight - this.scrollDiv.current.clientHeight) : 0;
+   }
+
    renderAltDisplay() {
       if (this.state.showJSON) {
 	 return (
@@ -540,46 +696,41 @@ export default class ContentPanel extends React.Component {
 	 );
 
       } else {
-	 const avgResHeight = 200;
-	 const scrollStepsPerRes = 4;
-//	 const minResHeight = 36;	// height of .content-header-container-disabled
-	 const minResHeight = 100;
-	 let resourcesToDisplay = Math.ceil(this.state.contentHeight / minResHeight);
-	 let minResIndexToDisplay = this.state.scrollFraction * (this.state.currResources.length-1);
-	 let minWholeResIndexToDisplay = Math.trunc(minResIndexToDisplay);
-	 let minFracResIndexToDisplay = minResIndexToDisplay - minWholeResIndexToDisplay;
-	 let maxResIndexToDisplay = Math.max(0, Math.ceil(minResIndexToDisplay + resourcesToDisplay - 1));
-	 console.log(`renderAltDisplay(): ${formatDPs(minResIndexToDisplay, 5)} --> ${formatDPs(maxResIndexToDisplay, 5)} [${this.state.currResources.length}/${this.state.currResources.length}]`);
-	 console.log(`   this.state.scrollFraction: ${this.state.scrollFraction}`);
+//@@@@
+	 let resourcesToRender = 50;	// TODO: get from config
+	 let maxResIndex = this.state.currResources.length - 1;
+	 let centerResIndexToRender = this.state.pageResource;
+	 let minResIndexToRender = Math.max(0, centerResIndexToRender - resourcesToRender/2);
+	 let minWholeResIndexToRender = Math.trunc(minResIndexToRender);
+	 let maxResIndexToRender = Math.min(maxResIndex, Math.max(0, Math.ceil(centerResIndexToRender + resourcesToRender/2 - 1)));
+	 console.log(`renderAltDisplay(): ${formatDPs(minResIndexToRender, 5)} --> ${formatDPs(maxResIndexToRender, 5)} [${this.state.currResources.length}]`);
+//	 console.log(`   this.altScrollFraction: ${this.altScrollFraction}`);
 
 	 let divs;
 
 	 if (this.state.currResources && this.state.currResources.length > 0) {
-	    divs = this.renderItems(this.state.currResources.slice(minWholeResIndexToDisplay, maxResIndexToDisplay));
-
-	    const container = document.querySelector('.content-panel-inner-body-alt-container');
-	    if (container) {
-	       if (!this.inScrollToDate && minFracResIndexToDisplay > 0) {
-		  const newContainerTop = -minFracResIndexToDisplay * avgResHeight;	// TODO: base on actual size of rendered resource
-		  container.style = `position: absolute; top:${newContainerTop}px;`;
-	       } else {
-		  container.style = `position: absolute; top:0px;`;
-	       }
-	    }
+	    divs = this.renderItems(this.state.currResources.slice(minWholeResIndexToRender, maxResIndexToRender));
 
 	 } else {
 	    divs = [ <div className='content-panel-no-data' key='1'>{this.noResultDisplay}</div> ];
 	 }
 
+	 console.log('DIVs: ' + divs.length);
+
+
+	 // TODO: get from config
+	 const avgResHeight = 200;
+	 const scrollStepsPerRes = 4;
+
 	 return [
 	    <div className='content-panel-inner-body-alt' key='1'>
-	       <div className='content-panel-inner-body-alt-container'>
+	       <div className='content-panel-inner-body-alt-container' ref={this.resContainer}>
 	          { divs }
 	       </div>
 	    </div>,
-	    <div className='content-panel-inner-body-scroll' key='2' onScroll={this.onScroll.bind(this)}>
-	       <div className='content-panel-inner-body-scroller' style={{minHeight: Math.max(this.state.panelHeight,
-											      this.state.currResources.length*avgResHeight*scrollStepsPerRes)}} />
+	    <div className='content-panel-inner-body-scroll' ref={this.scrollDiv} key='2' onScroll={this.onScroll.bind(this)}>
+	       <div className='content-panel-inner-body-scroller' ref={this.scrollerDiv}
+		    style={{minHeight: Math.max(this.state.panelHeight, this.state.currResources.length*avgResHeight*scrollStepsPerRes)}} />
 	    </div>
 	 ];
       }
@@ -613,7 +764,7 @@ export default class ContentPanel extends React.Component {
 	    case 'Conditions':
 	       resultDivs.push(<Conditions key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Conditions.catName)} />);
 	       break;
-	    case 'DocumentReferences':
+	    case 'Document References':
 	       resultDivs.push(<DocumentReferences key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(DocumentReferences.catName)} />);
 	       break;
 	    case 'Encounters':
@@ -644,6 +795,9 @@ export default class ContentPanel extends React.Component {
 	    case 'Procedures':
 	       resultDivs.push(<Procedures key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Procedures.catName)} />);
 	       break;
+	    case 'Procedure Requests':
+	       resultDivs.push(<ProcedureRequests key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(ProcedureRequests.catName)} />);
+	       break;
 	    case 'Social History':
 	       resultDivs.push(<SocialHistory key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(SocialHistory.catName)} />);
 	       break;
@@ -661,17 +815,101 @@ export default class ContentPanel extends React.Component {
       return resultDivs.length > 0 ? resultDivs : <div className='content-panel-no-data' key='1'>{this.noResultDisplay}</div>;
    }
 
-   debounceTimer = null;
+// ####
+   setContainerTop(offset) {
+//      let viewDelta = -100;
+//      let viewDelta = 0;
+      let viewDelta = 150;
+      if (this.resContainer.current) {
+	 let firstDOMElt = this.resContainer.current.children[0];
+	 let lastDOMElt = this.resContainer.current.children[this.resContainer.current.children.length-1];
 
-   debounce(func) {
-      // If there's a timer, cancel it
-      if (this.debounceTimer) {
-	 window.cancelAnimationFrame(this.debounceTimer);
+	 let topTrigger = offset > firstDOMElt.offsetTop + viewDelta;
+	 let botTrigger = -offset + this.resContainer.current.parentElement.offsetHeight > lastDOMElt.offsetTop + lastDOMElt.offsetHeight + viewDelta;
+
+	 let newContainerTop = offset + 'px';
+	 let resDelta = 25;	    //TODO: get from config
+
+	 console.log('setContainerTop: ' + newContainerTop);
+	 console.log('    container height: ' + this.resContainer.current.parentElement.offsetHeight);
+	 let firstIndex = Math.max(0, this.state.pageResource - resDelta);
+	 let firstDate = this.state.currResources[firstIndex].itemDate.substring(0, 10);
+	 console.log('    first resource: ' + firstDate + ' ' + this.state.currResources[firstIndex].category + ' [' + firstIndex + ']');
+	 let lastIndex = Math.min(this.state.currResources.length - 1, this.state.pageResource + resDelta);
+	 let lastDate = this.state.currResources[lastIndex].itemDate.substring(0, 10);
+	 console.log('    last resource: ' + lastDate + ' ' + this.state.currResources[lastIndex].category + ' [' + lastIndex + ']');
+	 console.log('    first offsetTop: ' + firstDOMElt.offsetTop + ' last offsetTop: ' + lastDOMElt.offsetTop);
+	 console.log('    last height: ' + lastDOMElt.offsetHeight);
+
+	 if (topTrigger) {
+//	    debugger;
+	    if (this.state.pageResource - resDelta >= 0) {
+	       let newResIndex = this.state.pageResource - resDelta - 1;
+	       let newScrollFraction = this.state.currResources && this.state.currResources.length === 0 ? 0 : newResIndex / this.state.currResources.length;
+	       let newScrollYVal = newScrollFraction * (this.scrollerDiv.current.clientHeight - this.scrollDiv.current.clientHeight);
+	       let oldPageRes = this.state.currResources[this.state.pageResource];
+	       let newPageRes = this.state.currResources[newResIndex];
+	       console.log('TOP TRIG -- pageResource (old): ' + this.state.pageResource + ' ' + oldPageRes.itemDate.substring(0, 10) + ' ' + oldPageRes.category);
+	       console.log('                    -->  (new): ' + newResIndex + ' ' + newPageRes.itemDate.substring(0, 10) + ' ' + newPageRes.category);
+	       console.log('            pageResourceY: ' + this.state.pageResourceY + ' --> ' + newScrollYVal);
+
+//	       this.setState({ pageResource: newResIndex,
+//			       pageResourceY: newScrollYVal });
+
+	       this.setState({ pageResource: newResIndex,
+			       pageResourceY: newScrollYVal,
+			       doScrollToRes: newResIndex });
+
+//	       this.scrollToRes(newResIndex);
+	    } else {
+	       console.log('TOP TRIG -- at begin');
+	       if (this.lastScrollDivScrollTop) {
+		  this.scrollDiv.current.scrollTop = this.lastScrollDivScrollTop;	// "Undo" unnecessary scrolling
+	       }
+	    }
+
+	 } else if (botTrigger) {
+//	    debugger;
+	    if (this.state.pageResource + resDelta < this.state.currResources.length) {
+	       let newResIndex = this.state.pageResource + resDelta;
+	       let newScrollFraction = this.state.currResources && this.state.currResources.length === 0 ? 0 : newResIndex / this.state.currResources.length;
+	       let newScrollYVal = newScrollFraction * (this.scrollerDiv.current.clientHeight - this.scrollDiv.current.clientHeight);
+	       let oldPageRes = this.state.currResources[this.state.pageResource];
+	       let newPageRes = this.state.currResources[newResIndex];
+	       console.log('BOT TRIG -- pageResource (old): ' + this.state.pageResource + ' ' + oldPageRes.itemDate.substring(0, 10) + ' ' + oldPageRes.category);
+	       console.log('                    -->  (new): ' + newResIndex + ' ' + newPageRes.itemDate.substring(0, 10) + ' ' + newPageRes.category);
+	       console.log('            pageResourceY: ' + this.state.pageResourceY + ' --> ' + newScrollYVal);
+
+//	       this.setState({ pageResource: newResIndex,
+//			       pageResourceY: newScrollYVal });
+
+	       this.setState({ pageResource: newResIndex,
+			       pageResourceY: newScrollYVal,
+			       doScrollToRes: newResIndex });
+
+//	       this.scrollToRes(newResIndex);
+	    } else {
+	       console.log('BOT TRIG -- at end');
+	       if (this.lastScrollDivScrollTop) {
+		  this.scrollDiv.current.scrollTop = this.lastScrollDivScrollTop;	// "Undo" unnecessary scrolling
+	       }
+	    }
+
+	 } else {
+	    this.resContainer.current.style.top = newContainerTop;
+	 }
       }
-
-      // Setup the new requestAnimationFrame()
-      this.debounceTimer = window.requestAnimationFrame(() => func());
    }
+
+//   debounce(func) {
+//      // If there's a timer, cancel it
+//      if (this.debounceTimer) {
+//	 window.cancelAnimationFrame(this.debounceTimer);
+//      }
+//
+//      // Setup the new requestAnimationFrame()
+//      this.debounceTimer = window.requestAnimationFrame(() => func());
+//   }
 
    debounce2(func, wait) {
       if (!this.debounceTimer) {
@@ -683,24 +921,33 @@ export default class ContentPanel extends React.Component {
    }
 
    onScroll(e) {
-      let debounceTime = 75;
-      let eCopy = Object.assign({}, e);
+//      let debounceTime = 75;
+//      let eCopy = Object.assign({}, e);
 //      this.debounce(() => this.onScrollDebounced(eCopy));
-      this.debounce2(() => this.onScrollDebounced(eCopy), debounceTime);
+//      this.debounce2(() => this.onScrollDebounced(eCopy), debounceTime);
+      this.onScrollDebounced(e);
+      this.lastScrollDivScrollTop = e.target.scrollTop;		// Save for possible "undo" in setContainerTop()
    }
 
    onScrollDebounced(e) {
-      let scrollFraction = e.target.scrollTop / (e.target.scrollHeight - e.target.clientHeight);
-      this.setState({ scrollFraction: scrollFraction });
+      if (this.state.scrollToResPhase !== null) {
+	 // Don't process scroll events when scrolling to a resource
 
-      console.log(`onScroll() scrollTop: ${e.target.scrollTop} scrollHeight: ${e.target.scrollHeight} clientHeight: ${e.target.clientHeight}`);
-      console.log(`onScroll() newScrollFraction: ${scrollFraction}`);
+      } else if (this.state.scrollToContextPhase !== null) {
+	 // Completion of scrollToContext()
+	 this.setState({ scrollToContextPhase: null });
+
+      } else {
+	 // scroll wheel / arrows
+	 console.log('onScroll: ' + this.state.pageResourceY + ' - ' + e.target.scrollTop);
+	 this.setContainerTop(this.state.pageResourceY - e.target.scrollTop);
+      }
    }
 
    renderDotOrAll() {
       let divs = this.state.currResources &&
 		 this.state.currResources.length > 0 ? this.renderItems(this.state.currResources)
-							 : [ <div className='content-panel-no-data' key='1'>{this.noResultDisplay}</div> ];
+						     : [ <div className='content-panel-no-data' key='1'>{this.noResultDisplay}</div> ];
       return (
 	 <div className='content-panel-inner-body'>
 	    { this.state.showJSON ? 
@@ -712,24 +959,13 @@ export default class ContentPanel extends React.Component {
       );
    }
 
-   // changeTrimLevel = () => {
-   //    switch(this.state.trimLevel) {
-   // 	 case Const.trimExpected:
-   // 	    this.state.trimLevelDirection === 'more' ? this.setState({ trimLevel: Const.trimMax, trimLevelDirection: 'less' })
-   // 						     : this.setState({ trimLevel: Const.trimNone, trimLevelDirection: 'more' });
-   // 	    break;
-
-   // 	 default:
-   // 	 case Const.trimMax:
-   // 	 case Const.trimNone:
-   // 	    this.setState({ trimLevel: Const.trimExpected });
-   // 	    break;
-   //    }	   
-   // }
-
    toggleTrimLevel = () => {
       this.setState({ trimLevel: this.state.trimLevel === Const.trimNone ? Const.trimExpected : Const.trimNone });
    }
+
+   isVirtualDisplay() {
+      return this.state.currResources.length >= config.contentPanelUseWindowing;
+   }	
 
    onlyAnnotatedChange = (event) => {
 //      console.log('annotated change: ' + event.target.checked);
@@ -743,7 +979,7 @@ export default class ContentPanel extends React.Component {
 //		     this.state.currResources.length < config.contentPanelUseWindowing ? this.renderDotOrAll() : this.renderAltDisplay();
       // Use virtual window rendering for all views (20191105)
       let contents = !this.state.currResources ||
-		     this.state.currResources.length < config.contentPanelUseWindowing ? this.renderDotOrAll() : this.renderAltDisplay();
+		     this.isVirtualDisplay() ? this.renderAltDisplay() : this.renderDotOrAll();
 
       return (
 	 <div className='content-panel-inner'>
@@ -751,9 +987,6 @@ export default class ContentPanel extends React.Component {
 	       <div className='content-panel-inner-title-left'>
 		 {/*  <div className={this.props.viewIconClass}/>
 		  <div className='content-panel-view-name'>{this.props.viewName}</div>*/}
-	         {/* <div className='content-panel-participant-name'>
-		     { this.props.resources && formatPatientName(this.props.resources.pathItem('[category=Patient].data.name')) }
-		  </div> */}
          
 		  <div className='content-panel-item-count'>
 		     {/* this.state.currResources.length + ' record' + (this.state.currResources.length === 1 ? '' : 's') */}
@@ -761,41 +994,32 @@ export default class ContentPanel extends React.Component {
 		     { `Displaying ${this.state.currResources.length} of ${this.props.totalResCount} record${this.props.totalResCount === 1 ? '' : 's'}` }
 		  </div>                
                          
-		  <button className={'content-panel-left-button' + (this.state.prevEnabled ? '' : '-off')}
-			  onClick={() => this.onNextPrev('prev')} />
-	       	  <button className={'content-panel-right-button' + (this.state.nextEnabled ? '' : '-off')}
-			  onClick={() => this.onNextPrev('next')} />
-		  <button className='content-panel-show-details-button' onClick={this.toggleTrimLevel}>
-		     {this.state.trimLevel===Const.trimNone ? 'Show Less' : 'Show More'}
-		  </button>               
-                         
-		  <label className='check-only-annotated-label'>
-		     <input className='check-only-annotated-check' type='checkbox' checked={this.state.onlyAnnotated} onChange={this.onlyAnnotatedChange}/>
-		     Show only annotated
-		  </label>
+		  { config.enableContentPanelLeftRight && <button className={'content-panel-left-button' + (this.state.prevEnabled ? '' : '-off')}
+			  onClick={() => this.onNextPrev('prev')} /> }
+	       	  { config.enableContentPanelLeftRight && <button className={'content-panel-right-button' + (this.state.nextEnabled ? '' : '-off')}
+			  onClick={() => this.onNextPrev('next')} /> }
+		  { config.enableShowLess && <button className='content-panel-show-details-button' onClick={this.toggleTrimLevel}>
+		       { this.state.trimLevel === Const.trimNone ? 'Show Less' : 'Show More' }
+		    </button> }
 
 	       	  {/* <button className={this.state.showAllData ? 'content-panel-all-button' : 'content-panel-dot-button'}
 			  onClick={() => this.setState({ showAllData: !this.state.showAllData })} /> */}
 		  {/* <button className={`content-panel-trim-${this.state.trimLevel}-button`} onClick={this.changeTrimLevel} /> */}
 		  {/* <button className={'content-panel-annotation-button' + (this.state.showAnnotation ? '' : '-off')}
 			     onClick={() => this.setState({ showAnnotation: !this.state.showAnnotation })} /> */}
-		  {/* <button className={'content-panel-alt-button'}
-			  onClick={() => this.setState({ displayVer: (this.state.displayVer+1)%3 },
-						       () => this.setState({ contentHeight: this.calcContentHeight(),
-									     scrollFraction: 0 }) ) } >
-		     { this.state.displayVer }
-		  </button> */}
 	       </div>
 	       <div className='content-panel-inner-title-center' onDoubleClick={this.onDoubleClick.bind(this)}>
 		  <button className={this.state.showDotLines ? 'content-panel-drag-button' : 'content-panel-no-drag-button'} />
-
-		  { this.state.annunciator && <div className='content-panel-annunciator'>{this.state.annunciator}</div> }
 	       </div>
 	       <div className='content-panel-inner-title-right'>
 		  {/* <button className='content-panel-inner-title-close-button' onClick={this.onClose} /> 
 		  <button className='content-panel-show-details-button' onClick={this.toggleTrimLevel}>
 		     {this.state.trimLevel===Const.trimNone ? 'Less' : 'More'}
 		  </button> */}
+		  { config.enableOnlyRecordsWithNotes && <label className='check-only-annotated-label'>
+		       <input className='check-only-annotated-check' type='checkbox' checked={this.state.onlyAnnotated} onChange={this.onlyAnnotatedChange}/>
+			  Only records with my notes
+		    </label> }
 		  <button className={'content-panel-json-button' + (this.state.showJSON ? '' : '-off')}
 			  onClick={() => this.setState({ showJSON: !this.state.showJSON })} /> 
 		    {/*
@@ -819,12 +1043,11 @@ export default class ContentPanel extends React.Component {
       // Dragging enabled/disabled by changing bounds.bottom
       return ( this.state.isOpen &&
 	       <Draggable axis='y' position={{x:0, y:this.state.positionY}} handle='.content-panel-inner-title-center'
-//			  bounds={{top:this.state.topBound, bottom:this.state.showDotLines ? this.state.bottomBound : this.state.topBound}}
 			  bounds={{top:this.props.topBoundFn(), bottom:this.state.showDotLines ? this.props.bottomBoundFn() : this.props.topBoundFn()}}
 			  onDrag={this.onDrag} onStop={this.onDragStop}>
 		  <div className={this.props.containerClassName}
 		       style={this.state.panelHeight ? {height:this.state.panelHeight} : {}}>
-		     { this.props.resources && this.props.context && this.renderContents(this.props.context) }
+		     { this.state.currResources && this.props.context && this.renderContents(this.props.context) }
 		  </div>
 	       </Draggable>
       )

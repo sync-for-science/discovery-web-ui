@@ -12,6 +12,7 @@ ReactDOM.render(
 	<Switch>
 	    <Route exact path='/' component={ParticipantList} />
 	    <Route path='/participant/:index' component={DiscoveryApp} />
+	    <Route path='/uploaded/:id' component={DiscoveryApp} />
 	</Switch>
     </Router>,
     document.getElementById('root')

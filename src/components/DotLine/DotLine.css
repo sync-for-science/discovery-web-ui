@@ -1,38 +1,50 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery DotLine Stylesheet */
-/* v.01.11 Updated 10/28/2019 */
+/* v.01.13 Updated 12/23/2019 */
 
 .active-dots {
    height: 10px;
    width: 10px;
-   fill: var(--dot);
-   stroke: var(--dot-stroke);
+   fill: var(--dots-active);
+   stroke: var(--dots-active-stroke);
    stroke-width: 1px;
-   padding: 6px 0;
+   padding: 10px 0 3px 0;
    cursor: pointer;
    pointer-events: visible;
 }  
 
 .inactive-dots {
-   fill: var(--dot-inactive);
-   stroke: var(--dot-stroke);
+   fill: var(--dots-inactive);
+   stroke: var(--dots-inactive-stroke);
+   stroke-width:1px;
+}
+
+.inactive-content-dots {
+   fill: var(--dots-content-inactive);
+   stroke: var(--dots-content-inactive-stroke);
+   stroke-width:1px;
+}
+
+.view-accent-dots {
+   fill: var(--tile-selected);
+   stroke:var(--dots-active-stroke);
    stroke-width:1px;
    cursor:pointer;
    pointer-events: visible;
 }
 
-.view-accent-dots {
+.view-last-accent-dots {
    fill: var(--tile-selected-last);
-   stroke:var(--dot-stroke);
+   stroke:var(--dots-active-stroke);
    stroke-width:1px;
    cursor:pointer;
    pointer-events: visible;
 }
 
 .active-search-dots {
-   fill: var(--dot-search);
-   stroke: var(--dot-search-stroke);
+   fill: var(--dots-active-search);
+   stroke: var(--dots-active-search-stroke);
    stroke-width: 1px;
    cursor: pointer;
    pointer-events: visible;
@@ -40,10 +52,10 @@
 
 .inactive-search-dots {
    fill: rgba(255,20,20,0.10);
-   stroke: var(--dot-stroke);
+   stroke: var(--dots-active-stroke);
    stroke-width: 1px;
-   cursor: pointer;
-   pointer-events: visible;
+/*   cursor: pointer;
+   pointer-events: visible; */
 }
 
 .highlight-ring-dots {

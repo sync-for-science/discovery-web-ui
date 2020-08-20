@@ -342,31 +342,31 @@ export default class PageHeader extends React.Component {
 	       <button className='tiles-view-button-off' onClick={() => this.viewClick('tilesView')}>Catalog</button>
 	       <button className='compare-view-button-off' onClick={() => this.viewClick('compareView')}>Compare</button>
 	       <button className='longitudinal-view-button-off' onClick={() => this.viewClick('reportView')}>Timeline</button>
-	       <button className='benefits-view-button-off' onClick={() => this.viewClick('financialView')}>Payer</button>
-	       <button className='view-button-no-op'>Collections</button>
-	       <button className='view-button-no-op'>Pathfinder</button>
-	       {/* <button className='consult-view-button-off' onClick={() => this.viewClick('consultView')}>Consult</button> */}
-	       {/* <button className='diabetes-view-button-off' onClick={() => this.viewClick('diabetesView')}>Conditions</button> */}
+	       { config.enablePayer && <button className='benefits-view-button-off' onClick={() => this.viewClick('financialView')}>Payer</button> }
+	       { config.enableCollections && <button className='view-button-no-op'>Collections</button> }
+	       { config.enablePathfinder && <button className='view-button-no-op'>Pathfinder</button> }
+	       { config.enableConsult && <button className='consult-view-button-off' onClick={() => this.viewClick('consultView')}>Consult</button> }
+	       { config.enableDiabetes && <button className='diabetes-view-button-off' onClick={() => this.viewClick('diabetesView')}>Conditions</button> }
 	    </div>
-	    { this.state.viewHelpIsOpen && this.renderViewHelp() }
+	    {/* this.state.viewHelpIsOpen && this.renderViewHelp() */}
 	    {/* <div className='patient-name'>
 	       { this.props.resources && formatPatientName(this.props.resources.pathItem('[category=Patient].data.name')) }
 	     </div> */}
-	    { this.props.resources && <Search data={this.props.resources.transformed} callback={this.props.searchCallback} />}
-	    <div className='header-controls-box'>
-	       {/* make highlight active/inactive first <button className={'inactive-light-'+(this.state.inactiveLight ? 'on' : 'off')}>Inactive</button> */}
-	       <button className='text-size-smaller-button-off'	onClick={() => this.resizeText('-')} >A</button>
-	       <div className='text-size-slider-container'>
-	          <div className='text-size-slider-button' />
-	       </div>
-	       <button className='text-size-larger-button-off'	onClick={() => this.resizeText('+')} >A</button>
-	    </div>
+	    { config.enableSearch && this.props.resources && <Search data={this.props.resources.transformed} callback={this.props.searchCallback} />}
+	    { config.enableTextSizing && <div className='header-controls-box'>
+		 {/* make highlight active/inactive first <button className={'inactive-light-'+(this.state.inactiveLight ? 'on' : 'off')}>Inactive</button> */}
+		 <button className='text-size-smaller-button-off'	onClick={() => this.resizeText('-')} >A</button>
+		 <div className='text-size-slider-container'>
+		    <div className='text-size-slider-button' />
+		 </div>
+		 <button className='text-size-larger-button-off'	onClick={() => this.resizeText('+')} >A</button>
+	      </div> }
 	    {/* <div className='text-size-current'		onClick={() => this.resetTextSize()}>
 	         {Math.round(this.state.currentTextSize*100)}%
 	     </div> */}
          
-	    <button className={this.state.menuIsOpen ? 'header-menu-button-open' : 'header-menu-button'}
-		    onClick={() => this.state.modalName === '' && this.setState({ menuIsOpen: !this.state.menuIsOpen })} />
+	    { config.enableMenu && <button className={this.state.menuIsOpen ? 'header-menu-button-open' : 'header-menu-button'}
+					   onClick={() => this.state.modalName === '' && this.setState({ menuIsOpen: !this.state.menuIsOpen })} /> }
 	    { this.state.menuIsOpen && this.renderMenu() }
 	    { this.state.themesMenuIsOpen && this.renderThemesMenu() }
 	 </div>

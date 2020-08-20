@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './SummaryView.css';
-//import config from '../../config.js';
+import config from '../../config.js';
 import FhirTransform from '../../FhirTransform.js';
 import { formatPatientName, formatPatientAddress } from '../../fhirUtil.js';
 import { formatDisplayDate, formatAge, titleCase } from '../../util.js';
@@ -119,7 +119,8 @@ export default class SummaryView extends React.Component {
 	    <div className='record' key={key++}>
 	        <div className='record-category'>{catName}</div> 
            <div className='record-count'>{resArray.length}</div>
-	        <div className='record-newest'>{maxDate ? maxDate.getFullYear() : ''}</div>
+	        { maxDate && <div className='record-newest'>{maxDate.getFullYear()}</div> }
+	        { !maxDate && <div className='record-newest-undefined'>{'\u2014'}</div> }
 	    </div>
 	 );
       }
@@ -146,30 +147,30 @@ export default class SummaryView extends React.Component {
 	    <div className='view-info-container'>
 	       <div className='view-info-graphic-catalog'/>
 	       <div className='view-info-text'>
-		  <b>Catalog</b> lists your unique clinical data by type.
+		  <br/><b>Catalog View</b> lists your unique clinical data by type.
 	       </div>
 	    </div>
 
 	    <div className='view-info-container'>
 	       <div className='view-info-graphic-compare'/>
 	       <div className='view-info-text'>
-		  <b>Compare</b> shows which providers have records of your unique clinical data.
+		  <b>Compare View</b> shows which providers have records of your unique clinical data.
 	       </div>
 	    </div>
 
 	    <div className='view-info-container'>
 	       <div className='view-info-graphic-timeline'/>
 	       <div className='view-info-text'>
-		  <b>Timeline</b> shows your detailed clinical and payer data over time.
+		  <b>Timeline View</b> shows your detailed clinical and payer data over time.
 	       </div>
 	    </div>
 
-	    <div className='view-info-container'>
-	       <div className='view-info-graphic-payer'/>
-	       <div className='view-info-text'>
-		  <b>Payer</b> presents your claims and benefits data.
-	       </div>
-	    </div>
+	    { config.enablePayer && <div className='view-info-container'>
+		 <div className='view-info-graphic-payer'/>
+		 <div className='view-info-text'>
+		    <b>Payer</b> presents your claims and benefits data.
+		 </div>
+	      </div> }
 	 </div>
       );
    }

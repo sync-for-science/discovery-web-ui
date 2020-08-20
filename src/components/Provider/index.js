@@ -18,7 +18,7 @@ export default class Provider extends React.Component {
       providerName: PropTypes.string.isRequired,
       svgWidth: PropTypes.string.isRequired,
       dotPositionsFn: PropTypes.func.isRequired,
-      dotClickFn: PropTypes.func.isRequired,
+      dotClickFn: PropTypes.func,
       enabledFn: PropTypes.func.isRequired,
       isEnabled: PropTypes.bool
    }

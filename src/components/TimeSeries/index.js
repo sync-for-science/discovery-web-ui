@@ -69,7 +69,8 @@ export default class TimeSeries extends React.Component {
 	    <MarkSeries className='mark' data={systolicSeries} size={4.5} color='#01a6aa' onValueClick={this.handleDotClick} />
 	    <MarkSeries className='mark' data={diastolicSeries} size={4.5} color='#01a6aa' onValueClick={this.handleDotClick} />
 
-	    { this.props.highlights && <MarkSeries className='mark' data={highlights} xDomain={[minX,maxX]} size={8} color='#8d3031' onValueClick={this.handleDotClick} /> }
+	    {/* this.props.highlights && <MarkSeries className='mark' data={highlights} xDomain={[minX,maxX]} size={8} color='#8d3031' onValueClick={this.handleDotClick} /> */}
+	    { this.props.highlights && <MarkSeries className='mark' data={highlights} xDomain={[minX,maxX]} size={8} color='#d78c14' onValueClick={this.handleDotClick} /> }
 	    { this.props.highlights && <MarkSeries className='mark' data={highlights} xDomain={[minX,maxX]} size={5} color='white' onValueClick={this.handleDotClick} /> }
 	    { this.props.highlights && <MarkSeries className='mark' data={highlights} xDomain={[minX,maxX]} size={3.7} color='#01a6aa' onValueClick={this.handleDotClick} /> }
 	 </XYPlot>
@@ -103,7 +104,8 @@ export default class TimeSeries extends React.Component {
 	    <LineSeries className='line' data={this.props.data} />
 	    <MarkSeries className='mark' data={this.props.data} size={4.5} onValueClick={this.handleDotClick} />
 
-	    { this.props.highlights && <MarkSeries className='mark' data={this.props.highlights} size={8}   color='#8d3031' onValueClick={this.handleDotClick} /> }
+	    {/* this.props.highlights && <MarkSeries className='mark' data={this.props.highlights} size={8}   color='#8d3031' onValueClick={this.handleDotClick} /> */}
+	    { this.props.highlights && <MarkSeries className='mark' data={this.props.highlights} size={8}   color='#d78c14' onValueClick={this.handleDotClick} /> }
 	    { this.props.highlights && <MarkSeries className='mark' data={this.props.highlights} size={5}   color='white'   onValueClick={this.handleDotClick} /> }	       
 	    { this.props.highlights && <MarkSeries className='mark' data={this.props.highlights} size={3.7} color='#01a6aa' onValueClick={this.handleDotClick} /> }
 	 </XYPlot>

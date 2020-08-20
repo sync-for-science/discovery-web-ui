@@ -8,7 +8,7 @@ import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderEOB, resolveDiagnosisReference, primaryTextValue } from '../../fhirUtil.js';
-import { Const, stringCompare, shallowEqArray, formatContentHeader } from '../../util.js';
+import { Const, stringCompare, formatKey, shallowEqArray, formatContentHeader } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -90,11 +90,14 @@ export default class Benefits extends React.Component {
    //    }
    // }
 
+//	       <div className='benefits category-container' style={this.props.style}>
+
    render() {
+      let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
-	       <div className='benefits category-container' style={this.props.style}>
-		  { formatContentHeader(this.props.isEnabled, Benefits.catName, this.state.matchingData[0], this.context) }
+	       <div className='benefits category-container' style={this.props.style} id={formatKey(firstRes)}>
+		  { formatContentHeader(this.props.isEnabled, Benefits.catName, firstRes, this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderEOB(this.state.matchingData, this.context) }
 	             { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }

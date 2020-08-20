@@ -1,0 +1,17 @@
+{
+   "upload": {
+      "manifestUrl": "http://data.discovery.cingulata.us/data/manifest",
+      "label": "Discovery"
+   }
+}
+
+
+// Returned manifest contents
+//{
+//   "name": "Upload to Discovery",
+//   "uploadUrl": "http://data.discovery.cingulata.us/data/upload/<id>",
+//   "infoUrl": "about:blank",
+//   "continueLabel": "Continue...",
+//   "continueUrl": "http://app.discovery.cingulata.us:3000/uploaded/<id>",
+//   "successMessage": "Success!"
+//}

@@ -5,7 +5,7 @@ import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderDisplay, primaryTextValue } from '../../fhirUtil.js';
-import { Const, stringCompare, formatContentHeader } from '../../util.js';
+import { Const, stringCompare, formatKey, formatContentHeader } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -23,12 +23,10 @@ export default class DocumentReferences extends React.Component {
    }
 
    static code(elt) {
-      return elt.data.code;
+      return elt.data.code ? elt.data.code : elt.data.type;
    }
 
    static primaryText(elt) {
-//      return elt.data.code.coding[0].display;
-//      return tryWithDefault(elt, elt => DocumentReferences.code(elt).coding[0].display, Const.unknownValue);
       return primaryTextValue(DocumentReferences.code(elt));
    }
 
@@ -59,10 +57,11 @@ export default class DocumentReferences extends React.Component {
    }
 
    render() {
+      let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
-	       <div className='document-references category-container'>
-		  { formatContentHeader(this.props.isEnabled, DocumentReferences.catName, this.state.matchingData[0], this.context) }
+	       <div className='document-references category-container' id={formatKey(firstRes)}>
+		  { formatContentHeader(this.props.isEnabled, DocumentReferences.catName, firstRes, this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Document', this.context) }
 	          </div>

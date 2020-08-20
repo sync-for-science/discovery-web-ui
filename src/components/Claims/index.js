@@ -8,7 +8,7 @@ import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderClaims, resolveDiagnosisReference } from '../../fhirUtil.js';
-import { Const, stringCompare, shallowEqArray, formatContentHeader } from '../../util.js';
+import { Const, stringCompare, shallowEqArray, formatKey, formatContentHeader } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -91,10 +91,11 @@ export default class Claims extends React.Component {
    // }
 
    render() {
+      let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
 	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
-	       <div className='claims category-container' style={this.props.style}>
-		  { formatContentHeader(this.props.isEnabled, Claims.catName, this.state.matchingData[0], this.context) }
+	       <div className='claims category-container' style={this.props.style} id={formatKey(firstRes)}>
+		  { formatContentHeader(this.props.isEnabled, Claims.catName, firstRes, this.context) }
 	          <div className='content-body'>
 		     { this.props.isEnabled && renderClaims(this.state.matchingData, this.context) }
 	             { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }

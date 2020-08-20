@@ -2,7 +2,7 @@
 /* @import '../../css/Selector.css'; */
 
 /* Sync for Science Discovery CategoryRollup Stylesheet */
-/* v.01.27 Updated 10/08/2019 */
+/* v.01.28 Updated 11/14/2019 */
 
 .category-rollup-svg-container {
    position: relative;
@@ -11,15 +11,11 @@
    display: flex;
    justify-content: center;
    align-items: center;
-   height: 60px;
-   max-height: 60px;
+   height: 32px;
+   max-height: 32px;
    width: 100%; 
-   background-image: url("../../svg/horizontal-rule-1px-blue-medium-100.svg");
-   background-position: center;
-   background-repeat: repeat-x;
-   background-clip: padding-box;
-   padding: 0 10px;
-   margin: -70px 0 0 0;
+   padding: 12px 0 0 0;
+   margin: -50px 0 0 0;
    overflow: hidden; 
 }
 
