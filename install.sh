@@ -1,6 +1,6 @@
 #!/bin/bash
 # Discovery Application Server installer
-# 20200819/SK
+# 20200821/SK
 
 # Get component locations
 echo -n 'DNS/IP address of the Discovery Data Server [localhost]: '
@@ -10,8 +10,8 @@ if [ -z $DATA_ADDR ]; then
 fi
 
 # Install prerequisites
-sudo apt install nodejs
-sudo apt install npm
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo apt-get install -y nodejs
 
 # Install node modules
 sudo npm install
