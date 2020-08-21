@@ -29,7 +29,7 @@ The package uses two postcss plugins not yet supported by Create React App:
 - postcss-import [<https://github.com/postcss/postcss-import>]
 - postcss-insert [<https://github.com/JoeCianflone/postcss-insert>]
 
-This is (currently) accomplished by editing **./node_modules/react-scripts/config/webpack.config.js** after running the install script. Note that upgrading react-scripts after installation will require reapplying this edit. Edit the file to add the two plugins as follows:
+This is (currently) accomplished by hand-editing **./node_modules/react-scripts/config/webpack.config.js** after running the install script. Note that upgrading react-scripts after installation will require reapplying this edit. Edit the file to add the two plugins as follows:
 
 	.
 	.
