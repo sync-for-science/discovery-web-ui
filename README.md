@@ -62,8 +62,8 @@ This is (currently) accomplished by hand-editing **./node_modules/react-scripts/
             },
             stage: 3,
           }),
-          require('postcss-import'),		<--- ADD THIS LINE
-          require('postcss-insert')		<--- ADD THIS LINE
+          require('postcss-import'),            <--- ADD THIS LINE
+          require('postcss-insert')             <--- ADD THIS LINE
         ],
         sourceMap: isEnvProduction && shouldUseSourceMap,
       },
