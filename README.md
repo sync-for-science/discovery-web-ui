@@ -12,6 +12,11 @@ All three packages can be installed on the same Linux instance, but the DNS/IP a
 
 ## Installation of the Discovery Application Server
 
+Verify this system is current:
+
+    sudo apt update
+    sudo apt upgrade
+
 Clone this repository:
 
     git clone https://github.com/sync-for-science/discovery
