@@ -3,6 +3,7 @@
 # 20200821/SK
 
 # Get component locations
+THIS_ADDR=`dig @resolver1.opendns.com ANY myip.opendns.com +short`
 echo -n 'DNS/IP address of the Discovery Data Server: '
 read DATA_ADDR
 
@@ -22,18 +23,22 @@ SUBST=s@DATA@$DATA_ADDR@g
 sed $SUBST src/config.js.template > src/config.js
 
 # Install Procure
+DISCOVERY_DIR=$PWD
+cd ..
 git clone https://github.com/sync-for-science/procure-wip
 cd procure-wip
+PROCURE_DIR=$PWD
 curl https://open.epic.com/MyApps/EndpointsJson -o ./public/config/epic_endpoints.json
 npm install
-cd ..
+cd $DISCOVERY_DIR
 
 # Connect Procure and Discovery
-cp -p ./Procure.config-override-dev.json ./procure-wip/public/config/config-override-dev.json
-
+SUBST1=s@THIS@$THIS_ADDR@g
+SUBST2=s@DATA@$DATA_ADDR@g
+sed -e $SUBST1 -e $SUBST2 ./Procure.config-override-dev.json.template > ../procure-wip/public/config/config-override-dev.json
 
 # Rewrite Procure service file to reference install dir
-SUBST=s@WORKINGDIR@$PWD@g
+SUBST=s@WORKINGDIR@$PROCURE_DIR@g
 sed $SUBST Procure.service.template > Procure.service
 
 # Setup and start Discovery service
