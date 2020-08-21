@@ -12,6 +12,11 @@ All three packages can be installed on the same Linux instance, but the DNS/IP a
 
 ## Installation of the Discovery Application Server
 
+Clone this repository:
+
+`git clone https://github.com/sync-for-science/discovery`
+`cd discovery`
+
 Run the **install.sh** script (you must have sudo privileges):
 
 `./install.sh`
