@@ -4,7 +4,7 @@ StartLimitInterval=0
 
 [Service]
 Type=simple
-WorkingDirectory=WORKINGDIR/procure-wip
+WorkingDirectory=WORKINGDIR
 Environment=PORT=4000
 ExecStart=/usr/bin/npm start
 Restart=always

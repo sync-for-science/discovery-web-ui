@@ -74,4 +74,4 @@ This is (currently) accomplished by hand-editing **./node_modules/react-scripts/
 
 ## Checking Status
 
-Use a web browser to access the Discovery Application at the DNS/IP address of this instance.
+Use a web browser to access the Discovery Application at the DNS/IP address of this instance. The default port is 3000.
