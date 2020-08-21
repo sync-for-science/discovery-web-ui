@@ -27,7 +27,7 @@ import SocialHistory from '../SocialHistory';
 import VitalSigns from '../VitalSigns';
 import Unimplemented from '../Unimplemented';
 
-import ListView from './ListView';
+//import ListView from './ListView';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -659,27 +659,27 @@ export default class ContentPanel extends React.Component {
       }
    }
 
-   renderItemForListView = (item) => {
-      let goo = this.renderItems([item.item]);
-      return goo;
-   }
-
-   NEWrenderAltDisplay() {
-      if (this.state.showJSON) {
-	 return (
-	    <div className='content-panel-inner-body'>
-	       <pre className='content-panel-data'>
-		  { JSON.stringify(this.state.currResources, null, 3) }
-	       </pre>
-	    </div>
-	 );
-
-      } else {
-	 return (
-	    <ListView data={this.state.currResources} renderItem={this.renderItemForListView} emptyText='[Nothing to show...]' />
-	 )
-      }
-   }
+//   renderItemForListView = (item) => {
+//      let goo = this.renderItems([item.item]);
+//      return goo;
+//   }
+//
+//   NEWrenderAltDisplay() {
+//      if (this.state.showJSON) {
+//	 return (
+//	    <div className='content-panel-inner-body'>
+//	       <pre className='content-panel-data'>
+//		  { JSON.stringify(this.state.currResources, null, 3) }
+//	       </pre>
+//	    </div>
+//	 );
+//
+//      } else {
+//	 return (
+//	    <ListView data={this.state.currResources} renderItem={this.renderItemForListView} emptyText='[Nothing to show...]' />
+//	 )
+//      }
+//   }
 
    get altScrollFraction() {
       return this.scrollDiv.current ? this.scrollDiv.current.scrollTop / (this.scrollDiv.current.scrollHeight - this.scrollDiv.current.clientHeight) : 0;
