@@ -3,11 +3,8 @@
 # 20200821/SK
 
 # Get component locations
-echo -n 'DNS/IP address of the Discovery Data Server [localhost]: '
+echo -n 'DNS/IP address of the Discovery Data Server: '
 read DATA_ADDR
-if [ -z $DATA_ADDR ]; then
-    DATA_ADDR=localhost
-fi
 
 # Install prerequisites
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -

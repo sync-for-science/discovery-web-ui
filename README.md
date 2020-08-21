@@ -29,7 +29,7 @@ Run the **install.sh** script (you must have sudo privileges):
 
 The install script will request the following:
 
-- The DNS/IP address of the Discovery Data Server (defaults to **localhost** if no input given)
+- The DNS/IP address of the Discovery Data Server
 
 The Procure application [<https://github.com/sync-for-science/procure-wip>] will also be installed.
 
@@ -62,8 +62,8 @@ This is (currently) accomplished by hand-editing **./node_modules/react-scripts/
             },
             stage: 3,
           }),
-	  require('postcss-import'),		<--- ADD THIS LINE
-	  require('postcss-insert'),		<--- ADD THIS LINE
+          require('postcss-import'),		<--- ADD THIS LINE
+          require('postcss-insert')		<--- ADD THIS LINE
         ],
         sourceMap: isEnvProduction && shouldUseSourceMap,
       },

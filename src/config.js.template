@@ -1,5 +1,5 @@
 export default {
-   serverUrl: 'DATA',
+   serverUrl: 'http://DATA',
    timeout: 5000,			// msec
 
    normalDotRadius: '5px',
