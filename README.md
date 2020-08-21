@@ -2,9 +2,9 @@
 
 The S4S Discovery application consists of the following components:
 
-1. **The Discovery Application Server (this package)** <https://github.com/sync-for-science/discovery>
-2. The Discovery FHIR Demo Data Providers <https://github.com/sync-for-science/discovery-FHIR-data>
-3. The Discovery Data Server (this package) <https://github.com/sync-for-science/discovery-data-server>
+1. **The Discovery Application Server (this package)** [<https://github.com/sync-for-science/discovery>]
+2. The Discovery FHIR Demo Data Providers [<https://github.com/sync-for-science/discovery-FHIR-data>]
+3. The Discovery Data Server (this package) [<https://github.com/sync-for-science/discovery-data-server>]
 
 This package sets up the S4S Discovery Application Server.
 
@@ -20,12 +20,14 @@ The install script will request the following:
 
 - The DNS/IP address of the Discovery Data Server (defaults to **localhost** if no input given)
 
+The Procure application [<https://github.com/sync-for-science/procure-wip>] will also be installed.
+
 ## Adding support for postcss-import and postcss-insert
 
 The package uses two postcss plugins not yet supported by Create React App:
 
-- postcss-import <https://github.com/postcss/postcss-import>
-- postcss-insert <https://github.com/JoeCianflone/postcss-insert>
+- postcss-import [<https://github.com/postcss/postcss-import>]
+- postcss-insert [<https://github.com/JoeCianflone/postcss-insert>]
 
 This is (currently) accomplished by editing **./node_modules/react-scripts/config/webpack.config.js** after running the install script. Note that upgrading react-scripts after installation will require reapplying this edit. Edit the file to add the two plugins as follows:
 
