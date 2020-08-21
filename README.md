@@ -12,7 +12,7 @@ All three packages can be installed on the same Linux instance, but the DNS/IP a
 
 ## Installation of the Discovery Application Server
 
-Verify this system is current:
+Verify the target system is current:
 
     sudo apt update
     sudo apt upgrade
