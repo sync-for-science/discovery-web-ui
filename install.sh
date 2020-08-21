@@ -53,6 +53,6 @@ sudo systemctl start Procure.service
 
 # Done
 echo
-echo Done! Remember to:
-echo          edit ./node_modules/react-scripts/config/webpack.config.js (see README.md)
-echo          restart the Discovery service (sudo systemctl restart Discovery.service)
+echo 'Done! Remember to:'
+echo '         edit ./node_modules/react-scripts/config/webpack.config.js (see README.md)'
+echo '         restart the Discovery service (sudo systemctl restart Discovery.service)'
