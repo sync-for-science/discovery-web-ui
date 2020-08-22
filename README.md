@@ -74,4 +74,8 @@ This is (currently) accomplished by hand-editing **./node_modules/react-scripts/
 
 ## Checking Status
 
-Use a web browser to access the Discovery Application at the DNS/IP address of this instance. The default port is 3000.
+Use a web browser to access the Discovery and Procure applications at the DNS/IP address of this instance:
+
+- Discovery: port 3000
+- Procure: port 4000
+
