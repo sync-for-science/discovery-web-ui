@@ -9,6 +9,8 @@ Environment=PORT=4000
 ExecStart=/usr/bin/npm start
 Restart=always
 RestartSec=3
+# Handle issue introduced with react-scripts 3.4.1
+StandardInput=tty-force
 
 [Install]
 WantedBy=multi-user.target
