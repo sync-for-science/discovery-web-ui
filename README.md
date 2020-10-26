@@ -20,7 +20,7 @@ Discovery has been developed by the Sync for Science (S4S) project (<http://sync
 The S4S Discovery application consists of the following components:
 
 1. The Discovery FHIR Demo Data Providers [<https://github.com/sync-for-science/discovery-FHIR-data>]
-2. The Discovery Data Server (this package) [<https://github.com/sync-for-science/discovery-data-server>]
+2. The Discovery Data Server [<https://github.com/sync-for-science/discovery-data-server>]
 3. **The Discovery Application Server (this package)** [<https://github.com/sync-for-science/discovery>]
 
 This package sets up the S4S Discovery Application Server.
