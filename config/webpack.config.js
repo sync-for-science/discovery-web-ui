@@ -107,6 +107,9 @@ module.exports = function(webpackEnv) {
               },
               stage: 3,
             }),
+            // https://github.com/sync-for-science/discovery/#adding-support-for-postcss-import-and-postcss-insert:
+            require('postcss-import'), //            <--- ADDED LINE
+            require('postcss-insert')  //            <--- ADDED LINE
           ],
           sourceMap: isEnvProduction && shouldUseSourceMap,
         },
