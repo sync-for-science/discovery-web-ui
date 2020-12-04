@@ -8,6 +8,7 @@ module.exports = {
     'plugin:react/recommended',
     'airbnb',
   ],
+  ignorePatterns: ['config/webpack.config.js'],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
