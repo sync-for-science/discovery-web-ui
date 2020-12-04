@@ -21,7 +21,7 @@ export default class CompareView extends React.Component {
 
    static myName = 'CompareView';
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform),
@@ -31,10 +31,10 @@ export default class CompareView extends React.Component {
     position: PropTypes.number.isRequired,
     date: PropTypes.string.isRequired
  })).isRequired,
- minDate: PropTypes.string.isRequired,		// Earliest date we have data for this participant
- startDate: PropTypes.string.isRequired,	// Jan 1 of minDate's year
- maxDate: PropTypes.string.isRequired,		// Latest date we have data for this participant
- endDate: PropTypes.string.isRequired		// Dec 31 of last year of timeline tick periods
+ minDate: PropTypes.string.isRequired,  // Earliest date we have data for this participant
+ startDate: PropTypes.string.isRequired, // Jan 1 of minDate's year
+ maxDate: PropTypes.string.isRequired,  // Latest date we have data for this participant
+ endDate: PropTypes.string.isRequired  // Dec 31 of last year of timeline tick periods
       }),
       categories: PropTypes.arrayOf(PropTypes.string).isRequired,
       providers: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -76,11 +76,11 @@ export default class CompareView extends React.Component {
 
    componentWillUnmount() {
       this.context.updateGlobalContext({ savedSelectedTiles: this.state.selectedUniqueItems,
-         lastTileSelected: this.state.lastUniqueItemSelected,		// Save selected, last selected unique items
+         lastTileSelected: this.state.lastUniqueItemSelected,  // Save selected, last selected unique items
  viewAccentDates: [],
  viewLastAccentDates: [],
  highlightedResources: [],
- lastHighlightedResources: [] });				// Clear highlights
+ lastHighlightedResources: [] });    // Clear highlights
    }
 
    componentDidUpdate(prevProps, prevState) {
@@ -92,7 +92,7 @@ export default class CompareView extends React.Component {
       // TODO: only on explicit changes?
       if (notEqJSON(prevState, this.state)) {
  let scroller = document.querySelector('.compare-view-scroller');
- let header = document.querySelector('.compare-view-title-container');		// TODO: this might not be the best place to put the CP top bound...
+ let header = document.querySelector('.compare-view-title-container');  // TODO: this might not be the best place to put the CP top bound...
  if (scroller && header) {
     this.setState({ topBound: numericPart(getStyle(scroller, 'margin-top')) + header.clientHeight });
  }
@@ -123,7 +123,7 @@ export default class CompareView extends React.Component {
  const headerBot = document.querySelector('.time-widget').getBoundingClientRect().bottom;
  const contentPanelTitleHeight = document.querySelector('.content-panel-inner-title').clientHeight;
 
- return footTop - headerBot - contentPanelTitleHeight - 10;	// TODO: correct margin size
+ return footTop - headerBot - contentPanelTitleHeight - 10; // TODO: correct margin size
 
       } catch (e) {
  return 0;
@@ -141,7 +141,7 @@ export default class CompareView extends React.Component {
  scroller.style = `height:${compareView.clientHeight/1.6}px;`;
       }
 
-      return scroller.clientHeight + 25;	// TODO: correct margin sizes
+      return scroller.clientHeight + 25; // TODO: correct margin sizes
    }
 
    onContentPanelResize() {
@@ -169,7 +169,7 @@ export default class CompareView extends React.Component {
    //
    // Resulting structure ('struct'):
    // {
-   //	cat1: [
+   // cat1: [
    //      {
    //         display: 'disp1',
    //         trueCategory: 'category',
@@ -178,9 +178,9 @@ export default class CompareView extends React.Component {
    //            {
    //               provName: 'prov1',
    //               count: count1,
-   //		    minDate: 'date1',
-   //		    maxDate: 'date2',
-   //		    dates: [ {x: 'date', y: 0}, ... ]
+   //      minDate: 'date1',
+   //      maxDate: 'date2',
+   //      dates: [ {x: 'date', y: 0}, ... ]
    //            },
    //            ...
    //         ]
@@ -197,13 +197,13 @@ export default class CompareView extends React.Component {
       for (let res of resources) {
  if (this.noCompareCategories.includes(res.category) ||
      !inDateRange(res.itemDate, this.props.thumbLeftDate, this.props.thumbRightDate)) {
-    continue;	// Ignore this resource
+    continue; // Ignore this resource
  }
 
  if (!struct.hasOwnProperty(cat)) {
     // Add this category
     struct[cat] = [];
-//	    console.log('1 ' + cat + ' added');
+//     console.log('1 ' + cat + ' added');
  }
 
  let thisCat = struct[cat];
@@ -226,17 +226,17 @@ export default class CompareView extends React.Component {
        thisProv.minDate = date.getTime() < thisProv.minDate.getTime() ? date : thisProv.minDate;
        thisProv.maxDate = date.getTime() > thisProv.maxDate.getTime() ? date : thisProv.maxDate;
        thisProv.dates.push({x:date, y:0});
-//	       console.log('2 ' + cat + ' ' + JSON.stringify(thisDisplay.codes) + ' ' + thisDisplay.display + ': ' + thisProv.provName + ' ' + thisProv.count);
+//        console.log('2 ' + cat + ' ' + JSON.stringify(thisDisplay.codes) + ' ' + thisDisplay.display + ': ' + thisProv.provName + ' ' + thisProv.count);
     } else {
        // Add new prov
        provs.push({ provName: prov, count: 1, minDate: date, maxDate: date, dates: [{x:date, y:0}] });
-//	       console.log('3 ' + cat + ' ' + JSON.stringify(thisDisplay.codes) + ' ' + thisDisplay.display + ': ' + prov + ' 1');
+//        console.log('3 ' + cat + ' ' + JSON.stringify(thisDisplay.codes) + ' ' + thisDisplay.display + ': ' + prov + ' 1');
     }
  } else {
     // Add new display value
     thisCat.push({ display: coding.display, trueCategory: res.category, codes: [coding.code],
    provs: [{ provName: prov, count: 1, minDate: date, maxDate: date, dates: [{x:date, y:0}] }] });
-//	    console.log('4 ' + cat + ' ' + coding.code + ' ' + coding.display + ': ' + prov + ' 1');
+//     console.log('4 ' + cat + ' ' + coding.code + ' ' + coding.display + ': ' + prov + ' 1');
  }
       }
    }
@@ -319,7 +319,7 @@ export default class CompareView extends React.Component {
    }
 
    onUniqueItemClick = (e) => {
-      let newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);	// copy selected unique items obj
+      let newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems); // copy selected unique items obj
       let uniqueItemId = this.parseUniqueItemId(e.target.id);
       let matchingUniqueItemResources = null
       let clearedPrevSelected = false;
@@ -333,8 +333,8 @@ export default class CompareView extends React.Component {
     delete newSelectedUniqueItems[uniqueItemId.catName][uniqueItemId.display];
  }
  clearedPrevSelected = true;
- this.context.updateGlobalContext({ highlightedResources: [],		// Used by HighlightDiv
-    lastHighlightedResources: [] });	//
+ this.context.updateGlobalContext({ highlightedResources: [],  // Used by HighlightDiv
+    lastHighlightedResources: [] }); //
  this.setState({ lastUniqueItemSelected: null });
 
       } else {
@@ -344,14 +344,14 @@ export default class CompareView extends React.Component {
  }
  matchingUniqueItemResources = this.matchingUniqueItemResources(uniqueItemId);
  newSelectedUniqueItems[uniqueItemId.catName][uniqueItemId.display] = matchingUniqueItemResources;
- this.context.updateGlobalContext({ highlightedResources: this.allSelectedUniqueItemResources(newSelectedUniqueItems),	// Used by HighlightDiv
-    lastHighlightedResources: matchingUniqueItemResources });				//
-//	 let newDate = matchingUniqueItemResources[0].itemDate;
-//	 let newContext = Object.assign(this.state.context, { date: newDate,
-//							      position: normalizeDates([newDate], this.state.context.minDate, this.state.context.maxDate)[0],
-//							      dotType: 'active' });
+ this.context.updateGlobalContext({ highlightedResources: this.allSelectedUniqueItemResources(newSelectedUniqueItems), // Used by HighlightDiv
+    lastHighlightedResources: matchingUniqueItemResources });    //
+//  let newDate = matchingUniqueItemResources[0].itemDate;
+//  let newContext = Object.assign(this.state.context, { date: newDate,
+//             position: normalizeDates([newDate], this.state.context.minDate, this.state.context.maxDate)[0],
+//             dotType: 'active' });
  this.setState({ lastUniqueItemSelected: uniqueItemId,
-//			 context: newContext
+//    context: newContext
        });
       }
 
@@ -417,7 +417,7 @@ this.matchingUniqueItemResources(uniqueItemId)) });
       } else {
  return 'compare-view-record-button';
       }
-   }		 
+   }   
 
    formatCount(count, onePre, onePost, multiPre, multiPost) {
        return (count === 1) ? onePre + onePost : multiPre + count + multiPost;
@@ -446,7 +446,7 @@ this.matchingUniqueItemResources(uniqueItemId)) });
 
  } else {
     // --> all selected
-    newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);	// copy selected unique items obj
+    newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems); // copy selected unique items obj
     if (!newSelectedUniqueItems[hCatName]) {
        newSelectedUniqueItems[hCatName] = {};
     }
@@ -462,7 +462,7 @@ trueCategory:unique1.trueCategory });
       } else if (selectedCount < uniqueItemsForCatCount) {
  // Part selected --> all selected (and save copy of partial)
  this.context.updateGlobalContext({ lastSavedSelectedTiles: JSON.parse(JSON.stringify(this.state.selectedUniqueItems)) });
- newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);	// copy selected tiles obj
+ newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems); // copy selected tiles obj
  if (!newSelectedUniqueItems[hCatName]) {
     newSelectedUniqueItems[hCatName] = {};
  }
@@ -482,7 +482,7 @@ trueCategory:unique1.trueCategory });
 
       } else {
  // All selected --> none selected
- newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);	// copy selected unique items obj
+ newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems); // copy selected unique items obj
  delete newSelectedUniqueItems[hCatName]
  this.setState({ selectedUniqueItems: newSelectedUniqueItems });
  this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedUniqueItems),
@@ -598,7 +598,7 @@ trueCategory:unique1.trueCategory });
       for (let catName of Object.keys(this.state.selectedUniqueItems)) {
  for (let displayStr of Object.keys(this.state.selectedUniqueItems[catName])) {
     if (!this.state.onlyMultisource ||
-(this.state.onlyMultisource &&		// more than one provider?
+(this.state.onlyMultisource &&  // more than one provider?
  this.state.selectedUniqueItems[catName][displayStr].reduce((provs, res) => provs.add(res.provider), new Set()).size > 1)) {
        resArray = resArray.concat(this.state.selectedUniqueItems[catName][displayStr]);
     }

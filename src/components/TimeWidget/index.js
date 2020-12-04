@@ -20,20 +20,20 @@ export default class TimeWidget extends React.Component {
 
    static myName = 'TimeWidget';
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
-      minDate: PropTypes.string.isRequired,		// Earliest date we have data for this participant
-      maxDate: PropTypes.string.isRequired,		// Latest date we have data for this participant
-      startDate: PropTypes.string.isRequired,		// Left-most date of the primary timeline
-      endDate: PropTypes.string.isRequired,		// Right-most date of the primary timeline
-      thumbLeft: PropTypes.number.isRequired,		// Relative location [0..1] of the left-most thumb
-      thumbRight: PropTypes.number.isRequired,		// Relative location [0..1] of the right-most thumb
+      minDate: PropTypes.string.isRequired,  // Earliest date we have data for this participant
+      maxDate: PropTypes.string.isRequired,  // Latest date we have data for this participant
+      startDate: PropTypes.string.isRequired,  // Left-most date of the primary timeline
+      endDate: PropTypes.string.isRequired,  // Right-most date of the primary timeline
+      thumbLeft: PropTypes.number.isRequired,  // Relative location [0..1] of the left-most thumb
+      thumbRight: PropTypes.number.isRequired,  // Relative location [0..1] of the right-most thumb
       timelineWidth: PropTypes.string.isRequired,
-      setLeftRightFn: PropTypes.func.isRequired,	// Communicate thumb movement to parent
-      dotPositionsFn: PropTypes.func.isRequired,	// Get dot positions from parent
-      dotClickFn: PropTypes.func,			// Communicate dot click to parent
-      dotContext: PropTypes.object			// The last clicked dot (or null)
+      setLeftRightFn: PropTypes.func.isRequired, // Communicate thumb movement to parent
+      dotPositionsFn: PropTypes.func.isRequired, // Get dot positions from parent
+      dotClickFn: PropTypes.func,   // Communicate dot click to parent
+      dotContext: PropTypes.object   // The last clicked dot (or null)
    }
     
    state = {
@@ -101,8 +101,8 @@ export default class TimeWidget extends React.Component {
       if (!this.periodPadding) {
  let expanded = document.querySelector('.timeline-expanded-years');
  this.periodPadding = expanded ? numericPart(getStyle(expanded, 'padding-left')) + numericPart(getStyle(expanded, 'padding-right')) : 0;
-      }	   
-   }	
+      }    
+   } 
 
    componentDidMount() {
       this.cacheSizes();
@@ -183,8 +183,8 @@ export default class TimeWidget extends React.Component {
       const expMinDate = new Date(this.state.thumbDates.minDate);
       const expMaxDate = new Date(this.state.thumbDates.maxDate);
 
-      const expFirstYear = parseInt(expMinDate.getFullYear());	// expMinDate's year
-      const expLastYear = parseInt(expMaxDate.getFullYear());	// expMaxDate's year
+      const expFirstYear = parseInt(expMinDate.getFullYear()); // expMinDate's year
+      const expLastYear = parseInt(expMaxDate.getFullYear()); // expMaxDate's year
 
       const expMonths = 1 + expMaxDate.getMonth() - expMinDate.getMonth() + 12 * (expLastYear - expFirstYear);
 
@@ -210,7 +210,7 @@ export default class TimeWidget extends React.Component {
        thisWidth = firstPeriodWidth;
     } else if ((periodIncr === 1 && year === expLastYear) ||
        (periodIncr > 1 && year+periodIncr >= expLastYear)) {
-       thisWidth = fullWidth - cumWidth - this.periodPadding;	// Last period width
+       thisWidth = fullWidth - cumWidth - this.periodPadding; // Last period width
     } else {
        thisWidth = periodWidth
     }
@@ -228,8 +228,8 @@ export default class TimeWidget extends React.Component {
       } else {
  // Months
  const dayMillis = 86400000;
-//	 const MinWidthForMonthLabel = 70;		// Width for font-size:0.800rem
- const MinWidthForMonthLabel = 65;		// Width for font-size:0.750rem
+//  const MinWidthForMonthLabel = 70;  // Width for font-size:0.800rem
+ const MinWidthForMonthLabel = 65;  // Width for font-size:0.750rem
  const MinWidthForNarrowMonthLabel = 55;
  const avgMonthDays = 30.4;
 
@@ -248,7 +248,7 @@ export default class TimeWidget extends React.Component {
      if (monthNum === 0) {
         thisWidth = firstMonthWidth;
      } else if (monthNum === expMonths-1) {
-        thisWidth = fullWidth - cumWidth - this.periodPadding;	// Last month width
+        thisWidth = fullWidth - cumWidth - this.periodPadding; // Last month width
      } else {
         thisWidth = avgMonthWidth;
      }
@@ -313,7 +313,7 @@ export default class TimeWidget extends React.Component {
 
  default:
     return '';
-      }	   
+      }    
    }
 
    setRange(rangeTag, centerDate) {
@@ -347,8 +347,8 @@ export default class TimeWidget extends React.Component {
 
    onRangeClick(range) {
       let width = numericPart(this.props.timelineWidth);
-      let centerDate = this.dotInRange(width) ? this.props.dotContext.date					// last dot clicked
-      : this.posToDate((this.state.leftX+this.state.rightX)/(2*width));	// center of current range
+      let centerDate = this.dotInRange(width) ? this.props.dotContext.date     // last dot clicked
+      : this.posToDate((this.state.leftX+this.state.rightX)/(2*width)); // center of current range
 
       this.setState({ rangeButton: range });
       this.setRange(range, centerDate);

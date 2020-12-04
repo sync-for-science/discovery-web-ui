@@ -171,7 +171,7 @@ function probToDivision(prob) {
       return i;
     }
   }
-  return 3;	// prob == 0 ends up here
+  return 3; // prob == 0 ends up here
 }
 
 const consultCases = {
@@ -227,7 +227,7 @@ function consultText(appContext, elt) {
     const divs = [];
     for (const def of defList) {
       const division = probToDivision(def.prob);
-      //	 let text = def.source + ':\u2002' + Math.trunc(def.prob * 100) + '% (' + highlightDivisionNames[division] + ')';
+      //  let text = def.source + ':\u2002' + Math.trunc(def.prob * 100) + '% (' + highlightDivisionNames[division] + ')';
       const text = `${def.source}:\u2002${Math.trunc(def.prob * 100)}%`;
       divs.push(<div className={highlightDivisionClasses[division]} key={divs.length}>{text}</div>);
     }

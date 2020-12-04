@@ -16,7 +16,7 @@ export default class MedsStatement extends React.Component {
 
    static catName = 'Meds Statement';
        
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static compareFn(a, b) {
       return stringCompare(MedsStatement.primaryText(a), MedsStatement.primaryText(b));
@@ -29,11 +29,11 @@ export default class MedsStatement extends React.Component {
 
    static primaryText(elt) {
       // if (elt.data.code) {
-      // 	 return elt.data.code.coding[0].display;
+      //   return elt.data.code.coding[0].display;
       // } else if (elt.data.medicationCodeableConcept) {
-      // 	 return elt.data.medicationCodeableConcept.coding[0].display;
+      //   return elt.data.medicationCodeableConcept.coding[0].display;
       // } else {
-      // 	 return '';
+      //   return '';
       // }
 //      return tryWithDefault(elt, elt => MedsStatement.code(elt).coding[0].display, Const.unknownValue);
       return primaryTextValue(MedsStatement.code(elt));
@@ -68,7 +68,7 @@ export default class MedsStatement extends React.Component {
    render() {
       let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
-       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
+       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) && // Don't show this category (at all) if disabled and trim set
        <div className='meds-statement category-container' id={formatKey(firstRes)}>
   { formatContentHeader(this.props.isEnabled, MedsStatement.catName, firstRes, this.context) }
           <div className='content-body'>

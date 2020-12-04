@@ -44,7 +44,7 @@ export default class TimeSeries extends React.Component {
 
       // TODO: some visualization when all data is the same date?
 //      if (minX === maxX) {
-//	 // something else
+//  // something else
 //      }
 
       // TODO: fix kluge
@@ -86,7 +86,7 @@ export default class TimeSeries extends React.Component {
 
       // TODO: some visualization when all data is the same date?
 //      if (minX === maxX) {
-//	 // something else
+//  // something else
 //      }
 
       // TODO: better technique to set Y scale for this case?
@@ -106,7 +106,7 @@ export default class TimeSeries extends React.Component {
 
     {/* this.props.highlights && <MarkSeries className='mark' data={this.props.highlights} size={8}   color='#8d3031' onValueClick={this.handleDotClick} /> */}
     { this.props.highlights && <MarkSeries className='mark' data={this.props.highlights} size={8}   color='#d78c14' onValueClick={this.handleDotClick} /> }
-    { this.props.highlights && <MarkSeries className='mark' data={this.props.highlights} size={5}   color='white'   onValueClick={this.handleDotClick} /> }	       
+    { this.props.highlights && <MarkSeries className='mark' data={this.props.highlights} size={5}   color='white'   onValueClick={this.handleDotClick} /> }        
     { this.props.highlights && <MarkSeries className='mark' data={this.props.highlights} size={3.7} color='#01a6aa' onValueClick={this.handleDotClick} /> }
  </XYPlot>
       );

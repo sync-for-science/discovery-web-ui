@@ -19,7 +19,7 @@ export default class TilesView extends React.Component {
 
    static myName = 'TilesView';
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform),
@@ -29,10 +29,10 @@ export default class TilesView extends React.Component {
     position: PropTypes.number.isRequired,
     date: PropTypes.string.isRequired
  })).isRequired,
- minDate: PropTypes.string.isRequired,		// Earliest date we have data for this participant
- startDate: PropTypes.string.isRequired,	// Jan 1 of minDate's year
- maxDate: PropTypes.string.isRequired,		// Latest date we have data for this participant
- endDate: PropTypes.string.isRequired		// Dec 31 of last year of timeline tick periods
+ minDate: PropTypes.string.isRequired,  // Earliest date we have data for this participant
+ startDate: PropTypes.string.isRequired, // Jan 1 of minDate's year
+ maxDate: PropTypes.string.isRequired,  // Latest date we have data for this participant
+ endDate: PropTypes.string.isRequired  // Dec 31 of last year of timeline tick periods
       }),
       categories: PropTypes.arrayOf(PropTypes.string).isRequired,
       providers: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -81,11 +81,11 @@ export default class TilesView extends React.Component {
 
    componentWillUnmount() {
       this.context.updateGlobalContext({ savedSelectedTiles: this.state.selectedTiles,
-         lastTileSelected: this.state.lastTileSelected,		// Save selected tiles, last tile selected
+         lastTileSelected: this.state.lastTileSelected,  // Save selected tiles, last tile selected
  viewAccentDates: [],
  viewLastAccentDates: [],
  highlightedResources: [],
- lastHighlightedResources: [] });			// Clear highlights
+ lastHighlightedResources: [] });   // Clear highlights
 
       window.removeEventListener('resize', this.onResize);
    }
@@ -136,7 +136,7 @@ export default class TilesView extends React.Component {
  const headerBot = document.querySelector('.time-widget').getBoundingClientRect().bottom;
  const contentPanelTitleHeight = document.querySelector('.content-panel-inner-title').clientHeight;
 
- return footTop - headerBot - contentPanelTitleHeight - 10;	// TODO: correct margin size
+ return footTop - headerBot - contentPanelTitleHeight - 10; // TODO: correct margin size
 
       } catch (e) {
  return 0;
@@ -154,7 +154,7 @@ export default class TilesView extends React.Component {
  container.style = `height:${tilesView.clientHeight/1.6}px;`;
       }
 
-      return container.clientHeight + 25;	// TODO: correct margin sizes
+      return container.clientHeight + 25; // TODO: correct margin sizes
    }
 
    onContentPanelResize() {
@@ -172,17 +172,17 @@ export default class TilesView extends React.Component {
       return { code, display: display === Const.unknownValue ? 'All ' + res.category : display };
    }
 
-   // Categories we DON'T want to collect	[FROM CompareView]
+   // Categories we DON'T want to collect [FROM CompareView]
    get noCollectCategories() {
        return ['Patient'];
    }
 
    //
-   // collectUnique()		[DERIVED FROM CompareView]
+   // collectUnique()  [DERIVED FROM CompareView]
    //
    // Resulting structure ('struct'):
    // {
-   //	cat1: [
+   // cat1: [
    //      {
    //         display: 'disp1',
    //         trueCategory: 'category',
@@ -191,9 +191,9 @@ export default class TilesView extends React.Component {
    //            {
    //               provName: 'prov1',
    //               count: count1,
-   //		    minDate: 'date1',
-   //		    maxDate: 'date2',
-   //		    dates: [ {x: 'date', y: 0}, ... ]
+   //      minDate: 'date1',
+   //      maxDate: 'date2',
+   //      dates: [ {x: 'date', y: 0}, ... ]
    //            },
    //            ...
    //         ]
@@ -210,13 +210,13 @@ export default class TilesView extends React.Component {
       for (let res of resources) {
  if (this.noCollectCategories.includes(res.category) ||
      !inDateRange(res.itemDate, this.props.thumbLeftDate, this.props.thumbRightDate)) {
-    continue;	// Ignore this resource
+    continue; // Ignore this resource
  }
 
  if (!struct.hasOwnProperty(cat)) {
     // Add this category
     struct[cat] = [];
-//	    console.log('1 ' + cat + ' added');
+//     console.log('1 ' + cat + ' added');
  }
 
  let thisCat = struct[cat];
@@ -239,17 +239,17 @@ export default class TilesView extends React.Component {
        thisProv.minDate = date.getTime() < thisProv.minDate.getTime() ? date : thisProv.minDate;
        thisProv.maxDate = date.getTime() > thisProv.maxDate.getTime() ? date : thisProv.maxDate;
        thisProv.dates.push({x:date, y:0});
-//	       console.log('2 ' + cat + ' ' + JSON.stringify(thisDisplay.codes) + ' ' + thisDisplay.display + ': ' + thisProv.provName + ' ' + thisProv.count);
+//        console.log('2 ' + cat + ' ' + JSON.stringify(thisDisplay.codes) + ' ' + thisDisplay.display + ': ' + thisProv.provName + ' ' + thisProv.count);
     } else {
        // Add new prov
        provs.push({ provName: prov, count: 1, minDate: date, maxDate: date, dates: [{x:date, y:0}] });
-//	       console.log('3 ' + cat + ' ' + JSON.stringify(thisDisplay.codes) + ' ' + thisDisplay.display + ': ' + prov + ' 1');
+//        console.log('3 ' + cat + ' ' + JSON.stringify(thisDisplay.codes) + ' ' + thisDisplay.display + ': ' + prov + ' 1');
     }
  } else {
     // Add new display value
     thisCat.push({ display: coding.display, trueCategory: res.category, codes: [coding.code],
    provs: [{ provName: prov, count: 1, minDate: date, maxDate: date, dates: [{x:date, y:0}] }] });
-//	    console.log('4 ' + cat + ' ' + coding.code + ' ' + coding.display + ': ' + prov + ' 1');
+//     console.log('4 ' + cat + ' ' + coding.code + ' ' + coding.display + ': ' + prov + ' 1');
  }
       }
    }
@@ -289,17 +289,17 @@ export default class TilesView extends React.Component {
       } else {
  const minFractionalColWidth = 15;
  const numCols = Object.keys(this.state.uniqueStruct).length;
- const colWidth = 175;					// Values MUST match tiles-view-column-container width and margins (px)
+ const colWidth = 175;     // Values MUST match tiles-view-column-container width and margins (px)
  const colRightMargin = 10;
- const totalColWidth = colWidth + colRightMargin;	// NOTE: DOM isn't fully built when we need this
- const containerWidth = container.clientWidth + colRightMargin;	// Browser doesn't "count" last margin
+ const totalColWidth = colWidth + colRightMargin; // NOTE: DOM isn't fully built when we need this
+ const containerWidth = container.clientWidth + colRightMargin; // Browser doesn't "count" last margin
  const visibleCols = containerWidth / totalColWidth;
  const wholeCols = Math.trunc(visibleCols);
  const fractionalCol = visibleCols - wholeCols;
- const fractionalColWidth = fractionalCol * totalColWidth;	// px
-//	 console.log('#### containerWidth: ' + containerWidth);
-//	 console.log('#### visibleCols:    ' + visibleCols.toFixed(3));
-//	 console.log('#### fracColWidth:   ' + fractionalColWidth.toFixed(3));
+ const fractionalColWidth = fractionalCol * totalColWidth; // px
+//  console.log('#### containerWidth: ' + containerWidth);
+//  console.log('#### visibleCols:    ' + visibleCols.toFixed(3));
+//  console.log('#### fracColWidth:   ' + fractionalColWidth.toFixed(3));
 
  return Math.min(numCols, fractionalColWidth < minFractionalColWidth ? wholeCols : containerWidth / totalColWidth);
       }
@@ -354,7 +354,7 @@ export default class TilesView extends React.Component {
    }
 
    onTileClick(e) {
-      let newSelectedTiles = Object.assign({}, this.state.selectedTiles);	// copy selected tiles obj
+      let newSelectedTiles = Object.assign({}, this.state.selectedTiles); // copy selected tiles obj
       let tileId = this.parseTileId(e.target.id);
       let matchingTileResources = null;
       let clearedPrevSelected = false;
@@ -368,8 +368,8 @@ export default class TilesView extends React.Component {
     delete newSelectedTiles[tileId.catName][tileId.display];
  }
  clearedPrevSelected = true;
- this.context.updateGlobalContext({ highlightedResources: [],		// Used by HighlightDiv
-    lastHighlightedResources: [] });	//
+ this.context.updateGlobalContext({ highlightedResources: [],  // Used by HighlightDiv
+    lastHighlightedResources: [] }); //
  this.setState({ lastTileSelected: null });
 
       } else {
@@ -379,14 +379,14 @@ export default class TilesView extends React.Component {
  }
  matchingTileResources = this.matchingTileResources(tileId);
  newSelectedTiles[tileId.catName][tileId.display] = matchingTileResources;
- this.context.updateGlobalContext({ highlightedResources: this.allSelectedTileResources(newSelectedTiles),	// Used by HighlightDiv
-    lastHighlightedResources: matchingTileResources });				//
-//	 let newDate = matchingTileResources[0].itemDate;
-//	 let newContext = Object.assign(this.state.context, { date: newDate,
-//							      position: normalizeDates([newDate], this.state.context.minDate, this.state.context.maxDate)[0],
-//							      dotType: 'active' });
+ this.context.updateGlobalContext({ highlightedResources: this.allSelectedTileResources(newSelectedTiles), // Used by HighlightDiv
+    lastHighlightedResources: matchingTileResources });    //
+//  let newDate = matchingTileResources[0].itemDate;
+//  let newContext = Object.assign(this.state.context, { date: newDate,
+//             position: normalizeDates([newDate], this.state.context.minDate, this.state.context.maxDate)[0],
+//             dotType: 'active' });
  this.setState({ lastTileSelected: tileId,
-//			 context: newContext
+//    context: newContext
        });
       }
 
@@ -458,7 +458,7 @@ export default class TilesView extends React.Component {
 
  } else {
     // --> all selected
-    newSelectedTiles = Object.assign({}, this.state.selectedTiles);	// copy selected tiles obj
+    newSelectedTiles = Object.assign({}, this.state.selectedTiles); // copy selected tiles obj
     if (!newSelectedTiles[hCatName]) {
        newSelectedTiles[hCatName] = {};
     }
@@ -473,7 +473,7 @@ export default class TilesView extends React.Component {
       } else if (selectedCount < tilesForCatCount) {
  // Part selected --> all selected (and save copy of partial)
  this.context.updateGlobalContext({ lastSavedSelectedTiles: JSON.parse(JSON.stringify(this.state.selectedTiles)) });
- newSelectedTiles = Object.assign({}, this.state.selectedTiles);	// copy selected tiles obj
+ newSelectedTiles = Object.assign({}, this.state.selectedTiles); // copy selected tiles obj
  if (!newSelectedTiles[hCatName]) {
     newSelectedTiles[hCatName] = {};
  }
@@ -492,7 +492,7 @@ export default class TilesView extends React.Component {
 
       } else {
  // All selected --> none selected
- newSelectedTiles = Object.assign({}, this.state.selectedTiles);	// copy selected tiles obj
+ newSelectedTiles = Object.assign({}, this.state.selectedTiles); // copy selected tiles obj
  delete newSelectedTiles[hCatName]
  this.setState({ selectedTiles: newSelectedTiles });
  this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedTiles),
@@ -513,7 +513,7 @@ export default class TilesView extends React.Component {
       } else {
  return 'tile-standard';
       }
-   }		 
+   }   
 
    buttonClass(catName) {
       let selectedTilesForCat = this.state.selectedTiles[this.hyphenate(catName)];
@@ -595,7 +595,7 @@ export default class TilesView extends React.Component {
       for (let catName of Object.keys(this.state.selectedTiles)) {
  for (let displayStr of Object.keys(this.state.selectedTiles[catName])) {
     if (!this.state.onlyMultisource ||
-(this.state.onlyMultisource &&		// more than one provider?
+(this.state.onlyMultisource &&  // more than one provider?
  this.state.selectedTiles[catName][displayStr].reduce((provs, res) => provs.add(res.provider), new Set()).size > 1)) {
        resArray = resArray.concat(this.state.selectedTiles[catName][displayStr]);
     }

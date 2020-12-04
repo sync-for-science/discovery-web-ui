@@ -29,26 +29,26 @@ export default class DiscoveryApp extends React.Component {
    }
 
    state = {
-      resources: null,		// Will be set to an instance of FhirTransform
-      totalResCount: null,	// Number of resources excluding Patient resources
-      dates: null,		// Collection of dates for views:
+      resources: null,  // Will be set to an instance of FhirTransform
+      totalResCount: null, // Number of resources excluding Patient resources
+      dates: null,  // Collection of dates for views:
 //    allDates
-//    minDate	   Earliest date we have data for this participant
-//    startDate	   Jan 1 of minDate's year
-//    maxDate	   Latest date we have data for this participant
-//    endDate	   Dec 31 of maxDate's year
-      searchRefs: [],		// Search results to highlight
-      searchMatchWords: [],	// Search results matching words
-      laserSearch: false,	// Laser Search enabled?
+//    minDate    Earliest date we have data for this participant
+//    startDate    Jan 1 of minDate's year
+//    maxDate    Latest date we have data for this participant
+//    endDate    Dec 31 of maxDate's year
+      searchRefs: [],  // Search results to highlight
+      searchMatchWords: [], // Search results matching words
+      laserSearch: false, // Laser Search enabled?
       isLoading: false,
-      fetchError: null,		// Possible axios error object
+      fetchError: null,  // Possible axios error object
       modalName: '',
       modalIsOpen: false,
       lastEvent: null,
       currentView: null,
       thumbLeftDate: null,
       thumbRightDate: null,
-      dotClickDate: null,	// dot click from ContentPanel
+      dotClickDate: null, // dot click from ContentPanel
       catsEnabled: null,
       provsEnabled: null,
       providers: [],
@@ -56,21 +56,21 @@ export default class DiscoveryApp extends React.Component {
       // Shared Global Context
       updateGlobalContext: (updates) => this.setState(updates),
 
-      themeName: null,		  	  // PageHeader
+      themeName: null,       // PageHeader
 
-      savedCatsEnabled: null,		  // StandardFilters & CategoryRollup
-      savedProvsEnabled: null,		  // StandardFilters & ProviderRollup
+      savedCatsEnabled: null,    // StandardFilters & CategoryRollup
+      savedProvsEnabled: null,    // StandardFilters & ProviderRollup
 
-      lastTileSelected: null,		  // TilesView & CompareView
-      savedSelectedTiles: null,		  // TilesView & CompareView
-      lastSavedSelectedTiles: null,	  // TilesView & CompareView
-      viewAccentDates: [],		  // TilesView & CompareView
-      viewLastAccentDates: [],		  // TilesView & CompareView
-      highlightedResources: [],		  // TilesView & CompareView
-      lastHighlightedResources: [],	  // TilesView & CompareView
-      onlyMultisource: false,		  // TilesView & CompareView
+      lastTileSelected: null,    // TilesView & CompareView
+      savedSelectedTiles: null,    // TilesView & CompareView
+      lastSavedSelectedTiles: null,   // TilesView & CompareView
+      viewAccentDates: [],    // TilesView & CompareView
+      viewLastAccentDates: [],    // TilesView & CompareView
+      highlightedResources: [],    // TilesView & CompareView
+      lastHighlightedResources: [],   // TilesView & CompareView
+      onlyMultisource: false,    // TilesView & CompareView
 
-      onlyAnnotated: false		  // ContentPanel
+      onlyAnnotated: false    // ContentPanel
    }
 
    componentDidMount() {
@@ -90,7 +90,7 @@ export default class DiscoveryApp extends React.Component {
     if (Object.getOwnPropertyNames(response.data).length !== 0) {
        const resources = new FhirTransform(response.data, this.topTemplate);
 
-       this.checkResourceCoverage(resources);	// Check whether we "found" all resources
+       this.checkResourceCoverage(resources); // Check whether we "found" all resources
 
        const itemDates = cleanDates(resources.pathItem('itemDate'));
 
@@ -98,11 +98,11 @@ export default class DiscoveryApp extends React.Component {
   throw new Error('No matching resources returned');
        }
 
-       const minDate = itemDates[0];						     // Earliest date we have data for this participant
-       const firstYear = parseInt(minDate.substring(0,4));			     // minDate's year
-       const startDate = firstYear+'-01-01';					     // Jan 1 of minDate's year
-       const maxDate = itemDates[itemDates.length-1];				     // The latest date we have data for this participant
-       const lastYear = parseInt(maxDate.substring(0,4));			     // maxDate's year
+       const minDate = itemDates[0];           // Earliest date we have data for this participant
+       const firstYear = parseInt(minDate.substring(0,4));        // minDate's year
+       const startDate = firstYear+'-01-01';          // Jan 1 of minDate's year
+       const maxDate = itemDates[itemDates.length-1];         // The latest date we have data for this participant
+       const lastYear = parseInt(maxDate.substring(0,4));        // maxDate's year
        const incr = timelineIncrYears(minDate, maxDate, config.maxSinglePeriods);    // Number of years between timeline ticks
        const endDate = (lastYear + incr - (lastYear-firstYear)%incr - 1) + '-12-31'  // Dec 31 of last year of timeline tick periods
        const normDates = normalizeDates(itemDates, startDate, endDate);
@@ -188,57 +188,57 @@ isLoading: false })
    // (functions in the template will be replaced with their return values)
    get categoriesForProviderTemplate() {
       return {
- 'Patient':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Patient]'),
- 'Conditions':     		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Condition]'),
- 'Lab Results':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
+ 'Patient':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Patient]'),
+ 'Conditions':       e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Condition]'),
+ 'Lab Results':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
        +'[*:isCategory(Laboratory)|:isCategory(laboratory)]', this.queryOptions),
- 'Vital Signs':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
+ 'Vital Signs':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
        +'[*:isCategory(Vital Signs)|:isCategory(vital-signs)]', this.queryOptions),
- 'Social History':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
+ 'Social History':  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
        +'[*:isCategory(Social History)]', this.queryOptions),
- 'Meds Statement':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationStatement]'),
+ 'Meds Statement':  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationStatement]'),
 
- 'Meds Requested':      	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationOrder|resourceType=MedicationRequest]'),
-//	 'Meds Requested':      	e => e.entry.reduce((res, elt) => {
-//					       (elt.resource.resourceType === 'MedicationOrder' ||
-//						elt.resource.resourceType === 'MedicationRequest') && res.push(elt.resource);
-//					       return res }, []),
+ 'Meds Requested':       e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationOrder|resourceType=MedicationRequest]'),
+//  'Meds Requested':       e => e.entry.reduce((res, elt) => {
+//            (elt.resource.resourceType === 'MedicationOrder' ||
+//      elt.resource.resourceType === 'MedicationRequest') && res.push(elt.resource);
+//            return res }, []),
 
- 'Meds Dispensed':      	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationDispense]'),
- 'Meds Administration':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationAdministration]'),
- 'Immunizations':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Immunization]'),
- 'Procedures':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Procedure]').concat(
+ 'Meds Dispensed':       e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationDispense]'),
+ 'Meds Administration':  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=MedicationAdministration]'),
+ 'Immunizations':  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Immunization]'),
+ 'Procedures':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Procedure]').concat(
         FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation][*:isCategory(procedure)]', this.queryOptions)),
- 'Procedure Requests':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ProcedureRequest]'),
- 'Document References':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=DocumentReference]'),
- 'Allergies':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=AllergyIntolerance]'),
- 'Benefits':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ExplanationOfBenefit]'),
- 'Claims':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Claim]'),
- 'Encounters':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Encounter]'),
- 'Exams':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
+ 'Procedure Requests':  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ProcedureRequest]'),
+ 'Document References':  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=DocumentReference]'),
+ 'Allergies':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=AllergyIntolerance]'),
+ 'Benefits':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ExplanationOfBenefit]'),
+ 'Claims':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Claim]'),
+ 'Encounters':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Encounter]'),
+ 'Exams':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
        +'[*:isCategory(Exam)|:isCategory(exam)]', this.queryOptions),
 
  // Currently unsupported
- 'Practitioner':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Practitioner]'),
- 'List':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=List]'),
- 'Questionnaire':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Questionnaire]'),
- 'Questionnaire Response':	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=QuestionnaireResponse]'),
- 'Observation-Other':	 	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
+ 'Practitioner':  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Practitioner]'),
+ 'List':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=List]'),
+ 'Questionnaire':  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Questionnaire]'),
+ 'Questionnaire Response': e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=QuestionnaireResponse]'),
+ 'Observation-Other':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Observation]'
        +'[*:isNotCategory(Laboratory)&:isNotCategory(laboratory)'
        + '&:isNotCategory(Vital Signs)&:isNotCategory(vital-signs)'
        + '&:isNotCategory(Social History)&:isNotCategory(procedure)'
        + '&:isNotCategory(Exam)&:isNotCategory(exam)]', this.queryOptions),
- 'Diagnostic Report':    	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=DiagnosticReport]'),
- 'Care Plan':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=CarePlan]'),
- 'Medication':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Medication]'),
- 'Organization':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Organization]'),
- 'Goal':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Goal]'),
- 'Basic':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Basic]'),
- 'Immunization Recommendation':	e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImmunizationRecommendation]'),
- 'Imaging Study':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImagingStudy]'),
- 'Coverage':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Coverage]'),
- 'Related Person':		e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=RelatedPerson]'),
- 'Device':			e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Device]')
+ 'Diagnostic Report':     e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=DiagnosticReport]'),
+ 'Care Plan':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=CarePlan]'),
+ 'Medication':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Medication]'),
+ 'Organization':  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Organization]'),
+ 'Goal':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Goal]'),
+ 'Basic':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Basic]'),
+ 'Immunization Recommendation': e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImmunizationRecommendation]'),
+ 'Imaging Study':  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=ImagingStudy]'),
+ 'Coverage':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Coverage]'),
+ 'Related Person':  e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=RelatedPerson]'),
+ 'Device':   e => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Device]')
       }
    }
 
@@ -258,7 +258,7 @@ isLoading: false })
        date = item.effectiveDateTime ? item.effectiveDateTime : null;
        break
     case 'Social History':
-       date = new Date().toISOString().substring(0,10);		// Use today's date
+       date = new Date().toISOString().substring(0,10);  // Use today's date
        break;
     case 'Meds Statement':
        date = tryWithDefault(item, item => item.dateAsserted,
@@ -308,7 +308,7 @@ isLoading: false })
        break;
 
     default:
-       return null;	// Items without a date
+       return null; // Items without a date
  }
       } catch (err) {
   console.log(`*** ${category} -- date error: ${err.message} ***`);
@@ -500,15 +500,15 @@ lastEvent={this.state.lastEvent} />;
  case 'financialView':
     return ['Claims', 'Benefits'];
 
-//	 case 'compareView':
-//	    let compareCats = ['Allergies', 'Conditions', 'Encounters', 'Exams', 'Immunizations', 'Lab Results',
-//			       'Meds Dispensed', 'Meds Requested', 'Procedures', 'Vital Signs', 'Social History'];
-//	    return this.categories.filter( elt => compareCats.includes(elt));
+//  case 'compareView':
+//     let compareCats = ['Allergies', 'Conditions', 'Encounters', 'Exams', 'Immunizations', 'Lab Results',
+//          'Meds Dispensed', 'Meds Requested', 'Procedures', 'Vital Signs', 'Social History'];
+//     return this.categories.filter( elt => compareCats.includes(elt));
 
-//	 case 'tilesView':
-//	    let tilesCats = ['Allergies', 'Conditions', 'Encounters', 'Exams', 'Immunizations', 'Lab Results',
-//			     'Meds Dispensed', 'Meds Requested', 'Procedures', 'Vital Signs', 'Social History'];
-//	    return this.categories.filter( elt => tilesCats.includes(elt));
+//  case 'tilesView':
+//     let tilesCats = ['Allergies', 'Conditions', 'Encounters', 'Exams', 'Immunizations', 'Lab Results',
+//        'Meds Dispensed', 'Meds Requested', 'Procedures', 'Vital Signs', 'Social History'];
+//     return this.categories.filter( elt => tilesCats.includes(elt));
 
  default:
     return this.categories;

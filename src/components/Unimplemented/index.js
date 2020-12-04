@@ -24,7 +24,7 @@ export default class Unimplemented extends React.Component {
        'Diagnostic Report', 'Care Plan', 'Medication', 'Organization', 'Goal', 'Basic',
        'Immunization Recommendation', 'Imaging Study', 'Coverage', 'Related Person', 'Device'];
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static compareFn(a, b) {
       return stringCompare(Unimplemented.primaryText(a), Unimplemented.primaryText(b));
@@ -79,7 +79,7 @@ export default class Unimplemented extends React.Component {
    render() {
       let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
-       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
+       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) && // Don't show this category (at all) if disabled and trim set
        <div className='unimplemented category-container' id={formatKey(firstRes)}>
   { formatContentHeader(this.props.isEnabled, Unimplemented.catName, firstRes, this.context) }
   <div className='content-body'>

@@ -1,4 +1,4 @@
-// import jsonQuery from 'json-query';	// Doesn't work with Chrome devtools (for some reason)
+// import jsonQuery from 'json-query'; // Doesn't work with Chrome devtools (for some reason)
 const jsonQuery = require('json-query');
 
 export default class FhirTransform {

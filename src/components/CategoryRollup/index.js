@@ -16,7 +16,7 @@ export default class CategoryRollup extends React.Component {
 
    static myName = 'CategoryRollup';
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       svgWidth: PropTypes.string.isRequired,
@@ -24,7 +24,7 @@ export default class CategoryRollup extends React.Component {
       dotClickFn: PropTypes.func,
       isExpanded: PropTypes.bool.isRequired,
       expansionFn: PropTypes.func.isRequired,
-      catsEnabledFn: PropTypes.func.isRequired,		// Callback to report changed category enable/disable
+      catsEnabledFn: PropTypes.func.isRequired,  // Callback to report changed category enable/disable
       noDots: PropTypes.bool,
       categories: PropTypes.arrayOf(PropTypes.string)
    }

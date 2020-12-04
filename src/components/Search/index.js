@@ -16,20 +16,20 @@ import veryInterestingFields from './veryInterestingFields.js';
 export default class Search extends React.Component {
 
    static propTypes = {
-      data: PropTypes.array.isRequired,		// Data (resources) to index/search
-      callback: PropTypes.func.isRequired	// Return search results to parent
+      data: PropTypes.array.isRequired,  // Data (resources) to index/search
+      callback: PropTypes.func.isRequired // Return search results to parent
    }
     
    state = {
-      searchIsOpen: false,	// Is the search input field displayed?
-      searchFor: '',		// Contents of the search input field
-      searchStatus: '',		// The displayed status string
-      searchTerms: '',		// Count of terms indexed ('nnn terms')
-      searchTree: null,		// The data structure resulting from data indexing
-      searchResults: null,	// Array of references to resources matching 'searchFor'
-      totalSearchRefs: 0,	// Count of all references for indexed terms
-      dataModalIsOpen: false,	// Is the dataModal open? (JSON data display) 
-      laserSearch: false	// Is laserSearch on? (only display data elements containing a search word)
+      searchIsOpen: false, // Is the search input field displayed?
+      searchFor: '',  // Contents of the search input field
+      searchStatus: '',  // The displayed status string
+      searchTerms: '',  // Count of terms indexed ('nnn terms')
+      searchTree: null,  // The data structure resulting from data indexing
+      searchResults: null, // Array of references to resources matching 'searchFor'
+      totalSearchRefs: 0, // Count of all references for indexed terms
+      dataModalIsOpen: false, // Is the dataModal open? (JSON data display) 
+      laserSearch: false // Is laserSearch on? (only display data elements containing a search word)
    }
 
    componentDidMount() {
@@ -168,12 +168,12 @@ export default class Search extends React.Component {
    // Collect array of references to participant resources matching 'searchFor'
    //
    // Each ref consists of:
-   //     .resource			the resource
-   //     .provider (string)		resource's provider
-   //     .category (string)		resource's category
-   //     .date (string)		resource's date
-   //     .veryInteresting (bool)	is the field that contains a word in 'searchFor' considered "interesting"? [currently unused]
-   //     .position (number)		resource's timeline position [0..1]
+   //     .resource   the resource
+   //     .provider (string)  resource's provider
+   //     .category (string)  resource's category
+   //     .date (string)  resource's date
+   //     .veryInteresting (bool) is the field that contains a word in 'searchFor' considered "interesting"? [currently unused]
+   //     .position (number)  resource's timeline position [0..1]
    //
    collectRefs(searchFor) {
       let words = searchFor.split(' ');

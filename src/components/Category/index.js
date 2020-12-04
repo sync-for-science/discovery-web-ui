@@ -30,14 +30,14 @@ export default class Category extends React.Component {
       window.addEventListener('keydown', this.onKeydown);
       if (this.props.isEnabled !== undefined) {
  this.setState({ isEnabled: this.props.isEnabled });
-//	 this.props.enabledFn(Category.myName, this.props.categoryName, this.props.isEnabled);
+//  this.props.enabledFn(Category.myName, this.props.categoryName, this.props.isEnabled);
       }
    }
 
    componentDidUpdate(prevProps, prevState) {
       if (this.props.isEnabled !== prevProps.isEnabled) {
  this.setState({ isEnabled: this.props.isEnabled });
-//	 this.props.enabledFn(Category.myName, this.props.categoryName, this.props.isEnabled);
+//  this.props.enabledFn(Category.myName, this.props.categoryName, this.props.isEnabled);
       }
    }
 

@@ -31,14 +31,14 @@ export default class Provider extends React.Component {
       window.addEventListener('keydown', this.onKeydown);
       if (this.props.isEnabled !== undefined) {
  this.setState({ isEnabled: this.props.isEnabled });
-//	 this.props.enabledFn(Provider.myName, this.props.providerName, this.props.isEnabled);
+//  this.props.enabledFn(Provider.myName, this.props.providerName, this.props.isEnabled);
       }
    }
 
    componentDidUpdate(prevProps, prevState) {
       if (this.props.isEnabled !== prevProps.isEnabled) {
  this.setState({ isEnabled: this.props.isEnabled });
-//	 this.props.enabledFn(Provider.myName, this.props.providerName, this.props.isEnabled);
+//  this.props.enabledFn(Provider.myName, this.props.providerName, this.props.isEnabled);
       }
    }
 

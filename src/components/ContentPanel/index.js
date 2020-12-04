@@ -31,8 +31,8 @@ import Unimplemented from '../Unimplemented';
 
 import DiscoveryContext from '../DiscoveryContext';
 
-const SET_PANEL_HEIGHT_DELAY = 250;	// msec
-const SCROLL_TO_RES_DELAY = 25;		// msec
+const SET_PANEL_HEIGHT_DELAY = 250; // msec
+const SCROLL_TO_RES_DELAY = 25;  // msec
 
 //
 // Render the content panel for ReportView, FinancialView, TilesView
@@ -46,7 +46,7 @@ export default class ContentPanel extends React.Component {
 
    static myName = 'ContentPanel';
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       open: PropTypes.bool.isRequired,
@@ -65,10 +65,10 @@ export default class ContentPanel extends React.Component {
  endDate: PropTypes.string,
  date: PropTypes.string,
  data: PropTypes.array
-      }),				// added dynamically by StandardFilters
+      }),    // added dynamically by StandardFilters
       catsEnabled: PropTypes.object.isRequired,
       provsEnabled: PropTypes.object.isRequired,
-      nextPrevFn: PropTypes.func,	// added dynamically by StandardFilters
+      nextPrevFn: PropTypes.func, // added dynamically by StandardFilters
       thumbLeftDate: PropTypes.string.isRequired,
       thumbRightDate: PropTypes.string.isRequired,
       viewName: PropTypes.string.isRequired,
@@ -84,7 +84,7 @@ export default class ContentPanel extends React.Component {
       bottomBoundFn: PropTypes.func.isRequired,
       initialPositionYFn: PropTypes.func,
       onResizeFn: PropTypes.func,
-      tileSort: PropTypes.bool,		// true --> "tile order sort", else default "report order sort"
+      tileSort: PropTypes.bool,  // true --> "tile order sort", else default "report order sort"
       noResultDisplay: PropTypes.string
    }
 
@@ -92,8 +92,8 @@ export default class ContentPanel extends React.Component {
       openPhase: null,
       isOpen: false,
 
-      panelHeight: 0,				// Height of top-level container
-      contentHeight: 0,				// Height of content-panel-inner-body(-alt) div
+      panelHeight: 0,    // Height of top-level container
+      contentHeight: 0,    // Height of content-panel-inner-body(-alt) div
       positionY: 0,
       dragging: false,
       lastDragUpdateTimestamp: 0,
@@ -109,23 +109,23 @@ export default class ContentPanel extends React.Component {
       currResources: null,
       updateResourcesPhase: null,
 
-//      pageResource: null,			// Center/midpoint resource index for the currently active "page"
-      pageResource: 0,				// Center/midpoint resource index for the currently active "page"
-      pageResourceY: 0,				// The matching scroll offset in .content-panel-inner-body-scroller for 'pageResource'
+//      pageResource: null,   // Center/midpoint resource index for the currently active "page"
+      pageResource: 0,    // Center/midpoint resource index for the currently active "page"
+      pageResourceY: 0,    // The matching scroll offset in .content-panel-inner-body-scroller for 'pageResource'
       scrollToContextPhase: null,
       scrollToResPhase: null,
       doScrollToRes: null,
       dotClickPhase: null,
 
 //      initialPositionYFn: null,
-      datesAscending: false,			// Display dates in ascending order?
+      datesAscending: false,   // Display dates in ascending order?
       onlyAnnotated: false
    }
 
    // Refs
-   resContainer = React.createRef();		// .content-panel-inner-body-alt-container
-   scrollDiv = React.createRef();		// .content-panel-inner-body-scroll
-   scrollerDiv = React.createRef();		// .content-panel-inner-body-scroller
+   resContainer = React.createRef();  // .content-panel-inner-body-alt-container
+   scrollDiv = React.createRef();  // .content-panel-inner-body-scroll
+   scrollerDiv = React.createRef();  // .content-panel-inner-body-scroller
 
    // Non-(React)tracked state vars
    debounceTimer = null;
@@ -208,16 +208,16 @@ export default class ContentPanel extends React.Component {
     case 'ArrowUp':
     case 'ArrowDown':
        if (this.scrollDiv.current) {
-  let scrollBump = 150;		// TODO: get from config
+  let scrollBump = 150;  // TODO: get from config
   let newScrollYVal = Math.max(0, this.scrollDiv.current.scrollTop + (event.key === 'ArrowDown' ? scrollBump : -scrollBump));
   console.log(event.key + ' --> scrollTo: ' + newScrollYVal);
   this.scrollDiv.current.scrollTo(0, newScrollYVal);
        }
        break;
 
-//	    case 'Escape':
-//	       this.onClose();
-//	       break;
+//     case 'Escape':
+//        this.onClose();
+//        break;
 
     default:
        break;
@@ -227,7 +227,7 @@ export default class ContentPanel extends React.Component {
 
    manageOpenSeq() {
       switch (this.state.openPhase) {
- case null:	// Initial state
+ case null: // Initial state
     if (this.props.open) {
        this.setState({ isOpen: true,
        openPhase: 'setPanels' });
@@ -239,7 +239,7 @@ export default class ContentPanel extends React.Component {
     this.setState({ openPhase: 'open' });
     break;
 
- case 'open':	// Terminal state
+ case 'open': // Terminal state
  default:
     break;
       }
@@ -247,7 +247,7 @@ export default class ContentPanel extends React.Component {
 
    manageUpdateResourcesSeq(update) {
       switch (this.state.updateResourcesPhase) {
- case null:	// Initial/terminal state
+ case null: // Initial/terminal state
  default:
     if (update) {
        this.setState({ currResources: this.calcCurrResources(),
@@ -257,7 +257,7 @@ export default class ContentPanel extends React.Component {
 
  case 'p2':
     this.highlightResourcesFromClickedDot();
-//	    let resIndex = this.targetResIndex(this.props.context);
+//     let resIndex = this.targetResIndex(this.props.context);
     this.setState({ // pageResource: resIndex,
     updateResourcesPhase: null });
     break;
@@ -267,7 +267,7 @@ export default class ContentPanel extends React.Component {
 // #### 
    manageScrollToContextSeq(doScroll) {
       switch (this.state.scrollToContextPhase) {
- case null:	// Initial/terminal state
+ case null: // Initial/terminal state
  default:
     if (doScroll) {
        this.scrollToContext(this.props.context);
@@ -289,7 +289,7 @@ export default class ContentPanel extends React.Component {
    manageScrollToResSeq() {
       let isNewPage;
       switch (this.state.scrollToResPhase) {
- case null:	// Initial/terminal state
+ case null: // Initial/terminal state
  default:
     if (this.state.doScrollToRes) {
        isNewPage = this.scrollToRes(this.state.doScrollToRes);
@@ -321,7 +321,7 @@ export default class ContentPanel extends React.Component {
       this.manageUpdateResourcesSeq(true);
 
 //      this.setState({ onlyAnnotated: this.context.onlyAnnotated },
-//		    () => this.setState({ currResources: this.calcCurrResources() }));
+//      () => this.setState({ currResources: this.calcCurrResources() }));
       this.setState({ onlyAnnotated: this.context.onlyAnnotated });
 
       this.updateDraggableOnMount();
@@ -401,7 +401,7 @@ export default class ContentPanel extends React.Component {
    scrollToRes(targetResIndex) {
       let isNewPage = false;
       if (targetResIndex >= 0) {
-//	 debugger;
+//  debugger;
  let res = this.state.currResources[targetResIndex];
  console.log('scrollToRes: ' + targetResIndex + ' ' + res.itemDate.substring(0, 10) + ' ' + res.category);
  let catKey = formatKey(res);
@@ -413,14 +413,14 @@ export default class ContentPanel extends React.Component {
     console.log('scrollToRes: resource in focus (' + catContainer.offsetTop + 'px)');
     this.scrollDiv.current.scrollTop = catContainer.offsetTop + this.state.pageResourceY;   // + pageResourceY so thumb is at correct location
 
-    this.setContainerTop(-catContainer.offsetTop);	// Show target resource at top of container
+    this.setContainerTop(-catContainer.offsetTop); // Show target resource at top of container
 
  } else {
     console.log('scrollToRes: resource NOT in focus');
     isNewPage = true;
     // Set state.pageResource to center current page on 'targetResIndex'
     if (this.state.pageResource !== targetResIndex) {
-       this.setState({ pageResource: targetResIndex });	// Only set the first time, not when wait for DOM update
+       this.setState({ pageResource: targetResIndex }); // Only set the first time, not when wait for DOM update
     }
  }
       } else {
@@ -437,14 +437,14 @@ export default class ContentPanel extends React.Component {
       let targetDate = dateOnly(context.date);
       switch (context.parent) {
  case 'TimeWidget':
-    return this.state.currResources.findIndex(elt => dateOnly(elt.itemDate) === targetDate);	// find date in currResources
+    return this.state.currResources.findIndex(elt => dateOnly(elt.itemDate) === targetDate); // find date in currResources
 
  case 'Category':
-    return this.state.currResources.findIndex(elt => dateOnly(elt.itemDate) === targetDate &&	// find date+category in currResources
+    return this.state.currResources.findIndex(elt => dateOnly(elt.itemDate) === targetDate && // find date+category in currResources
      elt.category === context.rowName);
 
  case 'Provider':
-    return this.state.currResources.findIndex(elt => dateOnly(elt.itemDate) === targetDate &&	// find date+provider in currResources
+    return this.state.currResources.findIndex(elt => dateOnly(elt.itemDate) === targetDate && // find date+provider in currResources
      elt.provider === context.rowName);
 
  default:
@@ -472,7 +472,7 @@ export default class ContentPanel extends React.Component {
  let key = formatKey(targetRes);
  let elt = document.getElementById(key);
  if (elt) {
-    elt.parentNode.scrollTop = elt.offsetTop - 30;	// content-header height
+    elt.parentNode.scrollTop = elt.offsetTop - 30; // content-header height
  } else {
     console.log('scrollToContext ???');
  }
@@ -614,7 +614,7 @@ res.data.discoveryAnnotation.annotationHistory)));
    }
 
    copyReverse(arr) {
-      let revArr = [];	
+      let revArr = []; 
       for (let i = arr.length-1; i>=0; i--) {
   revArr.push(arr[i]);
       }
@@ -666,18 +666,18 @@ res.data.discoveryAnnotation.annotationHistory)));
 //
 //   NEWrenderAltDisplay() {
 //      if (this.state.showJSON) {
-//	 return (
-//	    <div className='content-panel-inner-body'>
-//	       <pre className='content-panel-data'>
-//		  { JSON.stringify(this.state.currResources, null, 3) }
-//	       </pre>
-//	    </div>
-//	 );
+//  return (
+//     <div className='content-panel-inner-body'>
+//        <pre className='content-panel-data'>
+//    { JSON.stringify(this.state.currResources, null, 3) }
+//        </pre>
+//     </div>
+//  );
 //
 //      } else {
-//	 return (
-//	    <ListView data={this.state.currResources} renderItem={this.renderItemForListView} emptyText='[Nothing to show...]' />
-//	 )
+//  return (
+//     <ListView data={this.state.currResources} renderItem={this.renderItemForListView} emptyText='[Nothing to show...]' />
+//  )
 //      }
 //   }
 
@@ -697,14 +697,14 @@ res.data.discoveryAnnotation.annotationHistory)));
 
       } else {
 //@@@@
- let resourcesToRender = 50;	// TODO: get from config
+ let resourcesToRender = 50; // TODO: get from config
  let maxResIndex = this.state.currResources.length - 1;
  let centerResIndexToRender = this.state.pageResource;
  let minResIndexToRender = Math.max(0, centerResIndexToRender - resourcesToRender/2);
  let minWholeResIndexToRender = Math.trunc(minResIndexToRender);
  let maxResIndexToRender = Math.min(maxResIndex, Math.max(0, Math.ceil(centerResIndexToRender + resourcesToRender/2 - 1)));
  console.log(`renderAltDisplay(): ${formatDPs(minResIndexToRender, 5)} --> ${formatDPs(maxResIndexToRender, 5)} [${this.state.currResources.length}]`);
-//	 console.log(`   this.altScrollFraction: ${this.altScrollFraction}`);
+//  console.log(`   this.altScrollFraction: ${this.altScrollFraction}`);
 
  let divs;
 
@@ -828,7 +828,7 @@ res.data.discoveryAnnotation.annotationHistory)));
  let botTrigger = -offset + this.resContainer.current.parentElement.offsetHeight > lastDOMElt.offsetTop + lastDOMElt.offsetHeight + viewDelta;
 
  let newContainerTop = offset + 'px';
- let resDelta = 25;	    //TODO: get from config
+ let resDelta = 25;     //TODO: get from config
 
  console.log('setContainerTop: ' + newContainerTop);
  console.log('    container height: ' + this.resContainer.current.parentElement.offsetHeight);
@@ -842,7 +842,7 @@ res.data.discoveryAnnotation.annotationHistory)));
  console.log('    last height: ' + lastDOMElt.offsetHeight);
 
  if (topTrigger) {
-//	    debugger;
+//     debugger;
     if (this.state.pageResource - resDelta >= 0) {
        let newResIndex = this.state.pageResource - resDelta - 1;
        let newScrollFraction = this.state.currResources && this.state.currResources.length === 0 ? 0 : newResIndex / this.state.currResources.length;
@@ -853,23 +853,23 @@ res.data.discoveryAnnotation.annotationHistory)));
        console.log('                    -->  (new): ' + newResIndex + ' ' + newPageRes.itemDate.substring(0, 10) + ' ' + newPageRes.category);
        console.log('            pageResourceY: ' + this.state.pageResourceY + ' --> ' + newScrollYVal);
 
-//	       this.setState({ pageResource: newResIndex,
-//			       pageResourceY: newScrollYVal });
+//        this.setState({ pageResource: newResIndex,
+//          pageResourceY: newScrollYVal });
 
        this.setState({ pageResource: newResIndex,
        pageResourceY: newScrollYVal,
        doScrollToRes: newResIndex });
 
-//	       this.scrollToRes(newResIndex);
+//        this.scrollToRes(newResIndex);
     } else {
        console.log('TOP TRIG -- at begin');
        if (this.lastScrollDivScrollTop) {
-  this.scrollDiv.current.scrollTop = this.lastScrollDivScrollTop;	// "Undo" unnecessary scrolling
+  this.scrollDiv.current.scrollTop = this.lastScrollDivScrollTop; // "Undo" unnecessary scrolling
        }
     }
 
  } else if (botTrigger) {
-//	    debugger;
+//     debugger;
     if (this.state.pageResource + resDelta < this.state.currResources.length) {
        let newResIndex = this.state.pageResource + resDelta;
        let newScrollFraction = this.state.currResources && this.state.currResources.length === 0 ? 0 : newResIndex / this.state.currResources.length;
@@ -880,18 +880,18 @@ res.data.discoveryAnnotation.annotationHistory)));
        console.log('                    -->  (new): ' + newResIndex + ' ' + newPageRes.itemDate.substring(0, 10) + ' ' + newPageRes.category);
        console.log('            pageResourceY: ' + this.state.pageResourceY + ' --> ' + newScrollYVal);
 
-//	       this.setState({ pageResource: newResIndex,
-//			       pageResourceY: newScrollYVal });
+//        this.setState({ pageResource: newResIndex,
+//          pageResourceY: newScrollYVal });
 
        this.setState({ pageResource: newResIndex,
        pageResourceY: newScrollYVal,
        doScrollToRes: newResIndex });
 
-//	       this.scrollToRes(newResIndex);
+//        this.scrollToRes(newResIndex);
     } else {
        console.log('BOT TRIG -- at end');
        if (this.lastScrollDivScrollTop) {
-  this.scrollDiv.current.scrollTop = this.lastScrollDivScrollTop;	// "Undo" unnecessary scrolling
+  this.scrollDiv.current.scrollTop = this.lastScrollDivScrollTop; // "Undo" unnecessary scrolling
        }
     }
 
@@ -904,7 +904,7 @@ res.data.discoveryAnnotation.annotationHistory)));
 //   debounce(func) {
 //      // If there's a timer, cancel it
 //      if (this.debounceTimer) {
-//	 window.cancelAnimationFrame(this.debounceTimer);
+//  window.cancelAnimationFrame(this.debounceTimer);
 //      }
 //
 //      // Setup the new requestAnimationFrame()
@@ -926,7 +926,7 @@ res.data.discoveryAnnotation.annotationHistory)));
 //      this.debounce(() => this.onScrollDebounced(eCopy));
 //      this.debounce2(() => this.onScrollDebounced(eCopy), debounceTime);
       this.onScrollDebounced(e);
-      this.lastScrollDivScrollTop = e.target.scrollTop;		// Save for possible "undo" in setContainerTop()
+      this.lastScrollDivScrollTop = e.target.scrollTop;  // Save for possible "undo" in setContainerTop()
    }
 
    onScrollDebounced(e) {
@@ -965,7 +965,7 @@ res.data.discoveryAnnotation.annotationHistory)));
 
    isVirtualDisplay() {
       return this.state.currResources.length >= config.contentPanelUseWindowing;
-   }	
+   } 
 
    onlyAnnotatedChange = (event) => {
 //      console.log('annotated change: ' + event.target.checked);
@@ -976,7 +976,7 @@ res.data.discoveryAnnotation.annotationHistory)));
    renderContents(context) {
 //      // Temp: don't use virtual window rendering for Tiles/Compare views
 //      let contents = !this.state.currResources || this.props.tileSort ||
-//		     this.state.currResources.length < config.contentPanelUseWindowing ? this.renderDotOrAll() : this.renderAltDisplay();
+//       this.state.currResources.length < config.contentPanelUseWindowing ? this.renderDotOrAll() : this.renderAltDisplay();
       // Use virtual window rendering for all views (20191105)
       let contents = !this.state.currResources ||
      this.isVirtualDisplay() ? this.renderAltDisplay() : this.renderDotOrAll();

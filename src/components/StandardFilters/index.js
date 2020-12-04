@@ -20,7 +20,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class StandardFilters extends React.Component {
 
-   static contextType = DiscoveryContext;		// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform),
@@ -29,33 +29,33 @@ export default class StandardFilters extends React.Component {
     position: PropTypes.number.isRequired,
     date: PropTypes.string.isRequired
  })).isRequired,
- minDate: PropTypes.string.isRequired,		// Earliest date we have data for this participant
- startDate: PropTypes.string.isRequired,	// Jan 1 of minDate's year
- maxDate: PropTypes.string.isRequired,		// Latest date we have data for this participant
- endDate: PropTypes.string.isRequired		// Dec 31 of last year of timeline tick periods
+ minDate: PropTypes.string.isRequired,  // Earliest date we have data for this participant
+ startDate: PropTypes.string.isRequired, // Jan 1 of minDate's year
+ maxDate: PropTypes.string.isRequired,  // Latest date we have data for this participant
+ endDate: PropTypes.string.isRequired  // Dec 31 of last year of timeline tick periods
       }),
       categories: PropTypes.arrayOf(PropTypes.string).isRequired,
-      catsEnabled: PropTypes.object.isRequired,		// Initial state
+      catsEnabled: PropTypes.object.isRequired,  // Initial state
       providers: PropTypes.arrayOf(PropTypes.string).isRequired,
       provsEnabled: PropTypes.object.isRequired,
-      enabledFn: PropTypes.func.isRequired,		// Callback to report changed category & provider enable/disable
-      dateRangeFn: PropTypes.func,			// Optional callback to report changed thumb positions
+      enabledFn: PropTypes.func.isRequired,  // Callback to report changed category & provider enable/disable
+      dateRangeFn: PropTypes.func,   // Optional callback to report changed thumb positions
       lastEvent: PropTypes.instanceOf(Event),
       allowDotClick: PropTypes.bool,
       dotClickDate: PropTypes.string
    }
 
    state = {
-      minActivePos: 0.0,	    // Location [0..1] of TimeWidget left thumb
-      maxActivePos: 1.0,	    // Location [0..1] of TimeWidget right thumb
+      minActivePos: 0.0,     // Location [0..1] of TimeWidget left thumb
+      maxActivePos: 1.0,     // Location [0..1] of TimeWidget right thumb
       timelineIsExpanded: false,    // Is expanded timeline displayed (restricted dot range in effect)
       catsExpanded: true,
-      catsEnabled: {},		    // Enabled status of categories
+      catsEnabled: {},      // Enabled status of categories
       provsExpanded: true,
-      provsEnabled: {},		    // Enabled status of providers
+      provsEnabled: {},      // Enabled status of providers
       svgWidth: '0px',
-      dotClickContext: null,	    // The current dot (if one is highlighted)
-      activeDates: {}		    // Dates that are within the TimeWidget's active range and have one or more resources with enabled Categories/Providers
+      dotClickContext: null,     // The current dot (if one is highlighted)
+      activeDates: {}      // Dates that are within the TimeWidget's active range and have one or more resources with enabled Categories/Providers
    }
 
    componentDidMount() {
@@ -92,14 +92,14 @@ export default class StandardFilters extends React.Component {
 
 // TODO: not sure why this was here, but if enabled, next/prev and dot-click don't work w/ searchRefs
 //      } else if (this.context.searchRefs && this.context.searchRefs.length > 0) {
-//	 // If most recent searchRef differs from currently highlighted dot, set dotClickContext
-//	 let recentRef = this.context.searchRefs[0];
-//	 if (recentRef.position !== this.state.dotClickContext.position) {
-//	    let newContext = Object.assign({}, this.state.dotClickContext);
-//	    newContext.date = recentRef.date;
-//	    newContext.position = recentRef.position;
-//	    this.setState({ dotClickContext: newContext });
-//	 }
+//  // If most recent searchRef differs from currently highlighted dot, set dotClickContext
+//  let recentRef = this.context.searchRefs[0];
+//  if (recentRef.position !== this.state.dotClickContext.position) {
+//     let newContext = Object.assign({}, this.state.dotClickContext);
+//     newContext.date = recentRef.date;
+//     newContext.position = recentRef.position;
+//     this.setState({ dotClickContext: newContext });
+//  }
 
       } else if (this.props.allowDotClick && prevProps.dotClickDate !== this.props.dotClickDate) {
  // Set dotClickContext from dot clicked in ContentPanel (via this.props.dotClickDate)
@@ -133,19 +133,19 @@ export default class StandardFilters extends React.Component {
       const categoryNav = checkQuerySelector('.selector-nav');
 
       if (category && categoryNav) {
-  let svgWidth = (category.getBoundingClientRect().width - categoryNav.getBoundingClientRect().width - 13	// TODO: fix (far-right margin)
+  let svgWidth = (category.getBoundingClientRect().width - categoryNav.getBoundingClientRect().width - 13 // TODO: fix (far-right margin)
   - numericPart(getStyle(categoryNav, 'margin-left')) - numericPart(getStyle(categoryNav, 'margin-right')))+ 'px';
   this.setState({ svgWidth: svgWidth });
-//	  console.log('svgWidth: ' + svgWidth);
+//   console.log('svgWidth: ' + svgWidth);
        }
 
    }
 
    //
    // Callback function to record category/provider enable/disable
-   //   parent:		'Category', 'Provider'
-   //   rowName:	<category-name>/<provider-name>
-   //   isEnabled:	the current state to record
+   //   parent:  'Category', 'Provider'
+   //   rowName: <category-name>/<provider-name>
+   //   isEnabled: the current state to record
    //
    setEnabled = (parent, rowName, isEnabled) => {
       if (parent === 'Category') {
@@ -186,9 +186,9 @@ if (enabled === 0 || enabled === this.props.providers.length) {
    }
 
    //
-   // Is 'dot':	(1) in the TimeWidget's active range
-   //		(2) associated with an active Category
-   //		(3) associated with an active Provider
+   // Is 'dot': (1) in the TimeWidget's active range
+   //  (2) associated with an active Category
+   //  (3) associated with an active Provider
    isActive = (dot) => {
       return this.state.activeDates[dateOnly(dot.date)];
    }
@@ -227,9 +227,9 @@ if (enabled === 0 || enabled === this.props.providers.length) {
 
    //
    // Handle TimeWidget left/right thumb movement
-   //   minActivePos:	location [0..1] of left thumb
-   //   maxActivePos:	location [0..1] of right thumb
-   //   isExpanded:	true if secondary (expanded) timeline visible
+   //   minActivePos: location [0..1] of left thumb
+   //   maxActivePos: location [0..1] of right thumb
+   //   isExpanded: true if secondary (expanded) timeline visible
    //
    setLeftRight = (minActivePos, maxActivePos, isExpanded) => {
 //      console.log('minPos: ' + minActivePos + '  maxPos: ' + maxActivePos);
@@ -243,8 +243,8 @@ if (enabled === 0 || enabled === this.props.providers.length) {
 
    //
    // Handle Category/Provider expand/contract
-   //    section:	'Categories', 'Providers'
-   //	 expand:	true/false
+   //    section: 'Categories', 'Providers'
+   //  expand: true/false
    //
    onExpandContract = (section, expand) => {
       if (section === 'Categories') {
@@ -256,9 +256,9 @@ if (enabled === 0 || enabled === this.props.providers.length) {
 
    //
    // Return data for the clicked dot
-   //    parent:	'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
-   //    rowName:	<category-name>/<provider-name>
-   //    date:		date of the clicked dot
+   //    parent: 'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
+   //    rowName: <category-name>/<provider-name>
+   //    date:  date of the clicked dot
    //
    fetchDataForDot = (parent, rowName, date) => {
        switch (parent) {
@@ -283,7 +283,7 @@ if (enabled === 0 || enabled === this.props.providers.length) {
 
    //
    // Handle ContentPanel next/prev button clicks
-   //   direction:	'next' or 'prev'
+   //   direction: 'next' or 'prev'
    // Returns true if the button should be enabled, else false
    //
    onNextPrevClick = (direction) => {
@@ -344,17 +344,17 @@ if (enabled === 0 || enabled === this.props.providers.length) {
    //
    // Handle dot clicks
    //   context = {
-   //      parent:	   'CategoryRollup', 'Category', 'ProviderRollup', 'Provider', 'TimeWidget'
-   //      rowName:	   <category-name>/<provider-name>
-   //      dotType:	   type of the clicked dot (added below)
-   //      minDate:	   date of the first dot for this row
-   //      maxDate:	   date of the last dot for this row
-   //      date:	   date of the clicked dot (added below)
-   //      position:	   position of the clicked dot (added below)
-   //	   data:	   data associated with the clicked dot (added below)
+   //      parent:    'CategoryRollup', 'Category', 'ProviderRollup', 'Provider', 'TimeWidget'
+   //      rowName:    <category-name>/<provider-name>
+   //      dotType:    type of the clicked dot (added below)
+   //      minDate:    date of the first dot for this row
+   //      maxDate:    date of the last dot for this row
+   //      date:    date of the clicked dot (added below)
+   //      position:    position of the clicked dot (added below)
+   //    data:    data associated with the clicked dot (added below)
    //   } 
-   //   date:		   date of the clicked dot
-   //   dotType:	   'active', 'inactive', 'active-highlight', 'inactive-highlight', 'active-highlight-search', 'inactive-highlight-search'
+   //   date:     date of the clicked dot
+   //   dotType:    'active', 'inactive', 'active-highlight', 'inactive-highlight', 'active-highlight-search', 'inactive-highlight-search'
    //
    onDotClick = (context, date, dotType) => {
       if (this.props.allowDotClick) {
@@ -387,10 +387,10 @@ if (enabled === 0 || enabled === this.props.providers.length) {
 
    //
    // Callback function for this component's state, returning the requested array of position+date+dotType objects
-   //	parent:		'CategoryRollup', 'Category', 'ProviderRollup', 'Provider', 'TimeWidget'
-   //	rowName:	<category-name>/<provider-name>/'Full' or 'Active' (for TimeWidget)
-   //   isEnabled:	'true' = render normally, 'false' = active dots become inactive
-   //   fetchAll:	'true' = don't label dots with dotType, 'false' = label each dot with dotType
+   // parent:  'CategoryRollup', 'Category', 'ProviderRollup', 'Provider', 'TimeWidget'
+   // rowName: <category-name>/<provider-name>/'Full' or 'Active' (for TimeWidget)
+   //   isEnabled: 'true' = render normally, 'false' = active dots become inactive
+   //   fetchAll: 'true' = don't label dots with dotType, 'false' = label each dot with dotType
    //
 //   fetchDotPositions = (parent, rowName, isEnabled, fetchAll) => {
    fetchDotPositions = this.fetchDotPositions.bind(this);
@@ -410,39 +410,39 @@ if (enabled === 0 || enabled === this.props.providers.length) {
  position: normalizeDates([date], startDate, endDate)[0] });
    return result;
 }, []);
-//	// TODO: to use, need to build highlightedResources on Tiles/Compare load	  
-//	 let viewAccentRefs = this.context.highlightedResources ? this.context.highlightedResources.reduce((result, res) => {
-//						let date = res.itemDate;
-//						result.push({ dotType: 'view-accent', date: date, position: normalizeDates([date], startDate, endDate)[0] });
-//						return result;
-//					     }, []) : [];
+// // TODO: to use, need to build highlightedResources on Tiles/Compare load   
+//  let viewAccentRefs = this.context.highlightedResources ? this.context.highlightedResources.reduce((result, res) => {
+//      let date = res.itemDate;
+//      result.push({ dotType: 'view-accent', date: date, position: normalizeDates([date], startDate, endDate)[0] });
+//      return result;
+//          }, []) : [];
 
  let dotClickContext = this.state.dotClickContext;
  let matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget' ||
   (dotClickContext.parent === parent && dotClickContext.rowName === rowName));
  let inactiveHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
-//							 ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
+//        ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
  ((!isEnabled || !this.isActive(elt)) && elt.position === dotClickContext.position)
 ? this.includeDot(res, elt, 'inactive-highlight', parent === 'TimeWidget') : res, []);
 
  let activeHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
-//							 (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
+//        (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
  (isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
 ? this.includeDot(res, elt, 'active-highlight', parent === 'TimeWidget') : res, []);
 
  // TODO: is this correct (viewAccentRefs vs viewLastAccentRefs)?
  let viewAccentHighlightDots = matchContext && viewAccentRefs.reduce((res, elt) =>
-//							 (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
+//        (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
  (isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
 ? this.includeDot(res, elt, 'view-accent-highlight', parent === 'TimeWidget') : res, []);
 
  let inactiveHighlightSearchDots = matchContext && searchRefs.reduce((res, elt) =>
-//							 ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
+//        ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
  ((!isEnabled || !this.isActive(elt)) && elt.position === dotClickContext.position)
 ? this.includeDot(res, elt, 'inactive-highlight-search', parent === 'TimeWidget') : res, []);
 
  let activeHighlightSearchDots = matchContext && searchRefs.reduce((res, elt) =>
-//							 (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
+//        (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
  (isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
 ? this.includeDot(res, elt, 'active-highlight-search', parent === 'TimeWidget') : res, []);
 
@@ -455,10 +455,10 @@ if (enabled === 0 || enabled === this.props.providers.length) {
        if (fetchAll) {
   return allDates;
        } else {
-//		  return combine(allDates.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active') : res, []),
-//				 searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active-search') : res, []),
-//				 viewAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'view-accent') : res, []),
-//				 viewLastAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'view-last-accent')
+//    return combine(allDates.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active') : res, []),
+//     searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active-search') : res, []),
+//     viewAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'view-accent') : res, []),
+//     viewLastAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'view-last-accent')
   return combine(allDates.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'active') : res, []),
  searchRefs.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'active-search') : res, []),
  viewAccentRefs.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'view-accent') : res, []),
@@ -475,15 +475,15 @@ if (enabled === 0 || enabled === this.props.providers.length) {
        if (fetchAll) {
   return provDateObjs;
        } else {
-//		  return combine(provDateObjs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
-//									? this.includeDot(res, elt, 'inactive') : res, []),
-//				 provDateObjs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
-//									? this.includeDot(res, elt, 'active') : res, []),
-//				 provSearchRefs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
-//									? this.includeDot(res, elt, 'inactive-search') : res, []),
-//				 provSearchRefs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
-//									? this.includeDot(res, elt, 'active-search') : res, []),
-//				 highlightDots);
+//    return combine(provDateObjs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
+//         ? this.includeDot(res, elt, 'inactive') : res, []),
+//     provDateObjs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
+//         ? this.includeDot(res, elt, 'active') : res, []),
+//     provSearchRefs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
+//         ? this.includeDot(res, elt, 'inactive-search') : res, []),
+//     provSearchRefs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
+//         ? this.includeDot(res, elt, 'active-search') : res, []),
+//     highlightDots);
   return combine(provDateObjs.reduce((res, elt) => !isEnabled || !this.isActive(elt)
 ? this.includeDot(res, elt, 'inactive') : res, []),
  provDateObjs.reduce((res, elt) => isEnabled && this.isActive(elt)
@@ -503,15 +503,15 @@ if (enabled === 0 || enabled === this.props.providers.length) {
        if (fetchAll) {
   return catDateObjs;
        } else {
-//		  return combine(catDateObjs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
-//									? this.includeDot(res, elt, 'inactive') : res, []),
-//				 catDateObjs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
-//									? this.includeDot(res, elt, 'active') : res, []),
-//				 catSearchRefs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
-//									? this.includeDot(res, elt, 'inactive-search') : res, []),
-//				 catSearchRefs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
-//									? this.includeDot(res, elt, 'active-search') : res, []),
-//				 highlightDots);
+//    return combine(catDateObjs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
+//         ? this.includeDot(res, elt, 'inactive') : res, []),
+//     catDateObjs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
+//         ? this.includeDot(res, elt, 'active') : res, []),
+//     catSearchRefs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
+//         ? this.includeDot(res, elt, 'inactive-search') : res, []),
+//     catSearchRefs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
+//         ? this.includeDot(res, elt, 'active-search') : res, []),
+//     highlightDots);
   return combine(catDateObjs.reduce((res, elt) => !isEnabled || !this.isActive(elt)
 ? this.includeDot(res, elt, 'inactive') : res, []),
  catDateObjs.reduce((res, elt) => isEnabled && this.isActive(elt)
@@ -527,19 +527,19 @@ if (enabled === 0 || enabled === this.props.providers.length) {
        if (fetchAll) {
   return allDates;
        } else if (rowName === 'Full') {
-//	          return combine(allDates.reduce((res, elt) => !this.isActiveTimeWidget(elt)
-//	       								? this.includeDot(res, elt, 'inactive', true) : res, []),
-//	       			 allDates.reduce((res, elt) => this.isActiveTimeWidget(elt)
-//	       								? this.includeDot(res, elt, 'active', true) : res, []),
-//	       			 searchRefs.reduce((res, elt) => !this.isActiveTimeWidget(elt)
-//	       								? this.includeDot(res, elt, 'inactive-search', true) : res, []),
-//	       			 searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt)
-//	       								? this.includeDot(res, elt, 'active-search', true) : res, []),
-//	       			 viewAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt)
-//	       								? this.includeDot(res, elt, 'view-accent', true) : res, []),
-//	       			 viewLastAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt)
-//	       								    ? this.includeDot(res, elt, 'view-last-accent', true) : res, []),
-//	       			 highlightDots);
+//           return combine(allDates.reduce((res, elt) => !this.isActiveTimeWidget(elt)
+//                ? this.includeDot(res, elt, 'inactive', true) : res, []),
+//            allDates.reduce((res, elt) => this.isActiveTimeWidget(elt)
+//                ? this.includeDot(res, elt, 'active', true) : res, []),
+//            searchRefs.reduce((res, elt) => !this.isActiveTimeWidget(elt)
+//                ? this.includeDot(res, elt, 'inactive-search', true) : res, []),
+//            searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt)
+//                ? this.includeDot(res, elt, 'active-search', true) : res, []),
+//            viewAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt)
+//                ? this.includeDot(res, elt, 'view-accent', true) : res, []),
+//            viewLastAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt)
+//                    ? this.includeDot(res, elt, 'view-last-accent', true) : res, []),
+//            highlightDots);
           return combine(allDates.reduce((res, elt) => !this.isActive(elt)
        ? this.includeDot(res, elt, 'inactive', true) : res, []),
         allDates.reduce((res, elt) => this.isActive(elt)
@@ -554,10 +554,10 @@ if (enabled === 0 || enabled === this.props.providers.length) {
            ? this.includeDot(res, elt, 'view-last-accent', true) : res, []),
         highlightDots);
 
-       } else {	// TODO: currently not using this case
+       } else { // TODO: currently not using this case
   alert(`SF fetchDotPositions(): ${parent} ${rowName} (huh???)`);
-//	       	  return combine(allDates.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active') : res, []),
-//	       			 searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active-search') : res, []));
+//           return combine(allDates.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active') : res, []),
+//            searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active-search') : res, []));
          return combine(allDates.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'active') : res, []),
         searchRefs.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'active-search') : res, []));
        }

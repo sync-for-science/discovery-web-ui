@@ -11,7 +11,7 @@ import { getStyle, checkQuerySelector } from '../../util.js';
 export default class SVGContainer extends React.Component {
 
    static propTypes = {
-      preserveAspectRatio: PropTypes.string,		// Default is 'xMidYMid meet' if not provided
+      preserveAspectRatio: PropTypes.string,  // Default is 'xMidYMid meet' if not provided
       svgClassName: PropTypes.string.isRequired,
       style: PropTypes.object,
       svgWidth: PropTypes.string.isRequired
@@ -38,7 +38,7 @@ export default class SVGContainer extends React.Component {
     <svg className={this.props.svgClassName} width={width} height={height} preserveAspectRatio={par} xmlns='http://www.w3.org/2000/svg'>
        { childrenWithSizeProps }
     </svg>
- </div>	 
+ </div>  
       )
    }
 }

@@ -19,7 +19,7 @@ export default class Claims extends React.Component {
 
    static catName = 'Claims';
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static compareFn(a, b) {
       return stringCompare(Claims.primaryText(a), Claims.primaryText(b));
@@ -73,27 +73,27 @@ export default class Claims extends React.Component {
 
    // OLDresolveDiagnosisReference(elt) {
    //    if (isValid(elt, e => e.data.diagnosis[0].diagnosisReference.reference) && !elt.data.diagnosis[0].diagnosisReference.code) {
-   // 	 this.setState({loadingRefs: this.state.loadingRefs+1});
-   // 	 axios.get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.diagnosis[0].diagnosisReference.reference),
-   // 		   { cancelToken: this.AxiosCancelSource.token } )
-   // 	    .then(response => {
-   // 		// Add the de-referenced data to the diagnosisReference element
-   // 		elt.data.diagnosis[0].diagnosisReference = Object.assign(elt.data.diagnosis[0].diagnosisReference, response.data);
-   // 		this.setState({loadingRefs: this.state.loadingRefs-1});
-   // 	    })
-   // 	    .catch(thrown => {
-   // 		if (!axios.isCancel(thrown)) {
-   // 		   console.log(thrown);
-   // 		   this.setState({loadingRefs: this.state.loadingRefs-1});
-   // 		}
-   // 	    });
+   //   this.setState({loadingRefs: this.state.loadingRefs+1});
+   //   axios.get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.diagnosis[0].diagnosisReference.reference),
+   //      { cancelToken: this.AxiosCancelSource.token } )
+   //      .then(response => {
+   //   // Add the de-referenced data to the diagnosisReference element
+   //   elt.data.diagnosis[0].diagnosisReference = Object.assign(elt.data.diagnosis[0].diagnosisReference, response.data);
+   //   this.setState({loadingRefs: this.state.loadingRefs-1});
+   //      })
+   //      .catch(thrown => {
+   //   if (!axios.isCancel(thrown)) {
+   //      console.log(thrown);
+   //      this.setState({loadingRefs: this.state.loadingRefs-1});
+   //   }
+   //      });
    //    }
    // }
 
    render() {
       let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
-       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
+       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) && // Don't show this category (at all) if disabled and trim set
        <div className='claims category-container' style={this.props.style} id={formatKey(firstRes)}>
   { formatContentHeader(this.props.isEnabled, Claims.catName, firstRes, this.context) }
           <div className='content-body'>

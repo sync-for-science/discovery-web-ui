@@ -12,7 +12,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class HighlightDiv extends React.Component {
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       matchingResources: PropTypes.array,

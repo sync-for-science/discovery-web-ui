@@ -31,7 +31,7 @@ export default class DiscoveryModal extends React.Component {
   <div className="logo-modal-photo-one"></div>
   <div className="logo-modal-photo-two"></div>
   <div className="logo-modal-photo-three"></div>
-       </div>	
+       </div> 
        <div className="logo-modal-body-row">
   <div className="logo-modal-body-property">Version:</div>
   <div className="logo-modal-body-value">Alpha 0.8 (User Test) </div>
@@ -222,7 +222,7 @@ export default class DiscoveryModal extends React.Component {
   <div className="download-modal-body-row">
   <div className="download-modal-button">CVS File</div>
   </div>
-<div className="download-modal-text-block">	
+<div className="download-modal-text-block"> 
 <p><span className="download-modal-text-bold">Download</span> supports downloading data viewed in Discovery.</p>
 
 <p>We expect to support downloading in three formats:</p>

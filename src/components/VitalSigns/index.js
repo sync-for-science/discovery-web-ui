@@ -16,14 +16,14 @@ export default class VitalSigns extends React.Component {
 
    static catName = 'Vital Signs';
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static compareFn(a, b) {
       return stringCompare(canonVitals(VitalSigns.primaryText(a)), canonVitals(VitalSigns.primaryText(b)));
    }
 
    static code(elt) {
-      return elt.data.code;		// LOINC
+      return elt.data.code;  // LOINC
    }
 
    static primaryText(elt) {
@@ -62,7 +62,7 @@ export default class VitalSigns extends React.Component {
    render() {
       let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
-       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
+       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) && // Don't show this category (at all) if disabled and trim set
        <div className='vital-signs category-container' id={formatKey(firstRes)}>
   { formatContentHeader(this.props.isEnabled, VitalSigns.catName, firstRes, this.context) }
           <div className='content-body'>

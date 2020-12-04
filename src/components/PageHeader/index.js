@@ -19,20 +19,20 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class PageHeader extends React.Component {
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       rawQueryString: PropTypes.string.isRequired,
       modalIsOpen: PropTypes.bool.isRequired,
-      modalFn: PropTypes.func.isRequired,	// Callback to handle clicks on header icons
-      viewFn: PropTypes.func.isRequired,	// Callback to handle view selection
+      modalFn: PropTypes.func.isRequired, // Callback to handle clicks on header icons
+      viewFn: PropTypes.func.isRequired, // Callback to handle view selection
       searchCallback: PropTypes.func.isRequired,
       resources: PropTypes.instanceOf(FhirTransform)
    }
 
    state = {
       modalName: '',
-      logoClasses: ['logo-s4s-button'],		// Default value. Parsed from query string 'logos=a,b,c'
+      logoClasses: ['logo-s4s-button'],  // Default value. Parsed from query string 'logos=a,b,c'
       currentTextSize: 1.0,
       inactiveLight: true,
       menuIsOpen: false,
@@ -63,8 +63,8 @@ export default class PageHeader extends React.Component {
       if (queryVals.logos) {
   this.setState({ logoClasses: queryVals.logos.split(',') });
       }
-      this.viewClick('summaryView');	// Set initial/default view
-//      this.viewClick('reportView');	// Set initial/default view 
+      this.viewClick('summaryView'); // Set initial/default view
+//      this.viewClick('reportView'); // Set initial/default view 
   }
 
    componentWillUnmount() {
@@ -99,12 +99,12 @@ export default class PageHeader extends React.Component {
     case 'financialView':
        document.querySelector('.benefits-view-button-on').className = 'benefits-view-button-off';
        break;
-//	    case 'consultView':
-//	       document.querySelector('.consult-view-button-on').className = 'consult-view-button-off';
-//	       break;
-//	    case 'diabetesView':
-//	       document.querySelector('.diabetes-view-button-on').className = 'diabetes-view-button-off';
-//	       break;
+//     case 'consultView':
+//        document.querySelector('.consult-view-button-on').className = 'consult-view-button-off';
+//        break;
+//     case 'diabetesView':
+//        document.querySelector('.diabetes-view-button-on').className = 'diabetes-view-button-off';
+//        break;
     case 'tilesView':
        document.querySelector('.tiles-view-button-on').className = 'tiles-view-button-off';
        break;
@@ -142,8 +142,8 @@ export default class PageHeader extends React.Component {
 
    itemClick(itemName) {
       if (!this.props.modalIsOpen) {
- this.setState({ modalName: itemName });	// Record which button was clicked for subsequent close
- this.props.modalFn(itemName);			// Let parent know to open the modal
+ this.setState({ modalName: itemName }); // Record which button was clicked for subsequent close
+ this.props.modalFn(itemName);   // Let parent know to open the modal
 
  // Turn "on" the appropriate item
  switch (itemName) {
@@ -202,7 +202,7 @@ export default class PageHeader extends React.Component {
       if (viewName !== this.state.currentViewName) {
  // Clicked different view
  this.setState({ currentViewName: viewName });
- this.props.viewFn(viewName);		// Let parent know which view was selected
+ this.props.viewFn(viewName);  // Let parent know which view was selected
 
  // Turn "on" the appropriate button
  switch (viewName) {
@@ -215,12 +215,12 @@ export default class PageHeader extends React.Component {
     case 'financialView':
        document.querySelector('.benefits-view-button-off').className = 'benefits-view-button-on';
        break;
-//	    case 'consultView':
-//	       document.querySelector('.consult-view-button-off').className = 'consult-view-button-on';
-//	       break;
-//	    case 'diabetesView':
-//	       document.querySelector('.diabetes-view-button-off').className = 'diabetes-view-button-on';
-//	       break;
+//     case 'consultView':
+//        document.querySelector('.consult-view-button-off').className = 'consult-view-button-on';
+//        break;
+//     case 'diabetesView':
+//        document.querySelector('.diabetes-view-button-off').className = 'diabetes-view-button-on';
+//        break;
     case 'tilesView':
        document.querySelector('.tiles-view-button-off').className = 'tiles-view-button-on';
        break;
@@ -276,12 +276,12 @@ export default class PageHeader extends React.Component {
 
 //   get viewHelpTitle() {
 //      return {
-//	 reportView: '',
-////	 compareView: 'Compare',
-////	 summaryView: 'Summary',
-////	 financialView: 'Financial',
-////	 consultView: 'Consult',
-////	 diabetesView: 'Diabetes'
+//  reportView: '',
+////  compareView: 'Compare',
+////  summaryView: 'Summary',
+////  financialView: 'Financial',
+////  consultView: 'Consult',
+////  diabetesView: 'Diabetes'
 //      }
 //   }
 
@@ -292,8 +292,8 @@ export default class PageHeader extends React.Component {
  summaryView: <div><b>Summary</b> shows an overview of your data.</div>,
  tilesView: <div><b>Catalog</b> lists your unique clinical data by type.</div>,
  financialView: <div><b>Payer</b> presents your claims and benefits data.</div>,
-//	 consultView: <div>The <b>Consult View</b> shows a knowledge-annotated view of your conditions over time or for one point in time.</div>,
-//	 diabetesView: <div>The <b>Diabetes View</b> shows data specific to this condition.</div>
+//  consultView: <div>The <b>Consult View</b> shows a knowledge-annotated view of your conditions over time or for one point in time.</div>,
+//  diabetesView: <div>The <b>Diabetes View</b> shows data specific to this condition.</div>
       };
    }
 
@@ -303,8 +303,8 @@ export default class PageHeader extends React.Component {
  compareView: 'view-help-title-compare-view',
  summaryView: 'view-help-title-default-view',
  financialView: 'view-help-title-benefits-view',
-//	 consultView: 'view-help-title-consult-view',
-//	 diabetesView: 'view-help-title-diabetes-view'
+//  consultView: 'view-help-title-consult-view',
+//  diabetesView: 'view-help-title-diabetes-view'
       };
    }
     
@@ -355,13 +355,13 @@ export default class PageHeader extends React.Component {
     { config.enableSearch && this.props.resources && <Search data={this.props.resources.transformed} callback={this.props.searchCallback} />}
     { config.enableTextSizing && <div className='header-controls-box'>
  {/* make highlight active/inactive first <button className={'inactive-light-'+(this.state.inactiveLight ? 'on' : 'off')}>Inactive</button> */}
- <button className='text-size-smaller-button-off'	onClick={() => this.resizeText('-')} >A</button>
+ <button className='text-size-smaller-button-off' onClick={() => this.resizeText('-')} >A</button>
  <div className='text-size-slider-container'>
     <div className='text-size-slider-button' />
  </div>
- <button className='text-size-larger-button-off'	onClick={() => this.resizeText('+')} >A</button>
+ <button className='text-size-larger-button-off' onClick={() => this.resizeText('+')} >A</button>
       </div> }
-    {/* <div className='text-size-current'		onClick={() => this.resetTextSize()}>
+    {/* <div className='text-size-current'  onClick={() => this.resetTextSize()}>
          {Math.round(this.state.currentTextSize*100)}%
      </div> */}
          

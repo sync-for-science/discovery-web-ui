@@ -15,7 +15,7 @@ export default class ParticipantList extends React.Component {
       participants: {},
       isLoading: false,
       fetchError: null,
-      logoClasses: ['logo-s4s-button'],		// Parsed from query string 'logos=a,b,c'
+      logoClasses: ['logo-s4s-button'],  // Parsed from query string 'logos=a,b,c'
       menuIsOpen: false,
       listNames: null,
       currentList: 'All'

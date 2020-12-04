@@ -16,7 +16,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class CondDiv extends React.Component {
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       check:PropTypes.oneOfType([

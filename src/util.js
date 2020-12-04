@@ -93,7 +93,7 @@ export function formatDisplayDate(date, fillShortDates, surpressTime) {
     strDate = strDate.length === 4 ? strDate += '-01' : strDate;
     strDate = strDate.length === 7 ? strDate += '-01' : strDate;
     //      let options = surpressTime ? { year: 'numeric', month: 'short', day: '2-digit' }
-    //				 : { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
+    //     : { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
     const options = surpressTime ? { year: 'numeric', month: 'short', day: 'numeric' }
       : {
         year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true,
@@ -103,7 +103,7 @@ export function formatDisplayDate(date, fillShortDates, surpressTime) {
   const options = surpressTime ? (strDate.length === 4 ? { year: 'numeric' }
     : (strDate.length === 7 ? { year: 'numeric', month: 'short' }
       : { year: 'numeric', month: 'short', day: '2-digit' }))
-  //				 : { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
+  //     : { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
     : {
       year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true,
     };
@@ -176,7 +176,7 @@ export function formatContentHeader(isEnabled, category, res, appContext) {
   const dob = appContext.resources.pathItem('[category=Patient].data.birthDate');
   const age = formatAge(dob, res.itemDate, 'age ');
   //   let highlight = appContext.highlightedResources &&
-  //		   appContext.highlightedResources.some(elt => elt.category === category  && elt.itemDate === res.itemDate);
+  //     appContext.highlightedResources.some(elt => elt.category === category  && elt.itemDate === res.itemDate);
   const highlight = false;
 
   //      <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} id={dateOnly} data-fhir={fhirKey(res)}>
@@ -378,7 +378,7 @@ export function logDiffs(label, was, now) {
         // An array
         console.group(label);
         for (let i = 0; i < was.length; i++) {
-          //		  if (JSON.stringify(was[i]) !== JSON.stringify(now[i])) {
+          //    if (JSON.stringify(was[i]) !== JSON.stringify(now[i])) {
           if (notEqJSON(was[i], now[i])) {
             // Element changed
             logDiffs(`[${i}]`, was[i], now[i]);
@@ -387,7 +387,7 @@ export function logDiffs(label, was, now) {
         console.groupEnd();
       } else if (was === null) {
         // null
-        //	    if (JSON.stringify(was) !== JSON.stringify(now)) {
+        //     if (JSON.stringify(was) !== JSON.stringify(now)) {
         if (notEqJSON(was, now)) {
           // Changed
           console.log(`${label}: ${was} --> ${now}`);
@@ -400,16 +400,16 @@ export function logDiffs(label, was, now) {
             // Property present in both objects
             if (notEqJSON(was[attr], now[attr])) {
               //
-              //		     let prior = '<circular>';
-              //		     try {
-              //			prior = JSON.stringify(was[attr]);
-              //		     } catch (e) {}
-              //		     let current = '<circular>';
-              //		     try {
-              //			current = JSON.stringify(now[attr]);
-              //		     } catch (e) {}
-              /// /		     if (JSON.stringify(was[attr]) !== JSON.stringify(now[attr])){
-              //		     if (prior !== current) {
+              //       let prior = '<circular>';
+              //       try {
+              //   prior = JSON.stringify(was[attr]);
+              //       } catch (e) {}
+              //       let current = '<circular>';
+              //       try {
+              //   current = JSON.stringify(now[attr]);
+              //       } catch (e) {}
+              /// /       if (JSON.stringify(was[attr]) !== JSON.stringify(now[attr])){
+              //       if (prior !== current) {
               //
               // Property changed
               logDiffs(`.${attr}`, was[attr], now[attr]);
@@ -452,7 +452,7 @@ export function logDiffs(label, was, now) {
           // Present in 'was' or both -- already reported
         } else {
           // Only in 'now'
-          //		  console.log(`.${attr} not previously set`);
+          //    console.log(`.${attr} not previously set`);
           console.log(`.${attr}: <unset> --> ${now[attr]}`);
         }
       }

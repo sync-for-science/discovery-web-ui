@@ -16,14 +16,14 @@ export default class Exams extends React.Component {
 
    static catName = 'Exams';
     
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static compareFn(a, b) {
       return stringCompare(Exams.primaryText(a), Exams.primaryText(b));
    }
 
    static code(elt) {
-      return elt.data.code;		// LOINC
+      return elt.data.code;  // LOINC
    }
 
    static primaryText(elt) {
@@ -61,7 +61,7 @@ export default class Exams extends React.Component {
    render() {
       let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
-       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
+       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) && // Don't show this category (at all) if disabled and trim set
        <div className='exams category-container' id={formatKey(firstRes)}>
   { formatContentHeader(this.props.isEnabled, Exams.catName, firstRes, this.context) }
   <div className='content-body'>

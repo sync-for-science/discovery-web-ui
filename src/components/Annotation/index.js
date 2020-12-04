@@ -12,12 +12,12 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class Annotation extends React.Component {
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    // Extend resource.discoveryAnnotation (or return extension props if no annotation)
    static info(res) {
 //      return res.data.discoveryAnnotation ? Object.assign({}, res.data.discoveryAnnotation, { id: res.id, provider: res.provider, resourceId: res.data.id })
-//					  : { id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null };
+//       : { id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null };
       if (!res.data.discoveryAnnotation) {
  res.data['discoveryAnnotation'] = { id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null };
       } else {
@@ -77,7 +77,7 @@ export default class Annotation extends React.Component {
  if (div) {
     div.focus();
     document.execCommand('selectAll', false, null);
-    document.getSelection().collapseToEnd();		// Move cursor to end
+    document.getSelection().collapseToEnd();  // Move cursor to end
  }
       });
    }

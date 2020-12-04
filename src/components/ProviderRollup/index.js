@@ -16,7 +16,7 @@ export default class ProviderRollup extends React.Component {
 
    static myName = 'ProviderRollup';
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       svgWidth: PropTypes.string.isRequired,
@@ -24,7 +24,7 @@ export default class ProviderRollup extends React.Component {
       dotClickFn: PropTypes.func,
       isExpanded: PropTypes.bool.isRequired,
       expansionFn: PropTypes.func.isRequired,
-      provsEnabledFn: PropTypes.func.isRequired,		// Callback to report changed provider enable/disable
+      provsEnabledFn: PropTypes.func.isRequired,  // Callback to report changed provider enable/disable
       categories: PropTypes.arrayOf(PropTypes.string)
    }
 

@@ -24,13 +24,13 @@ export default class Sparkline extends React.Component {
       // this.props.dotClickFn && this.props.dotClickFn(dotDate);
       // // Need to "yield" via setTimeout() for 'elt' to resolve correctly
       // setTimeout(() => {
-      // 	 let elt = document.getElementById(formattedDotDate + '-' + this.props.measure);
-      // 	 if (elt) {
-      // 	    console.log('Found: ' + formattedDotDate);
-      // 	    elt.scrollIntoView({behavior: 'smooth', block: 'center'});
-      // 	 } else {
-      // 	    console.log('Not found: ' + formattedDotDate);
-      // 	 }
+      //   let elt = document.getElementById(formattedDotDate + '-' + this.props.measure);
+      //   if (elt) {
+      //      console.log('Found: ' + formattedDotDate);
+      //      elt.scrollIntoView({behavior: 'smooth', block: 'center'});
+      //   } else {
+      //      console.log('Not found: ' + formattedDotDate);
+      //   }
       // });
    }
 
@@ -51,8 +51,8 @@ export default class Sparkline extends React.Component {
    }
 }
 
-//	    <XYPlot className={this.props.className} xType='time' width={200} height={20} xDomain={[this.props.minDate, this.props.maxDate]} onClick={this.handleClick} >
-//	       <LineSeries className='line' data={[{x:this.props.minDate,y:0},{x:this.props.maxDate,y:0}]} onSeriesClick={this.handleSeriesClick} />
-//	       <LineSeries className='line' data={[{x:this.props.minDate,y:0},{x:this.props.maxDate,y:0}]} strokeWidth={5} opacity={0} onSeriesClick={this.handleSeriesClick} />
-//	       <MarkSeries className='mark' data={this.props.data} size={3.5} onSeriesClick={this.handleSeriesClick} />
-//	    </XYPlot>
+//     <XYPlot className={this.props.className} xType='time' width={200} height={20} xDomain={[this.props.minDate, this.props.maxDate]} onClick={this.handleClick} >
+//        <LineSeries className='line' data={[{x:this.props.minDate,y:0},{x:this.props.maxDate,y:0}]} onSeriesClick={this.handleSeriesClick} />
+//        <LineSeries className='line' data={[{x:this.props.minDate,y:0},{x:this.props.maxDate,y:0}]} strokeWidth={5} opacity={0} onSeriesClick={this.handleSeriesClick} />
+//        <MarkSeries className='mark' data={this.props.data} size={3.5} onSeriesClick={this.handleSeriesClick} />
+//     </XYPlot>
