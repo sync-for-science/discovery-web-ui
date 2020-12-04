@@ -23,25 +23,25 @@ export default class FhirTransform {
   // Walk the template, creating a copy and replacing functions (that refer to 'data') with their return values
   static transform(data, template) {
     if (template instanceof Function) {
-   // invoke the function on the data
-   return template(data);
+      // invoke the function on the data
+      return template(data);
     } if (template instanceof Array) {
-   // iterate over array members
-   const arr = [];
-   for (const elt of template) {
-      arr.push(FhirTransform.transform(data, elt));
-   }
-   return arr;
+      // iterate over array members
+      const arr = [];
+      for (const elt of template) {
+        arr.push(FhirTransform.transform(data, elt));
+      }
+      return arr;
     } if (template === null || !(template instanceof Object)) {
-   // return primitive types
-   return template;
+      // return primitive types
+      return template;
     }
-   // iterate over object properties
-   const obj = {};
-   for (const prop in template) {
+    // iterate over object properties
+    const obj = {};
+    for (const prop in template) {
       obj[prop] = FhirTransform.transform(data, template[prop]);
-   }
-   return obj;
+    }
+    return obj;
   }
 
   //

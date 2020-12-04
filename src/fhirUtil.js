@@ -61,19 +61,19 @@ export function formatPatientAddress(address) {
   const line = Array.isArray(addr.line) ? addr.line : [addr.line];
 
   return `${line.map((elt) => String(elt || '').trim()).join('\n')}\n${
-   addr.city}, ${addr.state} ${addr.postalCode}\n${
-   addr.country}`;
+    addr.city}, ${addr.state} ${addr.postalCode}\n${
+    addr.country}`;
 }
 
 export function formatPatientMRN(identifier, maxLength) {
   const identElts = Array.isArray(identifier) ? identifier : [identifier];
   for (const elt of identElts) {
     try {
-   if (elt.type.coding[0].code === 'MR') {
-      return maxLength === 0 || elt.value.length <= maxLength ? elt.value : `...${elt.value.substring(elt.value.length - maxLength)}`;
-   }
+      if (elt.type.coding[0].code === 'MR') {
+        return maxLength === 0 || elt.value.length <= maxLength ? elt.value : `...${elt.value.substring(elt.value.length - maxLength)}`;
+      }
     } catch (e) {
-    console.log(`formatPatientMRN(): ${e.message}`);
+      console.log(`formatPatientMRN(): ${e.message}`);
     }
   }
 
@@ -93,21 +93,21 @@ export function renderAllergies(matchingData, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-    found.push({
+      found.push({
         provider: elt.provider,
         clinicalStatus: elt.data.clinicalStatus,
         resourceId: elt.data.id,
-         display: classFromCat(elt.category).primaryText(elt),
+        display: classFromCat(elt.category).primaryText(elt),
         annotation: Annotation.info(elt),
-         verificationStatus: elt.data.verificationStatus,
+        verificationStatus: elt.data.verificationStatus,
         type: elt.data.type,
         category: elt.data.category,
-         criticality: elt.data.criticality,
+        criticality: elt.data.criticality,
         substance: elt.data.substance,
         reaction: elt.data.reaction,
       });
     } catch (e) {
-    console.log(`renderAllergies(): ${e.message}`);
+      console.log(`renderAllergies(): ${e.message}`);
     }
   }
 
@@ -146,7 +146,7 @@ export function renderAllergies(matchingData, appContext) {
           { elt.reaction && (
           <div className="col02 value-text">
             { tryWithDefault(elt, (elt) => elt.reaction[0].manifestation[0].coding[0].display,
-     tryWithDefault(elt, (elt) => elt.reaction[0].manifestation[0].text, Const.unknownValue)) }
+              tryWithDefault(elt, (elt) => elt.reaction[0].manifestation[0].text, Const.unknownValue)) }
           </div>
           ) }
         </div>
@@ -168,7 +168,7 @@ function probToDivision(prob) {
   const cats = highlightDivisions.length - 1;
   for (let i = 0; i < cats; i++) {
     if (prob <= highlightDivisions[i] && prob > highlightDivisions[i + 1]) {
-   return i;
+      return i;
     }
   }
   return 3;	// prob == 0 ends up here
@@ -177,46 +177,46 @@ function probToDivision(prob) {
 const consultCases = {
   3001: {
     Conditions: {
-   418: [
-      {
-         prob: 0.90,
-         source: 'NLP AI, Inc',
-      },
-   ],
-   438: [
-      {
-         prob: 0.32,
-         source: 'Benefits AI, Inc',
-      },
-      {
-         prob: 0.52,
-         source: 'NLP AI, Inc',
-      },
-   ],
-   457: [
-      {
-         prob: 0.15,
-         source: 'NLP AI, Inc',
-      },
-   ],
+      418: [
+        {
+          prob: 0.90,
+          source: 'NLP AI, Inc',
+        },
+      ],
+      438: [
+        {
+          prob: 0.32,
+          source: 'Benefits AI, Inc',
+        },
+        {
+          prob: 0.52,
+          source: 'NLP AI, Inc',
+        },
+      ],
+      457: [
+        {
+          prob: 0.15,
+          source: 'NLP AI, Inc',
+        },
+      ],
     },
     Allergies: {
     },
   },
   3017: {
     Conditions: {
-   6459: [
-      {
-         prob: 1.00,
-         source: 'Benefits AI, Inc',
-      },
-   ],
-   6488: [
-      {
-         prob: 0.80,
-         source: 'Labs  AI, Inc',
-      },
-   ],
+      6459: [
+        {
+          prob: 1.00,
+          source: 'Benefits AI, Inc',
+        },
+      ],
+      6488: [
+        {
+          prob: 0.80,
+          source: 'Labs  AI, Inc',
+        },
+      ],
     },
   },
 };
@@ -226,10 +226,10 @@ function consultText(appContext, elt) {
     const defList = consultCases[elt.participantId][elt.category][elt.resourceId];
     const divs = [];
     for (const def of defList) {
-   const division = probToDivision(def.prob);
+      const division = probToDivision(def.prob);
       //	 let text = def.source + ':\u2002' + Math.trunc(def.prob * 100) + '% (' + highlightDivisionNames[division] + ')';
-   const text = `${def.source}:\u2002${Math.trunc(def.prob * 100)}%`;
-   divs.push(<div className={highlightDivisionClasses[division]} key={divs.length}>{text}</div>);
+      const text = `${def.source}:\u2002${Math.trunc(def.prob * 100)}%`;
+      divs.push(<div className={highlightDivisionClasses[division]} key={divs.length}>{text}</div>);
     }
     return divs;
   }
@@ -245,7 +245,7 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-   found.push({
+      found.push({
         provider: elt.provider,
         category: elt.category,
         participantId: elt.id,
@@ -261,7 +261,7 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
         valueQuantity: elt.data.valueQuantity,
       });
     } catch (e) {
-   console.log(`renderDisplay(): ${e.message}`);
+      console.log(`renderDisplay(): ${e.message}`);
     }
   }
 
@@ -334,7 +334,7 @@ export function renderMedsStatement(matchingData, typeLabel, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-   found.push({
+      found.push({
         provider: elt.provider,
         category: elt.category,
         participantId: elt.id,
@@ -349,7 +349,7 @@ export function renderMedsStatement(matchingData, typeLabel, appContext) {
         valueQuantity: elt.data.valueQuantity,
       });
     } catch (e) {
-   console.log(`renderMedsStatement(): ${e.message}`);
+      console.log(`renderMedsStatement(): ${e.message}`);
     }
   }
 
@@ -421,20 +421,20 @@ export function renderImmunizations(matchingData, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-    found.push({
+      found.push({
         provider: elt.provider,
         id: elt.data.id,
         resourceId: elt.data.id,
-         display: classFromCat(elt.category).primaryText(elt),
-         status: elt.data.status,
+        display: classFromCat(elt.category).primaryText(elt),
+        status: elt.data.status,
         annotation: Annotation.info(elt),
-         notGiven: elt.data.notGiven,
+        notGiven: elt.data.notGiven,
         wasNotGiven: elt.data.wasNotGiven,
-         reported: elt.data.reported,
+        reported: elt.data.reported,
         primarySource: elt.data.primarySource,
       });
     } catch (e) {
-   console.log(`renderImmunizations(): ${e.message}`);
+      console.log(`renderImmunizations(): ${e.message}`);
     }
   }
 
@@ -486,7 +486,7 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-   found.push({
+      found.push({
         provider: elt.provider,
         date: elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
         resourceId: elt.data.id,
@@ -499,7 +499,7 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
         annotation: Annotation.info(elt),
       });
     } catch (e) {
-   console.log(`renderLabs(): ${e.message}`);
+      console.log(`renderLabs(): ${e.message}`);
     }
   }
 
@@ -508,16 +508,16 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
   const match = FhirTransform.getPathItem(resources.transformed, '[*category=Lab Results]');
   for (const elt of match) {
     try {
-   const displayStr = elt.data.code.coding[0].display;
-   const xVal = elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate);
-   const yVal = elt.data.valueQuantity.value;
-   if (series.hasOwnProperty(displayStr)) {
+      const displayStr = elt.data.code.coding[0].display;
+      const xVal = elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate);
+      const yVal = elt.data.valueQuantity.value;
+      if (series.hasOwnProperty(displayStr)) {
       // Add to series
-      series[displayStr].push({ provider: elt.provider, x: xVal, y: yVal });
-   } else {
+        series[displayStr].push({ provider: elt.provider, x: xVal, y: yVal });
+      } else {
       // New series
-      series[displayStr] = [{ provider: elt.provider, x: xVal, y: yVal }];
-   }
+        series[displayStr] = [{ provider: elt.provider, x: xVal, y: yVal }];
+      }
     } catch (e) {
       console.log(`renderLabs() 2: ${e.message}`);
     }
@@ -526,86 +526,86 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
   if (found.length > 0) {
     const isMultipleProviders = appContext.providers.length > 1;
     return found.map((elt, index) => {
-   let highlightValue = false;
-   const value = tryWithDefault(elt, (elt) => elt.valueQuantity.value, null);
-   const valueUnits = tryWithDefault(elt, (elt) => elt.valueQuantity.unit, null);
-   const valueRatioDisplay = elt.valueRatio ? `${elt.valueRatio.numerator.value} / ${elt.valueRatio.denominator.value}` : null;
+      let highlightValue = false;
+      const value = tryWithDefault(elt, (elt) => elt.valueQuantity.value, null);
+      const valueUnits = tryWithDefault(elt, (elt) => elt.valueQuantity.unit, null);
+      const valueRatioDisplay = elt.valueRatio ? `${elt.valueRatio.numerator.value} / ${elt.valueRatio.denominator.value}` : null;
 
-   let refRangeLabel;
-   let refRange;
+      let refRangeLabel;
+      let refRange;
 
-   if (elt.referenceRange) {
-      try {
-         refRangeLabel = elt.referenceRange[0].meaning.coding[0].display;
-      } catch (e) {
-         refRangeLabel = 'Reference Range';
+      if (elt.referenceRange) {
+        try {
+          refRangeLabel = elt.referenceRange[0].meaning.coding[0].display;
+        } catch (e) {
+          refRangeLabel = 'Reference Range';
+        }
+
+        try {
+          const lowValue = elt.referenceRange[0].low.value;
+          const lowUnits = elt.referenceRange[0].low.unit;
+
+          const highValue = elt.referenceRange[0].high.value;
+          const highUnits = elt.referenceRange[0].high.unit;
+
+          // Construct reference range
+          refRange = `${lowValue + (lowUnits && lowUnits !== highUnits ? ` ${lowUnits}` : '')} - ${highValue}${highUnits ? ` ${highUnits}` : ''}`;
+
+          // Highlight the measured value if outside of the reference range
+          highlightValue = valueUnits === lowUnits && valueUnits === highUnits && (value < lowValue || value > highValue);
+        } catch (e) {
+          refRange = elt.referenceRange.text;
+        }
       }
 
-      try {
-         const lowValue = elt.referenceRange[0].low.value;
-         const lowUnits = elt.referenceRange[0].low.unit;
-
-         const highValue = elt.referenceRange[0].high.value;
-         const highUnits = elt.referenceRange[0].high.unit;
-
-         // Construct reference range
-         refRange = `${lowValue + (lowUnits && lowUnits !== highUnits ? ` ${lowUnits}` : '')} - ${highValue}${highUnits ? ` ${highUnits}` : ''}`;
-
-         // Highlight the measured value if outside of the reference range
-         highlightValue = valueUnits === lowUnits && valueUnits === highUnits && (value < lowValue || value > highValue);
-      } catch (e) {
-         refRange = elt.referenceRange.text;
-      }
-   }
-
-   // Select only values with matching provider and then sort
-   const sortedSeries = series[elt.display] && series[elt.display].filter((e) => e.provider === elt.provider)
+      // Select only values with matching provider and then sort
+      const sortedSeries = series[elt.display] && series[elt.display].filter((e) => e.provider === elt.provider)
         .sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
-   const thisValue = elt.valueQuantity ? elt.valueQuantity.value : null;
+      const thisValue = elt.valueQuantity ? elt.valueQuantity.value : null;
 
-   return (
-  <div
-    className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
-    key={index}
-    id={`${formatKeyDate(elt.date.toISOString())}-${elt.display}`}
-    data-res={resKey(elt)}
-  >
-    <div className="content-data">
-      { elt.display && <div className="col01 label">Measure</div> }
-      { elt.display && <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.display}</HighlightDiv> }
+      return (
+        <div
+          className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+          key={index}
+          id={`${formatKeyDate(elt.date.toISOString())}-${elt.display}`}
+          data-res={resKey(elt)}
+        >
+          <div className="content-data">
+            { elt.display && <div className="col01 label">Measure</div> }
+            { elt.display && <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.display}</HighlightDiv> }
 
-      { elt.valueQuantity && <div className="col01 label">Value</div> }
-      { elt.valueQuantity && (
-      <div className={`col02 value-number${highlightValue ? ' highlight' : ''}`}>
-        {formatDPs(elt.valueQuantity.value, 1) + (elt.valueQuantity.unit ? ` ${elt.valueQuantity.unit}` : '') }
-      </div>
-      ) }
+            { elt.valueQuantity && <div className="col01 label">Value</div> }
+            { elt.valueQuantity && (
+            <div className={`col02 value-number${highlightValue ? ' highlight' : ''}`}>
+              {formatDPs(elt.valueQuantity.value, 1) + (elt.valueQuantity.unit ? ` ${elt.valueQuantity.unit}` : '') }
+            </div>
+            ) }
 
-      { valueRatioDisplay && <div className="col01 label">Value Ratio</div> }
-      { valueRatioDisplay && <div className="col02 value-number">{valueRatioDisplay}</div> }
+            { valueRatioDisplay && <div className="col01 label">Value Ratio</div> }
+            { valueRatioDisplay && <div className="col02 value-number">{valueRatioDisplay}</div> }
 
-      { elt.valueString && <div className="col01 label">Value</div> }
-      { elt.valueString && <div className="col02 value-text">{elt.valueString}</div> }
+            { elt.valueString && <div className="col01 label">Value</div> }
+            { elt.valueString && <div className="col02 value-text">{elt.valueString}</div> }
 
-      { elt.referenceRange && <div className="col01 label">{refRangeLabel}</div> }
-      { elt.referenceRange && <div className="col02 value-text">{refRange}</div> }
+            { elt.referenceRange && <div className="col01 label">{refRangeLabel}</div> }
+            { elt.referenceRange && <div className="col02 value-text">{refRange}</div> }
 
-      { isMultipleProviders && <div className="col01 label">Provider</div> }
-      { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
+            { isMultipleProviders && <div className="col01 label">Provider</div> }
+            { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
 
-      <CondDiv check={elt.status} expected="final">
-        <div className="col01 label">Status</div>
-        <div className="col02 value-text">{elt.status}</div>
-      </CondDiv>
-    </div>
-    <div className="content-graph">
-      { sortedSeries && <TimeSeries measure={elt.display} data={sortedSeries} highlights={[{ x: elt.date, y: thisValue }]} dotClickFn={dotClickFn} /> }
-    </div>
-    <div className="content-extras">
-      <Annotation annotation={elt.annotation} />
-    </div>
-  </div>
-   );
+            <CondDiv check={elt.status} expected="final">
+              <div className="col01 label">Status</div>
+              <div className="col02 value-text">{elt.status}</div>
+            </CondDiv>
+          </div>
+          <div className="content-graph">
+            { sortedSeries && <TimeSeries measure={elt.display} data={sortedSeries} highlights={[{ x: elt.date, y: thisValue }]} dotClickFn={dotClickFn} /> }
+          </div>
+          <div className="content-extras">
+            <Annotation annotation={elt.annotation} />
+          </div>
+        </div>
+      );
     });
   }
   return null;
@@ -620,7 +620,7 @@ export function renderMeds(matchingData, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-   found.push({
+      found.push({
         provider: elt.provider,
         resourceId: elt.data.id,
         display: classFromCat(elt.category).primaryText(elt),
@@ -633,7 +633,7 @@ export function renderMeds(matchingData, appContext) {
         annotation: Annotation.info(elt),
       });
     } catch (e) {
-   console.log(`renderMeds(): ${e.message}`);
+      console.log(`renderMeds(): ${e.message}`);
     }
   }
 
@@ -699,7 +699,7 @@ export function renderSocialHistory(matchingData, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-   found.push({
+      found.push({
         provider: elt.provider,
         resourceId: elt.data.id,
         display: classFromCat(elt.category).primaryText(elt),
@@ -708,7 +708,7 @@ export function renderSocialHistory(matchingData, appContext) {
         value: elt.data.valueCodeableConcept.coding[0].display,
       });
     } catch (e) {
-   console.log(`renderSocialHistory(): ${e.message}`);
+      console.log(`renderSocialHistory(): ${e.message}`);
     }
   }
 
@@ -746,7 +746,7 @@ export function renderEncounters(matchingData, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-   found.push({
+      found.push({
         provider: elt.provider,
         status: elt.data.status,
         resourceId: elt.data.id,
@@ -757,7 +757,7 @@ export function renderEncounters(matchingData, appContext) {
         period: elt.data.period,
       });
     } catch (e) {
-   console.log(`renderEncounters(): ${e.message}`);
+      console.log(`renderEncounters(): ${e.message}`);
     }
   }
 
@@ -798,9 +798,9 @@ export function renderUnimplemented(matchingData, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-    found.push({ provider: elt.provider, category: elt.category, resourceId: elt.data.id });
+      found.push({ provider: elt.provider, category: elt.category, resourceId: elt.data.id });
     } catch (e) {
-   console.log(`renderUnimplemented(): ${e.message}`);
+      console.log(`renderUnimplemented(): ${e.message}`);
     }
   }
 
@@ -839,24 +839,24 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-   // Don't display Vital Signs "container" resources with related elements
-   const displayStr = canonVitals(classFromCat(elt.category).primaryText(elt));
+      // Don't display Vital Signs "container" resources with related elements
+      const displayStr = canonVitals(classFromCat(elt.category).primaryText(elt));
 
-   if (displayStr !== 'Vital Signs') {
-      found.push({
+      if (displayStr !== 'Vital Signs') {
+        found.push({
           provider: elt.provider,
           resourceId: elt.data.id,
-   date: elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
-   display: displayStr,
+          date: elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate),
+          display: displayStr,
           annotation: Annotation.info(elt),
-   value: isValid(elt, (e) => e.data.valueQuantity) ? elt.data.valueQuantity.value : undefined,
-   unit: isValid(elt, (e) => e.data.valueQuantity) ? elt.data.valueQuantity.unit : undefined,
-   component: elt.data.component,
+          value: isValid(elt, (e) => e.data.valueQuantity) ? elt.data.valueQuantity.value : undefined,
+          unit: isValid(elt, (e) => e.data.valueQuantity) ? elt.data.valueQuantity.unit : undefined,
+          component: elt.data.component,
           status: elt.data.status,
         });
-   }
+      }
     } catch (e) {
-   console.log(`renderVitals(): ${e.message}`);
+      console.log(`renderVitals(): ${e.message}`);
     }
   }
 
@@ -865,100 +865,100 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
   const match = FhirTransform.getPathItem(resources.transformed, '[*category=Vital Signs]');
   for (const elt of match) {
     try {
-   // Don't graph Vital Signs "container" resources
-   const displayStr = canonVitals(elt.data.code.coding[0].display);
-   if (displayStr !== 'Vital Signs') {
-      const xVal = elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate);
-      if (elt.data.valueQuantity) {
-         // Single data value
-         const yVal = elt.data.valueQuantity.value;
-         if (series.hasOwnProperty(displayStr)) {
-    // Add to series
-    series[displayStr].push({ provider: elt.provider, x: xVal, y: yVal });
-         } else {
-    // New series
-    series[displayStr] = [{ provider: elt.provider, x: xVal, y: yVal }];
-         }
-      } else if (elt.data.component) {
-         // Dual/pair data values
-         const y1 = tryWithDefault(elt, (e) => e.data.component[0].valueQuantity.value, 0);
-         const y2 = tryWithDefault(elt, (e) => e.data.component[1].valueQuantity.value, 0);
-         const yVal = (y1 + y2) / 2;
-         const yVar = Math.abs(y2 - y1);
-         if (series.hasOwnProperty(displayStr)) {
-    // Add to series
-    series[displayStr].push({
+      // Don't graph Vital Signs "container" resources
+      const displayStr = canonVitals(elt.data.code.coding[0].display);
+      if (displayStr !== 'Vital Signs') {
+        const xVal = elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate);
+        if (elt.data.valueQuantity) {
+          // Single data value
+          const yVal = elt.data.valueQuantity.value;
+          if (series.hasOwnProperty(displayStr)) {
+            // Add to series
+            series[displayStr].push({ provider: elt.provider, x: xVal, y: yVal });
+          } else {
+            // New series
+            series[displayStr] = [{ provider: elt.provider, x: xVal, y: yVal }];
+          }
+        } else if (elt.data.component) {
+          // Dual/pair data values
+          const y1 = tryWithDefault(elt, (e) => e.data.component[0].valueQuantity.value, 0);
+          const y2 = tryWithDefault(elt, (e) => e.data.component[1].valueQuantity.value, 0);
+          const yVal = (y1 + y2) / 2;
+          const yVar = Math.abs(y2 - y1);
+          if (series.hasOwnProperty(displayStr)) {
+            // Add to series
+            series[displayStr].push({
               provider: elt.provider, x: xVal, y: yVal, yVariance: yVar, y1, y2,
             });
-         } else {
-    // New series
+          } else {
+            // New series
             series[displayStr] = [{
               provider: elt.provider, x: xVal, y: yVal, yVariance: yVar, y1, y2,
             }];
-         }
+          }
+        }
       }
-   }
     } catch (e) {
-   console.log(`renderVitals() 2: ${e.message}`);
+      console.log(`renderVitals() 2: ${e.message}`);
     }
   }
 
   if (found.length > 0) {
     const isMultipleProviders = appContext.providers.length > 1;
     return found.sort((a, b) => stringCompare(a.display, b.display)).map((elt, index) => {
-   // Select only values with matching provider and then sort
-   const sortedSeries = series[elt.display] && series[elt.display].filter((e) => e.provider === elt.provider)
+      // Select only values with matching provider and then sort
+      const sortedSeries = series[elt.display] && series[elt.display].filter((e) => e.provider === elt.provider)
         .sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
-   const thisValue = elt.value ? elt.value
-     : (tryWithDefault(elt, (e) => e.component[0].valueQuantity.value, 0)
+      const thisValue = elt.value ? elt.value
+        : (tryWithDefault(elt, (e) => e.component[0].valueQuantity.value, 0)
         + tryWithDefault(elt, (e) => e.component[1].valueQuantity.value, 0)) / 2;
 
-   return (
-  <div
-    className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
-    key={index}
-    id={`${formatKeyDate(elt.date.toISOString())}-${elt.display}`}
-    data-res={resKey(elt)}
-  >
-    <div className="content-data">
-      { elt.display && <div className="col01 label">Measure</div> }
-      { elt.display && <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.display}</HighlightDiv> }
+      return (
+        <div
+          className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+          key={index}
+          id={`${formatKeyDate(elt.date.toISOString())}-${elt.display}`}
+          data-res={resKey(elt)}
+        >
+          <div className="content-data">
+            { elt.display && <div className="col01 label">Measure</div> }
+            { elt.display && <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.display}</HighlightDiv> }
 
-      { elt.value && <div className="col01 label">Value</div> }
-      { elt.value && <div className="col02 value-number">{`${formatDPs(elt.value, 1)} ${elt.unit}`}</div> }
+            { elt.value && <div className="col01 label">Value</div> }
+            { elt.value && <div className="col02 value-number">{`${formatDPs(elt.value, 1)} ${elt.unit}`}</div> }
 
-      { elt.component && <div className="col01 label">{trimVitalsLabels(elt.component[0].code.coding[0].display)}</div> }
-      { elt.component && (
-      <div className="col02 value-number">
-        { `${tryWithDefault(elt, (e) => formatDPs(e.component[0].valueQuantity.value, 1), Const.unknownValue)} ${
-     tryWithDefault(elt, (e) => e.component[0].valueQuantity.unit, Const.unknownValue)}`}
-      </div>
-      ) }
+            { elt.component && <div className="col01 label">{trimVitalsLabels(elt.component[0].code.coding[0].display)}</div> }
+            { elt.component && (
+            <div className="col02 value-number">
+              { `${tryWithDefault(elt, (e) => formatDPs(e.component[0].valueQuantity.value, 1), Const.unknownValue)} ${
+                tryWithDefault(elt, (e) => e.component[0].valueQuantity.unit, Const.unknownValue)}`}
+            </div>
+            ) }
 
-      { elt.component && <div className="col01 label">{trimVitalsLabels(elt.component[1].code.coding[0].display)}</div> }
-      { elt.component && (
-      <div className="col02 value-number">
-        { `${tryWithDefault(elt, (e) => formatDPs(e.component[1].valueQuantity.value, 1), Const.unknownValue)} ${
-     tryWithDefault(elt, (e) => e.component[1].valueQuantity.unit, Const.unknownValue)}`}
-      </div>
-      ) }
+            { elt.component && <div className="col01 label">{trimVitalsLabels(elt.component[1].code.coding[0].display)}</div> }
+            { elt.component && (
+            <div className="col02 value-number">
+              { `${tryWithDefault(elt, (e) => formatDPs(e.component[1].valueQuantity.value, 1), Const.unknownValue)} ${
+                tryWithDefault(elt, (e) => e.component[1].valueQuantity.unit, Const.unknownValue)}`}
+            </div>
+            ) }
 
-      { isMultipleProviders && <div className="col01 label">Provider</div> }
-      { isMultipleProviders && <div className="col02 span07 value-text">{titleCase(elt.provider)}</div> }
+            { isMultipleProviders && <div className="col01 label">Provider</div> }
+            { isMultipleProviders && <div className="col02 span07 value-text">{titleCase(elt.provider)}</div> }
 
-      <CondDiv check={elt.status} expected="final">
-        <div className="col01 label">Status</div>
-        <div className="col02 value-text">{elt.status}</div>
-      </CondDiv>
-    </div>
-    <div className="content-graph">
-      { sortedSeries && <TimeSeries measure={elt.display} data={sortedSeries} highlights={[{ x: elt.date, y: thisValue }]} dotClickFn={dotClickFn} /> }
-    </div>
-    <div className="content-extras">
-      <Annotation annotation={elt.annotation} />
-    </div>
-  </div>
-   );
+            <CondDiv check={elt.status} expected="final">
+              <div className="col01 label">Status</div>
+              <div className="col02 value-text">{elt.status}</div>
+            </CondDiv>
+          </div>
+          <div className="content-graph">
+            { sortedSeries && <TimeSeries measure={elt.display} data={sortedSeries} highlights={[{ x: elt.date, y: thisValue }]} dotClickFn={dotClickFn} /> }
+          </div>
+          <div className="content-extras">
+            <Annotation annotation={elt.annotation} />
+          </div>
+        </div>
+      );
     });
   }
   return null;
@@ -968,17 +968,17 @@ function renderContainedResource(res, index, appContext) {
   const payload = [];
   switch (res.resourceType) {
     case 'Coverage':
-   payload.push(<div className="col01 label" key={`${index}-1`}>Coverage</div>);
-   payload.push(<div className="col02 value-text" key={`${index}-2`}>{res.type.text}</div>);
-   break;
+      payload.push(<div className="col01 label" key={`${index}-1`}>Coverage</div>);
+      payload.push(<div className="col02 value-text" key={`${index}-2`}>{res.type.text}</div>);
+      break;
     case 'ReferralRequest':
-   payload.push(<div className="col01 label" key={`${index}-1`}>Referral</div>);
-   payload.push(<div className="col02 value-text" key={`${index}-2`}>{res.status}</div>);
-   break;
+      payload.push(<div className="col01 label" key={`${index}-1`}>Referral</div>);
+      payload.push(<div className="col02 value-text" key={`${index}-2`}>{res.status}</div>);
+      break;
     default:
-   payload.push(<div className="col01 label" key={`${index}-1`}>{res.resourceType}</div>);
-   payload.push(<div className="col02 value-text" key={`${index}-2`}>{Const.unknownValue}</div>);
-   break;
+      payload.push(<div className="col01 label" key={`${index}-1`}>{res.resourceType}</div>);
+      payload.push(<div className="col02 value-text" key={`${index}-2`}>{Const.unknownValue}</div>);
+      break;
   }
   return payload;
 }
@@ -991,7 +991,7 @@ export function renderEOB(matchingData, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-   found.push({
+      found.push({
         provider: elt.provider,
         totalCost: elt.data.totalCost,
         totalBenefit: elt.data.totalBenefit,
@@ -1005,7 +1005,7 @@ export function renderEOB(matchingData, appContext) {
         annotation: Annotation.info(elt),
       });
     } catch (e) {
-   console.log(`renderEOB(): ${e.message}`);
+      console.log(`renderEOB(): ${e.message}`);
     }
   }
 
@@ -1029,7 +1029,7 @@ export function renderEOB(matchingData, appContext) {
 
           <div className="col01 label">Total benefit</div>
           { elt.totalBenefit ? <div className="col02 value-number">{`${elt.totalBenefit.value.toFixed(2)} ${elt.totalBenefit.code}`}</div>
-    : <div className="col02 value-text">unknown</div> }
+            : <div className="col02 value-text">unknown</div> }
 
           { isMultipleProviders && <div className="col01 label">Provider</div> }
           { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
@@ -1063,7 +1063,7 @@ export function renderClaims(matchingData, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-   found.push({
+      found.push({
         provider: elt.provider,
         total: elt.data.total,
         billablePeriod: elt.data.billablePeriod,
@@ -1074,7 +1074,7 @@ export function renderClaims(matchingData, appContext) {
         annotation: Annotation.info(elt),
       });
     } catch (e) {
-   console.log(`renderClaims(): ${e.message}`);
+      console.log(`renderClaims(): ${e.message}`);
     }
   }
 
@@ -1125,7 +1125,7 @@ export function renderExams(matchingData, appContext) {
   const found = [];
   for (const elt of matchingData) {
     try {
-   found.push({
+      found.push({
         provider: elt.provider,
         resourceId: elt.data.id,
         display: classFromCat(elt.category).primaryText(elt),
@@ -1135,7 +1135,7 @@ export function renderExams(matchingData, appContext) {
         valueConcept: elt.data.valueCodeableConcept,
       });
     } catch (e) {
-   console.log(`renderExams(): ${e.message}`);
+      console.log(`renderExams(): ${e.message}`);
     }
   }
 
@@ -1176,7 +1176,7 @@ function patchCatName(catName) {
     case 'Condition':
       return 'Conditions';
     default:
-   return catName;
+      return catName;
   }
 }
 
@@ -1188,9 +1188,9 @@ export function resolveDiagnosisReference(elt, appContext) {
 
     // Add the de-referenced data to the reasonReference element
     if (res) {
-   elt.data.diagnosis[0].diagnosisReference = Object.assign(elt.data.diagnosis[0].diagnosisReference, res.data);
+      elt.data.diagnosis[0].diagnosisReference = Object.assign(elt.data.diagnosis[0].diagnosisReference, res.data);
     } else {
-   console.log(`**** resolveDiagnosisReference(): Cannot find ${elt.data.diagnosis[0].diagnosisReference.reference}`);
+      console.log(`**** resolveDiagnosisReference(): Cannot find ${elt.data.diagnosis[0].diagnosisReference.reference}`);
     }
   }
 }
@@ -1203,9 +1203,9 @@ export function resolveReasonReference(elt, appContext) {
 
     // Add the de-referenced data to the reasonReference element
     if (res) {
-   elt.data.reasonReference[0] = Object.assign(elt.data.reasonReference[0], res.data);
+      elt.data.reasonReference[0] = Object.assign(elt.data.reasonReference[0], res.data);
     } else {
-   console.log(`**** resolveReasonReference(): Cannot find ${elt.data.reasonReference[0].reference}`);
+      console.log(`**** resolveReasonReference(): Cannot find ${elt.data.reasonReference[0].reference}`);
     }
   }
 }
@@ -1217,9 +1217,9 @@ export function resolveMedicationReference(elt, appContext) {
 
     // Add the de-referenced data to the medicationReference element and create the medicationCodeableConcept element
     if (res) {
-   elt.data.medicationReference = Object.assign(elt.data.medicationReference, res.data);
+      elt.data.medicationReference = Object.assign(elt.data.medicationReference, res.data);
     } else {
-   console.log(`**** resolveMedicationReference(): Cannot find ${elt.data.medicationReference.reference}`);
+      console.log(`**** resolveMedicationReference(): Cannot find ${elt.data.medicationReference.reference}`);
     }
     elt.data.medicationCodeableConcept = res ? res.data.code : { coding: [{ code: Const.unknownValue, display: Const.unknownValue }] };
 
@@ -1234,5 +1234,5 @@ export function resolveMedicationReference(elt, appContext) {
 //
 export function primaryTextValue(code) {
   return tryWithDefault(code, (code) => code.coding[0].display,
-         tryWithDefault(code, (code) => code.text, Const.unknownValue));
+    tryWithDefault(code, (code) => code.text, Const.unknownValue));
 }
