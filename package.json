@@ -24,6 +24,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "lint:js": "eslint . --ext .js,.jsx",
     "eject": "react-scripts eject"
   },
   "browserslist": [
