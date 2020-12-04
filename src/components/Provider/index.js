@@ -30,14 +30,14 @@ export default class Provider extends React.Component {
    componentDidMount() {
       window.addEventListener('keydown', this.onKeydown);
       if (this.props.isEnabled !== undefined) {
-	 this.setState({ isEnabled: this.props.isEnabled });
+ this.setState({ isEnabled: this.props.isEnabled });
 //	 this.props.enabledFn(Provider.myName, this.props.providerName, this.props.isEnabled);
       }
    }
 
    componentDidUpdate(prevProps, prevState) {
       if (this.props.isEnabled !== prevProps.isEnabled) {
-	 this.setState({ isEnabled: this.props.isEnabled });
+ this.setState({ isEnabled: this.props.isEnabled });
 //	 this.props.enabledFn(Provider.myName, this.props.providerName, this.props.isEnabled);
       }
    }
@@ -48,8 +48,8 @@ export default class Provider extends React.Component {
 
    onKeydown = (event) => {
       if (event.key === 'Enter') {
-	 // Do nothing (don't want in-focus buttons to toggle on Enter
-	 event.preventDefault();
+ // Do nothing (don't want in-focus buttons to toggle on Enter
+ event.preventDefault();
       }
    }
 
@@ -60,18 +60,18 @@ export default class Provider extends React.Component {
 
    render() {
       return (
-	 <div className='selector'>
-	    <div className='selector-nav'>
-	       <button className={this.state.isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={this.handleButtonClick} >
-		  { titleCase(this.props.providerName) }
-	       </button>
-	    </div>
-	    <SVGContainer className='selector-svg-container' svgClassName='selector-svg' svgWidth={this.props.svgWidth}>
-	       <DotLine dotPositions={this.props.dotPositionsFn(Provider.myName, this.props.providerName, this.state.isEnabled)}
-			context={ {parent:Provider.myName, rowName:this.props.providerName} }
-			dotClickFn={this.props.dotClickFn} />
-	    </SVGContainer>
-	 </div>
+ <div className='selector'>
+    <div className='selector-nav'>
+       <button className={this.state.isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={this.handleButtonClick} >
+  { titleCase(this.props.providerName) }
+       </button>
+    </div>
+    <SVGContainer className='selector-svg-container' svgClassName='selector-svg' svgWidth={this.props.svgWidth}>
+       <DotLine dotPositions={this.props.dotPositionsFn(Provider.myName, this.props.providerName, this.state.isEnabled)}
+context={ {parent:Provider.myName, rowName:this.props.providerName} }
+dotClickFn={this.props.dotClickFn} />
+    </SVGContainer>
+ </div>
       )
    }
 }

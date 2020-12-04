@@ -55,19 +55,19 @@ export default class VitalSigns extends React.Component {
 
    componentDidUpdate(prevProps, prevState) {
       if (prevProps.data !== this.props.data) {
-	 this.setMatchingData();
+ this.setMatchingData();
       }
    }
 
    render() {
       let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
-	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
-	       <div className='vital-signs category-container' id={formatKey(firstRes)}>
-		  { formatContentHeader(this.props.isEnabled, VitalSigns.catName, firstRes, this.context) }
-	          <div className='content-body'>
-		     { this.props.isEnabled && renderVitals(this.state.matchingData, this.props.resources, this.props.dotClickFn, this.context) }
-	          </div>
-	       </div> );
+       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
+       <div className='vital-signs category-container' id={formatKey(firstRes)}>
+  { formatContentHeader(this.props.isEnabled, VitalSigns.catName, firstRes, this.context) }
+          <div className='content-body'>
+     { this.props.isEnabled && renderVitals(this.state.matchingData, this.props.resources, this.props.dotClickFn, this.context) }
+          </div>
+       </div> );
    }
 }

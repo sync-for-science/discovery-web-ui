@@ -40,34 +40,34 @@ export default class CategoryRollup extends React.Component {
 
    handleSetClearButtonClick = () => {
       let enabled = Object.keys(this.context.catsEnabled).reduce((count, key) => count + (this.context.catsEnabled[key] &&
-											  this.props.categories.includes(key) ? 1 : 0), 0);
+  this.props.categories.includes(key) ? 1 : 0), 0);
       let newCatsEnabled = {};
 
       if (enabled === 0) {
-	 // None enabled
-	 if (this.context.savedCatsEnabled) {
-	    // --> prior saved partial
-	    newCatsEnabled = this.context.savedCatsEnabled;
+ // None enabled
+ if (this.context.savedCatsEnabled) {
+    // --> prior saved partial
+    newCatsEnabled = this.context.savedCatsEnabled;
 
-	 } else {
-	    // --> all enabled
-	    for (let cat of this.props.categories) {
-	       newCatsEnabled[cat] = true;
-	    }
-	 }
+ } else {
+    // --> all enabled
+    for (let cat of this.props.categories) {
+       newCatsEnabled[cat] = true;
+    }
+ }
 
       } else if (enabled < this.props.categories.length) {
-	 // Part enabled --> all enabled (and save partial)
-	 this.context.updateGlobalContext({ savedCatsEnabled: this.context.catsEnabled });
-	 for (let cat of this.props.categories) {
-	    newCatsEnabled[cat] = true;
-	 }
+ // Part enabled --> all enabled (and save partial)
+ this.context.updateGlobalContext({ savedCatsEnabled: this.context.catsEnabled });
+ for (let cat of this.props.categories) {
+    newCatsEnabled[cat] = true;
+ }
 
       } else {
-	 // All enabled --> none enabled
-	 for (let cat of this.props.categories) {
-	    newCatsEnabled[cat] = false;
-	 }
+ // All enabled --> none enabled
+ for (let cat of this.props.categories) {
+    newCatsEnabled[cat] = false;
+ }
       }
 
       this.props.catsEnabledFn(newCatsEnabled);
@@ -75,9 +75,9 @@ export default class CategoryRollup extends React.Component {
 
    buttonClass() {
       let enabled = this.context.catsEnabled ? Object.keys(this.context.catsEnabled).reduce((count, key) =>
-											count + (this.context.catsEnabled[key] &&
-												 this.props.categories.includes(key) ? 1 : 0), 0)
-					     : 0;
+count + (this.context.catsEnabled[key] &&
+ this.props.categories.includes(key) ? 1 : 0), 0)
+     : 0;
 
       if (enabled === 0) return 'selector-rollup-nav-button-none';
       if (enabled < this.props.categories.length) return 'selector-rollup-nav-button-partial';
@@ -86,19 +86,19 @@ export default class CategoryRollup extends React.Component {
 
    render() {
       return (
-	 <div className='selector-rollup'>
-	    <button className={this.state.isExpanded ? 'selector-rollup-nav-enabled' : 'selector-rollup-nav-disabled'} onClick={this.handleTwistyClick} >
-	      {/*Categories*/}Records
-	    </button>
-	    <button className={this.buttonClass()} onClick={this.handleSetClearButtonClick} />
-	    <SVGContainer className='category-rollup-svg-container' style={this.props.noDots ? {backgroundImage:'none'} : null}
-			  svgClassName='category-rollup-svg' svgWidth={this.props.svgWidth}>
-	       { !this.props.noDots &&
-		 <DotLine dotPositions={this.props.dotPositionsFn(CategoryRollup.myName, 'Categories', true)}
-			  context={ {parent:CategoryRollup.myName, rowName:'Categories'} }
-			  dotClickFn={this.props.dotClickFn} /> }
-	    </SVGContainer>
-	 </div>
+ <div className='selector-rollup'>
+    <button className={this.state.isExpanded ? 'selector-rollup-nav-enabled' : 'selector-rollup-nav-disabled'} onClick={this.handleTwistyClick} >
+      {/*Categories*/}Records
+    </button>
+    <button className={this.buttonClass()} onClick={this.handleSetClearButtonClick} />
+    <SVGContainer className='category-rollup-svg-container' style={this.props.noDots ? {backgroundImage:'none'} : null}
+  svgClassName='category-rollup-svg' svgWidth={this.props.svgWidth}>
+       { !this.props.noDots &&
+ <DotLine dotPositions={this.props.dotPositionsFn(CategoryRollup.myName, 'Categories', true)}
+  context={ {parent:CategoryRollup.myName, rowName:'Categories'} }
+  dotClickFn={this.props.dotClickFn} /> }
+    </SVGContainer>
+ </div>
       )
    }
 }

@@ -17,7 +17,7 @@ import DiscoveryContext from '../DiscoveryContext';
 export default class Procedures extends React.Component {
 
    static catName = 'Procedures';
-			       
+       
    static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
    static compareFn(a, b) {
@@ -51,12 +51,12 @@ export default class Procedures extends React.Component {
    setMatchingData() {
       let match = FhirTransform.getPathItem(this.props.data, `[*category=${Procedures.catName}]`);
       if (match.length > 0) {
-	 this.setState({ matchingData: match.sort(Procedures.compareFn) });
-	 for (var elt of match) {
-	    resolveReasonReference(elt, this.context);
-	 }
+ this.setState({ matchingData: match.sort(Procedures.compareFn) });
+ for (var elt of match) {
+    resolveReasonReference(elt, this.context);
+ }
       } else {
-	 this.setState({ matchingData: null });
+ this.setState({ matchingData: null });
       }
    }
 
@@ -66,7 +66,7 @@ export default class Procedures extends React.Component {
 
    componentDidUpdate(prevProps, prevState) {
       if (!shallowEqArray(prevProps.data, this.props.data)) {
-	 this.setMatchingData();
+ this.setMatchingData();
       }
    }
 
@@ -99,13 +99,13 @@ export default class Procedures extends React.Component {
    render() {
       let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
-	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
-	       <div className='procedures category-container' id={formatKey(firstRes)}>
-		  { formatContentHeader(this.props.isEnabled, Procedures.catName, firstRes, this.context) }
-	          <div className='content-body'>
-		     { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Procedure', this.context) }
-		     { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }
-	          </div>
-	       </div> );
+       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
+       <div className='procedures category-container' id={formatKey(firstRes)}>
+  { formatContentHeader(this.props.isEnabled, Procedures.catName, firstRes, this.context) }
+          <div className='content-body'>
+     { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Procedure', this.context) }
+     { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }
+          </div>
+       </div> );
    }
 }

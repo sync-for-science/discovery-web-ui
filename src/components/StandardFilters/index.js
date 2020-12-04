@@ -25,14 +25,14 @@ export default class StandardFilters extends React.Component {
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform),
       dates: PropTypes.shape({
-	 allDates: PropTypes.arrayOf(PropTypes.shape({
-	    position: PropTypes.number.isRequired,
-	    date: PropTypes.string.isRequired
-	 })).isRequired,
-	 minDate: PropTypes.string.isRequired,		// Earliest date we have data for this participant
-	 startDate: PropTypes.string.isRequired,	// Jan 1 of minDate's year
-	 maxDate: PropTypes.string.isRequired,		// Latest date we have data for this participant
-	 endDate: PropTypes.string.isRequired		// Dec 31 of last year of timeline tick periods
+ allDates: PropTypes.arrayOf(PropTypes.shape({
+    position: PropTypes.number.isRequired,
+    date: PropTypes.string.isRequired
+ })).isRequired,
+ minDate: PropTypes.string.isRequired,		// Earliest date we have data for this participant
+ startDate: PropTypes.string.isRequired,	// Jan 1 of minDate's year
+ maxDate: PropTypes.string.isRequired,		// Latest date we have data for this participant
+ endDate: PropTypes.string.isRequired		// Dec 31 of last year of timeline tick periods
       }),
       categories: PropTypes.arrayOf(PropTypes.string).isRequired,
       catsEnabled: PropTypes.object.isRequired,		// Initial state
@@ -61,13 +61,13 @@ export default class StandardFilters extends React.Component {
    componentDidMount() {
       this.updateSvgWidth();
       if (this.props.dates && this.props.allowDotClick) {
-	 this.setState({ dotClickContext: { parent: 'TimeWidget', rowName: 'Full', dotType: 'active',
-					    minDate: this.props.dates.minDate, maxDate: this.props.dates.maxDate,
-					    startDate: this.props.dates.startDate, endDate: this.props.dates.endDate,
-					    allDates: this.props.dates.allDates,
-					    date: this.props.dates.maxDate,
-					    data: this.fetchDataForDot('TimeWidget', 'Full', this.props.dates.maxDate),
-					    position: this.props.dates.allDates[this.props.dates.allDates.length-1].position }});
+ this.setState({ dotClickContext: { parent: 'TimeWidget', rowName: 'Full', dotType: 'active',
+    minDate: this.props.dates.minDate, maxDate: this.props.dates.maxDate,
+    startDate: this.props.dates.startDate, endDate: this.props.dates.endDate,
+    allDates: this.props.dates.allDates,
+    date: this.props.dates.maxDate,
+    data: this.fetchDataForDot('TimeWidget', 'Full', this.props.dates.maxDate),
+    position: this.props.dates.allDates[this.props.dates.allDates.length-1].position }});
       }
 
       this.setState({ catsEnabled: this.props.catsEnabled, provsEnabled: this.props.provsEnabled });
@@ -76,19 +76,19 @@ export default class StandardFilters extends React.Component {
 
    componentDidUpdate(prevProps, prevState) {
       if(prevState.minActivePos !== this.state.minActivePos ||
-	 prevState.maxActivePos !== this.state.maxActivePos ||
-	 notEqJSON(prevState.catsEnabled, this.state.catsEnabled) ||
-	 notEqJSON(prevState.provsEnabled, this.state.provsEnabled)) {
-	 this.setState({ activeDates: this.calcActiveDates() });
+ prevState.maxActivePos !== this.state.maxActivePos ||
+ notEqJSON(prevState.catsEnabled, this.state.catsEnabled) ||
+ notEqJSON(prevState.provsEnabled, this.state.provsEnabled)) {
+ this.setState({ activeDates: this.calcActiveDates() });
       }
 
       if (prevProps.lastEvent !== this.props.lastEvent) {
-	 switch (this.props.lastEvent.type) {
-	    case 'resize':
-	    default:
-	       this.updateSvgWidth();
-	       break;
-	 }
+ switch (this.props.lastEvent.type) {
+    case 'resize':
+    default:
+       this.updateSvgWidth();
+       break;
+ }
 
 // TODO: not sure why this was here, but if enabled, next/prev and dot-click don't work w/ searchRefs
 //      } else if (this.context.searchRefs && this.context.searchRefs.length > 0) {
@@ -102,27 +102,27 @@ export default class StandardFilters extends React.Component {
 //	 }
 
       } else if (this.props.allowDotClick && prevProps.dotClickDate !== this.props.dotClickDate) {
-	 // Set dotClickContext from dot clicked in ContentPanel (via this.props.dotClickDate)
-	 let theDate = this.props.dates.allDates.find(elt => new Date(elt.date).getTime() === new Date(this.props.dotClickDate).getTime());
-	 this.setState({ dotClickContext: { parent: 'TimeWidget', rowName: 'Full', dotType: 'active',
-					    minDate: this.props.dates.minDate, maxDate: this.props.dates.maxDate,
-					    allDates: this.props.dates.allDates,
-					    date: theDate.date,
-					    data: this.fetchDataForDot('TimeWidget', 'Full', theDate.date),
-					    position: theDate.position }});
+ // Set dotClickContext from dot clicked in ContentPanel (via this.props.dotClickDate)
+ let theDate = this.props.dates.allDates.find(elt => new Date(elt.date).getTime() === new Date(this.props.dotClickDate).getTime());
+ this.setState({ dotClickContext: { parent: 'TimeWidget', rowName: 'Full', dotType: 'active',
+    minDate: this.props.dates.minDate, maxDate: this.props.dates.maxDate,
+    allDates: this.props.dates.allDates,
+    date: theDate.date,
+    data: this.fetchDataForDot('TimeWidget', 'Full', theDate.date),
+    position: theDate.position }});
       }
    }
 
    calcActiveDates() {
       let activeDates = {};
       for (let res of this.props.resources.transformed) {
-	 let trueCategory = Unimplemented.unimplementedCats.includes(res.category) ? Unimplemented.catName : res.category;
-	 if (this.isActiveTimeWidget({ position: this.dateToPos(res.itemDate) }) &&
-	     this.state.catsEnabled[trueCategory] &&
-	     this.state.provsEnabled[res.provider]) {
-	    // This resource's date is active
-	    activeDates[dateOnly(res.itemDate)] = true;
-	 }
+ let trueCategory = Unimplemented.unimplementedCats.includes(res.category) ? Unimplemented.catName : res.category;
+ if (this.isActiveTimeWidget({ position: this.dateToPos(res.itemDate) }) &&
+     this.state.catsEnabled[trueCategory] &&
+     this.state.provsEnabled[res.provider]) {
+    // This resource's date is active
+    activeDates[dateOnly(res.itemDate)] = true;
+ }
       }
       return activeDates;
    }
@@ -133,9 +133,9 @@ export default class StandardFilters extends React.Component {
       const categoryNav = checkQuerySelector('.selector-nav');
 
       if (category && categoryNav) {
-	  let svgWidth = (category.getBoundingClientRect().width - categoryNav.getBoundingClientRect().width - 13	// TODO: fix (far-right margin)
-			  - numericPart(getStyle(categoryNav, 'margin-left')) - numericPart(getStyle(categoryNav, 'margin-right')))+ 'px';
-	  this.setState({ svgWidth: svgWidth });
+  let svgWidth = (category.getBoundingClientRect().width - categoryNav.getBoundingClientRect().width - 13	// TODO: fix (far-right margin)
+  - numericPart(getStyle(categoryNav, 'margin-left')) - numericPart(getStyle(categoryNav, 'margin-right')))+ 'px';
+  this.setState({ svgWidth: svgWidth });
 //	  console.log('svgWidth: ' + svgWidth);
        }
 
@@ -149,32 +149,32 @@ export default class StandardFilters extends React.Component {
    //
    setEnabled = (parent, rowName, isEnabled) => {
       if (parent === 'Category') {
-	 if (this.state.catsEnabled[rowName] !== isEnabled) {
-	    let catsEnabled = Object.assign({}, this.state.catsEnabled, {[rowName]: isEnabled})
-	    this.props.enabledFn(catsEnabled, this.state.provsEnabled);
-	     this.setState({catsEnabled: catsEnabled}, () => {
-		let enabled = Object.keys(this.state.catsEnabled).reduce((count, key) => count + (this.state.catsEnabled[key] &&
-												  this.props.categories.includes(key) ? 1 : 0), 0);
-		if (enabled === 0 || enabled === this.props.categories.length) {
-		   // Clear saved categories enabled
-		   this.context.updateGlobalContext({ savedCatsEnabled: null });
-		}
-	     });
-	 }
+ if (this.state.catsEnabled[rowName] !== isEnabled) {
+    let catsEnabled = Object.assign({}, this.state.catsEnabled, {[rowName]: isEnabled})
+    this.props.enabledFn(catsEnabled, this.state.provsEnabled);
+     this.setState({catsEnabled: catsEnabled}, () => {
+let enabled = Object.keys(this.state.catsEnabled).reduce((count, key) => count + (this.state.catsEnabled[key] &&
+  this.props.categories.includes(key) ? 1 : 0), 0);
+if (enabled === 0 || enabled === this.props.categories.length) {
+   // Clear saved categories enabled
+   this.context.updateGlobalContext({ savedCatsEnabled: null });
+}
+     });
+ }
       } else {
-	 // Provider
-	 if (this.state.provsEnabled[rowName] !== isEnabled) {
-	    let provsEnabled = Object.assign({}, this.state.provsEnabled, {[rowName]: isEnabled})
-	    this.props.enabledFn(this.state.catsEnabled, provsEnabled);
-	    this.setState({provsEnabled: provsEnabled}, () => {
-		let enabled = Object.keys(this.state.provsEnabled).reduce((count, key) => count + (this.state.provsEnabled[key] &&
-												  this.props.providers.includes(key) ? 1 : 0), 0);
-		if (enabled === 0 || enabled === this.props.providers.length) {
-		   // Clear saved providers enabled
-		   this.context.updateGlobalContext({ savedProvsEnabled: null });
-		}
-	     });
-	 }
+ // Provider
+ if (this.state.provsEnabled[rowName] !== isEnabled) {
+    let provsEnabled = Object.assign({}, this.state.provsEnabled, {[rowName]: isEnabled})
+    this.props.enabledFn(this.state.catsEnabled, provsEnabled);
+    this.setState({provsEnabled: provsEnabled}, () => {
+let enabled = Object.keys(this.state.provsEnabled).reduce((count, key) => count + (this.state.provsEnabled[key] &&
+  this.props.providers.includes(key) ? 1 : 0), 0);
+if (enabled === 0 || enabled === this.props.providers.length) {
+   // Clear saved providers enabled
+   this.context.updateGlobalContext({ savedProvsEnabled: null });
+}
+     });
+ }
       }
    }
 
@@ -198,9 +198,9 @@ export default class StandardFilters extends React.Component {
    //
    includeDot(result, dot, dotType, noExpand) {
       let min = this.state.minActivePos,
-	  max = this.state.maxActivePos;
+  max = this.state.maxActivePos;
       if (noExpand || max - min > 0) {
-	 result.push(Object.assign({dotType: dotType}, dot, noExpand ? {} : {position: (dot.position - min) / (max - min)}));
+ result.push(Object.assign({dotType: dotType}, dot, noExpand ? {} : {position: (dot.position - min) / (max - min)}));
       }
       return result;
    }
@@ -208,12 +208,12 @@ export default class StandardFilters extends React.Component {
    // TODO: Move to util.js?
    posToDate(pos) {
       if (this.props.dates) {
-	 let min = new Date(this.props.dates.startDate ? this.props.dates.startDate : 0).getTime();
-	 let max = new Date(this.props.dates.endDate ? this.props.dates.endDate : 0).getTime();
-	 let target = min + (max - min) * pos;
-	 return new Date(target).toISOString();
+ let min = new Date(this.props.dates.startDate ? this.props.dates.startDate : 0).getTime();
+ let max = new Date(this.props.dates.endDate ? this.props.dates.endDate : 0).getTime();
+ let target = min + (max - min) * pos;
+ return new Date(target).toISOString();
       } else {
-	 return new Date().toISOString();
+ return new Date().toISOString();
       }
    }
 
@@ -237,8 +237,8 @@ export default class StandardFilters extends React.Component {
       let maxDate = this.posToDate(maxActivePos);
       this.props.dateRangeFn && this.props.dateRangeFn(minDate, maxDate);
       this.setState({ minActivePos: minActivePos,
-		      maxActivePos: maxActivePos,
-		      timelineIsExpanded: isExpanded });
+      maxActivePos: maxActivePos,
+      timelineIsExpanded: isExpanded });
    }
 
    //
@@ -248,9 +248,9 @@ export default class StandardFilters extends React.Component {
    //
    onExpandContract = (section, expand) => {
       if (section === 'Categories') {
-	 this.setState({ catsExpanded: expand });
+ this.setState({ catsExpanded: expand });
       } else {
-	 this.setState({ provsExpanded: expand });
+ this.setState({ provsExpanded: expand });
       }
    }
 
@@ -263,21 +263,21 @@ export default class StandardFilters extends React.Component {
    fetchDataForDot = (parent, rowName, date) => {
        switch (parent) {
        case 'ProviderRollup':
-	   // Return all resources for enabled providers matching the clicked date
-	   return this.props.resources.pathItem(`[*itemDate=${date}]`);
-	   
+   // Return all resources for enabled providers matching the clicked date
+   return this.props.resources.pathItem(`[*itemDate=${date}]`);
+   
        case 'Provider':
-	   // Return all resources matching the clicked provider and date
-	   return this.props.resources.pathItem(`[*itemDate=${date}][*provider=${rowName}]`);
+   // Return all resources matching the clicked provider and date
+   return this.props.resources.pathItem(`[*itemDate=${date}][*provider=${rowName}]`);
 
        case 'Category':
-	   // Return all resources matching the clicked category and date
-	   return this.props.resources.pathItem(`[*itemDate=${date}][*category=${rowName}]`);
+   // Return all resources matching the clicked category and date
+   return this.props.resources.pathItem(`[*itemDate=${date}][*category=${rowName}]`);
 
        case 'CategoryRollup':
        default:
-	   // Return all resources for enabled categories matching the clicked date
-	   return this.props.resources.pathItem(`[*itemDate=${date}]`);
+   // Return all resources for enabled categories matching the clicked date
+   return this.props.resources.pathItem(`[*itemDate=${date}]`);
        }
    }
 
@@ -296,40 +296,40 @@ export default class StandardFilters extends React.Component {
       let ret = false;
 
       if (currDateIndex === -1) {
-	 // TODO: an error!
-	 return false;
+ // TODO: an error!
+ return false;
       }
 
       // Determine next/prev date
       if (direction === 'next') {
-	 if (currDateIndex === dates.length-1) {
-	    // No 'next' -- do nothing
-	    return false;
-	 } else {
-	    newContext.date = dates[currDateIndex+1].date;
-	    newContext.position = dates[currDateIndex+1].position;
-	    ret = currDateIndex+1 < dates.length-1;
-	    // Adjust thumb positions if current dot is in active range
-	    if (this.isActiveTimeWidget(this.state.dotClickContext)) {
-	       let newMax = Math.min(1.0, this.state.maxActivePos + newContext.position - oldPosition);
-	       this.setState({ minActivePos: newMax - thumbDistance, maxActivePos: newMax });
-	    }
-	 }
+ if (currDateIndex === dates.length-1) {
+    // No 'next' -- do nothing
+    return false;
+ } else {
+    newContext.date = dates[currDateIndex+1].date;
+    newContext.position = dates[currDateIndex+1].position;
+    ret = currDateIndex+1 < dates.length-1;
+    // Adjust thumb positions if current dot is in active range
+    if (this.isActiveTimeWidget(this.state.dotClickContext)) {
+       let newMax = Math.min(1.0, this.state.maxActivePos + newContext.position - oldPosition);
+       this.setState({ minActivePos: newMax - thumbDistance, maxActivePos: newMax });
+    }
+ }
       } else {
-	 // 'prev'
-	 if (currDateIndex === 0) {
-	    // No 'prev' -- do nothing
-	    return false;
-	 } else {
-	    newContext.date = dates[currDateIndex-1].date;
-	    newContext.position = dates[currDateIndex-1].position;
-	    ret = currDateIndex-1 > 0;
-	    // Adjust thumb positions if current dot is in active range
-	    if (this.isActiveTimeWidget(this.state.dotClickContext)) {
-	       let newMin = Math.max(0.0, this.state.minActivePos + newContext.position - oldPosition);
-	       this.setState({ minActivePos: newMin, maxActivePos: newMin + thumbDistance });
-	    }
-	 }
+ // 'prev'
+ if (currDateIndex === 0) {
+    // No 'prev' -- do nothing
+    return false;
+ } else {
+    newContext.date = dates[currDateIndex-1].date;
+    newContext.position = dates[currDateIndex-1].position;
+    ret = currDateIndex-1 > 0;
+    // Adjust thumb positions if current dot is in active range
+    if (this.isActiveTimeWidget(this.state.dotClickContext)) {
+       let newMin = Math.max(0.0, this.state.minActivePos + newContext.position - oldPosition);
+       this.setState({ minActivePos: newMin, maxActivePos: newMin + thumbDistance });
+    }
+ }
       }
 
       // Fetch new/appropriate data
@@ -358,18 +358,18 @@ export default class StandardFilters extends React.Component {
    //
    onDotClick = (context, date, dotType) => {
       if (this.props.allowDotClick) {
-	 const rowDates = this.fetchDotPositions(context.parent, context.rowName, true, true);
-	 const position = rowDates.find(elt => elt.date === date).position;
+ const rowDates = this.fetchDotPositions(context.parent, context.rowName, true, true);
+ const position = rowDates.find(elt => elt.date === date).position;
 
-	 context.dotType = this.updateDotType(dotType, position, false);
-	 context.minDate = rowDates[0].date;
-	 context.maxDate = rowDates[rowDates.length-1].date;
-	 context.allDates = this.props.dates.allDates;
-	 context.date = date;
-	 context.position = position;
-	 context.data = this.fetchDataForDot(context.parent, context.rowName, context.date);
+ context.dotType = this.updateDotType(dotType, position, false);
+ context.minDate = rowDates[0].date;
+ context.maxDate = rowDates[rowDates.length-1].date;
+ context.allDates = this.props.dates.allDates;
+ context.date = date;
+ context.position = position;
+ context.data = this.fetchDataForDot(context.parent, context.rowName, context.date);
 
-	 this.setState({ dotClickContext: context });
+ this.setState({ dotClickContext: context });
       }
    }
 
@@ -380,7 +380,7 @@ export default class StandardFilters extends React.Component {
       parts.push(isActivePos ? 'active' : 'inactive');
       parts.push('highlight');
       if (isSearch) {
-	 parts.push('search');
+ parts.push('search');
       }
       return parts.join('-');
    }
@@ -396,20 +396,20 @@ export default class StandardFilters extends React.Component {
    fetchDotPositions = this.fetchDotPositions.bind(this);
    fetchDotPositions(parent, rowName, isEnabled, fetchAll) {
       if (!this.props.resources || !this.props.dates || this.props.dates.allDates.length === 0) {
-	 return [];
+ return [];
       } else {
-	 let { startDate, endDate, allDates } = this.props.dates;
-	 let searchRefs = this.context.searchRefs;
-	 let viewAccentRefs = this.context.viewAccentDates.reduce((result, date) => {
-						   result.push({ dotType: 'view-accent', date: date,
-								 position: normalizeDates([date], startDate, endDate)[0] });
-						   return result;
-						}, []);
-	 let viewLastAccentRefs = this.context.viewLastAccentDates.reduce((result, date) => {
-						   result.push({ dotType: 'view-last-accent', date: date,
-								 position: normalizeDates([date], startDate, endDate)[0] });
-						   return result;
-						}, []);
+ let { startDate, endDate, allDates } = this.props.dates;
+ let searchRefs = this.context.searchRefs;
+ let viewAccentRefs = this.context.viewAccentDates.reduce((result, date) => {
+   result.push({ dotType: 'view-accent', date: date,
+ position: normalizeDates([date], startDate, endDate)[0] });
+   return result;
+}, []);
+ let viewLastAccentRefs = this.context.viewLastAccentDates.reduce((result, date) => {
+   result.push({ dotType: 'view-last-accent', date: date,
+ position: normalizeDates([date], startDate, endDate)[0] });
+   return result;
+}, []);
 //	// TODO: to use, need to build highlightedResources on Tiles/Compare load	  
 //	 let viewAccentRefs = this.context.highlightedResources ? this.context.highlightedResources.reduce((result, res) => {
 //						let date = res.itemDate;
@@ -417,64 +417,64 @@ export default class StandardFilters extends React.Component {
 //						return result;
 //					     }, []) : [];
 
-	 let dotClickContext = this.state.dotClickContext;
-	 let matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget' ||
-						  (dotClickContext.parent === parent && dotClickContext.rowName === rowName));
-	 let inactiveHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
+ let dotClickContext = this.state.dotClickContext;
+ let matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget' ||
+  (dotClickContext.parent === parent && dotClickContext.rowName === rowName));
+ let inactiveHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
 //							 ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
-							 ((!isEnabled || !this.isActive(elt)) && elt.position === dotClickContext.position)
-								? this.includeDot(res, elt, 'inactive-highlight', parent === 'TimeWidget') : res, []);
-	
-	 let activeHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
-//							 (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
-							 (isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
-								? this.includeDot(res, elt, 'active-highlight', parent === 'TimeWidget') : res, []);
+ ((!isEnabled || !this.isActive(elt)) && elt.position === dotClickContext.position)
+? this.includeDot(res, elt, 'inactive-highlight', parent === 'TimeWidget') : res, []);
 
-	 // TODO: is this correct (viewAccentRefs vs viewLastAccentRefs)?
-	 let viewAccentHighlightDots = matchContext && viewAccentRefs.reduce((res, elt) =>
+ let activeHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
 //							 (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
-							 (isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
-								? this.includeDot(res, elt, 'view-accent-highlight', parent === 'TimeWidget') : res, []);
+ (isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
+? this.includeDot(res, elt, 'active-highlight', parent === 'TimeWidget') : res, []);
 
-	 let inactiveHighlightSearchDots = matchContext && searchRefs.reduce((res, elt) =>
+ // TODO: is this correct (viewAccentRefs vs viewLastAccentRefs)?
+ let viewAccentHighlightDots = matchContext && viewAccentRefs.reduce((res, elt) =>
+//							 (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
+ (isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
+? this.includeDot(res, elt, 'view-accent-highlight', parent === 'TimeWidget') : res, []);
+
+ let inactiveHighlightSearchDots = matchContext && searchRefs.reduce((res, elt) =>
 //							 ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
-							 ((!isEnabled || !this.isActive(elt)) && elt.position === dotClickContext.position)
-								? this.includeDot(res, elt, 'inactive-highlight-search', parent === 'TimeWidget') : res, []);
+ ((!isEnabled || !this.isActive(elt)) && elt.position === dotClickContext.position)
+? this.includeDot(res, elt, 'inactive-highlight-search', parent === 'TimeWidget') : res, []);
 
-	 let activeHighlightSearchDots = matchContext && searchRefs.reduce((res, elt) =>
+ let activeHighlightSearchDots = matchContext && searchRefs.reduce((res, elt) =>
 //							 (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
-							 (isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
-								? this.includeDot(res, elt, 'active-highlight-search', parent === 'TimeWidget') : res, []);
+ (isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
+? this.includeDot(res, elt, 'active-highlight-search', parent === 'TimeWidget') : res, []);
 
-	 let highlightDots = combine(inactiveHighlightDots, activeHighlightDots, viewAccentHighlightDots,
-				     inactiveHighlightSearchDots, activeHighlightSearchDots);
+ let highlightDots = combine(inactiveHighlightDots, activeHighlightDots, viewAccentHighlightDots,
+     inactiveHighlightSearchDots, activeHighlightSearchDots);
 
-	 switch (parent) {
-	    case 'ProviderRollup':
+ switch (parent) {
+    case 'ProviderRollup':
             case 'CategoryRollup':
-	       if (fetchAll) {
-		  return allDates;
-	       } else {
+       if (fetchAll) {
+  return allDates;
+       } else {
 //		  return combine(allDates.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active') : res, []),
 //				 searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active-search') : res, []),
 //				 viewAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'view-accent') : res, []),
 //				 viewLastAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'view-last-accent')
-		  return combine(allDates.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'active') : res, []),
-				 searchRefs.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'active-search') : res, []),
-				 viewAccentRefs.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'view-accent') : res, []),
-				 viewLastAccentRefs.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'view-last-accent')
-												      : res, []),
-				 highlightDots);
-	       }
+  return combine(allDates.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'active') : res, []),
+ searchRefs.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'active-search') : res, []),
+ viewAccentRefs.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'view-accent') : res, []),
+ viewLastAccentRefs.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'view-last-accent')
+      : res, []),
+ highlightDots);
+       }
 
-	    case 'Provider':
-	       let provDates = cleanDates(this.props.resources.pathItem(`[*provider=${rowName}].itemDate`, this.queryOptions));
-	       let normProvDates = normalizeDates(provDates, startDate, endDate);
-	       let provDateObjs = provDates.map((date, index) => ({position: normProvDates[index], date: date}));
-	       let provSearchRefs = searchRefs.filter( elt => elt.provider === rowName);
-	       if (fetchAll) {
-		  return provDateObjs;
-	       } else {
+    case 'Provider':
+       let provDates = cleanDates(this.props.resources.pathItem(`[*provider=${rowName}].itemDate`, this.queryOptions));
+       let normProvDates = normalizeDates(provDates, startDate, endDate);
+       let provDateObjs = provDates.map((date, index) => ({position: normProvDates[index], date: date}));
+       let provSearchRefs = searchRefs.filter( elt => elt.provider === rowName);
+       if (fetchAll) {
+  return provDateObjs;
+       } else {
 //		  return combine(provDateObjs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
 //									? this.includeDot(res, elt, 'inactive') : res, []),
 //				 provDateObjs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
@@ -484,25 +484,25 @@ export default class StandardFilters extends React.Component {
 //				 provSearchRefs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
 //									? this.includeDot(res, elt, 'active-search') : res, []),
 //				 highlightDots);
-		  return combine(provDateObjs.reduce((res, elt) => !isEnabled || !this.isActive(elt)
-									? this.includeDot(res, elt, 'inactive') : res, []),
-				 provDateObjs.reduce((res, elt) => isEnabled && this.isActive(elt)
-									? this.includeDot(res, elt, 'active') : res, []),
-				 provSearchRefs.reduce((res, elt) => !isEnabled || !this.isActive(elt)
-									? this.includeDot(res, elt, 'inactive-search') : res, []),
-				 provSearchRefs.reduce((res, elt) => isEnabled && this.isActive(elt)
-									? this.includeDot(res, elt, 'active-search') : res, []),
-				 highlightDots);
-	       }
+  return combine(provDateObjs.reduce((res, elt) => !isEnabled || !this.isActive(elt)
+? this.includeDot(res, elt, 'inactive') : res, []),
+ provDateObjs.reduce((res, elt) => isEnabled && this.isActive(elt)
+? this.includeDot(res, elt, 'active') : res, []),
+ provSearchRefs.reduce((res, elt) => !isEnabled || !this.isActive(elt)
+? this.includeDot(res, elt, 'inactive-search') : res, []),
+ provSearchRefs.reduce((res, elt) => isEnabled && this.isActive(elt)
+? this.includeDot(res, elt, 'active-search') : res, []),
+ highlightDots);
+       }
 
             case 'Category':
-	       let catDates = cleanDates(this.props.resources.pathItem(`[*category=${rowName}].itemDate`, this.queryOptions));
-	       let normCatDates = normalizeDates(catDates, startDate, endDate);
-	       let catDateObjs = catDates.map((date, index) => ({position: normCatDates[index], date: date}));
-	       let catSearchRefs = searchRefs.filter( elt => elt.category === rowName);
-	       if (fetchAll) {
-		  return catDateObjs;
-	       } else {
+       let catDates = cleanDates(this.props.resources.pathItem(`[*category=${rowName}].itemDate`, this.queryOptions));
+       let normCatDates = normalizeDates(catDates, startDate, endDate);
+       let catDateObjs = catDates.map((date, index) => ({position: normCatDates[index], date: date}));
+       let catSearchRefs = searchRefs.filter( elt => elt.category === rowName);
+       if (fetchAll) {
+  return catDateObjs;
+       } else {
 //		  return combine(catDateObjs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
 //									? this.includeDot(res, elt, 'inactive') : res, []),
 //				 catDateObjs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
@@ -512,21 +512,21 @@ export default class StandardFilters extends React.Component {
 //				 catSearchRefs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
 //									? this.includeDot(res, elt, 'active-search') : res, []),
 //				 highlightDots);
-		  return combine(catDateObjs.reduce((res, elt) => !isEnabled || !this.isActive(elt)
-									? this.includeDot(res, elt, 'inactive') : res, []),
-				 catDateObjs.reduce((res, elt) => isEnabled && this.isActive(elt)
-									? this.includeDot(res, elt, 'active') : res, []),
-				 catSearchRefs.reduce((res, elt) => !isEnabled || !this.isActive(elt)
-									? this.includeDot(res, elt, 'inactive-search') : res, []),
-				 catSearchRefs.reduce((res, elt) => isEnabled && this.isActive(elt)
-									? this.includeDot(res, elt, 'active-search') : res, []),
-				 highlightDots);
-	       }
+  return combine(catDateObjs.reduce((res, elt) => !isEnabled || !this.isActive(elt)
+? this.includeDot(res, elt, 'inactive') : res, []),
+ catDateObjs.reduce((res, elt) => isEnabled && this.isActive(elt)
+? this.includeDot(res, elt, 'active') : res, []),
+ catSearchRefs.reduce((res, elt) => !isEnabled || !this.isActive(elt)
+? this.includeDot(res, elt, 'inactive-search') : res, []),
+ catSearchRefs.reduce((res, elt) => isEnabled && this.isActive(elt)
+? this.includeDot(res, elt, 'active-search') : res, []),
+ highlightDots);
+       }
 
-	    default:   // TimeWidget
-	       if (fetchAll) {
-		  return allDates;
-	       } else if (rowName === 'Full') {
+    default:   // TimeWidget
+       if (fetchAll) {
+  return allDates;
+       } else if (rowName === 'Full') {
 //	          return combine(allDates.reduce((res, elt) => !this.isActiveTimeWidget(elt)
 //	       								? this.includeDot(res, elt, 'inactive', true) : res, []),
 //	       			 allDates.reduce((res, elt) => this.isActiveTimeWidget(elt)
@@ -540,28 +540,28 @@ export default class StandardFilters extends React.Component {
 //	       			 viewLastAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt)
 //	       								    ? this.includeDot(res, elt, 'view-last-accent', true) : res, []),
 //	       			 highlightDots);
-	          return combine(allDates.reduce((res, elt) => !this.isActive(elt)
-	       								? this.includeDot(res, elt, 'inactive', true) : res, []),
-	       			 allDates.reduce((res, elt) => this.isActive(elt)
-	       								? this.includeDot(res, elt, 'active', true) : res, []),
-	       			 searchRefs.reduce((res, elt) => !this.isActive(elt)
-	       								? this.includeDot(res, elt, 'inactive-search', true) : res, []),
-	       			 searchRefs.reduce((res, elt) => this.isActive(elt)
-	       								? this.includeDot(res, elt, 'active-search', true) : res, []),
-	       			 viewAccentRefs.reduce((res, elt) => this.isActive(elt)
-	       								? this.includeDot(res, elt, 'view-accent', true) : res, []),
-	       			 viewLastAccentRefs.reduce((res, elt) => this.isActive(elt)
-	       								    ? this.includeDot(res, elt, 'view-last-accent', true) : res, []),
-	       			 highlightDots);
+          return combine(allDates.reduce((res, elt) => !this.isActive(elt)
+       ? this.includeDot(res, elt, 'inactive', true) : res, []),
+        allDates.reduce((res, elt) => this.isActive(elt)
+       ? this.includeDot(res, elt, 'active', true) : res, []),
+        searchRefs.reduce((res, elt) => !this.isActive(elt)
+       ? this.includeDot(res, elt, 'inactive-search', true) : res, []),
+        searchRefs.reduce((res, elt) => this.isActive(elt)
+       ? this.includeDot(res, elt, 'active-search', true) : res, []),
+        viewAccentRefs.reduce((res, elt) => this.isActive(elt)
+       ? this.includeDot(res, elt, 'view-accent', true) : res, []),
+        viewLastAccentRefs.reduce((res, elt) => this.isActive(elt)
+           ? this.includeDot(res, elt, 'view-last-accent', true) : res, []),
+        highlightDots);
 
-	       } else {	// TODO: currently not using this case
-		  alert(`SF fetchDotPositions(): ${parent} ${rowName} (huh???)`);
+       } else {	// TODO: currently not using this case
+  alert(`SF fetchDotPositions(): ${parent} ${rowName} (huh???)`);
 //	       	  return combine(allDates.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active') : res, []),
 //	       			 searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active-search') : res, []));
-	       	  return combine(allDates.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'active') : res, []),
-	       			 searchRefs.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'active-search') : res, []));
-	       }
-	 }
+         return combine(allDates.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'active') : res, []),
+        searchRefs.reduce((res, elt) => this.isActive(elt) ? this.includeDot(res, elt, 'active-search') : res, []));
+       }
+ }
       }
    }
 
@@ -580,44 +580,44 @@ export default class StandardFilters extends React.Component {
 //      console.log('SF render: ' + (this.state.dotClickContext ? this.state.dotClickContext.date : this.state.dotClickContext));
       let dates = this.props.dates;
       const extendedChildren = React.Children.map(this.props.children, child => {
-				 // Add context, nextPrevFn props
-				 return React.cloneElement(child, {context: this.state.dotClickContext,
-								   nextPrevFn: this.onNextPrevClick} );
-			       });
+ // Add context, nextPrevFn props
+ return React.cloneElement(child, {context: this.state.dotClickContext,
+   nextPrevFn: this.onNextPrevClick} );
+       });
       const dotClickFn = this.props.allowDotClick ? this.onDotClick : null;
 
       return (
          <div className='standard-filters'>
-	    <TimeWidget minDate={dates ? dates.minDate : ''} maxDate={dates ? dates.maxDate : ''}
-			startDate={dates ? dates.startDate : ''} endDate={dates ? dates.endDate : ''} dotContext={this.state.dotClickContext}
-			thumbLeft={this.state.minActivePos} thumbRight={this.state.maxActivePos} timelineWidth={this.state.svgWidth}
-			setLeftRightFn={this.setLeftRight} dotPositionsFn={this.fetchDotPositions} dotClickFn={dotClickFn} />
-	    <div className='standard-filters-categories-and-providers'>
-	       <Categories>
-		  <CategoryRollup key='rollup' svgWidth={this.state.svgWidth} noDots={!this.state.timelineIsExpanded} isExpanded={this.state.catsExpanded}
-			          dotPositionsFn={this.fetchDotPositions} dotClickFn={dotClickFn} expansionFn={this.onExpandContract}
-				  catsEnabledFn={this.setAllCatsEnabled} categories={this.props.categories} />
-	          { this.state.catsExpanded ? [
-	              this.props.categories && this.props.categories.map(
-			 cat => <Category key={cat} svgWidth={this.state.svgWidth} categoryName={cat} isEnabled={this.state.catsEnabled[cat]}
-					  dotPositionsFn={this.fetchDotPositions} dotClickFn={dotClickFn} enabledFn={this.setEnabled} /> ),
-		      <div className='standard-filters-category-nav-spacer-bottom' key='1' />
-		    ] : null }
-	       </Categories>
-	       <Providers>
-	          <ProviderRollup key='rollup' svgWidth={this.state.svgWidth} isExpanded={this.state.provsExpanded}
-				  dotPositionsFn={this.fetchDotPositions} dotClickFn={dotClickFn} expansionFn={this.onExpandContract}
-				  provsEnabledFn={this.setAllProvsEnabled} providers={this.props.providers} />
-		  { this.state.provsExpanded ? [
-		      this.props.providers.map(
-			 prov => <Provider key={prov} svgWidth={this.state.svgWidth} providerName={prov} isEnabled={this.state.provsEnabled[prov]}
-					   dotPositionsFn={this.fetchDotPositions} dotClickFn={dotClickFn} enabledFn={this.setEnabled} /> ),
-		      <div className='standard-filters-provider-nav-spacer-bottom' key='1' />
-		    ] : null }
-	       </Providers>
-	    </div>
-	    { extendedChildren }
-	 </div>
+    <TimeWidget minDate={dates ? dates.minDate : ''} maxDate={dates ? dates.maxDate : ''}
+startDate={dates ? dates.startDate : ''} endDate={dates ? dates.endDate : ''} dotContext={this.state.dotClickContext}
+thumbLeft={this.state.minActivePos} thumbRight={this.state.maxActivePos} timelineWidth={this.state.svgWidth}
+setLeftRightFn={this.setLeftRight} dotPositionsFn={this.fetchDotPositions} dotClickFn={dotClickFn} />
+    <div className='standard-filters-categories-and-providers'>
+       <Categories>
+  <CategoryRollup key='rollup' svgWidth={this.state.svgWidth} noDots={!this.state.timelineIsExpanded} isExpanded={this.state.catsExpanded}
+          dotPositionsFn={this.fetchDotPositions} dotClickFn={dotClickFn} expansionFn={this.onExpandContract}
+  catsEnabledFn={this.setAllCatsEnabled} categories={this.props.categories} />
+          { this.state.catsExpanded ? [
+              this.props.categories && this.props.categories.map(
+ cat => <Category key={cat} svgWidth={this.state.svgWidth} categoryName={cat} isEnabled={this.state.catsEnabled[cat]}
+  dotPositionsFn={this.fetchDotPositions} dotClickFn={dotClickFn} enabledFn={this.setEnabled} /> ),
+      <div className='standard-filters-category-nav-spacer-bottom' key='1' />
+    ] : null }
+       </Categories>
+       <Providers>
+          <ProviderRollup key='rollup' svgWidth={this.state.svgWidth} isExpanded={this.state.provsExpanded}
+  dotPositionsFn={this.fetchDotPositions} dotClickFn={dotClickFn} expansionFn={this.onExpandContract}
+  provsEnabledFn={this.setAllProvsEnabled} providers={this.props.providers} />
+  { this.state.provsExpanded ? [
+      this.props.providers.map(
+ prov => <Provider key={prov} svgWidth={this.state.svgWidth} providerName={prov} isEnabled={this.state.provsEnabled[prov]}
+   dotPositionsFn={this.fetchDotPositions} dotClickFn={dotClickFn} enabledFn={this.setEnabled} /> ),
+      <div className='standard-filters-provider-nav-spacer-bottom' key='1' />
+    ] : null }
+       </Providers>
+    </div>
+    { extendedChildren }
+ </div>
       );
    }
 }

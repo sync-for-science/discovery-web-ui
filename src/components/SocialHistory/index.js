@@ -45,7 +45,7 @@ export default class SocialHistory extends React.Component {
    setMatchingData() {
       let match = FhirTransform.getPathItem(this.props.data, `[*category=${SocialHistory.catName}]`);
       this.setState({ matchingData: match.length > 0 ? match.sort(SocialHistory.compareFn)
-						     : null });
+     : null });
    }
 
    componentDidMount() {
@@ -54,19 +54,19 @@ export default class SocialHistory extends React.Component {
 
    componentDidUpdate(prevProps, prevState) {
       if (prevProps.data !== this.props.data) {
-	 this.setMatchingData();
+ this.setMatchingData();
       }
    }
 
    render() {
       let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
-	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
-	       <div className='social-history category-container' id={formatKey(firstRes)}>
-		  { formatContentHeader(this.props.isEnabled, SocialHistory.catName, firstRes, this.context) }
-	          <div className='content-body'>
-		     { this.props.isEnabled && renderSocialHistory(this.state.matchingData, this.context) }
-	          </div>
-	       </div> );
+       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
+       <div className='social-history category-container' id={formatKey(firstRes)}>
+  { formatContentHeader(this.props.isEnabled, SocialHistory.catName, firstRes, this.context) }
+          <div className='content-body'>
+     { this.props.isEnabled && renderSocialHistory(this.state.matchingData, this.context) }
+          </div>
+       </div> );
    }
 }

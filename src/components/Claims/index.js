@@ -51,7 +51,7 @@ export default class Claims extends React.Component {
    setMatchingData() {
       let match = FhirTransform.getPathItem(this.props.data, `[*category=${Claims.catName}]`);
       for (let elt of match) {
-	 resolveDiagnosisReference(elt, this.context);
+ resolveDiagnosisReference(elt, this.context);
       }
       this.setState({ matchingData: match.length > 0 ? match : null });
    }
@@ -62,7 +62,7 @@ export default class Claims extends React.Component {
 
    componentDidUpdate(prevProps, prevState) {
       if (!shallowEqArray(prevProps.data, this.props.data)) {
-	 this.setMatchingData();
+ this.setMatchingData();
       }
    }
 
@@ -93,13 +93,13 @@ export default class Claims extends React.Component {
    render() {
       let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
-	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
-	       <div className='claims category-container' style={this.props.style} id={formatKey(firstRes)}>
-		  { formatContentHeader(this.props.isEnabled, Claims.catName, firstRes, this.context) }
-	          <div className='content-body'>
-		     { this.props.isEnabled && renderClaims(this.state.matchingData, this.context) }
-	             { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }
-	          </div>
-	       </div> );
+       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
+       <div className='claims category-container' style={this.props.style} id={formatKey(firstRes)}>
+  { formatContentHeader(this.props.isEnabled, Claims.catName, firstRes, this.context) }
+          <div className='content-body'>
+     { this.props.isEnabled && renderClaims(this.state.matchingData, this.context) }
+             { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }
+          </div>
+       </div> );
    }
 }

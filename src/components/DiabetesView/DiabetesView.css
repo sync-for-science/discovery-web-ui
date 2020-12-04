@@ -5,13 +5,13 @@
 /* v.01.09 Updated 05/13/2019 */
 
 .diabetes-view {
-	@insert .view-container;
+@insert .view-container;
    margin: 0 0 0 0;
 }
 
 .diabetes-title {
-	@insert .view-title;
-	background-image: url("../../svg/view-icon-diabetes.svg");
+@insert .view-title;
+background-image: url("../../svg/view-icon-diabetes.svg");
 }
 
 .diabetes-title-name {
@@ -19,7 +19,7 @@
 }
 
 .diabetes-contents {
-	@insert .view-contents;
+@insert .view-contents;
    padding: 0 0 7px 0;
    margin: 0;
    overflow-y: scroll;

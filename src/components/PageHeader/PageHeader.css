@@ -445,15 +445,15 @@
 .patient-name {
    display: flex;
    align-items: center;
-	justify-content: flex-start;
-	height: 60px;
-	width: 45%;
-	font-family: text;
+justify-content: flex-start;
+height: 60px;
+width: 45%;
+font-family: text;
    font-size: 1.200rem;
-	text-align: left;
+text-align: left;
    color:var(--label-participant);
    white-space: nowrap;
-	padding: 5px 0 0 0;
+padding: 5px 0 0 0;
    margin: 0 20px;
 }
 
@@ -476,7 +476,7 @@
    border-radius: 20px; 
    margin: 13px 10px 13px 20px;
 }
-			
+
 .text-size-smaller-button-off {
    width: 22px;
    min-width: 22px;
@@ -489,7 +489,7 @@
    padding: 0 0 0 5px;
    border: none;
    margin: 13px 0 13px 0;
-	cursor: pointer;
+cursor: pointer;
 }
 
 .text-size-slider-container {

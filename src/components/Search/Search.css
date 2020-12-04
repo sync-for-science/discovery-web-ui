@@ -6,7 +6,7 @@
 .search {
    position: relative;
    display: flex;
-	flex-direction: row;
+flex-direction: row;
    justify-content: flex-end;
    align-items: center;
    height: 46px;
@@ -41,13 +41,13 @@
 }
 
 .search-laser-button-on {
-	@insert search-buttons;
-	background-image: url("../../svg/search-button-laser-on2.svg");
+@insert search-buttons;
+background-image: url("../../svg/search-button-laser-on2.svg");
 }
 
 .search-laser-button-off {
-	@insert search-buttons;
-	background-image: url("../../svg/search-button-laser-off2.svg");
+@insert search-buttons;
+background-image: url("../../svg/search-button-laser-off2.svg");
 }
 
 .search-input {
