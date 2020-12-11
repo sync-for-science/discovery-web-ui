@@ -7,7 +7,7 @@ import {
   Const, getStyle, stringCompare, tryWithDefault, numericPart, inDateRange, uniqueBy, notEqJSON, classFromCat,
 } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
-import { fhirKey, primaryTextValue } from '../../fhirUtil.js';
+import { primaryTextValue } from '../../fhirUtil.js';
 
 import Unimplemented from '../Unimplemented';
 import ContentPanel from '../ContentPanel/ContentRight';
@@ -425,20 +425,20 @@ export default class TilesView extends React.Component {
     });
 
     // Scroll to the latest resource of the clicked tile
-    if (matchingTileResources) {
-      const latest = matchingTileResources.reduce((latest, elt) => (new Date(elt.itemDate) > new Date(latest.itemDate) ? elt : latest),
-        matchingTileResources[0]);
-      // Delay a bit to allow resources to be rendered to the DOM
-      setTimeout((res) => {
-        const key = fhirKey(res);
-        const elt = document.querySelector(`[data-fhir="${key}"]`);
-        if (elt) {
-          elt.scrollIntoView();
-        } else {
-          console.log(`onTileClick(): cannot scroll to "${key}"`);
-        }
-      }, 200, latest);
-    }
+    // if (matchingTileResources) {
+    //   const latest = matchingTileResources.reduce((latest, elt) => (new Date(elt.itemDate) > new Date(latest.itemDate) ? elt : latest),
+    //     matchingTileResources[0]);
+    //   // Delay a bit to allow resources to be rendered to the DOM
+    //   setTimeout((res) => {
+    //     const key = fhirKey(res);
+    //     const elt = document.querySelector(`[data-fhir="${key}"]`);
+    //     if (elt) {
+    //       elt.scrollIntoView();
+    //     } else {
+    //       console.log(`onTileClick(): cannot scroll to "${key}"`);
+    //     }
+    //   }, 200, latest);
+    // }
   }
 
   // Get unique dates from resources
