@@ -68,7 +68,6 @@ module.exports = {
     'react/destructuring-assignment': ['warn', 'always'],
     'react/forbid-prop-types': ['warn'],
     'react/jsx-filename-extension': ['warn'],
-    'react/jsx-indent': ['warn'],
     'react/jsx-no-bind': ['warn'],
     'react/no-access-state-in-setstate': ['warn'], // < FIX THIS ASAP:
     'react/no-array-index-key': ['warn'],
