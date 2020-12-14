@@ -9,7 +9,7 @@ module.exports = {
     'airbnb',
   ],
   ignorePatterns: ['config/webpack.config.js'],
-  // parser: 'babel-eslint',
+  parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
