@@ -368,13 +368,15 @@ export default class TimeWidget extends React.Component {
     const buttons = [];
     let key = 0;
     for (const range in this.ranges) {
-      buttons.push(<button
-        className={this.state.rangeButton === range ? 'date-range-button-on' : 'date-range-button-off'}
-        key={key++}
-        onClick={() => this.onRangeClick(range)}
-      >
-        {this.ranges[range].label}
-      </button>);
+      buttons.push(
+        <button
+          className={this.state.rangeButton === range ? 'date-range-button-on' : 'date-range-button-off'}
+          key={key++}
+          onClick={() => this.onRangeClick(range)}
+        >
+          {this.ranges[range].label}
+        </button>,
+      );
     }
     return buttons;
   }

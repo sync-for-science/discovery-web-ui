@@ -8,8 +8,8 @@ let snapshotDate = null;
 
 try {
   // Set snapshotDate if present
-  snapshotDate = require('../../SNAPSHOT_DATE.js').snapshotDate;
-} catch (err) {}
+  snapshotDate = require('../../SNAPSHOT_DATE.js').snapshotDate; // eslint-disable-line global-require
+} catch (err) {} // eslint-disable-line no-empty
 
 //
 // Render the page footer of DiscoveryApp page
