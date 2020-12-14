@@ -1182,8 +1182,8 @@ function patchCatName(catName) {
 
 export function resolveDiagnosisReference(elt, appContext) {
   if (isValid(elt, (elt) => elt.data.diagnosis[0].diagnosisReference.reference) && !elt.data.diagnosis[0].diagnosisReference.code) {
-    let [refCat, refId] = elt.data.diagnosis[0].diagnosisReference.reference.split('/');
-    refCat = patchCatName(refCat);
+    const [refCatOrig, refId] = elt.data.diagnosis[0].diagnosisReference.reference.split('/');
+    const refCat = patchCatName(refCatOrig);
     const res = appContext.resources.transformed.find((res) => res.provider === elt.provider && res.category === refCat && res.data.id === refId);
 
     // Add the de-referenced data to the reasonReference element
@@ -1197,8 +1197,8 @@ export function resolveDiagnosisReference(elt, appContext) {
 
 export function resolveReasonReference(elt, appContext) {
   if (isValid(elt, (elt) => elt.data.reasonReference[0].reference) && !elt.data.reasonReference[0].code) {
-    let [refCat, refId] = elt.data.reasonReference[0].reference.split('/');
-    refCat = patchCatName(refCat);
+    const [refCatOrig, refId] = elt.data.reasonReference[0].reference.split('/');
+    const refCat = patchCatName(refCatOrig);
     const res = appContext.resources.transformed.find((res) => res.provider === elt.provider && res.category === refCat && res.data.id === refId);
 
     // Add the de-referenced data to the reasonReference element

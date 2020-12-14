@@ -285,31 +285,41 @@ export default class PageHeader extends React.Component {
 
   get viewHelpText() {
     return {
-      reportView: <div>
-        <b>Timeline</b>
-        {' '}
-        shows your detailed clinical and payer data over time.
-                  </div>,
-      compareView: <div>
-        <b>Compare</b>
-        {' '}
-        shows which providers have records of your unique clinical data.
-                   </div>,
-      summaryView: <div>
-        <b>Summary</b>
-        {' '}
-        shows an overview of your data.
-                   </div>,
-      tilesView: <div>
-        <b>Catalog</b>
-        {' '}
-        lists your unique clinical data by type.
-                 </div>,
-      financialView: <div>
-        <b>Payer</b>
-        {' '}
-        presents your claims and benefits data.
-                     </div>,
+      reportView: (
+        <div>
+          <b>Timeline</b>
+          {' '}
+          shows your detailed clinical and payer data over time.
+        </div>
+      ),
+      compareView: (
+        <div>
+          <b>Compare</b>
+          {' '}
+          shows which providers have records of your unique clinical data.
+        </div>
+      ),
+      summaryView: (
+        <div>
+          <b>Summary</b>
+          {' '}
+          shows an overview of your data.
+        </div>
+      ),
+      tilesView: (
+        <div>
+          <b>Catalog</b>
+          {' '}
+          lists your unique clinical data by type.
+        </div>
+      ),
+      financialView: (
+        <div>
+          <b>Payer</b>
+          {' '}
+          presents your claims and benefits data.
+        </div>
+      ),
       //   consultView: <div>The <b>Consult View</b> shows a knowledge-annotated view of your conditions over time or for one point in time.</div>,
       //   diabetesView: <div>The <b>Diabetes View</b> shows data specific to this condition.</div>
     };
