@@ -35,7 +35,7 @@ export default class TimeWidget extends React.Component {
       dotClickFn: PropTypes.func,   // Communicate dot click to parent
       dotContext: PropTypes.object   // The last clicked dot (or null)
    }
-    
+
    state = {
       leftX: this.props.thumbLeft * numericPart(this.props.timelineWidth),
       rightX: this.props.thumbRight * numericPart(this.props.timelineWidth),
@@ -101,8 +101,8 @@ export default class TimeWidget extends React.Component {
       if (!this.periodPadding) {
  let expanded = document.querySelector('.timeline-expanded-years');
  this.periodPadding = expanded ? numericPart(getStyle(expanded, 'padding-left')) + numericPart(getStyle(expanded, 'padding-right')) : 0;
-      }    
-   } 
+      }
+   }
 
    componentDidMount() {
       this.cacheSizes();
@@ -252,7 +252,7 @@ export default class TimeWidget extends React.Component {
      } else {
         thisWidth = avgMonthWidth;
      }
-     
+
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const monthLabel = monthNames[monthDate.getMonth()] + '-' + monthDate.getFullYear();
     const narrowMonthLabel = (monthDate.getMonth()+1) + '/' + monthDate.getFullYear();
@@ -313,7 +313,7 @@ export default class TimeWidget extends React.Component {
 
  default:
     return '';
-      }    
+      }
    }
 
    setRange(rangeTag, centerDate) {
@@ -403,19 +403,17 @@ export default class TimeWidget extends React.Component {
   </div>
   <div className={this.state.showExpanded ? 'date-range-data-right-focused' : 'date-range-data-right'}> {rangeMax}</div>
        </div>
-       { this.state.showExpanded &&
- <Draggable axis='x' bounds={{left:(this.state.rightX-this.state.leftX-this.centerThumbWidth)/2,
-      right:rightBound-this.centerThumbWidth-(this.state.rightX-this.state.leftX-this.centerThumbWidth)/2}}
-    position={{x:(this.state.leftX+this.state.rightX-this.centerThumbWidth)/2, y:0}} onDrag={this.onCenterDrag}>
-    <div className='timeline-selector-center' />
- </Draggable> }
-       { !this.state.showExpanded &&
- <div className='timeline-help'>
-    { this.showHelp() }
- </div> }
+       { this.state.showExpanded && (<Draggable axis='x' bounds={{left:(this.state.rightX-this.state.leftX-this.centerThumbWidth)/2,
+         right:rightBound-this.centerThumbWidth-(this.state.rightX-this.state.leftX-this.centerThumbWidth)/2}}
+                                                position={{x:(this.state.leftX+this.state.rightX-this.centerThumbWidth)/2, y:0}} onDrag={this.onCenterDrag}>
+         <div className='timeline-selector-center' />
+       </Draggable>)}
+       { !this.state.showExpanded && (<div className='timeline-help'>
+           { this.showHelp() }
+         </div>)}
        { this.state.showExpanded && this.renderExpandedYears() }
     </div>
- </div>  
+ </div>
       )
    }
 }

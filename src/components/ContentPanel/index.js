@@ -194,7 +194,7 @@ export default class ContentPanel extends React.Component {
       this.props.onResizeFn && this.props.onResizeFn();
    }
 
-   onKeydown = this.onKeydown.bind(this); 
+   onKeydown = this.onKeydown.bind(this);
    onKeydown(event) {
       if (this.state.isOpen) {
  switch (event.key) {
@@ -264,7 +264,7 @@ export default class ContentPanel extends React.Component {
       }
    }
 
-// #### 
+// ####
    manageScrollToContextSeq(doScroll) {
       switch (this.state.scrollToContextPhase) {
  case null: // Initial/terminal state
@@ -392,7 +392,7 @@ export default class ContentPanel extends React.Component {
       if (notEqJSON(prevProps, this.props)) {
  this.setState({ prevEnabled: this.props.context.date !== this.props.context.minDate,
  nextEnabled: this.props.context.date !== this.props.context.maxDate });
-      }    
+      }
 
       console.log('componentDidUpdate() END');
    }
@@ -466,7 +466,7 @@ export default class ContentPanel extends React.Component {
  if (newScrollYVal !== this.scrollDiv.current.scrollTop) {
     this.setState({ pageResourceY: newScrollYVal });
  }
-  
+
       } else if (this.state.currResources && targetResIndex >= 0) {
  let targetRes = this.state.currResources[targetResIndex];
  let key = formatKey(targetRes);
@@ -497,7 +497,7 @@ export default class ContentPanel extends React.Component {
        } else {
   // Tertiary sort: ascending/descending date order
   return this.state.datesAscending ? new Date(a.itemDate).getTime() - new Date(b.itemDate).getTime()
-   : new Date(b.itemDate).getTime() - new Date(a.itemDate).getTime(); 
+   : new Date(b.itemDate).getTime() - new Date(a.itemDate).getTime();
        }
     }
 
@@ -521,7 +521,7 @@ export default class ContentPanel extends React.Component {
       });
    }
 
-   // 
+   //
    //  Collect an array of resources matching catsToDisplay, search state, thumb positions, showAllDate, and onlyAnnotated.
    //
    //  props.tileSort === false:
@@ -559,7 +559,7 @@ res.data.discoveryAnnotation.annotationHistory)));
 
       } else {
  arr = this.sortResources(limitedResources.filter(res => res.itemDate === this.props.context.date));
-      }       
+      }
 
       console.log('Resources: ' + arr.length);
       console.log('calcCurrResources() - END: ' + new Date().getTime());
@@ -594,7 +594,7 @@ res.data.discoveryAnnotation.annotationHistory)));
    provEnabled(prov) {
       return this.props.provsEnabled[prov] || this.props.provsEnabled[prov] === undefined;
    }
-    
+
    onShowHideLines = () => {
       if (this.state.showDotLines) {
  // Hide dot lines
@@ -614,7 +614,7 @@ res.data.discoveryAnnotation.annotationHistory)));
    }
 
    copyReverse(arr) {
-      let revArr = []; 
+      let revArr = [];
       for (let i = arr.length-1; i>=0; i--) {
   revArr.push(arr[i]);
       }
@@ -950,11 +950,9 @@ res.data.discoveryAnnotation.annotationHistory)));
      : [ <div className='content-panel-no-data' key='1'>{this.noResultDisplay}</div> ];
       return (
  <div className='content-panel-inner-body'>
-    { this.state.showJSON ? 
-<pre className='content-panel-data'>
+    { this.state.showJSON ? (<pre className='content-panel-data'>
    { JSON.stringify(this.state.currResources, null, 3) }
-</pre>
-      : divs }
+</pre>) : divs }
  </div>
       );
    }
@@ -965,7 +963,7 @@ res.data.discoveryAnnotation.annotationHistory)));
 
    isVirtualDisplay() {
       return this.state.currResources.length >= config.contentPanelUseWindowing;
-   } 
+   }
 
    onlyAnnotatedChange = (event) => {
 //      console.log('annotated change: ' + event.target.checked);
@@ -987,13 +985,13 @@ res.data.discoveryAnnotation.annotationHistory)));
        <div className='content-panel-inner-title-left'>
  {/*  <div className={this.props.viewIconClass}/>
   <div className='content-panel-view-name'>{this.props.viewName}</div>*/}
-         
+
   <div className='content-panel-item-count'>
      {/* this.state.currResources.length + ' record' + (this.state.currResources.length === 1 ? '' : 's') */}
      {/* `${this.state.currResources.length} record${this.state.currResources.length === 1 ? '' : 's'}` */}
      { `Displaying ${this.state.currResources.length} of ${this.props.totalResCount} record${this.props.totalResCount === 1 ? '' : 's'}` }
-  </div>                
-                         
+  </div>
+
   { config.enableContentPanelLeftRight && <button className={'content-panel-left-button' + (this.state.prevEnabled ? '' : '-off')}
   onClick={() => this.onNextPrev('prev')} /> }
          { config.enableContentPanelLeftRight && <button className={'content-panel-right-button' + (this.state.nextEnabled ? '' : '-off')}
@@ -1012,7 +1010,7 @@ res.data.discoveryAnnotation.annotationHistory)));
   <button className={this.state.showDotLines ? 'content-panel-drag-button' : 'content-panel-no-drag-button'} />
        </div>
        <div className='content-panel-inner-title-right'>
-  {/* <button className='content-panel-inner-title-close-button' onClick={this.onClose} /> 
+  {/* <button className='content-panel-inner-title-close-button' onClick={this.onClose} />
   <button className='content-panel-show-details-button' onClick={this.toggleTrimLevel}>
      {this.state.trimLevel===Const.trimNone ? 'Less' : 'More'}
   </button> */}
@@ -1021,7 +1019,7 @@ res.data.discoveryAnnotation.annotationHistory)));
   Only records with my notes
     </label> }
   <button className={'content-panel-json-button' + (this.state.showJSON ? '' : '-off')}
-  onClick={() => this.setState({ showJSON: !this.state.showJSON })} /> 
+  onClick={() => this.setState({ showJSON: !this.state.showJSON })} />
     {/*
              <button className='content-panel-print-button-off' />
        <button className='content-panel-download-button-off' />

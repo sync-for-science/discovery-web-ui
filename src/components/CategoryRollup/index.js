@@ -93,10 +93,11 @@ count + (this.context.catsEnabled[key] &&
     <button className={this.buttonClass()} onClick={this.handleSetClearButtonClick} />
     <SVGContainer className='category-rollup-svg-container' style={this.props.noDots ? {backgroundImage:'none'} : null}
   svgClassName='category-rollup-svg' svgWidth={this.props.svgWidth}>
-       { !this.props.noDots &&
- <DotLine dotPositions={this.props.dotPositionsFn(CategoryRollup.myName, 'Categories', true)}
-  context={ {parent:CategoryRollup.myName, rowName:'Categories'} }
-  dotClickFn={this.props.dotClickFn} /> }
+       { !this.props.noDots && (
+         <DotLine dotPositions={this.props.dotPositionsFn(CategoryRollup.myName, 'Categories', true)}
+                  context={ {parent:CategoryRollup.myName, rowName:'Categories'} }
+                  dotClickFn={this.props.dotClickFn} />
+       )}
     </SVGContainer>
  </div>
       )
