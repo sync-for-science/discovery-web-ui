@@ -96,7 +96,7 @@ export default class TilesView extends React.Component {
    }
 
    componentDidUpdate(prevProps, prevState) {
-     debugger;
+     // debugger;
      // TODO: only on explicit changes?
      if (notEqJSON(prevProps, this.props) || prevState.onlyMultisource !== this.state.onlyMultisource) {
        this.setState({ uniqueStruct: this.buildUniqueStruct() },

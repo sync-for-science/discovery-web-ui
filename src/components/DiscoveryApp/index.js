@@ -150,6 +150,7 @@ export default class DiscoveryApp extends React.Component {
          const initialResourceIDs = resources.initial[providerName].entry.map((elt) => elt.resource.id);
          const finalResourceIDs = resources.transformed.filter((elt) => elt.provider === providerName).map((elt) => elt.data.id);
          if (finalResourceIDs.length !== initialResourceIDs.length) {
+           // eslint-disable-next-line max-len
            const missingResources = initialResourceIDs.filter((id) => !finalResourceIDs.includes(id)).map((id) => resources.initial[providerName].entry.find((elt) => elt.resource.id === id));
            alert(`Participant ${this.props.match.params.index} (${providerName}) has ${
              finalResourceIDs.length} resources but should have ${initialResourceIDs.length}`);
