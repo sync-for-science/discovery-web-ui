@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 import './ContentPanel.css';
@@ -572,8 +573,22 @@ export default class ContentPanel extends React.Component {
     this.context.trimLevel = this.state.trimLevel;
     this.context.viewName = this.props.viewName;
 
+    if (!this.state.isOpen) {
+      return null;
+    }
+
+    const detailsRightTarget = document.getElementById('details-right');
+    // console.error('detailsRightTarget:', detailsRightTarget)
+    if (detailsRightTarget) {
+      return ReactDOM.createPortal((
+        <div>
+          { this.state.currResources && this.props.context && this.renderContents(this.props.context) }
+        </div>
+      ), detailsRightTarget);
+    }
+
     // Dragging enabled/disabled by changing bounds.bottom
-    return !this.state.isOpen || (
+    return (
       <div>
         { this.state.currResources && this.props.context && this.renderContents(this.props.context) }
       </div>
