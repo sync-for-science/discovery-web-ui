@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 // import './ProviderRollup.css';
 import '../../css/Selector.css';
 
-//import SVGContainer from '../SVGContainer';
-//import DotLine from '../DotLine';
+// import SVGContainer from '../SVGContainer';
+// import DotLine from '../DotLine';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -13,10 +13,9 @@ import DiscoveryContext from '../DiscoveryContext';
 // Render the DiscoveryApp "rollup" provider line
 //
 export default class ProviderRollup extends React.Component {
-
   static myName = 'ProviderRollup';
 
-  static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
+  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
     svgWidth: PropTypes.string.isRequired,
@@ -24,22 +23,22 @@ export default class ProviderRollup extends React.Component {
     dotClickFn: PropTypes.func,
     isExpanded: PropTypes.bool.isRequired,
     expansionFn: PropTypes.func.isRequired,
-    provsEnabledFn: PropTypes.func.isRequired,    // Callback to report changed provider enable/disable
-    categories: PropTypes.arrayOf(PropTypes.string)
+    provsEnabledFn: PropTypes.func.isRequired, // Callback to report changed provider enable/disable
+    categories: PropTypes.arrayOf(PropTypes.string),
   }
 
   state = {
-    isExpanded: this.props.isExpanded
+    isExpanded: this.props.isExpanded,
   }
 
   handleTwistyClick = () => {
-    this.setState({isExpanded: !this.state.isExpanded});
+    this.setState({ isExpanded: !this.state.isExpanded });
     this.props.expansionFn('Providers', !this.state.isExpanded);
   }
 
   handleSetClearButtonClick = () => {
-    let enabled = Object.keys(this.context.provsEnabled).reduce((count, key) => count + (this.context.provsEnabled[key] &&
-    this.props.providers.includes(key) ? 1 : 0), 0);
+    const enabled = Object.keys(this.context.provsEnabled).reduce((count, key) => count + (this.context.provsEnabled[key]
+    && this.props.providers.includes(key) ? 1 : 0), 0);
     let newProvsEnabled = {};
 
     if (enabled === 0) {
@@ -47,24 +46,21 @@ export default class ProviderRollup extends React.Component {
       if (this.context.savedProvsEnabled) {
         // --> prior saved partial
         newProvsEnabled = this.context.savedProvsEnabled;
-
       } else {
         // --> all enabled
-        for (let prov of this.props.providers) {
+        for (const prov of this.props.providers) {
           newProvsEnabled[prov] = true;
         }
       }
-
     } else if (enabled < this.props.providers.length) {
       // Part enabled --> all enabled (and save partial)
       this.context.updateGlobalContext({ savedProvsEnabled: this.context.provsEnabled });
-      for (let prov of this.props.providers) {
+      for (const prov of this.props.providers) {
         newProvsEnabled[prov] = true;
       }
-
     } else {
       // All enabled --> none enabled
-      for (let prov of this.props.providers) {
+      for (const prov of this.props.providers) {
         newProvsEnabled[prov] = false;
       }
     }
@@ -73,9 +69,8 @@ export default class ProviderRollup extends React.Component {
   }
 
   buttonClass() {
-    let enabled = this.context.provsEnabled ? Object.keys(this.context.provsEnabled).reduce((count, key) =>
-      count + (this.context.provsEnabled[key] &&
-      this.props.providers.includes(key) ? 1 : 0), 0)
+    const enabled = this.context.provsEnabled ? Object.keys(this.context.provsEnabled).reduce((count, key) => count + (this.context.provsEnabled[key]
+      && this.props.providers.includes(key) ? 1 : 0), 0)
       : 0;
 
     if (enabled === 0) return 'selector-rollup-nav-button-none';
@@ -85,9 +80,10 @@ export default class ProviderRollup extends React.Component {
 
   render() {
     return (
-      <div className='selector-rollup'>
-        <button className={this.state.isExpanded ? 'selector-rollup-nav-enabled' : 'selector-rollup-nav-disabled'} onClick={this.handleTwistyClick} >
-          {/*Providers*/}Providers
+      <div className="selector-rollup">
+        <button className={this.state.isExpanded ? 'selector-rollup-nav-enabled' : 'selector-rollup-nav-disabled'} onClick={this.handleTwistyClick}>
+          {/* Providers */}
+          Providers
         </button>
         <button className={this.buttonClass()} onClick={this.handleSetClearButtonClick} />
         {/* <SVGContainer className='provider-rollup-svg-container' svgClassName='provider-rollup-svg' svgWidth={this.props.svgWidth}>
@@ -96,6 +92,6 @@ export default class ProviderRollup extends React.Component {
       dotClickFn={this.props.dotClickFn} />
       </SVGContainer> */}
       </div>
-    )
+    );
   }
 }

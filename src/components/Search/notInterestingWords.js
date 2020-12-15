@@ -6,5 +6,5 @@ export default [
   'of',
   'or',
   'to',
-  'with'
-]
+  'with',
+];

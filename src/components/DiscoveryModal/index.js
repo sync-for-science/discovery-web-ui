@@ -8,18 +8,17 @@ import './DiscoveryModal.css';
 // Render Discovery modals
 //
 export default class DiscoveryModal extends React.Component {
-
   static propTypes = {
     isOpen: PropTypes.bool.isRequired,
     modalName: PropTypes.string.isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
   }
 
   modalClassNames = {
     overlay: 'discovery-modal-overlay',
     modal: 'discovery-modal',
     closeButton: 'discovery-modal-close-button',
-    closeIcon: 'discovery-modal-close-icon'
+    closeIcon: 'discovery-modal-close-icon',
   }
 
   renderLogoModal() {
@@ -28,9 +27,9 @@ export default class DiscoveryModal extends React.Component {
         <h4 className="logo-modal-title">About Sync for Science Discovery</h4>
         <div className="logo-modal-body">
           <div className="logo-modal-photo-row">
-            <div className="logo-modal-photo-one"></div>
-            <div className="logo-modal-photo-two"></div>
-            <div className="logo-modal-photo-three"></div>
+            <div className="logo-modal-photo-one" />
+            <div className="logo-modal-photo-two" />
+            <div className="logo-modal-photo-three" />
           </div>
           <div className="logo-modal-body-row">
             <div className="logo-modal-body-property">Version:</div>
@@ -53,7 +52,9 @@ export default class DiscoveryModal extends React.Component {
               Copyright © 2019 Sync for Science
             </div>
             <div className="logo-modal-body-row">
-              Sync for Science and &nbsp;<a href='http://syncfor.science' target='_blank' rel='noopener noreferrer'>S4S</a>&nbsp; are trademarks and/or service marks of the U.S. Department of Health and Human Services.
+              Sync for Science and &nbsp;
+              <a href="http://syncfor.science" target="_blank" rel="noopener noreferrer">S4S</a>
+&nbsp; are trademarks and/or service marks of the U.S. Department of Health and Human Services.
             </div>
             <div className="logo-modal-body-row">
               Sync for Science is funded as part of the Patient-Centered Information Commons (NIH Project 5U54HG007963-03) at Harvard Medical School.
@@ -61,7 +62,7 @@ export default class DiscoveryModal extends React.Component {
           </div>
         </div>
       </Modal>
-    )
+    );
   }
 
   renderHelpModal() {
@@ -71,9 +72,7 @@ export default class DiscoveryModal extends React.Component {
         <div className="help-modal-body">
           <div className="help-modal-content">
             <div className="help-modal-header">Discovery Interface</div>
-            <div>
-
-            </div>
+            <div />
             <ul>
               <li className="help-modal-list-item">Top of Page Controls</li>
               <li className="help-modal-list-item">Bottom of Page Controls</li>
@@ -82,9 +81,7 @@ export default class DiscoveryModal extends React.Component {
               <li className="help-modal-list-item">Providers</li>
             </ul>
             <div className="help-modal-header" id="header">Top of Page Controls</div>
-            <div>
-
-            </div>
+            <div />
             <ul>
               <li className="help-modal-list-item">Discovery Logo</li>
               <li className="help-modal-list-item">Font Size</li>
@@ -96,39 +93,30 @@ export default class DiscoveryModal extends React.Component {
             <div className="help-modal-subheader">
               Discovery Logo
             </div>
-            <div className="help-modal-subheader-content">
-            </div>
+            <div className="help-modal-subheader-content" />
             <div className="help-modal-subheader">
               Font Size Controls
             </div>
-            <div className="help-modal-subheader-content">
-            </div>
+            <div className="help-modal-subheader-content" />
             <div className="help-modal-subheader">
               Participant Info
             </div>
-            <div className="help-modal-subheader-content">
-            </div>
+            <div className="help-modal-subheader-content" />
             <div className="help-modal-subheader">
               Dicovery Guide
             </div>
-            <div className="help-modal-subheader-content">
-            </div>
+            <div className="help-modal-subheader-content" />
             <div className="help-modal-subheader">
               Download
             </div>
-            <div className="help-modal-subheader-content">
-            </div>
+            <div className="help-modal-subheader-content" />
             <div className="help-modal-subheader">
               Print
             </div>
-            <div className="help-modal-subheader-content">
-            </div>
-
+            <div className="help-modal-subheader-content" />
 
             <div className="help-modal-header">Bottom of Page Controls</div>
-            <div>
-
-            </div>
+            <div />
             <ul>
               <li className="help-modal-list-item">Quick View Button & Data Panel</li>
               <li className="help-modal-list-item">Search Button & Data Panel</li>
@@ -139,18 +127,14 @@ export default class DiscoveryModal extends React.Component {
             <div className="help-modal-subheader">
               Quick View Button & Data Panel
             </div>
-            <div className="help-modal-subheader-content">
-            </div>
+            <div className="help-modal-subheader-content" />
             <div className="help-modal-subheader">
               Search Button & Data Panel
             </div>
-            <div className="help-modal-subheader-content">
-            </div>
+            <div className="help-modal-subheader-content" />
 
             <div className="help-modal-header">Timeline Controls</div>
-            <div>
-
-            </div>
+            <div />
             <ul>
               <li className="help-modal-list-item">Calendar Button & Calendar Modal</li>
               <li className="help-modal-list-item">Date Range</li>
@@ -159,59 +143,47 @@ export default class DiscoveryModal extends React.Component {
             <div className="help-modal-subheader">
               Calendar Button & Calendar Modal
             </div>
-            <div className="help-modal-subheader-content">
-            </div>
+            <div className="help-modal-subheader-content" />
             <div className="help-modal-subheader">
               Date Range
             </div>
-            <div className="help-modal-subheader-content">
-            </div>
+            <div className="help-modal-subheader-content" />
             <div className="help-modal-subheader">
               Time Range Selector
             </div>
-            <div className="help-modal-subheader-content">
-            </div>
-
+            <div className="help-modal-subheader-content" />
 
             <div className="help-modal-header">Categories</div>
-            <div>
-
-            </div>
+            <div />
             <ul>
-              <li className="help-modal-list-item"></li>
-              <li className="help-modal-list-item"></li>
+              <li className="help-modal-list-item" />
+              <li className="help-modal-list-item" />
             </ul>
-            <div className="help-modal-subheader">
-
-            </div>
-            <div className="help-modal-subheader-content">
-            </div>
-            <div className="help-modal-subheader">
-
-            </div>
-            <div className="help-modal-subheader-content">
-            </div>
-
+            <div className="help-modal-subheader" />
+            <div className="help-modal-subheader-content" />
+            <div className="help-modal-subheader" />
+            <div className="help-modal-subheader-content" />
 
             <div className="help-modal-header">Providers</div>
-            <div>
-
-            </div>
+            <div />
             <ul>
               <li className="help-modal-list-item"> </li>
-              <li className="help-modal-list-item"></li>
+              <li className="help-modal-list-item" />
             </ul>
 
           </div>
         </div>
       </Modal>
-    )
+    );
   }
 
   renderDownloadModal() {
     return (
       <Modal open={this.props.isOpen} onClose={() => this.props.onClose(this.props.modalName)} classNames={this.modalClassNames}>
-        <div className="download-modal-title">Download – <em>Planned Feature</em></div>
+        <div className="download-modal-title">
+          Download –
+          <em>Planned Feature</em>
+        </div>
         <div className="download-modal-body">
           <div className="download-modal-body-row">
             <div className="download-modal-button">PDF</div>
@@ -223,11 +195,19 @@ export default class DiscoveryModal extends React.Component {
             <div className="download-modal-button">CVS File</div>
           </div>
           <div className="download-modal-text-block">
-            <p><span className="download-modal-text-bold">Download</span> supports downloading data viewed in Discovery.</p>
+            <p>
+              <span className="download-modal-text-bold">Download</span>
+              {' '}
+              supports downloading data viewed in Discovery.
+            </p>
 
             <p>We expect to support downloading in three formats:</p>
             <ul>
-              <li><span className="download-modal-text-bold">FHIR Bundles</span> in JSON</li>
+              <li>
+                <span className="download-modal-text-bold">FHIR Bundles</span>
+                {' '}
+                in JSON
+              </li>
               <li><span className="download-modal-text-bold">Comma delimited (CSV)</span></li>
               <li><span className="download-modal-text-bold">PDF</span></li>
             </ul>
@@ -242,24 +222,43 @@ export default class DiscoveryModal extends React.Component {
           </div>
         </div>
       </Modal>
-    )
+    );
   }
 
   renderPrintModal() {
     return (
       <Modal open={this.props.isOpen} onClose={() => this.props.onClose(this.props.modalName)} classNames={this.modalClassNames}>
-        <div className="print-modal-title">Print – <em>Planned Feature</em></div>
+        <div className="print-modal-title">
+          Print –
+          <em>Planned Feature</em>
+        </div>
         <div className="print-modal-body">
           <div className="print-modal-button">Print Panel Shown</div>
           <div className="print-modal-button">Print Selected Data</div>
           <div className="print-modal-button">Print All Data</div>
           <div className="print-modal-text-block">
-            <p><span className="print-modal-text-bold">Print</span> supports printing data viewed in Discovery.</p>
+            <p>
+              <span className="print-modal-text-bold">Print</span>
+              {' '}
+              supports printing data viewed in Discovery.
+            </p>
             <p>We expect to support printing in up to three formats:</p>
             <ul>
-              <li><span className="print-modal-text-bold">Plain Text</span> format with basic pagination</li>
-              <li><span className="print-modal-text-bold">Rich Text</span> format with basic pagination</li>
-              <li><span className="print-modal-text-bold">PDF Report</span> with “beyond basic” formatting</li>
+              <li>
+                <span className="print-modal-text-bold">Plain Text</span>
+                {' '}
+                format with basic pagination
+              </li>
+              <li>
+                <span className="print-modal-text-bold">Rich Text</span>
+                {' '}
+                format with basic pagination
+              </li>
+              <li>
+                <span className="print-modal-text-bold">PDF Report</span>
+                {' '}
+                with “beyond basic” formatting
+              </li>
             </ul>
             <p>We will explore having options to:</p>
             <ul>
@@ -271,7 +270,7 @@ export default class DiscoveryModal extends React.Component {
           </div>
         </div>
       </Modal>
-    )
+    );
   }
 
   render() {
