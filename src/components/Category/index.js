@@ -10,68 +10,67 @@ import DotLine from '../DotLine';
 // Render a DiscoveryApp category line
 //
 export default class Category extends React.Component {
-  static myName = 'Category';
 
-  static propTypes = {
-    categoryName: PropTypes.string.isRequired,
-    svgWidth: PropTypes.string.isRequired,
-    dotPositionsFn: PropTypes.func.isRequired,
-    dotClickFn: PropTypes.func,
-    enabledFn: PropTypes.func.isRequired,
-    isEnabled: PropTypes.bool,
-  }
+   static myName = 'Category';
 
-  state = {
-    isEnabled: false,
-  }
+   static propTypes = {
+      categoryName: PropTypes.string.isRequired,
+      svgWidth: PropTypes.string.isRequired,
+      dotPositionsFn: PropTypes.func.isRequired,
+      dotClickFn: PropTypes.func,
+      enabledFn: PropTypes.func.isRequired,
+      isEnabled: PropTypes.bool
+   }
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.onKeydown);
-    if (this.props.isEnabled !== undefined) {
-      this.setState({ isEnabled: this.props.isEnabled });
-      //   this.props.enabledFn(Category.myName, this.props.categoryName, this.props.isEnabled);
-    }
-  }
+   state = {
+      isEnabled: false
+   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.isEnabled !== prevProps.isEnabled) {
-      this.setState({ isEnabled: this.props.isEnabled });
-      //   this.props.enabledFn(Category.myName, this.props.categoryName, this.props.isEnabled);
-    }
-  }
+   componentDidMount() {
+      window.addEventListener('keydown', this.onKeydown);
+      if (this.props.isEnabled !== undefined) {
+	 this.setState({ isEnabled: this.props.isEnabled });
+//	 this.props.enabledFn(Category.myName, this.props.categoryName, this.props.isEnabled);
+      }
+   }
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onKeydown);
-  }
+   componentDidUpdate(prevProps, prevState) {
+      if (this.props.isEnabled !== prevProps.isEnabled) {
+	 this.setState({ isEnabled: this.props.isEnabled });
+//	 this.props.enabledFn(Category.myName, this.props.categoryName, this.props.isEnabled);
+      }
+   }
 
-  onKeydown = (event) => {
-    if (event.key === 'Enter') {
-      // Do nothing (don't want in-focus buttons to toggle on Enter
-      event.preventDefault();
-    }
-  }
+   componentWillUnmount() {
+      window.removeEventListener('keydown', this.onKeydown);
+   }
 
-  handleButtonClick = () => {
-    this.props.enabledFn(Category.myName, this.props.categoryName, !this.state.isEnabled);
-    this.setState({ isEnabled: !this.state.isEnabled });
-  }
+   onKeydown = (event) => {
+      if (event.key === 'Enter') {
+	 // Do nothing (don't want in-focus buttons to toggle on Enter
+	 event.preventDefault();
+      }
+   }
 
-  render() {
-    return (
-      <div className="selector">
-        <div className="selector-nav">
-          <button className={this.state.isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={this.handleButtonClick}>
-            { this.props.categoryName }
-          </button>
-        </div>
-        <SVGContainer className="selector-svg-container" svgClassName="selector-svg" svgWidth={this.props.svgWidth}>
-          <DotLine
-            dotPositions={this.props.dotPositionsFn(Category.myName, this.props.categoryName, this.state.isEnabled)}
-            context={{ parent: Category.myName, rowName: this.props.categoryName }}
-            dotClickFn={this.props.dotClickFn}
-          />
-        </SVGContainer>
-      </div>
-    );
-  }
+   handleButtonClick = () => {
+      this.props.enabledFn(Category.myName, this.props.categoryName, !this.state.isEnabled);
+      this.setState({isEnabled: !this.state.isEnabled});
+   }
+
+   render() {
+      return (
+	 <div className='selector'>
+	    <div className='selector-nav'>
+	       <button className={this.state.isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={this.handleButtonClick} >
+	          { this.props.categoryName }
+	       </button>
+	    </div>
+	    <SVGContainer className='selector-svg-container' svgClassName='selector-svg' svgWidth={this.props.svgWidth}>
+	       <DotLine dotPositions={this.props.dotPositionsFn(Category.myName, this.props.categoryName, this.state.isEnabled)}
+			context={ {parent:Category.myName, rowName:this.props.categoryName} }
+			dotClickFn={this.props.dotClickFn} />
+	    </SVGContainer>
+	 </div>
+      )
+   }
 }

@@ -5,9 +5,7 @@ import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderDisplay, primaryTextValue } from '../../fhirUtil.js';
-import {
-  Const, stringCompare, formatKey, formatContentHeader,
-} from '../../util.js';
+import { Const, stringCompare, formatKey, formatContentHeader } from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -15,63 +13,61 @@ import DiscoveryContext from '../DiscoveryContext';
 // Display the 'Conditions' category if there are matching resources
 //
 export default class Conditions extends React.Component {
-  static catName = 'Conditions';
 
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
+   static catName = 'Conditions';
 
-  static compareFn(a, b) {
-    return stringCompare(Conditions.primaryText(a), Conditions.primaryText(b));
-  }
+   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
 
-  static code(elt) {
-    return elt.data.code; // SNOMED
-  }
+   static compareFn(a, b) {
+      return stringCompare(Conditions.primaryText(a), Conditions.primaryText(b));
+   }
 
-  static primaryText(elt) {
-    //      return elt.data.code.coding[0].display;
-    //      return tryWithDefault(elt, elt => Conditions.code(elt).coding[0].display, Const.unknownValue);
-    return primaryTextValue(Conditions.code(elt));
-  }
+   static code(elt) {
+      return elt.data.code;			// SNOMED
+   }
 
-  static propTypes = {
-    data: PropTypes.array.isRequired,
-    isEnabled: PropTypes.bool,
-    showDate: PropTypes.bool,
-  }
+   static primaryText(elt) {
+//      return elt.data.code.coding[0].display;
+//      return tryWithDefault(elt, elt => Conditions.code(elt).coding[0].display, Const.unknownValue);
+      return primaryTextValue(Conditions.code(elt));
+   }
 
-  state = {
-    matchingData: null,
-  }
+   static propTypes = {
+      data: PropTypes.array.isRequired,
+      isEnabled: PropTypes.bool,
+      showDate: PropTypes.bool
+   }
 
-  setMatchingData() {
-    const match = FhirTransform.getPathItem(this.props.data, `[*category=${Conditions.catName}]`);
-    this.setState({
-      matchingData: match.length > 0 ? match.sort(Conditions.compareFn)
-        : null,
-    });
-  }
+   state = {
+      matchingData: null
+   }
 
-  componentDidMount() {
-    this.setMatchingData();
-  }
+   setMatchingData() {
+      let match = FhirTransform.getPathItem(this.props.data, `[*category=${Conditions.catName}]`);
+      this.setState({ matchingData: match.length > 0 ? match.sort(Conditions.compareFn)
+						     : null });
+   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.data !== this.props.data) {
+   componentDidMount() {
       this.setMatchingData();
-    }
-  }
+   }
 
-  render() {
-    const firstRes = this.state.matchingData && this.state.matchingData[0];
-    return (this.state.matchingData
-      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
-      && (
-      <div className="conditions category-container" id={formatKey(firstRes)}>
-        { formatContentHeader(this.props.isEnabled, Conditions.catName, firstRes, this.context) }
-        <div className="content-body">
-          { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Condition', this.context) }
-        </div>
-      </div>
-      ));
-  }
+   componentDidUpdate(prevProps, prevState) {
+      if (prevProps.data !== this.props.data) {
+	 this.setMatchingData();
+      }
+   }
+
+   render() {
+      let firstRes = this.state.matchingData && this.state.matchingData[0];
+      return ( this.state.matchingData &&
+	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
+	       <div className='conditions category-container' id={formatKey(firstRes)}>
+		  { formatContentHeader(this.props.isEnabled, Conditions.catName, firstRes, this.context) }
+	          <div className='content-body'>
+		     { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Condition', this.context) }
+	          </div>
+	       </div> );
+   }
 }
+
