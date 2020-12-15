@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Annotation Stylesheet */
+
 /* v.01.06 Updated 11/07/2019 */
 
 .annotation-container {
@@ -8,48 +9,50 @@
 }
 
 .annotation-buttons-container {
-   width: 100%;
-   min-width: 100%;
-   padding: 0;
+  width: 100%;
+  min-width: 100%;
+  padding: 0;
 }
 
 .annotation-button {
-   color: var(--label-white);
-   background-color: var(--button);
-   padding: 0 10px;
-   border-radius: .625rem;
-   margin: 0;
-   cursor: pointer;
-   outline: none;
+  color: var(--label-white);
+  background-color: var(--button);
+  padding: 0 10px;
+  border-radius: 0.625rem;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
 }
 
 .annotation-button-disabled {
-   @insert .annotation-button;
-   opacity: 0.6;
+  @insert .annotation-button;
+
+  opacity: 0.6;
 }
 
 .annotation-common {
-   width: 12rem;
-   min-width: 12rem;
-/*   min-height: calc(100% - 35px);
+  width: 12rem;
+  min-width: 12rem;
+
+  /*   min-height: calc(100% - 35px);
    max-height: calc(100% - 35px); */
-   overflow: auto;
+  overflow: auto;
 }
 
 .annotation {
-   @insert .annotation-common;
-   font-family: text;
-   font-size: 0.75rem;
-   background-color: var(--background-annotation);	/* lighter version of var(--gt1) */
-   padding: .313rem .625rem;
-   border-top: solid 1px var(--separator-dark);
-   border-radius: 0 0 .625rem .625rem;
-   overflow-x: hidden;
-   overflow-y: scroll;
-   white-space: pre-wrap;
+  @insert .annotation-common;
+
+  font-family: text;
+  font-size: 0.75rem;
+  background-color: var(--background-annotation);	/* lighter version of var(--gt1) */
+  padding: 0.313rem 0.625rem;
+  border-top: solid 1px var(--separator-dark);
+  border-radius: 0 0 0.625rem 0.625rem;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  white-space: pre-wrap;
 }
 
 .annotation-empty {
-   @insert .annotation-common;
+  @insert .annotation-common;
 }
-

@@ -1,31 +1,32 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery DiscoveryApp Stylesheet */
+
 /* v.01.08 Updated 9/05/2019 */
 
 body {
-   font-size: 16px;
-	background-color: var(--background-application);
-   padding: 0;
-   margin: 0;
-	overflow: hidden;
+  font-size: 16px;
+  background-color: var(--background-application);
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
 }
 
 button:focus {
-	outline: none;
+  outline: none;
 }
 
 .discovery-app {
-   position: fixed;
-   top: 0;
-   left: 0;
-   z-index: -10;
-   height: calc(100% - 10px); 
-   width: 100%;
-	min-width: 1024px;
-   background-color: var(--background-application);
-   padding: 0;
-   margin: 0;
-   overflow-x: hidden;
-   overflow-y: hidden; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -10;
+  height: calc(100% - 10px);
+  width: 100%;
+  min-width: 1024px;
+  background-color: var(--background-application);
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }

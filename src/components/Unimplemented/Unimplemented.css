@@ -1,12 +1,15 @@
 @charset "UTF-8";
+
 @import '../ContentPanel/ContentPanelCategories.css';
 
 /* Sync for Science Discovery Unimplemented Stylesheet */
+
 /* v.01.07 Updated 05/13/2019 */
 
 .unimplemented-value {
-   @insert .col01;
-   @insert .value-text;
-   font-size: .800rem;
-   margin: 3px 0 0 32px;
+  @insert .col01;
+  @insert .value-text;
+
+  font-size: 0.8rem;
+  margin: 3px 0 0 32px;
 }

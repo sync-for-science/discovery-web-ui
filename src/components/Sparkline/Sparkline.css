@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Sparkline Stylesheet */
+
 /* v.01.02 Updated 05/13/2019 */
 
 .mark {
@@ -8,14 +9,14 @@
 }
 
 .mark-noclick {
-   cursor: default;
+  cursor: default;
 }
 
 .line {
-   color: black;
+  color: black;
 }
 
 .line-noclick {
-   stroke: black;
-   cursor: default;
+  stroke: black;
+  cursor: default;
 }

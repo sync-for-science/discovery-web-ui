@@ -1,254 +1,258 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery TimeWidget Stylesheet */
+
 /* v.01.48 Updated 12/03/2019 */
 
 .time-widget {
-   position: relative;
-   top: 56px;
-   left: 0;
-   display: flex;
-   flex-direction: row;
-   width: 100%;
-   min-width: 1024px;
-   height: 100px;
-   background-color: transparent; 
-   padding: 0;
-   margin: 0;
-   overflow: visible;
+  position: relative;
+  top: 56px;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-width: 1024px;
+  height: 100px;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
 }
 
-
 .participant-name {
-   width: 140px;
-   min-width: 140px;
-   height: 24px;
-   font-family: label-semibold;
-   font-size: 1.125rem;
-   text-align: left;
-   line-height: 24px;
-   white-space: normal;
-   color: var(--label-participant);
-   margin: 10px 0 0 10px;
-   padding-left: 8px;
-/*   border-left: 2px solid var(--border-accent); */
+  width: 140px;
+  min-width: 140px;
+  height: 24px;
+  font-family: label-semibold;
+  font-size: 1.125rem;
+  text-align: left;
+  line-height: 24px;
+  white-space: normal;
+  color: var(--label-participant);
+  margin: 10px 0 0 10px;
+  padding-left: 8px;
+
+  /*   border-left: 2px solid var(--border-accent); */
 }
 
 .calendar-daterange-box {
-   display: flex;
-   flex-direction: column;
-   align-items: flex-start; 
-   width: 140px;
-   min-width: 140px;
-   height: 103px;
-   padding: 0 10px;
-   margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 140px;
+  min-width: 140px;
+  height: 103px;
+  padding: 0 10px;
+  margin: 0;
 }
 
 .calendar-button {
-   height: 30px;
-   width: 30px;
-   background-color: transparent;
-   background-size: 30px 30px;
-   background-position: 0 0;
-   background-repeat: no-repeat;
-   padding: 0 0 0 8px;
-   border: 0;
-   margin: 0;
-   cursor: pointer;
+  height: 30px;
+  width: 30px;
+  background-color: transparent;
+  background-size: 30px 30px;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  padding: 0 0 0 8px;
+  border: 0;
+  margin: 0;
+  cursor: pointer;
 }
 
 .date-range {
-   display: flex;
-   flex-direction: column;
-   justify-content: flex-end;
-   width: inherit;
-   font-family: data-text-medium;
-   font-size: 0.700rem;
-   line-height: 120%;
-   text-align: right;
-   color: var(--label-black);
-   margin: 0;
-   white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: inherit;
+  font-family: data-text-medium;
+  font-size: 0.7rem;
+  line-height: 120%;
+  text-align: right;
+  color: var(--label-black);
+  margin: 0;
+  white-space: nowrap;
 }
 
 .date-range-row {
-   display: flex;
-   flex-direction: row;
-   justify-content: flex-end;
-   align-items: flex-end;
-   width: 140px;
-   height: 20px;
-   font-family: text-semibold;
-   font-size: .500rem;
-   line-height: 20px;
-   padding: 0 0 0 0;
-   margin: 0 0 3px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 140px;
+  height: 20px;
+  font-family: text-semibold;
+  font-size: 0.5rem;
+  line-height: 20px;
+  padding: 0 0 0 0;
+  margin: 0 0 3px 0;
 }
 
 .timeline-controls {
-   display: flex;
-   flex-direction: column;
-   width: calc(100% - 170px);
-   min-width: 810px;
-   height: 100px;
-   max-height: 100px;
-   background-color: transparent;
-   padding: 0;
-   margin: 0; 
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 170px);
+  min-width: 810px;
+  height: 100px;
+  max-height: 100px;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
 }
 
 .timeline-tbd-container {
-   width: auto;
-   height: 40px;
-   max-height: 40px;
+  width: auto;
+  height: 40px;
+  max-height: 40px;
 }
 
 .timeline-selector-gradient-container {
-   display: flex;
-   flex-direction: row;
-   position: relative;
-   top: 1px;
-   width: auto;
-   height: 38.5px;
-   max-height: 38.5px;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  top: 1px;
+  width: auto;
+  height: 38.5px;
+  max-height: 38.5px;
 }
 
 .timeline-selector-gradient-left {
-   position: relative;
-   height: inherit;
-   background-color: var(--background-timeline-selector);
-   margin: 0;
-   border-bottom: solid 1.5px var(--separator-red);
-   border-right: solid 1.5px var(--separator-red);
-   border-bottom-right-radius: 5px; 
+  position: relative;
+  height: inherit;
+  background-color: var(--background-timeline-selector);
+  margin: 0;
+  border-bottom: solid 1.5px var(--separator-red);
+  border-right: solid 1.5px var(--separator-red);
+  border-bottom-right-radius: 5px;
 }
 
 .timeline-selector-gradient-right {
-   position: relative;
-   height: inherit;
-   background-color: var(--background-timeline-selector);
-   margin: 0 0 0 0;
-   border-bottom: solid 1.5px var(--separator-red);
-   border-left: solid 1.5px var(--separator-red);
-   border-bottom-left-radius: 5px; 
+  position: relative;
+  height: inherit;
+  background-color: var(--background-timeline-selector);
+  margin: 0 0 0 0;
+  border-bottom: solid 1.5px var(--separator-red);
+  border-left: solid 1.5px var(--separator-red);
+  border-bottom-left-radius: 5px;
 }
 
 .timeline-selection-box {
-   position: relative;
-   top: 0;
-   left: 0;
-   width: auto;
-   height: 40px;
-   max-height: 40px;
-   background-color: transparent;
-   padding: 0;
-   margin: 0;
-   overflow: visible;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: auto;
+  height: 40px;
+  max-height: 40px;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
 }
 
 .timeline {
-   left: 0;
-   width: auto;
-   display: flex;
-   flex-direction: row;
-   flex-wrap: nowrap;
-   align-items: initial;
-   width: 100%;
-   height: 38px;
-   min-height: 38px;
-   max-height: 38px;
-   background-color: var(--background-timeline);
-   background-image: url("../../svg/horizontal-rule-1px-blue-medium-100.svg");  
-   background-position: 0px 21px;
-   background-repeat: repeat-x;
-   padding: 0;
-   border-top: solid 2px var(--separator-white);
-   margin: -40px 0 0 0;
-}	
+  left: 0;
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: initial;
+  width: 100%;
+  height: 38px;
+  min-height: 38px;
+  max-height: 38px;
+  background-color: var(--background-timeline);
+  background-image: url("../../svg/horizontal-rule-1px-blue-medium-100.svg");
+  background-position: 0 21px;
+  background-repeat: repeat-x;
+  padding: 0;
+  border-top: solid 2px var(--separator-white);
+  margin: -40px 0 0 0;
+}
 
 .timeline-full {
-   position: relative;
-   left: 0;
-   top: 0;
-   width: 100%;
-   font-size: 0.750rem;
-   background-position: left bottom;
-   background-size: 2px 50%;
-   background-repeat: no-repeat;
-   background-color: transparent; 
-   padding: 0 0 0 5px;
-   margin: 0 0 0 -1px;
-   overflow: visible;
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 100%;
+  font-size: 0.75rem;
+  background-position: left bottom;
+  background-size: 2px 50%;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  padding: 0 0 0 5px;
+  margin: 0 0 0 -1px;
+  overflow: visible;
 }
 
 /* The full (top) timeline years inside the thumbs when the expanded (bottom) timeline ISN’T showing */
 .timeline-full-active-single-years {
-   @insert .timeline-full;
-   height: 23px;
-   max-height:23px;
-   font-family: data-text-light;
-   font-size: 0.625rem;
-   color: var(--label-date);
-   background-image: url("../../svg/tickmark-blue-medium-100.svg");
-   padding: 6px 0 0 5px;
-   margin: 0 0 9px 0;
+  @insert .timeline-full;
+
+  height: 23px;
+  max-height: 23px;
+  font-family: data-text-light;
+  font-size: 0.625rem;
+  color: var(--label-date);
+  background-image: url("../../svg/tickmark-blue-medium-100.svg");
+  padding: 6px 0 0 5px;
+  margin: 0 0 9px 0;
 }
 
 /* The full (top) timeline years inside the thumbs when the expanded (bottom timeline IS showing */
 .timeline-full-active-double-years {
-   @insert .timeline-full;
-   height: 23px;
-   max-height: 23px;
-   font-family: data-text-light;
-   font-size: 0.625rem;
-   color: var(--label-date);
-   background-image: url("../../svg/tickmark-blue-medium-100.svg");
-   padding: 6px 0 0 5px;
-   margin: 0;
+  @insert .timeline-full;
+
+  height: 23px;
+  max-height: 23px;
+  font-family: data-text-light;
+  font-size: 0.625rem;
+  color: var(--label-date);
+  background-image: url("../../svg/tickmark-blue-medium-100.svg");
+  padding: 6px 0 0 5px;
+  margin: 0;
 }
 
 /* The full (top) timeline years outside the thumbs */
 .timeline-full-inactive-years {
-   @insert .timeline-full;
-   height: 23px;
-   max-height: 23px;
-   font-family: data-text-light;
-   font-size: 0.625rem;
-   color: var(--label-date-inactive);
-   background-image: url("../../svg/tickmark-blue-medium-100.svg");
-   padding: 6px 0 0 5px;
-   margin: 0 0 14px 0;
+  @insert .timeline-full;
+
+  height: 23px;
+  max-height: 23px;
+  font-family: data-text-light;
+  font-size: 0.625rem;
+  color: var(--label-date-inactive);
+  background-image: url("../../svg/tickmark-blue-medium-100.svg");
+  padding: 6px 0 0 5px;
+  margin: 0 0 14px 0;
 }
 
 .timeline-svg-container {
-   position: relative;
-   top: -40px;
-   left: 0;
-   display: flex;
-   justify-content: center;
-   width: 100%;
-   height: 40px;
-   min-height:40px;
-   max-height:40px;
-   align-items: center;
-   background-clip: padding-box;
-   background-color: transparent;
-   padding: 0;
-   overflow: hidden;
-   pointer-events: none;
+  position: relative;
+  top: -40px;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
+  align-items: center;
+  background-clip: padding-box;
+  background-color: transparent;
+  padding: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .timeline-svg {
-   position: relative;
-   left: 0;
-   top: 0;
-   height: 23px;
-   max-height: 23px;
-   padding: 9px 0 5px 0;
-   margin: 0;
-   overflow: visible;
-   pointer-events:none;
+  position: relative;
+  left: 0;
+  top: 0;
+  height: 23px;
+  max-height: 23px;
+  padding: 9px 0 5px 0;
+  margin: 0;
+  overflow: visible;
+  pointer-events: none;
 }
 
 /*
@@ -265,305 +269,325 @@
 */
 
 .timeline-range-controls {
-   display: flex;
-   flex-direction: row;
-   width: auto;
-   height: 20px;
-   max-height: 20px;
-   background-color: var(--background-content);
-   padding: 0;
-   border-left: solid 1.5px var(--separator-red);
-   border-right: solid 1.5px var(--separator-red);
-   margin: 0;
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  height: 20px;
+  max-height: 20px;
+  background-color: var(--background-content);
+  padding: 0;
+  border-left: solid 1.5px var(--separator-red);
+  border-right: solid 1.5px var(--separator-red);
+  margin: 0;
 }
 
 .date-range-data {
-   height: 20px;
-   align-items: center;
-   font-family: text;
-   font-size: 11px;
-   line-height: 20px;
-   padding: 0;
+  height: 20px;
+  align-items: center;
+  font-family: text;
+  font-size: 11px;
+  line-height: 20px;
+  padding: 0;
 }
 
 .date-range-data-left {
-   height: 20px;
-   align-items: center;
-   font-family: text;
-   font-size: 11px;
-   line-height: 20px;
-   background-image: url("../../svg/date-range-arrow-left.svg");
-   background-repeat: no-repeat;
-   background-position: left;
-   padding: 0 0 0 17px;
+  height: 20px;
+  align-items: center;
+  font-family: text;
+  font-size: 11px;
+  line-height: 20px;
+  background-image: url("../../svg/date-range-arrow-left.svg");
+  background-repeat: no-repeat;
+  background-position: left;
+  padding: 0 0 0 17px;
 }
 
 .date-range-data-left-focused {
-   height: 20px;
-   align-items: center;
-   font-family: text;
-   font-size: 11px;
-   line-height: 20px;
-   background-image: url("../../svg/date-range-arrow-left-focused.svg");
-   background-repeat: no-repeat;
-   background-position: left;
-   padding: 0 0 0 17px;
+  height: 20px;
+  align-items: center;
+  font-family: text;
+  font-size: 11px;
+  line-height: 20px;
+  background-image: url("../../svg/date-range-arrow-left-focused.svg");
+  background-repeat: no-repeat;
+  background-position: left;
+  padding: 0 0 0 17px;
 }
 
 .date-range-data-right {
-   height: 20px;
-   align-items: center;
-   font-family: text;
-   font-size: 11px;
-   line-height: 20px;
-   background-image: url("../../svg/date-range-arrow-right.svg");
-   background-repeat: no-repeat;
-   background-position: right;
-   padding: 0 17px 0 0;
+  height: 20px;
+  align-items: center;
+  font-family: text;
+  font-size: 11px;
+  line-height: 20px;
+  background-image: url("../../svg/date-range-arrow-right.svg");
+  background-repeat: no-repeat;
+  background-position: right;
+  padding: 0 17px 0 0;
 }
 
 .date-range-data-right-focused {
-   height: 20px;
-   align-items: center;
-   font-family: text;
-   font-size: 11px;
-   line-height: 20px;
-   background-image: url("../../svg/date-range-arrow-right-focused.svg");
-   background-repeat: no-repeat;
-   background-position: right;
-   padding: 0 17px 0 0;
+  height: 20px;
+  align-items: center;
+  font-family: text;
+  font-size: 11px;
+  line-height: 20px;
+  background-image: url("../../svg/date-range-arrow-right-focused.svg");
+  background-repeat: no-repeat;
+  background-position: right;
+  padding: 0 17px 0 0;
 }
 
 .timeline-button-container {
-   display: flex;
-   flex-direction: row;
-   align-content: center;
-   height: 20px;
-   padding: 0;
-   margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  height: 20px;
+  padding: 0;
+  margin: 0 auto;
 }
 
 .date-range-button {
-   position:relative;
-   z-index: 5;
-/*   top: 0; */
-   top: 1px;
-   width: 80px;
-/*   height: 18px; */
-   height: 16px;
-   font-family: label-bold;
-   font-size: 12px;
-   color: var(--label-white);
-   border-radius: 20px;
-/*   padding:0 10px; */
-   padding: 0 10px 5px 10px;
-/*   margin: .5px 5px; */
-   margin: .5px 5px .5px 5px;
-   cursor: pointer;
-   outline: none;
-   border: solid 0px transparent;
+  position: relative;
+  z-index: 5;
+
+  /*   top: 0; */
+  top: 1px;
+  width: 80px;
+
+  /*   height: 18px; */
+  height: 16px;
+  font-family: label-bold;
+  font-size: 12px;
+  color: var(--label-white);
+  border-radius: 20px;
+
+  /*   padding:0 10px; */
+  padding: 0 10px 5px 10px;
+
+  /*   margin: .5px 5px; */
+  margin: 0.5px 5px 0.5px 5px;
+  cursor: pointer;
+  outline: none;
+  border: solid 0 transparent;
 }
 
 .date-range-button-on {
-   @insert .date-range-button;
-   background-color: var(--button-date-range);
- /*  border: solid 1.5px transparent; */
+  @insert .date-range-button;
+
+  background-color: var(--button-date-range);
+
+  /*  border: solid 1.5px transparent; */
 }
 
 .date-range-button-off {
-   @insert .date-range-button;
-   font-family: label-semibold;
-   color: var(--label-gray-light);
-   background-color: var(--button-date-range-disabled);
- /*  order: solid 1.5px transparent; */
+  @insert .date-range-button;
+
+  font-family: label-semibold;
+  color: var(--label-gray-light);
+  background-color: var(--button-date-range-disabled);
+
+  /*  order: solid 1.5px transparent; */
 }
 
 .timeline-selector {
-   position: relative;
-   top: 0;
-   width: 22px;
-   min-width: 22px;
-   height: 40px;
-   background-color: transparent;
-   background-repeat: no-repeat;
-   background-position: center center;
-   background-size: 20px 28px;
-   margin: 0;
-   cursor: col-resize;
+  position: relative;
+  top: 0;
+  width: 22px;
+  min-width: 22px;
+  height: 40px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 20px 28px;
+  margin: 0;
+  cursor: col-resize;
 }
 
 .timeline-selector-left {
-   @insert .timeline-selector;
-   background-image: url("../../svg/bracket-left-top-05.svg");
-   background-position: left bottom;
-   border-left: 2px solid var(--gs-040-100);
-   margin-left: -1.0px;
+  @insert .timeline-selector;
+
+  background-image: url("../../svg/bracket-left-top-05.svg");
+  background-position: left bottom;
+  border-left: 2px solid var(--gs-040-100);
+  margin-left: -1px;
 }
 
 .timeline-selector-left-alt {
-   @insert .timeline-selector;
-   background-image: url("../../svg/bracket-left-top-05.svg");
-   background-position: left bottom;
-   border-left: 2px solid var(--gs-040-100);
-   margin-left: -1.0px;
+  @insert .timeline-selector;
+
+  background-image: url("../../svg/bracket-left-top-05.svg");
+  background-position: left bottom;
+  border-left: 2px solid var(--gs-040-100);
+  margin-left: -1px;
 }
 
 .timeline-selector-center {
-   position: relative;
-   top: -63px;
-   width: 36px;
-   height: 12px;
-   min-height: 12px;
-   background-color:transparent;
-   background-image: url("../../svg/bracket-center-02.svg");
-   background-position: center;
-   background-repeat: no-repeat;
-   background-size: cover;
-   margin: -2px 0 0 0;
-   cursor: col-resize;
+  position: relative;
+  top: -63px;
+  width: 36px;
+  height: 12px;
+  min-height: 12px;
+  background-color: transparent;
+  background-image: url("../../svg/bracket-center-02.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: -2px 0 0 0;
+  cursor: col-resize;
 }
 
 .timeline-selector-right {
-   @insert .timeline-selector;
-   background-image: url("../../svg/bracket-right-top-05.svg");
-   background-position: right bottom;
-   padding: 0;
-   border-right: 2px solid var(--gs-040-100);
-   margin-left: -57px;
+  @insert .timeline-selector;
+
+  background-image: url("../../svg/bracket-right-top-05.svg");
+  background-position: right bottom;
+  padding: 0;
+  border-right: 2px solid var(--gs-040-100);
+  margin-left: -57px;
 }
 
 .timeline-selector-right-alt {
-   @insert .timeline-selector;
-   background-image: url("../../svg/bracket-right-top-05.svg");
-   background-position: right bottom;
-   border-right: 2px solid var(--gs-040-100);
-   margin-left: -57px;
+  @insert .timeline-selector;
+
+  background-image: url("../../svg/bracket-right-top-05.svg");
+  background-position: right bottom;
+  border-right: 2px solid var(--gs-040-100);
+  margin-left: -57px;
 }
 
 .timeline-expanded {
-   position: relative;
-   top: 0px;
-   left: 0px;
-   display: flex;
-   flex-direction: row;
-   flex-wrap: nowrap;
-   align-items: initial;
-   width: auto;
-   height: 38px;
-   max-height: 38px;
-   background-color: var(--background-timeline);
-   background-image: url("../../svg/horizontal-rule-1px-blue-medium-100.svg");  
-   background-position: 0px 21px;
-   background-repeat: repeat-x;
-   padding: 0;
-   border-bottom: solid 2px var(--separator-white);
-   border-left: solid 1.5px var(--separator-red);
-   border-right: solid 1.5px var(--separator-red);
-   margin: -10px 0 0 0;
+  position: relative;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: initial;
+  width: auto;
+  height: 38px;
+  max-height: 38px;
+  background-color: var(--background-timeline);
+  background-image: url("../../svg/horizontal-rule-1px-blue-medium-100.svg");
+  background-position: 0 21px;
+  background-repeat: repeat-x;
+  padding: 0;
+  border-bottom: solid 2px var(--separator-white);
+  border-left: solid 1.5px var(--separator-red);
+  border-right: solid 1.5px var(--separator-red);
+  margin: -10px 0 0 0;
 }
 
 /* The offset to left/right of the timeline */
 .timeline-shim {
-   position: relative;
-   top: 0;
-   min-width: 0;
-   height: 40px;
+  position: relative;
+  top: 0;
+  min-width: 0;
+  height: 40px;
 }
 
 .timeline-shim-left {
-   @insert .timeline-shim;
-   margin: 0;
-   
+  @insert .timeline-shim;
+
+  margin: 0;
 }
 
 .timeline-shim-left-alt {
-   @insert .timeline-shim;
-   margin: 0;
+  @insert .timeline-shim;
+
+  margin: 0;
 }
 
 .timeline-shim-right {
-   @insert .timeline-shim;
-   margin: 0 -1px 0 0;
+  @insert .timeline-shim;
+
+  margin: 0 -1px 0 0;
 }
 
 .timeline-shim-right-alt {
-   @insert .timeline-shim;
-   margin: 0 -1px 0 0;
+  @insert .timeline-shim;
+
+  margin: 0 -1px 0 0;
 }
 
 /* The expanded (bottom timeline years */
 .timeline-expanded-years {
-   display: flex;
-   flex-direction: column;
-   align-self: flex-start;
-   align-content: flex-start;
-   align-items: flex-start;
-   height: 29px;
-   max-height: 29px;
-   font-family: data-text-light;
-   font-size: 0.688rem;
-   color: var(--blue-dark-100);
-   background-image: url("../../svg/tickmark-blue-medium-100.svg");
-   background-position: 8px left;
-   background-size: 2px 30px;
-   background-repeat: no-repeat;
-   padding: 2px 0 0 4px;
-   margin: 3px 0 0 0;
-   overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+  height: 29px;
+  max-height: 29px;
+  font-family: data-text-light;
+  font-size: 0.688rem;
+  color: var(--blue-dark-100);
+  background-image: url("../../svg/tickmark-blue-medium-100.svg");
+  background-position: 8px left;
+  background-size: 2px 30px;
+  background-repeat: no-repeat;
+  padding: 2px 0 0 4px;
+  margin: 3px 0 0 0;
+  overflow: visible;
 }
 
 .timeline-help {
-   position: relative;
-   display: flex;
-   align-content: center;
-   top: 5px;
-   width: 100%;
-   height: 70px;
-   max-height: 70px;
-   background-color: transparent;
+  position: relative;
+  display: flex;
+  align-content: center;
+  top: 5px;
+  width: 100%;
+  height: 70px;
+  max-height: 70px;
+  background-color: transparent;
 }
 
 .timeline-help-col {
-   width: 30.5%;
-   max-width: 30.5%;
-   font-family: data-text;
-   font-size: 0.875rem;
-   line-height: 1.00rem;
-   color: var(--data);
-   background-color: var(--background-content);
-   padding: 3px 8px;
-   border-radius: 5px;
+  width: 30.5%;
+  max-width: 30.5%;
+  font-family: data-text;
+  font-size: 0.875rem;
+  line-height: 1rem;
+  color: var(--data);
+  background-color: var(--background-content);
+  padding: 3px 8px;
+  border-radius: 5px;
 }
 
 .timeline-help-col-1 {
-   @insert .timeline-help-col;
-   margin: 0 0 0 auto;
+  @insert .timeline-help-col;
+
+  margin: 0 0 0 auto;
 }
 
 .timeline-help-col-2 {
-   @insert .timeline-help-col;
-   margin: 0 10px;
+  @insert .timeline-help-col;
+
+  margin: 0 10px;
 }
 
 .timeline-help-col-3 {
-   @insert .timeline-help-col;
-   margin: 0 auto 0 0;
+  @insert .timeline-help-col;
+
+  margin: 0 auto 0 0;
 }
 
 .timeline-help-col-after {
-   content: "";
-   display: block;
-   position: absolute;
-   height: 32px;
-   top: 4px;
+  content: "";
+  display: block;
+  position: absolute;
+  height: 32px;
+  top: 4px;
 }
 
 .timeline-help-col-1::after {
-   @insert .timeline-help-col-after;
-   left: 33.33%;
+  @insert .timeline-help-col-after;
+
+  left: 33.33%;
 }
 
 .timeline-help-col-2::after {
-   @insert .timeline-help-col-after;
-   left: 66.66%;
+  @insert .timeline-help-col-after;
+
+  left: 66.66%;
 }

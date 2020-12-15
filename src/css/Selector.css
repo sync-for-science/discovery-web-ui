@@ -1,190 +1,199 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Selector CSS */
+
 /* v.01.13 Updated 11/14/2019 */
 
 .selector-set {
-   width: 100%;
-   min-width: 1024px;
-   height: auto;
-   padding: 0;
-   margin: 0;
+  width: 100%;
+  min-width: 1024px;
+  height: auto;
+  padding: 0;
+  margin: 0;
 }
 
 .selector {
-   display: flex;
-   flex-direction: row;
-   width: 100%;
-   min-height: 28px;
-   max-height: none;
-   padding: 0;
-   margin: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-height: 28px;
+  max-height: none;
+  padding: 0;
+  margin: 0;
 }
 
 .selector-rollup {
-   display: flex;
-   flex-direction: row;
-   width: calc(100% - 20px);
-   height: 38px;
-   max-height: 38px;
-   padding: 0;
-   margin: 0 10px;
+  display: flex;
+  flex-direction: row;
+  width: calc(100% - 20px);
+  height: 38px;
+  max-height: 38px;
+  padding: 0;
+  margin: 0 10px;
 }
 
 /* Common for @insert */
 .selector-rollup-nav {
-   display: flex;
-   flex-direction: row;
-   justify-content: center;
-   width: 100px;
-   min-width: 100px;
-   max-width: 100px;
-   height: 38px;
-   max-height: 38px;
-   font-family: header-bold;
-   font-size: 1.00rem;
-   color:var(--label-black);
-   text-align: left;
-   line-height: 38px;
-   background-size: 10px 10px;
-   background-position: 0px center;
-   background-repeat: no-repeat;
-   background-color:transparent;
-   padding: 0 15px 0 15px;
-   border: 0;
-   margin: 0;
-   outline: none;
-   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+  height: 38px;
+  max-height: 38px;
+  font-family: header-bold;
+  font-size: 1rem;
+  color: var(--label-black);
+  text-align: left;
+  line-height: 38px;
+  background-size: 10px 10px;
+  background-position: 0 center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  padding: 0 15px 0 15px;
+  border: 0;
+  margin: 0;
+  outline: none;
+  cursor: pointer;
 }
 
 .selector-rollup-nav-enabled {
-   @insert .selector-rollup-nav;
-   background-image: url(../svg/arrow-down-icon.svg);
+  @insert .selector-rollup-nav;
+
+  background-image: url(../svg/arrow-down-icon.svg);
 }
 
 .selector-rollup-nav-disabled {
-   @insert .selector-rollup-nav;
-   background-image: url(../svg/arrow-right-icon.svg);
+  @insert .selector-rollup-nav;
+
+  background-image: url(../svg/arrow-right-icon.svg);
 }
 
 .selector-rollup-nav-button {
-   width: 30px;
-   min-width: 30px;
-   height: 38px;
-   min-height: 38px;
-   background-color: transparent;
-   background-size: 15px 15px;
-   background-position: center center;
-   background-repeat: no-repeat;
-   padding: 0;
-   border: 0;
-   margin: 0 20px 0 0;
-   outline: none;
-   cursor: pointer;
+  width: 30px;
+  min-width: 30px;
+  height: 38px;
+  min-height: 38px;
+  background-color: transparent;
+  background-size: 15px 15px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  padding: 0;
+  border: 0;
+  margin: 0 20px 0 0;
+  outline: none;
+  cursor: pointer;
 }
 
 .selector-rollup-nav-button-all {
-   @insert .selector-rollup-nav-button;
-   background-image: url("../svg/button-selected-all.svg");
+  @insert .selector-rollup-nav-button;
+
+  background-image: url("../svg/button-selected-all.svg");
 }
 
 .selector-rollup-nav-button-partial {
-   @insert .selector-rollup-nav-button;
-   background-image: url("../svg/button-selected-partial.svg");
+  @insert .selector-rollup-nav-button;
+
+  background-image: url("../svg/button-selected-partial.svg");
 }
 
 .selector-rollup-nav-button-none {
-   @insert .selector-rollup-nav-button;
-   background-image: url("../svg/button-selected-none.svg");
+  @insert .selector-rollup-nav-button;
+
+  background-image: url("../svg/button-selected-none.svg");
 }
 
 .selector-nav {
-   display: flex;
-   justify-content: center;
-   width: 140px;
-   min-width: 140px;
-   height: auto;
-   text-align: center;
-/* text-transform: lowercase; */
-   padding: 0;
-   border-radius: 0 20px;
-   margin:0 10px 0 10px;
-   cursor: default;
+  display: flex;
+  justify-content: center;
+  width: 140px;
+  min-width: 140px;
+  height: auto;
+  text-align: center;
+
+  /* text-transform: lowercase; */
+  padding: 0;
+  border-radius: 0 20px;
+  margin: 0 10px 0 10px;
+  cursor: default;
 }
 
 /* Common for @insert */
 .selector-button {
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: left;
-   width: 160px;
-   max-width: 160px;
-   height: auto;
-   font-size:0.750rem;
-   text-align: left;
-   line-height: 0.750rem;
-   padding:4px 0 4px 10px;
-   border:0;
-   border-radius: 0 20px 20px 0;
-   margin: 0 0 2px 0;
-   outline:none;
-   overflow: visible;
-   white-space: wrap;
-   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  width: 160px;
+  max-width: 160px;
+  height: auto;
+  font-size: 0.75rem;
+  text-align: left;
+  line-height: 0.75rem;
+  padding: 4px 0 4px 10px;
+  border: 0;
+  border-radius: 0 20px 20px 0;
+  margin: 0 0 2px 0;
+  outline: none;
+  overflow: visible;
+  white-space: wrap;
+  cursor: pointer;
 }
 
 .selector-button-enabled {
-   @insert .selector-button;
-   font-family:text-bold;
-   color: var(--label-button);
-   background-color: var(--button-dark);
+  @insert .selector-button;
+
+  font-family: text-bold;
+  color: var(--label-button);
+  background-color: var(--button-dark);
 }
 
 .selector-button-disabled {
-   @insert .selector-button;
-   font-family:text-semibold;
-   color: var(--label-button-disabled-dark);
-   background-color: var(--button-disabled-dark);
+  @insert .selector-button;
+
+  font-family: text-semibold;
+  color: var(--label-button-disabled-dark);
+  background-color: var(--button-disabled-dark);
 }
 
 .selector-svg-container {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   width: 100%;
-   min-height: 28px;
-   max-height: none;
-    background-image: url(../svg/horizontal-rule-1px-black.svg); 
-   background-position: center;
-   background-repeat: repeat-x;
-   background-clip: padding-box;
-   background-color: var(--background-content);
-   padding: 0;
-   margin: 0 10px 0 0;
-   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 28px;
+  max-height: none;
+  background-image: url(../svg/horizontal-rule-1px-black.svg);
+  background-position: center;
+  background-repeat: repeat-x;
+  background-clip: padding-box;
+  background-color: var(--background-content);
+  padding: 0;
+  margin: 0 10px 0 0;
+  overflow: hidden;
 }
 
 .selector-svg {
-   width: inherit; 
-   min-height: 28px;
-   max-height: none;
-   overflow: visible;
+  width: inherit;
+  min-height: 28px;
+  max-height: none;
+  overflow: visible;
 }
 
 .selector-controls {
-   display:flex;
-   flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .selector-controls-button {
-   
+
 }
 
 .selector-controls-button-select-all {
-   
+
 }
 
 .selector-controls-button-clear {
-   
+
 }
