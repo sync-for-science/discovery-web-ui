@@ -1,268 +1,258 @@
 @charset "UTF-8";
+
 /* Sync for Science Colors Stylesheet */
+
 /* v.01.14  Updated 12/02/2019 */
 
 :root {
-/* COLOR THEME
+  /* COLOR THEME
    DISCOVERY THEME 01 - STANDARD THEME */
 
-/* GRAYS */
-   /* Gray Neutral (GN) */
-      --white: rgb(255,255,255);          /* White */
-      --white-60: rgba(255,255,255,.60);  /* White 60% opacity */
-      --gn1: rgb(230,230,230);            /* 10% Gray */
-      --gn2: rgb(205,205,205);            /* 20% Gray */
-      --gn3: rgb(180,180,180);            /* 30% Gray */
-      --gn4: rgb(155,155,155);            /* 40% Gray */
-      --gn4-15: rgba(155,155,155,.15);    /* 40% Gray 15% opacity */
-      --gn4-25: rgba(155,155,155,.25);    /* 40% Gray 25% opacity */
-      --gn4-40: rgba(155,155,155,.40);    /* 40% Gray 40% opacity */
-      --gn4-50: rgba(155,155,155,.50);    /* 40% Gray 50% opacity */
-      --gn5: rgb(130,130,130);      /* 50% Gray */
-      --gn6: rgb(105,105,105);      /* 60% Gray */
-      --gn7: rgb(80,80,80);         /* 70% Gray */
-      --gn8: rgb(55,55,55);         /* 80% Gray */
-      --gn9: rgb(30,30,30);         /* 90% Gray */
-      --black: rgb(0,0,0);          /* Black */
-      --black25: rgba(0,0,0,0.25);  /* Black 25% opacity */
+  /* GRAYS */
 
-   /* Gray Tint (GT) */
-      --gt1: rgb(233,237,244);             /* Blue Gray Light */
-      --gt1-40: rgba(233,237,244,.40);     /* Blue Gray Light */
-      --gt2: rgb(124,130,143);             /* Blue Gray Medium */
-      --gt3: rgb(166,183,217);             /* Blue Gray Medium Dark */
-      --gt4: rgb(143,158,187);             /* Blue Gray Dark */
-      --gt4-40: rgba(143,158,187,.40);     /* Blue Gray Dark 40% opacity */
-      --gt5: rgb(116,128,154);             /* Blue Gray Dark 2 */
-      --gt6: rgb(87,103,131);              /* Blue Gray Dark 3 */
-      --gt7: rgb(226,231,244);
-      --gt8: rgb(,,);
-      --gt9: rgb(,,);
+  /* Gray Neutral (GN) */
+  --white: rgb(255, 255, 255);          /* White */
+  --white-60: rgba(255, 255, 255, 0.6);  /* White 60% opacity */
+  --gn1: rgb(230, 230, 230);            /* 10% Gray */
+  --gn2: rgb(205, 205, 205);            /* 20% Gray */
+  --gn3: rgb(180, 180, 180);            /* 30% Gray */
+  --gn4: rgb(155, 155, 155);            /* 40% Gray */
+  --gn4-15: rgba(155, 155, 155, 0.15);    /* 40% Gray 15% opacity */
+  --gn4-25: rgba(155, 155, 155, 0.25);    /* 40% Gray 25% opacity */
+  --gn4-40: rgba(155, 155, 155, 0.4);    /* 40% Gray 40% opacity */
+  --gn4-50: rgba(155, 155, 155, 0.5);    /* 40% Gray 50% opacity */
+  --gn5: rgb(130, 130, 130);      /* 50% Gray */
+  --gn6: rgb(105, 105, 105);      /* 60% Gray */
+  --gn7: rgb(80, 80, 80);         /* 70% Gray */
+  --gn8: rgb(55, 55, 55);         /* 80% Gray */
+  --gn9: rgb(30, 30, 30);         /* 90% Gray */
+  --black: rgb(0, 0, 0);          /* Black */
+  --black25: rgba(0, 0, 0, 0.25);  /* Black 25% opacity */
 
-/* COLORS */
-   /* Color - Blue (CB) */
-      --cb1: rgb(69,98,163);
-      --cb2: rgb(,,);
-      --cb3: rgb(,,);
-   /* Color - Aqua (CA) */
-      --ca1: rgb(65,151,198);      /* Aqua */
-      --ca2: rgb(1,166,170);
-      --ca2-70: rgba(1,166,170,0.7);
-      --ca3: rgb(,,);
-   /* Color - Green (CG) */
-      --cg1: rgb(0,140,23);
-      --cg2: rgb(127,191,0);
-      --cg3: rgb(,,);
-     /* Color - Yellow (CY) */
-      --cy1: rgb(191,159,0);
-      --cy2: rgb(,,);
-      --cy3: rgb(,,);
-   /* Color - Orange (CO) */
-      --co1: rgb(215,140,20);      /* Orange */
-      --co2: rgb(228,198,106);     /* Light Orange */
-      --co3: rgb(,,);
-   /* Color - Red (CR) */
-      --cr1: rgb(166,55,0);
-      --cr2: rgb(255,20,20);
-      --cr3: rgb(141,48,49);
-      --cr4: rgb(255,160,160);
-      --cr5: rgb(255,10,10);
+  /* Gray Tint (GT) */
+  --gt1: rgb(233, 237, 244);             /* Blue Gray Light */
+  --gt1-40: rgba(233, 237, 244, 0.4);     /* Blue Gray Light */
+  --gt2: rgb(124, 130, 143);             /* Blue Gray Medium */
+  --gt3: rgb(166, 183, 217);             /* Blue Gray Medium Dark */
+  --gt4: rgb(143, 158, 187);             /* Blue Gray Dark */
+  --gt4-40: rgba(143, 158, 187, 0.4);     /* Blue Gray Dark 40% opacity */
+  --gt5: rgb(116, 128, 154);             /* Blue Gray Dark 2 */
+  --gt6: rgb(87, 103, 131);              /* Blue Gray Dark 3 */
+  --gt7: rgb(226, 231, 244);
+  --gt8: rgb(, ,);
+  --gt9: rgb(, ,);
 
-/* COLOR MAPS */
+  /* COLORS */
 
-/* BACKGROUND COLOR MAPS */
-   /* Background  */
-      --background-header: var(--gt5);
-         /*.ViewContainer.css|.ContentPanel.css|.DiscoveryModal.css
+  /* Color - Blue (CB) */
+  --cb1: rgb(69, 98, 163);
+  --cb2: rgb(, ,);
+  --cb3: rgb(, ,);
+
+  /* Color - Aqua (CA) */
+  --ca1: rgb(65, 151, 198);      /* Aqua */
+  --ca2: rgb(1, 166, 170);
+  --ca2-70: rgba(1, 166, 170, 0.7);
+  --ca3: rgb(, ,);
+
+  /* Color - Green (CG) */
+  --cg1: rgb(0, 140, 23);
+  --cg2: rgb(127, 191, 0);
+  --cg3: rgb(, ,);
+
+  /* Color - Yellow (CY) */
+  --cy1: rgb(191, 159, 0);
+  --cy2: rgb(, ,);
+  --cy3: rgb(, ,);
+
+  /* Color - Orange (CO) */
+  --co1: rgb(215, 140, 20);      /* Orange */
+  --co2: rgb(228, 198, 106);     /* Light Orange */
+  --co3: rgb(, ,);
+
+  /* Color - Red (CR) */
+  --cr1: rgb(166, 55, 0);
+  --cr2: rgb(255, 20, 20);
+  --cr3: rgb(141, 48, 49);
+  --cr4: rgb(255, 160, 160);
+  --cr5: rgb(255, 10, 10);
+
+  /* COLOR MAPS */
+
+  /* BACKGROUND COLOR MAPS */
+
+  /* Background  */
+  --background-header: var(--gt5);
+
+  /* .ViewContainer.css|.ContentPanel.css|.DiscoveryModal.css
          .PageFooter.css|.PageHeader.css|.ParticipantList.css */
-      --background-header-control: var(--gt6);
-         /* .PageHeader.css*/
-      --background-header-content: var(--gt4);
-         /* .Summary.css*/
-      --background-menu-hover: var(--gn4);
+  --background-header-control: var(--gt6);
 
-      --background-application: var(--gt1);
-         /* .DiscoveryApp.css|.PageHeader.css*/
-      --background-content: var(--white);
+  /* .PageHeader.css */
+  --background-header-content: var(--gt4);
 
-      --background-data: var(--co1);
+  /* .Summary.css */
+  --background-menu-hover: var(--gn4);
+  --background-application: var(--gt1);
 
-      --background-accent: var(--ca1);
-
-      --background-annotation: var(--gt1-40);
-
-      --background-timeline: var(--gt7);
-
-      --background-timeline-selector: var(--gn4-50);
-
-      --background-scrollbar-thumb: var(--gt4);
-
-      --background-scrollbar-thumb-hover: var(--gn5);
+  /* .DiscoveryApp.css|.PageHeader.css */
+  --background-content: var(--white);
+  --background-data: var(--co1);
+  --background-accent: var(--ca1);
+  --background-annotation: var(--gt1-40);
+  --background-timeline: var(--gt7);
+  --background-timeline-selector: var(--gn4-50);
+  --background-scrollbar-thumb: var(--gt4);
+  --background-scrollbar-thumb-hover: var(--gn5);
 
 
-   /* Background Highlight  */
-      --background-highlight-confirmed: var(--cg1);
-
-      --background-highlight-disconfirmed: var(--crt1);
-
-      --background-highlight-likely: var(--cg2);
-
-      --background-highlight-unlikely: var(--cy1);
+  /* Background Highlight  */
+  --background-highlight-confirmed: var(--cg1);
+  --background-highlight-disconfirmed: var(--crt1);
+  --background-highlight-likely: var(--cg2);
+  --background-highlight-unlikely: var(--cy1);
 
 
-   /* Background Interface  */
-      --background-scrollbar: var(--gt3);
+  /* Background Interface  */
+  --background-scrollbar: var(--gt3);
+  --background-overlay: var(--black25);
 
-      --background-overlay: var(--black25);
-         /* DiscoveryModal.css */
+  /* DiscoveryModal.css */
 
-   /* Button */
-      --button: var(--gt4);
+  /* Button */
+  --button: var(--gt4);
+  --button-dark: var(--gt5);
 
-      --button-dark: var(--gt5);
-         /* ContentPanel.css |  */
-      --button-disabled: var(--gt2);
-
-      --button-disabled-dark: var(--gt3);
-
-      --button-view: var(--gt1);
-
-      --button-view-disabled: var(--gt5);
-
-      --button-date-range: var(--gt5);
-
-      --button-date-range-disabled: var(--gt3);
+  /* ContentPanel.css |  */
+  --button-disabled: var(--gt2);
+  --button-disabled-dark: var(--gt3);
+  --button-view: var(--gt1);
+  --button-view-disabled: var(--gt5);
+  --button-date-range: var(--gt5);
+  --button-date-range-disabled: var(--gt3);
 
 
-   /* Tile */
-      --tile: var(--gt1);
-         /* TilesView.css */
-      --tile-selected: var(--co2);
-         /* TilesView.css */
-      --tile-selected-last: var(--co1);
-         /* TilesView.css */
-      --tile-area: var(--white);
-         /* TilesView.css */
+  /* Tile */
+  --tile: var(--gt1);
 
-    /* Content */
-      --content-header-old: var(--gt4);
-         /* ContentPanel.css */
-      --content-header: var(--gt4-trans);
-         /* ContentPanel.css */
-      --content-header-disabled: var(--gt1);
-         /* ContentPanel.css */
+  /* TilesView.css */
+  --tile-selected: var(--co2);
 
-/* FONT COLOR MAPS */
-   /* Labels */
-      --label-white: var(--white);
-         /* Selector.css| */
-      --label-gray: var(--gt2);
-         /* SummaryView.css| */
-      --label-gray-light: var(--gt1);
-         /* SummaryView.css| */
-      --label-black: var(--black);
-         /* Selector.css| */
-      --label-button: var(--white);
+  /* TilesView.css */
+  --tile-selected-last: var(--co1);
 
-      --label-button-disabled: var(--gt3);
+  /* TilesView.css */
+  --tile-area: var(--white);
 
-      --label-button-disabled-dark: var(--gt1);
+  /* TilesView.css */
 
-      --label-button-view: var(--black);
+  /* Content */
+  --content-header-old: var(--gt4);
 
-      --label-button-view-disabled: var(--white);
+  /* ContentPanel.css */
+  --content-header: var(--gt4-trans);
 
-      --label-size: var(--gt1);
+  /* ContentPanel.css */
+  --content-header-disabled: var(--gt1);
 
-      --label-size-disabled: var(--);
+  /* ContentPanel.css */
 
-      --label-date: var(--black);
+  /* FONT COLOR MAPS */
 
-      --label-date-inactive: var(--gn5);
+  /* Labels */
+  --label-white: var(--white);
 
-      --label-date-deselected: var(--);
+  /* Selector.css| */
+  --label-gray: var(--gt2);
 
-      --label-instructional: var(--);
+  /* SummaryView.css| */
+  --label-gray-light: var(--gt1);
 
-      --label-data: var(--gt6);
-         /* ContentPanelCategories.css | */
-      --label-data-disabled: var(--gt3);
-         /* ContentPanel.css | */
-      --label-data-hidden: var(--);
+  /* SummaryView.css| */
+  --label-black: var(--black);
 
-      --label-participant: var(--black);
+  /* Selector.css| */
+  --label-button: var(--white);
+  --label-button-disabled: var(--gt3);
+  --label-button-disabled-dark: var(--gt1);
+  --label-button-view: var(--black);
+  --label-button-view-disabled: var(--white);
+  --label-size: var(--gt1);
+  --label-size-disabled: var(--);
+  --label-date: var(--black);
+  --label-date-inactive: var(--gn5);
+  --label-date-deselected: var(--);
+  --label-instructional: var(--);
+  --label-data: var(--gt6);
 
-      --label-participant-white: var(--white);
+  /* ContentPanelCategories.css | */
+  --label-data-disabled: var(--gt3);
 
-      --label-title: var(--gt5);
+  /* ContentPanel.css | */
+  --label-data-hidden: var(--);
+  --label-participant: var(--black);
+  --label-participant-white: var(--white);
+  --label-title: var(--gt5);
+  --label-tile: var(--black);
 
-      --label-tile: var(--black);
-         /* TilesView.css */
-      --label-tile-selected: var(--black);
-         /* TilesView.css */
-      --label-tile-selected-last: var(--white);
-         /* TilesView.css */
+  /* TilesView.css */
+  --label-tile-selected: var(--black);
 
-   /* Text */
-      --text: var(--);
+  /* TilesView.css */
+  --label-tile-selected-last: var(--white);
 
-      --text-deselected: var(--);
+  /* TilesView.css */
 
-      --text-accent: var(--);
-
-      --text-accent-dark: var(--);
-
-      --text-link: var(--gt5);
-
-      --text-hover: var(--gt5);
-
-      --data: var(--black);
-
-      --data-deselected: var(--);
+  /* Text */
+  --text: var(--);
+  --text-deselected: var(--);
+  --text-accent: var(--);
+  --text-accent-dark: var(--);
+  --text-link: var(--gt5);
+  --text-hover: var(--gt5);
+  --data: var(--black);
+  --data-deselected: var(--);
 
 
-/* BORDER COLOR MAPS */
-      --separator-white: var(--white);
+  /* BORDER COLOR MAPS */
+  --separator-white: var(--white);
+  --separator-light: var(--gt1);
 
-      --separator-light: var(--gt1);
-         /* SummaryView.css */
-      --separator-dark: var(--gt4);
-
-      --separator-red: var(--cr5);
-
-      --separator-dark-translucent: var(--gt4-40);
-
-      --border-modal: var(--gt4);
-
-      --border-accent: var(--gt5);
+  /* SummaryView.css */
+  --separator-dark: var(--gt4);
+  --separator-red: var(--cr5);
+  --separator-dark-translucent: var(--gt4-40);
+  --border-modal: var(--gt4);
+  --border-accent: var(--gt5);
 
 
-/* FILL COLOR MAPS */
-      --dots-active: var(--ca2-70);
-      --dots-active-stroke: var(--white);
-      --dots-active-search: var(--cr4);
-      --dots-active-search-stroke: var(--white);
-      --dots-active-highlight: var(--cr3);
-      --dots-active-highlight-stroke: var(--white);
-      --dots-active-highlight-search: var();
-      --dots-active-highlight-search-stroke: var(--white);
-      --dots-inactive: var(--gn4-15);
-      --dots-inactive-stroke: var(--white);
-      --dots-content-inactive: var(--gn4-25);
-      --dots-content-inactive-stroke: var(--white);
-      --dots-inactive-search: var();
-      --dots-inactive-search-stroke: var(--white);
-      --dots-inactive-highlight: var(--gn4);
-      --dots-inactive-highlight-stroke: var(--white);
-      --dots-inactive-highlight-search: var(--cr4);
-      --dots-inactive-highlight-search-stroke: var(--white);
-      --dots-highlight-ring: transparent;
-/*      --dots-highlight-ring-stroke: var(--cr3); */
-      --dots-highlight-ring-stroke: var(--co1);
+  /* FILL COLOR MAPS */
+  --dots-active: var(--ca2-70);
+  --dots-active-stroke: var(--white);
+  --dots-active-search: var(--cr4);
+  --dots-active-search-stroke: var(--white);
+  --dots-active-highlight: var(--cr3);
+  --dots-active-highlight-stroke: var(--white);
+  --dots-active-highlight-search: var();
+  --dots-active-highlight-search-stroke: var(--white);
+  --dots-inactive: var(--gn4-15);
+  --dots-inactive-stroke: var(--white);
+  --dots-content-inactive: var(--gn4-25);
+  --dots-content-inactive-stroke: var(--white);
+  --dots-inactive-search: var();
+  --dots-inactive-search-stroke: var(--white);
+  --dots-inactive-highlight: var(--gn4);
+  --dots-inactive-highlight-stroke: var(--white);
+  --dots-inactive-highlight-search: var(--cr4);
+  --dots-inactive-highlight-search-stroke: var(--white);
+  --dots-highlight-ring: transparent;
 
-/* PART 03 - Discontinued. Confirm and Remove. */
+  /*      --dots-highlight-ring-stroke: var(--cr3); */
+  --dots-highlight-ring-stroke: var(--co1);
 
-/* Grayscale Pallet GS - 082119
+  /* PART 03 - Discontinued. Confirm and Remove. */
+
+  /* Grayscale Pallet GS - 082119
    --gs-000-100: rgba(255,255,255,1.00);
    --gs-010-100: rgba(230,230,230,1.00);
    --gs-020-100: rgba(204,204,204,1.00);
@@ -274,8 +264,9 @@
    --gs-100-025: rgba(0,0,0,0.25);
    --gs-100-010: rgba(0,0,0,0.10); */
 
-/* Base Color Sets - 083019 */
-/* Interface Neutral Solids
+  /* Base Color Sets - 083019 */
+
+  /* Interface Neutral Solids
    --ins-000: rgb(255,255,255);
    --ins-010: rgb(230,230,230);
    --ins-020: rgb(205,205,205);
@@ -289,38 +280,39 @@
    --ins-100: rgb(0,0,0);
    */
 
-/* Interface Neutral Translucents
+  /* Interface Neutral Translucents
    --int-100-010: rgba(0,0,0,0.10);
    --int-100-025: rgba(0,0,0,0.25);
    */
 
-/* Data Solids */
+  /* Data Solids */
 
 
-/* Data Translucents */
+  /* Data Translucents */
 
 
-/* Top Level Color Abstractions - 083019 */
-/* Common Elements */
+  /* Top Level Color Abstractions - 083019 */
 
-/* Backgrounds
+  /* Common Elements */
+
+  /* Backgrounds
    --background-white: var(--ins-000);
    --background-neutral-020: var(--ins-020);
    --background-neutral-040: var(--ins-040);
 */
 
-/* Labels
+  /* Labels
    --label-white: var(--ins-000);
    --label-neutral-050: var(--ins-050);
    --label-black: var(--ins-100);
 */
 
-/* Interface Structure Colors
+  /* Interface Structure Colors
    --background: var(--gs-000-100);
    --modal-shadow: var(--gs-100-025);
  */
 
-   /* New UX Color Set - 060719
+  /* New UX Color Set - 060719
    --black-100: rgba(34,34,34,1.00);
    --black-025: rgba(34,34,34,0.25);
    --gray-dark-100: rgba(163,177,204,1.00);
@@ -343,7 +335,7 @@
    --white-060: rgba(255,255,255,0.60);
 */
 
-   /* General Colors
+  /* General Colors
    --primary-100: rgba(0,26,114,1.00);
    --primary-040: rgba(0,26,114,0.40);
    --accent-100: rgba(255,199,14,1.00);
@@ -355,7 +347,7 @@
    --provider-100: rgba(1,166,170,1.00);
 */
 
-   /* Grays
+  /* Grays
    --gray-dark-100: rgba(30,30,30,1.00);
    --gray-medium-100: rgba(167,168,170,1.00);
    --gray-medium-060: rgba(167,168,170,0.60);
@@ -364,7 +356,7 @@
    --gray-light-020: rgba(200,200,200,0.20);
 */
 
-   /* Miscelleous Colors
+  /* Miscelleous Colors
    --blue-light-100: rgba(192,197,219,1.00);
    --red-100: rgba(255,20,20,1.00);
    --red-dark-100: rgba(141,48,49,1.00);
@@ -372,7 +364,7 @@
    --red-light-100: rgba(255,160,160,1.00);
  */
 
-   /* Data Colors
+  /* Data Colors
    --data: var(--red-dark-100);
    --data-label: var(--gray-medium-100);
    --data-divider: var(--gray-light-100);
@@ -380,19 +372,19 @@
 */
 
 
-   /* Category Colors
+  /* Category Colors
    --category: var(--category-100);
    --category-label-light: var(--white-100);
    --category-label-dark: var(--category-100);
 */
 
-   /* Provider Colors
+  /* Provider Colors
    --provider: var(--provider100);
    --provider-label-light: var(--white100);
    --provider-label-dark: var(--provider100);
 */
 
-   /* Dot Colors
+  /* Dot Colors
    --dots-active: var(--category-070);
    --dots-active-stroke: var(--white-100);
    --dots-active-search: var(--red-light-100);
@@ -413,7 +405,7 @@
    --dots-highlight-ring-stroke: var(--red-dark-100);
 */
 
-   /*
+  /*
    --confirmed: rgba(0,140,23,1.0);
    --likely: rgba(127,191,0,1.0);
    --unlikely: rgba(191,159,0,1.0);

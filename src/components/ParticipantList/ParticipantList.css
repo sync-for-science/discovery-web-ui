@@ -1,226 +1,233 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery ParticipantList Stylesheet */
+
 /* v.01.15 Updated 10/08/2019 */
 
 .participant-list {
-   height: 100%;
+  height: 100%;
 }
 
 .participant-list-header {
-   position: fixed;
-   top: 0;
-   left: 0;
-   display: flex;
-   flex-direction: row;
-   height: 60px;
-   min-height: 60px;
-   width: 100%;
-   background-color: var(--background-header);
-   padding: 0 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  height: 60px;
+  min-height: 60px;
+  width: 100%;
+  background-color: var(--background-header);
+  padding: 0 20px;
 }
 
 .logo-box {
-   display: flex;
-   align-items: center;
-   height: 60px;
-   min-height: 60px;
-   width: 220px;
-   min-width: 220px;
-   padding: 0;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  min-height: 60px;
+  width: 220px;
+  min-width: 220px;
+  padding: 0;
 }
 
 .logo-s4s-button {
-   height: 60px;
-   width: 220px;
-   background-color: transparent;
-   background-size: 220px 60px;
-   background-repeat: no-repeat;
-   padding: 0;
-   border: none;
-   outline: none;
-   cursor: none;
+  height: 60px;
+  width: 220px;
+  background-color: transparent;
+  background-size: 220px 60px;
+  background-repeat: no-repeat;
+  padding: 0;
+  border: none;
+  outline: none;
+  cursor: none;
 }
 
 .logo-s4s-button-off {
-   @insert .logo-s4s-button;
-   background-image: url(../../svg/logo-s4s-off.svg);
+  @insert .logo-s4s-button;
+
+  background-image: url(../../svg/logo-s4s-off.svg);
 }
 
 .logo-s4s-button-on {
-   @insert .logo-s4s-button;
-   background-image: url(../../svg/logo-s4s-on.svg);
+  @insert .logo-s4s-button;
+
+  background-image: url(../../svg/logo-s4s-on.svg);
 }
 
 .participant-list-content {
-   z-index: -1;
-   position: absolute;
-   top: 61px;
-   display: flex;
-   flex-direction: column;
-   height: 100%;
-   width: 95%;
-   background-color: var(--background-content);
-   padding: 15px;
-   margin: 15px 20px;
+  z-index: -1;
+  position: absolute;
+  top: 61px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 95%;
+  background-color: var(--background-content);
+  padding: 15px;
+  margin: 15px 20px;
 }
 
 .participant-list-title {
-   width: 100%;
-   font-family: header-bold;
-   font-size: 1.200rem;
-   color:var(--label-title);
-   border-bottom: 1px solid var(--border-accent);
-   padding: 0 0 5px 0;
+  width: 100%;
+  font-family: header-bold;
+  font-size: 1.2rem;
+  color: var(--label-title);
+  border-bottom: 1px solid var(--border-accent);
+  padding: 0 0 5px 0;
 }
 
 .participant-list-content-data {
-   height: auto;
-   padding: 0 0 20px 0;
+  height: auto;
+  padding: 0 0 20px 0;
 }
 
 .participant-list-header-wrapper {
-   display: flex;
-   flex-direction: row;
-   height: auto;
-   width: auto;
-   font-family: discovery-regular;
-   font-size: 1.000rem;
-   white-space: pre-wrap;
+  display: flex;
+  flex-direction: row;
+  height: auto;
+  width: auto;
+  font-family: discovery-regular;
+  font-size: 1rem;
+  white-space: pre-wrap;
 }
 
 .participant-list-column-header {
-   height: auto;
-   font-family: header-bold;
-   color: var(--label-title);
-   font-size: 1.000rem;
-   padding: 10px 0 5px 5px;
-   white-space: nowrap;
+  height: auto;
+  font-family: header-bold;
+  color: var(--label-title);
+  font-size: 1rem;
+  padding: 10px 0 5px 5px;
+  white-space: nowrap;
 }
 
 .participant-list-column-header-flagged {
-   @insert .participant-list-column-header;
-   width: 18px;
-   min-width: 18px;
-   padding: 10px 0 5px 0;
+  @insert .participant-list-column-header;
+
+  width: 18px;
+  min-width: 18px;
+  padding: 10px 0 5px 0;
 }
 
 .participant-list-column-header-name-id {
-   @insert .participant-list-column-header;
-   width: 286px;
-   min-width: 286px;
+  @insert .participant-list-column-header;
+
+  width: 286px;
+  min-width: 286px;
 }
 
 .participant-list-column-header-gender {
-   @insert .participant-list-column-header;
-   width: 80px;
-   min-width: 80px;
+  @insert .participant-list-column-header;
+
+  width: 80px;
+  min-width: 80px;
 }
 
 .participant-list-column-header-dob {
-   @insert .participant-list-column-header;
-   width: 116px;
-   min-width: 116px;
-   text-align: center;
+  @insert .participant-list-column-header;
+
+  width: 116px;
+  min-width: 116px;
+  text-align: center;
 }
 
 .participant-list-column-header-dates {
-   @insert .participant-list-column-header;
-   width: 116px;
-   min-width: 116px;
-   text-align: center;
+  @insert .participant-list-column-header;
+
+  width: 116px;
+  min-width: 116px;
+  text-align: center;
 }
 
 .participant-list-column-header-providers {
-   @insert .participant-list-column-header;
-   width: 98px;
-   min-width: 98px;
-   text-align: center;
-   padding: 10px 0 5px 10px;
+  @insert .participant-list-column-header;
+
+  width: 98px;
+  min-width: 98px;
+  text-align: center;
+  padding: 10px 0 5px 10px;
 }
 
 .participant-list-column-header-values {
-   @insert .participant-list-column-header;
-   width: 116px;
-   min-width: 116px;
-   text-align: center;
-   padding: 10px 10px 5px 10px;
-   white-space: nowrap;
+  @insert .participant-list-column-header;
+
+  width: 116px;
+  min-width: 116px;
+  text-align: center;
+  padding: 10px 10px 5px 10px;
+  white-space: nowrap;
 }
 
 .participant-list-data-wrapper {
-   display: grid;
-   grid-template-columns: repeat(7, minmax(min-content, max-content));
-   grid-column-gap: 5px;
-   grid-auto-rows: max-content;
-   height: calc(100vh - 12.500rem);
-   font-family: text;
-   font-size: 1.000rem;
-   margin: 5px 0 20px 0;
-   overflow-y: scroll;
-   white-space: pre-wrap;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(min-content, max-content));
+  grid-column-gap: 5px;
+  grid-auto-rows: max-content;
+  height: calc(100vh - 12.5rem);
+  font-family: text;
+  font-size: 1rem;
+  margin: 5px 0 20px 0;
+  overflow-y: scroll;
+  white-space: pre-wrap;
 }
 
 .participant-list-menu-button {
-   height: 40px;
-   width: 40px;
-   min-width: 40px;
-   background-color: transparent;
-   background-image: url(../../svg/icon-header-menu.svg);
-   background-position: center center;
-   background-size: 30px 30px;
-   background-repeat: no-repeat;
-   padding: 0;
-   border: 0;
-   margin: 10px 0 10px 0;
-   cursor: pointer;
+  height: 40px;
+  width: 40px;
+  min-width: 40px;
+  background-color: transparent;
+  background-image: url(../../svg/icon-header-menu.svg);
+  background-position: center center;
+  background-size: 30px 30px;
+  background-repeat: no-repeat;
+  padding: 0;
+  border: 0;
+  margin: 10px 0 10px 0;
+  cursor: pointer;
 }
 
 .participant-list-menu-button-open {
-   height: 40px;
-   width: 40px;
-   min-width: 40px;
-   background-color: transparent;
-   background-image: url(../../svg/icon-header-menu-hover.svg);
-   background-position: center center;
-   background-size: 30px 30px;
-   background-repeat: no-repeat;
-   padding: 0;
-   border: 0;
-   margin: 10px 0 10px 0;
-   cursor: pointer;
+  height: 40px;
+  width: 40px;
+  min-width: 40px;
+  background-color: transparent;
+  background-image: url(../../svg/icon-header-menu-hover.svg);
+  background-position: center center;
+  background-size: 30px 30px;
+  background-repeat: no-repeat;
+  padding: 0;
+  border: 0;
+  margin: 10px 0 10px 0;
+  cursor: pointer;
 }
 
 .participant-list-menu {
-   position: absolute;
-   top: 42px;
-   left: 240px;
-   z-index: 1;
-   width: 120px;
-   background-color: var(--background-content);
-   padding: 10px;
-   border: 1px solid var(--primary-100);
-   margin: 0 20px 0 0;
+  position: absolute;
+  top: 42px;
+  left: 240px;
+  z-index: 1;
+  width: 120px;
+  background-color: var(--background-content);
+  padding: 10px;
+  border: 1px solid var(--primary-100);
+  margin: 0 20px 0 0;
 }
 
 .participant-list-menu-item {
-   height: 20px;
-   width: auto;
-   font-family: text;
-   font-size:1.000rem;
-   background-color: var(--background-content);
-   background-position: 5px 0;
-   background-repeat: no-repeat;
-   border: none;
-   cursor: pointer;
-   padding: 2px 0 0 5px;
-   margin: 0 0 5px 0;
+  height: 20px;
+  width: auto;
+  font-family: text;
+  font-size: 1rem;
+  background-color: var(--background-content);
+  background-position: 5px 0;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  padding: 2px 0 0 5px;
+  margin: 0 0 5px 0;
 }
 
 .participant-list-menu-item:hover {
-   width: auto;
-   background-color: var(--background-menu-hover);
+  width: auto;
+  background-color: var(--background-menu-hover);
 }
-
-
-

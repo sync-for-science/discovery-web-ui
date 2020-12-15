@@ -1,29 +1,35 @@
 @charset "UTF-8";
+
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery CompareView Stylesheet */
+
 /* v.01.21 Updated 01/08/2020 */
 
 .compare-view {
-   @insert .view-container;
-   top: 166px;
+  @insert .view-container;
+
+  top: 166px;
+
   /* height: calc(100% - 176px); */
-   background-color: var(--background-content);
-   margin: 0;
-/*   overflow-x: hidden;
+  background-color: var(--background-content);
+  margin: 0;
+
+  /*   overflow-x: hidden;
    overflow-y: auto; */
-   display:flex;
-   flex-direction: column; 
+  display: flex;
+  flex-direction: column;
 }
 
 .compare-view-scroller {
-   position: relative;
-   top: 0;
-   height: inherit;
-/*   display: flex;
+  position: relative;
+  top: 0;
+  height: inherit;
+
+  /*   display: flex;
    flex-direction: column; */
-   margin: 0 0 20px 0;
-   overflow-y: auto;
+  margin: 0 0 20px 0;
+  overflow-y: auto;
 }
 
 .compare-view-all-unique-items {
@@ -31,247 +37,256 @@
 }
 
 .compare-view-all-unique-items-empty {
-   font-family: text-italic;
-   margin: 25px 0px 0px 30px;
+  font-family: text-italic;
+  margin: 25px 0 0 30px;
 }
 
 .compare-view-header {
-   display: flex;
-   flex-direction: row;
-   justify-content:flex-start;
-   width: 100%;
-   height: 30px;
-   line-height: 30px;
-   font-family: data-text;
-   font-size: 0.750rem;
-   color: var(--label-white);
-   background-color: var(--background-header-content);
-   border-bottom: solid 1px var(--separator-white);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  font-family: data-text;
+  font-size: 0.75rem;
+  color: var(--label-white);
+  background-color: var(--background-header-content);
+  border-bottom: solid 1px var(--separator-white);
 }
 
 .compare-view-header-button {
-   width: 80px;
-   height: 16px;
-   max-height: 16px;
-   font-family: label-bold;
-   font-size: 12px;
-   text-align: center;
-   line-height: 14px;
-   border-radius: 20px;
-   padding: 3px 0 0 0;
-   background-color: var(--button-date-range);
-   margin: auto 0 auto 20px;
-   outline: none;
-   border: solid 0px transparent;
+  width: 80px;
+  height: 16px;
+  max-height: 16px;
+  font-family: label-bold;
+  font-size: 12px;
+  text-align: center;
+  line-height: 14px;
+  border-radius: 20px;
+  padding: 3px 0 0 0;
+  background-color: var(--button-date-range);
+  margin: auto 0 auto 20px;
+  outline: none;
+  border: solid 0 transparent;
 }
 
 .compare-view-header-button-clear {
-   @insert .compare-view-header-button;
-   color: var(--label-gray-light);
-   cursor: default;
+  @insert .compare-view-header-button;
+
+  color: var(--label-gray-light);
+  cursor: default;
 }
 
 .compare-view-header-button-clear-selected {
-   @insert .compare-view-header-button;
-   color: var(--label-white);
-   cursor: pointer;
+  @insert .compare-view-header-button;
+
+  color: var(--label-white);
+  cursor: pointer;
 }
 
 .compare-view-header-button-clear-selected:active {
-   background-color: var(--button-disabled-dark);
+  background-color: var(--button-disabled-dark);
 }
 
 .compare-view-multisource-check {
-   position: relative;
-   top: 4px;
-   width: 14px;
-   height: 14px;
-   margin-right: 5px;
-   cursor: pointer;
+  position: relative;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  margin-right: 5px;
+  cursor: pointer;
 }
 
 .compare-view-multisource-label {
-   position: relative;
-   top: -0.5px;
-   margin-left: 20px;
-   cursor: pointer;
+  position: relative;
+  top: -0.5px;
+  margin-left: 20px;
+  cursor: pointer;
 }
 
 .compare-view-category-container {
-   position: relative;
-   top: 0;
-   display: flex;
-   flex-direction: column;
-   margin: 0 0 20px 0;
+  position: relative;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 20px 0;
 }
 
 .compare-view-title-container {
-   display: flex;
-   flex-direction: row;
-/*   width: 100%; */
-   width: 9.5rem;
-   max-height: 30px;
-   padding: 0;
-   border-top: solid var(--separator-dark-translucent) 1px;
-   margin: 10px 20px 10px 0;
-   background-color: var(--background-header-content);
+  display: flex;
+  flex-direction: row;
+
+  /*   width: 100%; */
+  width: 9.5rem;
+  max-height: 30px;
+  padding: 0;
+  border-top: solid var(--separator-dark-translucent) 1px;
+  margin: 10px 20px 10px 0;
+  background-color: var(--background-header-content);
 }
 
 .compare-view-title {
-   @insert .view-title;
-/*   width: 8.375rem; */
-   width: 5.9rem;
-   height: 30px;
-   min-height: 30px;
-   font-family: header-bold;
-   font-size: 0.813rem;
-   color: var(--label-black);
-   padding: 0 0 0 20px;
-/*   background-color: var(--background-header-content); */
+  @insert .view-title;
+
+  /*   width: 8.375rem; */
+  width: 5.9rem;
+  height: 30px;
+  min-height: 30px;
+  font-family: header-bold;
+  font-size: 0.813rem;
+  color: var(--label-black);
+  padding: 0 0 0 20px;
+
+  /*   background-color: var(--background-header-content); */
 }
 
 .compare-view-unique-item-container {
-   position: relative;
-   top: 0;
-   left: 0;
-   display: flex;
-   flex-direction: row;
-   width: 100%;
-   /* height: calc(100% - 38px); */
-   margin: 0;
-   background-color: var(--background-content);
-   padding: 0;
-   overflow-x: hidden;
-   overflow-y: hidden;
-   
+  position: relative;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  /* height: calc(100% - 38px); */
+  margin: 0;
+  background-color: var(--background-content);
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .compare-view-category-header-button {
-   width: 30px;
-   min-width: 30px;
-   height: 28px;
-   min-height: 28px;
-   background-color: transparent;
-   background-size: 15px 15px;
-   background-position: right center;
-   background-repeat: no-repeat;
-   padding: 0;
-   border: 0;
-/*   margin: 0 21px 0 auto; */
-   outline: none;
-   cursor: pointer;
+  width: 30px;
+  min-width: 30px;
+  height: 28px;
+  min-height: 28px;
+  background-color: transparent;
+  background-size: 15px 15px;
+  background-position: right center;
+  background-repeat: no-repeat;
+  padding: 0;
+  border: 0;
+
+  /*   margin: 0 21px 0 auto; */
+  outline: none;
+  cursor: pointer;
 }
 
 .compare-view-category-header-button-all {
-   @insert .compare-view-category-header-button;
-   background-image: url("../../svg/compare-button-selected-all.svg");
+  @insert .compare-view-category-header-button;
+
+  background-image: url("../../svg/compare-button-selected-all.svg");
 }
 
 .compare-view-category-header-button-partial {
-   @insert .compare-view-category-header-button;
-   background-image: url("../../svg/compare-button-selected-partial.svg");
+  @insert .compare-view-category-header-button;
+
+  background-image: url("../../svg/compare-button-selected-partial.svg");
 }
 
 .compare-view-category-header-button-none {
-   @insert .compare-view-category-header-button;
-   background-image: url("../../svg/compare-button-selected-none.svg");
+  @insert .compare-view-category-header-button;
+
+  background-image: url("../../svg/compare-button-selected-none.svg");
 }
 
 .compare-view-record-button {
-   width: 133px;
-   max-width: 133px;
-   height: auto;
-   min-height: 50px;
-   font-family: data-text;
-   font-size: 0.750rem;
-   line-height: normal;
-   text-align: left;
-   padding: 10px;
-   border: 0;
-   border-radius: 5px;
-   background-color: var(--background-application);
-   margin: 0 0 10px 20px;
-   cursor: pointer;
+  width: 133px;
+  max-width: 133px;
+  height: auto;
+  min-height: 50px;
+  font-family: data-text;
+  font-size: 0.75rem;
+  line-height: normal;
+  text-align: left;
+  padding: 10px;
+  border: 0;
+  border-radius: 5px;
+  background-color: var(--background-application);
+  margin: 0 0 10px 20px;
+  cursor: pointer;
 }
 
 .compare-view-record-button-selected {
-   width: 133px;
-   max-width: 133px;
-   height: auto;
-   min-height: 50px;
-   font-family: data-text-bold;
-   font-size: 0.750rem;
-   line-height: normal;
-   text-align: left;
-   padding: 10px;
-   border: 0;
-   border-radius: 5px;
-   color: var(--label-tile-selected);
-   background-color: var(--tile-selected);
-   margin: 0 0 10px 20px;
+  width: 133px;
+  max-width: 133px;
+  height: auto;
+  min-height: 50px;
+  font-family: data-text-bold;
+  font-size: 0.75rem;
+  line-height: normal;
+  text-align: left;
+  padding: 10px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--label-tile-selected);
+  background-color: var(--tile-selected);
+  margin: 0 0 10px 20px;
 }
 
 .compare-view-record-button-selected-last {
-   width: 133px;
-   max-width: 133px;
-   height: auto;
-   min-height: 50px;
-   font-family: data-text-bold;
-   font-size: 0.750rem;
-   line-height: normal;
-   text-align: left;
-   padding: 10px;
-   border: 0;
-   border-radius: 5px;
-   color: var(--label-black);
-   background-color: var(--tile-selected-last);
-   margin: 0 0 10px 20px;
+  width: 133px;
+  max-width: 133px;
+  height: auto;
+  min-height: 50px;
+  font-family: data-text-bold;
+  font-size: 0.75rem;
+  line-height: normal;
+  text-align: left;
+  padding: 10px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--label-black);
+  background-color: var(--tile-selected-last);
+  margin: 0 0 10px 20px;
 }
 
 .compare-view-data-column {
-   display:flex;
-   flex-direction: column;
-   width: auto;
+  display: flex;
+  flex-direction: column;
+  width: auto;
 }
 
 .compare-view-data-row {
-   display: flex;
-   flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .compare-view-sparkline {
-   display: flex;
-   align-items: left;
-   width: 300px;
-   margin: 0 0 0 -20px;
+  display: flex;
+  align-items: left;
+  width: 300px;
+  margin: 0 0 0 -20px;
 }
 
 .compare-view-sparkline-selected {
-   display: flex;
-   align-items: left;
-   width: 300px;
-   margin: 0 0 0 -20px;
+  display: flex;
+  align-items: left;
+  width: 300px;
+  margin: 0 0 0 -20px;
 }
 
 .compare-view-sparkline-last {
-   display: flex;
-   align-items: left;
-   width: 300px;
-   margin: 0 0 0 -20px;
+  display: flex;
+  align-items: left;
+  width: 300px;
+  margin: 0 0 0 -20px;
 }
 
 .compare-view-date-range {
-   min-width: 85px;
-   font-family: data-number;
-   font-size: 0.750rem;
-   text-align: right;
-   margin: 0 20px 0 0;
+  min-width: 85px;
+  font-family: data-number;
+  font-size: 0.75rem;
+  text-align: right;
+  margin: 0 20px 0 0;
 }
 
 .compare-view-provider {
-   font-family: data-text;
-   font-size: 0.750rem;
-   text-align: left;
-   margin: 0 0 0 15px;
-   user-select: none;
+  font-family: data-text;
+  font-size: 0.75rem;
+  text-align: left;
+  margin: 0 0 0 15px;
+  user-select: none;
 }

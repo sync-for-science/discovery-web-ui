@@ -1,16 +1,15 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery HighlightDiv Stylesheet */
+
 /* v.01.01 Updated 09/14/2019 */
 
 .highlight-resource {
-   background-color: var(--tile-selected);
+  background-color: var(--tile-selected);
 }
 
 .highlight-resource-last {
-   background-color: var(--tile-selected-last);
-   display: flex;
-   
-   border-radius: 3px;
+  background-color: var(--tile-selected-last);
+  display: flex;
+  border-radius: 3px;
 }
-

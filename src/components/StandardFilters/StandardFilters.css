@@ -1,11 +1,13 @@
 @charset "UTF-8";
+
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery StandardFilters Stylesheet */
+
 /* v.01.05 Updated 08/21/2019 */
 
 .standard-filters {
-/*    position: fixed;
+  /*    position: fixed;
     top: 46px;
     left: -150px;
     height: 100%;
@@ -13,155 +15,155 @@
 }
 
 .standard-filters-categories-and-providers {
-	position: fixed;
-	top: 166px;
-	left: 0;
-	height: auto;
-   width: 100%;
-	min-width: 1024px;
-	padding: 0;
-   margin: 0;
-	overflow: visible;
+  position: fixed;
+  top: 166px;
+  left: 0;
+  height: auto;
+  width: 100%;
+  min-width: 1024px;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
 }
 
 .standard-filters-category-nav-button-container {
-	display: flex;
-   flex-direction: row;
-   height: 36px;
-	min-height: 36px;
-	width: 146px;
-	min-width: 146px;
-	padding: 0;
-   margin: 0 0 0 10px;
-	cursor: default;
+  display: flex;
+  flex-direction: row;
+  height: 36px;
+  min-height: 36px;
+  width: 146px;
+  min-width: 146px;
+  padding: 0;
+  margin: 0 0 0 10px;
+  cursor: default;
 }
 
 .standard-filters-category-nav-button-select-all {
-   width: 80px;
-   height: 20px;
-   font-family: header-bold;
-   font-size: 0.750rem;
-   color: var(--blue-medium-100);
-   line-height: 20px;
-   background-color: var(--gs-000-100);
-   padding: 0;
-   border: none;
-   border-radius: 20px;
-   margin: 8px 0;
-   outline: none;
+  width: 80px;
+  height: 20px;
+  font-family: header-bold;
+  font-size: 0.75rem;
+  color: var(--blue-medium-100);
+  line-height: 20px;
+  background-color: var(--gs-000-100);
+  padding: 0;
+  border: none;
+  border-radius: 20px;
+  margin: 8px 0;
+  outline: none;
 }
 
 .standard-filters-category-nav-button-clear {
-   width: 56px;
-   height: 20px;
-   font-family: header-bold;
-   font-size: 0.750rem;
-   color: var(--blue-medium-100);
-   line-height: 20px;
-   background-color: var(--gs-000-100);
-   padding: 0;
-   border: none;
-   border-radius: 20px;
-   margin: 8px 5px 8px auto;
-   outline: none;
+  width: 56px;
+  height: 20px;
+  font-family: header-bold;
+  font-size: 0.75rem;
+  color: var(--blue-medium-100);
+  line-height: 20px;
+  background-color: var(--gs-000-100);
+  padding: 0;
+  border: none;
+  border-radius: 20px;
+  margin: 8px 5px 8px auto;
+  outline: none;
 }
 
 .standard-filters-category-nav-spacer-bottom {
-	height: 3px;
-	min-height: 3px;
-	width: 182px;
-	min-width: 182px;
-	padding: 0;
-   margin: 2px 0 8px;
+  height: 3px;
+  min-height: 3px;
+  width: 182px;
+  min-width: 182px;
+  padding: 0;
+  margin: 2px 0 8px;
 }
 
 .standard-filters-provider-nav-spacer-top {
-	height: 3px;
-	min-height: 3px;
-	width: 182px;
-	min-width: 182px;
-	padding: 0;
-   margin: 0;
+  height: 3px;
+  min-height: 3px;
+  width: 182px;
+  min-width: 182px;
+  padding: 0;
+  margin: 0;
 }
 
 .standard-filters-provider-nav-button-container {
-	display: flex;
-   flex-direction: row;
-   height: 36px;
-	min-height: 36px;
-	width: 146px;
-	min-width: 146px;
-	padding: 0;
-   margin: 0 0 0 10px;
-	cursor: default;
+  display: flex;
+  flex-direction: row;
+  height: 36px;
+  min-height: 36px;
+  width: 146px;
+  min-width: 146px;
+  padding: 0;
+  margin: 0 0 0 10px;
+  cursor: default;
 }
 
 .standard-filters-provider-nav-button-select-all {
-   width: 80px;
-   height: 20px;
-   font-family: header-bold;
-   font-size: 0.750rem;
-   color: var(--blue-medium-100);
-   line-height: 20px;
-   background-color: var(--gs-000-100);
-   padding: 0;
-   border: none;
-   border-radius: 20px;
-   margin: 8px 0;
+  width: 80px;
+  height: 20px;
+  font-family: header-bold;
+  font-size: 0.75rem;
+  color: var(--blue-medium-100);
+  line-height: 20px;
+  background-color: var(--gs-000-100);
+  padding: 0;
+  border: none;
+  border-radius: 20px;
+  margin: 8px 0;
 }
 
 .standard-filters-provider-nav-button-clear {
-   width: 56px;
-   height: 20px;
-   font-family: header-bold;
-   font-size: 0.750rem;
-   color: var(--blue-medium-100);
-   line-height: 20px;
-   background-color: var(--gs-000-100);
-   padding: 0;
-   border: none;
-   border-radius: 20px;
-   margin: 8px 5px 8px auto;
+  width: 56px;
+  height: 20px;
+  font-family: header-bold;
+  font-size: 0.75rem;
+  color: var(--blue-medium-100);
+  line-height: 20px;
+  background-color: var(--gs-000-100);
+  padding: 0;
+  border: none;
+  border-radius: 20px;
+  margin: 8px 5px 8px auto;
 }
 
 .standard-filters-provider-nav-spacer-bottom {
-	height: 3px;
-	min-height: 3px;
-	width: 182px;
-	min-width: 182px;
-	padding: 0;
-   margin: 3px 0 0;
+  height: 3px;
+  min-height: 3px;
+  width: 182px;
+  min-width: 182px;
+  padding: 0;
+  margin: 3px 0 0;
 }
 
-.standard-filters-single-provider{
-	display: flex;
-	flex-direction: column;
-   justify-content: center;
-	align-items: center;
-	height: 28px;
-	max-height: 28px; 
-	min-width: 184px;
-	max-width: 184px;
-	background-color: var(--provider);
-	margin: 10px 0 0 20px;
+.standard-filters-single-provider {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 28px;
+  max-height: 28px;
+  min-width: 184px;
+  max-width: 184px;
+  background-color: var(--provider);
+  margin: 10px 0 0 20px;
 }
 
-.standard-filters-single-provider-label{
-	display: flex;
-	flex-direction: column;
-   justify-content: center;
-	align-items: center;
-	height: 28px;
-	max-height: 28px; 
-	min-width: 184px;
-	max-width: 184px;
-	background-color: var(--provider);
-	margin: 10px 0 0 20px;
+.standard-filters-single-provider-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 28px;
+  max-height: 28px;
+  min-width: 184px;
+  max-width: 184px;
+  background-color: var(--provider);
+  margin: 10px 0 0 20px;
 }
 
-.standard-filters-single-provider-name{
-	font-family: text-bold;
-	font-size: 0.750rem;
-	color: var(--gs-000-100);
-	padding: 0;
+.standard-filters-single-provider-name {
+  font-family: text-bold;
+  font-size: 0.75rem;
+  color: var(--gs-000-100);
+  padding: 0;
 }

@@ -1,37 +1,42 @@
 @charset "UTF-8";
+
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery DiabetesView Stylesheet */
+
 /* v.01.09 Updated 05/13/2019 */
 
 .diabetes-view {
-	@insert .view-container;
-   margin: 0 0 0 0;
+  @insert .view-container;
+
+  margin: 0 0 0 0;
 }
 
 .diabetes-title {
-	@insert .view-title;
-	background-image: url("../../svg/view-icon-diabetes.svg");
+  @insert .view-title;
+
+  background-image: url("../../svg/view-icon-diabetes.svg");
 }
 
 .diabetes-title-name {
-   @insert .view-title-name;
+  @insert .view-title-name;
 }
 
 .diabetes-contents {
-	@insert .view-contents;
-   padding: 0 0 7px 0;
-   margin: 0;
-   overflow-y: scroll;
+  @insert .view-contents;
+
+  padding: 0 0 7px 0;
+  margin: 0;
+  overflow-y: scroll;
 }
 
 .diabetes-placeholder {
-   height: 400px; 
-   width: 400px;
-   background-image: url("../../png/disease-views-under-development-02.png");
-   background-repeat: no-repeat;
-   background-position: center center; 
-   background-size: cover;
-   margin:auto;
-   padding: 0 0 8px 0;
+  height: 400px;
+  width: 400px;
+  background-image: url("../../png/disease-views-under-development-02.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  margin: auto;
+  padding: 0 0 8px 0;
 }

@@ -1,296 +1,311 @@
 @charset "UTF-8";
+
 @import '../../css/ViewContainer.css';
 
 /* Sync for Science Discovery TilesView Stylesheet */
+
 /* v.01.09 Updated 01/08/2020 */
 
 /* Tiles View - contains tiles view and content panel  */
 
 .tiles-view {
-   position: fixed;
-   top: 166px;
-   left: 160px;
-   height: calc(100% - 176px);
-   width: calc(100% - 170px);
-   min-width: 840px;
-   display:flex;
-   flex-direction: column; 
-   background-color: var(--tile-area);
-   margin: 0;
+  position: fixed;
+  top: 166px;
+  left: 160px;
+  height: calc(100% - 176px);
+  width: calc(100% - 170px);
+  min-width: 840px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--tile-area);
+  margin: 0;
 }
 
 /* Tiles View Container  */
+
 /* Three column structure - left nav/content/right nav */
 
 .tiles-view-container {
-   display: flex;
-   flex-direction: row;
-   width: 100%;
-   height: inherit;
-   overflow-x: scroll;
-   overflow-y: hidden;
-   background-color: var(--tile-area);
-   margin: 15px 0 10px 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: inherit;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  background-color: var(--tile-area);
+  margin: 15px 0 10px 0;
 }
 
 .tiles-view-header {
-   display: flex;
-   flex-direction: row;
-   justify-content:flex-start;
-   width: 100%;
-   height: 30px;
-   line-height: 30px;
-   font-family: data-text;
-   font-size: 0.750rem;
-   color: var(--label-white);
-   background-color: var(--background-header-content); 
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  font-family: data-text;
+  font-size: 0.75rem;
+  color: var(--label-white);
+  background-color: var(--background-header-content);
 }
 
 .tiles-view-header-button {
-   width: 80px;
-   height: 16px;
-   max-height: 16px;
-   font-family: label-bold;
-   font-size: 12px;
-   text-align: center;
-   line-height: 14px;
-   border-radius: 20px;
-   padding: 3px 0 0 0;
-   background-color: var(--button-date-range);
-   margin: auto 0 auto 20px;
-   outline: none;
-   border: solid 0px transparent;
+  width: 80px;
+  height: 16px;
+  max-height: 16px;
+  font-family: label-bold;
+  font-size: 12px;
+  text-align: center;
+  line-height: 14px;
+  border-radius: 20px;
+  padding: 3px 0 0 0;
+  background-color: var(--button-date-range);
+  margin: auto 0 auto 20px;
+  outline: none;
+  border: solid 0 transparent;
 }
-    
+
 .tiles-view-header-button-clear {
-   @insert .tiles-view-header-button;
-   color: var(--label-gray-light);
-   cursor: default;
+  @insert .tiles-view-header-button;
+
+  color: var(--label-gray-light);
+  cursor: default;
 }
 
 .tiles-view-header-button-clear-selected {
-   @insert .tiles-view-header-button;
-   color: var(--label-white);
-   cursor: pointer;
+  @insert .tiles-view-header-button;
+
+  color: var(--label-white);
+  cursor: pointer;
 }
 
 .tiles-view-header-button-clear-selected:active {
-   background-color: var(--button-disabled-dark);
+  background-color: var(--button-disabled-dark);
 }
 
 .tiles-view-multisource-check {
-   position: relative;
-   top: 4px;
-   width: 14px;
-   height: 14px;
-   margin-right: 5px;
-   cursor: pointer;
+  position: relative;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  margin-right: 5px;
+  cursor: pointer;
 }
 
 .tiles-view-multisource-label {
-   position: relative;
-   top: -0.5px;
-   margin-left: 20px;
-   cursor: pointer;
+  position: relative;
+  top: -0.5px;
+  margin-left: 20px;
+  cursor: pointer;
 }
 
 /* Left navigation */
 
 .tiles-view-nav-left {
-   width: 20px;
-   height: 100%;
-   background-color: var(--tile-area);
-   padding: 2px 0 0 0;
-   margin: 0 5px 0 5px;
+  width: 20px;
+  height: 100%;
+  background-color: var(--tile-area);
+  padding: 2px 0 0 0;
+  margin: 0 5px 0 5px;
 }
 
 .tiles-view-nav-button {
-   width: 20px;
-   height: 32px;
-   background-size: 20px 32px;
-   background-repeat: no-repeat;
-   background-position: center;
-   background-color: var(--tile-area);
-   outline: none;
-   border: 0;
+  width: 20px;
+  height: 32px;
+  background-size: 20px 32px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: var(--tile-area);
+  outline: none;
+  border: 0;
 }
 
 .tiles-view-nav-left-button-on {
-   @insert .tiles-view-nav-button;
-   background-image: url("../../svg/arrow-button-tiles-left-on.svg");
-   cursor: pointer;
+  @insert .tiles-view-nav-button;
+
+  background-image: url("../../svg/arrow-button-tiles-left-on.svg");
+  cursor: pointer;
 }
 
 .tiles-view-nav-left-button-off {
-   @insert .tiles-view-nav-button;
-   background-image: url("../../svg/arrow-button-tiles-left-off.svg");
-   cursor: default;
+  @insert .tiles-view-nav-button;
+
+  background-image: url("../../svg/arrow-button-tiles-left-off.svg");
+  cursor: default;
 }
 
 /* Content */
 
 .tiles-view-container-inner {
-   display: flex;
-   flex-direction: row;
-   width: 100%;
-   height: 100%;
-   overflow-x: hidden;
-   overflow-y: hidden;
-   background-color: var(--tile-area);
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-color: var(--tile-area);
 }
 
 .tiles-view-container-inner-empty {
-   font-family: text-italic;
-   margin: 10px 0px 0px 30px;
+  font-family: text-italic;
+  margin: 10px 0 0 30px;
 }
 
 /* Content column structure */
 
 /* WARNING: Update numVisibleCols() in index.js if change width/margin values!!! */
 .tiles-view-column-container {
-   width:175px;
-   min-width: 175px;
-   height: auto;
-   display: flex;
-   flex-direction: column;
-   background-color: var(--tile-area);
-   margin: 0 10px 0 0;
-   overflow-x: hidden;
-   overflow-y: visible;
+  width: 175px;
+  min-width: 175px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--tile-area);
+  margin: 0 10px 0 0;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 .tiles-view-column-header {
-   display:flex;
-   flex-direction: row;
-   position: relative;
-   top: 0;
-   width: 100%;
-   min-width: 146px;
-   height: 28px;
-   min-height: 28px;
-   align-items: center;
-   font-family: header-bold;
-   font-size: 0.813rem;
-   line-height: 28px;
-   color: var(--label-black);
-   padding: 0 20px 0 10px;
-   background-color: var(--gt4-trans);
-   margin: 0 0 5px 0;
-   white-space: nowrap;
-   overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  top: 0;
+  width: 100%;
+  min-width: 146px;
+  height: 28px;
+  min-height: 28px;
+  align-items: center;
+  font-family: header-bold;
+  font-size: 0.813rem;
+  line-height: 28px;
+  color: var(--label-black);
+  padding: 0 20px 0 10px;
+  background-color: var(--gt4-trans);
+  margin: 0 0 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .tiles-view-column-header-button {
-   width: 30px;
-   min-width: 30px;
-   height: 28px;
-   min-height: 28px;
-   background-color: transparent;
-   background-size: 15px 15px;
-   background-position: right center;
-   background-repeat: no-repeat;
-   padding: 0;
-   border: 0;
-   margin: 0 21px 0 auto;
-   outline: none;
-   cursor: pointer;
+  width: 30px;
+  min-width: 30px;
+  height: 28px;
+  min-height: 28px;
+  background-color: transparent;
+  background-size: 15px 15px;
+  background-position: right center;
+  background-repeat: no-repeat;
+  padding: 0;
+  border: 0;
+  margin: 0 21px 0 auto;
+  outline: none;
+  cursor: pointer;
 }
 
 .tiles-view-column-header-button-all {
-   @insert .tiles-view-column-header-button;
-   background-image: url("../../svg/button-selected-all.svg");
+  @insert .tiles-view-column-header-button;
+
+  background-image: url("../../svg/button-selected-all.svg");
 }
 
 .tiles-view-column-header-button-partial {
-   @insert .tiles-view-column-header-button;
-   background-image: url("../../svg/button-selected-partial.svg");
+  @insert .tiles-view-column-header-button;
+
+  background-image: url("../../svg/button-selected-partial.svg");
 }
 
 .tiles-view-column-header-button-none {
-   @insert .tiles-view-column-header-button;
-   background-image: url("../../svg/button-selected-none.svg");
+  @insert .tiles-view-column-header-button;
+
+  background-image: url("../../svg/button-selected-none.svg");
 }
 
 .tiles-view-column-content {
-   display: flex;
-   flex-direction: column;
-   width: 175px;
-   max-width: 175px;
-   min-width: 175px;
-   height: auto;
-   overflow-y: auto;
-   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 175px;
+  max-width: 175px;
+  min-width: 175px;
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Tiles */
 .tile {
-   position: relative;
-   left: 0;
-   display: flex;
-   flex-direction: row;
-   flex: auto;
-   flex-shrink: 0;
-   width: 162px;
-   max-width: 162px;
-   height: auto;
-   min-height: 36px;
-   font-family: data-text;
-   font-size: 0.750rem;
-   line-height: normal;
-   text-align: left;
-   padding: 10px;
-   border: 0;
-   border-radius: 5px;
-   cursor: pointer;
-   white-space: inherit;
-   outline: none;
-
-   word-wrap: break-word;
-   box-sizing: border-box;
+  position: relative;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  flex: auto;
+  flex-shrink: 0;
+  width: 162px;
+  max-width: 162px;
+  height: auto;
+  min-height: 36px;
+  font-family: data-text;
+  font-size: 0.75rem;
+  line-height: normal;
+  text-align: left;
+  padding: 10px;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: inherit;
+  outline: none;
+  word-wrap: break-word;
+  box-sizing: border-box;
 }
 
 .tile-standard {
-   @insert .tile;
-   color: var(--label-tile);
-   background-color: var(--tile);
-   margin: 0 0 6px 0;
+  @insert .tile;
+
+  color: var(--label-tile);
+  background-color: var(--tile);
+  margin: 0 0 6px 0;
 }
 
 .tile-standard-selected {
-   @insert .tile;
-   color: var(--label-tile-selected);
-   background-color: var(--tile-selected);
-   margin: 0 0 6px 0;
+  @insert .tile;
+
+  color: var(--label-tile-selected);
+  background-color: var(--tile-selected);
+  margin: 0 0 6px 0;
 }
 
 .tile-standard-last {
-   @insert .tile;
-   font-family: header-bold;
-   color: var(--label-black);
-   background-color: var(--tile-selected-last);
-   margin: 0 0 6px 0;
+  @insert .tile;
+
+  font-family: header-bold;
+  color: var(--label-black);
+  background-color: var(--tile-selected-last);
+  margin: 0 0 6px 0;
 }
 
 /* Right navigation */
 .tiles-view-nav-right {
-   position: relative;
-   right: 0;
-   width: 20px;
-   height: 100%;
-   background-color: var(--tile-area);
-   padding: 2px 0 0 0;
-/*   margin: 0 5px 0 10px; */
-   margin: 0 5px 0 5px;
+  position: relative;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background-color: var(--tile-area);
+  padding: 2px 0 0 0;
+
+  /*   margin: 0 5px 0 10px; */
+  margin: 0 5px 0 5px;
 }
 
 .tiles-view-nav-right-button-on {
-   @insert .tiles-view-nav-button;
-   background-image: url("../../svg/arrow-button-tiles-right-on.svg");
-   cursor: pointer;
+  @insert .tiles-view-nav-button;
+
+  background-image: url("../../svg/arrow-button-tiles-right-on.svg");
+  cursor: pointer;
 }
 
 .tiles-view-nav-right-button-off {
-   @insert .tiles-view-nav-button;
-   background-image: url("../../svg/arrow-button-tiles-right-off.svg");
-   cursor: default;
+  @insert .tiles-view-nav-button;
+
+  background-image: url("../../svg/arrow-button-tiles-right-off.svg");
+  cursor: default;
 }

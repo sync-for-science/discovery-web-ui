@@ -1,376 +1,385 @@
 @charset "UTF-8";
 
 /* Sync for Science Discovery Discovery Modal Stylesheet */
+
 /* v.01.20 Updated 06/10/2019 */
 
 /* --- General Modal Styles --- */
 
 /* Modal Overlay */
 .discovery-modal-overlay {
-   position: fixed;
-   top: 46px;
-   left: 0;
-   right: 0;
-   bottom: 0;
-	display: flex;
-   align-items: flex-start;
-	justify-content: center;
-   background: var(--gs-100-025);
-   padding: 0;
-	overflow-y: auto;
-   overflow-x: hidden;
+  position: fixed;
+  top: 46px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: var(--gs-100-025);
+  padding: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* General Modal Styles */
 .discovery-modal {
-	position: absolute;
-	z-index: 1001;
-	width: auto;
-	min-width: 550px;
-   height: auto;
-	background-color: transparent;
-	background-clip: padding-box;
-   padding: 0;
-   border: 0 solid transparent;
-	border-radius: 10px;
-   margin-top: 120px;
-	
+  position: absolute;
+  z-index: 1001;
+  width: auto;
+  min-width: 550px;
+  height: auto;
+  background-color: transparent;
+  background-clip: padding-box;
+  padding: 0;
+  border: 0 solid transparent;
+  border-radius: 10px;
+  margin-top: 120px;
 }
 
 /* Close Button */
 .discovery-modal-close-button {
-   position: absolute;
-   top: 5px;
-   right: 14px;
-	display: flex;
-   background-color: transparent;
-   padding: 0;
-   border: none;
+  position: absolute;
+  top: 5px;
+  right: 14px;
+  display: flex;
+  background-color: transparent;
+  padding: 0;
+  border: none;
 }
 
 /* Close Icon */
 .discovery-modal-close-icon {
-	fill: var(--gs-000-100);
+  fill: var(--gs-000-100);
 }
 
 /* --- End Modal Styles --- */
 .modal-title {
-	display: flex;
-   flex-direction: row;
-	align-items: center;
-	height: 37px;
-	width: auto;
-	min-width: 550px;
-	background-color: var(--background-header);
-	background-repeat: no-repeat;
-	font-family: header-bold;
-	font-size: 1.000rem;
-   line-height: 37px;
-	color: var(--label-white);
-   padding: 0 0 0 50px;
-	border: 1px solid var(--background-header);
-	border-radius: 10px 10px 0 0;
-   margin: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 37px;
+  width: auto;
+  min-width: 550px;
+  background-color: var(--background-header);
+  background-repeat: no-repeat;
+  font-family: header-bold;
+  font-size: 1rem;
+  line-height: 37px;
+  color: var(--label-white);
+  padding: 0 0 0 50px;
+  border: 1px solid var(--background-header);
+  border-radius: 10px 10px 0 0;
+  margin: 0;
 }
 
 .modal-body {
-	height: 350px;
-   width: auto;
-	min-width: 520px;
-	max-height: 520px;
-	background-color: var(--background-content);
-	padding: 20px;
-   border: 2px solid var(--background-header);
-   border-top: none;
-	border-radius: 0 0 10px 10px;
-	margin: 0;
-	overflow-y: hidden;
-	overflow-x: hidden;
+  height: 350px;
+  width: auto;
+  min-width: 520px;
+  max-height: 520px;
+  background-color: var(--background-content);
+  padding: 20px;
+  border: 2px solid var(--background-header);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  margin: 0;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 .modal-body-row {
-	display: flex;
-	flex-direction: row;
-	flex-basis: auto;
+  display: flex;
+  flex-direction: row;
+  flex-basis: auto;
 }
 
 /* Logo Modal Styles */
 .logo-modal-title {
-	@insert .modal-title;
-	background-image: url(../../svg/icon-modal-logo-discovery.svg);
-	background-size: 30px 30px;
-	background-position: 012px center;
+  @insert .modal-title;
+
+  background-image: url(../../svg/icon-modal-logo-discovery.svg);
+  background-size: 30px 30px;
+  background-position: 012px center;
 }
 
 .logo-modal-body {
-	@insert .modal-body;
+  @insert .modal-body;
 }
 
 .logo-modal-body-row {
-	@insert .modal-body-row;
+  @insert .modal-body-row;
 }
 
 .logo-modal-photo-row {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	height: 155px;
-   width: auto;
-	margin: 0 0 10px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 155px;
+  width: auto;
+  margin: 0 0 10px 0;
 }
 
 .logo-modal-photo {
-   height: 155px;
-   width: 125px;
-   background-repeat: no-repeat;
-	background-size: cover;
-	margin: 0 5px;
+  height: 155px;
+  width: 125px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0 5px;
 }
 
 .logo-modal-photo-one {
-	@insert .logo-modal-photo;
-	background-image: url("../../png/David-Kreda-sepia-cropped-small.png");
+  @insert .logo-modal-photo;
+
+  background-image: url("../../png/David-Kreda-sepia-cropped-small.png");
 }
 
 .logo-modal-photo-two {
-	@insert .logo-modal-photo;
-	background-image: url("../../png/Steve-Klein-sepia-cropped-small.png");
+  @insert .logo-modal-photo;
+
+  background-image: url("../../png/Steve-Klein-sepia-cropped-small.png");
 }
 
 .logo-modal-photo-three {
-	@insert .logo-modal-photo;
-	background-image: url("../../png/Bob-Hires-sepia-cropped-small.png");
+  @insert .logo-modal-photo;
+
+  background-image: url("../../png/Bob-Hires-sepia-cropped-small.png");
 }
 
 .logo-modal-body-property {
-	width: 50%;
-	font-family: text;
-	font-size: 1.000rem; 
-	text-align: right;
-   padding: 0 15px 0 0;
+  width: 50%;
+  font-family: text;
+  font-size: 1rem;
+  text-align: right;
+  padding: 0 15px 0 0;
 }
 
 .logo-modal-body-value {
-	width: 50%; 
-   font-family: text-bold;
-   font-size: 1.000rem;
-	text-align: left;
+  width: 50%;
+  font-family: text-bold;
+  font-size: 1rem;
+  text-align: left;
 }
 
 .logo-modal-legal {
-	font-family: text;
-	font-size: 0.750rem;
-   margin: 20px 0 0 0;
+  font-family: text;
+  font-size: 0.75rem;
+  margin: 20px 0 0 0;
 }
 
 /* Participant Info Modal Styles */
 .info-modal-title {
-	@insert .modal-title;
-	background-color: var(--background-header);
-	background-image: url(../../svg/icon-modal-participant-info.svg);
-	background-size: 30px 30px;
-	background-position: 10px 10px;
+  @insert .modal-title;
+
+  background-color: var(--background-header);
+  background-image: url(../../svg/icon-modal-participant-info.svg);
+  background-size: 30px 30px;
+  background-position: 10px 10px;
 }
 
 .info-modal-body {
-	@insert .modal-body;
+  @insert .modal-body;
 }
 
 .info-modal-body-row {
-	@insert .modal-body-row;
+  @insert .modal-body-row;
 }
 
 .info-modal-body-property {
-	width: 50%;
-	font-family: text-italic;
-	font-size: 1.000rem;
-	text-align: right;
-   padding: 0 15px 0 0;
+  width: 50%;
+  font-family: text-italic;
+  font-size: 1rem;
+  text-align: right;
+  padding: 0 15px 0 0;
 }
 
 .info-modal-body-value {
-	width: 50%;
-	font-family: text;
-	font-size: 1.000rem;
-	text-align: left;
+  width: 50%;
+  font-family: text;
+  font-size: 1rem;
+  text-align: left;
 }
 
 /* Help Modal */
 .help-modal-title {
-	@insert .modal-title;
-	background-image: url(../../svg/icon-modal-help.svg);
-	background-size: 30px 30px;
-	background-position: 10px 5px;    
+  @insert .modal-title;
+
+  background-image: url(../../svg/icon-modal-help.svg);
+  background-size: 30px 30px;
+  background-position: 10px 5px;
 }
 
 .help-modal-body {
-	@insert .modal-body;
+  @insert .modal-body;
 }
 
 .help-modal-content {
-	overflow: hidden;
+  overflow: hidden;
 }
 
 .help-modal-header {
-	font-family: header-bold;
-	font-size: 1.000rem;
-	color: var(--primary-100);
-   border-bottom: 1px solid var(--primary-100);
+  font-family: header-bold;
+  font-size: 1rem;
+  color: var(--primary-100);
+  border-bottom: 1px solid var(--primary-100);
 }
 
 .help-modal-list {
-	
+
 }
 
 .help-modal-list-item {
-	font-family: text;
-	font-size: 1.000rem;	
+  font-family: text;
+  font-size: 1rem;
 }
 
 .help-modal-subheader {
-	font-family: header;
-	font-size: 1.000rem;
-	color: var(--primary-100);
-   margin: 0 0 0 20px;
+  font-family: header;
+  font-size: 1rem;
+  color: var(--primary-100);
+  margin: 0 0 0 20px;
 }
 
 .help-modal-subheader-content {
-	font-family: header;
-	font-size: 0.800rem;
-   margin: 0 0 10px 40px;
+  font-family: header;
+  font-size: 0.8rem;
+  margin: 0 0 10px 40px;
 }
 
 .help-modal-body-row {
-	@insert .modal-body-row;
+  @insert .modal-body-row;
 }
 
 .help-modal-body-property {
-	width: 50%;
-	font-family: text-italic;
-	font-size: 1.000rem;
-	text-align: right; 
-   padding: 0 15px 0 0;
+  width: 50%;
+  font-family: text-italic;
+  font-size: 1rem;
+  text-align: right;
+  padding: 0 15px 0 0;
 }
 
 .help-modal-body-value {
-	width: 50%;    
-	font-family: text;
-	font-size: 1.000rem;
-	text-align: left;  
+  width: 50%;
+  font-family: text;
+  font-size: 1rem;
+  text-align: left;
 }
 
 /* Download Modal */
 .download-modal-title {
-	@insert .modal-title;
-	background-image: url(../../svg/icon-modal-download.svg);
-	background-size: 30px 30px;
-	background-position: 10px 5px;
-	background-repeat: no-repeat;
-	font-family: header-bold;
+  @insert .modal-title;
+
+  background-image: url(../../svg/icon-modal-download.svg);
+  background-size: 30px 30px;
+  background-position: 10px 5px;
+  background-repeat: no-repeat;
+  font-family: header-bold;
 }
 
 .download-modal-body {
-	@insert .modal-body;
+  @insert .modal-body;
 }
 
 .download-modal-body-row {
-	@insert .modal-body-row;
-	justify-content: center;
+  @insert .modal-body-row;
+
+  justify-content: center;
 }
 
 .download-modal-body-property {
-	width: 50%;
-	font-family: text-italic;
-	font-size: 1.000rem;
-	text-align: right; 
-   padding: 0 15px 0 0;
+  width: 50%;
+  font-family: text-italic;
+  font-size: 1rem;
+  text-align: right;
+  padding: 0 15px 0 0;
 }
 
 .download-modal-body-value {
-	width: 50%;
-	font-family: text;
-	font-size: 1.000rem;
-	text-align: left;   
+  width: 50%;
+  font-family: text;
+  font-size: 1rem;
+  text-align: left;
 }
 
 .download-modal-button {
-	width: 60%;
-	font-family: header-bold;
-	font-size: 1.000rem;
-	text-align: center;
-   color: var(--white);
-   background-color: var(--primary-100);
-	padding: 10px 0;
-	border-radius: 25px;
-   margin: 10px auto;
+  width: 60%;
+  font-family: header-bold;
+  font-size: 1rem;
+  text-align: center;
+  color: var(--white);
+  background-color: var(--primary-100);
+  padding: 10px 0;
+  border-radius: 25px;
+  margin: 10px auto;
 }
 
 .download-modal-cancel-button {
-	
+
 }
 
 .download-modal-text-block {
-	font-family: text;
-	font-size: 1.000rem;
-	margin: 20px 0 0;
+  font-family: text;
+  font-size: 1rem;
+  margin: 20px 0 0;
 }
 
 .download-modal-text-bold {
-	font-family: text-bold;
-	font-size: 1.000rem;
+  font-family: text-bold;
+  font-size: 1rem;
 }
 
 /* Print modal */
 .print-modal-title {
-	@insert .modal-title;
-	background-image: url(../../svg/icon-modal-print.svg);
-	background-size: 30px 510px;
-	background-position: 10px 5px;
+  @insert .modal-title;
+
+  background-image: url(../../svg/icon-modal-print.svg);
+  background-size: 30px 510px;
+  background-position: 10px 5px;
 }
 
 .print-modal-body {
-	@insert .modal-body;
+  @insert .modal-body;
 }
 
 .print-modal-body-row {
-	@insert .modal-body-row;
+  @insert .modal-body-row;
 }
 
 .print-modal-body-property {
-	width: 50%;
-	font-family: text;
-	font-size: 1.000rem;
-	font-style: italic;
-	text-align: right;
-   padding: 0 15px 0 0;
+  width: 50%;
+  font-family: text;
+  font-size: 1rem;
+  font-style: italic;
+  text-align: right;
+  padding: 0 15px 0 0;
 }
 
 .print-modal-body-value {
-	width: 50%;
-	font-family: text;
-	font-size: 1.000rem;
-	text-align: left;    
+  width: 50%;
+  font-family: text;
+  font-size: 1rem;
+  text-align: left;
 }
 
 .print-modal-button {
-	width: 60%;
-	background-color: var(--primary-100);
-	font-family: text-bold;
-	font-size: 1.000rem;
-   text-align: center;
-	color: var(--white-100);
-   padding: 10px 0;
-	border-radius: 25px;
-   margin: 10px auto;
+  width: 60%;
+  background-color: var(--primary-100);
+  font-family: text-bold;
+  font-size: 1rem;
+  text-align: center;
+  color: var(--white-100);
+  padding: 10px 0;
+  border-radius: 25px;
+  margin: 10px auto;
 }
 
 .print-modal-text-block {
-	font-family: text;
-	font-size: 1.000rem;
-	margin: 20px 0 0;
+  font-family: text;
+  font-size: 1rem;
+  margin: 20px 0 0;
 }
 
 .print-modal-text-bold {
-	font-family: text-bold;
-	font-size: 1.000rem;
+  font-family: text-bold;
+  font-size: 1rem;
 }

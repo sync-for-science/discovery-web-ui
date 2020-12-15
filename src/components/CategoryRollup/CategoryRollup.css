@@ -1,27 +1,29 @@
 @charset "UTF-8";
+
 /* @import '../../css/Selector.css'; */
 
 /* Sync for Science Discovery CategoryRollup Stylesheet */
+
 /* v.01.28 Updated 11/14/2019 */
 
 .category-rollup-svg-container {
-   position: relative;
-   left: 0;
-   top: 0;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   height: 32px;
-   max-height: 32px;
-   width: 100%; 
-   padding: 12px 0 0 0;
-   margin: -50px 0 0 0;
-   overflow: hidden; 
+  position: relative;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+  max-height: 32px;
+  width: 100%;
+  padding: 12px 0 0 0;
+  margin: -50px 0 0 0;
+  overflow: hidden;
 }
 
-.category-rollup-svg { 
-   position: relative;
-   height: inherit;
-   overflow: visible;
-   margin: 0;
+.category-rollup-svg {
+  position: relative;
+  height: inherit;
+  overflow: visible;
+  margin: 0;
 }
