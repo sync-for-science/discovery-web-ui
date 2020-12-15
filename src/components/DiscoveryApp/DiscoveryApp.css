@@ -30,3 +30,14 @@ button:focus {
   overflow-x: hidden;
   overflow-y: hidden;
 }
+
+.outer-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+#details-right {
+  width: 400px;
+  margin-top: 50px;
+}

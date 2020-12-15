@@ -629,21 +629,24 @@ export default class DiscoveryApp extends React.Component {
             searchCallback={this.searchCallback}
             resources={this.state.resources}
           />
-          <StandardFilters
-            resources={this.state.resources}
-            dates={this.state.dates}
-            categories={this.viewCategories}
-            catsEnabled={this.initialCats}
-            providers={this.providers}
-            provsEnabled={this.initialProvs}
-            enabledFn={this.setEnabled}
-            dateRangeFn={this.setDateRange}
-            lastEvent={this.state.lastEvent}
-            allowDotClick={!['compareView', 'tilesView'].includes(this.state.currentView)}
-            dotClickDate={this.state.dotClickDate}
-          >
-            { this.state.currentView && this.renderCurrentView() }
-          </StandardFilters>
+          <div className="outer-container">
+            <StandardFilters
+              resources={this.state.resources}
+              dates={this.state.dates}
+              categories={this.viewCategories}
+              catsEnabled={this.initialCats}
+              providers={this.providers}
+              provsEnabled={this.initialProvs}
+              enabledFn={this.setEnabled}
+              dateRangeFn={this.setDateRange}
+              lastEvent={this.state.lastEvent}
+              allowDotClick={!['compareView', 'tilesView'].includes(this.state.currentView)}
+              dotClickDate={this.state.dotClickDate}
+            >
+              { this.state.currentView && this.renderCurrentView() }
+            </StandardFilters>
+            <div id="details-right" />
+          </div>
           <DiscoveryModal
             isOpen={this.state.modalIsOpen}
             modalName={this.state.modalName}
