@@ -34,13 +34,13 @@ const noDate = '<no date>';
 
 export function getStyle(oElm, css3Prop){
       try {
-	 if (window.getComputedStyle){
-	    return getComputedStyle(oElm).getPropertyValue(css3Prop);
-	 } else if (oElm.currentStyle){
-	    return oElm.currentStyle[css3Prop];
-	 }
+   if (window.getComputedStyle){
+      return getComputedStyle(oElm).getPropertyValue(css3Prop);
+   } else if (oElm.currentStyle){
+      return oElm.currentStyle[css3Prop];
+   }
       } catch (e) {
-      	 return '';
+         return '';
       }
    }
 
@@ -62,9 +62,9 @@ export function shallowEqArray(arr1, arr2) {
       return false;
    } else {
       for (let i = 0; i < arr1.length; i++) {
-	 if (arr1[i] !== arr2[i]) {
-	    return false;
-	 }
+   if (arr1[i] !== arr2[i]) {
+      return false;
+   }
       }
       return true;
    }
@@ -74,14 +74,14 @@ export function shallowEqArray(arr1, arr2) {
 export function stringifyEqArray(arr1, arr2) {
    try {
       if (arr1.length !== arr2.length) {
-	 return false;
+   return false;
       } else {
-	 for (let i = 0; i < arr1.length; i++) {
-	    if (arr1[i] !== arr2[i] && JSON.stringify(arr1[i]) !== JSON.stringify(arr2[i])) {
-	       return false;
-	    }
-	 }
-	 return true;
+   for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i] && JSON.stringify(arr1[i]) !== JSON.stringify(arr2[i])) {
+         return false;
+      }
+   }
+   return true;
       }
    } catch (e) {
       return false;
@@ -96,17 +96,17 @@ export function formatDisplayDate(date, fillShortDates, surpressTime) {
       strDate = strDate.length === 4 ? strDate += '-01' : strDate;
       strDate = strDate.length === 7 ? strDate += '-01' : strDate;
 //      let options = surpressTime ? { year: 'numeric', month: 'short', day: '2-digit' }
-//				 : { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
+//         : { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
       let options = surpressTime ? { year: 'numeric', month: 'short', day: 'numeric' }
-				 : { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
+         : { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
       return new Date(strDate).toLocaleDateString(locale, options).replace(' PM', 'pm').replace(' AM', 'am');
 
    } else {
       let options = surpressTime ? (strDate.length === 4 ? { year: 'numeric' }
-							 : (strDate.length === 7 ? { year: 'numeric', month: 'short' }
-										 : { year: 'numeric', month: 'short', day: '2-digit' }))
-//				 : { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
-				 : { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
+               : (strDate.length === 7 ? { year: 'numeric', month: 'short' }
+                     : { year: 'numeric', month: 'short', day: '2-digit' }))
+//         : { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
+         : { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
       return new Date(strDate).toLocaleDateString(locale, options).replace(' PM', 'pm').replace(' AM', 'am');
    }
 }
@@ -168,13 +168,13 @@ export function formatAge(birthDate, ageDate, prefix) {
       let weeks = Math.floor((months * AVG_DAYS_PER_MONTH + days) / DAYS_PER_WEEK);
 
       if (years === 0 && months === 0 && days <= MAX_ONLY_DAYS) {
-	 return prefix + days + (days === 1 ? ' day' : ' days');
+   return prefix + days + (days === 1 ? ' day' : ' days');
 
       } else if (years === 0 && weeks <= MAX_ONLY_WEEKS) {
-	 return prefix + weeks + ' weeks';
+   return prefix + weeks + ' weeks';
 
       } else {
-	 return prefix + (years > 0 ? years + 'yr' : '') + (years > 0 && months > 0 ? ' ' : '') + (months > 0 ? months + 'mo' : '');
+   return prefix + (years > 0 ? years + 'yr' : '') + (years > 0 && months > 0 ? ' ' : '') + (months > 0 ? months + 'mo' : '');
       }
    }
 }
@@ -186,18 +186,18 @@ export function formatContentHeader(isEnabled, category, res, appContext) {
    let dob = appContext.resources.pathItem('[category=Patient].data.birthDate');
    let age = formatAge(dob, res.itemDate, 'age ');
 //   let highlight = appContext.highlightedResources && 
-//		   appContext.highlightedResources.some(elt => elt.category === category  && elt.itemDate === res.itemDate);
+//       appContext.highlightedResources.some(elt => elt.category === category  && elt.itemDate === res.itemDate);
    let highlight = false;
 
 //      <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} id={dateOnly} data-fhir={fhirKey(res)}>
 
    return !isEnabled ? null : (
       <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} data-fhir={fhirKey(res)}>
-	 <div className={isEnabled ? (highlight ? 'content-header-highlight' : 'content-header') : 'content-header-disabled'}>{category}</div>
-	 <div className={isEnabled ? 'content-header-date' : 'content-header-date-disabled'}>{dateWithTime}</div>
-	 { appContext.trimLevel === Const.trimNone && age &&
-	   <div className={isEnabled ? 'content-header-age' : 'content-header-age-disabled'}>|&nbsp; {age}</div> }
-	 <div className='content-header-padding'/>
+   <div className={isEnabled ? (highlight ? 'content-header-highlight' : 'content-header') : 'content-header-disabled'}>{category}</div>
+   <div className={isEnabled ? 'content-header-date' : 'content-header-date-disabled'}>{dateWithTime}</div>
+   { appContext.trimLevel === Const.trimNone && age &&
+     <div className={isEnabled ? 'content-header-age' : 'content-header-age-disabled'}>|&nbsp; {age}</div> }
+   <div className='content-header-padding'/>
       </div>
    );
 }
@@ -221,22 +221,22 @@ export function tryWithDefault(data, accessor, defaultVal) {
    try {
       let accessorVal = accessor(data);
       if (accessorVal === undefined) {
-	 return defaultVal;
+   return defaultVal;
       } else {
-	 return accessorVal;
+   return accessorVal;
       }
    } catch (e) {
       return defaultVal;
    }
 }
-	
+  
 
 // Acronyms that should be displayed all uppercase
 const acronyms = ['Bmi', 'Lac', 'Ucla'];
 
 // Words that should be displayed all lowercase
 const minorWords = ['A', 'An', 'And', 'As', 'At', 'But', 'By', 'For', 'From', 'In',
-		    'Into', 'Near', 'Nor', 'Of', 'On', 'Onto', 'Or', 'The', 'To', 'With']; 
+        'Into', 'Near', 'Nor', 'Of', 'On', 'Onto', 'Or', 'The', 'To', 'With']; 
 
 export function titleCase(str) {
    let finalWords = [];
@@ -246,23 +246,23 @@ export function titleCase(str) {
       let word = words[index];
 
       if (word.includes('/')) {
-	 finalWords.push(word.split('/').map(word => titleCase(word)).join('/'));
+   finalWords.push(word.split('/').map(word => titleCase(word)).join('/'));
 
       } else if (word.includes('-')) {
-	 finalWords.push(word.split('-').map(word => titleCase(word)).join('-'));
+   finalWords.push(word.split('-').map(word => titleCase(word)).join('-'));
 
       } else if (word !== '') {
-	 let tcWord = word.replace(word[0], word[0].toUpperCase());
-	 if (acronyms.indexOf(tcWord) >= 0) {
-	    // Uppercase acronyms
-	    finalWords.push(tcWord.toUpperCase());
-	 } else if (minorWords.indexOf(tcWord) >= 0 && index > 0) {
-	    // Lowercase minor words, unless first
-	    finalWords.push(tcWord.toLowerCase());
-	 } else {
-	    // Title case word
-	    finalWords.push(tcWord);
-	 }
+   let tcWord = word.replace(word[0], word[0].toUpperCase());
+   if (acronyms.indexOf(tcWord) >= 0) {
+      // Uppercase acronyms
+      finalWords.push(tcWord.toUpperCase());
+   } else if (minorWords.indexOf(tcWord) >= 0 && index > 0) {
+      // Lowercase minor words, unless first
+      finalWords.push(tcWord.toLowerCase());
+   } else {
+      // Title case word
+      finalWords.push(tcWord);
+   }
       }
    }
 
@@ -286,7 +286,7 @@ export function combine() {
    let res = [];
    for (let i = 0; i < arguments.length; i++) {
       if (arguments[i]) {
-	 res = res.concat(arguments[i]);
+   res = res.concat(arguments[i]);
       }
    }
    return res;
@@ -295,7 +295,7 @@ export function combine() {
 // Remove nulls and duplicates from dateArray, then sort in ascending order
 export function cleanDates(dateArray) {
    return dateArray.filter((value, index) => value !== null && dateArray.indexOf(value) === index)
-		   .sort((a, b) => new Date(b) - new Date(a)).reverse();
+       .sort((a, b) => new Date(b) - new Date(a)).reverse();
 }
 
 // Normalize an array of dates by comparing elements to 'min' (returning 0.0) and 'max' (returning 1.0)
@@ -344,10 +344,10 @@ export function uniqueBy(arr, keyFn) {
    let seen = {};
    return arr.filter( (elt, index) => {
       try { 
-	 let key = keyFn(elt);
-	 return seen.hasOwnProperty(key) ? false : seen[key] = true;
+   let key = keyFn(elt);
+   return seen.hasOwnProperty(key) ? false : seen[key] = true;
       } catch (e) {
-	 return false;
+   return false;
       }
    });
 }
@@ -382,91 +382,91 @@ export function notEqJSON(a, b) {
 export function logDiffs(label, was, now) {
    switch (typeof was) {
       case 'object':
-	 if (was instanceof Array && !(now instanceof Array)) {
-	    console.log(`${label}: Array --> ${now}`);
-	 } else if (was instanceof Array) {
-	    // An array
-	    console.group(label);
-	       for (let i = 0; i < was.length; i++) {
-//		  if (JSON.stringify(was[i]) !== JSON.stringify(now[i])) {
-		  if (notEqJSON(was[i], now[i])) {
-		     // Element changed
-		     logDiffs(`[${i}]`, was[i], now[i]);
-		  }
-	       }
-	    console.groupEnd();
-	 } else if (was === null) {
-	    // null
-//	    if (JSON.stringify(was) !== JSON.stringify(now)) {
-	    if (notEqJSON(was, now)) {
-	       // Changed
-	       console.log(`${label}: ${was} --> ${now}`);
-	    }
-	 } else {
-	    // An object
-	    console.group(label);
-	       for (let attr in was) {
-		  if (now && now.hasOwnProperty(attr)) {
-		     // Property present in both objects
-		     if (notEqJSON(was[attr], now[attr])) {
+   if (was instanceof Array && !(now instanceof Array)) {
+      console.log(`${label}: Array --> ${now}`);
+   } else if (was instanceof Array) {
+      // An array
+      console.group(label);
+         for (let i = 0; i < was.length; i++) {
+//      if (JSON.stringify(was[i]) !== JSON.stringify(now[i])) {
+      if (notEqJSON(was[i], now[i])) {
+         // Element changed
+         logDiffs(`[${i}]`, was[i], now[i]);
+      }
+         }
+      console.groupEnd();
+   } else if (was === null) {
+      // null
+//      if (JSON.stringify(was) !== JSON.stringify(now)) {
+      if (notEqJSON(was, now)) {
+         // Changed
+         console.log(`${label}: ${was} --> ${now}`);
+      }
+   } else {
+      // An object
+      console.group(label);
+         for (let attr in was) {
+      if (now && now.hasOwnProperty(attr)) {
+         // Property present in both objects
+         if (notEqJSON(was[attr], now[attr])) {
 //
-//		     let prior = '<circular>';
-//		     try {
-//			prior = JSON.stringify(was[attr]);
-//		     } catch (e) {}
-//		     let current = '<circular>';
-//		     try {
-//			current = JSON.stringify(now[attr]);
-//		     } catch (e) {}
-////		     if (JSON.stringify(was[attr]) !== JSON.stringify(now[attr])){
-//		     if (prior !== current) {
+//         let prior = '<circular>';
+//         try {
+//      prior = JSON.stringify(was[attr]);
+//         } catch (e) {}
+//         let current = '<circular>';
+//         try {
+//      current = JSON.stringify(now[attr]);
+//         } catch (e) {}
+////         if (JSON.stringify(was[attr]) !== JSON.stringify(now[attr])){
+//         if (prior !== current) {
 //
-			// Property changed
-			logDiffs(`.${attr}`, was[attr], now[attr]);
-		     }
-		  } else {
-		     // Only in 'was'
-		     console.log(`.${attr} --> <unset>`);
-		  } 
-	       }
-	    console.groupEnd();
-	 }
+      // Property changed
+      logDiffs(`.${attr}`, was[attr], now[attr]);
+         }
+      } else {
+         // Only in 'was'
+         console.log(`.${attr} --> <unset>`);
+      } 
+         }
+      console.groupEnd();
+   }
          break;
 
       case 'function':
-	 if (was !== now) {
-	    // Function changed
-	    console.log(`Function ${label} changed.`);
-	 }
-	 break;
+   if (was !== now) {
+      // Function changed
+      console.log(`Function ${label} changed.`);
+   }
+   break;
 
       case 'string':
       case 'number':
       case 'boolean':
       case 'undefined':
-	 if (was !== now) {
-	    console.log(`${label}: ${was} --> ${now}`);
-	 }
+   if (was !== now) {
+      console.log(`${label}: ${was} --> ${now}`);
+   }
          break;
 
       default:
-	 break;
+   break;
    }
 
    // Log object props only present in 'now'
    if (typeof now === 'object' && now !== null && !(now instanceof Array)) {
       console.group(label);
-	 for (let attr in now) {
-	    if (now.hasOwnProperty(attr)) {
-	       if (was && was.hasOwnProperty(attr)) {
-		  // Present in 'was' or both -- already reported
-	       } else {
-		  // Only in 'now'
-//		  console.log(`.${attr} not previously set`); 
-		   console.log(`.${attr}: <unset> --> ${now[attr]}`); 
-	       }
-	    }
-	 }
+   for (let attr in now) {
+      if (now.hasOwnProperty(attr)) {
+         if (was && was.hasOwnProperty(attr)) {
+      // Present in 'was' or both -- already reported
+         } else {
+      // Only in 'now'
+//      console.log(`.${attr} not previously set`); 
+       console.log(`.${attr}: <unset> --> ${now[attr]}`); 
+         }
+      }
+   }
       console.groupEnd();
    }
 }
@@ -477,42 +477,42 @@ export function logDiffs(label, was, now) {
 export function classFromCat(cat) {
    switch(cat) {
       case Allergies.catName:
-	 return Allergies;
+   return Allergies;
        case Benefits.catName:
-	  return Benefits;
+    return Benefits;
        case Claims.catName:
-	  return Claims;
+    return Claims;
        case Conditions.catName:
-	  return Conditions;
+    return Conditions;
        case DocumentReferences.catName:
-	  return DocumentReferences;
+    return DocumentReferences;
        case Encounters.catName:
-	  return Encounters;
+    return Encounters;
        case Exams.catName:
-	  return Exams;
+    return Exams;
        case Immunizations.catName:
-	  return Immunizations;
+    return Immunizations;
        case LabResults.catName:
-	  return LabResults;
+    return LabResults;
        case MedsAdministration.catName:
-	  return MedsAdministration;
+    return MedsAdministration;
        case MedsDispensed.catName:
-	  return MedsDispensed;
+    return MedsDispensed;
        case MedsRequested.catName:
-	  return MedsRequested;
+    return MedsRequested;
        case MedsStatement.catName:
-	  return MedsStatement;
+    return MedsStatement;
        case Procedures.catName:
-	  return Procedures;
+    return Procedures;
        case ProcedureRequests.catName:
-	  return ProcedureRequests;
+    return ProcedureRequests;
        case SocialHistory.catName:
-	  return SocialHistory;
+    return SocialHistory;
        case VitalSigns.catName:
-	  return VitalSigns;
+    return VitalSigns;
        case Unimplemented.catName:
        default:
-	  return Unimplemented;
+    return Unimplemented;
    }
 }
 
@@ -524,9 +524,9 @@ export function groupBy(arr, keyFn) {
    for (let elt of arr) {
       let groupKey = keyFn(elt);
       if (groups[groupKey]) {
-      	 groups[groupKey].push(elt);
+         groups[groupKey].push(elt);
       } else {
-      	 groups[groupKey] = [ elt ];
+         groups[groupKey] = [ elt ];
       }
    }
    return groups;

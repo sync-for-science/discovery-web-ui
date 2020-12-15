@@ -16,7 +16,7 @@ export default class MedsAdministration extends React.Component {
 
    static catName = 'Meds Administration';
     
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
 
    static compareFn(a, b) {
       return stringCompare(MedsAdministration.primaryText(a), MedsAdministration.primaryText(b));
@@ -45,7 +45,7 @@ export default class MedsAdministration extends React.Component {
    setMatchingData() {
       let match = FhirTransform.getPathItem(this.props.data, `[*category=${MedsAdministration.catName}]`);
       this.setState({ matchingData: match.length > 0 ? match.sort(MedsAdministration.compareFn)
-						     : null });
+                 : null });
    }
     
    componentDidMount() {
@@ -54,19 +54,19 @@ export default class MedsAdministration extends React.Component {
 
    componentDidUpdate(prevProps, prevState) {
       if (prevProps.data !== this.props.data) {
-	 this.setMatchingData();
+   this.setMatchingData();
       }
    }
 
    render() {
       let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
-	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
-	       <div className='meds-administration category-container' id={formatKey(firstRes)}>
-		  { formatContentHeader(this.props.isEnabled, MedsAdministration.catName, firstRes, this.context) }
-	          <div className='content-body'>
-		     { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Medication', this.context) }
-	          </div>
-	       </div> );
+         (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&  // Don't show this category (at all) if disabled and trim set
+         <div className='meds-administration category-container' id={formatKey(firstRes)}>
+      { formatContentHeader(this.props.isEnabled, MedsAdministration.catName, firstRes, this.context) }
+            <div className='content-body'>
+         { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Medication', this.context) }
+            </div>
+         </div> );
    }
 }

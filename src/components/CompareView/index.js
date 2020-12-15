@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './CompareView.css';
 import config from '../../config.js';
 import { Const, getStyle, stringCompare, tryWithDefault, titleCase,
-	 numericPart, inDateRange, uniqueBy, notEqJSON, classFromCat } from '../../util.js';
+   numericPart, inDateRange, uniqueBy, notEqJSON, classFromCat } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 import { fhirKey, primaryTextValue } from '../../fhirUtil.js';
 
@@ -21,20 +21,20 @@ export default class CompareView extends React.Component {
 
    static myName = 'CompareView';
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       resources: PropTypes.instanceOf(FhirTransform),
       totalResCount: PropTypes.number,
       dates: PropTypes.shape({
-	 allDates: PropTypes.arrayOf(PropTypes.shape({
-	    position: PropTypes.number.isRequired,
-	    date: PropTypes.string.isRequired
-	 })).isRequired,
-	 minDate: PropTypes.string.isRequired,		// Earliest date we have data for this participant
-	 startDate: PropTypes.string.isRequired,	// Jan 1 of minDate's year
-	 maxDate: PropTypes.string.isRequired,		// Latest date we have data for this participant
-	 endDate: PropTypes.string.isRequired		// Dec 31 of last year of timeline tick periods
+   allDates: PropTypes.arrayOf(PropTypes.shape({
+      position: PropTypes.number.isRequired,
+      date: PropTypes.string.isRequired
+   })).isRequired,
+   minDate: PropTypes.string.isRequired,    // Earliest date we have data for this participant
+   startDate: PropTypes.string.isRequired,  // Jan 1 of minDate's year
+   maxDate: PropTypes.string.isRequired,    // Latest date we have data for this participant
+   endDate: PropTypes.string.isRequired    // Dec 31 of last year of timeline tick periods
       }),
       categories: PropTypes.arrayOf(PropTypes.string).isRequired,
       providers: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -57,76 +57,76 @@ export default class CompareView extends React.Component {
 
    componentDidMount() {
       if (this.context.savedSelectedTiles) {
-	 this.setState({ selectedUniqueItems: this.context.savedSelectedTiles });
-	 this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(this.context.savedSelectedTiles) });
+   this.setState({ selectedUniqueItems: this.context.savedSelectedTiles });
+   this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(this.context.savedSelectedTiles) });
       }
 
       if (this.context.lastTileSelected) {
-	 let last = this.context.lastTileSelected;
-	 this.setState({ lastUniqueItemSelected: last });
+   let last = this.context.lastTileSelected;
+   this.setState({ lastUniqueItemSelected: last });
 
-	 let lastResources = this.matchingUniqueItemResources(last);
-	 this.context.updateGlobalContext({ lastHighlightedResources: lastResources,
-					    viewLastAccentDates: this.uniqueDatesFromResources(lastResources) });
+   let lastResources = this.matchingUniqueItemResources(last);
+   this.context.updateGlobalContext({ lastHighlightedResources: lastResources,
+              viewLastAccentDates: this.uniqueDatesFromResources(lastResources) });
       }
 
       this.setState({ onlyMultisource: this.context.onlyMultisource },
-		    () => this.setState({ uniqueStruct: this.buildUniqueStruct() }));
+        () => this.setState({ uniqueStruct: this.buildUniqueStruct() }));
    }
 
    componentWillUnmount() {
       this.context.updateGlobalContext({ savedSelectedTiles: this.state.selectedUniqueItems,
-				         lastTileSelected: this.state.lastUniqueItemSelected,		// Save selected, last selected unique items
-					 viewAccentDates: [],
-					 viewLastAccentDates: [],
-					 highlightedResources: [],
-					 lastHighlightedResources: [] });				// Clear highlights
+                 lastTileSelected: this.state.lastUniqueItemSelected,    // Save selected, last selected unique items
+           viewAccentDates: [],
+           viewLastAccentDates: [],
+           highlightedResources: [],
+           lastHighlightedResources: [] });        // Clear highlights
    }
 
    componentDidUpdate(prevProps, prevState) {
       // TODO: only on explicit changes?
       if (notEqJSON(prevProps, this.props) || prevState.onlyMultisource !== this.state.onlyMultisource) {
-	 this.setState({ uniqueStruct: this.buildUniqueStruct() });
+   this.setState({ uniqueStruct: this.buildUniqueStruct() });
       }
 
       // TODO: only on explicit changes?
       if (notEqJSON(prevState, this.state)) {
-	 let scroller = document.querySelector('.compare-view-scroller');
-	 let header = document.querySelector('.compare-view-title-container');		// TODO: this might not be the best place to put the CP top bound...
-	 if (scroller && header) {
-	    this.setState({ topBound: numericPart(getStyle(scroller, 'margin-top')) + header.clientHeight });
-	 }
+   let scroller = document.querySelector('.compare-view-scroller');
+   let header = document.querySelector('.compare-view-title-container');    // TODO: this might not be the best place to put the CP top bound...
+   if (scroller && header) {
+      this.setState({ topBound: numericPart(getStyle(scroller, 'margin-top')) + header.clientHeight });
+   }
       }
 
       // Kluge: get saved tile state if not set in mount (and then clear)
       if (this.context.savedSelectedTiles && Object.keys(this.context.savedSelectedTiles).length > 0 &&
-	  this.state.selectedUniqueItems && Object.keys(this.state.selectedUniqueItems).length === 0) {
-	 this.setState({ selectedUniqueItems: this.context.savedSelectedTiles });
-	 this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(this.context.savedSelectedTiles),
-					    savedSelectedTiles: {} });
+    this.state.selectedUniqueItems && Object.keys(this.state.selectedUniqueItems).length === 0) {
+   this.setState({ selectedUniqueItems: this.context.savedSelectedTiles });
+   this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(this.context.savedSelectedTiles),
+              savedSelectedTiles: {} });
       }
 
       if (this.context.lastTileSelected && !this.state.lastUniqueItemSelected) {
-	 let last = this.context.lastTileSelected;
-	 this.setState({ lastUniqueItemSelected: last });
+   let last = this.context.lastTileSelected;
+   this.setState({ lastUniqueItemSelected: last });
 
-	 let lastResources = this.matchingUniqueItemResources(last);
-	 this.context.updateGlobalContext({ lastHighlightedResources: lastResources,
-					    viewLastAccentDates: this.uniqueDatesFromResources(lastResources),
-					    lastTileSelected: null });
+   let lastResources = this.matchingUniqueItemResources(last);
+   this.context.updateGlobalContext({ lastHighlightedResources: lastResources,
+              viewLastAccentDates: this.uniqueDatesFromResources(lastResources),
+              lastTileSelected: null });
       }
    }
 
    contentPanelBottomBound() {
       try {
-	 const footTop = document.querySelector('.page-footer').getBoundingClientRect().top;
-	 const headerBot = document.querySelector('.time-widget').getBoundingClientRect().bottom;
-	 const contentPanelTitleHeight = document.querySelector('.content-panel-inner-title').clientHeight;
+   const footTop = document.querySelector('.page-footer').getBoundingClientRect().top;
+   const headerBot = document.querySelector('.time-widget').getBoundingClientRect().bottom;
+   const contentPanelTitleHeight = document.querySelector('.content-panel-inner-title').clientHeight;
 
-	 return footTop - headerBot - contentPanelTitleHeight - 10;	// TODO: correct margin size
+   return footTop - headerBot - contentPanelTitleHeight - 10;  // TODO: correct margin size
 
       } catch (e) {
-	 return 0;
+   return 0;
       }
    }
 
@@ -138,10 +138,10 @@ export default class CompareView extends React.Component {
       scroller.style = 'height:""';
 
       if (scroller.clientHeight > compareView.clientHeight/1.6) {
-	 scroller.style = `height:${compareView.clientHeight/1.6}px;`;
+   scroller.style = `height:${compareView.clientHeight/1.6}px;`;
       }
 
-      return scroller.clientHeight + 25;	// TODO: correct margin sizes
+      return scroller.clientHeight + 25;  // TODO: correct margin sizes
    }
 
    onContentPanelResize() {
@@ -169,7 +169,7 @@ export default class CompareView extends React.Component {
    //
    // Resulting structure ('struct'):
    // {
-   //	cat1: [
+   //  cat1: [
    //      {
    //         display: 'disp1',
    //         trueCategory: 'category',
@@ -178,9 +178,9 @@ export default class CompareView extends React.Component {
    //            {
    //               provName: 'prov1',
    //               count: count1,
-   //		    minDate: 'date1',
-   //		    maxDate: 'date2',
-   //		    dates: [ {x: 'date', y: 0}, ... ]
+   //        minDate: 'date1',
+   //        maxDate: 'date2',
+   //        dates: [ {x: 'date', y: 0}, ... ]
    //            },
    //            ...
    //         ]
@@ -192,77 +192,77 @@ export default class CompareView extends React.Component {
    //
    collectUnique(struct, cat, prov) {
       let resources = cat === Unimplemented.catName ? this.props.resources.transformed.filter(res => Unimplemented.unimplementedCats.includes(res.category) &&
-												     res.provider === prov)
-						    : this.props.resources.pathItem(`[*category=${cat}][*provider=${prov}]`);
+                             res.provider === prov)
+                : this.props.resources.pathItem(`[*category=${cat}][*provider=${prov}]`);
       for (let res of resources) {
-	 if (this.noCompareCategories.includes(res.category) ||
-	     !inDateRange(res.itemDate, this.props.thumbLeftDate, this.props.thumbRightDate)) {
-	    continue;	// Ignore this resource
-	 }
+   if (this.noCompareCategories.includes(res.category) ||
+       !inDateRange(res.itemDate, this.props.thumbLeftDate, this.props.thumbRightDate)) {
+      continue;  // Ignore this resource
+   }
 
-	 if (!struct.hasOwnProperty(cat)) {
-	    // Add this category
-	    struct[cat] = [];
-//	    console.log('1 ' + cat + ' added');
-	 }
+   if (!struct.hasOwnProperty(cat)) {
+      // Add this category
+      struct[cat] = [];
+//      console.log('1 ' + cat + ' added');
+   }
 
-	 let thisCat = struct[cat];
-	 let coding = cat === Unimplemented.catName ? { code: res.category, display: 'All ' + res.category }
-						    : this.getCoding(res);
-	 let thisDisplay = thisCat.find(elt => elt.display === coding.display);
-	 let date = res.itemDate instanceof Date ? res.itemDate : new Date(res.itemDate);
+   let thisCat = struct[cat];
+   let coding = cat === Unimplemented.catName ? { code: res.category, display: 'All ' + res.category }
+                : this.getCoding(res);
+   let thisDisplay = thisCat.find(elt => elt.display === coding.display);
+   let date = res.itemDate instanceof Date ? res.itemDate : new Date(res.itemDate);
 
-	 if (thisDisplay) {
-	    // Update previously added display value
-	    let provs = thisDisplay.provs;
-	    let thisProv = provs.find(elt => elt.provName === prov);
-	    if (!thisDisplay.codes.includes(coding.code)) {
-	       // Add this code to code list for this display value
-	       thisDisplay.codes.push(coding.code);
-	    }
-	    if (thisProv) {
-	       // Update previously added prov
-	       thisProv.count++;
-	       thisProv.minDate = date.getTime() < thisProv.minDate.getTime() ? date : thisProv.minDate;
-	       thisProv.maxDate = date.getTime() > thisProv.maxDate.getTime() ? date : thisProv.maxDate;
-	       thisProv.dates.push({x:date, y:0});
-//	       console.log('2 ' + cat + ' ' + JSON.stringify(thisDisplay.codes) + ' ' + thisDisplay.display + ': ' + thisProv.provName + ' ' + thisProv.count);
-	    } else {
-	       // Add new prov
-	       provs.push({ provName: prov, count: 1, minDate: date, maxDate: date, dates: [{x:date, y:0}] });
-//	       console.log('3 ' + cat + ' ' + JSON.stringify(thisDisplay.codes) + ' ' + thisDisplay.display + ': ' + prov + ' 1');
-	    }
-	 } else {
-	    // Add new display value
-	    thisCat.push({ display: coding.display, trueCategory: res.category, codes: [coding.code],
-			   provs: [{ provName: prov, count: 1, minDate: date, maxDate: date, dates: [{x:date, y:0}] }] });
-//	    console.log('4 ' + cat + ' ' + coding.code + ' ' + coding.display + ': ' + prov + ' 1');
-	 }
+   if (thisDisplay) {
+      // Update previously added display value
+      let provs = thisDisplay.provs;
+      let thisProv = provs.find(elt => elt.provName === prov);
+      if (!thisDisplay.codes.includes(coding.code)) {
+         // Add this code to code list for this display value
+         thisDisplay.codes.push(coding.code);
+      }
+      if (thisProv) {
+         // Update previously added prov
+         thisProv.count++;
+         thisProv.minDate = date.getTime() < thisProv.minDate.getTime() ? date : thisProv.minDate;
+         thisProv.maxDate = date.getTime() > thisProv.maxDate.getTime() ? date : thisProv.maxDate;
+         thisProv.dates.push({x:date, y:0});
+//         console.log('2 ' + cat + ' ' + JSON.stringify(thisDisplay.codes) + ' ' + thisDisplay.display + ': ' + thisProv.provName + ' ' + thisProv.count);
+      } else {
+         // Add new prov
+         provs.push({ provName: prov, count: 1, minDate: date, maxDate: date, dates: [{x:date, y:0}] });
+//         console.log('3 ' + cat + ' ' + JSON.stringify(thisDisplay.codes) + ' ' + thisDisplay.display + ': ' + prov + ' 1');
+      }
+   } else {
+      // Add new display value
+      thisCat.push({ display: coding.display, trueCategory: res.category, codes: [coding.code],
+         provs: [{ provName: prov, count: 1, minDate: date, maxDate: date, dates: [{x:date, y:0}] }] });
+//      console.log('4 ' + cat + ' ' + coding.code + ' ' + coding.display + ': ' + prov + ' 1');
+   }
       }
    }
     
    buildUniqueStruct() {
       let struct = {};
       for (let catName of this.props.categories) {
-	 if (this.props.catsEnabled[catName] !== false) {
-	    for (let provName of this.props.providers) {
-	       if (this.props.provsEnabled[provName] !== false) {
-		  this.collectUnique(struct, catName, provName);
-	       }
-	    }
-	 }
+   if (this.props.catsEnabled[catName] !== false) {
+      for (let provName of this.props.providers) {
+         if (this.props.provsEnabled[provName] !== false) {
+      this.collectUnique(struct, catName, provName);
+         }
+      }
+   }
       }
 
       // Possibly prune if onlyMultisource
       if (this.state.onlyMultisource) {
-	 for (let cat in struct) {
-	    let pruned = struct[cat].filter(elt => elt.provs.length > 1);
-	    if (pruned.length > 0) {
-	       struct[cat] = pruned;
-	    } else {
-	       delete struct[cat];
-	    }
-	 }
+   for (let cat in struct) {
+      let pruned = struct[cat].filter(elt => elt.provs.length > 1);
+      if (pruned.length > 0) {
+         struct[cat] = pruned;
+      } else {
+         delete struct[cat];
+      }
+   }
       }
 
       return struct;
@@ -283,24 +283,24 @@ export default class CompareView extends React.Component {
 
    isUniqueItemSelected(catName, display) {
       try {
-	 return this.state.selectedUniqueItems[this.hyphenate(catName)][this.hyphenate(display)];
+   return this.state.selectedUniqueItems[this.hyphenate(catName)][this.hyphenate(display)];
       } catch (e) {
-	 return false;
+   return false;
       }
    }
 
    isLastUniqueItemSelected(catName, display) {
       return this.state.lastUniqueItemSelected &&
-	     this.state.lastUniqueItemSelected.catName === this.hyphenate(catName) &&
-	     this.state.lastUniqueItemSelected.display === this.hyphenate(display);
+       this.state.lastUniqueItemSelected.catName === this.hyphenate(catName) &&
+       this.state.lastUniqueItemSelected.display === this.hyphenate(display);
    }
 
    matchingUniqueItemResources(uniqueItemId) {
       let res = this.props.resources.transformed.filter(res => this.hyphenate(res.category) === uniqueItemId.catName &&
-							       this.hyphenate(this.getCoding(res).display) === uniqueItemId.display);
+                     this.hyphenate(this.getCoding(res).display) === uniqueItemId.display);
       if (res.length === 0) {
-	 // Kluge for 'other'
-	 res = this.props.resources.transformed.filter(res => res.category === uniqueItemId.trueCategory);
+   // Kluge for 'other'
+   res = this.props.resources.transformed.filter(res => res.category === uniqueItemId.trueCategory);
       }
 
       return res;
@@ -310,82 +310,82 @@ export default class CompareView extends React.Component {
    allSelectedUniqueItemResources(selectedUniqueItems) {
       let resArray = [];
       for (let catName of Object.keys(selectedUniqueItems)) {
-	 for (let displayStr of Object.keys(selectedUniqueItems[catName])) {
-	    resArray = resArray.concat(selectedUniqueItems[catName][displayStr])
-	 }
+   for (let displayStr of Object.keys(selectedUniqueItems[catName])) {
+      resArray = resArray.concat(selectedUniqueItems[catName][displayStr])
+   }
       }
 
       return resArray;
    }
 
    onUniqueItemClick = (e) => {
-      let newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);	// copy selected unique items obj
+      let newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);  // copy selected unique items obj
       let uniqueItemId = this.parseUniqueItemId(e.target.id);
       let matchingUniqueItemResources = null
       let clearedPrevSelected = false;
 
       if (this.isUniqueItemSelected(uniqueItemId.catName, uniqueItemId.display)) {
-	 if (Object.keys(newSelectedUniqueItems[uniqueItemId.catName]).length === 1) {
-	    // Delete category
-	    delete newSelectedUniqueItems[uniqueItemId.catName];
-	 } else {
-	    // Clear selection of the just-clicked unique item
-	    delete newSelectedUniqueItems[uniqueItemId.catName][uniqueItemId.display];
-	 }
-	 clearedPrevSelected = true;
-	 this.context.updateGlobalContext({ highlightedResources: [],		// Used by HighlightDiv
-					    lastHighlightedResources: [] });	//
-	 this.setState({ lastUniqueItemSelected: null });
+   if (Object.keys(newSelectedUniqueItems[uniqueItemId.catName]).length === 1) {
+      // Delete category
+      delete newSelectedUniqueItems[uniqueItemId.catName];
+   } else {
+      // Clear selection of the just-clicked unique item
+      delete newSelectedUniqueItems[uniqueItemId.catName][uniqueItemId.display];
+   }
+   clearedPrevSelected = true;
+   this.context.updateGlobalContext({ highlightedResources: [],    // Used by HighlightDiv
+              lastHighlightedResources: [] });  //
+   this.setState({ lastUniqueItemSelected: null });
 
       } else {
-	 // Select the clicked unique item
-	 if (!newSelectedUniqueItems[uniqueItemId.catName]) {
-	    newSelectedUniqueItems[uniqueItemId.catName] = {};
-	 }
-	 matchingUniqueItemResources = this.matchingUniqueItemResources(uniqueItemId);
-	 newSelectedUniqueItems[uniqueItemId.catName][uniqueItemId.display] = matchingUniqueItemResources;
-	 this.context.updateGlobalContext({ highlightedResources: this.allSelectedUniqueItemResources(newSelectedUniqueItems),	// Used by HighlightDiv
-					    lastHighlightedResources: matchingUniqueItemResources });				//
-//	 let newDate = matchingUniqueItemResources[0].itemDate;
-//	 let newContext = Object.assign(this.state.context, { date: newDate,
-//							      position: normalizeDates([newDate], this.state.context.minDate, this.state.context.maxDate)[0],
-//							      dotType: 'active' });
-	 this.setState({ lastUniqueItemSelected: uniqueItemId,
-//			 context: newContext
-		       });
+   // Select the clicked unique item
+   if (!newSelectedUniqueItems[uniqueItemId.catName]) {
+      newSelectedUniqueItems[uniqueItemId.catName] = {};
+   }
+   matchingUniqueItemResources = this.matchingUniqueItemResources(uniqueItemId);
+   newSelectedUniqueItems[uniqueItemId.catName][uniqueItemId.display] = matchingUniqueItemResources;
+   this.context.updateGlobalContext({ highlightedResources: this.allSelectedUniqueItemResources(newSelectedUniqueItems),  // Used by HighlightDiv
+              lastHighlightedResources: matchingUniqueItemResources });        //
+//   let newDate = matchingUniqueItemResources[0].itemDate;
+//   let newContext = Object.assign(this.state.context, { date: newDate,
+//                    position: normalizeDates([newDate], this.state.context.minDate, this.state.context.maxDate)[0],
+//                    dotType: 'active' });
+   this.setState({ lastUniqueItemSelected: uniqueItemId,
+//       context: newContext
+           });
       }
 
       // If all/no unique items are now selected for this category, clear lastSavedSelectedTiles for this category
       let selectedUniqueItemsForCatCount = newSelectedUniqueItems[uniqueItemId.catName] ? Object.keys(newSelectedUniqueItems[uniqueItemId.catName]).length
-											: 0;
+                      : 0;
       // TODO: following is inefficient -- consider converting uniqueStruct to use "hyphenated" category names
       let uniqueItemsForCatCount = this.state.uniqueStruct[Object.keys(this.state.uniqueStruct).find(key =>
-							      this.hyphenate(key) === uniqueItemId.catName)].length;
+                    this.hyphenate(key) === uniqueItemId.catName)].length;
       if (this.context.lastSavedSelectedTiles && (selectedUniqueItemsForCatCount === 0 || selectedUniqueItemsForCatCount === uniqueItemsForCatCount)) {
-	 let newLastSavedSelectedUniqueItems = Object.assign({}, this.context.lastSavedSelectedTiles);
-	 delete newLastSavedSelectedUniqueItems[uniqueItemId.catName];
-	 this.context.updateGlobalContext({ lastSavedSelectedTiles: newLastSavedSelectedUniqueItems });
+   let newLastSavedSelectedUniqueItems = Object.assign({}, this.context.lastSavedSelectedTiles);
+   delete newLastSavedSelectedUniqueItems[uniqueItemId.catName];
+   this.context.updateGlobalContext({ lastSavedSelectedTiles: newLastSavedSelectedUniqueItems });
       }
 
       this.setState({ selectedUniqueItems: newSelectedUniqueItems });
       this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedUniqueItems),
-					 viewLastAccentDates: clearedPrevSelected ? [] : this.uniqueDatesFromResources(
-												this.matchingUniqueItemResources(uniqueItemId)) });
+           viewLastAccentDates: clearedPrevSelected ? [] : this.uniqueDatesFromResources(
+                        this.matchingUniqueItemResources(uniqueItemId)) });
 
       // Scroll to the latest resource of the clicked tile
       if (matchingUniqueItemResources) {
-	 let latest = matchingUniqueItemResources.reduce((latest, elt) => new Date(elt.itemDate) > new Date(latest.itemDate) ? elt : latest,
-							 matchingUniqueItemResources[0]);
-	 // Delay a bit to allow resources to be rendered to the DOM
-	 setTimeout(res => {
-	    let key = fhirKey(res);
-	    let elt = document.querySelector(`[data-fhir="${key}"]`);
-	    if (elt) {
-	       elt.scrollIntoView();
-	    } else {
-	       console.log(`onUniqueItemClick(): cannot scroll to "${key}"`);
-	    }
-	 }, 200, latest);
+   let latest = matchingUniqueItemResources.reduce((latest, elt) => new Date(elt.itemDate) > new Date(latest.itemDate) ? elt : latest,
+               matchingUniqueItemResources[0]);
+   // Delay a bit to allow resources to be rendered to the DOM
+   setTimeout(res => {
+      let key = fhirKey(res);
+      let elt = document.querySelector(`[data-fhir="${key}"]`);
+      if (elt) {
+         elt.scrollIntoView();
+      } else {
+         console.log(`onUniqueItemClick(): cannot scroll to "${key}"`);
+      }
+   }, 200, latest);
       }
    }
 
@@ -399,11 +399,11 @@ export default class CompareView extends React.Component {
    viewAccentDatesFromSelected(selectedUniqueItems) {
       let dateArray = [];
       if (selectedUniqueItems) {
-	 for (let catName of Object.keys(selectedUniqueItems)) {
-	    for (let displayStr of Object.keys(selectedUniqueItems[catName])) {
-	       dateArray = dateArray.concat(selectedUniqueItems[catName][displayStr].reduce((acc, res) => { acc.push(res.itemDate); return acc; }, []));
-	    }
-	 }
+   for (let catName of Object.keys(selectedUniqueItems)) {
+      for (let displayStr of Object.keys(selectedUniqueItems[catName])) {
+         dateArray = dateArray.concat(selectedUniqueItems[catName][displayStr].reduce((acc, res) => { acc.push(res.itemDate); return acc; }, []));
+      }
+   }
       }
 
       return uniqueBy(dateArray, elt => elt);
@@ -411,13 +411,13 @@ export default class CompareView extends React.Component {
 
    uniqueButtonClassName(catName, display) {
       if (this.isLastUniqueItemSelected(catName, display)) {
-	 return 'compare-view-record-button-selected-last';
+   return 'compare-view-record-button-selected-last';
       } else if (this.isUniqueItemSelected(catName, display)) {
-	 return 'compare-view-record-button-selected';
+   return 'compare-view-record-button-selected';
       } else {
-	 return 'compare-view-record-button';
+   return 'compare-view-record-button';
       }
-   }		 
+   }     
 
    formatCount(count, onePre, onePost, multiPre, multiPost) {
        return (count === 1) ? onePre + onePost : multiPre + count + multiPost;
@@ -438,60 +438,60 @@ export default class CompareView extends React.Component {
       let newSelectedUniqueItems = null;
 
       if (selectedCount === 0) {
-	 // None selected
-	 if (this.context.lastSavedSelectedTiles && this.context.lastSavedSelectedTiles[hCatName]) {
-	    // --> prior saved partial
-	    this.setState({ selectedUniqueItems: this.context.lastSavedSelectedTiles });
-	    this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(this.context.lastSavedSelectedTiles) });
+   // None selected
+   if (this.context.lastSavedSelectedTiles && this.context.lastSavedSelectedTiles[hCatName]) {
+      // --> prior saved partial
+      this.setState({ selectedUniqueItems: this.context.lastSavedSelectedTiles });
+      this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(this.context.lastSavedSelectedTiles) });
 
-	 } else {
-	    // --> all selected
-	    newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);	// copy selected unique items obj
-	    if (!newSelectedUniqueItems[hCatName]) {
-	       newSelectedUniqueItems[hCatName] = {};
-	    }
-	    for (let unique1 of this.state.uniqueStruct[catName]) {
-	       let hDisplay1 = this.hyphenate(unique1.display);
-	       newSelectedUniqueItems[hCatName][hDisplay1] = this.matchingUniqueItemResources({ catName:hCatName, display:hDisplay1,
-												trueCategory:unique1.trueCategory });
-	    }
-	    this.setState({ selectedUniqueItems: newSelectedUniqueItems });
-	    this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedUniqueItems) });
-	 }
+   } else {
+      // --> all selected
+      newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);  // copy selected unique items obj
+      if (!newSelectedUniqueItems[hCatName]) {
+         newSelectedUniqueItems[hCatName] = {};
+      }
+      for (let unique1 of this.state.uniqueStruct[catName]) {
+         let hDisplay1 = this.hyphenate(unique1.display);
+         newSelectedUniqueItems[hCatName][hDisplay1] = this.matchingUniqueItemResources({ catName:hCatName, display:hDisplay1,
+                        trueCategory:unique1.trueCategory });
+      }
+      this.setState({ selectedUniqueItems: newSelectedUniqueItems });
+      this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedUniqueItems) });
+   }
 
       } else if (selectedCount < uniqueItemsForCatCount) {
-	 // Part selected --> all selected (and save copy of partial)
-	 this.context.updateGlobalContext({ lastSavedSelectedTiles: JSON.parse(JSON.stringify(this.state.selectedUniqueItems)) });
-	 newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);	// copy selected tiles obj
-	 if (!newSelectedUniqueItems[hCatName]) {
-	    newSelectedUniqueItems[hCatName] = {};
-	 }
-	 for (let unique2 of this.state.uniqueStruct[catName]) {
-	    let hDisplay2 = this.hyphenate(unique2.display);
-	    newSelectedUniqueItems[hCatName][hDisplay2] = this.matchingUniqueItemResources({ catName:hCatName, display:hDisplay2,
-											     trueCategory:unique2.trueCategory });
-	 }
-	 this.setState({ selectedUniqueItems: newSelectedUniqueItems });
-	 this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedUniqueItems),
-					    viewLastAccentDates: [] });
-	 // Clear lastUniqueItemSelected if matches
-	 if (this.state.lastUniqueItemSelected && this.state.lastUniqueItemSelected.catName === hCatName) {
-	    this.context.updateGlobalContext({ highlightedResources: [] });
-	    this.setState({ lastUniqueItemSelected: null });
-	 }
+   // Part selected --> all selected (and save copy of partial)
+   this.context.updateGlobalContext({ lastSavedSelectedTiles: JSON.parse(JSON.stringify(this.state.selectedUniqueItems)) });
+   newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);  // copy selected tiles obj
+   if (!newSelectedUniqueItems[hCatName]) {
+      newSelectedUniqueItems[hCatName] = {};
+   }
+   for (let unique2 of this.state.uniqueStruct[catName]) {
+      let hDisplay2 = this.hyphenate(unique2.display);
+      newSelectedUniqueItems[hCatName][hDisplay2] = this.matchingUniqueItemResources({ catName:hCatName, display:hDisplay2,
+                           trueCategory:unique2.trueCategory });
+   }
+   this.setState({ selectedUniqueItems: newSelectedUniqueItems });
+   this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedUniqueItems),
+              viewLastAccentDates: [] });
+   // Clear lastUniqueItemSelected if matches
+   if (this.state.lastUniqueItemSelected && this.state.lastUniqueItemSelected.catName === hCatName) {
+      this.context.updateGlobalContext({ highlightedResources: [] });
+      this.setState({ lastUniqueItemSelected: null });
+   }
 
       } else {
-	 // All selected --> none selected
-	 newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);	// copy selected unique items obj
-	 delete newSelectedUniqueItems[hCatName]
-	 this.setState({ selectedUniqueItems: newSelectedUniqueItems });
-	 this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedUniqueItems),
-					    viewLastAccentDates: [] });
-	 // Clear lastUniqueItemSelected if matches
-	 if (this.state.lastUniqueItemSelected && this.state.lastUniqueItemSelected.catName === hCatName) {
-	    this.context.updateGlobalContext({ highlightedResources: [] });
-	    this.setState({ lastUniqueItemSelected: null });
-	 }
+   // All selected --> none selected
+   newSelectedUniqueItems = Object.assign({}, this.state.selectedUniqueItems);  // copy selected unique items obj
+   delete newSelectedUniqueItems[hCatName]
+   this.setState({ selectedUniqueItems: newSelectedUniqueItems });
+   this.context.updateGlobalContext({ viewAccentDates: this.viewAccentDatesFromSelected(newSelectedUniqueItems),
+              viewLastAccentDates: [] });
+   // Clear lastUniqueItemSelected if matches
+   if (this.state.lastUniqueItemSelected && this.state.lastUniqueItemSelected.catName === hCatName) {
+      this.context.updateGlobalContext({ highlightedResources: [] });
+      this.setState({ lastUniqueItemSelected: null });
+   }
       }
    }
 
@@ -507,20 +507,20 @@ export default class CompareView extends React.Component {
 
    noneEnabled(obj) {
       for (let propName of Object.keys(obj)) {
-	 if (obj[propName]) {
-	    return false;
-	 }
+   if (obj[propName]) {
+      return false;
+   }
       }
       return true;
    }
 
    get noResultDisplay() {
       if (this.noneEnabled(this.props.catsEnabled)) {
-	 return 'No Record type is selected';
+   return 'No Record type is selected';
       } else if (this.noneEnabled(this.props.provsEnabled)) {
-	 return 'No Provider is selected';
+   return 'No Provider is selected';
       } else {
-	 return this.props.noResultDisplay ? this.props.noResultDisplay : 'No data found for the selected Records, Providers, and Time period';
+   return this.props.noResultDisplay ? this.props.noResultDisplay : 'No data found for the selected Records, Providers, and Time period';
       }
    }
 
@@ -530,18 +530,18 @@ export default class CompareView extends React.Component {
       let divs = [];
 
       for (let thisProv of provs) {
-	 divs.push(
-	    <div className='compare-view-data-row' key={divs.length}>
-	       <Sparkline className='compare-view-sparkline' minDate={minDate} maxDate={maxDate} data={thisProv.dates} />
-	       {/*<div className='compare-view-date-range'>
-		  { this.formatYearRange(thisProv.minDate, thisProv.maxDate) }
-	       </div>*/}
-	       <div className='compare-view-provider'>
-		  {/* titleCase(thisProv.provName) + this.formatCount(thisProv.count, ' [', '', ' [', 'x, ')
-		       + this.formatYearRange(thisProv.minDate, thisProv.maxDate, '', ']') */}
-		  { titleCase(thisProv.provName) + this.formatYearRange(thisProv.minDate, thisProv.maxDate, ' [', ']') }
-	       </div>
-	    </div>);
+   divs.push(
+      <div className='compare-view-data-row' key={divs.length}>
+         <Sparkline className='compare-view-sparkline' minDate={minDate} maxDate={maxDate} data={thisProv.dates} />
+         {/*<div className='compare-view-date-range'>
+      { this.formatYearRange(thisProv.minDate, thisProv.maxDate) }
+         </div>*/}
+         <div className='compare-view-provider'>
+      {/* titleCase(thisProv.provName) + this.formatCount(thisProv.count, ' [', '', ' [', 'x, ')
+           + this.formatYearRange(thisProv.minDate, thisProv.maxDate, '', ']') */}
+      { titleCase(thisProv.provName) + this.formatYearRange(thisProv.minDate, thisProv.maxDate, ' [', ']') }
+         </div>
+      </div>);
       }
 
       return divs;
@@ -550,17 +550,17 @@ export default class CompareView extends React.Component {
    renderUniqueItemsForCat(catName) {
       let divs = [];
       for (let thisUnique of this.state.uniqueStruct[catName].sort((a, b) => stringCompare(a.display, b.display))) {
-	 let count = thisUnique.provs.reduce((count, prov) => count + prov.count, 0);
-	 divs.push(
-	    <div className='compare-view-unique-item-container' key={divs.length}>
-	       {/* <button className={this.uniqueButtonClassName(catName, thisUnique.display)} id={this.uniqueItemId(catName, thisUnique.display)}
-		       onClick={this.onUniqueItemClick}>{thisUnique.display + this.formatCount(count, '', '', ' [', 'x]')}</button> */}
-	       <button className={this.uniqueButtonClassName(catName, thisUnique.display)} id={this.uniqueItemId(catName, thisUnique.display)}
-		       onClick={this.onUniqueItemClick}>{thisUnique.display + this.formatCount(count, '', '', ' [', ']')}</button>
-	       <div className='compare-view-data-column'>
-		  { this.renderProvsForUniqueItem(thisUnique.provs) }
-	       </div>
-	    </div>);
+   let count = thisUnique.provs.reduce((count, prov) => count + prov.count, 0);
+   divs.push(
+      <div className='compare-view-unique-item-container' key={divs.length}>
+         {/* <button className={this.uniqueButtonClassName(catName, thisUnique.display)} id={this.uniqueItemId(catName, thisUnique.display)}
+           onClick={this.onUniqueItemClick}>{thisUnique.display + this.formatCount(count, '', '', ' [', 'x]')}</button> */}
+         <button className={this.uniqueButtonClassName(catName, thisUnique.display)} id={this.uniqueItemId(catName, thisUnique.display)}
+           onClick={this.onUniqueItemClick}>{thisUnique.display + this.formatCount(count, '', '', ' [', ']')}</button>
+         <div className='compare-view-data-column'>
+      { this.renderProvsForUniqueItem(thisUnique.provs) }
+         </div>
+      </div>);
       }
 
       return divs;
@@ -570,23 +570,23 @@ export default class CompareView extends React.Component {
       let divs = [];
 
       for (let catName in this.state.uniqueStruct) {
-	 divs.push(
-	    <div className='compare-view-category-container' key={divs.length}>
-	       <div className='compare-view-title-container'>
-		  <div className='compare-view-title'>{catName}</div>
-		  <button className={this.buttonClass(catName)} onClick={() => this.handleSetClearButtonClick(catName)} />
-	       </div>
-	       { this.renderUniqueItemsForCat(catName) }
-	    </div>
-	 );
+   divs.push(
+      <div className='compare-view-category-container' key={divs.length}>
+         <div className='compare-view-title-container'>
+      <div className='compare-view-title'>{catName}</div>
+      <button className={this.buttonClass(catName)} onClick={() => this.handleSetClearButtonClick(catName)} />
+         </div>
+         { this.renderUniqueItemsForCat(catName) }
+      </div>
+   );
       }
 
       if (divs.length === 0) {
-	 divs.push(
-	    <div className='compare-view-all-unique-items-empty' key='0'>
-	       { this.noResultDisplay }
-	    </div>
-	 );
+   divs.push(
+      <div className='compare-view-all-unique-items-empty' key='0'>
+         { this.noResultDisplay }
+      </div>
+   );
       }
 
       return divs;
@@ -596,13 +596,13 @@ export default class CompareView extends React.Component {
    selectedUniqueItemResources() {
       let resArray = this.props.resources.transformed.filter(elt => elt.category === 'Patient');
       for (let catName of Object.keys(this.state.selectedUniqueItems)) {
-	 for (let displayStr of Object.keys(this.state.selectedUniqueItems[catName])) {
-	    if (!this.state.onlyMultisource ||
-		(this.state.onlyMultisource &&		// more than one provider?
-		 this.state.selectedUniqueItems[catName][displayStr].reduce((provs, res) => provs.add(res.provider), new Set()).size > 1)) {
-	       resArray = resArray.concat(this.state.selectedUniqueItems[catName][displayStr]);
-	    }
-	 }
+   for (let displayStr of Object.keys(this.state.selectedUniqueItems[catName])) {
+      if (!this.state.onlyMultisource ||
+    (this.state.onlyMultisource &&    // more than one provider?
+     this.state.selectedUniqueItems[catName][displayStr].reduce((provs, res) => provs.add(res.provider), new Set()).size > 1)) {
+         resArray = resArray.concat(this.state.selectedUniqueItems[catName][displayStr]);
+      }
+   }
       }
 
       return new FhirTransform(resArray, (data) => data);
@@ -616,40 +616,40 @@ export default class CompareView extends React.Component {
 
    onClearClick = () => {
       this.setState({ selectedUniqueItems: {},
-		      lastUniqueItemSelected: null });
+          lastUniqueItemSelected: null });
       this.context.updateGlobalContext({ viewAccentDates: [],
-					 viewLastAccentDates: [],
-				         highlightedResources: [] });
+           viewLastAccentDates: [],
+                 highlightedResources: [] });
    }
 
    render() {
       let uniqueSelected = Object.keys(this.state.selectedUniqueItems).length > 0;
       return (
-	 <div className='compare-view'>  
-	    <div className='compare-view-header'>
-	       <div className={uniqueSelected ? 'compare-view-header-button-clear-selected' : 'compare-view-header-button-clear'}
-		    onClick={this.onClearClick}>Clear</div>
-	       { config.enableReportedMultProvs && <label className='compare-view-multisource-label'>
-		    <input className='compare-view-multisource-check' type='checkbox'
-			   checked={this.state.onlyMultisource} onChange={this.onlyMultisourceChange}/>
-		    Reported by multiple providers
-		 </label> }
-	    </div>
-	    <div className='compare-view-scroller'>
-	       <div className='compare-view-all-unique-items'>
-		  { this.renderUniqueItems() }
-	       </div>
-	    </div>
-	    <ContentPanel open={true} catsEnabled={this.props.catsEnabled} provsEnabled={this.props.provsEnabled}
-			  containerClassName='content-panel-compare-view'
-			  topBoundFn={() => this.state.topBound} bottomBoundFn={this.contentPanelBottomBound}
-			  initialPositionYFn={this.initialPositionY.bind(this)} onResizeFn={this.onContentPanelResize.bind(this)}
-			  context={this.state.context} nextPrevFn={this.props.nextPrevFn}
-			  thumbLeftDate={this.props.thumbLeftDate} thumbRightDate={this.props.thumbRightDate}
-			  resources={this.selectedUniqueItemResources()} totalResCount={this.props.totalResCount}
-			  viewName='Compare' viewIconClass='compare-view-icon' tileSort={true}
-			  noResultDisplay={Object.keys(this.state.uniqueStruct).length > 0 ? 'No Card is selected' : 'No data to display'} />
-	 </div>
+   <div className='compare-view'>  
+      <div className='compare-view-header'>
+         <div className={uniqueSelected ? 'compare-view-header-button-clear-selected' : 'compare-view-header-button-clear'}
+        onClick={this.onClearClick}>Clear</div>
+         { config.enableReportedMultProvs && <label className='compare-view-multisource-label'>
+        <input className='compare-view-multisource-check' type='checkbox'
+         checked={this.state.onlyMultisource} onChange={this.onlyMultisourceChange}/>
+        Reported by multiple providers
+     </label> }
+      </div>
+      <div className='compare-view-scroller'>
+         <div className='compare-view-all-unique-items'>
+      { this.renderUniqueItems() }
+         </div>
+      </div>
+      <ContentPanel open={true} catsEnabled={this.props.catsEnabled} provsEnabled={this.props.provsEnabled}
+        containerClassName='content-panel-compare-view'
+        topBoundFn={() => this.state.topBound} bottomBoundFn={this.contentPanelBottomBound}
+        initialPositionYFn={this.initialPositionY.bind(this)} onResizeFn={this.onContentPanelResize.bind(this)}
+        context={this.state.context} nextPrevFn={this.props.nextPrevFn}
+        thumbLeftDate={this.props.thumbLeftDate} thumbRightDate={this.props.thumbRightDate}
+        resources={this.selectedUniqueItemResources()} totalResCount={this.props.totalResCount}
+        viewName='Compare' viewIconClass='compare-view-icon' tileSort={true}
+        noResultDisplay={Object.keys(this.state.uniqueStruct).length > 0 ? 'No Card is selected' : 'No data to display'} />
+   </div>
       );
    }
 }

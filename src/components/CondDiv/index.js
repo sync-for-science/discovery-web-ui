@@ -16,16 +16,16 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class CondDiv extends React.Component {
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
 
    static propTypes = {
       check:PropTypes.oneOfType([
-	 PropTypes.any,
-	 PropTypes.arrayOf(PropTypes.any)
+   PropTypes.any,
+   PropTypes.arrayOf(PropTypes.any)
       ]),
       expected:PropTypes.oneOfType([
-	 PropTypes.any,
-	 PropTypes.arrayOf(PropTypes.any)
+   PropTypes.any,
+   PropTypes.arrayOf(PropTypes.any)
       ])
    }
 
@@ -37,24 +37,24 @@ export default class CondDiv extends React.Component {
       let expectedArray = Array.isArray(expected) ? expected : [ expected ];
 
       switch (this.context.trimLevel) {
-	 // Unconditionally trim this element/value
+   // Unconditionally trim this element/value
          case Const.trimMax:
-	    return true;
+      return true;
 
-	 // Only trim 'expected' (typical) values
+   // Only trim 'expected' (typical) values
          case Const.trimExpected:
-	    return checkValArray.some( checkVal => expectedArray.includes(checkVal) );
+      return checkValArray.some( checkVal => expectedArray.includes(checkVal) );
 
-	 // Unconditionally show this element/value
+   // Unconditionally show this element/value
          default:
          case Const.trimNone:
-	    return false;
+      return false;
       }
    }
 
    render() {
       let allUndefined = this.props.hasOwnProperty('check') &&
-			 Array.isArray(this.props.check) ? this.props.check.every(elt => elt === undefined) : this.props.check === undefined;
+       Array.isArray(this.props.check) ? this.props.check.every(elt => elt === undefined) : this.props.check === undefined;
       return allUndefined || this.trim(this.props.check, this.props.expected) ? null : this.props.children;
    }
 }

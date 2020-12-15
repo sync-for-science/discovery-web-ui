@@ -9,11 +9,11 @@ import DiscoveryApp from './components/DiscoveryApp';
 
 ReactDOM.render(
     <Router>
-	<Switch>
-	    <Route exact path='/' component={ParticipantList} />
-	    <Route path='/participant/:index' component={DiscoveryApp} />
-	    <Route path='/uploaded/:id' component={DiscoveryApp} />
-	</Switch>
+  <Switch>
+      <Route exact path='/' component={ParticipantList} />
+      <Route path='/participant/:index' component={DiscoveryApp} />
+      <Route path='/uploaded/:id' component={DiscoveryApp} />
+  </Switch>
     </Router>,
     document.getElementById('root')
 );
