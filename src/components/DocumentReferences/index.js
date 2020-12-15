@@ -14,57 +14,57 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class DocumentReferences extends React.Component {
 
-   static catName = 'Document References';
-    
-   static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
+  static catName = 'Document References';
 
-   static compareFn(a, b) {
-      return stringCompare(DocumentReferences.primaryText(a), DocumentReferences.primaryText(b));
-   }
+  static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
 
-   static code(elt) {
-      return elt.data.code ? elt.data.code : elt.data.type;
-   }
+  static compareFn(a, b) {
+    return stringCompare(DocumentReferences.primaryText(a), DocumentReferences.primaryText(b));
+  }
 
-   static primaryText(elt) {
-      return primaryTextValue(DocumentReferences.code(elt));
-   }
+  static code(elt) {
+    return elt.data.code ? elt.data.code : elt.data.type;
+  }
 
-   static propTypes = {
-      data: PropTypes.array.isRequired,
-      isEnabled: PropTypes.bool,
-      showDate: PropTypes.bool
-   }
+  static primaryText(elt) {
+    return primaryTextValue(DocumentReferences.code(elt));
+  }
 
-   state = {
-      matchingData: null
-   }
+  static propTypes = {
+    data: PropTypes.array.isRequired,
+    isEnabled: PropTypes.bool,
+    showDate: PropTypes.bool
+  }
 
-   setMatchingData() {
-      let match = FhirTransform.getPathItem(this.props.data, `[*category=${DocumentReferences.catName}]`);
-      this.setState({ matchingData: match.length > 0 ? match.sort(DocumentReferences.compareFn)
-                 : null });
-   }  
+  state = {
+    matchingData: null
+  }
 
-   componentDidMount() {
+  setMatchingData() {
+    let match = FhirTransform.getPathItem(this.props.data, `[*category=${DocumentReferences.catName}]`);
+    this.setState({ matchingData: match.length > 0 ? match.sort(DocumentReferences.compareFn)
+        : null });
+  }
+
+  componentDidMount() {
+    this.setMatchingData();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data !== this.props.data) {
       this.setMatchingData();
-   }
+    }
+  }
 
-   componentDidUpdate(prevProps, prevState) {
-      if (prevProps.data !== this.props.data) {
-   this.setMatchingData();
-      }
-   }
-
-   render() {
-      let firstRes = this.state.matchingData && this.state.matchingData[0];
-      return ( this.state.matchingData &&
-         (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&  // Don't show this category (at all) if disabled and trim set
-         <div className='document-references category-container' id={formatKey(firstRes)}>
-      { formatContentHeader(this.props.isEnabled, DocumentReferences.catName, firstRes, this.context) }
-            <div className='content-body'>
-         { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Document', this.context) }
-            </div>
-         </div> );
-   }
+  render() {
+    let firstRes = this.state.matchingData && this.state.matchingData[0];
+    return ( this.state.matchingData &&
+      (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&  // Don't show this category (at all) if disabled and trim set
+      <div className='document-references category-container' id={formatKey(firstRes)}>
+        { formatContentHeader(this.props.isEnabled, DocumentReferences.catName, firstRes, this.context) }
+        <div className='content-body'>
+          { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Document', this.context) }
+        </div>
+      </div> );
+  }
 }

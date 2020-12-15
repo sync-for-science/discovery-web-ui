@@ -8,12 +8,12 @@ import ParticipantList from './components/ParticipantList';
 import DiscoveryApp from './components/DiscoveryApp';
 
 ReactDOM.render(
-    <Router>
-  <Switch>
+  <Router>
+    <Switch>
       <Route exact path='/' component={ParticipantList} />
       <Route path='/participant/:index' component={DiscoveryApp} />
       <Route path='/uploaded/:id' component={DiscoveryApp} />
-  </Switch>
-    </Router>,
-    document.getElementById('root')
+    </Switch>
+  </Router>,
+  document.getElementById('root')
 );

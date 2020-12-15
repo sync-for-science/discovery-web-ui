@@ -1,10 +1,10 @@
 export default [
-   'context',
-   'div',
-   'id',
-   'meta',
-   'reference',
+  'context',
+  'div',
+  'id',
+  'meta',
+  'reference',
 //   'resourceType',
-   'system',
-   'url'
+  'system',
+  'url'
 ]
