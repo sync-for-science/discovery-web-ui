@@ -14,58 +14,58 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class ProcedureRequests extends React.Component {
 
-   static catName = 'Procedure Requests';
-             
-   static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
+  static catName = 'Procedure Requests';
 
-   static compareFn(a, b) {
-      return stringCompare(ProcedureRequests.primaryText(a), ProcedureRequests.primaryText(b));
-   }
+  static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
 
-   static code(elt) {
-      return tryWithDefault(elt, elt => elt.data.valueCodeableConcept, tryWithDefault(elt, elt => elt.data.code, null));
-   }
+  static compareFn(a, b) {
+    return stringCompare(ProcedureRequests.primaryText(a), ProcedureRequests.primaryText(b));
+  }
 
-   static primaryText(elt) {
-      return primaryTextValue(ProcedureRequests.code(elt));
-   }
+  static code(elt) {
+    return tryWithDefault(elt, elt => elt.data.valueCodeableConcept, tryWithDefault(elt, elt => elt.data.code, null));
+  }
 
-   static propTypes = {
-      data: PropTypes.array.isRequired,
-      isEnabled: PropTypes.bool,
-      showDate: PropTypes.bool
-   }
+  static primaryText(elt) {
+    return primaryTextValue(ProcedureRequests.code(elt));
+  }
 
-   state = {
-      matchingData: null
-   }
+  static propTypes = {
+    data: PropTypes.array.isRequired,
+    isEnabled: PropTypes.bool,
+    showDate: PropTypes.bool
+  }
+
+  state = {
+    matchingData: null
+  }
 
 
-   setMatchingData() {
-      let match = FhirTransform.getPathItem(this.props.data, `[*category=${ProcedureRequests.catName}]`);
-      this.setState({ matchingData: match.length > 0 ? match.sort(ProcedureRequests.compareFn)
-                 : null });
-   }
+  setMatchingData() {
+    let match = FhirTransform.getPathItem(this.props.data, `[*category=${ProcedureRequests.catName}]`);
+    this.setState({ matchingData: match.length > 0 ? match.sort(ProcedureRequests.compareFn)
+        : null });
+  }
 
-   componentDidMount() {
+  componentDidMount() {
+    this.setMatchingData();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!shallowEqArray(prevProps.data, this.props.data)) {
       this.setMatchingData();
-   }
+    }
+  }
 
-   componentDidUpdate(prevProps, prevState) {
-      if (!shallowEqArray(prevProps.data, this.props.data)) {
-   this.setMatchingData();
-      }
-   }
-
-   render() {
-      let firstRes = this.state.matchingData && this.state.matchingData[0];
-      return ( this.state.matchingData &&
-         (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&  // Don't show this category (at all) if disabled and trim set
-         <div className='procedure-requests category-container' id={formatKey(firstRes)}>
-      { formatContentHeader(this.props.isEnabled, ProcedureRequests.catName, firstRes, this.context) }
-            <div className='content-body'>
-         { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Procedure Request', this.context) }
-            </div>
-         </div> );
-   }
+  render() {
+    let firstRes = this.state.matchingData && this.state.matchingData[0];
+    return ( this.state.matchingData &&
+      (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&  // Don't show this category (at all) if disabled and trim set
+      <div className='procedure-requests category-container' id={formatKey(firstRes)}>
+        { formatContentHeader(this.props.isEnabled, ProcedureRequests.catName, firstRes, this.context) }
+        <div className='content-body'>
+          { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Procedure Request', this.context) }
+        </div>
+      </div> );
+  }
 }

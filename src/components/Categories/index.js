@@ -7,12 +7,12 @@ import '../../css/Selector.css';
 //
 export default class Categories extends React.Component {
 
-   render() {
-      return (
-   <div className='selector-set'>
-      { this.props.children }  
-   </div>
-      )
-   }
+  render() {
+    return (
+      <div className='selector-set'>
+        { this.props.children }
+      </div>
+    )
+  }
 }
 

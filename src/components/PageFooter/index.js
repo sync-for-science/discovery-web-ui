@@ -7,8 +7,8 @@ import FhirTransform from '../../FhirTransform.js';
 var snapshotDate = null;
 
 try {
-   // Set snapshotDate if present
-   snapshotDate = require('../../SNAPSHOT_DATE.js').snapshotDate;
+  // Set snapshotDate if present
+  snapshotDate = require('../../SNAPSHOT_DATE.js').snapshotDate;
 } catch (err) {};
 
 //
@@ -16,28 +16,28 @@ try {
 //
 export default class PageFooter extends React.Component {
 
-   static propTypes = {
-      resources: PropTypes.instanceOf(FhirTransform)
-   }
+  static propTypes = {
+    resources: PropTypes.instanceOf(FhirTransform)
+  }
 
-   state = {
-      snapshotDate: null
-   }
-    
-   componentDidMount() {
-      this.setState({ snapshotDate: snapshotDate });
-   }
+  state = {
+    snapshotDate: null
+  }
 
-   render() {
-      return (
-   <div className='page-footer'>
-      <div className='footer-id'>
-         { this.props.resources && ' (' + this.props.resources.transformed[0].id + ')' }
+  componentDidMount() {
+    this.setState({ snapshotDate: snapshotDate });
+  }
+
+  render() {
+    return (
+      <div className='page-footer'>
+        <div className='footer-id'>
+          { this.props.resources && ' (' + this.props.resources.transformed[0].id + ')' }
+        </div>
+        <div className='footer-snapshot-date'>
+          { this.state.snapshotDate ? `Snapshot: ${this.state.snapshotDate}` : null }
+        </div>
       </div>
-      <div className='footer-snapshot-date'>
-         { this.state.snapshotDate ? `Snapshot: ${this.state.snapshotDate}` : null }
-      </div>
-         </div>
-      )
-   }
+    )
+  }
 }
