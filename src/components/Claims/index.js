@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-//import axios from 'axios';
+// import axios from 'axios';
 
 import '../ContentPanel/ContentPanel.css';
 
-//import config from '../../config.js';
+// import config from '../../config.js';
 
 import FhirTransform from '../../FhirTransform.js';
 import { renderClaims, resolveDiagnosisReference } from '../../fhirUtil.js';
-import { Const, stringCompare, shallowEqArray, formatKey, formatContentHeader } from '../../util.js';
+import {
+  Const, stringCompare, shallowEqArray, formatKey, formatContentHeader,
+} from '../../util.js';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -16,10 +18,9 @@ import DiscoveryContext from '../DiscoveryContext';
 // Display the 'Claims' category if there are matching resources
 //
 export default class Claims extends React.Component {
-
   static catName = 'Claims';
 
-  static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
+  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(Claims.primaryText(a), Claims.primaryText(b));
@@ -38,19 +39,19 @@ export default class Claims extends React.Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
     isEnabled: PropTypes.bool,
-    showDate: PropTypes.bool
+    showDate: PropTypes.bool,
   }
 
   state = {
     matchingData: null,
-    loadingRefs: 0
+    loadingRefs: 0,
   }
 
-//   AxiosCancelSource = axios.CancelToken.source();
+  //   AxiosCancelSource = axios.CancelToken.source();
 
   setMatchingData() {
-    let match = FhirTransform.getPathItem(this.props.data, `[*category=${Claims.catName}]`);
-    for (let elt of match) {
+    const match = FhirTransform.getPathItem(this.props.data, `[*category=${Claims.catName}]`);
+    for (const elt of match) {
       resolveDiagnosisReference(elt, this.context);
     }
     this.setState({ matchingData: match.length > 0 ? match : null });
@@ -66,10 +67,10 @@ export default class Claims extends React.Component {
     }
   }
 
-//   componentWillUnmount() {
-//      // Cancel any pending async gets
-//      this.AxiosCancelSource.cancel('unmounting');
-//   }
+  //   componentWillUnmount() {
+  //      // Cancel any pending async gets
+  //      this.AxiosCancelSource.cancel('unmounting');
+  //   }
 
   // OLDresolveDiagnosisReference(elt) {
   //    if (isValid(elt, e => e.data.diagnosis[0].diagnosisReference.reference) && !elt.data.diagnosis[0].diagnosisReference.code) {
@@ -91,15 +92,17 @@ export default class Claims extends React.Component {
   // }
 
   render() {
-    let firstRes = this.state.matchingData && this.state.matchingData[0];
-    return ( this.state.matchingData &&
-      (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&  // Don't show this category (at all) if disabled and trim set
-      <div className='claims category-container' style={this.props.style} id={formatKey(firstRes)}>
+    const firstRes = this.state.matchingData && this.state.matchingData[0];
+    return (this.state.matchingData
+      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
+      && (
+      <div className="claims category-container" style={this.props.style} id={formatKey(firstRes)}>
         { formatContentHeader(this.props.isEnabled, Claims.catName, firstRes, this.context) }
-        <div className='content-body'>
+        <div className="content-body">
           { this.props.isEnabled && renderClaims(this.state.matchingData, this.context) }
-          { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }
+          { this.props.isEnabled && this.state.loadingRefs > 0 && <div className="category-loading">Loading ...</div> }
         </div>
-      </div> );
+      </div>
+      ));
   }
 }

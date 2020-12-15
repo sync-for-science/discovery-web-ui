@@ -12,5 +12,5 @@ export default [
   'performedDateTime',
   'performedPeriod',
   'recordedDate',
-  'whenHandedOver'
-]
+  'whenHandedOver',
+];

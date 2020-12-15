@@ -11,7 +11,6 @@ import DotLine from '../DotLine';
 // Render a DiscoveryApp provider line
 //
 export default class Provider extends React.Component {
-
   static myName = 'Provider';
 
   static propTypes = {
@@ -20,25 +19,25 @@ export default class Provider extends React.Component {
     dotPositionsFn: PropTypes.func.isRequired,
     dotClickFn: PropTypes.func,
     enabledFn: PropTypes.func.isRequired,
-    isEnabled: PropTypes.bool
+    isEnabled: PropTypes.bool,
   }
 
   state = {
-    isEnabled: true
+    isEnabled: true,
   }
 
   componentDidMount() {
     window.addEventListener('keydown', this.onKeydown);
     if (this.props.isEnabled !== undefined) {
       this.setState({ isEnabled: this.props.isEnabled });
-//   this.props.enabledFn(Provider.myName, this.props.providerName, this.props.isEnabled);
+      //   this.props.enabledFn(Provider.myName, this.props.providerName, this.props.isEnabled);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.props.isEnabled !== prevProps.isEnabled) {
       this.setState({ isEnabled: this.props.isEnabled });
-//   this.props.enabledFn(Provider.myName, this.props.providerName, this.props.isEnabled);
+      //   this.props.enabledFn(Provider.myName, this.props.providerName, this.props.isEnabled);
     }
   }
 
@@ -55,23 +54,25 @@ export default class Provider extends React.Component {
 
   handleButtonClick = () => {
     this.props.enabledFn(Provider.myName, this.props.providerName, !this.state.isEnabled);
-    this.setState({isEnabled: !this.state.isEnabled});
+    this.setState({ isEnabled: !this.state.isEnabled });
   }
 
   render() {
     return (
-      <div className='selector'>
-        <div className='selector-nav'>
-          <button className={this.state.isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={this.handleButtonClick} >
+      <div className="selector">
+        <div className="selector-nav">
+          <button className={this.state.isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={this.handleButtonClick}>
             { titleCase(this.props.providerName) }
           </button>
         </div>
-        <SVGContainer className='selector-svg-container' svgClassName='selector-svg' svgWidth={this.props.svgWidth}>
-          <DotLine dotPositions={this.props.dotPositionsFn(Provider.myName, this.props.providerName, this.state.isEnabled)}
-                   context={ {parent:Provider.myName, rowName:this.props.providerName} }
-                   dotClickFn={this.props.dotClickFn} />
+        <SVGContainer className="selector-svg-container" svgClassName="selector-svg" svgWidth={this.props.svgWidth}>
+          <DotLine
+            dotPositions={this.props.dotPositionsFn(Provider.myName, this.props.providerName, this.state.isEnabled)}
+            context={{ parent: Provider.myName, rowName: this.props.providerName }}
+            dotClickFn={this.props.dotClickFn}
+          />
         </SVGContainer>
       </div>
-    )
+    );
   }
 }

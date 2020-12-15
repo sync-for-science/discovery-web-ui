@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fhirKey } from './fhirUtil.js'
+import { fhirKey } from './fhirUtil.js';
 
 import Allergies from './components/Allergies';
 import Benefits from './components/Benefits';
@@ -23,20 +23,20 @@ import Unimplemented from './components/Unimplemented';
 
 import './components/ContentPanel/ContentPanel.css';
 
-export let Const = {
+export const Const = {
   unknownValue: '????',
   trimNone: 'none',
   trimExpected: 'expected',
-  trimMax: 'max'
-}
+  trimMax: 'max',
+};
 
 const noDate = '<no date>';
 
-export function getStyle(oElm, css3Prop){
+export function getStyle(oElm, css3Prop) {
   try {
-    if (window.getComputedStyle){
+    if (window.getComputedStyle) {
       return getComputedStyle(oElm).getPropertyValue(css3Prop);
-    } else if (oElm.currentStyle){
+    } if (oElm.currentStyle) {
       return oElm.currentStyle[css3Prop];
     }
   } catch (e) {
@@ -49,25 +49,23 @@ export function stringCompare(a, b) {
   const bLower = b.toLowerCase();
   if (aLower === bLower) {
     return 0;
-  } else if (aLower < bLower) {
+  } if (aLower < bLower) {
     return -1;
-  } else { // aLower > bLower
-    return 1;
-  }
+  } // aLower > bLower
+  return 1;
 }
 
 // Do arrays have the same contents, checking for element-by-element strict equality
 export function shallowEqArray(arr1, arr2) {
   if (arr1.length !== arr2.length) {
     return false;
-  } else {
-    for (let i = 0; i < arr1.length; i++) {
-      if (arr1[i] !== arr2[i]) {
-        return false;
-      }
-    }
-    return true;
   }
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 // Do arrays have the same contents, checking for element-by-element stringify equality
@@ -75,44 +73,45 @@ export function stringifyEqArray(arr1, arr2) {
   try {
     if (arr1.length !== arr2.length) {
       return false;
-    } else {
-      for (let i = 0; i < arr1.length; i++) {
-        if (arr1[i] !== arr2[i] && JSON.stringify(arr1[i]) !== JSON.stringify(arr2[i])) {
-          return false;
-        }
-      }
-      return true;
     }
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i] && JSON.stringify(arr1[i]) !== JSON.stringify(arr2[i])) {
+        return false;
+      }
+    }
+    return true;
   } catch (e) {
     return false;
   }
 }
 
 export function formatDisplayDate(date, fillShortDates, surpressTime) {
-  let strDate = date+'';
-  let locale = 'en-US';
+  let strDate = `${date}`;
+  const locale = 'en-US';
 
   if (fillShortDates) {
     strDate = strDate.length === 4 ? strDate += '-01' : strDate;
     strDate = strDate.length === 7 ? strDate += '-01' : strDate;
-//      let options = surpressTime ? { year: 'numeric', month: 'short', day: '2-digit' }
-//         : { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
-    let options = surpressTime ? { year: 'numeric', month: 'short', day: 'numeric' }
-      : { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
-    return new Date(strDate).toLocaleDateString(locale, options).replace(' PM', 'pm').replace(' AM', 'am');
-
-  } else {
-    let options = surpressTime ? (strDate.length === 4 ? { year: 'numeric' }
-      : (strDate.length === 7 ? { year: 'numeric', month: 'short' }
-        : { year: 'numeric', month: 'short', day: '2-digit' }))
-      //         : { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
-      : { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
+    //      let options = surpressTime ? { year: 'numeric', month: 'short', day: '2-digit' }
+    //         : { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
+    const options = surpressTime ? { year: 'numeric', month: 'short', day: 'numeric' }
+      : {
+        year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true,
+      };
     return new Date(strDate).toLocaleDateString(locale, options).replace(' PM', 'pm').replace(' AM', 'am');
   }
+  const options = surpressTime ? (strDate.length === 4 ? { year: 'numeric' }
+    : (strDate.length === 7 ? { year: 'numeric', month: 'short' }
+      : { year: 'numeric', month: 'short', day: '2-digit' }))
+  //         : { year: 'numeric', month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
+    : {
+      year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true,
+    };
+  return new Date(strDate).toLocaleDateString(locale, options).replace(' PM', 'pm').replace(' AM', 'am');
 }
 
 export function formatKeyDate(date) {
-  let strDate = date+'';
+  let strDate = `${date}`;
 
   strDate = strDate.length === 4 ? strDate += '-01' : strDate;
   strDate = strDate.length === 7 ? strDate += '-01' : strDate;
@@ -121,83 +120,79 @@ export function formatKeyDate(date) {
   if (tLoc === -1) {
     // No time present
     return strDate;
-
-  } else {
-    // Drop time
-    return strDate.substring(0, tLoc);
   }
+  // Drop time
+  return strDate.substring(0, tLoc);
 }
 
 // XXXX
-//export function formatKey(date, category, provider) {
+// export function formatKey(date, category, provider) {
 //   return `${formatKeyDate(date)}_${category}_${provider}`;
-//}
+// }
 
-//export function formatKey(res) {
+// export function formatKey(res) {
 //   return `${formatKeyDate(res.itemDate)}_${res.category}_${res.provider}_${res.data.id}`;
-//}
+// }
 
 export function formatKey(res) {
   return `${formatKeyDate(res.itemDate)}_${res.category}`;
 }
 
 export function formatAge(birthDate, ageDate, prefix) {
-  let DAY_MS = 24 * 60 * 60 * 1000;
-  let MAX_ONLY_DAYS = 21;     // Max age to show just as "days"
-  let MAX_ONLY_WEEKS = 10;    // Max age to show just as "weeks"
-  let DAYS_PER_WEEK = 7;
-  let AVG_DAYS_PER_MONTH = 30.4;
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  const MAX_ONLY_DAYS = 21; // Max age to show just as "days"
+  const MAX_ONLY_WEEKS = 10; // Max age to show just as "weeks"
+  const DAYS_PER_WEEK = 7;
+  const AVG_DAYS_PER_MONTH = 30.4;
 
-  let startDate = new Date(birthDate);
-  let endDate = new Date(ageDate);
+  const startDate = new Date(birthDate);
+  const endDate = new Date(ageDate);
 
   if (!ageDate) {
     return null;
-
-  } else  if (endDate < startDate) {
+  } if (endDate < startDate) {
     return 'ALERT: Date is prior to birth';
-
-  } else if (endDate - startDate < DAY_MS) {
+  } if (endDate - startDate < DAY_MS) {
     return 'birth date';
-
-  } else {
-    let diffDate = new Date(endDate - startDate);
-    let years = diffDate.toISOString().slice(0,4) - 1970;
-    let months = diffDate.getMonth();
-    let days = diffDate.getDate();
-    let weeks = Math.floor((months * AVG_DAYS_PER_MONTH + days) / DAYS_PER_WEEK);
-
-    if (years === 0 && months === 0 && days <= MAX_ONLY_DAYS) {
-      return prefix + days + (days === 1 ? ' day' : ' days');
-
-    } else if (years === 0 && weeks <= MAX_ONLY_WEEKS) {
-      return prefix + weeks + ' weeks';
-
-    } else {
-      return prefix + (years > 0 ? years + 'yr' : '') + (years > 0 && months > 0 ? ' ' : '') + (months > 0 ? months + 'mo' : '');
-    }
   }
+  const diffDate = new Date(endDate - startDate);
+  const years = diffDate.toISOString().slice(0, 4) - 1970;
+  const months = diffDate.getMonth();
+  const days = diffDate.getDate();
+  const weeks = Math.floor((months * AVG_DAYS_PER_MONTH + days) / DAYS_PER_WEEK);
+
+  if (years === 0 && months === 0 && days <= MAX_ONLY_DAYS) {
+    return prefix + days + (days === 1 ? ' day' : ' days');
+  } if (years === 0 && weeks <= MAX_ONLY_WEEKS) {
+    return `${prefix + weeks} weeks`;
+  }
+  return prefix + (years > 0 ? `${years}yr` : '') + (years > 0 && months > 0 ? ' ' : '') + (months > 0 ? `${months}mo` : '');
 }
 
 // TODO: cleanup when determine not to show disabled header, eliminate header highlight
 export function formatContentHeader(isEnabled, category, res, appContext) {
 //   let dateOnly = formatKeyDate(res.itemDate);
-  let dateWithTime = res.itemDate ? formatDisplayDate(res.itemDate, true, false) : noDate;
-  let dob = appContext.resources.pathItem('[category=Patient].data.birthDate');
-  let age = formatAge(dob, res.itemDate, 'age ');
-//   let highlight = appContext.highlightedResources &&
-//       appContext.highlightedResources.some(elt => elt.category === category  && elt.itemDate === res.itemDate);
-  let highlight = false;
+  const dateWithTime = res.itemDate ? formatDisplayDate(res.itemDate, true, false) : noDate;
+  const dob = appContext.resources.pathItem('[category=Patient].data.birthDate');
+  const age = formatAge(dob, res.itemDate, 'age ');
+  //   let highlight = appContext.highlightedResources &&
+  //       appContext.highlightedResources.some(elt => elt.category === category  && elt.itemDate === res.itemDate);
+  const highlight = false;
 
-//      <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} id={dateOnly} data-fhir={fhirKey(res)}>
+  //      <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} id={dateOnly} data-fhir={fhirKey(res)}>
 
   return !isEnabled ? null : (
     <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} data-fhir={fhirKey(res)}>
       <div className={isEnabled ? (highlight ? 'content-header-highlight' : 'content-header') : 'content-header-disabled'}>{category}</div>
       <div className={isEnabled ? 'content-header-date' : 'content-header-date-disabled'}>{dateWithTime}</div>
-      { appContext.trimLevel === Const.trimNone && age &&
-      <div className={isEnabled ? 'content-header-age' : 'content-header-age-disabled'}>|&nbsp; {age}</div> }
-      <div className='content-header-padding'/>
+      { appContext.trimLevel === Const.trimNone && age
+      && (
+      <div className={isEnabled ? 'content-header-age' : 'content-header-age-disabled'}>
+        |&nbsp;
+        {age}
+      </div>
+      ) }
+      <div className="content-header-padding" />
     </div>
   );
 }
@@ -219,17 +214,15 @@ export function isValid(data, accessor) {
 // If accessor(data) is defined return accessor(data) else return defaultVal
 export function tryWithDefault(data, accessor, defaultVal) {
   try {
-    let accessorVal = accessor(data);
+    const accessorVal = accessor(data);
     if (accessorVal === undefined) {
       return defaultVal;
-    } else {
-      return accessorVal;
     }
+    return accessorVal;
   } catch (e) {
     return defaultVal;
   }
 }
-
 
 // Acronyms that should be displayed all uppercase
 const acronyms = ['Bmi', 'Lac', 'Ucla'];
@@ -239,20 +232,18 @@ const minorWords = ['A', 'An', 'And', 'As', 'At', 'But', 'By', 'For', 'From', 'I
   'Into', 'Near', 'Nor', 'Of', 'On', 'Onto', 'Or', 'The', 'To', 'With'];
 
 export function titleCase(str) {
-  let finalWords = [];
-  let words = str.toLowerCase().split(' ');
+  const finalWords = [];
+  const words = str.toLowerCase().split(' ');
 
   for (let index = 0; index < words.length; index++) {
-    let word = words[index];
+    const word = words[index];
 
     if (word.includes('/')) {
-      finalWords.push(word.split('/').map(word => titleCase(word)).join('/'));
-
+      finalWords.push(word.split('/').map((word) => titleCase(word)).join('/'));
     } else if (word.includes('-')) {
-      finalWords.push(word.split('-').map(word => titleCase(word)).join('-'));
-
+      finalWords.push(word.split('-').map((word) => titleCase(word)).join('-'));
     } else if (word !== '') {
-      let tcWord = word.replace(word[0], word[0].toUpperCase());
+      const tcWord = word.replace(word[0], word[0].toUpperCase());
       if (acronyms.indexOf(tcWord) >= 0) {
         // Uppercase acronyms
         finalWords.push(tcWord.toUpperCase());
@@ -271,7 +262,7 @@ export function titleCase(str) {
 
 export function numericPart(val) {
   const index = val.toString().search(/[A-Za-z%]/);
-  return parseFloat(val.toString().substring(0,index));
+  return parseFloat(val.toString().substring(0, index));
 }
 
 export function unitPart(val) {
@@ -301,10 +292,10 @@ export function cleanDates(dateArray) {
 // Normalize an array of dates by comparing elements to 'min' (returning 0.0) and 'max' (returning 1.0)
 //   (if min == max then return 0.5)
 export function normalizeDates(elts, minDate, maxDate) {
-  let min = (minDate instanceof Date) ? minDate : new Date(minDate);
-  let max = (maxDate instanceof Date) ? maxDate : new Date(maxDate);
-  let delta = max - min;
-  return elts.map( elt => (delta === 0) ? 0.5 : (((elt instanceof Date) ? elt : new Date(elt)) - min) / delta);
+  const min = (minDate instanceof Date) ? minDate : new Date(minDate);
+  const max = (maxDate instanceof Date) ? maxDate : new Date(maxDate);
+  const delta = max - min;
+  return elts.map((elt) => ((delta === 0) ? 0.5 : (((elt instanceof Date) ? elt : new Date(elt)) - min) / delta));
 }
 
 // Determine the increment/skip factor (in years) for timeline tickmarks
@@ -312,39 +303,38 @@ export function normalizeDates(elts, minDate, maxDate) {
 export function timelineIncrYears(minDate, maxDate, maxSinglePeriods) {
   const firstYear = new Date(formatKeyDate(minDate)).getUTCFullYear();
   const lastYear = new Date(formatKeyDate(maxDate)).getUTCFullYear();
-  const incr = Math.max(1, Math.ceil((lastYear-firstYear+1)/maxSinglePeriods));
+  const incr = Math.max(1, Math.ceil((lastYear - firstYear + 1) / maxSinglePeriods));
 
   return incr;
 }
 
 // Check whether a date (string or Date object) is within a date range (strings or Date objects)
 export function inDateRange(date, rangeLow, rangeHigh) {
-  let dateStr = (date instanceof Date ? date : new Date(date)).toISOString().substring(0,10);
-  let rangeLowStr = (rangeLow instanceof Date ? rangeLow : new Date(rangeLow)).toISOString().substring(0,10);
-  let rangeHighStr = (rangeHigh instanceof Date ? rangeHigh : new Date(rangeHigh)).toISOString().substring(0,10);
+  const dateStr = (date instanceof Date ? date : new Date(date)).toISOString().substring(0, 10);
+  const rangeLowStr = (rangeLow instanceof Date ? rangeLow : new Date(rangeLow)).toISOString().substring(0, 10);
+  const rangeHighStr = (rangeHigh instanceof Date ? rangeHigh : new Date(rangeHigh)).toISOString().substring(0, 10);
 
   return dateStr >= rangeLowStr && dateStr <= rangeHighStr;
 }
 
 // document.querySelector with check
 export function checkQuerySelector(sel) {
-  let elt = document.querySelector(sel);
+  const elt = document.querySelector(sel);
   if (elt) {
     return elt;
-  } else {
-    console.log('checkQuerySelector -- cannot find: ' + sel);
-//      debugger;
   }
+  console.log(`checkQuerySelector -- cannot find: ${sel}`);
+  //      debugger;
 }
 
 //
 // Return elements of 'arr' that are unique according to 'keyFn'
 //
 export function uniqueBy(arr, keyFn) {
-  let seen = {};
-  return arr.filter( (elt, index) => {
+  const seen = {};
+  return arr.filter((elt, index) => {
     try {
-      let key = keyFn(elt);
+      const key = keyFn(elt);
       return seen.hasOwnProperty(key) ? false : seen[key] = true;
     } catch (e) {
       return false;
@@ -388,7 +378,7 @@ export function logDiffs(label, was, now) {
         // An array
         console.group(label);
         for (let i = 0; i < was.length; i++) {
-//      if (JSON.stringify(was[i]) !== JSON.stringify(now[i])) {
+          //      if (JSON.stringify(was[i]) !== JSON.stringify(now[i])) {
           if (notEqJSON(was[i], now[i])) {
             // Element changed
             logDiffs(`[${i}]`, was[i], now[i]);
@@ -397,7 +387,7 @@ export function logDiffs(label, was, now) {
         console.groupEnd();
       } else if (was === null) {
         // null
-//      if (JSON.stringify(was) !== JSON.stringify(now)) {
+        //      if (JSON.stringify(was) !== JSON.stringify(now)) {
         if (notEqJSON(was, now)) {
           // Changed
           console.log(`${label}: ${was} --> ${now}`);
@@ -405,22 +395,22 @@ export function logDiffs(label, was, now) {
       } else {
         // An object
         console.group(label);
-        for (let attr in was) {
+        for (const attr in was) {
           if (now && now.hasOwnProperty(attr)) {
             // Property present in both objects
             if (notEqJSON(was[attr], now[attr])) {
-//
-//         let prior = '<circular>';
-//         try {
-//      prior = JSON.stringify(was[attr]);
-//         } catch (e) {}
-//         let current = '<circular>';
-//         try {
-//      current = JSON.stringify(now[attr]);
-//         } catch (e) {}
-////         if (JSON.stringify(was[attr]) !== JSON.stringify(now[attr])){
-//         if (prior !== current) {
-//
+              //
+              //         let prior = '<circular>';
+              //         try {
+              //      prior = JSON.stringify(was[attr]);
+              //         } catch (e) {}
+              //         let current = '<circular>';
+              //         try {
+              //      current = JSON.stringify(now[attr]);
+              //         } catch (e) {}
+              /// /         if (JSON.stringify(was[attr]) !== JSON.stringify(now[attr])){
+              //         if (prior !== current) {
+              //
               // Property changed
               logDiffs(`.${attr}`, was[attr], now[attr]);
             }
@@ -456,13 +446,13 @@ export function logDiffs(label, was, now) {
   // Log object props only present in 'now'
   if (typeof now === 'object' && now !== null && !(now instanceof Array)) {
     console.group(label);
-    for (let attr in now) {
+    for (const attr in now) {
       if (now.hasOwnProperty(attr)) {
         if (was && was.hasOwnProperty(attr)) {
           // Present in 'was' or both -- already reported
         } else {
           // Only in 'now'
-//      console.log(`.${attr} not previously set`);
+          //      console.log(`.${attr} not previously set`);
           console.log(`.${attr}: <unset> --> ${now[attr]}`);
         }
       }
@@ -475,7 +465,7 @@ export function logDiffs(label, was, now) {
 // Use category name to access static class members
 //
 export function classFromCat(cat) {
-  switch(cat) {
+  switch (cat) {
     case Allergies.catName:
       return Allergies;
     case Benefits.catName:
@@ -520,13 +510,13 @@ export function classFromCat(cat) {
 // Group elements of 'arr' according to 'keyFn'
 //
 export function groupBy(arr, keyFn) {
-  let groups = {};
-  for (let elt of arr) {
-    let groupKey = keyFn(elt);
+  const groups = {};
+  for (const elt of arr) {
+    const groupKey = keyFn(elt);
     if (groups[groupKey]) {
       groups[groupKey].push(elt);
     } else {
-      groups[groupKey] = [ elt ];
+      groups[groupKey] = [elt];
     }
   }
   return groups;

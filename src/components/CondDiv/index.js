@@ -15,26 +15,25 @@ import DiscoveryContext from '../DiscoveryContext';
 //       at least one of the elements of expected === an element of 'check'
 //
 export default class CondDiv extends React.Component {
-
-  static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
+  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
-    check:PropTypes.oneOfType([
+    check: PropTypes.oneOfType([
       PropTypes.any,
-      PropTypes.arrayOf(PropTypes.any)
+      PropTypes.arrayOf(PropTypes.any),
     ]),
-    expected:PropTypes.oneOfType([
+    expected: PropTypes.oneOfType([
       PropTypes.any,
-      PropTypes.arrayOf(PropTypes.any)
-    ])
+      PropTypes.arrayOf(PropTypes.any),
+    ]),
   }
 
   //
   // Determine whether a display element/value should be 'trimmed' (not displayed) based on trimLevel
   //
   trim(checkVal, expected) {
-    let checkValArray = Array.isArray(checkVal) ? checkVal : [ checkVal ];
-    let expectedArray = Array.isArray(expected) ? expected : [ expected ];
+    const checkValArray = Array.isArray(checkVal) ? checkVal : [checkVal];
+    const expectedArray = Array.isArray(expected) ? expected : [expected];
 
     switch (this.context.trimLevel) {
       // Unconditionally trim this element/value
@@ -43,7 +42,7 @@ export default class CondDiv extends React.Component {
 
       // Only trim 'expected' (typical) values
       case Const.trimExpected:
-        return checkValArray.some( checkVal => expectedArray.includes(checkVal) );
+        return checkValArray.some((checkVal) => expectedArray.includes(checkVal));
 
       // Unconditionally show this element/value
       default:
@@ -53,8 +52,8 @@ export default class CondDiv extends React.Component {
   }
 
   render() {
-    let allUndefined = this.props.hasOwnProperty('check') &&
-    Array.isArray(this.props.check) ? this.props.check.every(elt => elt === undefined) : this.props.check === undefined;
+    const allUndefined = this.props.hasOwnProperty('check')
+    && Array.isArray(this.props.check) ? this.props.check.every((elt) => elt === undefined) : this.props.check === undefined;
     return allUndefined || this.trim(this.props.check, this.props.expected) ? null : this.props.children;
   }
 }

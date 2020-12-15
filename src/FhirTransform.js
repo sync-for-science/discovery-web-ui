@@ -1,4 +1,4 @@
-//import jsonQuery from 'json-query';  // Doesn't work with Chrome devtools (for some reason)
+// import jsonQuery from 'json-query';  // Doesn't work with Chrome devtools (for some reason)
 const jsonQuery = require('json-query');
 
 export default class FhirTransform {
@@ -25,27 +25,23 @@ export default class FhirTransform {
     if (template instanceof Function) {
       // invoke the function on the data
       return template(data);
-
-    } else if (template instanceof Array) {
+    } if (template instanceof Array) {
       // iterate over array members
       const arr = [];
-      for (let elt of template) {
+      for (const elt of template) {
         arr.push(FhirTransform.transform(data, elt));
       }
       return arr;
-
-    } else if (template === null || !(template instanceof Object)) {
+    } if (template === null || !(template instanceof Object)) {
       // return primitive types
       return template;
-
-    } else {
-      // iterate over object properties
-      const obj = {};
-      for (let prop in template) {
-        obj[prop] = FhirTransform.transform(data, template[prop]);
-      }
-      return obj;
     }
+    // iterate over object properties
+    const obj = {};
+    for (const prop in template) {
+      obj[prop] = FhirTransform.transform(data, template[prop]);
+    }
+    return obj;
   }
 
   //
@@ -53,6 +49,6 @@ export default class FhirTransform {
   // See https://www.npmjs.com/package/json-query
   //
   static getPathItem(obj, path, options) {
-    return jsonQuery(path, Object.assign({data:obj}, options)).value;
+    return jsonQuery(path, { data: obj, ...options }).value;
   }
 }
