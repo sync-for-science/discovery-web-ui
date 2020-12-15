@@ -18,15 +18,15 @@ export default class MedsRequested extends React.Component {
 
    static catName = 'Meds Requested';
     
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
 
    static compareFn(a, b) {
       return stringCompare(MedsRequested.primaryText(a), MedsRequested.primaryText(b));
    }
 
    static code(elt) {
-//      return elt.data.medicationCodeableConcept ? elt.data.medicationCodeableConcept : null;	// RxNorm
-      return tryWithDefault(elt, elt => elt.data.medicationCodeableConcept, null);	// RxNorm
+//      return elt.data.medicationCodeableConcept ? elt.data.medicationCodeableConcept : null;  // RxNorm
+      return tryWithDefault(elt, elt => elt.data.medicationCodeableConcept, null);  // RxNorm
    }
 
    static primaryText(elt) {
@@ -50,12 +50,12 @@ export default class MedsRequested extends React.Component {
 
    tweakMedsRequested(elt) {
       if (elt.data.medicationReference.display) {
-	 // Mark medicationReference and create minimal medicationCodeableConcept element
-	 elt.data.medicationReference = Object.assign(elt.data.medicationReference, { code: Const.unknownValue });
-	 elt.data.medicationCodeableConcept = { coding: [{ code: Const.unknownValue, display: elt.data.medicationReference.display }] };
-	 return true;
+   // Mark medicationReference and create minimal medicationCodeableConcept element
+   elt.data.medicationReference = Object.assign(elt.data.medicationReference, { code: Const.unknownValue });
+   elt.data.medicationCodeableConcept = { coding: [{ code: Const.unknownValue, display: elt.data.medicationReference.display }] };
+   return true;
       } else {
-	 return false;
+   return false;
       }
    }
 
@@ -64,18 +64,18 @@ export default class MedsRequested extends React.Component {
       let withCode = [];
 
       if (match.length > 0) {
-  	 for (let elt of match) {
-	    if (elt.data.medicationCodeableConcept || this.tweakMedsRequested(elt)) {
-   	       withCode.push(elt);
-   	    } else if (resolveMedicationReference(elt, this.context)) {
-	       this.setState({ matchingData: this.state.matchingData ? this.state.matchingData.concat([elt]).sort(this.sortMeds) : [ elt ] });
-	    }
-   	    resolveReasonReference(elt, this.context);
-   	 }
+     for (let elt of match) {
+      if (elt.data.medicationCodeableConcept || this.tweakMedsRequested(elt)) {
+            withCode.push(elt);
+         } else if (resolveMedicationReference(elt, this.context)) {
+         this.setState({ matchingData: this.state.matchingData ? this.state.matchingData.concat([elt]).sort(this.sortMeds) : [ elt ] });
+      }
+         resolveReasonReference(elt, this.context);
+      }
       }
 
       this.setState({ matchingData: withCode.length > 0 ? withCode.sort(MedsRequested.compareFn) : null });
-   }	
+   }  
 
    componentDidMount() {
       this.setMatchingData();
@@ -83,7 +83,7 @@ export default class MedsRequested extends React.Component {
 
    componentDidUpdate(prevProps, prevState) {
       if (!shallowEqArray(prevProps.data, this.props.data)) {
-	 this.setMatchingData();
+   this.setMatchingData();
       }
    }
 
@@ -94,35 +94,35 @@ export default class MedsRequested extends React.Component {
 
    // OLDresolveMedicationReference(elt) {
    //    if (elt.data.medicationReference && !elt.data.medicationReference.code) {
-   // 	 this.setState({loadingRefs: this.state.loadingRefs+1});
-   // 	 axios.get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.medicationReference.reference),
-   // 		   { cancelToken: this.AxiosCancelSource.token } )
-   // 	    .then(response => {
-   // 		// Add the de-referenced data to the medicationReference element AND create the medicationCodeableConcept element
-   // 		elt.data.medicationReference = Object.assign(elt.data.medicationReference, response.data);
-   // 		elt.data.medicationCodeableConcept = response.data.code;
-   // 		this.setState({ loadingRefs: this.state.loadingRefs-1,
-   // 			        matchingData: this.state.matchingData ? this.state.matchingData.concat([elt]).sort(this.sortMeds)
-   // 								      : [ elt ] });
-   // 	    })
-   // 	    .catch(thrown => {
-   // 		if (!axios.isCancel(thrown)) {
-   // 		   console.log(thrown);
-   // 		   this.setState({loadingRefs: this.state.loadingRefs-1});
-   // 		}
-   // 	    });
+   //    this.setState({loadingRefs: this.state.loadingRefs+1});
+   //    axios.get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.medicationReference.reference),
+   //        { cancelToken: this.AxiosCancelSource.token } )
+   //       .then(response => {
+   //     // Add the de-referenced data to the medicationReference element AND create the medicationCodeableConcept element
+   //     elt.data.medicationReference = Object.assign(elt.data.medicationReference, response.data);
+   //     elt.data.medicationCodeableConcept = response.data.code;
+   //     this.setState({ loadingRefs: this.state.loadingRefs-1,
+   //               matchingData: this.state.matchingData ? this.state.matchingData.concat([elt]).sort(this.sortMeds)
+   //                       : [ elt ] });
+   //       })
+   //       .catch(thrown => {
+   //     if (!axios.isCancel(thrown)) {
+   //        console.log(thrown);
+   //        this.setState({loadingRefs: this.state.loadingRefs-1});
+   //     }
+   //       });
    //    } else {
-   // 	 console.log('Missing medicationReference!');
+   //    console.log('Missing medicationReference!');
    //    }
    // }
 
    // Fix inconsistencies between our category names and FHIR names
    patchCatName(catName) {
       switch (catName) {
-	 case 'Condition':
-	    return 'Conditions';
-	 default:
-	    return catName;
+   case 'Condition':
+      return 'Conditions';
+   default:
+      return catName;
        }
    }
 
@@ -130,33 +130,33 @@ export default class MedsRequested extends React.Component {
    //       Move to fhirUtil.js (with callback for state management)
    // OLDresolveReasonReference(elt) {
    //    if (elt.data.reasonReference && elt.data.reasonReference[0] && !elt.data.reasonReference[0].code) {
-   // 	 this.setState({loadingRefs: this.state.loadingRefs+1});
-   // 	 axios.get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.reasonReference[0].reference),
-   // 		   { cancelToken: this.AxiosCancelSource.token } )
-   // 	    .then(response => {
-   // 		// Add the de-referenced data to the reasonReference element
-   // 		elt.data.reasonReference[0] = Object.assign(elt.data.reasonReference[0], response.data);
-   // 		this.setState({loadingRefs: this.state.loadingRefs-1});
-   // 	    })
-   // 	    .catch(thrown => {
-   // 		if (!axios.isCancel(thrown)) {
-   // 		   console.log(thrown);
-   // 		   this.setState({loadingRefs: this.state.loadingRefs-1});
-   // 		}
-   // 	    });
+   //    this.setState({loadingRefs: this.state.loadingRefs+1});
+   //    axios.get(config.serverUrl + '/reference/' + encodeURIComponent(elt.provider) + '/' + encodeURIComponent(elt.data.reasonReference[0].reference),
+   //        { cancelToken: this.AxiosCancelSource.token } )
+   //       .then(response => {
+   //     // Add the de-referenced data to the reasonReference element
+   //     elt.data.reasonReference[0] = Object.assign(elt.data.reasonReference[0], response.data);
+   //     this.setState({loadingRefs: this.state.loadingRefs-1});
+   //       })
+   //       .catch(thrown => {
+   //     if (!axios.isCancel(thrown)) {
+   //        console.log(thrown);
+   //        this.setState({loadingRefs: this.state.loadingRefs-1});
+   //     }
+   //       });
    //    }
    // }
 
    render() {
       let firstRes = this.state.matchingData && this.state.matchingData[0];
       return ( this.state.matchingData &&
-	       (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&	// Don't show this category (at all) if disabled and trim set
-	       <div className='meds-requested category-container' id={formatKey(firstRes)}>
-		  { formatContentHeader(this.props.isEnabled, MedsRequested.catName, firstRes, this.context) }
-	          <div className='content-body'>
-		     { this.props.isEnabled && renderMeds(this.state.matchingData, this.context) }
-	             { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }
-	          </div>
-	       </div> );
+         (this.props.isEnabled || this.context.trimLevel===Const.trimNone) &&  // Don't show this category (at all) if disabled and trim set
+         <div className='meds-requested category-container' id={formatKey(firstRes)}>
+      { formatContentHeader(this.props.isEnabled, MedsRequested.catName, firstRes, this.context) }
+            <div className='content-body'>
+         { this.props.isEnabled && renderMeds(this.state.matchingData, this.context) }
+               { this.props.isEnabled && this.state.loadingRefs > 0 && <div className='category-loading'>Loading ...</div> }
+            </div>
+         </div> );
    }
 }

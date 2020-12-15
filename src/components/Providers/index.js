@@ -10,9 +10,9 @@ export default class Providers extends React.Component {
 
    render() {
       return (
-	 <div className='selector-set'>
-	    { this.props.children }
-	 </div>
+   <div className='selector-set'>
+      { this.props.children }
+   </div>
       )
    }
 }

@@ -1,4 +1,4 @@
-//import jsonQuery from 'json-query';	// Doesn't work with Chrome devtools (for some reason)
+//import jsonQuery from 'json-query';  // Doesn't work with Chrome devtools (for some reason)
 const jsonQuery = require('json-query');
 
 export default class FhirTransform {
@@ -23,28 +23,28 @@ export default class FhirTransform {
    // Walk the template, creating a copy and replacing functions (that refer to 'data') with their return values
    static transform(data, template) {
       if (template instanceof Function) {
-	 // invoke the function on the data
-	 return template(data);
-	   
+   // invoke the function on the data
+   return template(data);
+     
       } else if (template instanceof Array) {
-	 // iterate over array members
-	 const arr = [];
-	 for (let elt of template) {
-	    arr.push(FhirTransform.transform(data, elt));
-	 }	   
-	 return arr;
+   // iterate over array members
+   const arr = [];
+   for (let elt of template) {
+      arr.push(FhirTransform.transform(data, elt));
+   }     
+   return arr;
 
       } else if (template === null || !(template instanceof Object)) {
-	 // return primitive types
-	 return template;
+   // return primitive types
+   return template;
 
       } else {
-	 // iterate over object properties
-	 const obj = {};
-	 for (let prop in template) {
-	    obj[prop] = FhirTransform.transform(data, template[prop]);
-	 }
-	 return obj;
+   // iterate over object properties
+   const obj = {};
+   for (let prop in template) {
+      obj[prop] = FhirTransform.transform(data, template[prop]);
+   }
+   return obj;
       }
    }
 

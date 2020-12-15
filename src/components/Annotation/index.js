@@ -12,16 +12,16 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 export default class Annotation extends React.Component {
 
-   static contextType = DiscoveryContext;	// Allow the shared context to be accessed via 'this.context'
+   static contextType = DiscoveryContext;  // Allow the shared context to be accessed via 'this.context'
 
    // Extend resource.discoveryAnnotation (or return extension props if no annotation)
    static info(res) {
 //      return res.data.discoveryAnnotation ? Object.assign({}, res.data.discoveryAnnotation, { id: res.id, provider: res.provider, resourceId: res.data.id })
-//					  : { id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null };
+//            : { id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null };
       if (!res.data.discoveryAnnotation) {
-	 res.data['discoveryAnnotation'] = { id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null };
+   res.data['discoveryAnnotation'] = { id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null };
       } else {
-	 res.data.discoveryAnnotation = Object.assign(res.data.discoveryAnnotation, { id: res.id, provider: res.provider, resourceId: res.data.id });
+   res.data.discoveryAnnotation = Object.assign(res.data.discoveryAnnotation, { id: res.id, provider: res.provider, resourceId: res.data.id });
       }
 
       return res.data.discoveryAnnotation;
@@ -45,12 +45,12 @@ export default class Annotation extends React.Component {
    setAnnotationDisplay() {
       let div = this.annotationDiv();
       if (div) {
-	 if (this.props.annotation.annotationHistory) {
-	    let numVersions = this.props.annotation.annotationHistory.length;
-	    div.innerHTML = this.props.annotation.annotationHistory[numVersions-1].annotationText;
-	 } else {
-	    div.innerHTML = '';
-	 }
+   if (this.props.annotation.annotationHistory) {
+      let numVersions = this.props.annotation.annotationHistory.length;
+      div.innerHTML = this.props.annotation.annotationHistory[numVersions-1].annotationText;
+   } else {
+      div.innerHTML = '';
+   }
       }
    }
 
@@ -65,20 +65,20 @@ export default class Annotation extends React.Component {
    // Replace <div>, <br> with newline
    cleanText(text) {
       return text
-	 .replace(/<div><br>/g, '\n')
-	 .replace(/<div>|<br>/g, '\n')
-	 .replace(/<\/div>/g, '');
+   .replace(/<div><br>/g, '\n')
+   .replace(/<div>|<br>/g, '\n')
+   .replace(/<\/div>/g, '');
    }
 
    editAnnotation = () => {
       //   console.log(JSON.stringify(this.props.annotation, null, 3));
       this.setState({ inEdit: true }, () => {
-	 let div = this.annotationDiv();
-	 if (div) {
-	    div.focus();
-	    document.execCommand('selectAll', false, null);
-	    document.getSelection().collapseToEnd();		// Move cursor to end
-	 }
+   let div = this.annotationDiv();
+   if (div) {
+      div.focus();
+      document.execCommand('selectAll', false, null);
+      document.getSelection().collapseToEnd();    // Move cursor to end
+   }
       });
    }
 
@@ -88,19 +88,19 @@ export default class Annotation extends React.Component {
 
       // NOTE: 'updated' timestamp set by server
       if (annotation.annotationHistory) {
-	 annotation.annotationHistory.push({ updated: '<set by server>', annotationText: text });
+   annotation.annotationHistory.push({ updated: '<set by server>', annotationText: text });
       } else {
-	 annotation.annotationHistory = [{ updated: '<set by server>', annotationText: text }];
+   annotation.annotationHistory = [{ updated: '<set by server>', annotationText: text }];
       }
 
       axios.post(`${config.serverUrl}/participants/${annotation.id}/${annotation.provider}/${annotation.resourceId}`, {
-	 annotation: text
+   annotation: text
       })
       .then(response => {
-	 this.setState({ inEdit: false, changed: false });
+   this.setState({ inEdit: false, changed: false });
       })
       .catch(error => {
-	 alert('Save annotation failed. Please retry. ' + error);
+   alert('Save annotation failed. Please retry. ' + error);
       });
    }
 
@@ -131,16 +131,16 @@ export default class Annotation extends React.Component {
       let annotation = this.props.annotation;
       let isText = annotation.annotationHistory ? this.cleanText(annotation.annotationHistory[annotation.annotationHistory.length - 1].annotationText) : null;
       return <div className='annotation-container'>
-		<div className='annotation-buttons-container'>
-		   { !this.state.inEdit && <button className='annotation-button' onClick={this.editAnnotation}>{isText ? 'Edit My Note' : 'Add Note'}</button> }
-		   {  this.state.inEdit && <button className={this.state.changed ? 'annotation-button' : 'annotation-button-disabled'}
-						   onClick={this.saveAnnotation}>save</button> }
-		   {  this.state.inEdit && <button className='annotation-button' onClick={this.cancelEditAnnotation}>cancel</button> }
-		</div>
-		<div className={(isText || this.state.inEdit) ? 'annotation' : 'annotation-empty'} id={this.annotationKey()} 
-		     contentEditable={this.state.inEdit} suppressContentEditableWarning={true}
-		     onPaste={this.pasteAsPlainText} onKeyDown={this.stopPropagation} onKeyUp={this.checkForChange}>
-		</div>
-	     </div>;
+    <div className='annotation-buttons-container'>
+       { !this.state.inEdit && <button className='annotation-button' onClick={this.editAnnotation}>{isText ? 'Edit My Note' : 'Add Note'}</button> }
+       {  this.state.inEdit && <button className={this.state.changed ? 'annotation-button' : 'annotation-button-disabled'}
+               onClick={this.saveAnnotation}>save</button> }
+       {  this.state.inEdit && <button className='annotation-button' onClick={this.cancelEditAnnotation}>cancel</button> }
+    </div>
+    <div className={(isText || this.state.inEdit) ? 'annotation' : 'annotation-empty'} id={this.annotationKey()} 
+         contentEditable={this.state.inEdit} suppressContentEditableWarning={true}
+         onPaste={this.pasteAsPlainText} onKeyDown={this.stopPropagation} onKeyUp={this.checkForChange}>
+    </div>
+       </div>;
    }
 }

@@ -30,13 +30,13 @@ export default class PageFooter extends React.Component {
 
    render() {
       return (
-	 <div className='page-footer'>
-	    <div className='footer-id'>
-	       { this.props.resources && ' (' + this.props.resources.transformed[0].id + ')' }
-	    </div>
-	    <div className='footer-snapshot-date'>
-	       { this.state.snapshotDate ? `Snapshot: ${this.state.snapshotDate}` : null }
-	    </div>
+   <div className='page-footer'>
+      <div className='footer-id'>
+         { this.props.resources && ' (' + this.props.resources.transformed[0].id + ')' }
+      </div>
+      <div className='footer-snapshot-date'>
+         { this.state.snapshotDate ? `Snapshot: ${this.state.snapshotDate}` : null }
+      </div>
          </div>
       )
    }
