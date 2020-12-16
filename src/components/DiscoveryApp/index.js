@@ -10,7 +10,7 @@ import {
 } from '../../util.js';
 import PageHeader from '../PageHeader';
 import StandardFilters from '../StandardFilters';
-import ContentPanel from '../ContentPanel';
+import ContentPanel from '../ContentPanel/ContentRight';
 import SummaryView from '../SummaryView';
 import CompareView from '../CompareView';
 import DiabetesView from '../DiabetesView';

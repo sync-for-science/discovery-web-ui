@@ -10,7 +10,7 @@ import FhirTransform from '../../FhirTransform.js';
 import { fhirKey, primaryTextValue } from '../../fhirUtil.js';
 
 import Unimplemented from '../Unimplemented';
-import ContentPanel from '../ContentPanel';
+import ContentPanel from '../ContentPanel/ContentRight';
 
 import DiscoveryContext from '../DiscoveryContext';
 
