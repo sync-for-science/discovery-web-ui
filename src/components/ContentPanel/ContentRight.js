@@ -562,7 +562,9 @@ export default class ContentPanel extends React.Component {
             />
           </div>
         </div>
-        { contents }
+        <div className="content-panel-body">
+          { contents }
+        </div>
       </div>
     );
   }

@@ -6,7 +6,7 @@
 :root {
   --top-header-height: 50px;
   --left-nav-width: 170px;
-  --right-details-width: 420px;
+  --right-details-width: 440px;
 }
 
 body {
@@ -45,8 +45,10 @@ button:focus {
 }
 
 #details-right {
+  --right-gutter: 12px;
   width: var(--right-details-width);
   margin-top: var(--top-header-height);
+  padding-right: var(--right-gutter);
   z-index: 5; /* 4, and buttons from timeline overlap */
   background-color: var(--background-content);
 }
