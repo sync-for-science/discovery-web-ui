@@ -19,6 +19,7 @@
    overflow-y: auto; */
   display: flex;
   flex-direction: column;
+  width: calc(100vw - var(--left-nav-width) - var(--right-details-width));
 }
 
 .compare-view-scroller {

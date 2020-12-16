@@ -21,8 +21,8 @@
   position: absolute;
   left: 160px;
   top: 56px;
-  width: calc(100% - 170px);
-  max-width: calc(100% - 170px);
+  width: calc(100vw - var(--left-nav-width));
+  max-width: calc(100vw - var(--left-nav-width));
   height: calc(100% - 200px);
   background-color: var(--background-content);
   margin: 0 10px 10px 0;
