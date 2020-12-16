@@ -47,6 +47,7 @@ module.exports = {
       },
     ],
     'no-case-declarations': ['warn'],
+    'no-console': ['error'], // default is 'warn'
     'no-continue': ['warn'],
     'no-lonely-if': ['warn'],
     'no-mixed-operators': ['warn'],
