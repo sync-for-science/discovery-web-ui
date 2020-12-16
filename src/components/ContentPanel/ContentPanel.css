@@ -367,8 +367,6 @@
 .content-header-container {
   @insert .content-header-box;
 
-  /*   border-top: solid 1px var(--content-header); */
-  border-bottom: solid 1px var(--content-header-old);
   margin: 0 0 12px 0;
 }
 
@@ -385,6 +383,10 @@
 .category-container {
   width: calc(100% + 10px);
   margin: 0;
+}
+
+.category-container:not(:first-of-type) {
+  border-top: solid 1px var(--content-header-old);
 }
 
 .category-loading {
