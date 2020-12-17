@@ -7,6 +7,8 @@
 /* v.01.05 Updated 08/21/2019 */
 
 .standard-filters {
+  margin-top: 56px;
+  width: calc(100vw - var(--right-details-width));
   /*    position: fixed;
     top: 46px;
     left: -150px;
@@ -15,10 +17,13 @@
 }
 
 .standard-filters-categories-and-providers {
+  /* lower/main timeline */
+  /*
   position: fixed;
   top: 166px;
   left: 0;
   height: auto;
+  */
   width: 100%;
   min-width: 1024px;
   padding: 0;

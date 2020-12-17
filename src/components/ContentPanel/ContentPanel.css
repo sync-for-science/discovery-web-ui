@@ -21,8 +21,8 @@
   position: absolute;
   left: 160px;
   top: 56px;
-  width: calc(100% - 170px);
-  max-width: calc(100% - 170px);
+  width: calc(100vw - var(--left-nav-width));
+  max-width: calc(100vw - var(--left-nav-width));
   height: calc(100% - 200px);
   background-color: var(--background-content);
   margin: 0 10px 10px 0;
@@ -302,6 +302,13 @@
 }
 
 /* Content area. */
+.content-panel-body {
+  /* debug height by using a background-color on this element */
+  --content-right-body-offset-from-header: 48px; /* height of panel title and margin/padding */
+  height: calc(100vh - var(--top-header-height) - var(--content-right-body-offset-from-header));
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
 
 .content-panel-inner-body {
   display: flex;
@@ -311,9 +318,6 @@
   font-family: text;
   font-size: 1rem;
   background-color: var(--background-content);
-  margin: 5px 5px 0 0;
-  overflow-y: scroll;
-  overflow-x: hidden;
   white-space: pre-wrap;
 }
 
@@ -367,8 +371,6 @@
 .content-header-container {
   @insert .content-header-box;
 
-  /*   border-top: solid 1px var(--content-header); */
-  border-bottom: solid 1px var(--content-header-old);
   margin: 0 0 12px 0;
 }
 
@@ -385,6 +387,10 @@
 .category-container {
   width: calc(100% + 10px);
   margin: 0;
+}
+
+.category-container:not(:first-of-type) {
+  border-top: solid 1px var(--content-header-old);
 }
 
 .category-loading {
@@ -496,7 +502,7 @@
 
 .container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   padding: 0;
   margin: 0 20px 15px 20px;
@@ -519,9 +525,6 @@
   grid-template-columns: 8.125rem auto;
   grid-column-gap: 10px;
   grid-row-gap: 0;
-  width: 40%;
-  max-width: 40%;
-  min-width: 40%;
 
   /*   height: auto; */
   padding: 0;
@@ -530,24 +533,15 @@
 
 .content-graph {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-end;
-  width: 35%;
-  max-width: 35%;
-  min-width: 35%;
   margin: 0;
 }
 
 .content-extras {
-  /*  position: relative;
-   right: 0;
-   top: 0; */
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-end;
-  width: 25%;
-  max-width: 25%;
-  min-width: 25%;
   margin: 0;
 }
 

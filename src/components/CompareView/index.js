@@ -12,7 +12,7 @@ import { fhirKey, primaryTextValue } from '../../fhirUtil.js';
 
 import Unimplemented from '../Unimplemented';
 import Sparkline from '../Sparkline';
-import ContentPanel from '../ContentPanel';
+import ContentPanel from '../ContentPanel/ContentRight';
 
 import DiscoveryContext from '../DiscoveryContext';
 

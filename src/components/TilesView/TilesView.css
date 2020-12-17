@@ -13,7 +13,7 @@
   top: 166px;
   left: 160px;
   height: calc(100% - 176px);
-  width: calc(100% - 170px);
+  width: calc(100vw - var(--left-nav-width) - var(--right-details-width));
   min-width: 840px;
   display: flex;
   flex-direction: column;

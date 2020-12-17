@@ -3,6 +3,11 @@
 /* Sync for Science Discovery DiscoveryApp Stylesheet */
 
 /* v.01.08 Updated 9/05/2019 */
+:root {
+  --top-header-height: 50px;
+  --left-nav-width: 170px;
+  --right-details-width: 440px;
+}
 
 body {
   font-size: 16px;
@@ -29,4 +34,21 @@ button:focus {
   margin: 0;
   overflow-x: hidden;
   overflow-y: hidden;
+}
+
+.outer-container {
+  justify-content: space-between;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+
+#details-right {
+  --right-gutter: 12px;
+  width: var(--right-details-width);
+  margin-top: var(--top-header-height);
+  padding-right: var(--right-gutter);
+  z-index: 5; /* 4, and buttons from timeline overlap */
+  background-color: var(--background-content);
 }
