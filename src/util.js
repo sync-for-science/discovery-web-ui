@@ -22,6 +22,7 @@ import VitalSigns from './components/VitalSigns';
 import Unimplemented from './components/Unimplemented';
 
 import './components/ContentPanel/ContentPanel.css';
+import { log } from './utils/logger';
 
 export const Const = {
   unknownValue: '????',
@@ -323,7 +324,7 @@ export function checkQuerySelector(sel) {
   if (elt) {
     return elt;
   }
-  console.log(`checkQuerySelector -- cannot find: ${sel}`);
+  log(`checkQuerySelector -- cannot find: ${sel}`);
   //      debugger;
 }
 
@@ -373,7 +374,7 @@ export function logDiffs(label, was, now) {
   switch (typeof was) {
     case 'object':
       if (was instanceof Array && !(now instanceof Array)) {
-        console.log(`${label}: Array --> ${now}`);
+        log(`${label}: Array --> ${now}`);
       } else if (was instanceof Array) {
         // An array
         console.group(label);
@@ -390,7 +391,7 @@ export function logDiffs(label, was, now) {
         //      if (JSON.stringify(was) !== JSON.stringify(now)) {
         if (notEqJSON(was, now)) {
           // Changed
-          console.log(`${label}: ${was} --> ${now}`);
+          log(`${label}: ${was} --> ${now}`);
         }
       } else {
         // An object
@@ -416,7 +417,7 @@ export function logDiffs(label, was, now) {
             }
           } else {
             // Only in 'was'
-            console.log(`.${attr} --> <unset>`);
+            log(`.${attr} --> <unset>`);
           }
         }
         console.groupEnd();
@@ -426,7 +427,7 @@ export function logDiffs(label, was, now) {
     case 'function':
       if (was !== now) {
         // Function changed
-        console.log(`Function ${label} changed.`);
+        log(`Function ${label} changed.`);
       }
       break;
 
@@ -435,7 +436,7 @@ export function logDiffs(label, was, now) {
     case 'boolean':
     case 'undefined':
       if (was !== now) {
-        console.log(`${label}: ${was} --> ${now}`);
+        log(`${label}: ${was} --> ${now}`);
       }
       break;
 
@@ -453,7 +454,7 @@ export function logDiffs(label, was, now) {
         } else {
           // Only in 'now'
           //      console.log(`.${attr} not previously set`);
-          console.log(`.${attr}: <unset> --> ${now[attr]}`);
+          log(`.${attr}: <unset> --> ${now[attr]}`);
         }
       }
     }

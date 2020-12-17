@@ -7,6 +7,7 @@ import { formatKeyDate } from '../../util.js';
 import 'react-vis/dist/style.css';
 
 import './TimeSeries.css';
+import { log } from '../../utils/logger';
 
 //
 // Time series using react-vis
@@ -27,10 +28,10 @@ export default class TimeSeries extends React.Component {
     setTimeout(() => {
       const elt = document.getElementById(`${formattedDotDate}-${this.props.measure}`);
       if (elt) {
-        console.log(`Found: ${formattedDotDate}`);
+        log(`Found: ${formattedDotDate}`);
         elt.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else {
-        console.log(`Not found: ${formattedDotDate}`);
+        log(`Not found: ${formattedDotDate}`);
       }
     });
   }

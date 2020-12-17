@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import './ContentPanel.css';
 import config from '../../config.js';
+import { log } from '../../utils/logger';
 import {
   Const, stringCompare, inDateRange, notEqJSON, logDiffs, classFromCat, groupBy, dateOnly,
 } from '../../util.js';
@@ -224,7 +225,7 @@ export default class ContentPanel extends React.Component {
       });
     }
 
-    console.log('componentDidUpdate() END');
+    log('componentDidUpdate() END');
   }
 
   //
@@ -295,7 +296,7 @@ export default class ContentPanel extends React.Component {
   //
   calcCurrResources() {
     let arr = [];
-    console.log(`calcCurrResources() - start: ${new Date().getTime()}`);
+    log(`calcCurrResources() - start: ${new Date().getTime()}`);
     const limitedResources = this.props.catsToDisplay ? this.props.resources.transformed.filter((res) => this.props.catsToDisplay.includes(res.category)
       && res.category !== 'Patient'
       && this.catEnabled(res.category)
@@ -320,8 +321,8 @@ export default class ContentPanel extends React.Component {
       arr = this.sortResources(limitedResources.filter((res) => res.itemDate === this.props.context.date));
     }
 
-    console.log(`Resources: ${arr.length}`);
-    console.log(`calcCurrResources() - END: ${new Date().getTime()}`);
+    log(`Resources: ${arr.length}`);
+    log(`calcCurrResources() - END: ${new Date().getTime()}`);
 
     return arr;
   }
@@ -340,7 +341,7 @@ export default class ContentPanel extends React.Component {
         this.setState({ prevEnabled: true, nextEnabled: enabled });
       }
     } catch (e) {
-      console.log(`ContentPanel - onNextPrev(): ${e.message}`);
+      log(`ContentPanel - onNextPrev(): ${e.message}`);
     }
   }
 
@@ -400,7 +401,7 @@ export default class ContentPanel extends React.Component {
   }
 
   renderItems = (arr) => {
-    console.log('renderItems');
+    log('renderItems');
     const showDate = this.state.showAllData;
     const resultDivs = [];
     let groups = {};

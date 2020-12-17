@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import './TilesView.css';
 import config from '../../config.js';
+import { log } from '../../utils/logger';
 import {
   Const, getStyle, stringCompare, tryWithDefault, numericPart, inDateRange, uniqueBy, notEqJSON, classFromCat,
 } from '../../util.js';
@@ -658,7 +659,7 @@ export default class TilesView extends React.Component {
   render() {
     const maxFirstTileColNum = Object.keys(this.state.uniqueStruct).length - Math.trunc(this.state.numVisibleCols);
     const tileSelected = Object.keys(this.state.selectedTiles).length > 0;
-    console.log(`numVis: ${this.state.numVisibleCols} maxFirst: ${maxFirstTileColNum} first: ${this.state.firstTileColNum}`);
+    log(`numVis: ${this.state.numVisibleCols} maxFirst: ${maxFirstTileColNum} first: ${this.state.firstTileColNum}`);
     return (
       <div className="tiles-view">
         <div className="tiles-view-header">
