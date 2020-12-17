@@ -377,7 +377,7 @@ export function logDiffs(label, was, now) {
         log(`${label}: Array --> ${now}`);
       } else if (was instanceof Array) {
         // An array
-        console.group(label);
+        console.group(label); // eslint-disable-line no-console
         for (let i = 0; i < was.length; i++) {
           //      if (JSON.stringify(was[i]) !== JSON.stringify(now[i])) {
           if (notEqJSON(was[i], now[i])) {
@@ -385,7 +385,7 @@ export function logDiffs(label, was, now) {
             logDiffs(`[${i}]`, was[i], now[i]);
           }
         }
-        console.groupEnd();
+        console.groupEnd(); // eslint-disable-line no-console
       } else if (was === null) {
         // null
         //      if (JSON.stringify(was) !== JSON.stringify(now)) {
@@ -395,7 +395,7 @@ export function logDiffs(label, was, now) {
         }
       } else {
         // An object
-        console.group(label);
+        console.group(label); // eslint-disable-line no-console
         for (const attr in was) {
           if (now && now.hasOwnProperty(attr)) {
             // Property present in both objects
@@ -420,7 +420,7 @@ export function logDiffs(label, was, now) {
             log(`.${attr} --> <unset>`);
           }
         }
-        console.groupEnd();
+        console.groupEnd(); // eslint-disable-line no-console
       }
       break;
 
@@ -446,7 +446,7 @@ export function logDiffs(label, was, now) {
 
   // Log object props only present in 'now'
   if (typeof now === 'object' && now !== null && !(now instanceof Array)) {
-    console.group(label);
+    console.group(label); // eslint-disable-line no-console
     for (const attr in now) {
       if (now.hasOwnProperty(attr)) {
         if (was && was.hasOwnProperty(attr)) {
@@ -458,7 +458,7 @@ export function logDiffs(label, was, now) {
         }
       }
     }
-    console.groupEnd();
+    console.groupEnd(); // eslint-disable-line no-console
   }
 }
 

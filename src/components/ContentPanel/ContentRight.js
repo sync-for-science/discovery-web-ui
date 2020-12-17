@@ -6,7 +6,7 @@ import './ContentPanel.css';
 import config from '../../config.js';
 import { log } from '../../utils/logger';
 import {
-  Const, stringCompare, inDateRange, notEqJSON, logDiffs, classFromCat, groupBy, dateOnly,
+  Const, stringCompare, inDateRange, notEqJSON, classFromCat, groupBy, dateOnly,
 } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 
@@ -186,11 +186,11 @@ export default class ContentPanel extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (notEqJSON(this.props, nextProps)) {
       // Prop change
-      window.logDiffs && logDiffs('Props', this.props, nextProps);
+      // window.logDiffs && logDiffs('Props', this.props, nextProps);
       return true;
     } if (notEqJSON(this.state, nextState)) {
       // State change
-      window.logDiffs && logDiffs('State', this.state, nextState);
+      // window.logDiffs && logDiffs('State', this.state, nextState);
       return true;
     }
     // No change
@@ -204,8 +204,8 @@ export default class ContentPanel extends React.Component {
   getSnapshotBeforeUpdate(prevProps, prevState) {
     // Capture info from the DOM before it is updated
     // Return value is passed as 'snapshot' to componentDidUpdate()
-    logDiffs('Props', prevProps, this.props);
-    logDiffs('State', prevState, this.state);
+    // logDiffs('Props', prevProps, this.props);
+    // logDiffs('State', prevState, this.state);
     return null;
   }
 
