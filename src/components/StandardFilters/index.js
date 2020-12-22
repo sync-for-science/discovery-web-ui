@@ -18,9 +18,9 @@ import ProviderRollup from '../ProviderRollup';
 import Providers from '../Providers';
 import Provider from '../Provider';
 import Unimplemented from '../Unimplemented';
-
 import DiscoveryContext from '../DiscoveryContext';
 
+import { SUBROUTES } from '../../constants';
 //
 // Render the "container" (with filters) for views of the participant's data
 //
@@ -28,6 +28,7 @@ class StandardFilters extends React.PureComponent {
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
+    activeView: PropTypes.oneOf(SUBROUTES),
     resources: PropTypes.instanceOf(FhirTransform),
     dates: PropTypes.shape({
       allDates: PropTypes.arrayOf(PropTypes.shape({
@@ -591,13 +592,14 @@ class StandardFilters extends React.PureComponent {
   render() {
     //      console.log('SF render: ' + (this.props.dotClickContext ? this.props.dotClickContext.date : this.props.dotClickContext));
 
-    const { dates } = this.props;
+    const { activeView, dates } = this.props;
 
     const dotClickFn = this.props.allowDotClick ? this.onDotClick : null;
 
     return (
       <>
         <TimeWidget
+          activeView={activeView}
           minDate={dates ? dates.minDate : ''}
           maxDate={dates ? dates.maxDate : ''}
           startDate={dates ? dates.startDate : ''}
