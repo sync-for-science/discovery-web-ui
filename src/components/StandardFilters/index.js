@@ -1,4 +1,8 @@
 import React from 'react';
+import {
+  atom,
+  useRecoilState,
+} from 'recoil';
 import PropTypes from 'prop-types';
 
 import './StandardFilters.css';
@@ -20,7 +24,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 // Render the "container" (with filters) for views of the participant's data
 //
-export default class StandardFilters extends React.Component {
+class StandardFilters extends React.Component {
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
@@ -55,27 +59,25 @@ export default class StandardFilters extends React.Component {
     provsExpanded: true,
     provsEnabled: {}, // Enabled status of providers
     svgWidth: '0px',
-    dotClickContext: null, // The current dot (if one is highlighted)
+    // dotClickContext: null, // The current dot (if one is highlighted)
     activeDates: {}, // Dates that are within the TimeWidget's active range and have one or more resources with enabled Categories/Providers
   }
 
   componentDidMount() {
     this.updateSvgWidth();
     if (this.props.dates && this.props.allowDotClick) {
-      this.setState({
-        dotClickContext: {
-          parent: 'TimeWidget',
-          rowName: 'Full',
-          dotType: 'active',
-          minDate: this.props.dates.minDate,
-          maxDate: this.props.dates.maxDate,
-          startDate: this.props.dates.startDate,
-          endDate: this.props.dates.endDate,
-          allDates: this.props.dates.allDates,
-          date: this.props.dates.maxDate,
-          data: this.fetchDataForDot('TimeWidget', 'Full', this.props.dates.maxDate),
-          position: this.props.dates.allDates[this.props.dates.allDates.length - 1].position,
-        },
+      this.props.setDotClickContext({
+        parent: 'TimeWidget',
+        rowName: 'Full',
+        dotType: 'active',
+        minDate: this.props.dates.minDate,
+        maxDate: this.props.dates.maxDate,
+        startDate: this.props.dates.startDate,
+        endDate: this.props.dates.endDate,
+        allDates: this.props.dates.allDates,
+        date: this.props.dates.maxDate,
+        data: this.fetchDataForDot('TimeWidget', 'Full', this.props.dates.maxDate),
+        position: this.props.dates.allDates[this.props.dates.allDates.length - 1].position,
       });
     }
 
@@ -103,8 +105,8 @@ export default class StandardFilters extends React.Component {
       //      } else if (this.context.searchRefs && this.context.searchRefs.length > 0) {
       //   // If most recent searchRef differs from currently highlighted dot, set dotClickContext
       //   let recentRef = this.context.searchRefs[0];
-      //   if (recentRef.position !== this.state.dotClickContext.position) {
-      //      let newContext = Object.assign({}, this.state.dotClickContext);
+      //   if (recentRef.position !== this.props.dotClickContext.position) {
+      //      let newContext = Object.assign({}, this.props.dotClickContext);
       //      newContext.date = recentRef.date;
       //      newContext.position = recentRef.position;
       //      this.setState({ dotClickContext: newContext });
@@ -112,18 +114,16 @@ export default class StandardFilters extends React.Component {
     } else if (this.props.allowDotClick && prevProps.dotClickDate !== this.props.dotClickDate) {
       // Set dotClickContext from dot clicked in ContentPanel (via this.props.dotClickDate)
       const theDate = this.props.dates.allDates.find((elt) => new Date(elt.date).getTime() === new Date(this.props.dotClickDate).getTime());
-      this.setState({
-        dotClickContext: {
-          parent: 'TimeWidget',
-          rowName: 'Full',
-          dotType: 'active',
-          minDate: this.props.dates.minDate,
-          maxDate: this.props.dates.maxDate,
-          allDates: this.props.dates.allDates,
-          date: theDate.date,
-          data: this.fetchDataForDot('TimeWidget', 'Full', theDate.date),
-          position: theDate.position,
-        },
+      this.props.setDotClickContext({
+        parent: 'TimeWidget',
+        rowName: 'Full',
+        dotType: 'active',
+        minDate: this.props.dates.minDate,
+        maxDate: this.props.dates.maxDate,
+        allDates: this.props.dates.allDates,
+        date: theDate.date,
+        data: this.fetchDataForDot('TimeWidget', 'Full', theDate.date),
+        position: theDate.position,
       });
     }
   }
@@ -242,9 +242,11 @@ export default class StandardFilters extends React.Component {
   //
   setLeftRight = (minActivePos, maxActivePos, isExpanded) => {
     //      console.log('minPos: ' + minActivePos + '  maxPos: ' + maxActivePos);
-    const minDate = this.posToDate(minActivePos);
-    const maxDate = this.posToDate(maxActivePos);
-    this.props.dateRangeFn && this.props.dateRangeFn(minDate, maxDate);
+    if (this.props.dateRangeFn) {
+      const minDate = this.posToDate(minActivePos);
+      const maxDate = this.posToDate(maxActivePos);
+      this.props.dateRangeFn(minDate, maxDate);
+    }
     this.setState({
       minActivePos,
       maxActivePos,
@@ -299,8 +301,8 @@ export default class StandardFilters extends React.Component {
   //
   onNextPrevClick = (direction) => {
     const thumbDistance = this.state.maxActivePos - this.state.minActivePos;
-    const oldPosition = this.state.dotClickContext.position;
-    const newContext = { ...this.state.dotClickContext };
+    const oldPosition = this.props.dotClickContext.position;
+    const newContext = { ...this.props.dotClickContext };
     const dates = this.fetchDotPositions(newContext.parent, newContext.rowName, true, true);
     const currDateIndex = dates.findIndex((elt) => elt.date === newContext.date);
 
@@ -321,7 +323,7 @@ export default class StandardFilters extends React.Component {
       newContext.position = dates[currDateIndex + 1].position;
       ret = currDateIndex + 1 < dates.length - 1;
       // Adjust thumb positions if current dot is in active range
-      if (this.isActiveTimeWidget(this.state.dotClickContext)) {
+      if (this.isActiveTimeWidget(this.props.dotClickContext)) {
         const newMax = Math.min(1.0, this.state.maxActivePos + newContext.position - oldPosition);
         this.setState({ minActivePos: newMax - thumbDistance, maxActivePos: newMax });
       }
@@ -335,7 +337,7 @@ export default class StandardFilters extends React.Component {
       newContext.position = dates[currDateIndex - 1].position;
       ret = currDateIndex - 1 > 0;
       // Adjust thumb positions if current dot is in active range
-      if (this.isActiveTimeWidget(this.state.dotClickContext)) {
+      if (this.isActiveTimeWidget(this.props.dotClickContext)) {
         const newMin = Math.max(0.0, this.state.minActivePos + newContext.position - oldPosition);
         this.setState({ minActivePos: newMin, maxActivePos: newMin + thumbDistance });
       }
@@ -433,7 +435,7 @@ export default class StandardFilters extends React.Component {
     //            return result;
     //               }, []) : [];
 
-    const { dotClickContext } = this.state;
+    const { dotClickContext } = this.props;
     const matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget'
         || (dotClickContext.parent === parent && dotClickContext.rowName === rowName));
     const inactiveHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
@@ -587,24 +589,20 @@ export default class StandardFilters extends React.Component {
 
   // TODO: handle noDots for LongitudinalView???
   render() {
-    //      console.log('SF render: ' + (this.state.dotClickContext ? this.state.dotClickContext.date : this.state.dotClickContext));
+    //      console.log('SF render: ' + (this.props.dotClickContext ? this.props.dotClickContext.date : this.props.dotClickContext));
+
     const { dates } = this.props;
-    const extendedChildren = React.Children.map(this.props.children, (child) =>
-      // Add context, nextPrevFn props
-      React.cloneElement(child, {
-        context: this.state.dotClickContext,
-        nextPrevFn: this.onNextPrevClick,
-      }));
+
     const dotClickFn = this.props.allowDotClick ? this.onDotClick : null;
 
     return (
-      <div className="standard-filters">
+      <>
         <TimeWidget
           minDate={dates ? dates.minDate : ''}
           maxDate={dates ? dates.maxDate : ''}
           startDate={dates ? dates.startDate : ''}
           endDate={dates ? dates.endDate : ''}
-          dotContext={this.state.dotClickContext}
+          dotContext={this.props.dotClickContext}
           thumbLeft={this.state.minActivePos}
           thumbRight={this.state.maxActivePos}
           timelineWidth={this.state.svgWidth}
@@ -671,8 +669,28 @@ export default class StandardFilters extends React.Component {
             ] : null }
           </Providers>
         </div>
-        { extendedChildren }
-      </div>
+      </>
     );
   }
 }
+
+export const dotClickContextState = atom({
+  key: 'dotClickContextState', // unique ID (with respect to other atoms/selectors)
+  default: null, // default value (aka initial value)
+});
+
+const StandardFiltersHOC = React.memo((props) => {
+  const [dotClickContext, setDotClickContext] = useRecoilState(dotClickContextState);
+
+  return (
+    <StandardFilters
+      {...props} // eslint-disable-line react/jsx-props-no-spreading
+      dotClickContext={dotClickContext}
+      setDotClickContext={setDotClickContext}
+    />
+  );
+});
+
+StandardFiltersHOC.propTypes = StandardFilters.propTypes;
+
+export default StandardFiltersHOC;
