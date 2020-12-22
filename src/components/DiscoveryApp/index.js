@@ -16,6 +16,7 @@ import ContentPanel from '../ContentPanel/ContentRight';
 import SummaryView from '../SummaryView';
 import CompareView from '../CompareView';
 import TilesView from '../TilesView';
+import Collections from '../Collections';
 import DiscoveryModal from '../DiscoveryModal';
 import Unimplemented from '../Unimplemented';
 import PageFooter from '../PageFooter';
@@ -554,6 +555,9 @@ export default class DiscoveryApp extends React.PureComponent {
                       viewName="Report"
                       viewIconClass="longitudinal-view-icon"
                     />
+                  </Route>
+                  <Route path="/participant/:participantId/collections">
+                    <Collections />
                   </Route>
                   <Route
                     path="/participant/:participantId/:activeView?"
