@@ -4,6 +4,7 @@ import { XYPlot, LineSeries, MarkSeries } from 'react-vis';
 import 'react-vis/dist/style.css';
 
 import './Sparkline.css';
+import { log } from '../../utils/logger';
 
 //
 // Sparkline using react-vis
@@ -17,7 +18,7 @@ export default class Sparkline extends React.Component {
   }
 
   handleClick = (event) => {
-    console.log('Sparkline click');
+    log('Sparkline click');
     // let dotDate = datapoint.x.toISOString();
     // let formattedDotDate = formatDate(dotDate, true, true);
     // this.props.dotClickFn && this.props.dotClickFn(dotDate);

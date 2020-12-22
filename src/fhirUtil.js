@@ -2,6 +2,7 @@ import React from 'react';
 
 import './components/ContentPanel/ContentPanel.css';
 import './components/ContentPanel/ContentPanelCategories.css';
+import { log } from './utils/logger';
 
 import FhirTransform from './FhirTransform.js';
 import {
@@ -73,7 +74,7 @@ export function formatPatientMRN(identifier, maxLength) {
         return maxLength === 0 || elt.value.length <= maxLength ? elt.value : `...${elt.value.substring(elt.value.length - maxLength)}`;
       }
     } catch (e) {
-      console.log(`formatPatientMRN(): ${e.message}`);
+      log(`formatPatientMRN(): ${e.message}`);
     }
   }
 
@@ -107,7 +108,7 @@ export function renderAllergies(matchingData, appContext) {
         reaction: elt.data.reaction,
       });
     } catch (e) {
-      console.log(`renderAllergies(): ${e.message}`);
+      log(`renderAllergies(): ${e.message}`);
     }
   }
 
@@ -261,7 +262,7 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
         valueQuantity: elt.data.valueQuantity,
       });
     } catch (e) {
-      console.log(`renderDisplay(): ${e.message}`);
+      log(`renderDisplay(): ${e.message}`);
     }
   }
 
@@ -349,7 +350,7 @@ export function renderMedsStatement(matchingData, typeLabel, appContext) {
         valueQuantity: elt.data.valueQuantity,
       });
     } catch (e) {
-      console.log(`renderMedsStatement(): ${e.message}`);
+      log(`renderMedsStatement(): ${e.message}`);
     }
   }
 
@@ -434,7 +435,7 @@ export function renderImmunizations(matchingData, appContext) {
         primarySource: elt.data.primarySource,
       });
     } catch (e) {
-      console.log(`renderImmunizations(): ${e.message}`);
+      log(`renderImmunizations(): ${e.message}`);
     }
   }
 
@@ -499,7 +500,7 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
         annotation: Annotation.info(elt),
       });
     } catch (e) {
-      console.log(`renderLabs(): ${e.message}`);
+      log(`renderLabs(): ${e.message}`);
     }
   }
 
@@ -519,7 +520,7 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
         series[displayStr] = [{ provider: elt.provider, x: xVal, y: yVal }];
       }
     } catch (e) {
-      console.log(`renderLabs() 2: ${e.message}`);
+      log(`renderLabs() 2: ${e.message}`);
     }
   }
 
@@ -633,7 +634,7 @@ export function renderMeds(matchingData, appContext) {
         annotation: Annotation.info(elt),
       });
     } catch (e) {
-      console.log(`renderMeds(): ${e.message}`);
+      log(`renderMeds(): ${e.message}`);
     }
   }
 
@@ -708,7 +709,7 @@ export function renderSocialHistory(matchingData, appContext) {
         value: elt.data.valueCodeableConcept.coding[0].display,
       });
     } catch (e) {
-      console.log(`renderSocialHistory(): ${e.message}`);
+      log(`renderSocialHistory(): ${e.message}`);
     }
   }
 
@@ -757,7 +758,7 @@ export function renderEncounters(matchingData, appContext) {
         period: elt.data.period,
       });
     } catch (e) {
-      console.log(`renderEncounters(): ${e.message}`);
+      log(`renderEncounters(): ${e.message}`);
     }
   }
 
@@ -800,7 +801,7 @@ export function renderUnimplemented(matchingData, appContext) {
     try {
       found.push({ provider: elt.provider, category: elt.category, resourceId: elt.data.id });
     } catch (e) {
-      console.log(`renderUnimplemented(): ${e.message}`);
+      log(`renderUnimplemented(): ${e.message}`);
     }
   }
 
@@ -856,7 +857,7 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
         });
       }
     } catch (e) {
-      console.log(`renderVitals(): ${e.message}`);
+      log(`renderVitals(): ${e.message}`);
     }
   }
 
@@ -899,7 +900,7 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
         }
       }
     } catch (e) {
-      console.log(`renderVitals() 2: ${e.message}`);
+      log(`renderVitals() 2: ${e.message}`);
     }
   }
 
@@ -1005,7 +1006,7 @@ export function renderEOB(matchingData, appContext) {
         annotation: Annotation.info(elt),
       });
     } catch (e) {
-      console.log(`renderEOB(): ${e.message}`);
+      log(`renderEOB(): ${e.message}`);
     }
   }
 
@@ -1074,7 +1075,7 @@ export function renderClaims(matchingData, appContext) {
         annotation: Annotation.info(elt),
       });
     } catch (e) {
-      console.log(`renderClaims(): ${e.message}`);
+      log(`renderClaims(): ${e.message}`);
     }
   }
 
@@ -1135,7 +1136,7 @@ export function renderExams(matchingData, appContext) {
         valueConcept: elt.data.valueCodeableConcept,
       });
     } catch (e) {
-      console.log(`renderExams(): ${e.message}`);
+      log(`renderExams(): ${e.message}`);
     }
   }
 
@@ -1190,7 +1191,7 @@ export function resolveDiagnosisReference(elt, appContext) {
     if (res) {
       elt.data.diagnosis[0].diagnosisReference = Object.assign(elt.data.diagnosis[0].diagnosisReference, res.data);
     } else {
-      console.log(`**** resolveDiagnosisReference(): Cannot find ${elt.data.diagnosis[0].diagnosisReference.reference}`);
+      log(`**** resolveDiagnosisReference(): Cannot find ${elt.data.diagnosis[0].diagnosisReference.reference}`);
     }
   }
 }
@@ -1205,7 +1206,7 @@ export function resolveReasonReference(elt, appContext) {
     if (res) {
       elt.data.reasonReference[0] = Object.assign(elt.data.reasonReference[0], res.data);
     } else {
-      console.log(`**** resolveReasonReference(): Cannot find ${elt.data.reasonReference[0].reference}`);
+      log(`**** resolveReasonReference(): Cannot find ${elt.data.reasonReference[0].reference}`);
     }
   }
 }
@@ -1219,7 +1220,7 @@ export function resolveMedicationReference(elt, appContext) {
     if (res) {
       elt.data.medicationReference = Object.assign(elt.data.medicationReference, res.data);
     } else {
-      console.log(`**** resolveMedicationReference(): Cannot find ${elt.data.medicationReference.reference}`);
+      log(`**** resolveMedicationReference(): Cannot find ${elt.data.medicationReference.reference}`);
     }
     elt.data.medicationCodeableConcept = res ? res.data.code : { coding: [{ code: Const.unknownValue, display: Const.unknownValue }] };
 

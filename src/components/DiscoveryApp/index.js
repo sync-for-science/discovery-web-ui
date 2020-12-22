@@ -4,6 +4,7 @@ import { get } from 'axios';
 
 import './DiscoveryApp.css';
 import config from '../../config.js';
+import { log } from '../../utils/logger';
 import FhirTransform from '../../FhirTransform.js';
 import {
   tryWithDefault, cleanDates, normalizeDates, timelineIncrYears,
@@ -154,7 +155,7 @@ export default class DiscoveryApp extends React.Component {
           const missingResources = initialResourceIDs.filter((id) => !finalResourceIDs.includes(id)).map((id) => resources.initial[providerName].entry.find((elt) => elt.resource.id === id));
           alert(`Participant ${this.props.match.params.index} (${providerName}) has ${
             finalResourceIDs.length} resources but should have ${initialResourceIDs.length}`);
-          console.log(JSON.stringify(missingResources, null, 3));
+          log(JSON.stringify(missingResources, null, 3));
         }
       }
     }
@@ -317,14 +318,14 @@ export default class DiscoveryApp extends React.Component {
           return null; // Items without a date
       }
     } catch (err) {
-      console.log(`*** ${category} -- date error: ${err.message} ***`);
+      log(`*** ${category} -- date error: ${err.message} ***`);
       return null;
     }
 
     if (date) {
       return date;
     }
-    console.log(`*** ${category} -- no date found! ***`);
+    log(`*** ${category} -- no date found! ***`);
     return null;
   }
 
@@ -427,7 +428,7 @@ export default class DiscoveryApp extends React.Component {
     try {
       const headerBot = document.querySelector('.time-widget').getBoundingClientRect().top;
       const targetTop = document.querySelector('.standard-filters-categories-and-providers').getBoundingClientRect().top;
-      console.log(`Top Bound: ${targetTop - headerBot}`);
+      log(`Top Bound: ${targetTop - headerBot}`);
       return targetTop - headerBot;
     } catch (e) {
       return 0;
@@ -438,7 +439,7 @@ export default class DiscoveryApp extends React.Component {
     try {
       const footTop = document.querySelector('.page-footer').getBoundingClientRect().top;
       const headerBot = document.querySelector('.time-widget').getBoundingClientRect().bottom;
-      console.log(`Bottom Bound: ${footTop - headerBot + 26}`);
+      log(`Bottom Bound: ${footTop - headerBot + 26}`);
       return footTop - headerBot + 26;
     } catch (e) {
       return 0;

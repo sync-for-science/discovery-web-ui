@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import './CompareView.css';
 import config from '../../config.js';
+import { log } from '../../utils/logger';
 import {
   Const, getStyle, stringCompare, tryWithDefault, titleCase,
   numericPart, inDateRange, uniqueBy, notEqJSON, classFromCat,
@@ -405,7 +406,7 @@ export default class CompareView extends React.Component {
         if (elt) {
           elt.scrollIntoView();
         } else {
-          console.log(`onUniqueItemClick(): cannot scroll to "${key}"`);
+          log(`onUniqueItemClick(): cannot scroll to "${key}"`);
         }
       }, 200, latest);
     }
