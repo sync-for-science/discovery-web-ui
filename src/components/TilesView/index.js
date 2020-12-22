@@ -47,7 +47,6 @@ export default class TilesView extends React.Component {
   }
 
   state = {
-    context: this.props.context,
     firstTileColNum: 0,
     leftColNavEnabled: true,
     rightColNavEnabled: true,
@@ -547,6 +546,9 @@ export default class TilesView extends React.Component {
   }
 
   noneEnabled(obj) {
+    // if (!obj) {
+    //   return true;
+    // }
     for (const propName of Object.keys(obj)) {
       if (obj[propName]) {
         return false;
@@ -709,7 +711,6 @@ export default class TilesView extends React.Component {
           bottomBoundFn={this.contentPanelBottomBound}
           initialPositionYFn={this.initialPositionY.bind(this)}
           onResizeFn={this.onContentPanelResize.bind(this)}
-          context={this.state.context}
           nextPrevFn={this.props.nextPrevFn}
           thumbLeftDate={this.props.thumbLeftDate}
           thumbRightDate={this.props.thumbRightDate}

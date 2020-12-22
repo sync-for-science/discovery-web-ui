@@ -190,6 +190,9 @@ export default class SummaryView extends React.Component {
   }
 
   render() {
+    // if (!this.props.resources) {
+    //   return null;
+    // }
     const birthDate = this.props.resources.pathItem('[category=Patient].data.birthDate');
     const dateOfDeath = this.props.resources.pathItem('[category=Patient].data.deceasedDateTime');
     //      let name = formatPatientName(this.props.resources.pathItem('[category=Patient].data.name'));
