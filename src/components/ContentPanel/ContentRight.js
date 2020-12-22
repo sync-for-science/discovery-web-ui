@@ -46,7 +46,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //       https://github.com/bvaughn/react-window/issues/6
 //
 
-class ContentPanel extends React.Component {
+class ContentPanel extends React.PureComponent {
   static myName = 'ContentPanel';
 
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
@@ -188,19 +188,19 @@ class ContentPanel extends React.Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (notEqJSON(this.props, nextProps)) {
-      // Prop change
-      // window.logDiffs && logDiffs('Props', this.props, nextProps);
-      return true;
-    } if (notEqJSON(this.state, nextState)) {
-      // State change
-      // window.logDiffs && logDiffs('State', this.state, nextState);
-      return true;
-    }
-    // No change
-    return false;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (notEqJSON(this.props, nextProps)) {
+  //     // Prop change
+  //     // window.logDiffs && logDiffs('Props', this.props, nextProps);
+  //     return true;
+  //   } if (notEqJSON(this.state, nextState)) {
+  //     // State change
+  //     // window.logDiffs && logDiffs('State', this.state, nextState);
+  //     return true;
+  //   }
+  //   // No change
+  //   return false;
+  // }
 
   static getDerivedStateFromProps(props, state) {
     return null;
