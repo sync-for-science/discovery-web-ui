@@ -20,7 +20,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 // Render the "compare view" of the participant's data
 //
-export default class CompareView extends React.Component {
+export default class CompareView extends React.PureComponent {
   static myName = 'CompareView';
 
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'

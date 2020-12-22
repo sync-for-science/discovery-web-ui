@@ -14,7 +14,7 @@ import './PageHeader.css';
 
 const LOGO_CLASS = 'logo-s4s-button';
 
-export default class PageHeader extends React.Component {
+export default class PageHeader extends React.PureComponent {
   static propTypes = {
     modalIsOpen: PropTypes.bool.isRequired,
     modalFn: PropTypes.func.isRequired, // Callback to handle clicks on header icons

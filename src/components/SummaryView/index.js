@@ -13,7 +13,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 // Render the "Summary view" of the participant's data
 //
-export default class SummaryView extends React.Component {
+export default class SummaryView extends React.PureComponent {
   static myName = 'SummaryView';
 
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'

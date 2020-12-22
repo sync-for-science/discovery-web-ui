@@ -24,7 +24,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 // Render the "container" (with filters) for views of the participant's data
 //
-class StandardFilters extends React.Component {
+class StandardFilters extends React.PureComponent {
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {

@@ -25,7 +25,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 // Render the top-level Discovery application page
 //
-export default class DiscoveryApp extends React.Component {
+export default class DiscoveryApp extends React.PureComponent {
   static propTypes = {
     match: PropTypes.object,
   }

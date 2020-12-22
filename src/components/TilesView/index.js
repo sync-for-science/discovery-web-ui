@@ -18,7 +18,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 // Render the "tiles view" of the participant's data
 //
-export default class TilesView extends React.Component {
+export default class TilesView extends React.PureComponent {
   static myName = 'TilesView';
 
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
