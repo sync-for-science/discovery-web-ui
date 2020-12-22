@@ -11,14 +11,13 @@ import './PageHeader.css';
 //    if there is a 'logos' query parameter, its comma-separated
 //    elements will be used as left-to-right logo css classes.
 //
+
+const LOGO_CLASS = 'logo-s4s-button';
+
 export default class PageHeader extends React.Component {
   static propTypes = {
     modalIsOpen: PropTypes.bool.isRequired,
     modalFn: PropTypes.func.isRequired, // Callback to handle clicks on header icons
-  }
-
-  state = {
-    logoClasses: ['logo-s4s-button'], // Default value. Parsed from query string 'logos=a,b,c'
   }
 
   itemClick(itemName) {
@@ -28,9 +27,7 @@ export default class PageHeader extends React.Component {
       // Turn "on" the appropriate item
       switch (itemName) {
         case 'logoModal':
-          for (const logoClass of this.state.logoClasses) {
-            document.querySelector(`.${logoClass}-off`).className = `${logoClass}-on`;
-          }
+          document.querySelector('#logo-button').className = `${LOGO_CLASS}-on`;
           break;
         default:
           break;
@@ -42,9 +39,11 @@ export default class PageHeader extends React.Component {
     return (
       <header>
         <div className="logo-box">
-          { this.state.logoClasses.map(
-            (logoClass, index) => <button className={`${logoClass}-off`} key={logoClass + index} onClick={() => this.itemClick('logoModal')} />,
-          )}
+          <button
+            id="logo-button"
+            className={`${LOGO_CLASS}-off`}
+            onClick={() => this.itemClick('logoModal')}
+          />
         </div>
         <nav>
           <NavLink
