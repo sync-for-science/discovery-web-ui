@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import { atom, useRecoilState, useRecoilValue } from 'recoil';
+import { get } from 'axios';
 
 import './DiscoveryApp.css';
 import config from '../../config.js';
@@ -14,14 +16,14 @@ import TilesView from '../TilesView';
 import Collections from '../Collections';
 import Unimplemented from '../Unimplemented';
 import PageFooter from '../PageFooter';
-import Api from './Api';
+import Api, { normalizeResourcesAndInjectPartipantId } from './Api';
 
 import DiscoveryContext from '../DiscoveryContext';
 
 //
 // Render the top-level Discovery application page
 //
-export default class DiscoveryApp extends React.PureComponent {
+class DiscoveryApp extends React.PureComponent {
   constructor(props) {
     super(props);
     const { match: { params: { participantId } } } = this.props;
@@ -315,3 +317,58 @@ export default class DiscoveryApp extends React.PureComponent {
     );
   }
 }
+
+export const resourcesState = atom({
+  key: 'resourcesState', // unique ID (with respect to other atoms/selectors)
+  default: {
+    loading: false,
+    error: null,
+    raw: null,
+    normalized: null,
+  },
+});
+
+// if using React.memo, there's a proptype warning for Route:
+const DiscoveryAppHOC = (props) => {
+  const [resources, setResources] = useRecoilState(resourcesState);
+
+  useEffect(() => {
+    function fetchData() {
+      setResources({
+        ...resources,
+        loading: true,
+      });
+
+      const { match: { params: { id, participantId } } } = props;
+
+      const dataUrl = id ? `${config.serverUrl}/data/download/${id}`
+        : `${config.serverUrl}/participants/${participantId}`;
+
+      get(dataUrl).then((response) => {
+        setResources({
+          ...resources,
+          raw: response.data,
+          normalized: normalizeResourcesAndInjectPartipantId(participantId)(response.data),
+        });
+      }).catch((error) => {
+        setResources({
+          ...resources,
+          loading: false,
+          error,
+        });
+      });
+    }
+    fetchData();
+  }, []); // empty array for dependency: invoke only when mounted.
+
+  return (
+    <DiscoveryApp
+      {...props} // eslint-disable-line react/jsx-props-no-spreading
+      resources={resources}
+    />
+  );
+};
+
+DiscoveryAppHOC.propTypes = DiscoveryApp.propTypes;
+
+export default DiscoveryAppHOC;
