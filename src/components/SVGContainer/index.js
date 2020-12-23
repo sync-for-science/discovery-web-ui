@@ -33,8 +33,17 @@ export default class SVGContainer extends React.Component {
     const childrenWithSizeProps = React.Children.map(this.props.children,
       (child) => child && React.cloneElement(child, { width, height }));
     return (
-      <div className={this.props.className} style={this.props.style ? this.props.style : null}>
-        <svg className={this.props.svgClassName} width={width} height={height} preserveAspectRatio={par} xmlns="http://www.w3.org/2000/svg">
+      <div
+        className={this.props.className}
+        style={this.props.style ? this.props.style : null}
+      >
+        <svg
+          className={this.props.svgClassName}
+          width={width}
+          height={height}
+          preserveAspectRatio={par}
+          xmlns="http://www.w3.org/2000/svg"
+        >
           { childrenWithSizeProps }
         </svg>
       </div>
