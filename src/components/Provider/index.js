@@ -4,9 +4,6 @@ import PropTypes from 'prop-types';
 import '../../css/Selector.css';
 import { titleCase } from '../../util.js';
 
-import SVGContainer from '../SVGContainer';
-import DotLine from '../DotLine';
-
 //
 // Render a DiscoveryApp provider line
 //
@@ -65,13 +62,6 @@ export default class Provider extends React.Component {
             { titleCase(this.props.providerName) }
           </button>
         </div>
-        <SVGContainer className="selector-svg-container" svgClassName="selector-svg" svgWidth={this.props.svgWidth}>
-          <DotLine
-            dotPositions={this.props.dotPositionsFn(Provider.myName, this.props.providerName, this.state.isEnabled)}
-            context={{ parent: Provider.myName, rowName: this.props.providerName }}
-            dotClickFn={this.props.dotClickFn}
-          />
-        </SVGContainer>
       </div>
     );
   }
