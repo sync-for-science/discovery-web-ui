@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { get } from 'axios';
 
 import './DiscoveryApp.css';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import config from '../../config.js';
 import { log } from '../../utils/logger';
 import FhirTransform from '../../FhirTransform.js';
@@ -14,8 +15,8 @@ import StandardFilters from '../StandardFilters';
 import ContentPanel from '../ContentPanel/ContentRight';
 import SummaryView from '../SummaryView';
 import CompareView from '../CompareView';
-import DiabetesView from '../DiabetesView';
 import TilesView from '../TilesView';
+import Collections from '../Collections';
 import DiscoveryModal from '../DiscoveryModal';
 import Unimplemented from '../Unimplemented';
 import PageFooter from '../PageFooter';
@@ -25,7 +26,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 // Render the top-level Discovery application page
 //
-export default class DiscoveryApp extends React.Component {
+export default class DiscoveryApp extends React.PureComponent {
   static propTypes = {
     match: PropTypes.object,
   }
@@ -47,7 +48,6 @@ export default class DiscoveryApp extends React.Component {
     modalName: '',
     modalIsOpen: false,
     lastEvent: null,
-    currentView: null,
     thumbLeftDate: null,
     thumbRightDate: null,
     dotClickDate: null, // dot click from ContentPanel
@@ -81,9 +81,11 @@ export default class DiscoveryApp extends React.Component {
 
     this.setState({ isLoading: true });
 
+    const { match: { params: { id, participantId } } } = this.props;
+
     // Check for uploaded data
-    const dataUrl = this.props.match.params.id ? `${config.serverUrl}/data/download/${this.props.match.params.id}`
-      : `${config.serverUrl}/participants/${this.props.match.params.index}`;
+    const dataUrl = id ? `${config.serverUrl}/data/download/${id}`
+      : `${config.serverUrl}/participants/${participantId}`;
 
     // Get the merged dataset and transform it using topTemplate
     get(dataUrl)
@@ -153,7 +155,8 @@ export default class DiscoveryApp extends React.Component {
         if (finalResourceIDs.length !== initialResourceIDs.length) {
           // eslint-disable-next-line max-len
           const missingResources = initialResourceIDs.filter((id) => !finalResourceIDs.includes(id)).map((id) => resources.initial[providerName].entry.find((elt) => elt.resource.id === id));
-          alert(`Participant ${this.props.match.params.index} (${providerName}) has ${
+          const { match: { params: { participantId } } } = this.props;
+          alert(`Participant ${participantId} (${providerName}) has ${
             finalResourceIDs.length} resources but should have ${initialResourceIDs.length}`);
           log(JSON.stringify(missingResources, null, 3));
         }
@@ -349,12 +352,13 @@ export default class DiscoveryApp extends React.Component {
               // Ignore empty top-level item
             } else {
               // Flatten data
+              const { match: { params: { participantId } } } = this.props;
               for (const elt of obj[propName]) {
                 result.push({
                   provider: providerName,
                   category: propName,
                   itemDate: this.itemDate(elt, propName),
-                  id: this.props.match.params.index,
+                  id: participantId,
                   data: elt,
                 });
               }
@@ -409,17 +413,6 @@ export default class DiscoveryApp extends React.Component {
     this.setState({ thumbLeftDate: minDate, thumbRightDate: maxDate });
   }
 
-  //
-  // Search callback function
-  //
-  searchCallback = (refs, matchWords, laserSearch) => {
-    const plusRefs = refs.map((ref) => {
-      ref.position = this.state.dates.allDates.find((elt) => elt.date === ref.date).position;
-      return ref;
-    });
-    this.setState({ searchRefs: plusRefs, searchMatchWords: matchWords, laserSearch });
-  }
-
   onDotClick = (dotClickDate) => {
     this.setState({ dotClickDate });
   }
@@ -446,160 +439,15 @@ export default class DiscoveryApp extends React.Component {
     }
   }
 
-  renderCurrentView() {
-    switch (this.state.currentView) {
-      case 'reportView':
-        return (
-          <ContentPanel
-            open
-            catsEnabled={this.state.catsEnabled}
-            provsEnabled={this.state.provsEnabled}
-            dotClickFn={this.onDotClick}
-            containerClassName="content-panel-absolute"
-            topBoundFn={this.calcContentPanelTopBound}
-            bottomBoundFn={this.calcContentPanelBottomBound}
-          // context, nextPrevFn added in StandardFilters
-            thumbLeftDate={this.state.thumbLeftDate}
-            thumbRightDate={this.state.thumbRightDate}
-            resources={this.state.resources}
-            totalResCount={this.state.totalResCount}
-            viewName="Report"
-            viewIconClass="longitudinal-view-icon"
-          />
-        );
-
-      case 'financialView':
-        return (
-          <ContentPanel
-            open
-            catsEnabled={this.state.catsEnabled}
-            provsEnabled={this.state.provsEnabled}
-            containerClassName="content-panel-absolute"
-            topBoundFn={this.calcContentPanelTopBound}
-            bottomBoundFn={this.calcContentPanelBottomBound}
-          // context, nextPrevFn added in StandardFilters
-            thumbLeftDate={this.state.thumbLeftDate}
-            thumbRightDate={this.state.thumbRightDate}
-            resources={this.state.resources}
-            totalResCount={this.state.totalResCount}
-            catsToDisplay={['Benefits', 'Claims']}
-            viewName="Financial"
-            viewIconClass="benefits-view-icon"
-            showAllData
-          />
-        );
-
-      case 'consultView':
-        return (
-          <ContentPanel
-            open
-            catsEnabled={this.state.catsEnabled}
-            provsEnabled={this.state.provsEnabled}
-            dotClickFn={this.onDotClick}
-            containerClassName="content-panel-absolute"
-            topBoundFn={this.calcContentPanelTopBound}
-            bottomBoundFn={this.calcContentPanelBottomBound}
-          // context, nextPrevFn added in StandardFilters
-            thumbLeftDate={this.state.thumbLeftDate}
-            thumbRightDate={this.state.thumbRightDate}
-            resources={this.state.resources}
-            totalResCount={this.state.totalResCount}
-            viewName="Consult"
-            viewIconClass="consult-view-icon"
-            showAllData
-            initialTrimLevel="expected"
-          />
-        );
-
-      case 'compareView':
-        return (
-          <CompareView
-            resources={this.state.resources}
-            totalResCount={this.state.totalResCount}
-            dates={this.state.dates}
-            categories={this.categories}
-            providers={this.providers}
-            catsEnabled={this.state.catsEnabled}
-            provsEnabled={this.state.provsEnabled}
-            thumbLeftDate={this.state.thumbLeftDate}
-            thumbRightDate={this.state.thumbRightDate}
-            lastEvent={this.state.lastEvent}
-          />
-        );
-
-      case 'diabetesView':
-        return (
-          <DiabetesView
-            resources={this.state.resources}
-            dates={this.state.dates}
-            categories={this.categories}
-            providers={this.providers}
-            catsEnabled={this.state.catsEnabled}
-            provsEnabled={this.state.provsEnabled}
-            lastEvent={this.state.lastEvent}
-          />
-        );
-
-      case 'tilesView':
-        return (
-          <TilesView
-            resources={this.state.resources}
-            totalResCount={this.state.totalResCount}
-            dates={this.state.dates}
-            categories={this.categories}
-            providers={this.providers}
-            catsEnabled={this.state.catsEnabled}
-            provsEnabled={this.state.provsEnabled}
-            thumbLeftDate={this.state.thumbLeftDate}
-            thumbRightDate={this.state.thumbRightDate}
-            lastEvent={this.state.lastEvent}
-          />
-        );
-
-      case 'summaryView':
-      default:
-        return (
-          <SummaryView
-            resources={this.state.resources}
-            dates={this.state.dates}
-            categories={this.categories}
-            providers={this.providers}
-            lastEvent={this.state.lastEvent}
-          />
-        );
-    }
-  }
-
   get viewCategories() {
-    switch (this.state.currentView) {
-      case 'financialView':
-        return ['Claims', 'Benefits'];
-
-        //   case 'compareView':
-        //      let compareCats = ['Allergies', 'Conditions', 'Encounters', 'Exams', 'Immunizations', 'Lab Results',
-        //             'Meds Dispensed', 'Meds Requested', 'Procedures', 'Vital Signs', 'Social History'];
-        //      return this.categories.filter( elt => compareCats.includes(elt));
-
-        //   case 'tilesView':
-        //      let tilesCats = ['Allergies', 'Conditions', 'Encounters', 'Exams', 'Immunizations', 'Lab Results',
-        //           'Meds Dispensed', 'Meds Requested', 'Procedures', 'Vital Signs', 'Social History'];
-        //      return this.categories.filter( elt => tilesCats.includes(elt));
-
-      default:
-        return this.categories;
-    }
+    return this.categories;
   }
 
   get initialCats() {
     const cats = {};
 
     for (const cat of this.categories) {
-      if (this.state.currentView === 'consultView') {
-        // only enable Conditions (if present)
-        cats[cat] = cat === 'Conditions';
-      } else {
-        cats[cat] = true;
-      }
+      cats[cat] = true;
     }
 
     return cats;
@@ -618,34 +466,110 @@ export default class DiscoveryApp extends React.Component {
       return <p>Loading ...</p>;
     }
 
+    const { match: { params: { activeView = 'summary', participantId } } } = this.props;
+
     return (
       <DiscoveryContext.Provider value={this.state}>
         { this.state.themeName && <link rel="stylesheet" type="text/css" href={`/themes/${this.state.themeName}.css`} /> }
         <div className="discovery-app">
           <PageHeader
-            rawQueryString={this.props.location.search}
+            participantId={participantId}
             modalIsOpen={this.state.modalIsOpen}
             modalFn={(name) => this.setState({ modalName: name, modalIsOpen: true })}
-            viewFn={(name) => this.setState({ currentView: name })}
-            searchCallback={this.searchCallback}
-            resources={this.state.resources}
           />
           <div className="outer-container">
-            <StandardFilters
-              resources={this.state.resources}
-              dates={this.state.dates}
-              categories={this.viewCategories}
-              catsEnabled={this.initialCats}
-              providers={this.providers}
-              provsEnabled={this.initialProvs}
-              enabledFn={this.setEnabled}
-              dateRangeFn={this.setDateRange}
-              lastEvent={this.state.lastEvent}
-              allowDotClick={!['compareView', 'tilesView'].includes(this.state.currentView)}
-              dotClickDate={this.state.dotClickDate}
-            >
-              { this.state.currentView && this.renderCurrentView() }
-            </StandardFilters>
+            <div className="standard-filters">
+              <StandardFilters
+                activeView={activeView}
+                resources={this.state.resources}
+                dates={this.state.dates}
+                categories={this.viewCategories}
+                catsEnabled={this.initialCats}
+                providers={this.providers}
+                provsEnabled={this.initialProvs}
+                enabledFn={this.setEnabled}
+                dateRangeFn={this.setDateRange}
+                lastEvent={this.state.lastEvent}
+                // TODO: convert to use route path segment:
+                // allowDotClick={!['compare', 'catalog'].includes(activeView)}
+                allowDotClick
+                dotClickDate={this.state.dotClickDate}
+              />
+              { this.state.resources && (
+                <Switch>
+                  <Route path="/participant/:participantId/summary">
+                    <SummaryView
+                      activeView={activeView}
+                      resources={this.state.resources}
+                      dates={this.state.dates}
+                      categories={this.categories}
+                      providers={this.providers}
+                      lastEvent={this.state.lastEvent}
+                    />
+                  </Route>
+                  <Route path="/participant/:participantId/catalog">
+                    <TilesView
+                      activeView={activeView}
+                      resources={this.state.resources}
+                      totalResCount={this.state.totalResCount}
+                      dates={this.state.dates}
+                      categories={this.categories}
+                      providers={this.providers}
+                      catsEnabled={this.state.catsEnabled}
+                      provsEnabled={this.state.provsEnabled}
+                      thumbLeftDate={this.state.thumbLeftDate}
+                      thumbRightDate={this.state.thumbRightDate}
+                      lastEvent={this.state.lastEvent}
+                    />
+                  </Route>
+                  <Route path="/participant/:participantId/compare">
+                    <CompareView
+                      activeView={activeView}
+                      resources={this.state.resources}
+                      totalResCount={this.state.totalResCount}
+                      dates={this.state.dates}
+                      categories={this.categories}
+                      providers={this.providers}
+                      catsEnabled={this.state.catsEnabled}
+                      provsEnabled={this.state.provsEnabled}
+                      thumbLeftDate={this.state.thumbLeftDate}
+                      thumbRightDate={this.state.thumbRightDate}
+                      lastEvent={this.state.lastEvent}
+                    />
+                  </Route>
+                  <Route path="/participant/:participantId/timeline">
+                    <ContentPanel
+                      open
+                      activeView={activeView}
+                      catsEnabled={this.state.catsEnabled}
+                      provsEnabled={this.state.provsEnabled}
+                      dotClickFn={this.onDotClick}
+                      containerClassName="content-panel-absolute"
+                      topBoundFn={this.calcContentPanelTopBound}
+                      bottomBoundFn={this.calcContentPanelBottomBound}
+                      // context, nextPrevFn added in StandardFilters
+                      thumbLeftDate={this.state.thumbLeftDate}
+                      thumbRightDate={this.state.thumbRightDate}
+                      resources={this.state.resources}
+                      totalResCount={this.state.totalResCount}
+                      viewName="Report"
+                      viewIconClass="longitudinal-view-icon"
+                    />
+                  </Route>
+                  <Route path="/participant/:participantId/collections">
+                    <Collections />
+                  </Route>
+                  <Route
+                    path="/participant/:participantId/:activeView?"
+                  >
+                    <Redirect
+                      push
+                      to={`/participant/${participantId}/summary`}
+                    />
+                  </Route>
+                </Switch>
+              )}
+            </div>
             <div id="details-right" />
           </div>
           <DiscoveryModal

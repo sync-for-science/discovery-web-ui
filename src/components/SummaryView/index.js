@@ -13,7 +13,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 // Render the "Summary view" of the participant's data
 //
-export default class SummaryView extends React.Component {
+export default class SummaryView extends React.PureComponent {
   static myName = 'SummaryView';
 
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
@@ -190,6 +190,9 @@ export default class SummaryView extends React.Component {
   }
 
   render() {
+    // if (!this.props.resources) {
+    //   return null;
+    // }
     const birthDate = this.props.resources.pathItem('[category=Patient].data.birthDate');
     const dateOfDeath = this.props.resources.pathItem('[category=Patient].data.deceasedDateTime');
     //      let name = formatPatientName(this.props.resources.pathItem('[category=Patient].data.name'));

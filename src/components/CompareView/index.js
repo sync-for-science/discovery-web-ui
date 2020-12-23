@@ -20,7 +20,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //
 // Render the "compare view" of the participant's data
 //
-export default class CompareView extends React.Component {
+export default class CompareView extends React.PureComponent {
   static myName = 'CompareView';
 
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
@@ -49,7 +49,6 @@ export default class CompareView extends React.Component {
   }
 
   state = {
-    context: this.props.context,
     uniqueStruct: {},
     selectedUniqueItems: {},
     lastUniqueItemSelected: null,
@@ -404,7 +403,7 @@ export default class CompareView extends React.Component {
         const key = fhirKey(res);
         const elt = document.querySelector(`[data-fhir="${key}"]`);
         if (elt) {
-          elt.scrollIntoView();
+          // elt.scrollIntoView();
         } else {
           log(`onUniqueItemClick(): cannot scroll to "${key}"`);
         }
@@ -698,7 +697,6 @@ export default class CompareView extends React.Component {
           bottomBoundFn={this.contentPanelBottomBound}
           initialPositionYFn={this.initialPositionY.bind(this)}
           onResizeFn={this.onContentPanelResize.bind(this)}
-          context={this.state.context}
           nextPrevFn={this.props.nextPrevFn}
           thumbLeftDate={this.props.thumbLeftDate}
           thumbRightDate={this.props.thumbRightDate}

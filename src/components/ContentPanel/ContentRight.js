@@ -1,6 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {
+  useRecoilValue,
+} from 'recoil';
 import PropTypes from 'prop-types';
+
+import { dotClickContextState } from '../StandardFilters';
 
 import './ContentPanel.css';
 import config from '../../config.js';
@@ -41,7 +46,7 @@ import DiscoveryContext from '../DiscoveryContext';
 //       https://github.com/bvaughn/react-window/issues/6
 //
 
-export default class ContentPanel extends React.Component {
+class ContentPanel extends React.PureComponent {
   static myName = 'ContentPanel';
 
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
@@ -183,19 +188,19 @@ export default class ContentPanel extends React.Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (notEqJSON(this.props, nextProps)) {
-      // Prop change
-      // window.logDiffs && logDiffs('Props', this.props, nextProps);
-      return true;
-    } if (notEqJSON(this.state, nextState)) {
-      // State change
-      // window.logDiffs && logDiffs('State', this.state, nextState);
-      return true;
-    }
-    // No change
-    return false;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (notEqJSON(this.props, nextProps)) {
+  //     // Prop change
+  //     // window.logDiffs && logDiffs('Props', this.props, nextProps);
+  //     return true;
+  //   } if (notEqJSON(this.state, nextState)) {
+  //     // State change
+  //     // window.logDiffs && logDiffs('State', this.state, nextState);
+  //     return true;
+  //   }
+  //   // No change
+  //   return false;
+  // }
 
   static getDerivedStateFromProps(props, state) {
     return null;
@@ -219,10 +224,10 @@ export default class ContentPanel extends React.Component {
     this.manageUpdateResourcesSeq(doUpdateResources);
 
     if (notEqJSON(prevProps, this.props)) {
-      this.setState({
-        prevEnabled: this.props.context.date !== this.props.context.minDate,
-        nextEnabled: this.props.context.date !== this.props.context.maxDate,
-      });
+      // this.setState({
+      //   prevEnabled: this.props.context.date !== this.props.context.minDate,
+      //   nextEnabled: this.props.context.date !== this.props.context.maxDate,
+      // });
     }
 
     log('componentDidUpdate() END');
@@ -298,14 +303,13 @@ export default class ContentPanel extends React.Component {
     let arr = [];
     log(`calcCurrResources() - start: ${new Date().getTime()}`);
     const limitedResources = this.props.catsToDisplay ? this.props.resources.transformed.filter((res) => this.props.catsToDisplay.includes(res.category)
-      && res.category !== 'Patient'
-      && this.catEnabled(res.category)
-      && this.provEnabled(res.provider)
-      && inDateRange(res.itemDate, this.props.thumbLeftDate,
-        this.props.thumbRightDate)
-      && (!this.state.onlyAnnotated || (res.data.discoveryAnnotation
-        && res.data.discoveryAnnotation.annotationHistory)))
-      : this.props.resources.transformed.filter((res) => res.category !== 'Patient'
+        && res.category !== 'Patient'
+        && this.catEnabled(res.category)
+        && this.provEnabled(res.provider)
+        && inDateRange(res.itemDate, this.props.thumbLeftDate,
+          this.props.thumbRightDate)
+        && (!this.state.onlyAnnotated || (res.data.discoveryAnnotation
+          && res.data.discoveryAnnotation.annotationHistory))) : this.props.resources.transformed.filter((res) => res.category !== 'Patient'
         && this.catEnabled(res.category)
         && this.provEnabled(res.provider)
         && inDateRange(res.itemDate, this.props.thumbLeftDate,
@@ -532,30 +536,30 @@ export default class ContentPanel extends React.Component {
             </div>
 
             { config.enableContentPanelLeftRight && (
-            <button
-              className={`content-panel-left-button${this.state.prevEnabled ? '' : '-off'}`}
-              onClick={() => this.onNextPrev('prev')}
-            />
+              <button
+                className={`content-panel-left-button${this.state.prevEnabled ? '' : '-off'}`}
+                onClick={() => this.onNextPrev('prev')}
+              />
             ) }
             { config.enableContentPanelLeftRight && (
-            <button
-              className={`content-panel-right-button${this.state.nextEnabled ? '' : '-off'}`}
-              onClick={() => this.onNextPrev('next')}
-            />
+              <button
+                className={`content-panel-right-button${this.state.nextEnabled ? '' : '-off'}`}
+                onClick={() => this.onNextPrev('next')}
+              />
             ) }
             { config.enableShowLess && (
-            <button className="content-panel-show-details-button" onClick={this.toggleTrimLevel}>
-              { this.state.trimLevel === Const.trimNone ? 'Show Less' : 'Show More' }
-            </button>
+              <button className="content-panel-show-details-button" onClick={this.toggleTrimLevel}>
+                { this.state.trimLevel === Const.trimNone ? 'Show Less' : 'Show More' }
+              </button>
             ) }
           </div>
           <div className="content-panel-inner-title-center" />
           <div className="content-panel-inner-title-right">
             { config.enableOnlyRecordsWithNotes && (
-            <label className="check-only-annotated-label">
-              <input className="check-only-annotated-check" type="checkbox" checked={this.state.onlyAnnotated} onChange={this.onlyAnnotatedChange} />
-              Only records with my notes
-            </label>
+              <label className="check-only-annotated-label">
+                <input className="check-only-annotated-check" type="checkbox" checked={this.state.onlyAnnotated} onChange={this.onlyAnnotatedChange} />
+                Only records with my notes
+              </label>
             ) }
             <button
               className={`content-panel-json-button${this.state.showJSON ? '' : '-off'}`}
@@ -598,3 +602,18 @@ export default class ContentPanel extends React.Component {
     );
   }
 }
+
+const ContentPanelHOC = React.memo((props) => {
+  const dotClickContext = useRecoilValue(dotClickContextState);
+
+  return (
+    <ContentPanel
+      {...props} // eslint-disable-line react/jsx-props-no-spreading
+      context={dotClickContext}
+    />
+  );
+});
+
+ContentPanelHOC.propTypes = ContentPanel.propTypes;
+
+export default ContentPanelHOC;
