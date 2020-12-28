@@ -5,13 +5,7 @@
 /* v.01.09 Updated 10/07/2019 */
 
 .view-container {
-  position: fixed;
-  top: 146px;
-  left: 160px;
-  width: calc(100% - 170px);
   min-width: 840px;
-  height: calc(100% - 200px);
-  margin: 0;
 }
 
 .view-title {

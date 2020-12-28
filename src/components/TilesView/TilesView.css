@@ -9,11 +9,8 @@
 /* Tiles View - contains tiles view and content panel  */
 
 .tiles-view {
-  position: fixed;
-  top: 166px;
-  left: 160px;
-  height: calc(100% - 176px);
-  width: calc(100vw - var(--left-nav-width) - var(--right-details-width));
+  /* TODO: better metrics for height */
+  height: calc(100vh - 200px);
   min-width: 840px;
   display: flex;
   flex-direction: column;

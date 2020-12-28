@@ -37,6 +37,7 @@ import Unimplemented from '../Unimplemented';
 // import ListView from './ListView';
 
 import DiscoveryContext from '../DiscoveryContext';
+import PersistentDrawerRight from './Drawer';
 
 //
 // Render the content panel for ReportView, FinancialView, TilesView
@@ -585,12 +586,13 @@ class ContentPanel extends React.PureComponent {
     }
 
     const detailsRightTarget = document.getElementById('details-right');
-    // console.error('detailsRightTarget:', detailsRightTarget)
     if (detailsRightTarget) {
       return ReactDOM.createPortal((
-        <div>
-          { this.state.currResources && this.props.context && this.renderContents(this.props.context) }
-        </div>
+        <PersistentDrawerRight>
+          <div className="record-list">
+            { this.state.currResources && this.props.context && this.renderContents(this.props.context) }
+          </div>
+        </PersistentDrawerRight>
       ), detailsRightTarget);
     }
 

@@ -9,9 +9,8 @@
 .compare-view {
   @insert .view-container;
 
-  top: 166px;
-
-  /* height: calc(100% - 176px); */
+  /* TODO: better metrics for height */
+  height: calc(100vh - 200px);
   background-color: var(--background-content);
   margin: 0;
 
@@ -19,7 +18,6 @@
    overflow-y: auto; */
   display: flex;
   flex-direction: column;
-  width: calc(100vw - var(--left-nav-width) - var(--right-details-width));
 }
 
 .compare-view-scroller {

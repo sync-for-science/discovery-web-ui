@@ -18,13 +18,9 @@ export default class CategoryRollup extends React.Component {
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
-    svgWidth: PropTypes.string.isRequired,
-    dotPositionsFn: PropTypes.func.isRequired,
-    dotClickFn: PropTypes.func,
     isExpanded: PropTypes.bool.isRequired,
     expansionFn: PropTypes.func.isRequired,
     catsEnabledFn: PropTypes.func.isRequired, // Callback to report changed category enable/disable
-    noDots: PropTypes.bool,
     categories: PropTypes.arrayOf(PropTypes.string),
   }
 
@@ -87,21 +83,6 @@ export default class CategoryRollup extends React.Component {
           Records
         </button>
         <button className={this.buttonClass()} onClick={this.handleSetClearButtonClick} />
-        <SVGContainer
-          className="category-rollup-svg-container"
-          style={this.props.noDots ? { backgroundImage: 'none' } : null}
-          svgClassName="category-rollup-svg"
-          svgWidth={this.props.svgWidth}
-        >
-          { !this.props.noDots
-          && (
-          <DotLine
-            dotPositions={this.props.dotPositionsFn(CategoryRollup.myName, 'Categories', true)}
-            context={{ parent: CategoryRollup.myName, rowName: 'Categories' }}
-            dotClickFn={this.props.dotClickFn}
-          />
-          ) }
-        </SVGContainer>
       </div>
     );
   }

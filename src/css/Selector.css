@@ -5,8 +5,6 @@
 /* v.01.13 Updated 11/14/2019 */
 
 .selector-set {
-  width: 100%;
-  min-width: 1024px;
   height: auto;
   padding: 0;
   margin: 0;
@@ -15,7 +13,6 @@
 .selector {
   display: flex;
   flex-direction: row;
-  width: 100%;
   min-height: 28px;
   max-height: none;
   padding: 0;
@@ -25,7 +22,6 @@
 .selector-rollup {
   display: flex;
   flex-direction: row;
-  width: calc(100% - 20px);
   height: 38px;
   max-height: 38px;
   padding: 0;
