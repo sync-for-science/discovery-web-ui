@@ -1,17 +1,17 @@
 import React from 'react';
 import { node, string } from 'prop-types';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
-import { useTranslation } from 'react-i18next';
-import ReactMarkdown from 'react-markdown/with-html';
+// import { useTranslation } from 'react-i18next';
+// import ReactMarkdown from 'react-markdown/with-html';
 
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import OutboundLink from './OutboundLink';
+import CloseIcon from '@material-ui/icons/Close';
+// import OutboundLink from './OutboundLink';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,9 +29,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Modal = ({ i18nKey, icon, children }) => {
+const Modal = ({
+  modalId, icon, title, tooltip, children,
+}) => {
   const classes = useStyles();
-  const { t } = useTranslation();
   const [modalOpen, setOpen] = React.useState(false);
 
   const handleModalOpen = () => {
@@ -41,11 +42,6 @@ const Modal = ({ i18nKey, icon, children }) => {
   const handleModalClose = () => {
     setOpen(false);
   };
-
-  const modalId = `${i18nKey}-modal`;
-  const title = t(`${i18nKey}.title`);
-  const body = t(`${i18nKey}.body`);
-  const tooltip = t(`${i18nKey}.tooltip`);
 
   const modalGraphicOrText = icon ? (
     <IconButton
@@ -85,8 +81,6 @@ const Modal = ({ i18nKey, icon, children }) => {
         id={modalId}
         fullWidth
         maxWidth="md" // 'lg' 'md' 'sm' 'xl' 'xs' false
-        disableBackdropClick={false}
-        disableEscapeKeyDown={false}
         open={modalOpen}
         onClose={handleModalClose}
         className={classes.root}
@@ -95,19 +89,15 @@ const Modal = ({ i18nKey, icon, children }) => {
           <DialogTitle>
             {title}
           </DialogTitle>
-          <Button
-            variant="text"
+          <IconButton
             onClick={handleModalClose}
+            aria-label="close"
+            aria-controls={modalId}
           >
-            Close
-          </Button>
+            <CloseIcon />
+          </IconButton>
         </DialogActions>
         <DialogContent>
-          <ReactMarkdown
-            source={body}
-            escapeHtml={false}
-            renderers={{ link: OutboundLink }}
-          />
           { children }
         </DialogContent>
       </Dialog>
@@ -116,14 +106,18 @@ const Modal = ({ i18nKey, icon, children }) => {
 };
 
 Modal.propTypes = {
-  i18nKey: string.isRequired,
+  modalId: string.isRequired,
   icon: node,
+  title: string,
+  tooltip: node,
   children: node,
 };
 
 Modal.defaultProps = {
   icon: null,
+  title: '',
+  tooltip: null,
   children: null,
 };
 
-export default Modal;
+export default React.memo(Modal);
