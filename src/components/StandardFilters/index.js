@@ -592,14 +592,13 @@ class StandardFilters extends React.PureComponent {
   render() {
     //      console.log('SF render: ' + (this.props.dotClickContext ? this.props.dotClickContext.date : this.props.dotClickContext));
 
-    const { activeView, dates } = this.props;
+    const { dates } = this.props;
 
     const dotClickFn = this.props.allowDotClick ? this.onDotClick : null;
 
     return (
       <>
         <TimeWidget
-          activeView={activeView}
           minDate={dates ? dates.minDate : ''}
           maxDate={dates ? dates.maxDate : ''}
           startDate={dates ? dates.startDate : ''}
