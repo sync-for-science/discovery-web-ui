@@ -96,6 +96,7 @@ nav {
 }
 
 header nav a,
+header nav a:link,
 header nav a:hover,
 header nav a:active,
 header nav a:visited {
