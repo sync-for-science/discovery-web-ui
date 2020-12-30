@@ -7,7 +7,6 @@
 
 /* v.01.24 Updated 12/09/2019 */
 
-
 /* New Summary View Styles */
 .summary-view-container {
   position: fixed;
@@ -116,7 +115,6 @@
   background-color: var(--background-content);
 }
 
-
 /* Right Column */
 .summary-view-right-column {
   position: relative;
@@ -174,7 +172,6 @@
   flex-direction: row;
   width: 100%;
 }
-
 
 /* Participant Info Column */
 .participant-info-column {
@@ -243,7 +240,6 @@
   padding: 10px 0 10px 10px;
   border-bottom: solid 1px var(--separator-light);
 }
-
 
 /* Records Column */
 .records-column {
@@ -340,7 +336,6 @@
   min-width: 32px;
   margin: 0 15px 0 35px;
 }
-
 
 /* Provider Column */
 .providers-column {
@@ -468,7 +463,6 @@
    margin: 0;
    overflow-y: scroll;
 }
-
 
 .default-data-owner-title {
 	width: 16.875rem;

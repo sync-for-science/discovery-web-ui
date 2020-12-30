@@ -394,15 +394,10 @@
   border-top: solid 1px var(--content-header-old);
 }
 
-.category-loading {
-
-}
-
 .unimplemented {
   font-family: data-text;
   white-space: nowrap;
 }
-
 
 /* Content Panel Header Styles */
 
@@ -544,10 +539,6 @@
   flex-direction: column;
   justify-content: flex-end;
   margin: 0;
-}
-
-.explanation {
-
 }
 
 .content-panel-data {

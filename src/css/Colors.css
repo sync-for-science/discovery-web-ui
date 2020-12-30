@@ -39,36 +39,36 @@
   --gt5: rgb(116, 128, 154);             /* Blue Gray Dark 2 */
   --gt6: rgb(87, 103, 131);              /* Blue Gray Dark 3 */
   --gt7: rgb(226, 231, 244);
-  --gt8: rgb(, ,);
-  --gt9: rgb(, ,);
+  /* --gt8: rgb(, ,); */
+  /* --gt9: rgb(, ,); */
 
   /* COLORS */
 
   /* Color - Blue (CB) */
   --cb1: rgb(69, 98, 163);
-  --cb2: rgb(, ,);
-  --cb3: rgb(, ,);
+  /* --cb2: rgb(, ,); */
+  /* --cb3: rgb(, ,); */
 
   /* Color - Aqua (CA) */
   --ca1: rgb(65, 151, 198);      /* Aqua */
   --ca2: rgb(1, 166, 170);
   --ca2-70: rgba(1, 166, 170, 0.7);
-  --ca3: rgb(, ,);
+  /* --ca3: rgb(, ,); */
 
   /* Color - Green (CG) */
   --cg1: rgb(0, 140, 23);
   --cg2: rgb(127, 191, 0);
-  --cg3: rgb(, ,);
+  /* --cg3: rgb(, ,); */
 
   /* Color - Yellow (CY) */
   --cy1: rgb(191, 159, 0);
-  --cy2: rgb(, ,);
-  --cy3: rgb(, ,);
+  /* --cy2: rgb(, ,); */
+  /* --cy3: rgb(, ,); */
 
   /* Color - Orange (CO) */
   --co1: rgb(215, 140, 20);      /* Orange */
   --co2: rgb(228, 198, 106);     /* Light Orange */
-  --co3: rgb(, ,);
+  /* --co3: rgb(, ,); */
 
   /* Color - Red (CR) */
   --cr1: rgb(166, 55, 0);
@@ -105,13 +105,11 @@
   --background-scrollbar-thumb: var(--gt4);
   --background-scrollbar-thumb-hover: var(--gn5);
 
-
   /* Background Highlight  */
   --background-highlight-confirmed: var(--cg1);
   --background-highlight-disconfirmed: var(--crt1);
   --background-highlight-likely: var(--cg2);
   --background-highlight-unlikely: var(--cy1);
-
 
   /* Background Interface  */
   --background-scrollbar: var(--gt3);
@@ -130,7 +128,6 @@
   --button-view-disabled: var(--gt5);
   --button-date-range: var(--gt5);
   --button-date-range-disabled: var(--gt3);
-
 
   /* Tile */
   --tile: var(--gt1);
@@ -213,7 +210,6 @@
   --data: var(--black);
   --data-deselected: var(--);
 
-
   /* BORDER COLOR MAPS */
   --separator-white: var(--white);
   --separator-light: var(--gt1);
@@ -224,7 +220,6 @@
   --separator-dark-translucent: var(--gt4-40);
   --border-modal: var(--gt4);
   --border-accent: var(--gt5);
-
 
   /* FILL COLOR MAPS */
   --dots-active: var(--ca2-70);
@@ -287,9 +282,7 @@
 
   /* Data Solids */
 
-
   /* Data Translucents */
-
 
   /* Top Level Color Abstractions - 083019 */
 
@@ -370,7 +363,6 @@
    --data-divider: var(--gray-light-100);
    --data-loading: var(--red-100);
 */
-
 
   /* Category Colors
    --category: var(--category-100);
