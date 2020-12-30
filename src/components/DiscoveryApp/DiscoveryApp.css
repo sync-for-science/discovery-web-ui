@@ -46,6 +46,7 @@ button:focus {
 
 #details-right {
   --right-gutter: 12px;
+
   width: var(--right-details-width);
   margin-top: var(--top-header-height);
   padding-right: var(--right-gutter);

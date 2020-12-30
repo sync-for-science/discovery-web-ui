@@ -305,6 +305,7 @@
 .content-panel-body {
   /* debug height by using a background-color on this element */
   --content-right-body-offset-from-header: 48px; /* height of panel title and margin/padding */
+
   height: calc(100vh - var(--top-header-height) - var(--content-right-body-offset-from-header));
   overflow-y: scroll;
   overflow-x: hidden;
