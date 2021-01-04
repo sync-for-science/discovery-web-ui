@@ -4,6 +4,6 @@
     "font-family-no-missing-generic-family-keyword": null,
     "property-no-unknown": null,
     "at-rule-no-unknown": null,
-    comment-empty-line-before: null
+    "comment-empty-line-before": null
   }
 }
