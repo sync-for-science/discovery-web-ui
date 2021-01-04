@@ -11,7 +11,26 @@ export const rootTheme = createMuiTheme({
         //           https://next.material-ui.com/guides/migration-v4/
       },
     },
+    MuiDialogActions: {
+      styleOverrides: {
+        justifyContent: 'space-between',
+        padding: '8px 16px 8px 16px',
+        root: {
+          justifyContent: 'space-between',
+          padding: '8px 16px 8px 16px',
+          // example styling of nested component:
+          '& .MuiDialogTitle-root': {
+            // '& [class*="MuiDialogTitle-root"]': { // ^alternatively
+            color: 'red',
+            padding: 0,
+          },
+        },
+      },
+    },
   },
   palette: {
+    // TODO:
+    // primary: {
+    // },
   },
 });
