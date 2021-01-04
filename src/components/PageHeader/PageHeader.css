@@ -107,6 +107,10 @@ header nav a:visited {
   text-align: center;
   text-decoration: none;
   background-color: transparent;
+
+  &:hover {
+    color: red
+  }
 }
 
 header nav a.active {
