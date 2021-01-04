@@ -32,25 +32,7 @@
   background-color: transparent;
   background-clip: padding-box;
   padding: 0;
-  border: 0 solid transparent;
-  border-radius: 10px;
   margin-top: 120px;
-}
-
-/* Close Button */
-.discovery-modal-close-button {
-  position: absolute;
-  top: 5px;
-  right: 14px;
-  display: flex;
-  background-color: transparent;
-  padding: 0;
-  border: none;
-}
-
-/* Close Icon */
-.discovery-modal-close-icon {
-  fill: var(--gs-000-100);
 }
 
 /* --- End Modal Styles --- */
@@ -68,8 +50,6 @@
   line-height: 37px;
   color: var(--label-white);
   padding: 0 0 0 50px;
-  border: 1px solid var(--background-header);
-  border-radius: 10px 10px 0 0;
   margin: 0;
 }
 
@@ -80,9 +60,6 @@
   max-height: 520px;
   background-color: var(--background-content);
   padding: 20px;
-  border: 2px solid var(--background-header);
-  border-top: none;
-  border-radius: 0 0 10px 10px;
   margin: 0;
   overflow-y: hidden;
   overflow-x: hidden;
@@ -221,7 +198,6 @@
   font-family: header-bold;
   font-size: 1rem;
   color: var(--primary-100);
-  border-bottom: 1px solid var(--primary-100);
 }
 
 .help-modal-list-item {
@@ -305,7 +281,6 @@
   color: var(--white);
   background-color: var(--primary-100);
   padding: 10px 0;
-  border-radius: 25px;
   margin: 10px auto;
 }
 
@@ -361,7 +336,6 @@
   text-align: center;
   color: var(--white-100);
   padding: 10px 0;
-  border-radius: 25px;
   margin: 10px auto;
 }
 
