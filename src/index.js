@@ -9,6 +9,7 @@ import {
   // useRecoilValue,
 } from 'recoil';
 
+import { ThemeProvider, rootTheme } from './themes';
 import './css/Colors.css';
 import './css/Fonts.css';
 
@@ -17,13 +18,15 @@ import DiscoveryApp from './components/DiscoveryApp';
 
 ReactDOM.render(
   <RecoilRoot>
-    <Router>
-      <Switch>
-        <Route exact path="/" component={ParticipantList} />
-        <Route path="/participant/:participantId/:activeView?" component={DiscoveryApp} />
-        <Route path="/uploaded/:id" component={DiscoveryApp} />
-      </Switch>
-    </Router>
+    <ThemeProvider theme={rootTheme}>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={ParticipantList} />
+          <Route path="/participant/:participantId/:activeView?" component={DiscoveryApp} />
+          <Route path="/uploaded/:id" component={DiscoveryApp} />
+        </Switch>
+      </Router>
+    </ThemeProvider>
   </RecoilRoot>,
   document.getElementById('root'),
 );
