@@ -6,6 +6,7 @@
 
 .time-widget {
   /* upper/smaller timeline */
+
   /*
   position: relative;
   top: 56px;
@@ -153,7 +154,7 @@
 
 .timeline {
   left: 0;
-  width: auto;
+  /* width: auto; */
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;

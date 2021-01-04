@@ -9,6 +9,7 @@
 .standard-filters {
   margin-top: 56px;
   width: calc(100vw - var(--right-details-width));
+
   /*    position: fixed;
     top: 46px;
     left: -150px;
@@ -18,6 +19,7 @@
 
 .standard-filters-categories-and-providers {
   /* lower/main timeline */
+
   /*
   position: fixed;
   top: 166px;

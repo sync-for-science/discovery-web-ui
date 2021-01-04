@@ -33,9 +33,10 @@
   overflow-y: auto;
 }
 
-.compare-view-all-unique-items {
+/* class being used in CompareView/index.js */
+/* .compare-view-all-unique-items {
 
-}
+} */
 
 .compare-view-all-unique-items-empty {
   font-family: text-italic;

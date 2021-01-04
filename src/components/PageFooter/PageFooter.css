@@ -26,9 +26,9 @@
 .footer-id {
   vertical-align: middle;
   font-family: text;
-  font-size: 8px;
-  color: var(--label-black);
-  margin: 1px 0 0 0;
+  /* font-size: 8px; */
+  /* color: var(--label-black); */
+  /* margin: 1px 0 0 0; */
   font-size: 0;
   color: transparent;
   margin: 0;
@@ -37,9 +37,9 @@
 .footer-snapshot-date {
   vertical-align: middle;
   font-family: text;
-  font-size: 8px;
-  color: var(--label-black);
-  margin: 1px 30px 0 auto;
+  /* font-size: 8px; */
+  /* color: var(--label-black); */
+  /* margin: 1px 30px 0 auto; */
   font-size: 0;
   color: transparent;
   margin: 0;

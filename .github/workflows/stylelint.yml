@@ -1,0 +1,11 @@
+name: Lint CSS
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm ci
+      - name: Run stylelint
+        run: node_modules/.bin/stylelint src/**/*.css

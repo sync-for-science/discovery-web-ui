@@ -82,6 +82,7 @@ nav {
 
 .view-button {
   height: 38px;
+
   /* width: 4.5rem; */
   min-width: 4.5rem;
   font-family: header-bold;
@@ -94,15 +95,17 @@ nav {
   cursor: pointer;
 }
 
-header nav a, header nav a:hover, header nav a:active, header nav a:visited {
+header nav a,
+header nav a:link,
+header nav a:hover,
+header nav a:active,
+header nav a:visited {
   @insert .view-button;
 
   box-sizing: border-box;
   padding: 10px 5px 10px 5px;
-
   text-align: center;
   text-decoration: none;
-
   background-color: transparent;
 }
 

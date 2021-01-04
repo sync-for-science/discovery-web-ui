@@ -224,10 +224,6 @@
   border-bottom: 1px solid var(--primary-100);
 }
 
-.help-modal-list {
-
-}
-
 .help-modal-list-item {
   font-family: text;
   font-size: 1rem;
@@ -311,10 +307,6 @@
   padding: 10px 0;
   border-radius: 25px;
   margin: 10px auto;
-}
-
-.download-modal-cancel-button {
-
 }
 
 .download-modal-text-block {
