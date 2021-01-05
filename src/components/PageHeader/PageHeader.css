@@ -105,27 +105,20 @@ nav {
   background-color: transparent;
 }
 
-header nav a {
-  @insert .nav-button;
+header {
+  & nav {
+    & a {
+      @insert .nav-button;
 
-  &:link {
-    @insert .nav-button;
-  }
+      &:link, &:hover, &:visited {
+        @insert .nav-button;
+      }
 
-  &:hover {
-    @insert .nav-button;
-  }
-
-  &:active {
-    @insert .nav-button;
-  }
-
-  &:visited {
-    @insert .nav-button;
+      &.active {
+        background-color: var(--button-view);
+        color: var(--label-button-view);
+      }
+    }
   }
 }
 
-header nav a.active {
-  background-color: var(--button-view);
-  color: var(--label-button-view);
-}
