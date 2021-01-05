@@ -5,6 +5,7 @@
 /* v.01.48 Updated 12/03/2019 */
 
 .time-widget {
+  user-select: none;
   /* upper/smaller timeline */
 
   /*
