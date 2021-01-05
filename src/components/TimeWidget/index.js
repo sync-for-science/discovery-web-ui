@@ -14,7 +14,6 @@ import SVGContainer from '../SVGContainer';
 import DotLine from '../DotLine';
 
 import DiscoveryContext from '../DiscoveryContext';
-import { SUBROUTES } from '../../constants';
 
 //
 // Render the DiscoveryApp Time Widget
@@ -25,7 +24,6 @@ export default class TimeWidget extends React.Component {
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
-    activeView: PropTypes.oneOf(SUBROUTES),
     minDate: PropTypes.string.isRequired, // Earliest date we have data for this participant
     maxDate: PropTypes.string.isRequired, // Latest date we have data for this participant
     startDate: PropTypes.string.isRequired, // Left-most date of the primary timeline
@@ -285,35 +283,6 @@ export default class TimeWidget extends React.Component {
     );
   }
 
-  // TODO: collect following from individual view components?
-  showHelp() {
-    switch (this.props.activeView) {
-      case 'timeline':
-        return [
-          <div className="timeline-help-col-1" key="1">Shows your detailed data by date and time.</div>,
-          <div className="timeline-help-col-2" key="2">Select a dot to scroll to data for that date and time.</div>,
-          <div className="timeline-help-col-3" key="3">Adjust Records, Providers, or Time to change data shown.</div>,
-        ];
-
-      case 'catalog':
-        return [
-          <div className="timeline-help-col-1" key="1">Cards summarize your unique data by Record type.</div>,
-          <div className="timeline-help-col-2" key="2">Select Cards to see your detailed data.</div>,
-          <div className="timeline-help-col-3" key="3">Adjust Records, Providers, or Time to change data shown.</div>,
-        ];
-
-      case 'compare':
-        return [
-          <div className="timeline-help-col-1" key="1">Cards summarize your unique data by Record type and Provider.</div>,
-          <div className="timeline-help-col-2" key="2">Select Cards to see your detailed data.</div>,
-          <div className="timeline-help-col-3" key="3">Adjust Records, Providers, or Time to change data shown.</div>,
-        ];
-
-      default:
-        return '';
-    }
-  }
-
   setRange(rangeTag, centerDate) {
     //      console.log(`Range: ${rangeTag}  CenterDate: ${centerDate}`);
     const range = this.ranges[rangeTag];
@@ -435,12 +404,6 @@ export default class TimeWidget extends React.Component {
           >
             <div className="timeline-selector-center" />
           </Draggable>
-          ) }
-          { !this.state.showExpanded
-          && (
-          <div className="timeline-help">
-            { this.showHelp() }
-          </div>
           ) }
           { this.state.showExpanded && this.renderExpandedYears() }
         </div>
