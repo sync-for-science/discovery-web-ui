@@ -95,11 +95,7 @@ nav {
   cursor: pointer;
 }
 
-header nav a,
-header nav a:link,
-header nav a:hover,
-header nav a:active,
-header nav a:visited {
+.nav-button {
   @insert .view-button;
 
   box-sizing: border-box;
@@ -109,7 +105,20 @@ header nav a:visited {
   background-color: transparent;
 }
 
-header nav a.active {
-  background-color: var(--button-view);
-  color: var(--label-button-view);
+header {
+  & nav {
+    & a {
+      @insert .nav-button;
+
+      &:link, &:hover, &:visited {
+        @insert .nav-button;
+      }
+
+      &.active {
+        background-color: var(--button-view);
+        color: var(--label-button-view);
+      }
+    }
+  }
 }
+
