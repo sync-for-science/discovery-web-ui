@@ -17,7 +17,6 @@ import SummaryView from '../SummaryView';
 import CompareView from '../CompareView';
 import TilesView from '../TilesView';
 import Collections from '../Collections';
-import DiscoveryModal from '../DiscoveryModal';
 import Unimplemented from '../Unimplemented';
 import PageFooter from '../PageFooter';
 
@@ -45,8 +44,6 @@ export default class DiscoveryApp extends React.PureComponent {
     laserSearch: false, // Laser Search enabled?
     isLoading: false,
     fetchError: null, // Possible axios error object
-    modalName: '',
-    modalIsOpen: false,
     lastEvent: null,
     thumbLeftDate: null,
     thumbRightDate: null,
@@ -474,8 +471,6 @@ export default class DiscoveryApp extends React.PureComponent {
         <div className="discovery-app">
           <PageHeader
             participantId={participantId}
-            modalIsOpen={this.state.modalIsOpen}
-            modalFn={(name) => this.setState({ modalName: name, modalIsOpen: true })}
           />
           <div className="outer-container">
             <div className="standard-filters">
@@ -572,11 +567,6 @@ export default class DiscoveryApp extends React.PureComponent {
             </div>
             <div id="details-right" />
           </div>
-          <DiscoveryModal
-            isOpen={this.state.modalIsOpen}
-            modalName={this.state.modalName}
-            onClose={(name) => this.setState({ modalName: '', modalIsOpen: false })}
-          />
           <PageFooter resources={this.state.resources} />
         </div>
       </DiscoveryContext.Provider>
