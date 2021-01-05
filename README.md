@@ -49,46 +49,6 @@ The install script will request the following:
 - The DNS/IP address of the Discovery Data Server
 
 The Procure application [<https://github.com/sync-for-science/procure-wip>] will also be installed.
-
-## Adding support for postcss-import and postcss-insert
-
-The package uses two postcss plugins not yet supported by Create React App:
-
-- postcss-import [<https://github.com/postcss/postcss-import>]
-- postcss-insert [<https://github.com/JoeCianflone/postcss-insert>]
-
-This is (currently) accomplished by hand-editing **./node_modules/react-scripts/config/webpack.config.js** after running the install script. Note that upgrading react-scripts after installation will require reapplying this edit. Edit the file to add the two plugins as follows:
-
-      .
-      .
-      .
-
-      // Options for PostCSS as we reference these options twice
-      // Adds vendor prefixing based on your specified browser support in
-      // package.json
-      loader: require.resolve('postcss-loader'),
-      options: {
-        // Necessary for external CSS imports to work
-        // https://github.com/facebook/create-react-app/issues/2677
-        ident: 'postcss',
-        plugins: () => [
-          require('postcss-flexbugs-fixes'),
-          require('postcss-preset-env')({
-            autoprefixer: {
-              flexbox: 'no-2009',
-            },
-            stage: 3,
-          }),
-          require('postcss-import'),            <--- ADD THIS LINE
-          require('postcss-insert')             <--- ADD THIS LINE
-        ],
-        sourceMap: isEnvProduction && shouldUseSourceMap,
-      },
-
-      .
-      .
-      .
-
 ## Checking Status
 
 Use a web browser to access the Discovery and Procure applications at the DNS/IP address of this instance:
