@@ -9,13 +9,9 @@
 
 /* New Summary View Styles */
 .summary-view-container {
-  position: fixed;
-  top: 50px;
-  z-index: 100;
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 100%;
   background-color: var(--background-application);
   border-top: solid 10px var(--background-application);
 }
@@ -117,14 +113,12 @@
 
 /* Right Column */
 .summary-view-right-column {
-  position: relative;
-  z-index: 10;
   display: flex;
   flex-direction: column;
   width: 100%;
   min-width: 734px;
   background-color: var(--background-application);
-  margin: 0 10px 0 20px;
+  margin-left: 16px;
 }
 
 .summary-view-right-column-header {

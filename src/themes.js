@@ -21,7 +21,6 @@ export const rootTheme = createMuiTheme({
           // example styling of nested component:
           '& .MuiDialogTitle-root': {
             // '& [class*="MuiDialogTitle-root"]': { // ^alternatively
-            color: 'red',
             padding: 0,
           },
         },

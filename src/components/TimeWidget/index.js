@@ -14,6 +14,7 @@ import SVGContainer from '../SVGContainer';
 import DotLine from '../DotLine';
 
 import DiscoveryContext from '../DiscoveryContext';
+import CategoryRollup from '../CategoryRollup';
 
 //
 // Render the DiscoveryApp Time Widget
@@ -223,7 +224,13 @@ export default class TimeWidget extends React.Component {
 
         if (thisWidth > 0) {
           periods.push(
-            <div className="timeline-expanded-years" key={year} style={{ width: thisWidth }}>
+            <div
+              className="timeline-expanded-years"
+              key={year}
+              style={{
+                width: thisWidth,
+              }}
+            >
               {thisWidth >= MinWidthForYearLabel ? year : null}
             </div>,
           );
@@ -264,7 +271,13 @@ export default class TimeWidget extends React.Component {
 
         if (thisWidth > 0) {
           periods.push(
-            <div className="timeline-expanded-years" key={monthLabel} style={{ width: thisWidth }}>
+            <div
+              className="timeline-expanded-years"
+              key={monthLabel}
+              style={{
+                width: thisWidth,
+              }}
+            >
               {thisWidth >= MinWidthForMonthLabel ? monthLabel : thisWidth >= MinWidthForNarrowMonthLabel ? narrowMonthLabel : null}
             </div>,
           );
@@ -370,7 +383,11 @@ export default class TimeWidget extends React.Component {
               ) }
             </div>
             { this.renderFullYears() }
-            <SVGContainer className="timeline-svg-container" svgClassName="timeline-svg" svgWidth={this.props.timelineWidth}>
+            <SVGContainer
+              className="timeline-svg-container"
+              svgClassName="timeline-svg"
+              svgWidth={this.props.timelineWidth}
+            >
               <DotLine
                 dotPositions={this.props.dotPositionsFn(TimeWidget.myName, 'Full', true)}
                 context={{ parent: TimeWidget.myName, rowName: 'Full' }}
@@ -406,6 +423,19 @@ export default class TimeWidget extends React.Component {
           </Draggable>
           ) }
           { this.state.showExpanded && this.renderExpandedYears() }
+          { this.state.showExpanded && (
+            <SVGContainer
+              className="category-rollup-svg-container"
+              svgClassName="category-rollup-svg"
+              svgWidth={this.props.timelineWidth}
+            >
+              <DotLine
+                dotPositions={this.props.dotPositionsFn('CategoryRollup', 'Categories', true)}
+                context={{ parent: CategoryRollup.myName, rowName: 'Categories' }}
+                dotClickFn={this.props.dotClickFn}
+              />
+            </SVGContainer>
+          ) }
         </div>
       </div>
     );

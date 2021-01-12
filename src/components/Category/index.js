@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 
 import '../../css/Selector.css';
 
-import SVGContainer from '../SVGContainer';
-import DotLine from '../DotLine';
-
 //
 // Render a DiscoveryApp category line
 //
@@ -64,13 +61,6 @@ export default class Category extends React.Component {
             { this.props.categoryName }
           </button>
         </div>
-        <SVGContainer className="selector-svg-container" svgClassName="selector-svg" svgWidth={this.props.svgWidth}>
-          <DotLine
-            dotPositions={this.props.dotPositionsFn(Category.myName, this.props.categoryName, this.state.isEnabled)}
-            context={{ parent: Category.myName, rowName: this.props.categoryName }}
-            dotClickFn={this.props.dotClickFn}
-          />
-        </SVGContainer>
       </div>
     );
   }

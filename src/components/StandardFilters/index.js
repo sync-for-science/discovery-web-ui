@@ -6,6 +6,7 @@ import {
 import PropTypes from 'prop-types';
 
 import './StandardFilters.css';
+import ReactDOM from 'react-dom';
 import FhirTransform from '../../FhirTransform.js';
 import {
   getStyle, numericPart, combine, cleanDates, normalizeDates, checkQuerySelector, notEqJSON, dateOnly,
@@ -145,14 +146,12 @@ class StandardFilters extends React.PureComponent {
 
   // Kluge: following needs to know about lower-level classes
   updateSvgWidth = (event) => {
-    const category = checkQuerySelector('.selector');
-    const categoryNav = checkQuerySelector('.selector-nav');
+    const availableWidth = checkQuerySelector('#measure-available-width');
+    const leftnavWidth = checkQuerySelector('#measure-leftnav-width');
 
-    if (category && categoryNav) {
-      const svgWidth = `${category.getBoundingClientRect().width - categoryNav.getBoundingClientRect().width - 13 // TODO: fix (far-right margin)
-        - numericPart(getStyle(categoryNav, 'margin-left')) - numericPart(getStyle(categoryNav, 'margin-right'))}px`;
-      this.setState({ svgWidth });
-      //    console.log('svgWidth: ' + svgWidth);
+    if (availableWidth && leftnavWidth) {
+      const svgWidth = availableWidth.getBoundingClientRect().width - leftnavWidth.getBoundingClientRect().width - 13; // TODO: fix (far-right margin)
+      this.setState({ svgWidth: `${svgWidth}px` });
     }
   }
 
@@ -588,12 +587,78 @@ class StandardFilters extends React.PureComponent {
     this.setState({ provsEnabled });
   }
 
+  renderLeftNav = () => {
+    const dotClickFn = this.props.allowDotClick ? this.onDotClick : null;
+    return (
+      <div className="standard-filters-categories-and-providers">
+        <Categories>
+          <CategoryRollup
+            key="rollup"
+            isExpanded={this.state.catsExpanded}
+            expansionFn={this.onExpandContract}
+            catsEnabledFn={this.setAllCatsEnabled}
+            categories={this.props.categories}
+          />
+          { this.state.catsExpanded ? [
+            this.props.categories && this.props.categories.map(
+              (cat) => (
+                <Category
+                  key={cat}
+                  svgWidth={this.state.svgWidth}
+                  categoryName={cat}
+                  isEnabled={this.state.catsEnabled[cat]}
+                  dotPositionsFn={this.fetchDotPositions}
+                  dotClickFn={dotClickFn}
+                  enabledFn={this.setEnabled}
+                />
+              ),
+            ),
+            <div className="standard-filters-category-nav-spacer-bottom" key="1" />,
+          ] : null }
+        </Categories>
+        <Providers>
+          <ProviderRollup
+            key="rollup"
+            svgWidth={this.state.svgWidth}
+            isExpanded={this.state.provsExpanded}
+            dotPositionsFn={this.fetchDotPositions}
+            dotClickFn={dotClickFn}
+            expansionFn={this.onExpandContract}
+            provsEnabledFn={this.setAllProvsEnabled}
+            providers={this.props.providers}
+          />
+          { this.state.provsExpanded ? [
+            this.props.providers.map(
+              (prov) => (
+                <Provider
+                  key={prov}
+                  svgWidth={this.state.svgWidth}
+                  providerName={prov}
+                  isEnabled={this.state.provsEnabled[prov]}
+                  dotPositionsFn={this.fetchDotPositions}
+                  dotClickFn={dotClickFn}
+                  enabledFn={this.setEnabled}
+                />
+              ),
+            ),
+            <div className="standard-filters-provider-nav-spacer-bottom" key="1" />,
+          ] : null }
+        </Providers>
+      </div>
+    );
+  }
+
+  portalLeftNav = () => {
+    const leftNavTarget = document.getElementById('left-nav');
+    if (leftNavTarget) {
+      return ReactDOM.createPortal((this.renderLeftNav()), leftNavTarget);
+    }
+  }
+
   // TODO: handle noDots for LongitudinalView???
   render() {
     //      console.log('SF render: ' + (this.props.dotClickContext ? this.props.dotClickContext.date : this.props.dotClickContext));
-
     const { dates } = this.props;
-
     const dotClickFn = this.props.allowDotClick ? this.onDotClick : null;
 
     return (
@@ -611,65 +676,11 @@ class StandardFilters extends React.PureComponent {
           dotPositionsFn={this.fetchDotPositions}
           dotClickFn={dotClickFn}
         />
-        <div className="standard-filters-categories-and-providers">
-          <Categories>
-            <CategoryRollup
-              key="rollup"
-              svgWidth={this.state.svgWidth}
-              noDots={!this.state.timelineIsExpanded}
-              isExpanded={this.state.catsExpanded}
-              dotPositionsFn={this.fetchDotPositions}
-              dotClickFn={dotClickFn}
-              expansionFn={this.onExpandContract}
-              catsEnabledFn={this.setAllCatsEnabled}
-              categories={this.props.categories}
-            />
-            { this.state.catsExpanded ? [
-              this.props.categories && this.props.categories.map(
-                (cat) => (
-                  <Category
-                    key={cat}
-                    svgWidth={this.state.svgWidth}
-                    categoryName={cat}
-                    isEnabled={this.state.catsEnabled[cat]}
-                    dotPositionsFn={this.fetchDotPositions}
-                    dotClickFn={dotClickFn}
-                    enabledFn={this.setEnabled}
-                  />
-                ),
-              ),
-              <div className="standard-filters-category-nav-spacer-bottom" key="1" />,
-            ] : null }
-          </Categories>
-          <Providers>
-            <ProviderRollup
-              key="rollup"
-              svgWidth={this.state.svgWidth}
-              isExpanded={this.state.provsExpanded}
-              dotPositionsFn={this.fetchDotPositions}
-              dotClickFn={dotClickFn}
-              expansionFn={this.onExpandContract}
-              provsEnabledFn={this.setAllProvsEnabled}
-              providers={this.props.providers}
-            />
-            { this.state.provsExpanded ? [
-              this.props.providers.map(
-                (prov) => (
-                  <Provider
-                    key={prov}
-                    svgWidth={this.state.svgWidth}
-                    providerName={prov}
-                    isEnabled={this.state.provsEnabled[prov]}
-                    dotPositionsFn={this.fetchDotPositions}
-                    dotClickFn={dotClickFn}
-                    enabledFn={this.setEnabled}
-                  />
-                ),
-              ),
-              <div className="standard-filters-provider-nav-spacer-bottom" key="1" />,
-            ] : null }
-          </Providers>
+        <div id="measure-available-width">
+          <div id="measure-leftnav-width" />
+          <div id="measure-timeline-width" />
         </div>
+        { this.portalLeftNav() }
       </>
     );
   }

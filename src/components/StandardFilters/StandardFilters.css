@@ -7,14 +7,26 @@
 /* v.01.05 Updated 08/21/2019 */
 
 .standard-filters {
-  margin-top: 56px;
   width: calc(100vw - var(--right-details-width));
-
   /*    position: fixed;
     top: 46px;
     left: -150px;
     height: 100%;
     width: 100%; */
+}
+
+#measure-available-width {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  > #measure-leftnav-width {
+    width: var(--left-nav-width);
+  }
+
+  > #measure-timeline-width {
+    width: calc(100vw - var(--left-nav-width) - var(--right-details-width));
+  }
 }
 
 .standard-filters-categories-and-providers {
@@ -26,8 +38,7 @@
   left: 0;
   height: auto;
   */
-  width: 100%;
-  min-width: 1024px;
+  width: var(--left-nav-width);
   padding: 0;
   margin: 0;
   overflow: visible;

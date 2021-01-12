@@ -473,97 +473,104 @@ export default class DiscoveryApp extends React.PureComponent {
             participantId={participantId}
           />
           <div className="outer-container">
-            <div className="standard-filters">
-              <StandardFilters
-                activeView={activeView}
-                resources={this.state.resources}
-                dates={this.state.dates}
-                categories={this.viewCategories}
-                catsEnabled={this.initialCats}
-                providers={this.providers}
-                provsEnabled={this.initialProvs}
-                enabledFn={this.setEnabled}
-                dateRangeFn={this.setDateRange}
-                lastEvent={this.state.lastEvent}
-                // TODO: convert to use route path segment:
-                // allowDotClick={!['compare', 'catalog'].includes(activeView)}
-                allowDotClick
-                dotClickDate={this.state.dotClickDate}
-              />
-              { this.state.resources && (
-                <Switch>
-                  <Route path="/participant/:participantId/summary">
-                    <SummaryView
-                      activeView={activeView}
-                      resources={this.state.resources}
-                      dates={this.state.dates}
-                      categories={this.categories}
-                      providers={this.providers}
-                      lastEvent={this.state.lastEvent}
-                    />
-                  </Route>
-                  <Route path="/participant/:participantId/catalog">
-                    <TilesView
-                      activeView={activeView}
-                      resources={this.state.resources}
-                      totalResCount={this.state.totalResCount}
-                      dates={this.state.dates}
-                      categories={this.categories}
-                      providers={this.providers}
-                      catsEnabled={this.state.catsEnabled}
-                      provsEnabled={this.state.provsEnabled}
-                      thumbLeftDate={this.state.thumbLeftDate}
-                      thumbRightDate={this.state.thumbRightDate}
-                      lastEvent={this.state.lastEvent}
-                    />
-                  </Route>
-                  <Route path="/participant/:participantId/compare">
-                    <CompareView
-                      activeView={activeView}
-                      resources={this.state.resources}
-                      totalResCount={this.state.totalResCount}
-                      dates={this.state.dates}
-                      categories={this.categories}
-                      providers={this.providers}
-                      catsEnabled={this.state.catsEnabled}
-                      provsEnabled={this.state.provsEnabled}
-                      thumbLeftDate={this.state.thumbLeftDate}
-                      thumbRightDate={this.state.thumbRightDate}
-                      lastEvent={this.state.lastEvent}
-                    />
-                  </Route>
-                  <Route path="/participant/:participantId/timeline">
-                    <ContentPanel
-                      open
-                      activeView={activeView}
-                      catsEnabled={this.state.catsEnabled}
-                      provsEnabled={this.state.provsEnabled}
-                      dotClickFn={this.onDotClick}
-                      containerClassName="content-panel-absolute"
-                      topBoundFn={this.calcContentPanelTopBound}
-                      bottomBoundFn={this.calcContentPanelBottomBound}
-                      // context, nextPrevFn added in StandardFilters
-                      thumbLeftDate={this.state.thumbLeftDate}
-                      thumbRightDate={this.state.thumbRightDate}
-                      resources={this.state.resources}
-                      totalResCount={this.state.totalResCount}
-                      viewName="Report"
-                      viewIconClass="longitudinal-view-icon"
-                    />
-                  </Route>
-                  <Route path="/participant/:participantId/collections">
-                    <Collections />
-                  </Route>
-                  <Route
-                    path="/participant/:participantId/:activeView?"
-                  >
-                    <Redirect
-                      push
-                      to={`/participant/${participantId}/summary`}
-                    />
-                  </Route>
-                </Switch>
-              )}
+            <div className="inner-container">
+              <div className="standard-filters">
+                <StandardFilters
+                  activeView={activeView}
+                  resources={this.state.resources}
+                  dates={this.state.dates}
+                  categories={this.viewCategories}
+                  catsEnabled={this.initialCats}
+                  providers={this.providers}
+                  provsEnabled={this.initialProvs}
+                  enabledFn={this.setEnabled}
+                  dateRangeFn={this.setDateRange}
+                  lastEvent={this.state.lastEvent}
+                  // TODO: convert to use route path segment:
+                  // allowDotClick={!['compare', 'catalog'].includes(activeView)}
+                  allowDotClick
+                  dotClickDate={this.state.dotClickDate}
+                />
+              </div>
+              <div id="below-timeline">
+                <div id="left-nav" />
+                <main>
+                  { this.state.resources && (
+                    <Switch>
+                      <Route path="/participant/:participantId/summary">
+                        <SummaryView
+                          activeView={activeView}
+                          resources={this.state.resources}
+                          dates={this.state.dates}
+                          categories={this.categories}
+                          providers={this.providers}
+                          lastEvent={this.state.lastEvent}
+                        />
+                      </Route>
+                      <Route path="/participant/:participantId/catalog">
+                        <TilesView
+                          activeView={activeView}
+                          resources={this.state.resources}
+                          totalResCount={this.state.totalResCount}
+                          dates={this.state.dates}
+                          categories={this.categories}
+                          providers={this.providers}
+                          catsEnabled={this.state.catsEnabled}
+                          provsEnabled={this.state.provsEnabled}
+                          thumbLeftDate={this.state.thumbLeftDate}
+                          thumbRightDate={this.state.thumbRightDate}
+                          lastEvent={this.state.lastEvent}
+                        />
+                      </Route>
+                      <Route path="/participant/:participantId/compare">
+                        <CompareView
+                          activeView={activeView}
+                          resources={this.state.resources}
+                          totalResCount={this.state.totalResCount}
+                          dates={this.state.dates}
+                          categories={this.categories}
+                          providers={this.providers}
+                          catsEnabled={this.state.catsEnabled}
+                          provsEnabled={this.state.provsEnabled}
+                          thumbLeftDate={this.state.thumbLeftDate}
+                          thumbRightDate={this.state.thumbRightDate}
+                          lastEvent={this.state.lastEvent}
+                        />
+                      </Route>
+                      <Route path="/participant/:participantId/timeline">
+                        <ContentPanel
+                          open
+                          activeView={activeView}
+                          catsEnabled={this.state.catsEnabled}
+                          provsEnabled={this.state.provsEnabled}
+                          dotClickFn={this.onDotClick}
+                          containerClassName="content-panel-absolute"
+                          topBoundFn={this.calcContentPanelTopBound}
+                          bottomBoundFn={this.calcContentPanelBottomBound}
+                          // context, nextPrevFn added in StandardFilters
+                          thumbLeftDate={this.state.thumbLeftDate}
+                          thumbRightDate={this.state.thumbRightDate}
+                          resources={this.state.resources}
+                          totalResCount={this.state.totalResCount}
+                          viewName="Report"
+                          viewIconClass="longitudinal-view-icon"
+                        />
+                      </Route>
+                      <Route path="/participant/:participantId/collections">
+                        <Collections />
+                      </Route>
+                      <Route
+                        path="/participant/:participantId/:activeView?"
+                      >
+                        <Redirect
+                          push
+                          to={`/participant/${participantId}/summary`}
+                        />
+                      </Route>
+                    </Switch>
+                  )}
+                </main>
+              </div>
             </div>
             <div id="details-right" />
           </div>

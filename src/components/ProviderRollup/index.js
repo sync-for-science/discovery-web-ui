@@ -82,15 +82,9 @@ export default class ProviderRollup extends React.Component {
     return (
       <div className="selector-rollup">
         <button className={this.state.isExpanded ? 'selector-rollup-nav-enabled' : 'selector-rollup-nav-disabled'} onClick={this.handleTwistyClick}>
-          {/* Providers */}
           Providers
         </button>
         <button className={this.buttonClass()} onClick={this.handleSetClearButtonClick} />
-        {/* <SVGContainer className='provider-rollup-svg-container' svgClassName='provider-rollup-svg' svgWidth={this.props.svgWidth}>
-         <DotLine dotPositions={this.props.dotPositionsFn(ProviderRollup.myName, 'Providers', true)}
-      context={ {parent:ProviderRollup.myName, rowName:'Providers'} }
-      dotClickFn={this.props.dotClickFn} />
-      </SVGContainer> */}
       </div>
     );
   }
