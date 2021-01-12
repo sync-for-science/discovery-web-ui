@@ -147,19 +147,11 @@ class StandardFilters extends React.PureComponent {
   // Kluge: following needs to know about lower-level classes
   updateSvgWidth = (event) => {
     const availableWidth = checkQuerySelector('#measure-available-width');
-    // const category = checkQuerySelector('.selector');
-    const category = availableWidth;
-    const categoryNav = checkQuerySelector('.selector-nav');
+    const leftnavWidth = checkQuerySelector('#measure-leftnav-width');
 
-    // window.category = category;
-    // window.categoryNav = categoryNav;
-    // window.availableWidth = availableWidth;
-
-    if (category && categoryNav) {
-      const svgWidth = `${category.getBoundingClientRect().width - categoryNav.getBoundingClientRect().width - 13 // TODO: fix (far-right margin)
-        - numericPart(getStyle(categoryNav, 'margin-left')) - numericPart(getStyle(categoryNav, 'margin-right'))}px`;
-      this.setState({ svgWidth });
-      // console.info(`svgWidth: ${svgWidth}`);
+    if (availableWidth && leftnavWidth) {
+      const svgWidth = availableWidth.getBoundingClientRect().width - leftnavWidth.getBoundingClientRect().width - 13; // TODO: fix (far-right margin)
+      this.setState({ svgWidth: `${svgWidth}px` });
     }
   }
 
