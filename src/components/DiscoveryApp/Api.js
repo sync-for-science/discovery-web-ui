@@ -76,8 +76,7 @@ export default class API {
         if (finalResourceIDs.length !== initialResourceIDs.length) {
           // eslint-disable-next-line max-len
           const missingResources = initialResourceIDs.filter((id) => !finalResourceIDs.includes(id)).map((id) => resources.initial[providerName].entry.find((elt) => elt.resource.id === id));
-          const { match: { params: { participantId } } } = this.props;
-          alert(`Participant ${participantId} (${providerName}) has ${
+          alert(`Participant ${this.participantId} (${providerName}) has ${
             finalResourceIDs.length} resources but should have ${initialResourceIDs.length}`);
           log(JSON.stringify(missingResources, null, 3));
         }
