@@ -150,7 +150,7 @@ class StandardFilters extends React.PureComponent {
     const leftnavWidth = checkQuerySelector('#measure-leftnav-width');
 
     if (availableWidth && leftnavWidth) {
-      const svgWidth = availableWidth.getBoundingClientRect().width - leftnavWidth.getBoundingClientRect().width - 13; // TODO: fix (far-right margin)
+      const svgWidth = availableWidth.getBoundingClientRect().width - leftnavWidth.getBoundingClientRect().width; // TODO: fix (far-right margin)
       this.setState({ svgWidth: `${svgWidth}px` });
     }
   }
