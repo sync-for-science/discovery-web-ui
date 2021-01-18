@@ -23,9 +23,11 @@ export default class FhirTransform {
   // Walk the template, creating a copy and replacing functions (that refer to 'data') with their return values
   static transform(data, template) {
     if (template instanceof Function) {
+      console.error('xxx is Function');
       // invoke the function on the data
       return template(data);
     } if (template instanceof Array) {
+      console.error('xxx is Array');
       // iterate over array members
       const arr = [];
       for (const elt of template) {
