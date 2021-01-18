@@ -12,11 +12,11 @@ jobs:
         uses: actions/cache@v2
         with:
           path: |
-            ~/.npm
+            .npm
             node_modules
           key: ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json') }}
       - name: Install JavaScript dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm ci
+        run: npm ci --cache .npm
       - name: Run ESLint
         run: npm run-script lint:js
