@@ -306,9 +306,9 @@
   /* debug height by using a background-color on this element */
   --content-right-body-offset-from-header: 48px; /* height of panel title and margin/padding */
 
-  height: calc(100vh - var(--top-header-height) - var(--content-right-body-offset-from-header));
-  overflow-y: scroll;
-  overflow-x: hidden;
+  min-height: calc(100vh - var(--top-header-height) - var(--content-right-body-offset-from-header));
+  /* overflow-y: scroll;
+  overflow-x: hidden; */
 }
 
 .content-panel-inner-body {
@@ -320,6 +320,8 @@
   font-size: 1rem;
   background-color: var(--background-content);
   white-space: pre-wrap;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .content-panel-inner-body-alt {
@@ -336,6 +338,7 @@
   margin: 5px 5px 0 0;
   overflow: hidden;
   white-space: pre-wrap;
+  
 }
 
 .content-panel-inner-body-alt-container {
