@@ -60,8 +60,8 @@ module.exports = {
     'no-restricted-syntax': ['warn'],
     'no-return-assign': ['warn'],
     'no-shadow': ['warn'],
-    // 'no-unused-expressions': ['warn'],
-    // 'no-unused-vars': ['warn'],
+    'no-unused-expressions': ['warn'],
+    'no-unused-vars': ['warn'],
     'prefer-rest-params': ['warn'],
     radix: ['warn'],
     'react/button-has-type': ['warn'],
@@ -69,7 +69,7 @@ module.exports = {
     'react/forbid-prop-types': ['warn'],
     'react/jsx-filename-extension': ['warn'],
     'react/jsx-no-bind': ['warn'],
-    'react/no-access-state-in-setstate': ['warn'], // < FIX THIS ASAP:
+    // 'react/no-access-state-in-setstate': ['warn'], // < FIX THIS ASAP:
     'react/no-array-index-key': ['warn'],
     'react/no-did-update-set-state': ['warn'],
     'react/no-string-refs': ['warn'],
