@@ -5,7 +5,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install modules
-        run: npm ci
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+      - name: "Restore cache of JavaScript dependencies"
+        uses: actions/cache@v2
+        with:
+          path: |
+            .npm
+          key: ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json') }}
+      - name: Install JavaScript dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci --cache .npm
       - name: Run stylelint
         run: node_modules/.bin/stylelint src/**/*.css
