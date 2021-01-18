@@ -21,6 +21,7 @@ import Claims from '../Claims';
 import Conditions from '../Conditions';
 import DocumentReferences from '../DocumentReferences';
 import Encounters from '../Encounters';
+// import Encounters from '../cards/Encounters'
 import Exams from '../Exams';
 import Immunizations from '../Immunizations';
 import LabResults from '../LabResults';
@@ -406,6 +407,7 @@ class ContentPanel extends React.PureComponent {
   }
 
   renderItems = (arr) => {
+    console.log('arr', arr)
     log('renderItems');
     const showDate = this.state.showAllData;
     const resultDivs = [];
@@ -576,7 +578,7 @@ class ContentPanel extends React.PureComponent {
   }
 
   render() {
-    // console.info('this.props.context: ', this.props.context);
+    console.info('this.props.context: ', this.props.context);
     // Locally extend DiscoveryContext with trimLevel & viewName (hack)
     this.context.trimLevel = this.state.trimLevel;
     this.context.viewName = this.props.viewName;
