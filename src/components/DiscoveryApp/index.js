@@ -197,6 +197,8 @@ export default class DiscoveryApp extends React.PureComponent {
 
     const { match: { params: { activeView = 'summary', participantId } } } = this.props;
 
+    const isSummary = activeView === 'summary';
+
     return (
       <DiscoveryContext.Provider value={this.state}>
         { this.state.themeName && <link rel="stylesheet" type="text/css" href={`/themes/${this.state.themeName}.css`} /> }
@@ -206,7 +208,7 @@ export default class DiscoveryApp extends React.PureComponent {
           />
           <div className="outer-container">
             <div className="inner-container">
-              <div className="standard-filters">
+              <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
                 <StandardFilters
                   activeView={activeView}
                   resources={this.state.resources}
@@ -225,7 +227,7 @@ export default class DiscoveryApp extends React.PureComponent {
                 />
               </div>
               <div id="below-timeline">
-                <div id="left-nav" />
+                { !isSummary && <div id="left-nav" /> }
                 <main>
                   { this.state.resources && (
                     <Switch>
@@ -304,7 +306,7 @@ export default class DiscoveryApp extends React.PureComponent {
                 </main>
               </div>
             </div>
-            <div id="details-right" />
+            { !isSummary && <div id="details-right" /> }
           </div>
           <PageFooter resources={this.state.resources} />
         </div>
