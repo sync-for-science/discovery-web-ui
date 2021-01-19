@@ -367,10 +367,7 @@ export default class TimeWidget extends React.Component {
     const rightGradientWidth = numericPart(this.props.timelineWidth) - this.state.rightX;
 
     return (
-      <div className="time-widget">
-        <div className="participant-name">
-          { this.context.resources && formatPatientName(this.context.resources.pathItem('[category=Patient].data.name')) }
-        </div>
+      <div className="time-widget" style={{ width: this.props.timelineWidth }}>
         <div className="timeline-controls">
           <div className="timeline-tbd-container">
             <div className="timeline-selector-gradient-container">

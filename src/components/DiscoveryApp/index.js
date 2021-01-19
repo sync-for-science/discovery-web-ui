@@ -207,6 +207,7 @@ export default class DiscoveryApp extends React.PureComponent {
             participantId={participantId}
           />
           <div className="outer-container">
+            <div id="left-nav" style={{ display: isSummary ? 'none' : 'block' }} />
             <div className="inner-container">
               <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
                 <StandardFilters
@@ -227,7 +228,7 @@ export default class DiscoveryApp extends React.PureComponent {
                 />
               </div>
               <div id="below-timeline">
-                { !isSummary && <div id="left-nav" /> }
+                <div id="measure-available-width">  </div>
                 <main>
                   { this.state.resources && (
                     <Switch>
