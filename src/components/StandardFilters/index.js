@@ -146,12 +146,10 @@ class StandardFilters extends React.PureComponent {
 
   // Kluge: following needs to know about lower-level classes
   updateSvgWidth = (event) => {
-    const availableWidth = checkQuerySelector('#measure-available-width');
-    const leftnavWidth = checkQuerySelector('#measure-leftnav-width');
-
-    if (availableWidth && leftnavWidth) {
-      const svgWidth = availableWidth.getBoundingClientRect().width - leftnavWidth.getBoundingClientRect().width - 13; // TODO: fix (far-right margin)
-      this.setState({ svgWidth: `${svgWidth}px` });
+    const availableWidthEl = checkQuerySelector('#measure-available-width');
+    if (availableWidthEl) {
+      const availableWidth = availableWidthEl.getBoundingClientRect().width;
+      this.setState({ svgWidth: `${availableWidth}px` });
     }
   }
 
@@ -676,10 +674,6 @@ class StandardFilters extends React.PureComponent {
           dotPositionsFn={this.fetchDotPositions}
           dotClickFn={dotClickFn}
         />
-        <div id="measure-available-width">
-          <div id="measure-leftnav-width" />
-          <div id="measure-timeline-width" />
-        </div>
         { this.portalLeftNav() }
       </>
     );

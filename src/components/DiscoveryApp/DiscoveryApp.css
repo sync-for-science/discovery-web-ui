@@ -43,26 +43,37 @@ button:focus {
   width: 100vw;
   height: 100vh;
 
-  & .inner-container {
+  > #left-nav {
+    width: var(--left-nav-width);
+    padding-top: var(--top-header-height);
+  }
+
+  > .inner-container {
     margin-top: 56px;
+    width: calc(100vw - var(--left-nav-width) - var(--right-details-width));
 
-    & #below-timeline {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
+    > .standard-filters {
+      width: 100%;
+    }
 
-      & #left-nav {
-        width: var(--left-nav-width);
+    > #below-timeline {
+      padding: 8px;
+
+      > #measure-available-width {
+        width: 100%;
       }
 
-      & main {
-        flex: auto;
-        padding: 8px;
+      > main {
+        & .collections-content {
+          width: calc(100vw - var(--left-nav-width) - var(--right-details-width) - 16px);
+          height: calc(100vh - 260px);
+          overflow: scroll;
+        }
       }
     }
   }
 
-  & #details-right {
+  > #details-right {
     width: var(--right-details-width);
     min-width: var(--right-details-width);
     margin-top: var(--top-header-height);
