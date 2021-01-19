@@ -42,11 +42,6 @@ const PageHeader = ({ participantId }) => (
         Compare
       </NavLink>
       <NavLink
-        to={`/participant/${participantId}/timeline`}
-      >
-        Timeline
-      </NavLink>
-      <NavLink
         to={`/participant/${participantId}/collections`}
       >
         Collections
