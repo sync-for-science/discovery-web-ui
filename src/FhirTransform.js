@@ -8,10 +8,6 @@ export default class FhirTransform {
     this.transformed = FhirTransform.transform(data, template);
   }
 
-  get initialData() {
-    return this.initial;
-  }
-
   get transformedData() {
     return this.transformed;
   }
@@ -25,14 +21,16 @@ export default class FhirTransform {
     if (template instanceof Function) {
       // invoke the function on the data
       return template(data);
-    } if (template instanceof Array) {
+    }
+    if (template instanceof Array) {
       // iterate over array members
       const arr = [];
       for (const elt of template) {
         arr.push(FhirTransform.transform(data, elt));
       }
       return arr;
-    } if (template === null || !(template instanceof Object)) {
+    }
+    if (template === null || !(template instanceof Object)) {
       // return primitive types
       return template;
     }
