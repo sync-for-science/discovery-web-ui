@@ -1,40 +1,113 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { atom, useRecoilState, useRecoilValue } from 'recoil';
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import { resourcesState } from '../DiscoveryApp';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
 
-const Collections = (props) => (
-  <div>
-    COLLECTIONS
-    <PersistentDrawerRight>
+const useStyles = makeStyles({
+  root: {
+    // minWidth: 275,
+    border: '1px solid red',
+    margin: '10px',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+});
+
+const RecordCard = ({ resource }) => {
+  const classes = useStyles();
+  const {
+    provider,
+    data,
+    data: {
+      id,
+      resourceType,
+      effectiveDateTime,
+      itemDate,
+    },
+  } = resource;
+  // if (id === 'f22de2b8-f549-416c-bea2-cdffe2585a65') {
+  //   console.error('id: ', id);
+  //   console.error('data: ', data);
+  // }
+
+  // const fields = Object.entries(data).map(([k, v]) => {
+  //   console.error(' k , v: ', k , v);
+  //   return (
+  //     <div>
+  //       { k }: { JSON.stringify(v) }
+  //     </div>
+  //   );
+  // });
+
+  return (
+    <Card
+      className={classes.root}
+      elevation={4}
+      style={{
+        margin: '10px',
+        border: '1px solid red',
+      }}
+    >
+      <CardContent>
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+          { resourceType }
+        </Typography>
+        <Typography className={classes.pos} color="textSecondary">
+          { itemDate }
+        </Typography>
+        <Typography variant="body2" component="p" />
+      </CardContent>
+      <CardActions>
+        <Button size="small">Annotate</Button>
+      </CardActions>
+    </Card>
+  );
+};
+
+const CardList = ({ normalized }) => {
+  if (!normalized) {
+    return null;
+  }
+  return normalized.map((r) => (<RecordCard resource={r} key={r.data.id} />));
+};
+
+const Collections = (props) => {
+  const resources = useRecoilValue(resourcesState);
+  const { loading, normalized } = resources;
+
+  return (
+    <div>
+      <h3>COLLECTIONS</h3>
       <div>
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        loading:
+        { String(loading) }
       </div>
-    </PersistentDrawerRight>
-  </div>
-);
+      <div className="collections-content">
+        <pre>
+          { JSON.stringify(normalized, null, '  ') }
+        </pre>
+      </div>
+      <PersistentDrawerRight>
+        <div className="card-list">
+          <CardList
+            normalized={normalized}
+          />
+        </div>
+      </PersistentDrawerRight>
+    </div>
+  );
+};
 
 export default React.memo(Collections);
