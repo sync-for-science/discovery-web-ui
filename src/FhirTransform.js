@@ -18,6 +18,9 @@ export default class FhirTransform {
 
   // Walk the template, creating a copy and replacing functions (that refer to 'data') with their return values
   static transform(data, template) {
+    if (!template) {
+      return data;
+    }
     if (template instanceof Function) {
       // invoke the function on the data
       return template(data);

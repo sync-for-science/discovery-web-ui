@@ -170,53 +170,16 @@ const categoriesForProviderTemplate = {
 };
 // });
 
-export const normalizeResponseResources = (data, participantId) => {
-  const result = [];
-  if (data) {
-    for (const providerName in data) {
-      if (data[providerName].error) {
-        // Error response
-        if (!result.Error) {
-          // Init container
-          result.Error = {};
-        }
-        result.Error[providerName] = data[providerName].error;
-      } else {
-        // Valid data for this provider
-        const obj = FhirTransform.transform(data[providerName], categoriesForProviderTemplate);
-        for (const propName in obj) {
-          if (obj[propName] === null || obj[propName] === undefined || (obj[propName] instanceof Array && obj[propName].length === 0)) {
-            // Ignore empty top-level item
-          } else {
-            // Flatten data
-            for (const elt of obj[propName]) {
-            // for (const elt in obj[propName]) {
-              result.push({
-                provider: providerName,
-                category: propName,
-                itemDate: itemDate(elt, propName),
-                id: participantId,
-                data: elt,
-              });
-            }
-          }
-        }
-      }
-    }
-  }
-  return result;
-};
-
-const checkResourceCoverage = (resources, participantId) => {
-  for (const providerName in resources.initial) {
-    if (resources.initial[providerName].error) {
+const checkResourceCoverage = (rawResponseData, normalizedResources, participantId) => {
+  for (const providerName in rawResponseData) {
+    if (rawResponseData[providerName].error) {
       alert(`Could not read resources from provider ${providerName}`);
     } else {
-      const initialResourceIDs = resources.initial[providerName].entry.map((elt) => elt.resource.id);
-      const finalResourceIDs = resources.transformed.filter((elt) => elt.provider === providerName).map((elt) => elt.data.id);
+      const initialResourceIDs = rawResponseData[providerName].entry.map((elt) => elt.resource.id);
+      const finalResourceIDs = normalizedResources.filter((elt) => elt.provider === providerName).map((elt) => elt.data.id);
       if (finalResourceIDs.length !== initialResourceIDs.length) {
         // eslint-disable-next-line max-len
-        const missingResources = initialResourceIDs.filter((id) => !finalResourceIDs.includes(id)).map((id) => resources.initial[providerName].entry.find((elt) => elt.resource.id === id));
+        const missingResources = initialResourceIDs.filter((id) => !finalResourceIDs.includes(id)).map((id) => rawResponseData[providerName].entry.find((elt) => elt.resource.id === id));
         alert(`Participant ${participantId} (${providerName}) has ${
           finalResourceIDs.length} resources but should have ${initialResourceIDs.length}`);
         log(JSON.stringify(missingResources, null, 3));
@@ -226,7 +189,7 @@ const checkResourceCoverage = (resources, participantId) => {
 };
 
 // Template/function for the full merged data set
-const getTopTemplate = (participantId) => (data) => {
+export const normalizeResourcesAndInjectPartipantId = (participantId) => (data) => {
   const result = [];
   for (const providerName in data) {
     if (data[providerName].error) {
@@ -245,6 +208,7 @@ const getTopTemplate = (participantId) => (data) => {
         } else {
           // Flatten data
           for (const elt of obj[propName]) {
+            // for (const elt in obj[propName]) {
             result.push({
               provider: providerName,
               category: propName,
@@ -275,10 +239,12 @@ export default class API {
       .then((response) => {
         // Non-empty response?
         if (Object.getOwnPropertyNames(response.data).length !== 0) {
-          const resources = new FhirTransform(response.data, getTopTemplate(this.participantId));
+          const rawResponseData = response.data;
+          const normalizedResources = normalizeResourcesAndInjectPartipantId(this.participantId)(rawResponseData);
+          const resources = new FhirTransform(normalizedResources);
           // const resources = (response.data, this.participantId);
 
-          checkResourceCoverage(resources, this.participantId); // Check whether we "found" all resources
+          checkResourceCoverage(rawResponseData, normalizedResources, this.participantId); // Check whether we "found" all resources
 
           const itemDates = cleanDates(resources.pathItem('itemDate'));
 
