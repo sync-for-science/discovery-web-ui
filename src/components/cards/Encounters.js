@@ -1,122 +1,90 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import clsx from 'clsx';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import PropTypes from 'prop-types';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    maxWidth: 345,
-    marginTop: 10,
-  },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  avatar: {
-    backgroundColor: red[500],
-  },
-}));
+import '../ContentPanel/ContentPanel.css';
 
-const Encounters = ({data, showDate, isEnabled}) =>  {
-  console.log('data', data)
-  console.log('showDate', showDate)
-  console.log('isEnabled', isEnabled)
-  const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+import FhirTransform from '../../FhirTransform.js';
+import { renderEncounters, primaryTextValue } from '../../fhirUtil.js';
+import {
+  Const, stringCompare, formatKey, formatContentHeader, tryWithDefault,
+} from '../../util.js';
 
-  const {category, itemDate} = data && data[0]
+import DiscoveryContext from '../DiscoveryContext';
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+import BaseCard from './BaseCard'
 
-  return (
-    <Card className={classes.root} variant="outlined">
-      <CardHeader
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title={category}
-        subheader={itemDate}
-        titleTypographyProps={{variant:'subtitle2' }}
-        subheaderTypographyProps={{variant:'body2' }}
-      />
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          Card Body
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded,
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>Method:</Typography>
-          <Typography paragraph>
-            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-            minutes.
-          </Typography>
-          <Typography paragraph>
-            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high
-            heat. Add chicken, shrimp and chorizo, and cook, stirring occasionally until lightly
-            browned, 6 to 8 minutes. Transfer shrimp to a large plate and set aside, leaving chicken
-            and chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes, onion, salt and
-            pepper, and cook, stirring often until thickened and fragrant, about 10 minutes. Add
-            saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-          </Typography>
-          <Typography paragraph>
-            Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook
-            without stirring, until most of the liquid is absorbed, 15 to 18 minutes. Reduce heat to
-            medium-low, add reserved shrimp and mussels, tucking them down into the rice, and cook
-            again without stirring, until mussels have opened and rice is just tender, 5 to 7
-            minutes more. (Discard any mussels that don’t open.)
-          </Typography>
-          <Typography>
-            Set aside off of the heat to let rest for 10 minutes, and then serve.
-          </Typography>
-        </CardContent>
-      </Collapse>
-    </Card>
-  );
+//
+// Display the 'Encounters' category if there are matching resources
+//
+export default class Encounters extends React.Component {
+  static catName = 'Encounters';
+
+  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
+
+  static compareFn(a, b) {
+    return stringCompare(Encounters.primaryText(a), Encounters.primaryText(b));
+  }
+
+  static code(elt) {
+    // if (isValid(elt, elt => elt.data.type[0].coding[0].display) ||
+    //     isValid(elt, elt => elt.data.type[0].text)) {
+    //    return elt.data.type[0];
+    // } else if (isValid(elt, elt => elt.data.type[0].coding[0]) &&
+    //      isValid(elt, elt => elt.data.class)) {
+    //    return { code: elt.data.type[0].coding[0].code, display: elt.data.class };
+    // } else if (isValid(elt, elt => elt.data.class)) {
+    //    return { code: elt.data.class, display: elt.data.class };
+    // } else {
+    //    return null;
+    // }
+    return tryWithDefault(elt, (elt) => elt.data.type[0], null);
+  }
+
+  static primaryText(elt) {
+    // return tryWithDefault(elt, elt => elt.data.type[0].coding[0].display,
+    //           tryWithDefault(elt, elt => elt.data.type[0].text, tryWithDefault(elt, elt => elt.data.class, '????')));
+    //      return tryWithDefault(elt, elt => Encounters.code(elt).coding[0].display,
+    //         tryWithDefault(elt, elt => Encounters.code(elt).text, Const.unknownValue));
+    return primaryTextValue(Encounters.code(elt));
+  }
+
+  static propTypes = {
+    data: PropTypes.array.isRequired,
+    isEnabled: PropTypes.bool,
+    showDate: PropTypes.bool,
+  }
+
+  state = {
+    matchingData: null,
+  }
+
+  setMatchingData() {
+    const match = FhirTransform.getPathItem(this.props.data, `[*category=${Encounters.catName}]`);
+    this.setState({ matchingData: match.length > 0 ? match.sort(Encounters.compareFn) : null });
+  }
+
+  componentDidMount() {
+    this.setMatchingData();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.data !== this.props.data) {
+      this.setMatchingData();
+    }
+  }
+
+  render() {
+    const firstRes = this.state.matchingData && this.state.matchingData[0];
+    return (this.state.matchingData
+      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
+      && (
+      <BaseCard data={this.props.data} showDate={this.props.showDate}>
+        <div className="encounters category-container" id={formatKey(firstRes)}>
+          <div className="content-body">
+            { this.props.isEnabled && renderEncounters(this.state.matchingData, this.context) }
+          </div>
+        </div>
+      </BaseCard>
+      ));
+  }
 }
-
-export default Encounters

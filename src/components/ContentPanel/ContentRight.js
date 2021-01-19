@@ -15,13 +15,12 @@ import {
 } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 
-import Allergies from '../Allergies';
+import Allergies from '../cards/Allergies';
 import Benefits from '../Benefits';
 import Claims from '../Claims';
-import Conditions from '../Conditions';
+import Conditions from '../cards/Conditions';
 import DocumentReferences from '../DocumentReferences';
-// import Encounters from '../Encounters';
-import Encounters from '../cards/Encounters'
+import Encounters from '../cards/Encounters';
 import Exams from '../Exams';
 import Immunizations from '../Immunizations';
 import LabResults from '../LabResults';
@@ -414,7 +413,7 @@ class ContentPanel extends React.PureComponent {
   }
 
   renderItems = (arr) => {
-    console.log('arr', arr)
+    console.log('arr', arr);
     log('renderItems');
     const showDate = this.state.showAllData;
     const resultDivs = [];

@@ -8,6 +8,7 @@
     "@material-ui/core": "^5.0.0-alpha.22",
     "@material-ui/icons": "^5.0.0-alpha.22",
     "axios": "^0.18.1",
+    "date-fns": "^2.16.1",
     "json-query": "^2.2.2",
     "moment": "^2.24.0",
     "postcss-import": "^12.0.1",
