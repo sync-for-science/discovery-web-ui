@@ -20,8 +20,8 @@ import Benefits from '../Benefits';
 import Claims from '../Claims';
 import Conditions from '../Conditions';
 import DocumentReferences from '../DocumentReferences';
-import Encounters from '../Encounters';
-// import Encounters from '../cards/Encounters'
+// import Encounters from '../Encounters';
+import Encounters from '../cards/Encounters'
 import Exams from '../Exams';
 import Immunizations from '../Immunizations';
 import LabResults from '../LabResults';
@@ -503,7 +503,7 @@ class ContentPanel extends React.PureComponent {
     && this.state.currResources.length > 0 ? this.renderItems(this.state.currResources)
       : [<div className="content-panel-no-data" key="1">{this.noResultDisplay}</div>];
     return (
-      <div className="content-panel-inner-body">
+      <div className="content-right-inner-body">
         { this.state.showJSON
           ? (
             <pre className="content-panel-data">

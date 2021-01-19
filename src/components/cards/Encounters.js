@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
@@ -19,6 +18,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
+    marginTop: 10,
   },
   media: {
     height: 0,
@@ -39,9 +39,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Encounters = () =>  {
+const Encounters = ({data, showDate, isEnabled}) =>  {
+  console.log('data', data)
+  console.log('showDate', showDate)
+  console.log('isEnabled', isEnabled)
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+
+  const {category, itemDate} = data && data[0]
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -50,23 +55,19 @@ const Encounters = () =>  {
   return (
     <Card className={classes.root} variant="outlined">
       <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            R
-          </Avatar>
-        }
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title={category}
+        subheader={itemDate}
+        titleTypographyProps={{variant:'subtitle2' }}
+        subheaderTypographyProps={{variant:'body2' }}
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook together with your
-          guests. Add 1 cup of frozen peas along with the mussels, if you like.
+          Card Body
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
