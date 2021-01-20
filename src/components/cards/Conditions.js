@@ -1,13 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
 
 import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { renderDisplay, primaryTextValue } from '../../fhirUtil.js';
+import { primaryTextValue, renderMUIDisplay } from '../../fhirUtil.js';
 import {
-  Const, stringCompare, formatKey, formatContentHeader,
+  Const, stringCompare,
 } from '../../util.js';
 
 import BaseCard from './BaseCard'
@@ -20,12 +19,10 @@ export const catName = 'Conditions';
 
 const Conditions = ({data, isEnabled, showDate}) => {
   const [matchingData, setMatchingData] = useState(null)
-  console.log('matchingData: ', matchingData)
   const contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
 
   function compareFn(a, b) {
-    console.log('a', a)
     return stringCompare(primaryText(a), primaryText(b));
   }
 
@@ -39,15 +36,8 @@ const Conditions = ({data, isEnabled, showDate}) => {
     return primaryTextValue(code(elt));
   }
 
-
-
-  // state = {
-  //   matchingData: null,
-  // }
-
   function parseMatchingData() {
     const match = FhirTransform.getPathItem(data, `[*category=${catName}]`);
-    console.log('match', match)
     setMatchingData(match.length > 0 ? match.sort(compareFn) : null)
   }
 
@@ -58,37 +48,15 @@ const Conditions = ({data, isEnabled, showDate}) => {
   useEffect(() => {
     parseMatchingData()
   }, [data])
-
-  // componentDidMount() {
-  //   this.setMatchingData();
-  // }
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevProps.data !== this.props.data) {
-  //     this.setMatchingData();
-  //   }
-  // }
-
   
   const firstRes = matchingData && matchingData[0];
-  console.log('firstRes', firstRes)
-  console.log('contextType', contextType)
+  const muiDisplay = matchingData && renderMUIDisplay(matchingData, 'Condition', contextType)[0]
 
   return (matchingData
     && (isEnabled || contextType.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
     && (
       <BaseCard data={firstRes} showDate={showDate}>
-        <div className="conditions category-container" id={formatKey(firstRes)}>
-          {/* { formatContentHeader(isEnabled, Conditions.catName, firstRes, contextType) } */}
-          <div className="content-body">
-            { isEnabled && renderDisplay(matchingData, 'Condition', contextType) }
-          </div>
-        </div>
-
-        <Grid container>
-          <Grid item>Container</Grid>
-          <Grid item>Value</Grid>
-        </Grid>
+        {muiDisplay}
       </BaseCard>
     ));
   }

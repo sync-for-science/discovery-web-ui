@@ -14,7 +14,6 @@ import { format } from 'date-fns';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: "100%",
     marginTop: 10,
     backgroundColor: "#e9edf4" // TODO add colors to theme
   },
@@ -56,13 +55,13 @@ const BaseCard = ({ data, showDate, children }) => {
   return (
     <Card className={classes.root} variant="outlined">
       <CardHeader
-        action={(
-          <IconButton aria-label="remove">
-            <CloseIcon />
-          </IconButton>
-        )}
+        // action={(
+        //   <IconButton aria-label="remove">
+        //     <CloseIcon />
+        //   </IconButton>
+        // )}
         title={category}
-        subheader={formattedDate}
+        subheader={`${formattedDate} | (Todo: Age of Patient at Event)`}
         titleTypographyProps={{ variant: 'button' }}
         subheaderTypographyProps={{ variant: 'body2' }}
       />

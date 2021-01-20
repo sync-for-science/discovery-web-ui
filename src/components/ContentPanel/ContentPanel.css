@@ -305,8 +305,10 @@
 .content-panel-body {
   /* debug height by using a background-color on this element */
   --content-right-body-offset-from-header: 48px; /* height of panel title and margin/padding */
+  --content-right-body-padding-from-right-border: 30px; /* right padding so cards in collection don't overflow */
 
   height: calc(100vh - var(--top-header-height) - var(--content-right-body-offset-from-header));
+  padding: 0 var(--content-right-body-padding-from-right-border) 0 0;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -329,6 +331,7 @@
   font-size: 1rem;
   background-color: var(--background-content);
   white-space: pre-wrap;
+  padding-right: 30px,
 }
 
 .content-panel-inner-body-alt {

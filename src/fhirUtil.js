@@ -1,4 +1,6 @@
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 import './components/ContentPanel/ContentPanel.css';
 import './components/ContentPanel/ContentPanelCategories.css';
@@ -237,6 +239,106 @@ function consultText(appContext, elt) {
   return '';
 }
 
+export function renderMUIDisplay(matchingData, typeLabel, appContext) {
+  const found = [];
+  for (const elt of matchingData) {
+    try {
+      found.push({
+        provider: elt.provider,
+        category: elt.category,
+        participantId: elt.id,
+        resourceId: elt.data.id,
+        display: classFromCat(elt.category).primaryText(elt),
+        annotation: Annotation.info(elt),
+        status: elt.data.status,
+        clinicalStatus: elt.data.clinicalStatus,
+        abatement: elt.data.abatementDateTime,
+        orderedBy: tryWithDefault(elt, (elt) => elt.data.orderer.display, undefined),
+        verificationStatus: elt.data.verificationStatus,
+        reason: elt.data.reasonReference,
+        valueQuantity: elt.data.valueQuantity,
+      });
+    } catch (e) {
+      log(`renderDisplay(): ${e.message}`);
+    }
+  }
+
+  if (found.length > 0) {
+    // const isMultipleProviders = appContext.providers.length > 1;
+    return found.map((elt, index) => (
+      <Grid container spacing={0}>
+        {elt.display && (
+          <>
+            <Grid item xs={5}><Typography variant="body2">{typeLabel.toUpperCase()}</Typography></Grid>
+            <Grid item xs={7}><Typography variant="body2">{elt.display}</Typography></Grid>
+          </>
+        )}
+        {elt.valueQuantity && (
+          <>
+            <Grid item xs={5}><Typography variant="body2">RESULT</Typography></Grid>
+            <Grid item xs={7}><Typography variant="body2">{`${elt.valueQuantity.value} ${elt.valueQuantity.unit}`}</Typography></Grid>
+          </>
+        )}
+        {isValid(elt, (e) => e.reason[0].code) && (
+          <>
+            <Grid item xs={5}><Typography variant="body2">REASON</Typography></Grid>
+            <Grid item xs={7}><Typography variant="body2">{elt.reason[0].code.coding[0].display}</Typography></Grid>
+          </>
+        )}
+        {isValid(elt, (e) => e.reason[0].onsetDateTime) && (
+          <>
+            <Grid item xs={5}><Typography variant="body2">ONSET</Typography></Grid>
+            <Grid item xs={7}><Typography variant="body2">{formatDisplayDate(elt.reason[0].onsetDateTime, false, false)}</Typography></Grid>
+          </>
+        )}
+        {isValid(elt, (e) => e.reason[0].abatementDateTime) && (
+          <>
+            <Grid item xs={5}><Typography variant="body2">ABATEMENT</Typography></Grid>
+            <Grid item xs={7}><Typography variant="body2">{formatDisplayDate(elt.reason[0].abatementDateTime, false, false)}</Typography></Grid>
+          </>
+        )}
+        {elt.abatement && (
+          <>
+            <Grid item xs={5}><Typography variant="body2">ABATEMENT</Typography></Grid>
+            <Grid item xs={7}><Typography variant="body2">{formatDisplayDate(elt.abatement, false, false)}</Typography></Grid>
+          </>
+        )}
+        {elt.orderedBy && (
+          <>
+            <Grid item xs={5}><Typography variant="body2">ORDERED BY</Typography></Grid>
+            <Grid item xs={7}><Typography variant="body2">{elt.orderedBy}</Typography></Grid>
+          </>
+        )}
+        {isValid(elt, (e) => e.reason[0].assertedDate) && (
+          <>
+            <Grid item xs={5}><Typography variant="body2">ASSERTED</Typography></Grid>
+            <Grid item xs={7}><Typography variant="body2">{formatDisplayDate(elt.reason[0].assertedDate, false, false)}</Typography></Grid>
+          </>
+        )}
+        {elt.status && (
+          <>
+            <Grid item xs={5}><Typography variant="body2">STATUS</Typography></Grid>
+            <Grid item xs={7}><Typography variant="body2">{elt.status}</Typography></Grid>
+          </>
+        )}
+        {elt.clinicalStatus && (
+          <>
+            <Grid item xs={5}><Typography variant="body2">CLINICAL STATUS</Typography></Grid>
+            <Grid item xs={7}><Typography variant="body2">{elt.clinicalStatus}</Typography></Grid>
+          </>
+        )}
+        {elt.verificationStatus && (
+          <>
+            <Grid item xs={5}><Typography variant="body2">VERIFICATION</Typography></Grid>
+            <Grid item xs={7}><Typography variant="body2">{elt.verificationStatus}</Typography></Grid>
+          </>
+        )}
+      </Grid>
+    ));
+  }
+  return null
+}
+
 //
 // renderDisplay()
 //
@@ -244,7 +346,6 @@ function consultText(appContext, elt) {
 //
 export function renderDisplay(matchingData, typeLabel, appContext) {
   const found = [];
-  console.log('matchingData.length', matchingData.length)
   for (const elt of matchingData) {
     try {
       found.push({
