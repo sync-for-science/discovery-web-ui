@@ -250,6 +250,7 @@ function consultText(viewName, elt) {
 //
 export function renderDisplay(matchingData, typeLabel, { providers, viewName }) {
   const found = [];
+  console.log('matchingData.length', matchingData.length)
   for (const elt of matchingData) {
     try {
       found.push({
@@ -317,8 +318,8 @@ export function renderDisplay(matchingData, typeLabel, { providers, viewName }) 
           { isValid(elt, (e) => e.reason[0].assertedDate)
           && <div className="col02 value-text">{formatDisplayDate(elt.reason[0].assertedDate, false, false)}</div> }
 
-          { isMultipleProviders && <div className="col01 label">Provider</div> }
-          { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
+          {/* { isMultipleProviders && <div className="col01 label">Provider</div> }
+          { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> } */}
 
           <CondDiv
             check={elt.status}

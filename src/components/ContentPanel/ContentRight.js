@@ -18,7 +18,7 @@ import FhirTransform from '../../FhirTransform.js';
 import Allergies from '../cards/Allergies';
 import Benefits from '../cards/Benefits';
 import Claims from '../cards/Claims';
-import Conditions from '../cards/Conditions';
+import Conditions, {catName} from '../cards/Conditions';
 import DocumentReferences from '../cards/DocumentReferences';
 import Encounters from '../cards/Encounters';
 import Exams from '../cards/Exams';
@@ -413,7 +413,6 @@ class ContentPanel extends React.PureComponent {
   }
 
   renderItems = (arr) => {
-    console.log('arr', arr);
     log('renderItems');
     const showDate = this.state.showAllData;
     const resultDivs = [];
@@ -718,7 +717,6 @@ class ContentPanel extends React.PureComponent {
   }
 
   render() {
-    console.info('this.props.context: ', this.props.context);
     // Locally extend DiscoveryContext with trimLevel & viewName (hack)
 
     if (!this.state.isOpen) {

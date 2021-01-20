@@ -69,7 +69,7 @@ export default class LabResults extends React.Component {
     return (this.state.matchingData
       && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
-        <BaseCard data={this.props.data} showDate={this.props.showDate}>
+        <BaseCard data={firstRes} showDate={this.props.showDate}>
           <div className="lab-results category-container" id={formatKey(firstRes)}>
             { formatContentHeader(this.props.isEnabled, LabResults.catName, firstRes, this.context) }
             <div className="content-body">
