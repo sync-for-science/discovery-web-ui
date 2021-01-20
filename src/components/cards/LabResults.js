@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { renderDisplay, primaryTextValue } from '../../fhirUtil.js';
+import { renderLabs, primaryTextValue } from '../../fhirUtil.js';
 import {
   Const, stringCompare, formatKey, formatContentHeader,
 } from '../../util.js';
@@ -13,31 +13,33 @@ import BaseCard from './BaseCard'
 import DiscoveryContext from '../DiscoveryContext';
 
 //
-// Display the 'Conditions' category if there are matching resources
+// Display the 'Lab Results' category if there are matching resources
 //
-export default class Conditions extends React.Component {
-  static catName = 'Conditions';
+export default class LabResults extends React.Component {
+  static catName = 'Lab Results';
 
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
-    return stringCompare(Conditions.primaryText(a), Conditions.primaryText(b));
+    return stringCompare(LabResults.primaryText(a), LabResults.primaryText(b));
   }
 
   static code(elt) {
-    return elt.data.code; // SNOMED
+    return elt.data.code; // LOINC
   }
 
   static primaryText(elt) {
     //      return elt.data.code.coding[0].display;
-    //      return tryWithDefault(elt, elt => Conditions.code(elt).coding[0].display, Const.unknownValue);
-    return primaryTextValue(Conditions.code(elt));
+    //      return tryWithDefault(elt, elt => LabResults.code(elt).coding[0].display, Const.unknownValue);
+    return primaryTextValue(LabResults.code(elt));
   }
 
   static propTypes = {
     data: PropTypes.array.isRequired,
     isEnabled: PropTypes.bool,
     showDate: PropTypes.bool,
+    resources: PropTypes.instanceOf(FhirTransform),
+    dotClickFn: PropTypes.func,
   }
 
   state = {
@@ -45,9 +47,9 @@ export default class Conditions extends React.Component {
   }
 
   setMatchingData() {
-    const match = FhirTransform.getPathItem(this.props.data, `[*category=${Conditions.catName}]`);
+    const match = FhirTransform.getPathItem(this.props.data, `[*category=${LabResults.catName}]`);
     this.setState({
-      matchingData: match.length > 0 ? match.sort(Conditions.compareFn)
+      matchingData: match.length > 0 ? match.sort(LabResults.compareFn)
         : null,
     });
   }
@@ -68,10 +70,10 @@ export default class Conditions extends React.Component {
       && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
         <BaseCard data={this.props.data} showDate={this.props.showDate}>
-          <div className="conditions category-container" id={formatKey(firstRes)}>
-            { formatContentHeader(this.props.isEnabled, Conditions.catName, firstRes, this.context) }
+          <div className="lab-results category-container" id={formatKey(firstRes)}>
+            { formatContentHeader(this.props.isEnabled, LabResults.catName, firstRes, this.context) }
             <div className="content-body">
-              { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Condition', this.context) }
+              { this.props.isEnabled && renderLabs(this.state.matchingData, this.props.resources, this.props.dotClickFn, this.context) }
             </div>
           </div>
         </BaseCard>

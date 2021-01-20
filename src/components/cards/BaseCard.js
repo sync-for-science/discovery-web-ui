@@ -19,7 +19,7 @@ import EncountersBody from './Encounters';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: 345,
+    maxWidth: "100%",
     marginTop: 10,
     backgroundColor: "#e9edf4" // TODO add colors to theme
   },
