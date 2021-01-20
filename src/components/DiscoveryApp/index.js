@@ -16,7 +16,7 @@ import TilesView from '../TilesView';
 import Collections from '../Collections';
 import Unimplemented from '../Unimplemented';
 import PageFooter from '../PageFooter';
-import Api, { normalizeResourcesAndInjectPartipantId, generateLegacyResources } from './Api';
+import Api, { normalizeResourcesAndInjectPartipantId, generateLegacyResources, computeFilterState } from './Api';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -332,6 +332,9 @@ export const resourcesState = atom({
 export const filtersState = atom({
   key: 'filtersState', // unique ID (with respect to other atoms/selectors)
   default: {
+    dates: null,
+    thumbLeftDate: null,
+    thumbRightDate: null,
   },
 });
 
@@ -361,6 +364,11 @@ const DiscoveryAppHOC = (props) => {
           raw,
           normalized,
           legacy,
+        });
+
+        setFilters({
+          ...filters,
+          ...computeFilterState(legacy),
         });
       }).catch((error) => {
         setResources({
