@@ -288,6 +288,8 @@ class StandardFilters extends React.PureComponent {
       case 'CategoryRollup':
       default:
         // Return all resources for enabled categories matching the clicked date
+        console.error('this.props.resources: ', this.props.resources);
+        console.error('date: ', date);
         return this.props.resources.pathItem(`[*itemDate=${date}]`);
     }
   }
