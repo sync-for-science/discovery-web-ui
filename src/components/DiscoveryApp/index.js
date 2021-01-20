@@ -16,7 +16,7 @@ import TilesView from '../TilesView';
 import Collections from '../Collections';
 import Unimplemented from '../Unimplemented';
 import PageFooter from '../PageFooter';
-import Api, { normalizeResourcesAndInjectPartipantId } from './Api';
+import Api, { normalizeResourcesAndInjectPartipantId, generateLegacyResources } from './Api';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -325,6 +325,7 @@ export const resourcesState = atom({
     error: null,
     raw: null,
     normalized: null,
+    legacy: null,
   },
 });
 
@@ -345,10 +346,14 @@ const DiscoveryAppHOC = (props) => {
         : `${config.serverUrl}/participants/${participantId}`;
 
       get(dataUrl).then((response) => {
+        const raw = response.data;
+        const normalized = normalizeResourcesAndInjectPartipantId(participantId)(response.data);
+        const legacy = generateLegacyResources(raw, normalized, participantId);
         setResources({
           ...resources,
-          raw: response.data,
-          normalized: normalizeResourcesAndInjectPartipantId(participantId)(response.data),
+          raw,
+          normalized,
+          legacy,
         });
       }).catch((error) => {
         setResources({
