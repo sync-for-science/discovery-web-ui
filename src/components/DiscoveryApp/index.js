@@ -329,9 +329,16 @@ export const resourcesState = atom({
   },
 });
 
+export const filtersState = atom({
+  key: 'filtersState', // unique ID (with respect to other atoms/selectors)
+  default: {
+  },
+});
+
 // if using React.memo, there's a proptype warning for Route:
 const DiscoveryAppHOC = (props) => {
   const [resources, setResources] = useRecoilState(resourcesState);
+  const [filters, setFilters] = useRecoilState(filtersState);
 
   useEffect(() => {
     function fetchData() {
