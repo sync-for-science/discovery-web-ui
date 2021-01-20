@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import '../ContentPanel/ContentPanel.css';
 
 import FhirTransform from '../../FhirTransform.js';
-import { renderDisplay, primaryTextValue } from '../../fhirUtil.js';
+import { renderSocialHistory, primaryTextValue } from '../../fhirUtil.js';
 import {
   Const, stringCompare, formatKey, formatContentHeader,
 } from '../../util.js';
@@ -13,25 +13,25 @@ import BaseCard from './BaseCard'
 import DiscoveryContext from '../DiscoveryContext';
 
 //
-// Display the 'Conditions' category if there are matching resources
+// Display the 'Social History' category if there are matching resources
 //
-export default class Conditions extends React.Component {
-  static catName = 'Conditions';
+export default class SocialHistory extends React.Component {
+  static catName = 'Social History';
 
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
-    return stringCompare(Conditions.primaryText(a), Conditions.primaryText(b));
+    return stringCompare(SocialHistory.primaryText(a), SocialHistory.primaryText(b));
   }
 
   static code(elt) {
-    return elt.data.code; // SNOMED
+    return elt.data.code; // LOINC
   }
 
   static primaryText(elt) {
     //      return elt.data.code.coding[0].display;
-    //      return tryWithDefault(elt, elt => Conditions.code(elt).coding[0].display, Const.unknownValue);
-    return primaryTextValue(Conditions.code(elt));
+    //      return tryWithDefault(elt, elt => SocialHistory.code(elt).coding[0].display, Const.unknownValue);
+    return primaryTextValue(SocialHistory.code(elt));
   }
 
   static propTypes = {
@@ -45,9 +45,9 @@ export default class Conditions extends React.Component {
   }
 
   setMatchingData() {
-    const match = FhirTransform.getPathItem(this.props.data, `[*category=${Conditions.catName}]`);
+    const match = FhirTransform.getPathItem(this.props.data, `[*category=${SocialHistory.catName}]`);
     this.setState({
-      matchingData: match.length > 0 ? match.sort(Conditions.compareFn)
+      matchingData: match.length > 0 ? match.sort(SocialHistory.compareFn)
         : null,
     });
   }
@@ -68,10 +68,10 @@ export default class Conditions extends React.Component {
       && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
         <BaseCard data={this.props.data} showDate={this.props.showDate}>
-          <div className="conditions category-container" id={formatKey(firstRes)}>
-            { formatContentHeader(this.props.isEnabled, Conditions.catName, firstRes, this.context) }
+          <div className="social-history category-container" id={formatKey(firstRes)}>
+            { formatContentHeader(this.props.isEnabled, SocialHistory.catName, firstRes, this.context) }
             <div className="content-body">
-              { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Condition', this.context) }
+              { this.props.isEnabled && renderSocialHistory(this.state.matchingData, this.context) }
             </div>
           </div>
         </BaseCard>
