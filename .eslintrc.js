@@ -75,6 +75,7 @@ module.exports = {
     'react/no-string-refs': ['warn'],
     'react/no-unused-prop-types': ['warn'],
     'react/no-unused-state': ['warn'],
+    // 'react/jsx-max-props-per-line': ['error', { maximum: 1, when: 'always' }],
     'react/prefer-stateless-function': ['warn'],
     'react/prop-types': ['warn'],
     'react/require-default-props': ['warn'],
