@@ -224,6 +224,13 @@ export const normalizeResourcesAndInjectPartipantId = (participantId) => (data) 
   return result;
 };
 
+export const generateLegacyResources = (rawResponseData, normalizedResources, participantId) => {
+  const legacyResources = new FhirTransform(normalizedResources);
+  // const resources = (response.data, this.participantId);
+  checkResourceCoverage(rawResponseData, normalizedResources, participantId); // Check whether we "found" all resources
+  return legacyResources;
+};
+
 export default class API {
   constructor(participantId, setState) {
     this.participantId = participantId;
@@ -241,12 +248,9 @@ export default class API {
         if (Object.getOwnPropertyNames(response.data).length !== 0) {
           const rawResponseData = response.data;
           const normalizedResources = normalizeResourcesAndInjectPartipantId(this.participantId)(rawResponseData);
-          const resources = new FhirTransform(normalizedResources);
-          // const resources = (response.data, this.participantId);
+          const legacyResources = generateLegacyResources(rawResponseData, normalizedResources, this.participantId);
 
-          checkResourceCoverage(rawResponseData, normalizedResources, this.participantId); // Check whether we "found" all resources
-
-          const itemDates = cleanDates(resources.pathItem('itemDate'));
+          const itemDates = cleanDates(legacyResources.pathItem('itemDate'));
 
           if (itemDates.length === 0) {
             throw new Error('No matching resources returned');
@@ -266,7 +270,7 @@ export default class API {
           };
 
           this.setState({
-            resources,
+            resources: legacyResources,
             dates,
             thumbLeftDate: minDate,
             thumbRightDate: maxDate,
