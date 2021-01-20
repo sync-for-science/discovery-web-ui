@@ -172,6 +172,7 @@ export function formatAge(birthDate, ageDate, prefix) {
 
 // TODO: cleanup when determine not to show disabled header, eliminate header highlight
 export function formatContentHeader(isEnabled, category, res, appContext) {
+  console.log('appContext', appContext)
 //   let dateOnly = formatKeyDate(res.itemDate);
   const dateWithTime = res.itemDate ? formatDisplayDate(res.itemDate, true, false) : noDate;
   const dob = appContext.resources.pathItem('[category=Patient].data.birthDate');

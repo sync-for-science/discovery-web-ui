@@ -60,6 +60,7 @@ export default class Encounters extends React.Component {
 
   setMatchingData() {
     const match = FhirTransform.getPathItem(this.props.data, `[*category=${Encounters.catName}]`);
+    console.log('encounters match', match)
     this.setState({ matchingData: match.length > 0 ? match.sort(Encounters.compareFn) : null });
   }
 
@@ -78,7 +79,7 @@ export default class Encounters extends React.Component {
     return (this.state.matchingData
       && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
-      <BaseCard data={this.props.data} showDate={this.props.showDate}>
+      <BaseCard data={firstRes} showDate={this.props.showDate}>
         <div className="encounters category-container" id={formatKey(firstRes)}>
           <div className="content-body">
             { this.props.isEnabled && renderEncounters(this.state.matchingData, this.context) }

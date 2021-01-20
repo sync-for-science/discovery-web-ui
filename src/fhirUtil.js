@@ -244,6 +244,7 @@ function consultText(appContext, elt) {
 //
 export function renderDisplay(matchingData, typeLabel, appContext) {
   const found = [];
+  console.log('matchingData.length', matchingData.length)
   for (const elt of matchingData) {
     try {
       found.push({
@@ -267,7 +268,7 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    // const isMultipleProviders = appContext.providers.length > 1;
     return found.map((elt, index) => (
       <div className={index < found.length - 1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
         <div className="content-data">
@@ -304,8 +305,8 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
           { isValid(elt, (e) => e.reason[0].assertedDate)
           && <div className="col02 value-text">{formatDisplayDate(elt.reason[0].assertedDate, false, false)}</div> }
 
-          { isMultipleProviders && <div className="col01 label">Provider</div> }
-          { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
+          {/* { isMultipleProviders && <div className="col01 label">Provider</div> }
+          { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> } */}
 
           <CondDiv check={elt.status} expected={['final', 'completed']}>
             <div className="col01 label">Status</div>
