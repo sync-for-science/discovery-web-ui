@@ -5,15 +5,26 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import CloseIcon from '@material-ui/icons/Close';
 import { format } from 'date-fns';
+
+import ConditionCardBody from './ConditionCardBody'
+import MedicationRequestBody from './MedicationRequestCardBody'
+
+const selectCardBody = (fieldsData) => {
+  switch (fieldsData.resourceType) {
+    case "Condition":
+      return <ConditionCardBody fieldsData={fieldsData} />
+    case "MedicationRequest":
+      return <MedicationRequestBody fieldsData={fieldsData} />
+    default:
+      break;
+  }
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const RecordCard = ({ resource }) => {
-  console.log('resource: ', resource);
+  // console.log('resource: ', resource);
   const [expanded, setExpanded] = React.useState(false);
   const classes = useStyles();
   // const bull = <span className={classes.bullet}>•</span>;
@@ -76,18 +87,43 @@ const RecordCard = ({ resource }) => {
   // });
 
   const fieldsData = {
-    provider: resource.provider,
+    abatement: data.abatementDateTime,
+    billablePeriod: data.billablePeriod,
     category: resource.category,
+    careTeam: data.careTeam,
+    class: data.class && data.class.code,
+    clinicalStatus: data.clinicalStatus,
+    criticality: data.criticality,
+    component: data.component,
+    date: resource.itemDate,
+    daysSupply: data.daysSupply,
+    diagnosis: data.diagnosis,
+    display: data.code && data.code.text,
+    dispenseRequest: data.dispenseRequest,
+    dosageInstruction: data.dosageInstruction,
+    medicationDisplay: data.medicationCodeableConcept && data.medicationCodeableConcept.text,
+    notGiven: data.notGiven,
+    orderedBy: data.orderer && data.orderer.display,
     participantId: resource.id,
+    period: data.period,
+    primarySource: data.primarySource,
+    provider: resource.provider,
+    reaction: data.reaction,
+    reason: data.reasonReference,
+    reported: data.reported,
     resourceId: data.id,
-    display: resource.category,
-    status: 'data.status',
-    clinicalStatus: resource.clinicalStatus,
-    abatement: resource.abatementDateTime,
-    orderedBy: 'data.orderer.display',
+    resourceType: data.resourceType,
+    status: data.status,
+    substance: data.substance,
+    taken: data.taken,
+    totalBenefit: data.totalBenefit,
+    totalCost: data.totalCost,
+    type: data.type,
+    use: data.use,
+    valueCodeableConcept: data.valueCodeableConcept && data.valueCodeableConcept.coding,
+    valueQuantity: data.valueQuantity,
     verificationStatus: data.verificationStatus,
-    reason: 'data.reasonReference',
-    valueQuantity: 'data.valueQuantity'
+    wasNotGiven: data.wasNotGiven
   }
 
   console.log('fieldsData', fieldsData)
@@ -107,8 +143,8 @@ const RecordCard = ({ resource }) => {
         subheaderTypographyProps={{ variant: 'body2' }}
       />
       <CardContent>
-        <Grid container spacing={1}>
-          {'fields'}
+        <Grid container spacing={0}>
+          {selectCardBody(fieldsData)}
         </Grid>
       </CardContent>
       <CardActions disableSpacing className={classes.cardActions}>
