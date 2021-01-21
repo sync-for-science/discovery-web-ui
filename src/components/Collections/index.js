@@ -2,12 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { atom, useRecoilState, useRecoilValue } from 'recoil';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 
+
+import RecordCard from '../cards/RecordCard'
 import { resourcesState } from '../DiscoveryApp';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
 // import FhirTransform from '../../FhirTransform';
@@ -29,58 +26,14 @@ const useStyles = makeStyles({
   },
 });
 
-const RecordCard = ({ resource }) => {
-  console.error('resource: ', resource);
-  const classes = {}; // useStyles();
-  // const bull = <span className={classes.bullet}>•</span>;
-  const {
-    provider, data, data: {
-      resourceType,
-      effectiveDateTime,
-      itemDate,
-    },
-  } = resource;
-
-  // const fields = Object.entries(data).map(([k, v]) => {
-  //   console.error(' k , v: ', k , v);
-  //   return (
-  //     <div>
-  //       { k }: { JSON.stringify(v) }
-  //     </div>
-  //   );
-  // });
-
-  return (
-    <Card
-      className={classes.root}
-      elevation={4}
-      style={{
-        margin: '10px',
-        border: '1px solid red',
-      }}
-    >
-      <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-          { resourceType }
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          { itemDate }
-        </Typography>
-        <Typography variant="body2" component="p" />
-      </CardContent>
-      <CardActions>
-        <Button size="small">Annotate</Button>
-      </CardActions>
-    </Card>
-  );
-};
-
 const CardList = ({ normalized }) => {
   if (!normalized) {
     return null;
   }
 
-  return normalized.map((r) => <RecordCard resource={r} />);
+  const slice = normalized.slice(2, 3)
+
+  return slice.map((r) => <RecordCard resource={r} />);
 };
 
 const Collections = (props) => {
