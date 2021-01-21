@@ -14,6 +14,10 @@ import { format } from 'date-fns';
 
 import ConditionCardBody from './ConditionCardBody'
 import MedicationRequestBody from './MedicationRequestCardBody'
+import BenefitCardBody from './BenefitCardBody'
+import ClaimCardBody from './ClaimCardBody'
+import EncounterCardBody from './EncounterCardBody'
+import ImmunizationCardBody from './ImmunizationCardBody'
 
 const selectCardBody = (fieldsData) => {
   switch (fieldsData.resourceType) {
@@ -21,6 +25,14 @@ const selectCardBody = (fieldsData) => {
       return <ConditionCardBody fieldsData={fieldsData} />
     case "MedicationRequest":
       return <MedicationRequestBody fieldsData={fieldsData} />
+    case "ExplanationOfBenefit":
+      return <BenefitCardBody fieldsData={fieldsData} />
+    case "Claim":
+      return <ClaimCardBody fieldsData={fieldsData} />
+    case "Encounter":
+      return <EncounterCardBody fieldsData={fieldsData} />
+    case "Immunization":
+      return <ImmunizationCardBody fieldsData={fieldsData} />
     default:
       break;
   }
@@ -60,7 +72,7 @@ const RecordCard = ({ resource }) => {
   const classes = useStyles();
   // const bull = <span className={classes.bullet}>•</span>;
   const {
-    provider, data, itemDate, data: {
+    provider, data, itemDate, category, data: {
       resourceType,
       effectiveDateTime,
     },
@@ -95,6 +107,7 @@ const RecordCard = ({ resource }) => {
     clinicalStatus: data.clinicalStatus,
     criticality: data.criticality,
     component: data.component,
+    contained: data.contained,
     date: resource.itemDate,
     daysSupply: data.daysSupply,
     diagnosis: data.diagnosis,
@@ -116,6 +129,7 @@ const RecordCard = ({ resource }) => {
     status: data.status,
     substance: data.substance,
     taken: data.taken,
+    total: data.total,
     totalBenefit: data.totalBenefit,
     totalCost: data.totalCost,
     type: data.type,
@@ -137,7 +151,7 @@ const RecordCard = ({ resource }) => {
         //     <CloseIcon />
         //   </IconButton>
         // )}
-        title={resourceType}
+        title={category}
         subheader={`${displayDate} | (Todo: Age of Patient at Event)`}
         titleTypographyProps={{ variant: 'button' }}
         subheaderTypographyProps={{ variant: 'body2' }}
