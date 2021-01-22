@@ -35,6 +35,7 @@ export default class CondDiv extends React.Component {
     const checkValArray = Array.isArray(checkVal) ? checkVal : [checkVal];
     const expectedArray = Array.isArray(expected) ? expected : [expected];
 
+    // TODO: excise context:
     switch (this.context.trimLevel) {
       // Unconditionally trim this element/value
       case Const.trimMax:

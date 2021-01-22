@@ -73,13 +73,16 @@ export default class Encounters extends React.Component {
 
   render() {
     const firstRes = this.state.matchingData && this.state.matchingData[0];
+    const {
+      patient, providers, trimLevel,
+    } = this.props;
     return (this.state.matchingData
-      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
+      && (this.props.isEnabled || trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
       <div className="encounters category-container" id={formatKey(firstRes)}>
-        { formatContentHeader(this.props.isEnabled, Encounters.catName, firstRes, this.context) }
+        { formatContentHeader(this.props.isEnabled, Encounters.catName, firstRes, { patient, trimLevel }) }
         <div className="content-body">
-          { this.props.isEnabled && renderEncounters(this.state.matchingData, this.context) }
+          { this.props.isEnabled && renderEncounters(this.state.matchingData, providers) }
         </div>
       </div>
       ));

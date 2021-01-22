@@ -78,15 +78,18 @@ export default class Unimplemented extends React.Component {
 
   render() {
     const firstRes = this.state.matchingData && this.state.matchingData[0];
+    const {
+      patient, providers, trimLevel,
+    } = this.props;
     return (this.state.matchingData
-      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
+      && (this.props.isEnabled || trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
-      <div className="unimplemented category-container" id={formatKey(firstRes)}>
-        { formatContentHeader(this.props.isEnabled, Unimplemented.catName, firstRes, this.context) }
-        <div className="content-body">
-          { this.props.isEnabled && renderUnimplemented(this.state.matchingData, this.context) }
+        <div className="unimplemented category-container" id={formatKey(firstRes)}>
+          { formatContentHeader(this.props.isEnabled, Unimplemented.catName, firstRes, { patient, trimLevel }) }
+          <div className="content-body">
+            { this.props.isEnabled && renderUnimplemented(this.state.matchingData, providers) }
+          </div>
         </div>
-      </div>
       ));
   }
 }

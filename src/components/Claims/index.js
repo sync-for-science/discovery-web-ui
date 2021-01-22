@@ -52,7 +52,7 @@ export default class Claims extends React.Component {
   setMatchingData() {
     const match = FhirTransform.getPathItem(this.props.data, `[*category=${Claims.catName}]`);
     for (const elt of match) {
-      resolveDiagnosisReference(elt, this.context);
+      resolveDiagnosisReference(elt, this.props.legacyResources);
     }
     this.setState({ matchingData: match.length > 0 ? match : null });
   }
@@ -93,13 +93,16 @@ export default class Claims extends React.Component {
 
   render() {
     const firstRes = this.state.matchingData && this.state.matchingData[0];
+    const {
+      patient, providers, trimLevel,
+    } = this.props;
     return (this.state.matchingData
-      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
+      && (this.props.isEnabled || trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
       <div className="claims category-container" style={this.props.style} id={formatKey(firstRes)}>
-        { formatContentHeader(this.props.isEnabled, Claims.catName, firstRes, this.context) }
+        { formatContentHeader(this.props.isEnabled, Claims.catName, firstRes, { patient, trimLevel }) }
         <div className="content-body">
-          { this.props.isEnabled && renderClaims(this.state.matchingData, this.context) }
+          { this.props.isEnabled && renderClaims(this.state.matchingData, providers) }
           { this.props.isEnabled && this.state.loadingRefs > 0 && <div className="category-loading">Loading ...</div> }
         </div>
       </div>

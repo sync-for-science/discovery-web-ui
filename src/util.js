@@ -172,14 +172,10 @@ export function formatAge(birthDate, ageDate, prefix) {
 
 // TODO: cleanup when determine not to show disabled header, eliminate header highlight
 export function formatContentHeader(isEnabled, category, res, { patient, trimLevel }) {
-  console.error('>>>>>>>>>>>. trimLevel: ', trimLevel);
   //   let dateOnly = formatKeyDate(res.itemDate);
   const dateWithTime = res.itemDate ? formatDisplayDate(res.itemDate, true, false) : noDate;
-  // const dob = options.resources.pathItem('[category=Patient].data.birthDate');
   const dob = patient.data.birthDate;
-  console.error('dob: ', dob);
   const age = formatAge(dob, res.itemDate, 'age ');
-  console.error('age: ', age);
   //   let highlight = appContext.highlightedResources &&
   //       appContext.highlightedResources.some(elt => elt.category === category  && elt.itemDate === res.itemDate);
   const highlight = false;
