@@ -3,8 +3,9 @@ import { format } from 'date-fns';
 
 import CardBodyField from './CardBodyField'
 
-export function formatDate(date) {
-  return date ? format( new Date(date), 'MMM d, y h:mm:ssaaa') : null
+export function formatDate(date, displayMinutes = true) {
+  const dateDisplay = displayMinutes ? 'MMM d, y h:mm:ssaaa' : 'MMM d, y'
+  return date ? format( new Date(date), dateDisplay) : null
 }
 
 const GenericCardBody = ({fieldsData}) => {

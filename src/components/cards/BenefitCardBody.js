@@ -1,22 +1,11 @@
 import React from 'react'
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import { formatDate } from './GenericCardBody'
 
 import CardBodyField from './CardBodyField'
 
-const useStyles = makeStyles((theme) => ({
-  highlight: {
-    backgroundColor: '#d78c14', // add this color to theme
-  }
-}));
-
 const BenefitCardBody = ({fieldsData}) => {
-  const classes = useStyles()
-
   const claimDisplay = fieldsData.type.coding[0].display
-  const periodDisplay = `${formatDate(fieldsData.billablePeriod.start)} - ${formatDate(fieldsData.billablePeriod.end)}`
+  const periodDisplay = `${formatDate(fieldsData.billablePeriod.start, false)} - ${formatDate(fieldsData.billablePeriod.end, false)}`
   const totalCostDisplay = `${fieldsData.totalCost.value.toFixed(2)} ${fieldsData.totalCost.code}`
   const totalBenefitDisplay = fieldsData.totalBenefit || 'unknown'
   const roleDisplay = fieldsData.careTeam[0].role.coding[0].display
@@ -89,7 +78,7 @@ const BenefitCardBody = ({fieldsData}) => {
       <CardBodyField 
         dependency={fieldsData.diagnosis} 
         label="DIAGNOSIS" 
-        value={fieldsData.provider} 
+        value={fieldsData.diagnosis} 
       />
       <CardBodyField 
         dependency={fieldsData.status} 

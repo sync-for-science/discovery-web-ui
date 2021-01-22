@@ -119,7 +119,14 @@ const RecordCard = ({ resource }) => {
     contained: data.contained,
     date: resource.itemDate,
     daysSupply: data.daysSupply,
-    diagnosis: data.diagnosis,
+    diagnosis: 
+      data.diagnosis 
+      && data.diagnosis[0] 
+      && data.diagnosis[0].type 
+      && data.diagnosis[0].type[0]
+      && data.diagnosis[0].type[0].coding
+      && data.diagnosis[0].type[0].coding[0]
+      && data.diagnosis[0].type[0].coding[0].code,
     display: data.code && data.code.text,
     dispenseRequest: data.dispenseRequest,
     dosageInstruction: data.dosageInstruction && data.dosageInstruction[0],

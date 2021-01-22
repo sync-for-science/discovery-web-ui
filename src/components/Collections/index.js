@@ -9,9 +9,9 @@ const CardList = ({ normalized }) => {
     return null;
   }
 
-  const record = normalized.filter(element => element.category === 'Benefits')
-  // const record = normalized.filter(element => element.data.id === 'f974c2e4-d8d9-433d-90d7-0fc112d1137f')
-  // return record.map((r, i) => <RecordCard key={i} resource={r} />);
+  const record = normalized.filter(element => element.category === 'Claims')
+  // const record = normalized.filter(element => element.data.id === '4afef915-ade7-42d4-8e82-5012e1c47704')
+  return record.map((r, i) => <RecordCard key={i} resource={r} />);
   return normalized.map((r, i) => <RecordCard key={i} resource={r} />);
 };
 
