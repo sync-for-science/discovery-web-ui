@@ -1,0 +1,69 @@
+import React from 'react'
+import { format } from 'date-fns';
+
+import CardBodyField from './CardBodyField'
+
+export function formatDate(date) {
+  return date ? format( new Date(date), 'MMM d, y h:mm:ssaaa') : null
+}
+
+const GenericCardBody = ({fieldsData}) => {
+
+  return (
+    <>
+      <CardBodyField 
+        dependency={fieldsData.display} 
+        label="CONDITIONS" 
+        value={fieldsData.display} 
+        highlight
+      />
+      <CardBodyField 
+        dependency={fieldsData.reason} 
+        label="REASON" 
+        value={fieldsData.reason} 
+      />
+      <CardBodyField 
+        dependency={fieldsData.onsetDateTime} 
+        label="ONSET" 
+        value={formatDate(fieldsData.onsetDateTime)} 
+      />
+      <CardBodyField 
+        dependency={fieldsData.abatement} 
+        label="ABATEMENT" 
+        value={formatDate(fieldsData.abatement)} 
+      />
+      <CardBodyField 
+        dependency={fieldsData.orderedBy} 
+        label="ORDERED BY" 
+        value={fieldsData.orderedBy} 
+      />
+      <CardBodyField 
+        dependency={fieldsData.asserted} 
+        label="ASSERTED" 
+        value={formatDate(fieldsData.asserted)} 
+      />
+      <CardBodyField 
+        dependency={fieldsData.provider} 
+        label="PROVIDER" 
+        value={fieldsData.provider} 
+      />
+      <CardBodyField 
+        dependency={fieldsData.status} 
+        label="STATUS" 
+        value={fieldsData.status} 
+      />
+      <CardBodyField 
+        dependency={fieldsData.clinicalStatus} 
+        label="CLINICAL STATUS" 
+        value={fieldsData.clinicalStatus} 
+      />
+      <CardBodyField 
+        dependency={fieldsData.verificationStatus} 
+        label="VERIFICATION" 
+        value={fieldsData.verificationStatus} 
+      />
+    </>
+  )
+}
+
+export default GenericCardBody

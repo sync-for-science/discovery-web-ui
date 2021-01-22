@@ -12,33 +12,34 @@ import TextField from '@material-ui/core/TextField';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { format } from 'date-fns';
 
-import ConditionCardBody from './ConditionCardBody'
+import GenericCardBody from './GenericCardBody'
 import MedicationRequestBody from './MedicationRequestCardBody'
 import BenefitCardBody from './BenefitCardBody'
 import ClaimCardBody from './ClaimCardBody'
 import EncounterCardBody from './EncounterCardBody'
 import ImmunizationCardBody from './ImmunizationCardBody'
 import LabResultCardBody from './LabResultCardBody';
-import ProcedureCardBody from './ProcedureCardBody';
 
 const selectCardBody = (fieldsData) => {
-  switch (fieldsData.resourceType) {
-    case "Condition":
-      return <ConditionCardBody fieldsData={fieldsData} />
-    case "MedicationRequest":
+  switch (fieldsData.category) {
+    case "Conditions":
+    case "Document References":
+    case "Meds Administration":
+    case "Procedures":
+    case "Procedure Requests":
+      return <GenericCardBody fieldsData={fieldsData} />
+    case "Meds Requested":
       return <MedicationRequestBody fieldsData={fieldsData} />
-    case "ExplanationOfBenefit":
+    case "Benefits":
       return <BenefitCardBody fieldsData={fieldsData} />
-    case "Claim":
+    case "Claims":
       return <ClaimCardBody fieldsData={fieldsData} />
-    case "Encounter":
+    case "Encounters":
       return <EncounterCardBody fieldsData={fieldsData} />
-    case "Immunization":
+    case "Immunizations":
       return <ImmunizationCardBody fieldsData={fieldsData} />
-    case "Observation":
+    case "Lab Results":
       return <LabResultCardBody fieldsData={fieldsData} />
-    case "Procedure":
-      return <ProcedureCardBody fieldsData={fieldsData} />
     default:
       break;
   }
@@ -106,6 +107,7 @@ const RecordCard = ({ resource }) => {
 
   const fieldsData = {
     abatement: data.abatementDateTime,
+    asserted: data.assertedDate,
     billablePeriod: data.billablePeriod,
     category: resource.category,
     careTeam: data.careTeam,
@@ -122,13 +124,14 @@ const RecordCard = ({ resource }) => {
     dosageInstruction: data.dosageInstruction,
     medicationDisplay: data.medicationCodeableConcept && data.medicationCodeableConcept.text,
     notGiven: data.notGiven,
+    onsetDateTime: data.onsetDateTime,
     orderedBy: data.orderer && data.orderer.display,
     participantId: resource.id,
     period: data.period,
     primarySource: data.primarySource,
     provider: resource.provider,
     reaction: data.reaction,
-    reason: data.reasonReference,
+    reason: data.reason && data.reason[0] && data.reason[0].coding && data.reason[0].coding[0] && data.reason[0].coding && data.reason[0].coding[0].display,
     reported: data.reported,
     resourceId: data.id,
     resourceType: data.resourceType,
