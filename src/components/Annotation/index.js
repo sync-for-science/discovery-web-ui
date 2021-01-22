@@ -5,27 +5,25 @@ import axios from 'axios';
 import './Annotation.css';
 import config from '../../config.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Annotation
 //
 export default class Annotation extends React.Component {
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
-
   // Extend resource.discoveryAnnotation (or return extension props if no annotation)
   static info(res) {
     //      return res.data.discoveryAnnotation ? Object.assign({}, res.data.discoveryAnnotation, { id: res.id, provider: res.provider, resourceId: res.data.id })
     //            : { id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null };
-    if (!res.data.discoveryAnnotation) {
-      res.data.discoveryAnnotation = {
-        id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null,
-      };
-    } else {
-      res.data.discoveryAnnotation = Object.assign(res.data.discoveryAnnotation, { id: res.id, provider: res.provider, resourceId: res.data.id });
+    if (Object.isExtensible(res.data)) {
+      if (!res.data.discoveryAnnotation) {
+        // console.info('Object.isExtensible(res.data): ', Object.isExtensible(res.data));
+        res.data.discoveryAnnotation = {
+          id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null,
+        };
+      } else {
+        res.data.discoveryAnnotation = Object.assign(res.data.discoveryAnnotation, { id: res.id, provider: res.provider, resourceId: res.data.id });
+      }
+      return res.data.discoveryAnnotation;
     }
-
-    return res.data.discoveryAnnotation;
   }
 
   static propTypes = {
@@ -44,6 +42,9 @@ export default class Annotation extends React.Component {
 
   // Set annotation div contents
   setAnnotationDisplay() {
+    if (!this.props.annotation) {
+      return;
+    }
     const div = this.annotationDiv();
     if (div) {
       if (this.props.annotation.annotationHistory) {
@@ -94,6 +95,7 @@ export default class Annotation extends React.Component {
       annotation.annotationHistory = [{ updated: '<set by server>', annotationText: text }];
     }
 
+    // SAVE ANNOTATION:
     axios.post(`${config.serverUrl}/participants/${annotation.id}/${annotation.provider}/${annotation.resourceId}`, {
       annotation: text,
     })
@@ -130,6 +132,9 @@ export default class Annotation extends React.Component {
 
   render() {
     const { annotation } = this.props;
+    if (!annotation) {
+      return null;
+    }
     const isText = annotation.annotationHistory ? this.cleanText(annotation.annotationHistory[annotation.annotationHistory.length - 1].annotationText) : null;
     return (
       <div className="annotation-container">

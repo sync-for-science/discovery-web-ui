@@ -4,15 +4,11 @@ import PropTypes from 'prop-types';
 import './DiabetesView.css';
 import FhirTransform from '../../FhirTransform.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Render the Diabetes view of the participant's data
 //
 export default class DiabetesView extends React.Component {
   static myName = 'DiabetesView';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
     resources: PropTypes.instanceOf(FhirTransform),

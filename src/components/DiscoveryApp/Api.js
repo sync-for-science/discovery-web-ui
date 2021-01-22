@@ -5,6 +5,7 @@ import {
 } from '../../util';
 import config from '../../config';
 import { log } from '../../utils/logger';
+import Unimplemented from '../Unimplemented';
 
 const itemDate = (item, category) => {
   let date = null;
@@ -170,53 +171,16 @@ const categoriesForProviderTemplate = {
 };
 // });
 
-export const normalizeResponseResources = (data, participantId) => {
-  const result = [];
-  if (data) {
-    for (const providerName in data) {
-      if (data[providerName].error) {
-        // Error response
-        if (!result.Error) {
-          // Init container
-          result.Error = {};
-        }
-        result.Error[providerName] = data[providerName].error;
-      } else {
-        // Valid data for this provider
-        const obj = FhirTransform.transform(data[providerName], categoriesForProviderTemplate);
-        for (const propName in obj) {
-          if (obj[propName] === null || obj[propName] === undefined || (obj[propName] instanceof Array && obj[propName].length === 0)) {
-            // Ignore empty top-level item
-          } else {
-            // Flatten data
-            for (const elt of obj[propName]) {
-            // for (const elt in obj[propName]) {
-              result.push({
-                provider: providerName,
-                category: propName,
-                itemDate: itemDate(elt, propName),
-                id: participantId,
-                data: elt,
-              });
-            }
-          }
-        }
-      }
-    }
-  }
-  return result;
-};
-
-const checkResourceCoverage = (resources, participantId) => {
-  for (const providerName in resources.initial) {
-    if (resources.initial[providerName].error) {
+const checkResourceCoverage = (rawResponseData, normalizedResources, participantId) => {
+  for (const providerName in rawResponseData) {
+    if (rawResponseData[providerName].error) {
       alert(`Could not read resources from provider ${providerName}`);
     } else {
-      const initialResourceIDs = resources.initial[providerName].entry.map((elt) => elt.resource.id);
-      const finalResourceIDs = resources.transformed.filter((elt) => elt.provider === providerName).map((elt) => elt.data.id);
+      const initialResourceIDs = rawResponseData[providerName].entry.map((elt) => elt.resource.id);
+      const finalResourceIDs = normalizedResources.filter((elt) => elt.provider === providerName).map((elt) => elt.data.id);
       if (finalResourceIDs.length !== initialResourceIDs.length) {
         // eslint-disable-next-line max-len
-        const missingResources = initialResourceIDs.filter((id) => !finalResourceIDs.includes(id)).map((id) => resources.initial[providerName].entry.find((elt) => elt.resource.id === id));
+        const missingResources = initialResourceIDs.filter((id) => !finalResourceIDs.includes(id)).map((id) => rawResponseData[providerName].entry.find((elt) => elt.resource.id === id));
         alert(`Participant ${participantId} (${providerName}) has ${
           finalResourceIDs.length} resources but should have ${initialResourceIDs.length}`);
         log(JSON.stringify(missingResources, null, 3));
@@ -226,7 +190,7 @@ const checkResourceCoverage = (resources, participantId) => {
 };
 
 // Template/function for the full merged data set
-const getTopTemplate = (participantId) => (data) => {
+export const normalizeResourcesAndInjectPartipantId = (participantId) => (data) => {
   const result = [];
   for (const providerName in data) {
     if (data[providerName].error) {
@@ -245,6 +209,7 @@ const getTopTemplate = (participantId) => (data) => {
         } else {
           // Flatten data
           for (const elt of obj[propName]) {
+            // for (const elt in obj[propName]) {
             result.push({
               provider: providerName,
               category: propName,
@@ -260,63 +225,68 @@ const getTopTemplate = (participantId) => (data) => {
   return result;
 };
 
-export default class API {
-  constructor(participantId, setState) {
-    this.participantId = participantId;
-    this.mySetState = setState;
+export const generateLegacyResources = (rawResponseData, normalizedResources, participantId) => {
+  const legacyResources = new FhirTransform(normalizedResources);
+  // const resources = (response.data, this.participantId);
+  checkResourceCoverage(rawResponseData, normalizedResources, participantId); // Check whether we "found" all resources
+  return legacyResources;
+};
+
+export const computeFilterState = (legacyResources) => {
+  const itemDates = cleanDates(legacyResources.pathItem('itemDate'));
+
+  if (itemDates.length === 0) {
+    throw new Error('No matching resources returned');
   }
 
-  setState(obj) {
-    this.mySetState(obj);
+  const minDate = itemDates[0]; // Earliest date we have data for this participant
+  const firstYear = parseInt(minDate.substring(0, 4)); // minDate's year
+  const startDate = `${firstYear}-01-01`; // Jan 1 of minDate's year
+  const maxDate = itemDates[itemDates.length - 1]; // The latest date we have data for this participant
+  const lastYear = parseInt(maxDate.substring(0, 4)); // maxDate's year
+  const incr = timelineIncrYears(minDate, maxDate, config.maxSinglePeriods); // Number of years between timeline ticks
+  const endDate = `${lastYear + incr - (lastYear - firstYear) % incr - 1}-12-31`; // Dec 31 of last year of timeline tick periods
+  const normDates = normalizeDates(itemDates, startDate, endDate);
+  const allDates = itemDates.map((date, index) => ({ position: normDates[index], date }));
+  const dates = {
+    allDates, minDate, startDate, maxDate, endDate,
+  };
+
+  return {
+    dates,
+    thumbLeftDate: minDate,
+    thumbRightDate: maxDate,
+  };
+};
+
+// Return sorted array of all provider names for this participant
+export const extractProviders = (normalized) => {
+  const provs = {};
+  if (normalized) {
+    for (const resource of normalized) {
+      // Add the found provider
+      provs[resource.provider] = null;
+    }
   }
+  return Object.keys(provs).sort();
+};
 
-  fetch(dataUrl) {
-    return get(dataUrl)
-      .then((response) => {
-        // Non-empty response?
-        if (Object.getOwnPropertyNames(response.data).length !== 0) {
-          const resources = new FhirTransform(response.data, getTopTemplate(this.participantId));
-          // const resources = (response.data, this.participantId);
-
-          checkResourceCoverage(resources, this.participantId); // Check whether we "found" all resources
-
-          const itemDates = cleanDates(resources.pathItem('itemDate'));
-
-          if (itemDates.length === 0) {
-            throw new Error('No matching resources returned');
-          }
-
-          const minDate = itemDates[0]; // Earliest date we have data for this participant
-          const firstYear = parseInt(minDate.substring(0, 4)); // minDate's year
-          const startDate = `${firstYear}-01-01`; // Jan 1 of minDate's year
-          const maxDate = itemDates[itemDates.length - 1]; // The latest date we have data for this participant
-          const lastYear = parseInt(maxDate.substring(0, 4)); // maxDate's year
-          const incr = timelineIncrYears(minDate, maxDate, config.maxSinglePeriods); // Number of years between timeline ticks
-          const endDate = `${lastYear + incr - (lastYear - firstYear) % incr - 1}-12-31`; // Dec 31 of last year of timeline tick periods
-          const normDates = normalizeDates(itemDates, startDate, endDate);
-          const allDates = itemDates.map((date, index) => ({ position: normDates[index], date }));
-          const dates = {
-            allDates, minDate, startDate, maxDate, endDate,
-          };
-
-          this.setState({
-            resources,
-            dates,
-            thumbLeftDate: minDate,
-            thumbRightDate: maxDate,
-            isLoading: false,
-          },
-          () => this.setState({
-            providers: this.providers,
-            // totalResCount: this.state.resources.transformed.filter((elt) => elt.category !== 'Patient').length,
-          }));
-        } else {
-          this.setState({
-            fetchError: { message: 'Invalid Participant ID' },
-            isLoading: false,
-          });
-        }
-      })
-      .catch((fetchError) => this.setState({ fetchError, isLoading: false }));
+// Return sorted array of all populated category names for this participant
+export const extractCategories = (normalized) => {
+  // const { legacy: legacyResources } = this.props.resources;
+  const cats = {};
+  if (normalized) {
+    for (const resource of normalized) {
+      if (resource.category === 'Patient') {
+        // Ignore
+      } else if (Unimplemented.unimplementedCats.includes(resource.category)) {
+        // Add the "Unimplemented" category
+        cats[Unimplemented.catName] = null;
+      } else {
+        // Add the found category
+        cats[resource.category] = null;
+      }
+    }
   }
-}
+  return Object.keys(cats).sort();
+};

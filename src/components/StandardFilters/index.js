@@ -9,7 +9,7 @@ import './StandardFilters.css';
 import ReactDOM from 'react-dom';
 import FhirTransform from '../../FhirTransform.js';
 import {
-  getStyle, numericPart, combine, cleanDates, normalizeDates, checkQuerySelector, notEqJSON, dateOnly,
+  combine, cleanDates, normalizeDates, checkQuerySelector, notEqJSON, dateOnly,
 } from '../../util.js';
 import TimeWidget from '../TimeWidget';
 import CategoryRollup from '../CategoryRollup';

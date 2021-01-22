@@ -11,15 +11,11 @@ import {
   Const, stringCompare, shallowEqArray, formatKey, formatContentHeader, tryWithDefault,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Procedures' category if there are matching resources
 //
 export default class Procedures extends React.Component {
   static catName = 'Procedures';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(Procedures.primaryText(a), Procedures.primaryText(b));
@@ -54,7 +50,7 @@ export default class Procedures extends React.Component {
     if (match.length > 0) {
       this.setState({ matchingData: match.sort(Procedures.compareFn) });
       for (const elt of match) {
-        resolveReasonReference(elt, this.context);
+        resolveReasonReference(elt, this.props.legacyResources);
       }
     } else {
       this.setState({ matchingData: null });
@@ -99,13 +95,16 @@ export default class Procedures extends React.Component {
 
   render() {
     const firstRes = this.state.matchingData && this.state.matchingData[0];
+    const {
+      patient, providers, trimLevel, viewName,
+    } = this.props;
     return (this.state.matchingData
-      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
+      && (this.props.isEnabled || trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
       <div className="procedures category-container" id={formatKey(firstRes)}>
-        { formatContentHeader(this.props.isEnabled, Procedures.catName, firstRes, this.context) }
+        { formatContentHeader(this.props.isEnabled, Procedures.catName, firstRes, { patient, trimLevel }) }
         <div className="content-body">
-          { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Procedure', this.context) }
+          { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Procedure', { providers, viewName }) }
           { this.props.isEnabled && this.state.loadingRefs > 0 && <div className="category-loading">Loading ...</div> }
         </div>
       </div>

@@ -24,7 +24,11 @@ export default class TilesView extends React.PureComponent {
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
-    resources: PropTypes.instanceOf(FhirTransform),
+    resources: PropTypes.shape({
+      patient: PropTypes.shape({}),
+      providers: PropTypes.arrayOf(PropTypes.string),
+      legacy: PropTypes.instanceOf(FhirTransform),
+    }),
     totalResCount: PropTypes.number,
     dates: PropTypes.shape({
       allDates: PropTypes.arrayOf(PropTypes.shape({
@@ -212,9 +216,10 @@ export default class TilesView extends React.PureComponent {
   // }
   //
   collectUnique(struct, cat, prov) {
-    const resources = cat === Unimplemented.catName ? this.props.resources.transformed.filter((res) => Unimplemented.unimplementedCats.includes(res.category)
+    const { legacy } = this.props.resources;
+    const resources = cat === Unimplemented.catName ? legacy.transformed.filter((res) => Unimplemented.unimplementedCats.includes(res.category)
       && res.provider === prov)
-      : this.props.resources.pathItem(`[*category=${cat}][*provider=${prov}]`);
+      : legacy.pathItem(`[*category=${cat}][*provider=${prov}]`);
     for (const res of resources) {
       if (this.noCollectCategories.includes(res.category)
         || !inDateRange(res.itemDate, this.props.thumbLeftDate, this.props.thumbRightDate)) {
@@ -345,11 +350,12 @@ export default class TilesView extends React.PureComponent {
   }
 
   matchingTileResources(tileId) {
-    let res = this.props.resources.transformed.filter((res) => this.hyphenate(res.category) === tileId.catName
+    const { legacy } = this.props.resources;
+    let res = legacy.transformed.filter((res) => this.hyphenate(res.category) === tileId.catName
       && this.hyphenate(this.getCoding(res).display) === tileId.display);
     if (res.length === 0) {
       // Kluge for 'other'
-      res = this.props.resources.transformed.filter((res) => res.category === tileId.trueCategory);
+      res = legacy.transformed.filter((res) => res.category === tileId.trueCategory);
     }
 
     return res;
@@ -617,7 +623,8 @@ export default class TilesView extends React.PureComponent {
 
   // Collect resources matching all selected tiles (plus Patient)
   selectedTileResources() {
-    let resArray = this.props.resources.transformed.filter((elt) => elt.category === 'Patient');
+    const { legacy } = this.props.resources;
+    let resArray = legacy.transformed.filter((elt) => elt.category === 'Patient');
     for (const catName of Object.keys(this.state.selectedTiles)) {
       for (const displayStr of Object.keys(this.state.selectedTiles[catName])) {
         if (!this.state.onlyMultisource
@@ -715,6 +722,8 @@ export default class TilesView extends React.PureComponent {
           thumbLeftDate={this.props.thumbLeftDate}
           thumbRightDate={this.props.thumbRightDate}
           resources={this.selectedTileResources()}
+          patient={this.props.resources.patient}
+          providers={this.props.resources.providers}
           totalResCount={this.props.totalResCount}
           viewName="Tiles"
           viewIconClass="tiles-view-icon"

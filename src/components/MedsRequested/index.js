@@ -13,15 +13,11 @@ import {
   Const, stringCompare, shallowEqArray, formatKey, formatContentHeader, tryWithDefault,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Meds Requested' category if there are matching resources
 //
 export default class MedsRequested extends React.Component {
   static catName = 'Meds Requested';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(MedsRequested.primaryText(a), MedsRequested.primaryText(b));
@@ -69,10 +65,10 @@ export default class MedsRequested extends React.Component {
       for (const elt of match) {
         if (elt.data.medicationCodeableConcept || this.tweakMedsRequested(elt)) {
           withCode.push(elt);
-        } else if (resolveMedicationReference(elt, this.context)) {
+        } else if (resolveMedicationReference(elt, this.props.legacyResources)) {
           this.setState({ matchingData: this.state.matchingData ? this.state.matchingData.concat([elt]).sort(this.sortMeds) : [elt] });
         }
-        resolveReasonReference(elt, this.context);
+        resolveReasonReference(elt, this.props.legacyResources);
       }
     }
 
@@ -151,13 +147,16 @@ export default class MedsRequested extends React.Component {
 
   render() {
     const firstRes = this.state.matchingData && this.state.matchingData[0];
+    const {
+      patient, providers, trimLevel,
+    } = this.props;
     return (this.state.matchingData
-      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
+      && (this.props.isEnabled || trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
       <div className="meds-requested category-container" id={formatKey(firstRes)}>
-        { formatContentHeader(this.props.isEnabled, MedsRequested.catName, firstRes, this.context) }
+        { formatContentHeader(this.props.isEnabled, MedsRequested.catName, firstRes, { patient, trimLevel }) }
         <div className="content-body">
-          { this.props.isEnabled && renderMeds(this.state.matchingData, this.context) }
+          { this.props.isEnabled && renderMeds(this.state.matchingData, providers) }
           { this.props.isEnabled && this.state.loadingRefs > 0 && <div className="category-loading">Loading ...</div> }
         </div>
       </div>

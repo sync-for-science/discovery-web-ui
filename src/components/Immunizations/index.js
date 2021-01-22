@@ -8,16 +8,13 @@ import { renderImmunizations, primaryTextValue } from '../../fhirUtil.js';
 import {
   Const, stringCompare, formatKey, formatContentHeader,
 } from '../../util.js';
-
-import DiscoveryContext from '../DiscoveryContext';
+import { connectToResources } from '../../recoil';
 
 //
 // Display the 'Immunizations' category if there are matching resources
 //
-export default class Immunizations extends React.Component {
+class Immunizations extends React.Component {
   static catName = 'Immunizations';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(Immunizations.primaryText(a), Immunizations.primaryText(b));
@@ -63,15 +60,20 @@ export default class Immunizations extends React.Component {
 
   render() {
     const firstRes = this.state.matchingData && this.state.matchingData[0];
+    const {
+      patient, providers, trimLevel,
+    } = this.props;
     return (this.state.matchingData
-      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
+      && (this.props.isEnabled || trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
       <div className="immunizations category-container" id={formatKey(firstRes)}>
-        { formatContentHeader(this.props.isEnabled, Immunizations.catName, firstRes, this.context) }
+        { formatContentHeader(this.props.isEnabled, Immunizations.catName, firstRes, { patient, trimLevel }) }
         <div className="content-body">
-          { this.props.isEnabled && renderImmunizations(this.state.matchingData, this.context) }
+          { this.props.isEnabled && renderImmunizations(this.state.matchingData, providers) }
         </div>
       </div>
       ));
   }
 }
+
+export default connectToResources(Immunizations);

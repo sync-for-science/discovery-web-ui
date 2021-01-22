@@ -9,15 +9,11 @@ import {
   Const, stringCompare, formatKey, formatContentHeader,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Document References' category if there are matching resources
 //
 export default class DocumentReferences extends React.Component {
   static catName = 'Document References';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(DocumentReferences.primaryText(a), DocumentReferences.primaryText(b));
@@ -61,13 +57,16 @@ export default class DocumentReferences extends React.Component {
 
   render() {
     const firstRes = this.state.matchingData && this.state.matchingData[0];
+    const {
+      patient, providers, trimLevel, viewName,
+    } = this.props;
     return (this.state.matchingData
-      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
+      && (this.props.isEnabled || trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
       <div className="document-references category-container" id={formatKey(firstRes)}>
-        { formatContentHeader(this.props.isEnabled, DocumentReferences.catName, firstRes, this.context) }
+        { formatContentHeader(this.props.isEnabled, DocumentReferences.catName, firstRes, { patient, trimLevel }) }
         <div className="content-body">
-          { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Document', this.context) }
+          { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Document', { providers, viewName }) }
         </div>
       </div>
       ));

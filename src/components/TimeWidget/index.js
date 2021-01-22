@@ -5,7 +5,6 @@ import moment from 'moment';
 
 import './TimeWidget.css';
 import config from '../../config.js';
-import { formatPatientName } from '../../fhirUtil.js';
 import {
   getStyle, formatDisplayDate, formatKeyDate, numericPart, timelineIncrYears,
 } from '../../util.js';

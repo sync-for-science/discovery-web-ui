@@ -9,15 +9,11 @@ import {
   Const, stringCompare, shallowEqArray, formatKey, formatContentHeader, tryWithDefault,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Procedure Requests' category if there are matching resources
 //
 export default class ProcedureRequests extends React.Component {
   static catName = 'Procedure Requests';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(ProcedureRequests.primaryText(a), ProcedureRequests.primaryText(b));
@@ -61,13 +57,16 @@ export default class ProcedureRequests extends React.Component {
 
   render() {
     const firstRes = this.state.matchingData && this.state.matchingData[0];
+    const {
+      patient, providers, trimLevel, viewName,
+    } = this.props;
     return (this.state.matchingData
-      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
+      && (this.props.isEnabled || trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
       <div className="procedure-requests category-container" id={formatKey(firstRes)}>
-        { formatContentHeader(this.props.isEnabled, ProcedureRequests.catName, firstRes, this.context) }
+        { formatContentHeader(this.props.isEnabled, ProcedureRequests.catName, firstRes, { patient, trimLevel }) }
         <div className="content-body">
-          { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Procedure Request', this.context) }
+          { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Procedure Request', { providers, viewName }) }
         </div>
       </div>
       ));

@@ -9,15 +9,11 @@ import {
   Const, stringCompare, formatKey, formatContentHeader, tryWithDefault,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Allergies' category if there are matching resources
 //
 export default class Allergies extends React.Component {
   static catName = 'Allergies';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(Allergies.primaryText(a), Allergies.primaryText(b));
@@ -68,15 +64,18 @@ export default class Allergies extends React.Component {
 
   render() {
     const firstRes = this.state.matchingData && this.state.matchingData[0];
+    const {
+      patient, providers, trimLevel,
+    } = this.props;
     return (this.state.matchingData
-      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
+      && (this.props.isEnabled || trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
-      <div className="allergies category-container" id={formatKey(firstRes)}>
-        { formatContentHeader(this.props.isEnabled, Allergies.catName, firstRes, this.context) }
-        <div className="content-body">
-          { this.props.isEnabled && renderAllergies(this.state.matchingData, this.context) }
+        <div className="allergies category-container" id={formatKey(firstRes)}>
+          { formatContentHeader(this.props.isEnabled, Allergies.catName, firstRes, { patient, trimLevel }) }
+          <div className="content-body">
+            { this.props.isEnabled && renderAllergies(this.state.matchingData, providers) }
+          </div>
         </div>
-      </div>
       ));
   }
 }

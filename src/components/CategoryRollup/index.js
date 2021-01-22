@@ -4,9 +4,6 @@ import PropTypes from 'prop-types';
 import '../../css/Selector.css';
 import './CategoryRollup.css';
 
-import SVGContainer from '../SVGContainer';
-import DotLine from '../DotLine';
-
 import DiscoveryContext from '../DiscoveryContext';
 
 //

@@ -9,15 +9,11 @@ import {
   Const, stringCompare, formatKey, formatContentHeader,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Meds Administration' category if there are matching resources
 //
 export default class MedsAdministration extends React.Component {
   static catName = 'Meds Administration';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(MedsAdministration.primaryText(a), MedsAdministration.primaryText(b));
@@ -63,13 +59,16 @@ export default class MedsAdministration extends React.Component {
 
   render() {
     const firstRes = this.state.matchingData && this.state.matchingData[0];
+    const {
+      patient, providers, trimLevel, viewName,
+    } = this.props;
     return (this.state.matchingData
-      && (this.props.isEnabled || this.context.trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
+      && (this.props.isEnabled || trimLevel === Const.trimNone) // Don't show this category (at all) if disabled and trim set
       && (
       <div className="meds-administration category-container" id={formatKey(firstRes)}>
-        { formatContentHeader(this.props.isEnabled, MedsAdministration.catName, firstRes, this.context) }
+        { formatContentHeader(this.props.isEnabled, MedsAdministration.catName, firstRes, { patient, trimLevel }) }
         <div className="content-body">
-          { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Medication', this.context) }
+          { this.props.isEnabled && renderDisplay(this.state.matchingData, 'Medication', { providers, viewName }) }
         </div>
       </div>
       ));
