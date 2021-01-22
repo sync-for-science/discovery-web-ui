@@ -18,6 +18,8 @@ import BenefitCardBody from './BenefitCardBody'
 import ClaimCardBody from './ClaimCardBody'
 import EncounterCardBody from './EncounterCardBody'
 import ImmunizationCardBody from './ImmunizationCardBody'
+import LabResultCardBody from './LabResultCardBody';
+import ProcedureCardBody from './ProcedureCardBody';
 
 const selectCardBody = (fieldsData) => {
   switch (fieldsData.resourceType) {
@@ -33,6 +35,10 @@ const selectCardBody = (fieldsData) => {
       return <EncounterCardBody fieldsData={fieldsData} />
     case "Immunization":
       return <ImmunizationCardBody fieldsData={fieldsData} />
+    case "Observation":
+      return <LabResultCardBody fieldsData={fieldsData} />
+    case "Procedure":
+      return <ProcedureCardBody fieldsData={fieldsData} />
     default:
       break;
   }
@@ -134,13 +140,14 @@ const RecordCard = ({ resource }) => {
     totalCost: data.totalCost,
     type: data.type,
     use: data.use,
+    vaccineDisplay: data.vaccineCode && data.vaccineCode.coding && data.vaccineCode.coding[0] && data.vaccineCode.coding[0].display,
     valueCodeableConcept: data.valueCodeableConcept && data.valueCodeableConcept.coding,
     valueQuantity: data.valueQuantity,
     verificationStatus: data.verificationStatus,
     wasNotGiven: data.wasNotGiven
   }
 
-  console.log('fieldsData', fieldsData)
+  // console.log('fieldsData', fieldsData)
 
 
   return (
