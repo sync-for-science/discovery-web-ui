@@ -13,15 +13,11 @@ import {
   Const, stringCompare, shallowEqArray, formatKey, formatContentHeader, tryWithDefault,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Meds Requested' category if there are matching resources
 //
 export default class MedsRequested extends React.Component {
   static catName = 'Meds Requested';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(MedsRequested.primaryText(a), MedsRequested.primaryText(b));

@@ -9,15 +9,11 @@ import {
   Const, stringCompare, formatKey, formatContentHeader, tryWithDefault,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Encounters' category if there are matching resources
 //
 export default class Encounters extends React.Component {
   static catName = 'Encounters';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(Encounters.primaryText(a), Encounters.primaryText(b));

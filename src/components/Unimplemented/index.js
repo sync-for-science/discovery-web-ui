@@ -11,8 +11,6 @@ import {
   Const, stringCompare, stringifyEqArray, formatKey, formatContentHeader,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Unimplemented' categories if there are matching resources
 //
@@ -24,8 +22,6 @@ export default class Unimplemented extends React.Component {
   static unimplementedCats = ['Practitioner', 'List', 'Questionnaire', 'Questionnaire Response', 'Observation-Other',
     'Diagnostic Report', 'Care Plan', 'Medication', 'Organization', 'Goal', 'Basic',
     'Immunization Recommendation', 'Imaging Study', 'Coverage', 'Related Person', 'Device'];
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(Unimplemented.primaryText(a), Unimplemented.primaryText(b));

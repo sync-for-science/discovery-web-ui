@@ -12,15 +12,11 @@ import {
   Const, stringCompare, shallowEqArray, formatKey, formatContentHeader,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Claims' category if there are matching resources
 //
 export default class Claims extends React.Component {
   static catName = 'Claims';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(Claims.primaryText(a), Claims.primaryText(b));

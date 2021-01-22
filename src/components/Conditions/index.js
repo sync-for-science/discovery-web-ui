@@ -9,15 +9,11 @@ import {
   Const, stringCompare, formatKey, formatContentHeader,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Conditions' category if there are matching resources
 //
 export default class Conditions extends React.Component {
   static catName = 'Conditions';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(Conditions.primaryText(a), Conditions.primaryText(b));

@@ -9,15 +9,11 @@ import {
   Const, stringCompare, formatKey, formatContentHeader,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Document References' category if there are matching resources
 //
 export default class DocumentReferences extends React.Component {
   static catName = 'Document References';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(DocumentReferences.primaryText(a), DocumentReferences.primaryText(b));

@@ -9,15 +9,11 @@ import {
   Const, stringCompare, shallowEqArray, formatKey, formatContentHeader, tryWithDefault,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Procedure Requests' category if there are matching resources
 //
 export default class ProcedureRequests extends React.Component {
   static catName = 'Procedure Requests';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(ProcedureRequests.primaryText(a), ProcedureRequests.primaryText(b));

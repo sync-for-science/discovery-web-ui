@@ -8,8 +8,6 @@ import { renderImmunizations, primaryTextValue } from '../../fhirUtil.js';
 import {
   Const, stringCompare, formatKey, formatContentHeader,
 } from '../../util.js';
-
-import DiscoveryContext from '../DiscoveryContext';
 import { connectToResources } from '../../recoil';
 
 //
@@ -17,8 +15,6 @@ import { connectToResources } from '../../recoil';
 //
 class Immunizations extends React.Component {
   static catName = 'Immunizations';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(Immunizations.primaryText(a), Immunizations.primaryText(b));

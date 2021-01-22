@@ -5,14 +5,10 @@ import axios from 'axios';
 import './Annotation.css';
 import config from '../../config.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Annotation
 //
 export default class Annotation extends React.Component {
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
-
   // Extend resource.discoveryAnnotation (or return extension props if no annotation)
   static info(res) {
     //      return res.data.discoveryAnnotation ? Object.assign({}, res.data.discoveryAnnotation, { id: res.id, provider: res.provider, resourceId: res.data.id })

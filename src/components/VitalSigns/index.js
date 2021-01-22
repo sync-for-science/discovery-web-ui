@@ -9,15 +9,11 @@ import {
   Const, stringCompare, formatKey, formatContentHeader,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Vital Signs' category if there are matching resources
 //
 export default class VitalSigns extends React.Component {
   static catName = 'Vital Signs';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(canonVitals(VitalSigns.primaryText(a)), canonVitals(VitalSigns.primaryText(b)));

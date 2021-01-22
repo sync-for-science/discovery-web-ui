@@ -8,15 +8,11 @@ import { formatPatientName, formatPatientAddress } from '../../fhirUtil.js';
 import { formatDisplayDate, formatAge, titleCase } from '../../util.js';
 import Unimplemented from '../Unimplemented';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Render the "Summary view" of the participant's data
 //
 export default class SummaryView extends React.PureComponent {
   static myName = 'SummaryView';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
     resources: PropTypes.instanceOf(FhirTransform),

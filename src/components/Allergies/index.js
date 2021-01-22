@@ -9,15 +9,11 @@ import {
   Const, stringCompare, formatKey, formatContentHeader, tryWithDefault,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Allergies' category if there are matching resources
 //
 export default class Allergies extends React.Component {
   static catName = 'Allergies';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(Allergies.primaryText(a), Allergies.primaryText(b));

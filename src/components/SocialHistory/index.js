@@ -9,15 +9,11 @@ import {
   Const, stringCompare, formatKey, formatContentHeader,
 } from '../../util.js';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Display the 'Social History' category if there are matching resources
 //
 export default class SocialHistory extends React.Component {
   static catName = 'Social History';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static compareFn(a, b) {
     return stringCompare(SocialHistory.primaryText(a), SocialHistory.primaryText(b));
