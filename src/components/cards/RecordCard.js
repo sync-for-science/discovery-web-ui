@@ -151,7 +151,7 @@ const RecordCard = ({ resource }) => {
     wasNotGiven: data.wasNotGiven
   }
 
-  // console.log('fieldsData', fieldsData)
+  console.log('fieldsData', fieldsData)
 
 
   return (
