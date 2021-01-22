@@ -171,22 +171,30 @@ export function formatAge(birthDate, ageDate, prefix) {
 }
 
 // TODO: cleanup when determine not to show disabled header, eliminate header highlight
-export function formatContentHeader(isEnabled, category, res, appContext) {
-//   let dateOnly = formatKeyDate(res.itemDate);
+export function formatContentHeader(isEnabled, category, res, { patient, trimLevel }) {
+  console.error('>>>>>>>>>>>. trimLevel: ', trimLevel);
+  //   let dateOnly = formatKeyDate(res.itemDate);
   const dateWithTime = res.itemDate ? formatDisplayDate(res.itemDate, true, false) : noDate;
-  const dob = appContext.resources.pathItem('[category=Patient].data.birthDate');
+  // const dob = options.resources.pathItem('[category=Patient].data.birthDate');
+  const dob = patient.data.birthDate;
+  console.error('dob: ', dob);
   const age = formatAge(dob, res.itemDate, 'age ');
+  console.error('age: ', age);
   //   let highlight = appContext.highlightedResources &&
   //       appContext.highlightedResources.some(elt => elt.category === category  && elt.itemDate === res.itemDate);
   const highlight = false;
 
   //      <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} id={dateOnly} data-fhir={fhirKey(res)}>
 
+  // TODO: access trimLevel from filter state?
   return !isEnabled ? null : (
-    <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} data-fhir={fhirKey(res)}>
+    <div
+      className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'}
+      data-fhir={fhirKey(res)}
+    >
       <div className={isEnabled ? (highlight ? 'content-header-highlight' : 'content-header') : 'content-header-disabled'}>{category}</div>
       <div className={isEnabled ? 'content-header-date' : 'content-header-date-disabled'}>{dateWithTime}</div>
-      { appContext.trimLevel === Const.trimNone && age
+      { trimLevel === Const.trimNone && age
       && (
       <div className={isEnabled ? 'content-header-age' : 'content-header-age-disabled'}>
         |&nbsp;

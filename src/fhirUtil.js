@@ -90,7 +90,7 @@ export function resKey(elt) {
   return `${elt.provider}/${id}`;
 }
 
-export function renderAllergies(matchingData, appContext) {
+export function renderAllergies(matchingData, providers) {
   const found = [];
   for (const elt of matchingData) {
     try {
@@ -113,12 +113,23 @@ export function renderAllergies(matchingData, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.map((elt, index) => (
-      <div className={index < found.length - 1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
+      <div
+        className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+        key={index}
+        data-res={resKey(elt)}
+      >
         <div className="content-data">
           { elt.display && <div className="col01 label">Allergy</div> }
-          { elt.display && <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.display}</HighlightDiv> }
+          { elt.display && (
+            <HighlightDiv
+              className="col02 value-text primary"
+              matchingResources={matchingData}
+            >
+              {elt.display}
+            </HighlightDiv>
+          ) }
 
           { isMultipleProviders && <div className="col01 label">Provider</div> }
           { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
@@ -126,7 +137,10 @@ export function renderAllergies(matchingData, appContext) {
           { elt.clinicalStatus && <div className="col01 label">Clinical status</div> }
           { elt.clinicalStatus && <div className="col02 value-text">{elt.clinicalStatus}</div> }
 
-          <CondDiv check={elt.verificationStatus} expected="confirmed">
+          <CondDiv
+            check={elt.verificationStatus}
+            expected="confirmed"
+          >
             <div className="col01 label">Verification</div>
             <div className="col02 value-text">{elt.verificationStatus}</div>
           </CondDiv>
@@ -145,10 +159,10 @@ export function renderAllergies(matchingData, appContext) {
 
           { elt.reaction && <div className="col01 label">Reaction</div> }
           { elt.reaction && (
-          <div className="col02 value-text">
-            { tryWithDefault(elt, (elt) => elt.reaction[0].manifestation[0].coding[0].display,
-              tryWithDefault(elt, (elt) => elt.reaction[0].manifestation[0].text, Const.unknownValue)) }
-          </div>
+            <div className="col02 value-text">
+              { tryWithDefault(elt, (elt) => elt.reaction[0].manifestation[0].coding[0].display,
+                tryWithDefault(elt, (elt) => elt.reaction[0].manifestation[0].text, Const.unknownValue)) }
+            </div>
           ) }
         </div>
         <div className="content-graph" />
@@ -222,15 +236,22 @@ const consultCases = {
   },
 };
 
-function consultText(appContext, elt) {
-  if (appContext.viewName === 'Consult' && isValid(consultCases, (cC) => cC[elt.participantId][elt.category][elt.resourceId])) {
+function consultText(viewName, elt) {
+  if (viewName === 'Consult' && isValid(consultCases, (cC) => cC[elt.participantId][elt.category][elt.resourceId])) {
     const defList = consultCases[elt.participantId][elt.category][elt.resourceId];
     const divs = [];
     for (const def of defList) {
       const division = probToDivision(def.prob);
       //   let text = def.source + ':\u2002' + Math.trunc(def.prob * 100) + '% (' + highlightDivisionNames[division] + ')';
       const text = `${def.source}:\u2002${Math.trunc(def.prob * 100)}%`;
-      divs.push(<div className={highlightDivisionClasses[division]} key={divs.length}>{text}</div>);
+      divs.push(
+        <div
+          className={highlightDivisionClasses[division]}
+          key={divs.length}
+        >
+          {text}
+        </div>,
+      );
     }
     return divs;
   }
@@ -242,7 +263,7 @@ function consultText(appContext, elt) {
 //
 // Used by Conditions, DocumentReferences, MedsAdministration, Procedures, ProcedureRequests
 //
-export function renderDisplay(matchingData, typeLabel, appContext) {
+export function renderDisplay(matchingData, typeLabel, { providers, viewName }) {
   const found = [];
   for (const elt of matchingData) {
     try {
@@ -267,17 +288,24 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.map((elt, index) => (
-      <div className={index < found.length - 1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
+      <div
+        className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+        key={index}
+        data-res={resKey(elt)}
+      >
         <div className="content-data">
           { elt.display && <div className="col01 label">{typeLabel}</div> }
           {/* elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> */}
           { elt.display && (
-          <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>
-            {elt.display}
-            {consultText(appContext, elt)}
-          </HighlightDiv>
+            <HighlightDiv
+              className="col02 value-text primary"
+              matchingResources={matchingData}
+            >
+              {elt.display}
+              {consultText(viewName, elt)}
+            </HighlightDiv>
           ) }
 
           { elt.valueQuantity && <div className="col01 label">Result</div> }
@@ -307,7 +335,10 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
           { isMultipleProviders && <div className="col01 label">Provider</div> }
           { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
 
-          <CondDiv check={elt.status} expected={['final', 'completed']}>
+          <CondDiv
+            check={elt.status}
+            expected={['final', 'completed']}
+          >
             <div className="col01 label">Status</div>
             <div className="col02 value-text">{elt.status}</div>
           </CondDiv>
@@ -315,7 +346,10 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
           { elt.clinicalStatus && <div className="col01 label">Clinical status</div> }
           { elt.clinicalStatus && <div className="col02 value-text">{elt.clinicalStatus}</div> }
 
-          <CondDiv check={elt.verificationStatus} expected="confirmed">
+          <CondDiv
+            check={elt.verificationStatus}
+            expected="confirmed"
+          >
             <div className="col01 label">Verification</div>
             <div className="col02 value-text">{elt.verificationStatus}</div>
           </CondDiv>
@@ -331,7 +365,7 @@ export function renderDisplay(matchingData, typeLabel, appContext) {
   return null;
 }
 
-export function renderMedsStatement(matchingData, typeLabel, appContext) {
+export function renderMedsStatement(matchingData, typeLabel, { providers, viewName }) {
   const found = [];
   for (const elt of matchingData) {
     try {
@@ -355,17 +389,24 @@ export function renderMedsStatement(matchingData, typeLabel, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.map((elt, index) => (
-      <div className={index < found.length - 1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
+      <div
+        className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+        key={index}
+        data-res={resKey(elt)}
+      >
         <div className="content-data">
           { elt.display && <div className="col01 label">{typeLabel}</div> }
           {/* elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> */}
           { elt.display && (
-          <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>
-            {elt.display}
-            {consultText(appContext, elt)}
-          </HighlightDiv>
+            <HighlightDiv
+              className="col02 value-text primary"
+              matchingResources={matchingData}
+            >
+              {elt.display}
+              {consultText(viewName, elt)}
+            </HighlightDiv>
           ) }
 
           { elt.valueQuantity && <div className="col01 label">Result</div> }
@@ -389,7 +430,10 @@ export function renderMedsStatement(matchingData, typeLabel, appContext) {
           { isMultipleProviders && <div className="col01 label">Provider</div> }
           { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
 
-          <CondDiv check={elt.status} expected={['final', 'completed', 'active']}>
+          <CondDiv
+            check={elt.status}
+            expected={['final', 'completed', 'active']}
+          >
             <div className="col01 label">Status</div>
             <div className="col02 value-text">{elt.status}</div>
           </CondDiv>
@@ -397,12 +441,18 @@ export function renderMedsStatement(matchingData, typeLabel, appContext) {
           { elt.clinicalStatus && <div className="col01 label">Clinical status</div> }
           { elt.clinicalStatus && <div className="col02 value-text">{elt.clinicalStatus}</div> }
 
-          <CondDiv check={elt.taken} expected="y">
+          <CondDiv
+            check={elt.taken}
+            expected="y"
+          >
             <div className="col01 label">Taken</div>
             <div className="col02 value-text">{elt.taken}</div>
           </CondDiv>
 
-          <CondDiv check={elt.verificationStatus} expected="confirmed">
+          <CondDiv
+            check={elt.verificationStatus}
+            expected="confirmed"
+          >
             <div className="col01 label">Verification</div>
             <div className="col02 value-text">{elt.verificationStatus}</div>
           </CondDiv>
@@ -418,7 +468,7 @@ export function renderMedsStatement(matchingData, typeLabel, appContext) {
   return null;
 }
 
-export function renderImmunizations(matchingData, appContext) {
+export function renderImmunizations(matchingData, providers) {
   const found = [];
   for (const elt of matchingData) {
     try {
@@ -440,25 +490,45 @@ export function renderImmunizations(matchingData, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.map((elt, index) => (
-      <div className={index < found.length - 1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
+      <div
+        className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+        key={index}
+        data-res={resKey(elt)}
+      >
         <div className="content-data">
           { elt.display && <div className="col01 label">Vaccine</div> }
-          { elt.display && <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.display}</HighlightDiv> }
+          { elt.display && (
+            <HighlightDiv
+              className="col02 value-text primary"
+              matchingResources={matchingData}
+            >
+              {elt.display}
+            </HighlightDiv>
+          ) }
 
-          <CondDiv check={[elt.notGiven, elt.wasNotGiven]} expected={false}>
+          <CondDiv
+            check={[elt.notGiven, elt.wasNotGiven]}
+            expected={false}
+          >
             <div className="col01 label">Given</div>
             { elt.notGiven !== undefined && <div className="col02 value-text">{elt.notGiven ? 'no' : 'yes'}</div> }
             { elt.wasNotGiven !== undefined && <div className="col02 value-text">{elt.wasNotGiven ? 'no' : 'yes'}</div> }
           </CondDiv>
 
-          <CondDiv check={elt.reported} expected={false}>
+          <CondDiv
+            check={elt.reported}
+            expected={false}
+          >
             <div className="col01 label">Reported</div>
             <div className="col02 value-text">{elt.reported ? 'yes' : 'no'}</div>
           </CondDiv>
 
-          <CondDiv check={elt.primarySource} expected>
+          <CondDiv
+            check={elt.primarySource}
+            expected
+          >
             <div className="col01 label">Primary Source</div>
             <div className="col02 value-text">{elt.primarySource ? 'yes' : 'no'}</div>
           </CondDiv>
@@ -466,7 +536,10 @@ export function renderImmunizations(matchingData, appContext) {
           { isMultipleProviders && <div className="col01 label">Provider</div> }
           { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
 
-          <CondDiv check={elt.status} expected={['final', 'completed']}>
+          <CondDiv
+            check={elt.status}
+            expected={['final', 'completed']}
+          >
             <div className="col01 label">Status</div>
             <div className="col02 value-text">{elt.status}</div>
           </CondDiv>
@@ -482,7 +555,7 @@ export function renderImmunizations(matchingData, appContext) {
   return null;
 }
 
-export function renderLabs(matchingData, resources, dotClickFn, appContext) {
+export function renderLabs(matchingData, resources, dotClickFn, providers) {
   // Collect info to display from matchingData
   const found = [];
   for (const elt of matchingData) {
@@ -525,7 +598,7 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.map((elt, index) => {
       let highlightValue = false;
       const value = tryWithDefault(elt, (elt) => elt.valueQuantity.value, null);
@@ -573,13 +646,20 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
         >
           <div className="content-data">
             { elt.display && <div className="col01 label">Measure</div> }
-            { elt.display && <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.display}</HighlightDiv> }
+            { elt.display && (
+              <HighlightDiv
+                className="col02 value-text primary"
+                matchingResources={matchingData}
+              >
+                {elt.display}
+              </HighlightDiv>
+            ) }
 
             { elt.valueQuantity && <div className="col01 label">Value</div> }
             { elt.valueQuantity && (
-            <div className={`col02 value-number${highlightValue ? ' highlight' : ''}`}>
-              {formatDPs(elt.valueQuantity.value, 1) + (elt.valueQuantity.unit ? ` ${elt.valueQuantity.unit}` : '') }
-            </div>
+              <div className={`col02 value-number${highlightValue ? ' highlight' : ''}`}>
+                {formatDPs(elt.valueQuantity.value, 1) + (elt.valueQuantity.unit ? ` ${elt.valueQuantity.unit}` : '') }
+              </div>
             ) }
 
             { valueRatioDisplay && <div className="col01 label">Value Ratio</div> }
@@ -594,13 +674,23 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
             { isMultipleProviders && <div className="col01 label">Provider</div> }
             { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
 
-            <CondDiv check={elt.status} expected="final">
+            <CondDiv
+              check={elt.status}
+              expected="final"
+            >
               <div className="col01 label">Status</div>
               <div className="col02 value-text">{elt.status}</div>
             </CondDiv>
           </div>
           <div className="content-graph">
-            { sortedSeries && <TimeSeries measure={elt.display} data={sortedSeries} highlights={[{ x: elt.date, y: thisValue }]} dotClickFn={dotClickFn} /> }
+            { sortedSeries && (
+              <TimeSeries
+                measure={elt.display}
+                data={sortedSeries}
+                highlights={[{ x: elt.date, y: thisValue }]}
+                dotClickFn={dotClickFn}
+              />
+            ) }
           </div>
           <div className="content-extras">
             <Annotation annotation={elt.annotation} />
@@ -617,7 +707,7 @@ export function renderLabs(matchingData, resources, dotClickFn, appContext) {
 //
 // Used by MedsDispensed, MedsRequested
 //
-export function renderMeds(matchingData, appContext) {
+export function renderMeds(matchingData, providers) {
   const found = [];
   for (const elt of matchingData) {
     try {
@@ -639,12 +729,23 @@ export function renderMeds(matchingData, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.map((elt, index) => (
-      <div className={index < found.length - 1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
+      <div
+        className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+        key={index}
+        data-res={resKey(elt)}
+      >
         <div className="content-data">
           { elt.display && <div className="col01 label">Medication</div> }
-          { elt.display && <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.display}</HighlightDiv> }
+          { elt.display && (
+            <HighlightDiv
+              className="col02 value-text primary"
+              matchingResources={matchingData}
+            >
+              {elt.display}
+            </HighlightDiv>
+          ) }
 
           { isValid(elt, (e) => e.reason[0].code) && <div className="col01 label">Reason</div> }
           { isValid(elt, (e) => e.reason[0].code) && <div className="col02 value-text">{elt.reason[0].code.coding[0].display}</div> }
@@ -664,7 +765,10 @@ export function renderMeds(matchingData, appContext) {
           { isMultipleProviders && <div className="col01 label">Provider</div> }
           { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
 
-          <CondDiv check={elt.status} expected={['active', 'completed']}>
+          <CondDiv
+            check={elt.status}
+            expected={['active', 'completed']}
+          >
             <div className="col01 label">Status</div>
             <div className="col02 value-text">{elt.status}</div>
           </CondDiv>
@@ -696,7 +800,7 @@ export function renderMeds(matchingData, appContext) {
   return null;
 }
 
-export function renderSocialHistory(matchingData, appContext) {
+export function renderSocialHistory(matchingData, providers) {
   const found = [];
   for (const elt of matchingData) {
     try {
@@ -714,12 +818,23 @@ export function renderSocialHistory(matchingData, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.map((elt, index) => (
-      <div className={index < found.length - 1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
+      <div
+        className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+        key={index}
+        data-res={resKey(elt)}
+      >
         <div className="content-data">
           { elt.display && <div className="col01 label">Type</div> }
-          { elt.display && <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.display}</HighlightDiv> }
+          { elt.display && (
+            <HighlightDiv
+              className="col02 value-text primary"
+              matchingResources={matchingData}
+            >
+              {elt.display}
+            </HighlightDiv>
+          ) }
 
           <div className="col01 label">Value</div>
           <div className="col02 value-text">{elt.value}</div>
@@ -727,7 +842,10 @@ export function renderSocialHistory(matchingData, appContext) {
           { isMultipleProviders && <div className="col01 label">Provider</div> }
           { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
 
-          <CondDiv check={elt.status} expected="final">
+          <CondDiv
+            check={elt.status}
+            expected="final"
+          >
             <div className="col01 label">Status</div>
             <div className="col02 value-text">{elt.status}</div>
           </CondDiv>
@@ -743,7 +861,7 @@ export function renderSocialHistory(matchingData, appContext) {
   return null;
 }
 
-export function renderEncounters(matchingData, appContext) {
+export function renderEncounters(matchingData, providers) {
   const found = [];
   for (const elt of matchingData) {
     try {
@@ -763,12 +881,23 @@ export function renderEncounters(matchingData, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.map((elt, index) => (
-      <div className={index < found.length - 1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
+      <div
+        className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+        key={index}
+        data-res={resKey(elt)}
+      >
         <div className="content-data">
           { elt.display && <div className="col01 label">Type</div> }
-          { elt.display && <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.display}</HighlightDiv> }
+          { elt.display && (
+            <HighlightDiv
+              className="col02 value-text primary"
+              matchingResources={matchingData}
+            >
+              {elt.display}
+            </HighlightDiv>
+          ) }
 
           { elt.period.start !== elt.period.end && <div className="col01 label">Ending</div> }
           { elt.period.start !== elt.period.end && <div className="col02 value-text">{formatDisplayDate(elt.period.end, true, false)}</div> }
@@ -776,7 +905,10 @@ export function renderEncounters(matchingData, appContext) {
           <div className="col01 label">Class</div>
           <div className="col02 value-text">{elt.class}</div>
 
-          <CondDiv check={elt.status} expected="finished">
+          <CondDiv
+            check={elt.status}
+            expected="finished"
+          >
             <div className="col01 label">Status</div>
             <div className="col02 value-text">{elt.status}</div>
           </CondDiv>
@@ -795,7 +927,7 @@ export function renderEncounters(matchingData, appContext) {
   return null;
 }
 
-export function renderUnimplemented(matchingData, appContext) {
+export function renderUnimplemented(matchingData, providers) {
   const found = [];
   for (const elt of matchingData) {
     try {
@@ -806,12 +938,21 @@ export function renderUnimplemented(matchingData, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.map((elt, index) => (
-      <div className={index < found.length - 1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
+      <div
+        className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+        key={index}
+        data-res={resKey(elt)}
+      >
         <div className="content-data">
           <div className="col01 label">{elt.category}</div>
-          <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>Pending</HighlightDiv>
+          <HighlightDiv
+            className="col02 value-text primary"
+            matchingResources={matchingData}
+          >
+            Pending
+          </HighlightDiv>
 
           { isMultipleProviders && <div className="col01 label">Provider</div> }
           { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
@@ -835,7 +976,7 @@ export function canonVitals(display) {
   return titleCase(display.replace(/_/g, ' '));
 }
 
-export function renderVitals(matchingData, resources, dotClickFn, appContext) {
+export function renderVitals(matchingData, resources, dotClickFn, providers) {
   // Collect info to display from matchingData
   const found = [];
   for (const elt of matchingData) {
@@ -905,7 +1046,7 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.sort((a, b) => stringCompare(a.display, b.display)).map((elt, index) => {
       // Select only values with matching provider and then sort
       const sortedSeries = series[elt.display] && series[elt.display].filter((e) => e.provider === elt.provider)
@@ -923,37 +1064,54 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
         >
           <div className="content-data">
             { elt.display && <div className="col01 label">Measure</div> }
-            { elt.display && <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.display}</HighlightDiv> }
+            { elt.display && (
+              <HighlightDiv
+                className="col02 value-text primary"
+                matchingResources={matchingData}
+              >
+                {elt.display}
+              </HighlightDiv>
+            ) }
 
             { elt.value && <div className="col01 label">Value</div> }
             { elt.value && <div className="col02 value-number">{`${formatDPs(elt.value, 1)} ${elt.unit}`}</div> }
 
             { elt.component && <div className="col01 label">{trimVitalsLabels(elt.component[0].code.coding[0].display)}</div> }
             { elt.component && (
-            <div className="col02 value-number">
-              { `${tryWithDefault(elt, (e) => formatDPs(e.component[0].valueQuantity.value, 1), Const.unknownValue)} ${
-                tryWithDefault(elt, (e) => e.component[0].valueQuantity.unit, Const.unknownValue)}`}
-            </div>
+              <div className="col02 value-number">
+                { `${tryWithDefault(elt, (e) => formatDPs(e.component[0].valueQuantity.value, 1), Const.unknownValue)} ${
+                  tryWithDefault(elt, (e) => e.component[0].valueQuantity.unit, Const.unknownValue)}`}
+              </div>
             ) }
 
             { elt.component && <div className="col01 label">{trimVitalsLabels(elt.component[1].code.coding[0].display)}</div> }
             { elt.component && (
-            <div className="col02 value-number">
-              { `${tryWithDefault(elt, (e) => formatDPs(e.component[1].valueQuantity.value, 1), Const.unknownValue)} ${
-                tryWithDefault(elt, (e) => e.component[1].valueQuantity.unit, Const.unknownValue)}`}
-            </div>
+              <div className="col02 value-number">
+                { `${tryWithDefault(elt, (e) => formatDPs(e.component[1].valueQuantity.value, 1), Const.unknownValue)} ${
+                  tryWithDefault(elt, (e) => e.component[1].valueQuantity.unit, Const.unknownValue)}`}
+              </div>
             ) }
 
             { isMultipleProviders && <div className="col01 label">Provider</div> }
             { isMultipleProviders && <div className="col02 span07 value-text">{titleCase(elt.provider)}</div> }
 
-            <CondDiv check={elt.status} expected="final">
+            <CondDiv
+              check={elt.status}
+              expected="final"
+            >
               <div className="col01 label">Status</div>
               <div className="col02 value-text">{elt.status}</div>
             </CondDiv>
           </div>
           <div className="content-graph">
-            { sortedSeries && <TimeSeries measure={elt.display} data={sortedSeries} highlights={[{ x: elt.date, y: thisValue }]} dotClickFn={dotClickFn} /> }
+            { sortedSeries && (
+              <TimeSeries
+                measure={elt.display}
+                data={sortedSeries}
+                highlights={[{ x: elt.date, y: thisValue }]}
+                dotClickFn={dotClickFn}
+              />
+            ) }
           </div>
           <div className="content-extras">
             <Annotation annotation={elt.annotation} />
@@ -965,30 +1123,72 @@ export function renderVitals(matchingData, resources, dotClickFn, appContext) {
   return null;
 }
 
-function renderContainedResource(res, index, appContext) {
+function renderContainedResource(res, index) {
   const payload = [];
   switch (res.resourceType) {
     case 'Coverage':
-      payload.push(<div className="col01 label" key={`${index}-1`}>Coverage</div>);
-      payload.push(<div className="col02 value-text" key={`${index}-2`}>{res.type.text}</div>);
+      payload.push(
+        <div
+          className="col01 label"
+          key={`${index}-1`}
+        >
+          Coverage
+        </div>,
+      );
+      payload.push(
+        <div
+          className="col02 value-text"
+          key={`${index}-2`}
+        >
+          {res.type.text}
+        </div>,
+      );
       break;
     case 'ReferralRequest':
-      payload.push(<div className="col01 label" key={`${index}-1`}>Referral</div>);
-      payload.push(<div className="col02 value-text" key={`${index}-2`}>{res.status}</div>);
+      payload.push(
+        <div
+          className="col01 label"
+          key={`${index}-1`}
+        >
+          Referral
+        </div>,
+      );
+      payload.push(
+        <div
+          className="col02 value-text"
+          key={`${index}-2`}
+        >
+          {res.status}
+        </div>,
+      );
       break;
     default:
-      payload.push(<div className="col01 label" key={`${index}-1`}>{res.resourceType}</div>);
-      payload.push(<div className="col02 value-text" key={`${index}-2`}>{Const.unknownValue}</div>);
+      payload.push(
+        <div
+          className="col01 label"
+          key={`${index}-1`}
+        >
+          {res.resourceType}
+        </div>,
+      );
+      payload.push(
+        <div
+          className="col02 value-text"
+          key={`${index}-2`}
+        >
+          {Const.unknownValue}
+        </div>,
+      );
       break;
   }
   return payload;
 }
 
-function renderContained(contained, appContext) {
-  return contained.map((elt, index) => renderContainedResource(elt, index, appContext));
+function renderContained(contained) {
+  return contained.map((elt, index) => renderContainedResource(elt, index));
 }
 
-export function renderEOB(matchingData, appContext) {
+export function renderEOB(matchingData, providers) {
   const found = [];
   for (const elt of matchingData) {
     try {
@@ -1011,12 +1211,21 @@ export function renderEOB(matchingData, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.map((elt, index) => (
-      <div className={index < found.length - 1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
+      <div
+        className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+        key={index}
+        data-res={resKey(elt)}
+      >
         <div className="content-data">
           <div className="col01 label">Claim type</div>
-          <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.claimType.coding[0].display}</HighlightDiv>
+          <HighlightDiv
+            className="col02 value-text primary"
+            matchingResources={matchingData}
+          >
+            {elt.claimType.coding[0].display}
+          </HighlightDiv>
 
           <div className="col01 label">Period</div>
           <div className="col02 value-text">
@@ -1039,7 +1248,10 @@ export function renderEOB(matchingData, appContext) {
           { isValid(elt, (e) => e.diagnosis[0].diagnosisReference.code)
           && <div className="col02 value-text">{elt.diagnosis[0].diagnosisReference.code.coding[0].display}</div> }
 
-          <CondDiv check={elt.status} expected="active">
+          <CondDiv
+            check={elt.status}
+            expected="active"
+          >
             <div className="col01 label">Status</div>
             <div className="col02 value-text">{elt.status}</div>
           </CondDiv>
@@ -1047,7 +1259,7 @@ export function renderEOB(matchingData, appContext) {
           { isValid(elt, (e) => e.careTeam[0].role.coding[0].display) && <div className="col01 label">Role</div> }
           { isValid(elt, (e) => e.careTeam[0].role.coding[0].display) && <div className="col02 value-text">{elt.careTeam[0].role.coding[0].display}</div> }
 
-          { elt.contained && renderContained(elt.contained, appContext) }
+          { elt.contained && renderContained(elt.contained) }
         </div>
 
         <div className="content-graph" />
@@ -1060,7 +1272,7 @@ export function renderEOB(matchingData, appContext) {
   return null;
 }
 
-export function renderClaims(matchingData, appContext) {
+export function renderClaims(matchingData, providers) {
   const found = [];
   for (const elt of matchingData) {
     try {
@@ -1080,12 +1292,19 @@ export function renderClaims(matchingData, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.map((elt, index) => (
-      <div className={index < found.length - 1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
+      <div
+        className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+        key={index}
+        data-res={resKey(elt)}
+      >
         <div className="content-data">
           <div className="col01 label">Period</div>
-          <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>
+          <HighlightDiv
+            className="col02 value-text primary"
+            matchingResources={matchingData}
+          >
             { formatDisplayDate(elt.billablePeriod.start, true, true) }
             &nbsp;&nbsp;&mdash;&nbsp;
             { formatDisplayDate(elt.billablePeriod.end, true, true) }
@@ -1101,12 +1320,18 @@ export function renderClaims(matchingData, appContext) {
           { isValid(elt, (e) => e.diagnosis[0].diagnosisReference.code)
           && <div className="col02 value-text">{elt.diagnosis[0].diagnosisReference.code.coding[0].display}</div> }
 
-          <CondDiv check={elt.status} expected="active">
+          <CondDiv
+            check={elt.status}
+            expected="active"
+          >
             <div className="col01 label">Status</div>
             <div className="col02 value-text">{elt.status}</div>
           </CondDiv>
 
-          <CondDiv check={elt.use} expected="complete">
+          <CondDiv
+            check={elt.use}
+            expected="complete"
+          >
             <div className="col01 label">Use</div>
             <div className="col02 value-text">{elt.use}</div>
           </CondDiv>
@@ -1122,7 +1347,7 @@ export function renderClaims(matchingData, appContext) {
   return null;
 }
 
-export function renderExams(matchingData, appContext) {
+export function renderExams(matchingData, providers) {
   const found = [];
   for (const elt of matchingData) {
     try {
@@ -1141,12 +1366,23 @@ export function renderExams(matchingData, appContext) {
   }
 
   if (found.length > 0) {
-    const isMultipleProviders = appContext.providers.length > 1;
+    const isMultipleProviders = providers.length > 1;
     return found.map((elt, index) => (
-      <div className={index < found.length - 1 ? 'content-container' : 'content-container-last'} key={index} data-res={resKey(elt)}>
+      <div
+        className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
+        key={index}
+        data-res={resKey(elt)}
+      >
         <div className="content-data">
           { elt.display && <div className="col01 label">Type</div> }
-          { elt.display && <HighlightDiv className="col02 value-text primary" matchingResources={matchingData}>{elt.display}</HighlightDiv> }
+          { elt.display && (
+            <HighlightDiv
+              className="col02 value-text primary"
+              matchingResources={matchingData}
+            >
+              {elt.display}
+            </HighlightDiv>
+          ) }
 
           { (elt.valueQuantity || elt.valueConcept) && <div className="col01 label">Value</div> }
           { elt.valueQuantity && <div className="col02 value-text">{`${elt.valueQuantity.value} ${elt.valueQuantity.unit}`}</div> }
@@ -1155,7 +1391,10 @@ export function renderExams(matchingData, appContext) {
           { isMultipleProviders && <div className="col01 label">Provider</div> }
           { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
 
-          <CondDiv check={elt.status} expected="final">
+          <CondDiv
+            check={elt.status}
+            expected="final"
+          >
             <div className="col01 label">Status</div>
             <div className="col02 value-text">{elt.status}</div>
           </CondDiv>
@@ -1181,11 +1420,11 @@ function patchCatName(catName) {
   }
 }
 
-export function resolveDiagnosisReference(elt, appContext) {
+export function resolveDiagnosisReference(elt, resources) {
   if (isValid(elt, (elt) => elt.data.diagnosis[0].diagnosisReference.reference) && !elt.data.diagnosis[0].diagnosisReference.code) {
     const [refCatOrig, refId] = elt.data.diagnosis[0].diagnosisReference.reference.split('/');
     const refCat = patchCatName(refCatOrig);
-    const res = appContext.resources.transformed.find((res) => res.provider === elt.provider && res.category === refCat && res.data.id === refId);
+    const res = resources.transformed.find((res) => res.provider === elt.provider && res.category === refCat && res.data.id === refId);
 
     // Add the de-referenced data to the reasonReference element
     if (res) {
@@ -1196,11 +1435,11 @@ export function resolveDiagnosisReference(elt, appContext) {
   }
 }
 
-export function resolveReasonReference(elt, appContext) {
+export function resolveReasonReference(elt, resources) {
   if (isValid(elt, (elt) => elt.data.reasonReference[0].reference) && !elt.data.reasonReference[0].code) {
     const [refCatOrig, refId] = elt.data.reasonReference[0].reference.split('/');
     const refCat = patchCatName(refCatOrig);
-    const res = appContext.resources.transformed.find((res) => res.provider === elt.provider && res.category === refCat && res.data.id === refId);
+    const res = resources.transformed.find((res) => res.provider === elt.provider && res.category === refCat && res.data.id === refId);
 
     // Add the de-referenced data to the reasonReference element
     if (res) {
@@ -1211,10 +1450,10 @@ export function resolveReasonReference(elt, appContext) {
   }
 }
 
-export function resolveMedicationReference(elt, appContext) {
+export function resolveMedicationReference(elt, resources) {
   if (isValid(elt, (elt) => elt.data.medicationReference.reference) && !elt.data.medicationReference.code) {
     const [refCat, refId] = elt.data.medicationReference.reference.split('/');
-    const res = appContext.resources.transformed.find((res) => res.provider === elt.provider && res.category === refCat && res.data.id === refId);
+    const res = resources.transformed.find((res) => res.provider === elt.provider && res.category === refCat && res.data.id === refId);
 
     // Add the de-referenced data to the medicationReference element and create the medicationCodeableConcept element
     if (res) {
