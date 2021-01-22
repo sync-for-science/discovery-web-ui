@@ -15,7 +15,7 @@ import CompareView from '../CompareView';
 import TilesView from '../TilesView';
 import Collections from '../Collections';
 import PageFooter from '../PageFooter';
-import Api, {
+import {
   normalizeResourcesAndInjectPartipantId, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
 } from './Api';
 import { resourcesState, filtersState } from '../../recoil';
@@ -26,12 +26,6 @@ import DiscoveryContext from '../DiscoveryContext';
 // Render the top-level Discovery application page
 //
 class DiscoveryApp extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    const { match: { params: { participantId } } } = this.props;
-    this.api = new Api(participantId, (obj) => this.setState(obj));
-  }
-
   static propTypes = {
     match: PropTypes.object,
   }
@@ -81,15 +75,6 @@ class DiscoveryApp extends React.PureComponent {
   componentDidMount() {
     window.addEventListener('resize', this.onEvent);
     window.addEventListener('keydown', this.onEvent);
-
-    const { match: { params: { id, participantId } } } = this.props;
-
-    // Check for uploaded data
-    const dataUrl = id ? `${config.serverUrl}/data/download/${id}`
-      : `${config.serverUrl}/participants/${participantId}`;
-
-    // Get the merged dataset and transform it using topTemplate
-    this.api.fetch(dataUrl);
   }
 
   componentWillUnmount() {
@@ -179,7 +164,7 @@ class DiscoveryApp extends React.PureComponent {
     const { resources: { patient, providers, categories } } = this.props;
 
     return (
-      <DiscoveryContext.Provider value={this.state}>
+      <DiscoveryContext.Provider value={{ ...this.state, ...this.props.filters }}>
         { this.state.themeName && <link rel="stylesheet" type="text/css" href={`/themes/${this.state.themeName}.css`} /> }
         <div className="discovery-app">
           <PageHeader
@@ -319,6 +304,9 @@ const DiscoveryAppHOC = (props) => {
         // TODO: break-out into dedicated reducer function that uses memoized selectors:
         const raw = response.data;
         const normalized = normalizeResourcesAndInjectPartipantId(participantId)(response.data);
+        if (normalized.length === 0) {
+          throw new Error('Invalid Participant ID');
+        }
         const legacy = generateLegacyResources(raw, normalized, participantId);
         // const patient = legacy.pathItem('[category=Patient]');
         const patient = normalized.find(({ category }) => category === 'Patient');
