@@ -13,15 +13,17 @@ export default class Annotation extends React.Component {
   static info(res) {
     //      return res.data.discoveryAnnotation ? Object.assign({}, res.data.discoveryAnnotation, { id: res.id, provider: res.provider, resourceId: res.data.id })
     //            : { id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null };
-    if (!res.data.discoveryAnnotation) {
-      res.data.discoveryAnnotation = {
-        id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null,
-      };
-    } else {
-      res.data.discoveryAnnotation = Object.assign(res.data.discoveryAnnotation, { id: res.id, provider: res.provider, resourceId: res.data.id });
+    if (Object.isExtensible(res.data)) {
+      if (!res.data.discoveryAnnotation) {
+        // console.info('Object.isExtensible(res.data): ', Object.isExtensible(res.data));
+        res.data.discoveryAnnotation = {
+          id: res.id, provider: res.provider, resourceId: res.data.id, annotationHistory: null,
+        };
+      } else {
+        res.data.discoveryAnnotation = Object.assign(res.data.discoveryAnnotation, { id: res.id, provider: res.provider, resourceId: res.data.id });
+      }
+      return res.data.discoveryAnnotation;
     }
-
-    return res.data.discoveryAnnotation;
   }
 
   static propTypes = {
@@ -90,6 +92,7 @@ export default class Annotation extends React.Component {
       annotation.annotationHistory = [{ updated: '<set by server>', annotationText: text }];
     }
 
+    // SAVE ANNOTATION:
     axios.post(`${config.serverUrl}/participants/${annotation.id}/${annotation.provider}/${annotation.resourceId}`, {
       annotation: text,
     })
