@@ -77,7 +77,14 @@ class ContentPanel extends React.PureComponent {
     thumbRightDate: PropTypes.string.isRequired,
     viewName: PropTypes.string.isRequired,
     viewIconClass: PropTypes.string.isRequired,
+    // ------ note that resources are not no directly receiving recoil state "resources":
     resources: PropTypes.instanceOf(FhirTransform),
+    // resources: PropTypes.shape({
+    //   legacy: PropTypes.instanceOf(FhirTransform),
+    // }),
+    patient: PropTypes.shape({}),
+    providers: PropTypes.arrayOf(PropTypes.string),
+    // ------
     totalResCount: PropTypes.number,
     catsToDisplay: PropTypes.arrayOf(PropTypes.string),
     showAllData: PropTypes.bool,
@@ -304,19 +311,19 @@ class ContentPanel extends React.PureComponent {
     let arr = [];
     log(`calcCurrResources() - start: ${new Date().getTime()}`);
     const limitedResources = this.props.catsToDisplay ? this.props.resources.transformed.filter((res) => this.props.catsToDisplay.includes(res.category)
-        && res.category !== 'Patient'
-        && this.catEnabled(res.category)
-        && this.provEnabled(res.provider)
-        && inDateRange(res.itemDate, this.props.thumbLeftDate,
-          this.props.thumbRightDate)
-        && (!this.state.onlyAnnotated || (res.data.discoveryAnnotation
-          && res.data.discoveryAnnotation.annotationHistory))) : this.props.resources.transformed.filter((res) => res.category !== 'Patient'
-        && this.catEnabled(res.category)
-        && this.provEnabled(res.provider)
-        && inDateRange(res.itemDate, this.props.thumbLeftDate,
-          this.props.thumbRightDate)
-        && (!this.state.onlyAnnotated || (res.data.discoveryAnnotation
-          && res.data.discoveryAnnotation.annotationHistory)));
+      && res.category !== 'Patient'
+      && this.catEnabled(res.category)
+      && this.provEnabled(res.provider)
+      && inDateRange(res.itemDate, this.props.thumbLeftDate,
+        this.props.thumbRightDate)
+      && (!this.state.onlyAnnotated || (res.data.discoveryAnnotation
+        && res.data.discoveryAnnotation.annotationHistory))) : this.props.resources.transformed.filter((res) => res.category !== 'Patient'
+      && this.catEnabled(res.category)
+      && this.provEnabled(res.provider)
+      && inDateRange(res.itemDate, this.props.thumbLeftDate,
+        this.props.thumbRightDate)
+      && (!this.state.onlyAnnotated || (res.data.discoveryAnnotation
+        && res.data.discoveryAnnotation.annotationHistory)));
 
     if (this.state.showAllData && this.context.searchRefs.length > 0) {
       arr = this.sortResources(this.context.searchRefs.map((ref) => ref.resource));
@@ -417,37 +424,98 @@ class ContentPanel extends React.PureComponent {
       groups = groupBy(arr, (elt) => `${elt.category}-${elt.itemDate}`);
     }
 
+    const { patient, providers, viewName } = this.props;
+    const { trimLevel } = this.state;
+
+    const legacyProps = {
+      patient,
+      providers,
+      trimLevel,
+      viewName,
+    };
+
     // Render each group
     for (const groupKey in groups) {
       const group = groups[groupKey];
       switch (group[0].category) {
         case 'Allergies':
-          resultDivs.push(<Allergies key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Allergies.catName)} />);
+          resultDivs.push(<Allergies
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(Allergies.catName)}
+          />);
           break;
         case 'Benefits':
-          resultDivs.push(<Benefits key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Benefits.catName)} />);
+          resultDivs.push(<Benefits
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            legacyResources={this.props.resources}
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(Benefits.catName)}
+          />);
           break;
         case 'Claims':
-          resultDivs.push(<Claims key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Claims.catName)} />);
+          resultDivs.push(<Claims
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            legacyResources={this.props.resources}
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(Claims.catName)}
+          />);
           break;
         case 'Conditions':
-          resultDivs.push(<Conditions key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Conditions.catName)} />);
+          resultDivs.push(<Conditions
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(Conditions.catName)}
+          />);
           break;
         case 'Document References':
-          resultDivs.push(<DocumentReferences key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(DocumentReferences.catName)} />);
+          resultDivs.push(<DocumentReferences
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(DocumentReferences.catName)}
+          />);
           break;
         case 'Encounters':
-          resultDivs.push(<Encounters key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Encounters.catName)} />);
+          resultDivs.push(<Encounters
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(Encounters.catName)}
+          />);
           break;
         case 'Exams':
-          resultDivs.push(<Exams key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Exams.catName)} />);
+          resultDivs.push(<Exams
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(Exams.catName)}
+          />);
           break;
         case 'Immunizations':
-          resultDivs.push(<Immunizations key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Immunizations.catName)} />);
+          resultDivs.push(<Immunizations
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(Immunizations.catName)}
+          />);
           break;
         case 'Lab Results':
           resultDivs.push(<LabResults
             key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
             data={group}
             showDate={showDate}
             isEnabled={this.catEnabled(LabResults.catName)}
@@ -456,29 +524,74 @@ class ContentPanel extends React.PureComponent {
           />);
           break;
         case 'Meds Administration':
-          resultDivs.push(<MedsAdministration key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(MedsAdministration.catName)} />);
+          resultDivs.push(<MedsAdministration
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(MedsAdministration.catName)}
+          />);
           break;
         case 'Meds Dispensed':
-          resultDivs.push(<MedsDispensed key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(MedsDispensed.catName)} />);
+          resultDivs.push(<MedsDispensed
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(MedsDispensed.catName)}
+          />);
           break;
         case 'Meds Requested':
-          resultDivs.push(<MedsRequested key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(MedsRequested.catName)} />);
+          resultDivs.push(<MedsRequested
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            legacyResources={this.props.resources}
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(MedsRequested.catName)}
+          />);
           break;
         case 'Meds Statement':
-          resultDivs.push(<MedsStatement key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(MedsStatement.catName)} />);
+          resultDivs.push(<MedsStatement
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(MedsStatement.catName)}
+          />);
           break;
         case 'Procedures':
-          resultDivs.push(<Procedures key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Procedures.catName)} />);
+          resultDivs.push(<Procedures
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            legacyResources={this.props.resources}
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(Procedures.catName)}
+          />);
           break;
         case 'Procedure Requests':
-          resultDivs.push(<ProcedureRequests key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(ProcedureRequests.catName)} />);
+          resultDivs.push(<ProcedureRequests
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(ProcedureRequests.catName)}
+          />);
           break;
         case 'Social History':
-          resultDivs.push(<SocialHistory key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(SocialHistory.catName)} />);
+          resultDivs.push(<SocialHistory
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(SocialHistory.catName)}
+          />);
           break;
         case 'Vital Signs':
           resultDivs.push(<VitalSigns
             key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
             data={group}
             showDate={showDate}
             isEnabled={this.catEnabled(VitalSigns.catName)}
@@ -488,18 +601,38 @@ class ContentPanel extends React.PureComponent {
           break;
         case 'Unimplemented':
         default:
-          resultDivs.push(<Unimplemented key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Unimplemented.catName)} />);
+          resultDivs.push(<Unimplemented
+            key={groupKey}
+            {...legacyProps} // eslint-disable-line react/jsx-props-no-spreading
+            data={group}
+            showDate={showDate}
+            isEnabled={this.catEnabled(Unimplemented.catName)}
+          />);
           break;
       }
     }
 
-    return resultDivs.length > 0 ? resultDivs : <div className="content-panel-no-data" key="1">{this.noResultDisplay}</div>;
+    return resultDivs.length > 0 ? resultDivs : (
+      <div
+        className="content-panel-no-data"
+        key="1"
+      >
+        {this.noResultDisplay}
+      </div>
+    );
   }
 
   renderDotOrAll() {
-    const divs = this.state.currResources
-    && this.state.currResources.length > 0 ? this.renderItems(this.state.currResources)
-      : [<div className="content-panel-no-data" key="1">{this.noResultDisplay}</div>];
+    const divs = this.state.currResources && this.state.currResources.length > 0
+      ? this.renderItems(this.state.currResources)
+      : [(
+        <div
+          className="content-panel-no-data"
+          key="1"
+        >
+          {this.noResultDisplay}
+        </div>
+      )];
     return (
       <div className="content-panel-inner-body">
         { this.state.showJSON
@@ -523,7 +656,7 @@ class ContentPanel extends React.PureComponent {
     this.context.updateGlobalContext({ onlyAnnotated: event.target.checked });
   }
 
-  renderContents(context) {
+  renderContents() {
     // console.info('this.isVirtualDisplay: ', this.isVirtualDisplay());
     const contents = !this.state.currResources || this.renderDotOrAll();
     // console.info('contents: ', contents);
@@ -549,7 +682,10 @@ class ContentPanel extends React.PureComponent {
               />
             ) }
             { config.enableShowLess && (
-              <button className="content-panel-show-details-button" onClick={this.toggleTrimLevel}>
+              <button
+                className="content-panel-show-details-button"
+                onClick={this.toggleTrimLevel}
+              >
                 { this.state.trimLevel === Const.trimNone ? 'Show Less' : 'Show More' }
               </button>
             ) }
@@ -558,7 +694,12 @@ class ContentPanel extends React.PureComponent {
           <div className="content-panel-inner-title-right">
             { config.enableOnlyRecordsWithNotes && (
               <label className="check-only-annotated-label">
-                <input className="check-only-annotated-check" type="checkbox" checked={this.state.onlyAnnotated} onChange={this.onlyAnnotatedChange} />
+                <input
+                  className="check-only-annotated-check"
+                  type="checkbox"
+                  checked={this.state.onlyAnnotated}
+                  onChange={this.onlyAnnotatedChange}
+                />
                 Only records with my notes
               </label>
             ) }
@@ -578,8 +719,6 @@ class ContentPanel extends React.PureComponent {
   render() {
     // console.info('this.props.context: ', this.props.context);
     // Locally extend DiscoveryContext with trimLevel & viewName (hack)
-    this.context.trimLevel = this.state.trimLevel;
-    this.context.viewName = this.props.viewName;
 
     if (!this.state.isOpen) {
       return null;
@@ -590,7 +729,7 @@ class ContentPanel extends React.PureComponent {
       return ReactDOM.createPortal((
         <PersistentDrawerRight>
           <div className="record-list">
-            { this.state.currResources && this.props.context && this.renderContents(this.props.context) }
+            { this.state.currResources && this.props.context && this.renderContents() }
           </div>
         </PersistentDrawerRight>
       ), detailsRightTarget);
@@ -599,7 +738,7 @@ class ContentPanel extends React.PureComponent {
     // Dragging enabled/disabled by changing bounds.bottom
     return (
       <div>
-        { this.state.currResources && this.props.context && this.renderContents(this.props.context) }
+        { this.state.currResources && this.props.context && this.renderContents() }
       </div>
     );
   }
