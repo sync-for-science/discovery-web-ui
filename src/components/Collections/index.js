@@ -31,11 +31,9 @@ const CardList = ({ normalized }) => {
     return null;
   }
 
-  // const slice = normalized.slice(5, 6)
-
-  const record = [normalized.find(element => element.data.id === '168ea212-2d23-46ac-9110-7c549c735477')]
-  return record.map((r, i) => <RecordCard key={i} resource={r} />);
-  return normalized.map((r) => <RecordCard resource={r} />);
+  const record = normalized.filter(element => element.data.resourceType === 'Observation')
+  // return record.map((r, i) => <RecordCard key={i} resource={r} />);
+  return normalized.map((r, i) => <RecordCard key={i} resource={r} />);
 };
 
 const Collections = (props) => {
