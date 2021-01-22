@@ -13,7 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { format } from 'date-fns';
 
 import GenericCardBody from './GenericCardBody'
-import MedicationRequestBody from './MedicationRequestCardBody'
+import MedicationCardBody from './MedicationCardBody'
 import BenefitCardBody from './BenefitCardBody'
 import ClaimCardBody from './ClaimCardBody'
 import EncounterCardBody from './EncounterCardBody'
@@ -28,8 +28,9 @@ const selectCardBody = (fieldsData) => {
     case "Procedures":
     case "Procedure Requests":
       return <GenericCardBody fieldsData={fieldsData} />
+    case "Meds Dispensed":
     case "Meds Requested":
-      return <MedicationRequestBody fieldsData={fieldsData} />
+      return <MedicationCardBody fieldsData={fieldsData} />
     case "Benefits":
       return <BenefitCardBody fieldsData={fieldsData} />
     case "Claims":
@@ -121,7 +122,7 @@ const RecordCard = ({ resource }) => {
     diagnosis: data.diagnosis,
     display: data.code && data.code.text,
     dispenseRequest: data.dispenseRequest,
-    dosageInstruction: data.dosageInstruction,
+    dosageInstruction: data.dosageInstruction && data.dosageInstruction[0],
     medicationDisplay: data.medicationCodeableConcept && data.medicationCodeableConcept.text,
     notGiven: data.notGiven,
     onsetDateTime: data.onsetDateTime,
