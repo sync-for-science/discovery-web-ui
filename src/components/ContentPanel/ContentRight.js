@@ -15,24 +15,24 @@ import {
 } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 
-import Allergies from '../cards/Allergies';
-import Benefits from '../cards/Benefits';
-import Claims from '../cards/Claims';
-import Conditions, {catName} from '../cards/Conditions';
-import DocumentReferences from '../cards/DocumentReferences';
-import Encounters from '../cards/Encounters';
-import Exams from '../cards/Exams';
-import Immunizations from '../cards/Immunizations';
-import LabResults from '../cards/LabResults';
-import MedsAdministration from '../cards/MedsAdministration';
-import MedsDispensed from '../cards/MedsDispensed';
-import MedsRequested from '../cards/MedsRequested';
-import MedsStatement from '../cards/MedsStatement';
-import Procedures from '../cards/Procedures';
-import ProcedureRequests from '../cards/ProcedureRequests';
-import SocialHistory from '../cards/SocialHistory';
-import VitalSigns from '../cards/VitalSigns';
-import Unimplemented from '../cards/Unimplemented';
+import Allergies from '../Allergies';
+import Benefits from '../Benefits';
+import Claims from '../Claims';
+import Conditions from '../Conditions';
+import DocumentReferences from '../DocumentReferences';
+import Encounters from '../Encounters';
+import Exams from '../Exams';
+import Immunizations from '../Immunizations';
+import LabResults from '../LabResults';
+import MedsAdministration from '../MedsAdministration';
+import MedsDispensed from '../MedsDispensed';
+import MedsRequested from '../MedsRequested';
+import MedsStatement from '../MedsStatement';
+import Procedures from '../Procedures';
+import ProcedureRequests from '../ProcedureRequests';
+import SocialHistory from '../SocialHistory';
+import VitalSigns from '../VitalSigns';
+import Unimplemented from '../Unimplemented';
 
 // import ListView from './ListView';
 
@@ -431,7 +431,7 @@ class ContentPanel extends React.PureComponent {
           resultDivs.push(<Claims key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Claims.catName)} />);
           break;
         case 'Conditions':
-          resultDivs.push(<Conditions key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(catName)} />);
+          resultDivs.push(<Conditions key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(Encounters.catName)} />);
           break;
         case 'Document References':
           resultDivs.push(<DocumentReferences key={groupKey} data={group} showDate={showDate} isEnabled={this.catEnabled(DocumentReferences.catName)} />);
