@@ -140,6 +140,7 @@ const RecordCard = ({ resource }) => {
     provider: resource.provider,
     reaction: data.reaction,
     reason: data.reason && data.reason[0] && data.reason[0].coding && data.reason[0].coding[0] && data.reason[0].coding && data.reason[0].coding[0].display,
+    referenceRange: data.referenceRange,
     reported: data.reported,
     resourceId: data.id,
     resourceType: data.resourceType,
@@ -154,6 +155,7 @@ const RecordCard = ({ resource }) => {
     vaccineDisplay: data.vaccineCode && data.vaccineCode.coding && data.vaccineCode.coding[0] && data.vaccineCode.coding[0].display,
     valueCodeableConcept: data.valueCodeableConcept && data.valueCodeableConcept.coding,
     valueQuantity: data.valueQuantity,
+    valueRatio: data.valueRatio,
     verificationStatus: data.verificationStatus,
     wasNotGiven: data.wasNotGiven
   }
