@@ -5,6 +5,7 @@ import {
 } from '../../util';
 import config from '../../config';
 import { log } from '../../utils/logger';
+import Unimplemented from '../Unimplemented';
 
 const itemDate = (item, category) => {
   let date = null;
@@ -224,6 +225,72 @@ export const normalizeResourcesAndInjectPartipantId = (participantId) => (data) 
   return result;
 };
 
+export const generateLegacyResources = (rawResponseData, normalizedResources, participantId) => {
+  const legacyResources = new FhirTransform(normalizedResources);
+  // const resources = (response.data, this.participantId);
+  checkResourceCoverage(rawResponseData, normalizedResources, participantId); // Check whether we "found" all resources
+  return legacyResources;
+};
+
+export const computeFilterState = (legacyResources) => {
+  const itemDates = cleanDates(legacyResources.pathItem('itemDate'));
+
+  if (itemDates.length === 0) {
+    throw new Error('No matching resources returned');
+  }
+
+  const minDate = itemDates[0]; // Earliest date we have data for this participant
+  const firstYear = parseInt(minDate.substring(0, 4)); // minDate's year
+  const startDate = `${firstYear}-01-01`; // Jan 1 of minDate's year
+  const maxDate = itemDates[itemDates.length - 1]; // The latest date we have data for this participant
+  const lastYear = parseInt(maxDate.substring(0, 4)); // maxDate's year
+  const incr = timelineIncrYears(minDate, maxDate, config.maxSinglePeriods); // Number of years between timeline ticks
+  const endDate = `${lastYear + incr - (lastYear - firstYear) % incr - 1}-12-31`; // Dec 31 of last year of timeline tick periods
+  const normDates = normalizeDates(itemDates, startDate, endDate);
+  const allDates = itemDates.map((date, index) => ({ position: normDates[index], date }));
+  const dates = {
+    allDates, minDate, startDate, maxDate, endDate,
+  };
+
+  return {
+    dates,
+    thumbLeftDate: minDate,
+    thumbRightDate: maxDate,
+  };
+};
+
+// Return sorted array of all provider names for this participant
+export const extractProviders = (normalized) => {
+  const provs = {};
+  if (normalized) {
+    for (const resource of normalized) {
+      // Add the found provider
+      provs[resource.provider] = null;
+    }
+  }
+  return Object.keys(provs).sort();
+};
+
+// Return sorted array of all populated category names for this participant
+export const extractCategories = (normalized) => {
+  // const { legacy: legacyResources } = this.props.resources;
+  const cats = {};
+  if (normalized) {
+    for (const resource of normalized) {
+      if (resource.category === 'Patient') {
+        // Ignore
+      } else if (Unimplemented.unimplementedCats.includes(resource.category)) {
+        // Add the "Unimplemented" category
+        cats[Unimplemented.catName] = null;
+      } else {
+        // Add the found category
+        cats[resource.category] = null;
+      }
+    }
+  }
+  return Object.keys(cats).sort();
+};
+
 export default class API {
   constructor(participantId, setState) {
     this.participantId = participantId;
@@ -241,36 +308,14 @@ export default class API {
         if (Object.getOwnPropertyNames(response.data).length !== 0) {
           const rawResponseData = response.data;
           const normalizedResources = normalizeResourcesAndInjectPartipantId(this.participantId)(rawResponseData);
-          const resources = new FhirTransform(normalizedResources);
-          // const resources = (response.data, this.participantId);
+          const legacyResources = generateLegacyResources(rawResponseData, normalizedResources, this.participantId);
 
-          checkResourceCoverage(rawResponseData, normalizedResources, this.participantId); // Check whether we "found" all resources
-
-          const itemDates = cleanDates(resources.pathItem('itemDate'));
-
-          if (itemDates.length === 0) {
-            throw new Error('No matching resources returned');
-          }
-
-          const minDate = itemDates[0]; // Earliest date we have data for this participant
-          const firstYear = parseInt(minDate.substring(0, 4)); // minDate's year
-          const startDate = `${firstYear}-01-01`; // Jan 1 of minDate's year
-          const maxDate = itemDates[itemDates.length - 1]; // The latest date we have data for this participant
-          const lastYear = parseInt(maxDate.substring(0, 4)); // maxDate's year
-          const incr = timelineIncrYears(minDate, maxDate, config.maxSinglePeriods); // Number of years between timeline ticks
-          const endDate = `${lastYear + incr - (lastYear - firstYear) % incr - 1}-12-31`; // Dec 31 of last year of timeline tick periods
-          const normDates = normalizeDates(itemDates, startDate, endDate);
-          const allDates = itemDates.map((date, index) => ({ position: normDates[index], date }));
-          const dates = {
-            allDates, minDate, startDate, maxDate, endDate,
-          };
+          const filterState = computeFilterState(legacyResources);
 
           this.setState({
-            resources,
-            dates,
-            thumbLeftDate: minDate,
-            thumbRightDate: maxDate,
+            resources: legacyResources,
             isLoading: false,
+            ...filterState,
           },
           () => this.setState({
             providers: this.providers,
