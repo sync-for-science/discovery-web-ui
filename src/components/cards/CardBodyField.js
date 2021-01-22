@@ -13,10 +13,6 @@ const CardBodyField = ({dependency, label, value, highlight = false}) => {
   const classes = useStyles()
   const highlightStyle = highlight ? classes.highlight : ""
 
-  // if (label === "ABATEMENT") {
-  //   debugger
-  // }
-
   if (dependency) {
     return (
       <>
