@@ -68,7 +68,7 @@ const MedicationStatementCardBody = ({fieldsData}) => {
       <CardBodyField 
         dependency={true} 
         label="Graph" 
-        value='(Placeholder Graph' 
+        value="(Placeholder Graph)" 
       />
     </>
   )

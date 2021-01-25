@@ -21,6 +21,8 @@ import ImmunizationCardBody from './ImmunizationCardBody'
 import LabResultCardBody from './LabResultCardBody';
 import ExamCardBody from './ExamCardBody';
 import MedicationStatementCardBody from './MedicationStatementCardBody';
+import SocialHistoryCardBody from './SocialHistoryCardBody';
+import UnimplementedCardBody from './UnimplementedCardBody';
 
 const selectCardBody = (fieldsData) => {
   switch (fieldsData.category) {
@@ -47,6 +49,10 @@ const selectCardBody = (fieldsData) => {
       return <ExamCardBody fieldsData={fieldsData} />
     case "Meds Statement":
       return <MedicationStatementCardBody fieldsData={fieldsData} />
+    case "Social History":
+      return <SocialHistoryCardBody fieldsData={fieldsData} />
+    case "Other":
+      return <UnimplementedCardBody fieldsData={fieldsData} />
     default:
       break;
   }
