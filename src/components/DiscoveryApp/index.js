@@ -55,8 +55,6 @@ class DiscoveryApp extends React.PureComponent {
     // Shared Global Context
     updateGlobalContext: (updates) => this.setState(updates),
 
-    themeName: null, // PageHeader
-
     savedCatsEnabled: null, // StandardFilters & CategoryRollup
     savedProvsEnabled: null, // StandardFilters & ProviderRollup
 
@@ -167,7 +165,6 @@ class DiscoveryApp extends React.PureComponent {
 
     return (
       <DiscoveryContext.Provider value={{ ...this.state, ...this.props.filters }}>
-        { this.state.themeName && <link rel="stylesheet" type="text/css" href={`/themes/${this.state.themeName}.css`} /> }
         <div className="discovery-app">
           <PageHeader
             participantId={participantId}
