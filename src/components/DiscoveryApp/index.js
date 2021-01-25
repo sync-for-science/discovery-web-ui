@@ -200,7 +200,6 @@ class DiscoveryApp extends React.PureComponent {
                           dates={dates}
                           categories={categories}
                           providers={providers}
-                          lastEvent={this.state.lastEvent}
                         />
                       </Route>
                       <Route path="/participant/:participantId/catalog">
@@ -215,7 +214,6 @@ class DiscoveryApp extends React.PureComponent {
                           provsEnabled={this.state.provsEnabled}
                           thumbLeftDate={thumbLeftDate}
                           thumbRightDate={thumbRightDate}
-                          lastEvent={this.state.lastEvent}
                         />
                       </Route>
                       <Route path="/participant/:participantId/compare">
@@ -230,7 +228,6 @@ class DiscoveryApp extends React.PureComponent {
                           provsEnabled={this.state.provsEnabled}
                           thumbLeftDate={thumbLeftDate}
                           thumbRightDate={thumbRightDate}
-                          lastEvent={this.state.lastEvent}
                         />
                       </Route>
                       <Route path="/participant/:participantId/timeline">

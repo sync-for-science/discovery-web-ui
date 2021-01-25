@@ -28,7 +28,6 @@ export default class DiabetesView extends React.Component {
     provsEnabled: PropTypes.object.isRequired,
     thumbLeftDate: PropTypes.string.isRequired,
     thumbRightDate: PropTypes.string.isRequired,
-    lastEvent: PropTypes.instanceOf(Event),
   }
 
   render() {
