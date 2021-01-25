@@ -19,6 +19,7 @@ import ClaimCardBody from './ClaimCardBody'
 import EncounterCardBody from './EncounterCardBody'
 import ImmunizationCardBody from './ImmunizationCardBody'
 import LabResultCardBody from './LabResultCardBody';
+import ExamCardBody from './ExamCardBody';
 
 const selectCardBody = (fieldsData) => {
   switch (fieldsData.category) {
@@ -41,6 +42,8 @@ const selectCardBody = (fieldsData) => {
       return <ImmunizationCardBody fieldsData={fieldsData} />
     case "Lab Results":
       return <LabResultCardBody fieldsData={fieldsData} />
+    case "Exams":
+      return <ExamCardBody fieldsData={fieldsData} />
     default:
       break;
   }
@@ -154,6 +157,7 @@ const RecordCard = ({ resource }) => {
     use: data.use,
     vaccineDisplay: data.vaccineCode && data.vaccineCode.coding && data.vaccineCode.coding[0] && data.vaccineCode.coding[0].display,
     valueCodeableConcept: data.valueCodeableConcept && data.valueCodeableConcept.coding,
+    valueConcept: date.valueConcept,
     valueQuantity: data.valueQuantity,
     valueRatio: data.valueRatio,
     verificationStatus: data.verificationStatus,
