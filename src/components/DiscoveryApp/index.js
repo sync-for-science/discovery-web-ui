@@ -40,7 +40,6 @@ class DiscoveryApp extends React.PureComponent {
     //    maxDate     Latest date we have data for this participant
     //    endDate     Dec 31 of maxDate's year
     searchRefs: [], // Search results to highlight
-    laserSearch: false, // Laser Search enabled?
     // isLoading: false,
     // fetchError: null, // Possible axios error object
     lastEvent: null,
