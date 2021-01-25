@@ -20,6 +20,7 @@ import EncounterCardBody from './EncounterCardBody'
 import ImmunizationCardBody from './ImmunizationCardBody'
 import LabResultCardBody from './LabResultCardBody';
 import ExamCardBody from './ExamCardBody';
+import MedicationStatementCardBody from './MedicationStatementCardBody';
 
 const selectCardBody = (fieldsData) => {
   switch (fieldsData.category) {
@@ -44,6 +45,8 @@ const selectCardBody = (fieldsData) => {
       return <LabResultCardBody fieldsData={fieldsData} />
     case "Exams":
       return <ExamCardBody fieldsData={fieldsData} />
+    case "Meds Statement":
+      return <MedicationStatementCardBody fieldsData={fieldsData} />
     default:
       break;
   }
@@ -78,36 +81,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 const RecordCard = ({ resource }) => {
-  // console.log('resource: ', resource);
   const [expanded, setExpanded] = React.useState(false);
   const classes = useStyles();
-  // const bull = <span className={classes.bullet}>•</span>;
-  const {
-    provider, data, itemDate, category, data: {
-      resourceType,
-      effectiveDateTime,
-    },
-  } = resource;
+  const { provider, data, itemDate, category } = resource;
 
   const displayDate = format(new Date(itemDate), 'MMM d, y h:mm:ssaaa')
-
-  // const fields = Object.entries(data).map(([k, v]) => {
-  //   // console.error(' k , v: ', k , v);
-  //   return (
-  //     <>
-  //       <Grid item xs={5}>
-  //         <Typography variant="body2">
-  //           {k}
-  //         </Typography>
-  //       </Grid>
-  //       <Grid item xs={7}>
-  //         <Typography variant="body2">
-  //           {JSON.stringify(v)}
-  //         </Typography>
-  //       </Grid>
-  //     </>
-  //   );
-  // });
 
   const fieldsData = {
     abatement: data.abatementDateTime,
@@ -135,14 +113,19 @@ const RecordCard = ({ resource }) => {
     dosageInstruction: data.dosageInstruction && data.dosageInstruction[0],
     medicationDisplay: data.medicationCodeableConcept && data.medicationCodeableConcept.text,
     notGiven: data.notGiven,
-    onsetDateTime: data.onsetDateTime,
+    onset: data.onsetDateTime,
     orderedBy: data.orderer && data.orderer.display,
     participantId: resource.id,
     period: data.period,
     primarySource: data.primarySource,
-    provider: resource.provider,
+    provider: provider,
     reaction: data.reaction,
-    reason: data.reason && data.reason[0] && data.reason[0].coding && data.reason[0].coding[0] && data.reason[0].coding && data.reason[0].coding[0].display,
+    reason: data.reason 
+      && data.reason[0]
+      && data.reason[0].coding
+      && data.reason[0].coding[0]
+      && data.reason[0].coding
+      && data.reason[0].coding[0].display,
     referenceRange: data.referenceRange,
     reported: data.reported,
     resourceId: data.id,
@@ -155,9 +138,13 @@ const RecordCard = ({ resource }) => {
     totalCost: data.totalCost,
     type: data.type,
     use: data.use,
-    vaccineDisplay: data.vaccineCode && data.vaccineCode.coding && data.vaccineCode.coding[0] && data.vaccineCode.coding[0].display,
+    vaccineDisplay: 
+      data.vaccineCode 
+      && data.vaccineCode.coding 
+      && data.vaccineCode.coding[0] 
+      && data.vaccineCode.coding[0].display,
     valueCodeableConcept: data.valueCodeableConcept && data.valueCodeableConcept.coding,
-    valueConcept: date.valueConcept,
+    valueConcept: data.valueConcept,
     valueQuantity: data.valueQuantity,
     valueRatio: data.valueRatio,
     verificationStatus: data.verificationStatus,

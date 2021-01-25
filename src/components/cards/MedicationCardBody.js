@@ -46,9 +46,9 @@ const MedicationCardBody = ({fieldsData}) => {
         value={fieldsData.reason} 
       />
       <CardBodyField 
-        dependency={fieldsData.onsetDateTime} 
+        dependency={fieldsData.onset} 
         label="ONSET" 
-        value={formatDate(fieldsData.onsetDateTime)} 
+        value={formatDate(fieldsData.onset)} 
       />
       <CardBodyField 
         dependency={fieldsData.abatement} 

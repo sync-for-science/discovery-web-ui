@@ -1,22 +1,24 @@
 import React from 'react'
-import { format } from 'date-fns';
 
+import { formatDate } from './GenericCardBody'
 import CardBodyField from './CardBodyField'
 
-export function formatDate(date, displayMinutes = true) {
-  const dateDisplay = displayMinutes ? 'MMM d, y h:mm:ssaaa' : 'MMM d, y'
-  return date ? format( new Date(date), dateDisplay) : null
-}
-
-const GenericCardBody = ({fieldsData}) => {
-
+// no Meds Statement records found in patients so far, data use/shape not confirmed
+const MedicationStatementCardBody = ({fieldsData}) => {
+  const valueResult = `${fieldsData.valueQuantity.value.toFixed(1)} ${fieldsData.valueQuantity.unit}`
   return (
     <>
       <CardBodyField 
         dependency={fieldsData.display} 
-        label="CONDITIONS" 
+        label="MEDICATION" 
         value={fieldsData.display} 
         highlight
+      />
+      {/* consultText from fhirUtil.js not built due to lack of example data, use/shape not confirmed */}
+      <CardBodyField 
+        dependency={fieldsData.valueQuantity} 
+        label="RESULT" 
+        value={valueResult} 
       />
       <CardBodyField 
         dependency={fieldsData.reason} 
@@ -32,11 +34,6 @@ const GenericCardBody = ({fieldsData}) => {
         dependency={fieldsData.abatement} 
         label="ABATEMENT" 
         value={formatDate(fieldsData.abatement)} 
-      />
-      <CardBodyField 
-        dependency={fieldsData.orderedBy} 
-        label="ORDERED BY" 
-        value={fieldsData.orderedBy} 
       />
       <CardBodyField 
         dependency={fieldsData.asserted} 
@@ -59,12 +56,22 @@ const GenericCardBody = ({fieldsData}) => {
         value={fieldsData.clinicalStatus} 
       />
       <CardBodyField 
+        dependency={fieldsData.taken} 
+        label="TAKEN" 
+        value={fieldsData.taken} 
+      />
+      <CardBodyField 
         dependency={fieldsData.verificationStatus} 
         label="VERIFICATION" 
         value={fieldsData.verificationStatus} 
+      />
+      <CardBodyField 
+        dependency={true} 
+        label="Graph" 
+        value='(Placeholder Graph' 
       />
     </>
   )
 }
 
-export default GenericCardBody
+export default MedicationStatementCardBody
