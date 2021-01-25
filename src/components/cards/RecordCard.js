@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { format } from 'date-fns';
 
+
 import GenericCardBody from './GenericCardBody'
 import MedicationCardBody from './MedicationCardBody'
 import BenefitCardBody from './BenefitCardBody'
@@ -25,7 +26,7 @@ import SocialHistoryCardBody from './SocialHistoryCardBody';
 import UnimplementedCardBody from './UnimplementedCardBody';
 import VitalSignCardBody from './VitalSignCardBody';
 
-const selectCardBody = (fieldsData) => {
+const selectCardBody = (fieldsData, vitalSigns) => {
   switch (fieldsData.category) {
     case "Conditions":
     case "Document References":
@@ -55,7 +56,7 @@ const selectCardBody = (fieldsData) => {
     case "Other":
       return <UnimplementedCardBody fieldsData={fieldsData} />
     case "Vital Signs":
-      return <VitalSignCardBody fieldsData={fieldsData} />
+      return <VitalSignCardBody fieldsData={fieldsData} vitalSigns={vitalSigns} />
     default:
       break;
   }
@@ -89,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const RecordCard = ({ resource }) => {
+const RecordCard = ({ resource, normalized }) => {
   const [expanded, setExpanded] = React.useState(false);
   const classes = useStyles();
   const { provider, data, itemDate, category } = resource;
@@ -178,7 +179,7 @@ const RecordCard = ({ resource }) => {
       />
       <CardContent>
         <Grid container spacing={0}>
-          {selectCardBody(fieldsData)}
+          {selectCardBody(fieldsData, normalized)}
         </Grid>
       </CardContent>
       <CardActions disableSpacing className={classes.cardActions}>
