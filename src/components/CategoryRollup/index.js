@@ -4,21 +4,18 @@ import PropTypes from 'prop-types';
 import '../../css/Selector.css';
 import './CategoryRollup.css';
 
-import DiscoveryContext from '../DiscoveryContext';
+import { useRecoilState } from 'recoil';
+import { activeCategoriesState, categoriesModeState } from '../../recoil';
 
 //
 // Render the DiscoveryApp "rollup" category line
 //
-export default class CategoryRollup extends React.Component {
+class CategoryRollup extends React.Component {
   static myName = 'CategoryRollup';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
     isExpanded: PropTypes.bool.isRequired,
     expansionFn: PropTypes.func.isRequired,
-    catsEnabledFn: PropTypes.func.isRequired, // Callback to report changed category enable/disable
-    categories: PropTypes.arrayOf(PropTypes.string),
   }
 
   state = {
@@ -30,53 +27,42 @@ export default class CategoryRollup extends React.Component {
     this.props.expansionFn('Categories', !this.state.isExpanded);
   }
 
+  // getActiveCount = () => {
+  //   const { activeCategories } = this.props;
+  //   return Object.values(activeCategories).reduce((count, isActive) => count + (isActive ? 1 : 0), 0);
+  // }
+
   handleSetClearButtonClick = () => {
-    const enabled = Object.keys(this.context.catsEnabled).reduce((count, key) => count + (this.context.catsEnabled[key]
-    && this.props.categories.includes(key) ? 1 : 0), 0);
-    let newCatsEnabled = {};
+    const {
+      categoriesMode, setCategoriesMode,
+    } = this.props;
+    // const enabled = this.getActiveCount();
 
-    if (enabled === 0) {
-      // None enabled
-      if (this.context.savedCatsEnabled) {
-        // --> prior saved partial
-        newCatsEnabled = this.context.savedCatsEnabled;
-      } else {
-        // --> all enabled
-        for (const cat of this.props.categories) {
-          newCatsEnabled[cat] = true;
-        }
-      }
-    } else if (enabled < this.props.categories.length) {
-      // Part enabled --> all enabled (and save partial)
-      this.context.updateGlobalContext({ savedCatsEnabled: this.context.catsEnabled });
-      for (const cat of this.props.categories) {
-        newCatsEnabled[cat] = true;
-      }
-    } else {
-      // All enabled --> none enabled
-      for (const cat of this.props.categories) {
-        newCatsEnabled[cat] = false;
-      }
+    // cycles from: active > all > none > active
+    if (categoriesMode === 'none') { // (enabled === 0) {
+      setCategoriesMode('active');
+    } else if (categoriesMode === 'active') { // (enabled < categories.length) {
+      setCategoriesMode('all');
+    } else if (categoriesMode === 'all') {
+      setCategoriesMode('none');
     }
-
-    this.props.catsEnabledFn(newCatsEnabled);
   }
 
   buttonClass() {
-    const enabled = this.context.catsEnabled ? Object.keys(this.context.catsEnabled).reduce((count, key) => count + (this.context.catsEnabled[key]
-      && this.props.categories.includes(key) ? 1 : 0), 0)
-      : 0;
-
-    if (enabled === 0) return 'selector-rollup-nav-button-none';
-    if (enabled < this.props.categories.length) return 'selector-rollup-nav-button-partial';
-    return 'selector-rollup-nav-button-all';
+    const { categoriesMode } = this.props;
+    if (categoriesMode === 'none') {
+      return 'selector-rollup-nav-button-none';
+    } if (categoriesMode === 'active') {
+      return 'selector-rollup-nav-button-partial';
+    } if (categoriesMode === 'all') {
+      return 'selector-rollup-nav-button-all';
+    }
   }
 
   render() {
     return (
       <div className="selector-rollup">
         <button className={this.state.isExpanded ? 'selector-rollup-nav-enabled' : 'selector-rollup-nav-disabled'} onClick={this.handleTwistyClick}>
-          {/* Categories */}
           Records
         </button>
         <button className={this.buttonClass()} onClick={this.handleSetClearButtonClick} />
@@ -84,3 +70,20 @@ export default class CategoryRollup extends React.Component {
     );
   }
 }
+
+const CategoryRollupHOC = (props) => {
+  const [activeCategories, setActiveCategories] = useRecoilState(activeCategoriesState);
+  const [categoriesMode, setCategoriesMode] = useRecoilState(categoriesModeState);
+
+  return (
+    <CategoryRollup
+      {...props} // eslint-disable-line react/jsx-props-no-spreading
+      activeCategories={activeCategories}
+      setActiveCategories={setActiveCategories}
+      categoriesMode={categoriesMode}
+      setCategoriesMode={setCategoriesMode}
+    />
+  );
+};
+
+export default CategoryRollupHOC;
