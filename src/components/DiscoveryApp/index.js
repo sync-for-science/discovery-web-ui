@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { get } from 'axios';
 
 import './DiscoveryApp.css';
@@ -18,7 +18,9 @@ import PageFooter from '../PageFooter';
 import {
   normalizeResourcesAndInjectPartipantId, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
 } from './Api';
-import { resourcesState, filtersState } from '../../recoil';
+import {
+  resourcesState, filtersState, activeCategoriesState, activeProvidersState,
+} from '../../recoil';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -46,8 +48,10 @@ class DiscoveryApp extends React.PureComponent {
     // thumbLeftDate: null,
     // thumbRightDate: null,
     dotClickDate: null, // dot click from ContentPanel
-    catsEnabled: null,
-    provsEnabled: null,
+
+    // catsEnabled: null,
+    // provsEnabled: null,
+
     providers: [],
 
     // Shared Global Context
@@ -82,12 +86,12 @@ class DiscoveryApp extends React.PureComponent {
     this.setState({ lastEvent: event });
   }
 
-  setEnabled = (catsEnabled, provsEnabled) => {
-    this.setState({
-      catsEnabled,
-      provsEnabled,
-    });
-  }
+  // setEnabled = (catsEnabled, provsEnabled) => {
+  //   this.setState({
+  //     catsEnabled,
+  //     provsEnabled,
+  //   });
+  // }
 
   // Record thumb positions as returned from StandardFilters
   setDateRange = (minDate, maxDate) => {
@@ -126,12 +130,15 @@ class DiscoveryApp extends React.PureComponent {
 
   get initialCats() {
     const { resources: { categories } } = this.props;
+    console.error('>>>>>>>>>>>>>>>. categories: ', categories);
+
     const cats = {};
 
     for (const cat of categories) {
       cats[cat] = true;
     }
 
+    console.error('>>>>>>>>>>>>>>>. cats: ', cats);
     return cats;
   }
 
@@ -155,11 +162,15 @@ class DiscoveryApp extends React.PureComponent {
 
     const isSummary = activeView === 'summary';
 
-    const { dates, thumbLeftDate, thumbRightDate } = this.props.filters;
+    const {
+      resources, activeCategories, activeProviders, filters,
+    } = this.props;
+
+    const { dates, thumbLeftDate, thumbRightDate } = filters;
 
     const {
       patient, totalResCount, providers, categories,
-    } = this.props.resources;
+    } = resources;
 
     return (
       <DiscoveryContext.Provider value={{ ...this.state, ...this.props.filters }}>
@@ -176,10 +187,10 @@ class DiscoveryApp extends React.PureComponent {
                   resources={legacyResources}
                   dates={dates}
                   categories={categories}
-                  catsEnabled={this.initialCats}
+                  catsEnabled={activeCategories}
                   providers={providers}
-                  provsEnabled={this.initialProvs}
-                  enabledFn={this.setEnabled}
+                  provsEnabled={activeProviders}
+                  // enabledFn={this.setEnabled}
                   dateRangeFn={this.setDateRange}
                   lastEvent={this.state.lastEvent}
                   // TODO: convert to use route path segment:
@@ -210,8 +221,8 @@ class DiscoveryApp extends React.PureComponent {
                           dates={dates}
                           categories={categories}
                           providers={providers}
-                          catsEnabled={this.state.catsEnabled}
-                          provsEnabled={this.state.provsEnabled}
+                          catsEnabled={activeCategories}
+                          provsEnabled={activeProviders}
                           thumbLeftDate={thumbLeftDate}
                           thumbRightDate={thumbRightDate}
                         />
@@ -224,8 +235,8 @@ class DiscoveryApp extends React.PureComponent {
                           dates={dates}
                           categories={categories}
                           providers={providers}
-                          catsEnabled={this.state.catsEnabled}
-                          provsEnabled={this.state.provsEnabled}
+                          catsEnabled={activeCategories}
+                          provsEnabled={activeProviders}
                           thumbLeftDate={thumbLeftDate}
                           thumbRightDate={thumbRightDate}
                         />
@@ -234,8 +245,8 @@ class DiscoveryApp extends React.PureComponent {
                         <ContentPanel
                           open
                           activeView={activeView}
-                          catsEnabled={this.state.catsEnabled}
-                          provsEnabled={this.state.provsEnabled}
+                          catsEnabled={activeCategories}
+                          provsEnabled={activeProviders}
                           dotClickFn={this.onDotClick}
                           containerClassName="content-panel-absolute"
                           topBoundFn={this.calcContentPanelTopBound}
@@ -280,6 +291,10 @@ class DiscoveryApp extends React.PureComponent {
 const DiscoveryAppHOC = (props) => {
   const [resources, setResources] = useRecoilState(resourcesState);
   const [filters, setFilters] = useRecoilState(filtersState);
+  const activeCategories = useRecoilValue(activeCategoriesState);
+  // const [activeCategories, setActiveCategories] = useRecoilState(activeCategoriesState);
+  const activeProviders = useRecoilValue(activeProvidersState);
+  // const [activeProviders, setActiveProviders] = useRecoilState(activeProvidersState);
 
   useEffect(() => {
     function fetchData() {
@@ -307,6 +322,7 @@ const DiscoveryAppHOC = (props) => {
         const providers = extractProviders(normalized);
         const categories = extractCategories(normalized);
         const totalResCount = legacy.transformed.filter((elt) => elt.category !== 'Patient').length;
+
         setResources({
           ...resources,
           raw,
@@ -337,6 +353,9 @@ const DiscoveryAppHOC = (props) => {
     <DiscoveryApp
       {...props} // eslint-disable-line react/jsx-props-no-spreading
       resources={resources}
+      activeCategories={activeCategories}
+      activeProviders={activeProviders}
+      // setActiveProviders={setActiveProviders}
       filters={filters}
       setFilters={setFilters}
     />

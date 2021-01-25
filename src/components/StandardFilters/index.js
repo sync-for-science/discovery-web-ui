@@ -2,6 +2,7 @@ import React from 'react';
 import {
   atom,
   useRecoilState,
+  useResetRecoilState,
 } from 'recoil';
 import PropTypes from 'prop-types';
 
@@ -22,6 +23,7 @@ import Unimplemented from '../Unimplemented';
 import DiscoveryContext from '../DiscoveryContext';
 
 import { SUBROUTES } from '../../constants';
+import { activeCategoriesState, activeProvidersState } from '../../recoil';
 //
 // Render the "container" (with filters) for views of the participant's data
 //
@@ -42,10 +44,12 @@ class StandardFilters extends React.PureComponent {
       endDate: PropTypes.string.isRequired, // Dec 31 of last year of timeline tick periods
     }),
     categories: PropTypes.arrayOf(PropTypes.string).isRequired,
-    catsEnabled: PropTypes.object.isRequired, // Initial state
+    // catsEnabled: PropTypes.object.isRequired, // Initial state
+    activeCategories: PropTypes.shape({}).isRequired,
     providers: PropTypes.arrayOf(PropTypes.string).isRequired,
-    provsEnabled: PropTypes.object.isRequired,
-    enabledFn: PropTypes.func.isRequired, // Callback to report changed category & provider enable/disable
+    // provsEnabled: PropTypes.object.isRequired,
+    activeProviders: PropTypes.shape({}).isRequired,
+    // enabledFn: PropTypes.func.isRequired, // Callback to report changed category & provider enable/disable
     dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
     lastEvent: PropTypes.instanceOf(Event),
     allowDotClick: PropTypes.bool,
@@ -57,9 +61,9 @@ class StandardFilters extends React.PureComponent {
     maxActivePos: 1.0, // Location [0..1] of TimeWidget right thumb
     timelineIsExpanded: false, // Is expanded timeline displayed (restricted dot range in effect)
     catsExpanded: true,
-    catsEnabled: {}, // Enabled status of categories
+    // catsEnabled: {}, // Enabled status of categories
     provsExpanded: true,
-    provsEnabled: {}, // Enabled status of providers
+    // provsEnabled: {}, // Enabled status of providers
     svgWidth: '0px',
     // dotClickContext: null, // The current dot (if one is highlighted)
     activeDates: {}, // Dates that are within the TimeWidget's active range and have one or more resources with enabled Categories/Providers
@@ -83,15 +87,15 @@ class StandardFilters extends React.PureComponent {
       });
     }
 
-    this.setState({ catsEnabled: this.props.catsEnabled, provsEnabled: this.props.provsEnabled });
-    this.props.enabledFn(this.props.catsEnabled, this.props.provsEnabled);
+    // this.setState({ provsEnabled: this.props.provsEnabled });
+    // this.props.enabledFn(this.props.catsEnabled, this.props.provsEnabled);
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.minActivePos !== this.state.minActivePos
       || prevState.maxActivePos !== this.state.maxActivePos
-      || notEqJSON(prevState.catsEnabled, this.state.catsEnabled)
-      || notEqJSON(prevState.provsEnabled, this.state.provsEnabled)) {
+      || notEqJSON(prevProps.activeCategories, this.props.activeCategories)
+      || notEqJSON(prevProps.activeProviders, this.props.activeProviders)) {
       this.setState({ activeDates: this.calcActiveDates() });
     }
 
@@ -135,8 +139,8 @@ class StandardFilters extends React.PureComponent {
     for (const res of this.props.resources.transformed) {
       const trueCategory = Unimplemented.unimplementedCats.includes(res.category) ? Unimplemented.catName : res.category;
       if (this.isActiveTimeWidget({ position: this.dateToPos(res.itemDate) })
-        && this.state.catsEnabled[trueCategory]
-        && this.state.provsEnabled[res.provider]) {
+        && this.props.activeCategories[trueCategory]
+        && this.props.activeProviders[res.provider]) {
         // This resource's date is active
         activeDates[dateOnly(res.itemDate)] = true;
       }
@@ -159,36 +163,6 @@ class StandardFilters extends React.PureComponent {
   //   rowName:  <category-name>/<provider-name>
   //   isEnabled:  the current state to record
   //
-  setEnabled = (parent, rowName, isEnabled) => {
-    if (parent === 'Category') {
-      if (this.state.catsEnabled[rowName] !== isEnabled) {
-        const catsEnabled = { ...this.state.catsEnabled, [rowName]: isEnabled };
-        this.props.enabledFn(catsEnabled, this.state.provsEnabled);
-        this.setState({ catsEnabled }, () => {
-          const enabled = Object.keys(this.state.catsEnabled).reduce((count, key) => count + (this.state.catsEnabled[key]
-          && this.props.categories.includes(key) ? 1 : 0), 0);
-          if (enabled === 0 || enabled === this.props.categories.length) {
-            // Clear saved categories enabled
-            this.context.updateGlobalContext({ savedCatsEnabled: null });
-          }
-        });
-      }
-    } else {
-      // Provider
-      if (this.state.provsEnabled[rowName] !== isEnabled) {
-        const provsEnabled = { ...this.state.provsEnabled, [rowName]: isEnabled };
-        this.props.enabledFn(this.state.catsEnabled, provsEnabled);
-        this.setState({ provsEnabled }, () => {
-          const enabled = Object.keys(this.state.provsEnabled).reduce((count, key) => count + (this.state.provsEnabled[key]
-          && this.props.providers.includes(key) ? 1 : 0), 0);
-          if (enabled === 0 || enabled === this.props.providers.length) {
-            // Clear saved providers enabled
-            this.context.updateGlobalContext({ savedProvsEnabled: null });
-          }
-        });
-      }
-    }
-  }
 
   //
   // Is 'dot' in the TimeWidget's active range?
@@ -575,14 +549,11 @@ class StandardFilters extends React.PureComponent {
     }
   }
 
-  setAllCatsEnabled = (catsEnabled) => {
-    this.props.enabledFn(catsEnabled, this.state.provsEnabled);
-    this.setState({ catsEnabled });
-  }
-
   setAllProvsEnabled = (provsEnabled) => {
-    this.props.enabledFn(this.state.catsEnabled, provsEnabled);
-    this.setState({ provsEnabled });
+    console.error('======================== setAllProvsEnabled: ');
+    this.props.resetActiveProviders();
+    // this.props.enabledFn(this.state.catsEnabled, provsEnabled);
+    // this.setState({ provsEnabled });
   }
 
   renderLeftNav = () => {
@@ -594,7 +565,6 @@ class StandardFilters extends React.PureComponent {
             key="rollup"
             isExpanded={this.state.catsExpanded}
             expansionFn={this.onExpandContract}
-            catsEnabledFn={this.setAllCatsEnabled}
             categories={this.props.categories}
           />
           { this.state.catsExpanded ? [
@@ -602,12 +572,7 @@ class StandardFilters extends React.PureComponent {
               (cat) => (
                 <Category
                   key={cat}
-                  svgWidth={this.state.svgWidth}
                   categoryName={cat}
-                  isEnabled={this.state.catsEnabled[cat]}
-                  dotPositionsFn={this.fetchDotPositions}
-                  dotClickFn={dotClickFn}
-                  enabledFn={this.setEnabled}
                 />
               ),
             ),
@@ -617,12 +582,8 @@ class StandardFilters extends React.PureComponent {
         <Providers>
           <ProviderRollup
             key="rollup"
-            svgWidth={this.state.svgWidth}
             isExpanded={this.state.provsExpanded}
-            dotPositionsFn={this.fetchDotPositions}
-            dotClickFn={dotClickFn}
             expansionFn={this.onExpandContract}
-            provsEnabledFn={this.setAllProvsEnabled}
             providers={this.props.providers}
           />
           { this.state.provsExpanded ? [
@@ -630,12 +591,7 @@ class StandardFilters extends React.PureComponent {
               (prov) => (
                 <Provider
                   key={prov}
-                  svgWidth={this.state.svgWidth}
                   providerName={prov}
-                  isEnabled={this.state.provsEnabled[prov]}
-                  dotPositionsFn={this.fetchDotPositions}
-                  dotClickFn={dotClickFn}
-                  enabledFn={this.setEnabled}
                 />
               ),
             ),
@@ -688,11 +644,23 @@ export const dotClickContextState = atom({
 const StandardFiltersHOC = React.memo((props) => {
   const [dotClickContext, setDotClickContext] = useRecoilState(dotClickContextState);
 
+  const [activeCategories, setActiveCategories] = useRecoilState(activeCategoriesState);
+  const resetActiveCategories = useResetRecoilState(activeCategoriesState);
+
+  const [activeProviders, setActiveProviders] = useRecoilState(activeProvidersState);
+  const resetActiveProviders = useResetRecoilState(activeProvidersState);
+
   return (
     <StandardFilters
       {...props} // eslint-disable-line react/jsx-props-no-spreading
       dotClickContext={dotClickContext}
       setDotClickContext={setDotClickContext}
+      activeCategories={activeCategories}
+      setActiveCategories={setActiveCategories}
+      resetActiveCategories={resetActiveCategories}
+      activeProviders={activeProviders}
+      setActiveProviders={setActiveProviders}
+      resetActiveProviders={resetActiveProviders}
     />
   );
 });

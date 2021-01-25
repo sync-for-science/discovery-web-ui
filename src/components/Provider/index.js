@@ -1,68 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useRecoilState } from 'recoil';
 
 import '../../css/Selector.css';
 import { titleCase } from '../../util.js';
+import { activeProvidersState } from '../../recoil';
 
 //
-// Render a DiscoveryApp provider line
+// Render a DiscoveryApp category line
 //
-export default class Provider extends React.Component {
-  static myName = 'Provider';
+const Provider = ({ providerName }) => {
+  const [activeProviders, setActiveProviders] = useRecoilState(activeProvidersState);
 
-  static propTypes = {
-    providerName: PropTypes.string.isRequired,
-    svgWidth: PropTypes.string.isRequired,
-    dotPositionsFn: PropTypes.func.isRequired,
-    dotClickFn: PropTypes.func,
-    enabledFn: PropTypes.func.isRequired,
-    isEnabled: PropTypes.bool,
-  }
+  const isEnabled = activeProviders[providerName];
 
-  state = {
-    isEnabled: true,
-  }
+  const handleButtonClick = () => {
+    setActiveProviders((prevActiveCategories) => ({
+      ...prevActiveCategories,
+      [providerName]: !isEnabled,
+    }));
+  };
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.onKeydown);
-    if (this.props.isEnabled !== undefined) {
-      this.setState({ isEnabled: this.props.isEnabled });
-      //   this.props.enabledFn(Provider.myName, this.props.providerName, this.props.isEnabled);
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.isEnabled !== prevProps.isEnabled) {
-      this.setState({ isEnabled: this.props.isEnabled });
-      //   this.props.enabledFn(Provider.myName, this.props.providerName, this.props.isEnabled);
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onKeydown);
-  }
-
-  onKeydown = (event) => {
-    if (event.key === 'Enter') {
-      // Do nothing (don't want in-focus buttons to toggle on Enter
-      event.preventDefault();
-    }
-  }
-
-  handleButtonClick = () => {
-    this.props.enabledFn(Provider.myName, this.props.providerName, !this.state.isEnabled);
-    this.setState({ isEnabled: !this.state.isEnabled });
-  }
-
-  render() {
-    return (
-      <div className="selector">
-        <div className="selector-nav">
-          <button className={this.state.isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={this.handleButtonClick}>
-            { titleCase(this.props.providerName) }
-          </button>
-        </div>
+  return (
+    <div className="selector">
+      <div className="selector-nav">
+        <button className={isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={handleButtonClick}>
+          { titleCase(providerName) }
+        </button>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+Provider.myName = 'Category';
+
+Provider.propTypes = {
+  providerName: PropTypes.string.isRequired,
+};
+
+export default Provider;

@@ -1,67 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useRecoilState } from 'recoil';
 
 import '../../css/Selector.css';
+import { activeCategoriesState } from '../../recoil';
 
 //
 // Render a DiscoveryApp category line
 //
-export default class Category extends React.Component {
-  static myName = 'Category';
+const Category = ({ categoryName }) => {
+  const [activeCategories, setActiveCategories] = useRecoilState(activeCategoriesState);
 
-  static propTypes = {
-    categoryName: PropTypes.string.isRequired,
-    svgWidth: PropTypes.string.isRequired,
-    dotPositionsFn: PropTypes.func.isRequired,
-    dotClickFn: PropTypes.func,
-    enabledFn: PropTypes.func.isRequired,
-    isEnabled: PropTypes.bool,
-  }
+  const isEnabled = activeCategories[categoryName];
 
-  state = {
-    isEnabled: false,
-  }
+  const handleButtonClick = () => {
+    setActiveCategories((prevActiveCategories) => ({
+      ...prevActiveCategories,
+      [categoryName]: !isEnabled,
+    }));
+  };
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.onKeydown);
-    if (this.props.isEnabled !== undefined) {
-      this.setState({ isEnabled: this.props.isEnabled });
-      //   this.props.enabledFn(Category.myName, this.props.categoryName, this.props.isEnabled);
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.isEnabled !== prevProps.isEnabled) {
-      this.setState({ isEnabled: this.props.isEnabled });
-      //   this.props.enabledFn(Category.myName, this.props.categoryName, this.props.isEnabled);
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onKeydown);
-  }
-
-  onKeydown = (event) => {
-    if (event.key === 'Enter') {
-      // Do nothing (don't want in-focus buttons to toggle on Enter
-      event.preventDefault();
-    }
-  }
-
-  handleButtonClick = () => {
-    this.props.enabledFn(Category.myName, this.props.categoryName, !this.state.isEnabled);
-    this.setState({ isEnabled: !this.state.isEnabled });
-  }
-
-  render() {
-    return (
-      <div className="selector">
-        <div className="selector-nav">
-          <button className={this.state.isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={this.handleButtonClick}>
-            { this.props.categoryName }
-          </button>
-        </div>
+  return (
+    <div className="selector">
+      <div className="selector-nav">
+        <button className={isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={handleButtonClick}>
+          { categoryName }
+        </button>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+Category.myName = 'Category';
+
+Category.propTypes = {
+  categoryName: PropTypes.string.isRequired,
+};
+
+export default Category;
