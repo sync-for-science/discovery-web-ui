@@ -19,7 +19,14 @@ const LabResultCardBody = ({fieldsData}) => {
   } else if ( fieldsData.component ) {
     valueField = fieldsData.component.map((resource, i) => {
       const valueDisplay = `${resource.valueQuantity.value.toFixed(1)} ${resource.valueQuantity.code}`
-      const label = resource.code.text.split(' ')[0].toUpperCase()
+      let label
+      if (resource.code.text === "Diastolic Blood Pressure") {
+        label = "DIASTOLIC"
+      } else if (resource.code.text === "Systolic Blood Pressure") {
+        label = "SYSTOLIC"
+      } else {
+        label = resource.code.text
+      }
       return (
         <CardBodyField 
           key={i}

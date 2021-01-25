@@ -23,6 +23,7 @@ import ExamCardBody from './ExamCardBody';
 import MedicationStatementCardBody from './MedicationStatementCardBody';
 import SocialHistoryCardBody from './SocialHistoryCardBody';
 import UnimplementedCardBody from './UnimplementedCardBody';
+import VitalSignCardBody from './VitalSignCardBody';
 
 const selectCardBody = (fieldsData) => {
   switch (fieldsData.category) {
@@ -53,6 +54,8 @@ const selectCardBody = (fieldsData) => {
       return <SocialHistoryCardBody fieldsData={fieldsData} />
     case "Other":
       return <UnimplementedCardBody fieldsData={fieldsData} />
+    case "Vital Signs":
+      return <VitalSignCardBody fieldsData={fieldsData} />
     default:
       break;
   }
@@ -157,7 +160,7 @@ const RecordCard = ({ resource }) => {
     wasNotGiven: data.wasNotGiven
   }
 
-  console.log('fieldsData', fieldsData)
+  // console.log('fieldsData', fieldsData)
 
 
   return (
