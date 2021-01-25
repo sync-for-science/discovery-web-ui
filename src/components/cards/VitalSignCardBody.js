@@ -1,43 +1,41 @@
-import React from 'react'
+import React from 'react';
 
-import CardBodyField from './CardBodyField'
+import CardBodyField from './CardBodyField';
 // import FhirTransform from './FhirTransform';
-import {canonVitals, computeTimeSeriesData} from '../../fhirUtil'
-import {tryWithDefault} from '../../util'
+import { canonVitals, computeTimeSeriesData } from '../../fhirUtil';
+import { tryWithDefault } from '../../util';
 import { log } from '../../utils/logger';
 import TimeSeries from '../TimeSeries/index';
 
-const VitalSignCardBody = ({fieldsData, vitalSigns}) => {
-  console.log('vitalSigns', vitalSigns)
-  const valueDisplay = fieldsData.valueQuantity && `${fieldsData.valueQuantity.value.toFixed(1)} ${fieldsData.valueQuantity.unit}`
-  
+const VitalSignCardBody = ({ fieldsData, vitalSigns }) => {
+  console.log('vitalSigns', vitalSigns);
+  const valueDisplay = fieldsData.valueQuantity && `${fieldsData.valueQuantity.value.toFixed(1)} ${fieldsData.valueQuantity.unit}`;
+
   // breakout embedded fields in component, typically for Blood Pressure
-  let displayComponents
+  let displayComponents;
   if (fieldsData.component) {
     displayComponents = fieldsData.component.map((resource, i) => {
-      let label
-      if (resource.code.text === "Diastolic Blood Pressure") {
-        label = "DIASTOLIC"
-      } else if (resource.code.text === "Systolic Blood Pressure") {
-        label = "SYSTOLIC"
+      let label;
+      if (resource.code.text === 'Diastolic Blood Pressure') {
+        label = 'DIASTOLIC';
+      } else if (resource.code.text === 'Systolic Blood Pressure') {
+        label = 'SYSTOLIC';
       } else {
-        label = resource.code.text
+        label = resource.code.text;
       }
 
-      const resourceValueDisplay = resource.valueQuantity && `${resource.valueQuantity.value.toFixed(1)} ${resource.valueQuantity.unit}`
+      const resourceValueDisplay = resource.valueQuantity && `${resource.valueQuantity.value.toFixed(1)} ${resource.valueQuantity.unit}`;
 
       return (
-        <CardBodyField 
+        <CardBodyField
           key={i}
-          dependency={resource.valueQuantity.value} 
+          dependency={resource.valueQuantity.value}
           label={label}
-          value={resourceValueDisplay} 
+          value={resourceValueDisplay}
         />
-      )
-    })
+      );
+    });
   }
-
-
 
   // const series = {};
   // // const vitalSigns = FhirTransform.getPathItem(resources.transformed, '[*category=Vital Signs]');
@@ -82,36 +80,36 @@ const VitalSignCardBody = ({fieldsData, vitalSigns}) => {
   //   }
   // }
 
-  const { data, highlights } = computeTimeSeriesData()
-  
+  const { data, highlights } = computeTimeSeriesData(vitalSigns);
+
   return (
     <>
-      <CardBodyField 
-        dependency={fieldsData.display} 
-        label="MEASURE" 
-        value={fieldsData.display} 
+      <CardBodyField
+        dependency={fieldsData.display}
+        label="MEASURE"
+        value={fieldsData.display}
         highlight
       />
-      <CardBodyField 
-        dependency={fieldsData.valueQuantity} 
-        label="VALUE" 
+      <CardBodyField
+        dependency={fieldsData.valueQuantity}
+        label="VALUE"
         value={valueDisplay}
       />
       {displayComponents}
-      <CardBodyField 
-        dependency={fieldsData.provider} 
-        label="PROVIDER" 
-        value={fieldsData.provider} 
+      <CardBodyField
+        dependency={fieldsData.provider}
+        label="PROVIDER"
+        value={fieldsData.provider}
       />
-      <CardBodyField 
-        dependency={fieldsData.status} 
-        label="STATUS" 
-        value={fieldsData.status} 
+      <CardBodyField
+        dependency={fieldsData.status}
+        label="STATUS"
+        value={fieldsData.status}
       />
-      <CardBodyField 
-        dependency={true} 
-        label="TIMESERIES" 
-        value='Placeholder Time Series'
+      <CardBodyField
+        dependency
+        label="TIMESERIES"
+        value="Placeholder Time Series"
       />
       <TimeSeries
         measure={fieldsData.display}
@@ -120,7 +118,7 @@ const VitalSignCardBody = ({fieldsData, vitalSigns}) => {
         dotClickFn={() => {}}
       />
     </>
-  )
-}
+  );
+};
 
-export default VitalSignCardBody
+export default VitalSignCardBody;

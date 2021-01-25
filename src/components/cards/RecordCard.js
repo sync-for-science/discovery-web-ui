@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {shape} from 'prop-types';
+import { shape } from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,13 +12,12 @@ import TextField from '@material-ui/core/TextField';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { format } from 'date-fns';
 
-
-import GenericCardBody from './GenericCardBody'
-import MedicationCardBody from './MedicationCardBody'
-import BenefitCardBody from './BenefitCardBody'
-import ClaimCardBody from './ClaimCardBody'
-import EncounterCardBody from './EncounterCardBody'
-import ImmunizationCardBody from './ImmunizationCardBody'
+import GenericCardBody from './GenericCardBody';
+import MedicationCardBody from './MedicationCardBody';
+import BenefitCardBody from './BenefitCardBody';
+import ClaimCardBody from './ClaimCardBody';
+import EncounterCardBody from './EncounterCardBody';
+import ImmunizationCardBody from './ImmunizationCardBody';
 import LabResultCardBody from './LabResultCardBody';
 import ExamCardBody from './ExamCardBody';
 import MedicationStatementCardBody from './MedicationStatementCardBody';
@@ -26,46 +25,46 @@ import SocialHistoryCardBody from './SocialHistoryCardBody';
 import UnimplementedCardBody from './UnimplementedCardBody';
 import VitalSignCardBody from './VitalSignCardBody';
 
-const selectCardBody = (fieldsData, vitalSigns) => {
+const selectCardBody = (fieldsData, normalized, vitalSigns) => {
   switch (fieldsData.category) {
-    case "Conditions":
-    case "Document References":
-    case "Meds Administration":
-    case "Procedures":
-    case "Procedure Requests":
-      return <GenericCardBody fieldsData={fieldsData} />
-    case "Meds Dispensed":
-    case "Meds Requested":
-      return <MedicationCardBody fieldsData={fieldsData} />
-    case "Benefits":
-      return <BenefitCardBody fieldsData={fieldsData} />
-    case "Claims":
-      return <ClaimCardBody fieldsData={fieldsData} />
-    case "Encounters":
-      return <EncounterCardBody fieldsData={fieldsData} />
-    case "Immunizations":
-      return <ImmunizationCardBody fieldsData={fieldsData} />
-    case "Lab Results":
-      return <LabResultCardBody fieldsData={fieldsData} />
-    case "Exams":
-      return <ExamCardBody fieldsData={fieldsData} />
-    case "Meds Statement":
-      return <MedicationStatementCardBody fieldsData={fieldsData} />
-    case "Social History":
-      return <SocialHistoryCardBody fieldsData={fieldsData} />
-    case "Other":
-      return <UnimplementedCardBody fieldsData={fieldsData} />
-    case "Vital Signs":
-      return <VitalSignCardBody fieldsData={fieldsData} vitalSigns={vitalSigns} />
+    case 'Conditions':
+    case 'Document References':
+    case 'Meds Administration':
+    case 'Procedures':
+    case 'Procedure Requests':
+      return <GenericCardBody fieldsData={fieldsData} />;
+    case 'Meds Dispensed':
+    case 'Meds Requested':
+      return <MedicationCardBody fieldsData={fieldsData} />;
+    case 'Benefits':
+      return <BenefitCardBody fieldsData={fieldsData} />;
+    case 'Claims':
+      return <ClaimCardBody fieldsData={fieldsData} />;
+    case 'Encounters':
+      return <EncounterCardBody fieldsData={fieldsData} />;
+    case 'Immunizations':
+      return <ImmunizationCardBody fieldsData={fieldsData} />;
+    case 'Lab Results':
+      return <LabResultCardBody fieldsData={fieldsData} />;
+    case 'Exams':
+      return <ExamCardBody fieldsData={fieldsData} />;
+    case 'Meds Statement':
+      return <MedicationStatementCardBody fieldsData={fieldsData} />;
+    case 'Social History':
+      return <SocialHistoryCardBody fieldsData={fieldsData} />;
+    case 'Other':
+      return <UnimplementedCardBody fieldsData={fieldsData} />;
+    case 'Vital Signs':
+      return <VitalSignCardBody fieldsData={fieldsData} vitalSigns={vitalSigns} />;
     default:
       break;
   }
-}
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 10,
-    backgroundColor: "#e9edf4" // TODO add colors to theme
+    backgroundColor: '#e9edf4', // TODO add colors to theme
   },
   media: {
     height: 0,
@@ -85,17 +84,18 @@ const useStyles = makeStyles((theme) => ({
     padding: 16,
   },
   noteField: {
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 }));
 
-
-const RecordCard = ({ resource, normalized }) => {
+const RecordCard = ({ resource, normalized, vitalSigns }) => {
   const [expanded, setExpanded] = React.useState(false);
   const classes = useStyles();
-  const { provider, data, itemDate, category } = resource;
+  const {
+    provider, data, itemDate, category,
+  } = resource;
 
-  const displayDate = format(new Date(itemDate), 'MMM d, y h:mm:ssaaa')
+  const displayDate = format(new Date(itemDate), 'MMM d, y h:mm:ssaaa');
 
   const fieldsData = {
     abatement: data.abatementDateTime,
@@ -110,10 +110,10 @@ const RecordCard = ({ resource, normalized }) => {
     contained: data.contained,
     date: resource.itemDate,
     daysSupply: data.daysSupply,
-    diagnosis: 
-      data.diagnosis 
-      && data.diagnosis[0] 
-      && data.diagnosis[0].type 
+    diagnosis:
+      data.diagnosis
+      && data.diagnosis[0]
+      && data.diagnosis[0].type
       && data.diagnosis[0].type[0]
       && data.diagnosis[0].type[0].coding
       && data.diagnosis[0].type[0].coding[0]
@@ -128,9 +128,9 @@ const RecordCard = ({ resource, normalized }) => {
     participantId: resource.id,
     period: data.period,
     primarySource: data.primarySource,
-    provider: provider,
+    provider,
     reaction: data.reaction,
-    reason: data.reason 
+    reason: data.reason
       && data.reason[0]
       && data.reason[0].coding
       && data.reason[0].coding[0]
@@ -148,21 +148,20 @@ const RecordCard = ({ resource, normalized }) => {
     totalCost: data.totalCost,
     type: data.type,
     use: data.use,
-    vaccineDisplay: 
-      data.vaccineCode 
-      && data.vaccineCode.coding 
-      && data.vaccineCode.coding[0] 
+    vaccineDisplay:
+      data.vaccineCode
+      && data.vaccineCode.coding
+      && data.vaccineCode.coding[0]
       && data.vaccineCode.coding[0].display,
     valueCodeableConcept: data.valueCodeableConcept && data.valueCodeableConcept.coding,
     valueConcept: data.valueConcept,
     valueQuantity: data.valueQuantity,
     valueRatio: data.valueRatio,
     verificationStatus: data.verificationStatus,
-    wasNotGiven: data.wasNotGiven
-  }
+    wasNotGiven: data.wasNotGiven,
+  };
 
   // console.log('fieldsData', fieldsData)
-
 
   return (
     <Card className={classes.root} variant="outlined">
@@ -179,12 +178,14 @@ const RecordCard = ({ resource, normalized }) => {
       />
       <CardContent>
         <Grid container spacing={0}>
-          {selectCardBody(fieldsData, normalized)}
+          {selectCardBody(fieldsData, normalized, vitalSigns)}
         </Grid>
       </CardContent>
       <CardActions disableSpacing className={classes.cardActions}>
         <Button variant="outlined" disableElevation size="small" onClick={() => setExpanded(!expanded)}>
-          Notes <ExpandMoreIcon />
+          Notes
+          {' '}
+          <ExpandMoreIcon />
         </Button>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
@@ -205,7 +206,7 @@ const RecordCard = ({ resource, normalized }) => {
 };
 
 RecordCard.prototype = {
-  resource: shape({})
-}
+  resource: shape({}),
+};
 
-export default RecordCard
+export default RecordCard;

@@ -1,22 +1,22 @@
 import React from 'react';
 
+import jsonQuery from 'json-query';
 import { connectToResources } from '../../recoil';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
-import RecordCard from '../cards/RecordCard'
-import jsonQuery from 'json-query'
+import RecordCard from '../cards/RecordCard';
 
 const CardList = ({ normalized }) => {
   if (!normalized) {
     return null;
   }
-  
-  const options = {}
-  const path = '[*category=Vital Signs]'
+
+  const options = {};
+  const path = '[*category=Vital Signs]';
   const vitalSigns = jsonQuery(path, { data: normalized, ...options }).value;
-  
-  const record = normalized.filter(element => element.category === 'Vital Signs')
+
+  const record = normalized.filter((element) => element.category === 'Vital Signs');
   // const record = normalized.filter(element => element.data.id === '4afef915-ade7-42d4-8e82-5012e1c47704')
-  return record.map((r, i) => <RecordCard key={i} resource={r} vitalSigns={vitalSigns}/>);
+  return record.map((r, i) => <RecordCard key={i} resource={r} vitalSigns={vitalSigns} />);
   // console.log('vitalSigns: ', vitalSigns)
   // return normalized.map((r, i) => <RecordCard key={i} resource={r} vitalSigns={vitalSigns}/>);
 };

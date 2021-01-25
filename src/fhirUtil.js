@@ -342,7 +342,7 @@ export function renderMUIDisplay(matchingData, typeLabel, appContext) {
       </Grid>
     ));
   }
-  return null
+  return null;
 }
 
 //
@@ -1142,7 +1142,6 @@ export function renderVitals(matchingData, resources, dotClickFn, providers) {
         : (tryWithDefault(elt, (e) => e.component[0].valueQuantity.value, 0)
         + tryWithDefault(elt, (e) => e.component[1].valueQuantity.value, 0)) / 2;
 
-
       return (
         <div
           className={index < found.length - 1 ? 'content-container' : 'content-container-last'}
@@ -1161,7 +1160,10 @@ export function renderVitals(matchingData, resources, dotClickFn, providers) {
               </HighlightDiv>
             ) }
 
-            <div>THIS VALUE: {JSON.stringify(thisValue)}</div>
+            <div>
+              THIS VALUE:
+              {JSON.stringify(thisValue)}
+            </div>
 
             { elt.value && <div className="col01 label">Value</div> }
             { elt.value && <div className="col02 value-number">{`${formatDPs(elt.value, 1)} ${elt.unit}`}</div> }
@@ -1213,9 +1215,12 @@ export function renderVitals(matchingData, resources, dotClickFn, providers) {
   return null;
 }
 
-export const computeTimeSeriesData = () => {
-  return {data: [], highlights: []}
-}
+export const computeTimeSeriesData = (vitalSigns) => {
+  const data = [];
+  const highlights = [];
+
+  return { data, highlights };
+};
 
 function renderContainedResource(res, index) {
   const payload = [];
