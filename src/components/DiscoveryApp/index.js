@@ -32,7 +32,7 @@ class DiscoveryApp extends React.PureComponent {
 
   state = {
     // resources: null, // Will be set to an instance of FhirTransform
-    totalResCount: null, // Number of resources excluding Patient resources
+    // totalResCount: null, // Number of resources excluding Patient resources
     // dates: null, // Collection of dates for views:
     //    allDates
     //    minDate     Earliest date we have data for this participant
@@ -161,7 +161,9 @@ class DiscoveryApp extends React.PureComponent {
 
     const { dates, thumbLeftDate, thumbRightDate } = this.props.filters;
 
-    const { resources: { patient, providers, categories } } = this.props;
+    const {
+      patient, totalResCount, providers, categories,
+    } = this.props.resources;
 
     return (
       <DiscoveryContext.Provider value={{ ...this.state, ...this.props.filters }}>
@@ -210,7 +212,7 @@ class DiscoveryApp extends React.PureComponent {
                         <TilesView
                           activeView={activeView}
                           resources={this.props.resources}
-                          totalResCount={this.state.totalResCount}
+                          totalResCount={totalResCount}
                           dates={dates}
                           categories={categories}
                           providers={providers}
@@ -225,7 +227,7 @@ class DiscoveryApp extends React.PureComponent {
                         <CompareView
                           activeView={activeView}
                           resources={this.props.resources}
-                          totalResCount={this.state.totalResCount}
+                          totalResCount={totalResCount}
                           dates={dates}
                           categories={categories}
                           providers={providers}
@@ -252,7 +254,7 @@ class DiscoveryApp extends React.PureComponent {
                           resources={legacyResources}
                           patient={patient}
                           providers={providers}
-                          totalResCount={this.state.totalResCount}
+                          totalResCount={totalResCount}
                           viewName="Report"
                           viewIconClass="longitudinal-view-icon"
                         />
@@ -312,10 +314,12 @@ const DiscoveryAppHOC = (props) => {
         const patient = normalized.find(({ category }) => category === 'Patient');
         const providers = extractProviders(normalized);
         const categories = extractCategories(normalized);
+        const totalResCount = legacy.transformed.filter((elt) => elt.category !== 'Patient').length;
         setResources({
           ...resources,
           raw,
           normalized,
+          totalResCount,
           patient,
           providers,
           categories,

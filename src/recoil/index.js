@@ -8,6 +8,7 @@ export const resourcesState = atom({
     error: null,
     raw: null,
     normalized: null,
+    totalResCount: 0,
     patient: null,
     providers: [],
     categories: [],
