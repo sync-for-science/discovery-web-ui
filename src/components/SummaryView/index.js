@@ -28,7 +28,6 @@ export default class SummaryView extends React.PureComponent {
     }),
     categories: PropTypes.arrayOf(PropTypes.string).isRequired,
     providers: PropTypes.arrayOf(PropTypes.string).isRequired,
-    lastEvent: PropTypes.instanceOf(Event),
   }
 
   //
