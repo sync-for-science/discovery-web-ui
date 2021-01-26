@@ -10,9 +10,7 @@ import { activeProvidersState, providersModeState } from '../../recoil';
 //
 // Render the DiscoveryApp "rollup" provider line
 //
-class ProviderRollup extends React.Component {
-  static myName = 'ProviderRollup';
-
+class ProviderRollup extends React.PureComponent {
   static propTypes = {
     isExpanded: PropTypes.bool.isRequired,
     expansionFn: PropTypes.func.isRequired,

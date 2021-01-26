@@ -10,9 +10,7 @@ import { activeCategoriesState, categoriesModeState } from '../../recoil';
 //
 // Render the DiscoveryApp "rollup" category line
 //
-class CategoryRollup extends React.Component {
-  static myName = 'CategoryRollup';
-
+class CategoryRollup extends React.PureComponent {
   static propTypes = {
     isExpanded: PropTypes.bool.isRequired,
     expansionFn: PropTypes.func.isRequired,

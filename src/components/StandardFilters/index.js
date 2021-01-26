@@ -2,7 +2,7 @@ import React from 'react';
 import {
   atom,
   useRecoilState,
-  useResetRecoilState,
+  useRecoilValue,
 } from 'recoil';
 import PropTypes from 'prop-types';
 
@@ -549,58 +549,44 @@ class StandardFilters extends React.PureComponent {
     }
   }
 
-  setAllProvsEnabled = (provsEnabled) => {
-    console.error('======================== setAllProvsEnabled: ');
-    this.props.resetActiveProviders();
-    // this.props.enabledFn(this.state.catsEnabled, provsEnabled);
-    // this.setState({ provsEnabled });
-  }
-
-  renderLeftNav = () => {
-    const dotClickFn = this.props.allowDotClick ? this.onDotClick : null;
-    return (
-      <div className="standard-filters-categories-and-providers">
-        <Categories>
-          <CategoryRollup
-            key="rollup"
-            isExpanded={this.state.catsExpanded}
-            expansionFn={this.onExpandContract}
-            categories={this.props.categories}
-          />
-          { this.state.catsExpanded ? [
-            this.props.categories && this.props.categories.map(
-              (cat) => (
-                <Category
-                  key={cat}
-                  categoryName={cat}
-                />
-              ),
+  renderLeftNav = () => (
+    <div className="standard-filters-categories-and-providers">
+      <Categories>
+        <CategoryRollup
+          isExpanded={this.state.catsExpanded}
+          expansionFn={this.onExpandContract}
+        />
+        { this.state.catsExpanded ? [
+          this.props.categories && this.props.categories.map(
+            (cat) => (
+              <Category
+                key={cat}
+                categoryName={cat}
+              />
             ),
-            <div className="standard-filters-category-nav-spacer-bottom" key="1" />,
-          ] : null }
-        </Categories>
-        <Providers>
-          <ProviderRollup
-            key="rollup"
-            isExpanded={this.state.provsExpanded}
-            expansionFn={this.onExpandContract}
-            providers={this.props.providers}
-          />
-          { this.state.provsExpanded ? [
-            this.props.providers.map(
-              (prov) => (
-                <Provider
-                  key={prov}
-                  providerName={prov}
-                />
-              ),
+          ),
+          <div className="standard-filters-category-nav-spacer-bottom" key="1" />,
+        ] : null }
+      </Categories>
+      <Providers>
+        <ProviderRollup
+          isExpanded={this.state.provsExpanded}
+          expansionFn={this.onExpandContract}
+        />
+        { this.state.provsExpanded ? [
+          this.props.providers.map(
+            (prov) => (
+              <Provider
+                key={prov}
+                providerName={prov}
+              />
             ),
-            <div className="standard-filters-provider-nav-spacer-bottom" key="1" />,
-          ] : null }
-        </Providers>
-      </div>
-    );
-  }
+          ),
+          <div className="standard-filters-provider-nav-spacer-bottom" key="1" />,
+        ] : null }
+      </Providers>
+    </div>
+  )
 
   portalLeftNav = () => {
     const leftNavTarget = document.getElementById('left-nav');
@@ -644,11 +630,8 @@ export const dotClickContextState = atom({
 const StandardFiltersHOC = React.memo((props) => {
   const [dotClickContext, setDotClickContext] = useRecoilState(dotClickContextState);
 
-  const [activeCategories, setActiveCategories] = useRecoilState(activeCategoriesState);
-  const resetActiveCategories = useResetRecoilState(activeCategoriesState);
-
-  const [activeProviders, setActiveProviders] = useRecoilState(activeProvidersState);
-  const resetActiveProviders = useResetRecoilState(activeProvidersState);
+  const activeCategories = useRecoilValue(activeCategoriesState);
+  const activeProviders = useRecoilValue(activeProvidersState);
 
   return (
     <StandardFilters
@@ -656,11 +639,7 @@ const StandardFiltersHOC = React.memo((props) => {
       dotClickContext={dotClickContext}
       setDotClickContext={setDotClickContext}
       activeCategories={activeCategories}
-      setActiveCategories={setActiveCategories}
-      resetActiveCategories={resetActiveCategories}
       activeProviders={activeProviders}
-      setActiveProviders={setActiveProviders}
-      resetActiveProviders={resetActiveProviders}
     />
   );
 });
