@@ -64,7 +64,6 @@ const selectCardBody = (fieldsData, normalized, vitalSigns) => {
 const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: 10,
-    backgroundColor: '#e9edf4', // TODO add colors to theme
   },
   media: {
     height: 0,
@@ -173,8 +172,8 @@ const RecordCard = ({ resource, normalized, vitalSigns }) => {
         // )}
         title={category}
         subheader={`${displayDate} | (Todo: Age of Patient at Event)`}
-        titleTypographyProps={{ variant: 'button' }}
-        subheaderTypographyProps={{ variant: 'body2' }}
+        titleTypographyProps={{ variant: 's4sHeader' }}
+        subheaderTypographyProps={{ variant: 's4sSubheader' }}
       />
       <CardContent>
         <Grid container spacing={0}>
