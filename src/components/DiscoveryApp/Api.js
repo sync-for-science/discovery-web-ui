@@ -225,6 +225,18 @@ export const normalizeResourcesAndInjectPartipantId = (participantId) => (data) 
   return result;
 };
 
+export const generateRecordsDictionary = (normalized) => normalized.reduce((acc, record) => {
+  const { data: { id: uuid } } = record;
+  // console.info('uuid: ', uuid);
+  if (acc[uuid]) {
+    console.info(`record ${uuid} already exists. (category = ${record.category})`); // eslint-disable-line no-console
+  }
+  return {
+    ...acc,
+    [uuid]: record,
+  };
+}, {});
+
 export const generateLegacyResources = (rawResponseData, normalizedResources, participantId) => {
   const legacyResources = new FhirTransform(normalizedResources);
   // const resources = (response.data, this.participantId);

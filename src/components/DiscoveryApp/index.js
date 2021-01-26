@@ -16,7 +16,7 @@ import TilesView from '../TilesView';
 import Collections from '../Collections';
 import PageFooter from '../PageFooter';
 import {
-  normalizeResourcesAndInjectPartipantId, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
+  normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
 } from './Api';
 import {
   resourcesState, filtersState, activeCategoriesState, activeProvidersState,
@@ -290,17 +290,7 @@ const DiscoveryAppHOC = (props) => {
         // const patient = legacy.pathItem('[category=Patient]');
         const patient = normalized.find(({ category }) => category === 'Patient');
         const totalResCount = legacy.transformed.filter((elt) => elt.category !== 'Patient').length;
-        const records = normalized.reduce((acc, record) => {
-          const { data: { id: uuid } } = record;
-          // console.info('uuid: ', uuid);
-          if (acc[uuid]) {
-            console.info(`record ${uuid} already exists. (category = ${record.category})`); // eslint-disable-line no-console
-          }
-          return {
-            ...acc,
-            [uuid]: record,
-          };
-        }, {});
+        const records = generateRecordsDictionary(normalized);
         const providers = extractProviders(records);
         const categories = extractCategories(records);
 
