@@ -292,11 +292,23 @@ const DiscoveryAppHOC = (props) => {
         const providers = extractProviders(normalized);
         const categories = extractCategories(normalized);
         const totalResCount = legacy.transformed.filter((elt) => elt.category !== 'Patient').length;
+        const records = normalized.reduce((acc, record) => {
+          const { data: { id: uuid } } = record;
+          // console.info('uuid: ', uuid);
+          if (acc[uuid]) {
+            console.info(`record ${uuid} already exists. (category = ${record.category})`); // eslint-disable-line no-console
+          }
+          return {
+            ...acc,
+            [uuid]: record,
+          };
+        }, {});
 
         setResources({
           ...resources,
           raw,
           normalized,
+          records,
           totalResCount,
           patient,
           providers,

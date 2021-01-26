@@ -12,6 +12,7 @@ export const resourcesState = atom({
     error: null,
     raw: null,
     normalized: null,
+    records: {},
     totalResCount: 0,
     patient: null,
     providers: [],
