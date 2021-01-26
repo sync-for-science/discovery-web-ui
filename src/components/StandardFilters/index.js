@@ -644,6 +644,6 @@ const StandardFiltersHOC = React.memo((props) => {
   );
 });
 
-StandardFiltersHOC.propTypes = StandardFilters.propTypes;
+// StandardFiltersHOC.propTypes = StandardFilters.propTypes;
 
 export default StandardFiltersHOC;
