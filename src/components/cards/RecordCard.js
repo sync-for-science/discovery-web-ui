@@ -25,6 +25,7 @@ import MedicationStatementCardBody from './MedicationStatementCardBody';
 import SocialHistoryCardBody from './SocialHistoryCardBody';
 import UnimplementedCardBody from './UnimplementedCardBody';
 import VitalSignCardBody from './VitalSignCardBody';
+import { formatAge } from '../../util';
 
 const selectCardBody = (fieldsData, normalized) => {
   switch (fieldsData.category) {
@@ -94,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecordCard = ({ resource, normalized }) => {
+const RecordCard = ({ resource, normalized, patient }) => {
   const [expanded, setExpanded] = React.useState(false);
   const classes = useStyles();
   const {
@@ -169,6 +170,8 @@ const RecordCard = ({ resource, normalized }) => {
 
   // console.log('fieldsData', fieldsData)
 
+  const patientAgeAtRecord = formatAge(patient.data.birthDate, resource.itemDate, 'age ') || ""
+  
   return (
     <Card 
       className={classes.root} 
@@ -182,7 +185,7 @@ const RecordCard = ({ resource, normalized }) => {
         //   </IconButton>
         // )}
         title={category}
-        subheader={`${displayDate} | (Todo: Age of Patient at Event)`}
+        subheader={`${displayDate} | ${patientAgeAtRecord}`}
         titleTypographyProps={{ variant: 's4sHeader' }}
         subheaderTypographyProps={{ variant: 's4sSubheader' }}
       />
