@@ -1,9 +1,10 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography';
-import CardBodyField from './CardBodyField'
-import {computeTimeSeriesData} from '../../fhirUtil'
-import TimeSeries from '../TimeSeries/index';
 import { makeStyles } from '@material-ui/core/styles';
+
+import CardBodyField from './CardBodyField'
+import TimeSeries from '../TimeSeries/index';
+import {computeTimeSeriesVitalSignsData} from '../../fhirUtil'
 
 const useStyles = makeStyles((theme) => ({
   timeSeries: {
@@ -41,7 +42,7 @@ const VitalSignCardBody = ({fieldsData, vitalSigns}) => {
     })
   }
 
-  const { data, highlights } = computeTimeSeriesData(fieldsData, vitalSigns)
+  const { data, highlights } = computeTimeSeriesVitalSignsData(fieldsData, vitalSigns)
 
   return (
     <>
@@ -66,11 +67,6 @@ const VitalSignCardBody = ({fieldsData, vitalSigns}) => {
         dependency={fieldsData.status} 
         label="STATUS" 
         value={fieldsData.status} 
-      />
-      <CardBodyField 
-        dependency={true} 
-        label="TIMESERIES" 
-        value='Placeholder Time Series'
       />
       <Typography variant="timeSeries" className={classes.timeSeries}>
         {data && <TimeSeries

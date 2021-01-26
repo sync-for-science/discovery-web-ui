@@ -1,8 +1,19 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
 import CardBodyField from './CardBodyField';
+import TimeSeries from '../TimeSeries/index';
+import {computeTimeSeriesLabResultsData} from '../../fhirUtil'
 
-const LabResultCardBody = ({ fieldsData }) => {
+const useStyles = makeStyles((theme) => ({
+  timeSeries: {
+    marginTop: '20px',
+  },
+}));
+
+const LabResultCardBody = ({ fieldsData, labResults }) => {
+  const classes = useStyles()
   const valueRatioDisplay = `${fieldsData.valueRatio && fieldsData.valueRatio.numerator.value} / ${fieldsData.valueRatio && fieldsData.valueRatio.denominator.value}`;
 
   let valueField;
@@ -37,6 +48,8 @@ const LabResultCardBody = ({ fieldsData }) => {
     });
   }
 
+  const { data, highlights } = computeTimeSeriesLabResultsData(fieldsData, labResults)
+
   return (
     <>
       <CardBodyField
@@ -67,12 +80,14 @@ const LabResultCardBody = ({ fieldsData }) => {
         label="STATUS"
         value={fieldsData.status}
       />
-      {/* need data from other lab results to build graph */}
-      <CardBodyField
-        dependency
-        label="GRAPH"
-        value="(Placeholder Graph)"
-      />
+      <Typography variant="timeSeries" className={classes.timeSeries}>
+        {data && <TimeSeries
+          measure={fieldsData.display}
+          data={data}
+          highlights={highlights}
+          dotClickFn={() => {}}
+        />}
+      </Typography>
     </>
   );
 };

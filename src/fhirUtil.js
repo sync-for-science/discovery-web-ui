@@ -789,6 +789,69 @@ export function renderLabs(matchingData, resources, dotClickFn, providers) {
   return null;
 }
 
+export const computeTimeSeriesLabResultsData = (fieldsData, labResults) => {
+  const { date, display } = fieldsData
+  let series = {}
+  labResults.forEach((elt) => {
+    try {
+      const displayStr = elt.data.code.coding[0].display;
+      const xVal = elt.itemDate instanceof Date ? elt.daitemDatete : new Date(elt.itemDate);
+      const yVal = elt.data.valueQuantity.value;
+      if (series.hasOwnProperty(displayStr)) {
+        // Add to series
+        series[displayStr].push({ provider: elt.provider, x: xVal, y: yVal });
+      } else {
+        // New series
+        series[displayStr] = [{ provider: elt.provider, x: xVal, y: yVal }];
+      }
+    } catch (e) {
+      log(`renderLabs() 2: ${e.message}`);
+    }
+  })
+
+  let highlightValue = false;
+  const value = tryWithDefault(fieldsData, (fieldsData) => fieldsData.valueQuantity.value, null);
+  const valueUnits = tryWithDefault(fieldsData, (fieldsData) => fieldsData.valueQuantity.unit, null);
+  const valueRatioDisplay = fieldsData.valueRatio ? `${fieldsData.valueRatio.numerator.value} / ${fieldsData.valueRatio.denominator.value}` : null;
+
+  let refRangeLabel;
+  let refRange;
+
+  if (fieldsData.referenceRange) {
+    try {
+      refRangeLabel = fieldsData.referenceRange[0].meaning.coding[0].display;
+    } catch (e) {
+      refRangeLabel = 'Reference Range';
+    }
+
+    try {
+      const lowValue = fieldsData.referenceRange[0].low.value;
+      const lowUnits = fieldsData.referenceRange[0].low.unit;
+
+      const highValue = fieldsData.referenceRange[0].high.value;
+      const highUnits = fieldsData.referenceRange[0].high.unit;
+
+      // Construct reference range
+      refRange = `${lowValue + (lowUnits && lowUnits !== highUnits ? ` ${lowUnits}` : '')} - ${highValue}${highUnits ? ` ${highUnits}` : ''}`;
+
+      // Highlight the measured value if outside of the reference range
+      highlightValue = valueUnits === lowUnits && valueUnits === highUnits && (value < lowValue || value > highValue);
+    } catch (e) {
+      refRange = fieldsData.referenceRange.text;
+    }
+  }
+
+  // Select only values with matching provider and then sort
+  const data = series[fieldsData.display] && series[fieldsData.display].filter((e) => e.provider === fieldsData.provider)
+    .sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
+  const thisValue = fieldsData.valueQuantity ? fieldsData.valueQuantity.value : null;
+
+  const highlights = [{ x: new Date(date), y: thisValue }]
+
+  return {data, highlights}
+}
+
+
 //
 // renderMeds()
 //
@@ -1210,7 +1273,7 @@ export function renderVitals(matchingData, resources, dotClickFn, providers) {
   return null;
 }
 
-export const computeTimeSeriesData = (fieldsData, vitalSigns) => {
+export const computeTimeSeriesVitalSignsData = (fieldsData, vitalSigns) => {
   const { date, display } = fieldsData
   let series = {}
   vitalSigns.forEach((elt) => {

@@ -11,6 +11,7 @@ import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { format } from 'date-fns';
+import jsonQuery from 'json-query';
 
 import GenericCardBody from './GenericCardBody';
 import MedicationCardBody from './MedicationCardBody';
@@ -25,7 +26,7 @@ import SocialHistoryCardBody from './SocialHistoryCardBody';
 import UnimplementedCardBody from './UnimplementedCardBody';
 import VitalSignCardBody from './VitalSignCardBody';
 
-const selectCardBody = (fieldsData, normalized, vitalSigns) => {
+const selectCardBody = (fieldsData, normalized) => {
   switch (fieldsData.category) {
     case 'Conditions':
     case 'Document References':
@@ -45,7 +46,10 @@ const selectCardBody = (fieldsData, normalized, vitalSigns) => {
     case 'Immunizations':
       return <ImmunizationCardBody fieldsData={fieldsData} />;
     case 'Lab Results':
-      return <LabResultCardBody fieldsData={fieldsData} />;
+      const labOptions = {}
+      const labResultsPath = '[*category=Lab Results]';
+      const labResults = jsonQuery(labResultsPath, { data: normalized, ...labOptions }).value;
+      return <LabResultCardBody fieldsData={fieldsData} labResults={labResults}/>;
     case 'Exams':
       return <ExamCardBody fieldsData={fieldsData} />;
     case 'Meds Statement':
@@ -55,6 +59,9 @@ const selectCardBody = (fieldsData, normalized, vitalSigns) => {
     case 'Other':
       return <UnimplementedCardBody fieldsData={fieldsData} />;
     case 'Vital Signs':
+        const vitalSignsOptions = {};
+        const vitalSignsPath = '[*category=Vital Signs]';
+        const vitalSigns = jsonQuery(vitalSignsPath, { data: normalized, ...vitalSignsOptions }).value;
       return <VitalSignCardBody fieldsData={fieldsData} vitalSigns={vitalSigns} />;
     default:
       break;
@@ -87,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecordCard = ({ resource, normalized, vitalSigns }) => {
+const RecordCard = ({ resource, normalized }) => {
   const [expanded, setExpanded] = React.useState(false);
   const classes = useStyles();
   const {
@@ -181,7 +188,7 @@ const RecordCard = ({ resource, normalized, vitalSigns }) => {
       />
       <CardContent>
         <Grid container spacing={0}>
-          {selectCardBody(fieldsData, normalized, vitalSigns)}
+          {selectCardBody(fieldsData, normalized)}
         </Grid>
       </CardContent>
       <CardActions disableSpacing className={classes.cardActions}>
