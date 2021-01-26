@@ -1070,7 +1070,7 @@ export function renderVitals(matchingData, resources, dotClickFn, providers) {
     try {
       // Don't display Vital Signs "container" resources with related elements
       const displayStr = canonVitals(classFromCat(elt.category).primaryText(elt));
-
+      
       if (displayStr !== 'Vital Signs') {
         found.push({
           provider: elt.provider,
@@ -1160,11 +1160,6 @@ export function renderVitals(matchingData, resources, dotClickFn, providers) {
               </HighlightDiv>
             ) }
 
-            <div>
-              THIS VALUE:
-              {JSON.stringify(thisValue)}
-            </div>
-
             { elt.value && <div className="col01 label">Value</div> }
             { elt.value && <div className="col02 value-number">{`${formatDPs(elt.value, 1)} ${elt.unit}`}</div> }
 
@@ -1221,7 +1216,7 @@ export const computeTimeSeriesData = (fieldsData, vitalSigns) => {
   vitalSigns.forEach((elt) => {
     try {
       // Don't graph Vital Signs "container" resources
-      const displayStr = canonVitals(elt.data.code.coding[0].display);
+      const displayStr = elt.data.code.coding[0].display;
       if (displayStr !== 'Vital Signs') {
         const xVal = elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate);
         if (elt.data.valueQuantity) {
@@ -1261,10 +1256,8 @@ export const computeTimeSeriesData = (fieldsData, vitalSigns) => {
   // Select only values with matching provider and then sort
   const data = series[display] && series[display].filter((e) => e.provider === fieldsData.provider)
   .sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
-  const thisValue = fieldsData.value ? fieldsData.value
-  : (tryWithDefault(fieldsData, (e) => e.component[0].valueQuantity.value, 0)
-  + tryWithDefault(fieldsData, (e) => e.component[1].valueQuantity.value, 0)) / 2;
-
+  const thisValue = fieldsData.valueQuantity && fieldsData.valueQuantity.value
+  
   const highlights = [{ x: new Date(date), y: thisValue }]
   
 
