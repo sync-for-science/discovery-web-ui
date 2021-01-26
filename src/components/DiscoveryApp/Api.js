@@ -261,32 +261,32 @@ export const computeFilterState = (legacyResources) => {
 
 // Return sorted array of all provider names for this participant
 export const extractProviders = (normalized) => {
-  const provs = {};
+  const providersSet = new Set();
   if (normalized) {
     for (const resource of normalized) {
       // Add the found provider
-      provs[resource.provider] = null;
+      providersSet.add(resource.provider);
     }
   }
-  return Object.keys(provs).sort();
+  return [...providersSet].sort();
 };
 
 // Return sorted array of all populated category names for this participant
 export const extractCategories = (normalized) => {
   // const { legacy: legacyResources } = this.props.resources;
-  const cats = {};
+  const categoriesSet = new Set();
   if (normalized) {
     for (const resource of normalized) {
       if (resource.category === 'Patient') {
         // Ignore
       } else if (Unimplemented.unimplementedCats.includes(resource.category)) {
         // Add the "Unimplemented" category
-        cats[Unimplemented.catName] = null;
+        categoriesSet.add(Unimplemented.catName);
       } else {
         // Add the found category
-        cats[resource.category] = null;
+        categoriesSet.add(resource.category);
       }
     }
   }
-  return Object.keys(cats).sort();
+  return [...categoriesSet].sort();
 };
