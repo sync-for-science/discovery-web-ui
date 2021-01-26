@@ -375,6 +375,11 @@ export default class TilesView extends React.PureComponent {
   onTileClick(e) {
     const newSelectedTiles = { ...this.state.selectedTiles }; // copy selected tiles obj
     const tileId = this.parseTileId(e.target.id);
+
+    console.info('TilesView e.target.id: ', e.target.id);
+    console.error('TilesView tileId: ', tileId);
+    console.info('TilesView uniqueStruct: ', JSON.stringify(this.state.uniqueStruct, null, '  '));
+
     let matchingTileResources = null;
     let clearedPrevSelected = false;
 
