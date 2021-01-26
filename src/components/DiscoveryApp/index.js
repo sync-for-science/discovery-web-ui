@@ -51,8 +51,7 @@ class DiscoveryApp extends React.PureComponent {
 
     // catsEnabled: null,
     // provsEnabled: null,
-
-    providers: [],
+    // providers: [],
 
     // Shared Global Context
     updateGlobalContext: (updates) => this.setState(updates),
@@ -85,13 +84,6 @@ class DiscoveryApp extends React.PureComponent {
   onEvent = (event) => {
     this.setState({ lastEvent: event });
   }
-
-  // setEnabled = (catsEnabled, provsEnabled) => {
-  //   this.setState({
-  //     catsEnabled,
-  //     provsEnabled,
-  //   });
-  // }
 
   // Record thumb positions as returned from StandardFilters
   setDateRange = (minDate, maxDate) => {
@@ -126,25 +118,6 @@ class DiscoveryApp extends React.PureComponent {
     } catch (e) {
       return 0;
     }
-  }
-
-  get initialCats() {
-    const { resources: { categories } } = this.props;
-    console.error('>>>>>>>>>>>>>>>. categories: ', categories);
-
-    const cats = {};
-
-    for (const cat of categories) {
-      cats[cat] = true;
-    }
-
-    console.error('>>>>>>>>>>>>>>>. cats: ', cats);
-    return cats;
-  }
-
-  get initialProvs() {
-    const { resources: { providers } } = this.props;
-    return providers.reduce((res, prov) => { res[prov] = true; return res; }, {});
   }
 
   render() {
@@ -190,7 +163,6 @@ class DiscoveryApp extends React.PureComponent {
                   catsEnabled={activeCategories}
                   providers={providers}
                   provsEnabled={activeProviders}
-                  // enabledFn={this.setEnabled}
                   dateRangeFn={this.setDateRange}
                   lastEvent={this.state.lastEvent}
                   // TODO: convert to use route path segment:
@@ -292,9 +264,7 @@ const DiscoveryAppHOC = (props) => {
   const [resources, setResources] = useRecoilState(resourcesState);
   const [filters, setFilters] = useRecoilState(filtersState);
   const activeCategories = useRecoilValue(activeCategoriesState);
-  // const [activeCategories, setActiveCategories] = useRecoilState(activeCategoriesState);
   const activeProviders = useRecoilValue(activeProvidersState);
-  // const [activeProviders, setActiveProviders] = useRecoilState(activeProvidersState);
 
   useEffect(() => {
     function fetchData() {
@@ -355,7 +325,6 @@ const DiscoveryAppHOC = (props) => {
       resources={resources}
       activeCategories={activeCategories}
       activeProviders={activeProviders}
-      // setActiveProviders={setActiveProviders}
       filters={filters}
       setFilters={setFilters}
     />
