@@ -163,7 +163,11 @@ const RecordCard = ({ resource, normalized, vitalSigns }) => {
   // console.log('fieldsData', fieldsData)
 
   return (
-    <Card className={classes.root} variant="outlined">
+    <Card 
+      className={classes.root} 
+      variant="outlined"
+      id={`${format(new Date(fieldsData.date), 'y-MM-dd')}-${fieldsData.display}`}
+    >
       <CardHeader
         // action={(
         //   <IconButton aria-label="remove">

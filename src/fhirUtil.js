@@ -1195,8 +1195,6 @@ export function renderVitals(matchingData, resources, dotClickFn, providers) {
               <div className="col02 value-text">{elt.status}</div>
             </CondDiv>
           </div>
-          {console.log('TimeSeries Date: ', elt.date instanceof Date)}
-          {console.log('TimeSeries value: ', thisValue)}
           <div className="content-graph">
             { sortedSeries && (
               <TimeSeries
