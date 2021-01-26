@@ -193,6 +193,7 @@ export const normalizeResourcesAndInjectPartipantId = (participantId) => (data) 
   const result = [];
   for (const providerName in data) {
     if (data[providerName].error) {
+      console.error('data[providerName].error: ', data[providerName].error); // eslint-disable-line no-console
       // Error response
       if (!result.Error) {
         // Init container
