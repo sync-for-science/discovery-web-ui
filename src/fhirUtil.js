@@ -1215,8 +1215,9 @@ export const computeTimeSeriesData = (fieldsData, vitalSigns) => {
   let series = {}
   vitalSigns.forEach((elt) => {
     try {
-      // Don't graph Vital Signs "container" resources
+      // this is different than renderVitals, removes canonVitals
       const displayStr = elt.data.code.coding[0].display;
+      // Don't graph Vital Signs "container" resources
       if (displayStr !== 'Vital Signs') {
         const xVal = elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate);
         if (elt.data.valueQuantity) {
@@ -1256,8 +1257,10 @@ export const computeTimeSeriesData = (fieldsData, vitalSigns) => {
   // Select only values with matching provider and then sort
   const data = series[display] && series[display].filter((e) => e.provider === fieldsData.provider)
   .sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
+
+  // this is different than renderVitals due to different shape of fieldsData
   const thisValue = fieldsData.valueQuantity && fieldsData.valueQuantity.value
-  
+
   const highlights = [{ x: new Date(date), y: thisValue }]
   
 

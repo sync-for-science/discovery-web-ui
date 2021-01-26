@@ -1,13 +1,18 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography';
 import CardBodyField from './CardBodyField'
-// import FhirTransform from './FhirTransform';
-import {canonVitals, computeTimeSeriesData} from '../../fhirUtil'
-import {tryWithDefault} from '../../util'
-import { log } from '../../utils/logger';
+import {computeTimeSeriesData} from '../../fhirUtil'
 import TimeSeries from '../TimeSeries/index';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  timeSeries: {
+    marginTop: '20px',
+  },
+}));
 
 const VitalSignCardBody = ({fieldsData, vitalSigns}) => {
+  const classes = useStyles()
   const valueDisplay = fieldsData.valueQuantity && `${fieldsData.valueQuantity.value.toFixed(1)} ${fieldsData.valueQuantity.unit}`
   
   // breakout embedded fields in component, typically for Blood Pressure
@@ -67,7 +72,7 @@ const VitalSignCardBody = ({fieldsData, vitalSigns}) => {
         label="TIMESERIES" 
         value='Placeholder Time Series'
       />
-      <Typography variant="timeSeries">
+      <Typography variant="timeSeries" className={classes.timeSeries}>
         {data && <TimeSeries
           measure={fieldsData.display}
           data={data}
