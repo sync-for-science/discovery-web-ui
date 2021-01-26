@@ -55,7 +55,10 @@ class DiscoveryApp extends React.PureComponent {
     // providers: [],
 
     // Shared Global Context
-    updateGlobalContext: (updates) => this.setState(updates),
+    updateGlobalContext: (updates) => {
+      console.info('updateGlobalContext: ', JSON.stringify(updates, null, '  '));
+      this.setState(updates);
+    },
 
     savedCatsEnabled: null, // StandardFilters & CategoryRollup
     savedProvsEnabled: null, // StandardFilters & ProviderRollup
