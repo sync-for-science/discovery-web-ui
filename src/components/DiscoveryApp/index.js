@@ -289,8 +289,6 @@ const DiscoveryAppHOC = (props) => {
         const legacy = generateLegacyResources(raw, normalized, participantId);
         // const patient = legacy.pathItem('[category=Patient]');
         const patient = normalized.find(({ category }) => category === 'Patient');
-        const providers = extractProviders(normalized);
-        const categories = extractCategories(normalized);
         const totalResCount = legacy.transformed.filter((elt) => elt.category !== 'Patient').length;
         const records = normalized.reduce((acc, record) => {
           const { data: { id: uuid } } = record;
@@ -303,6 +301,8 @@ const DiscoveryAppHOC = (props) => {
             [uuid]: record,
           };
         }, {});
+        const providers = extractProviders(records);
+        const categories = extractCategories(records);
 
         setResources({
           ...resources,

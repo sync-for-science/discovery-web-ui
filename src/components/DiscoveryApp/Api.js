@@ -260,31 +260,33 @@ export const computeFilterState = (legacyResources) => {
 };
 
 // Return sorted array of all provider names for this participant
-export const extractProviders = (normalized) => {
+export const extractProviders = (records) => {
   const providersSet = new Set();
-  if (normalized) {
-    for (const resource of normalized) {
+  if (records) {
+    for (const key in records) {
+      const record = records[key];
       // Add the found provider
-      providersSet.add(resource.provider);
+      providersSet.add(record.provider);
     }
   }
   return [...providersSet].sort();
 };
 
 // Return sorted array of all populated category names for this participant
-export const extractCategories = (normalized) => {
+export const extractCategories = (records) => {
   // const { legacy: legacyResources } = this.props.resources;
   const categoriesSet = new Set();
-  if (normalized) {
-    for (const resource of normalized) {
-      if (resource.category === 'Patient') {
+  if (records) {
+    for (const key in records) {
+      const record = records[key];
+      if (record.category === 'Patient') {
         // Ignore
-      } else if (Unimplemented.unimplementedCats.includes(resource.category)) {
+      } else if (Unimplemented.unimplementedCats.includes(record.category)) {
         // Add the "Unimplemented" category
         categoriesSet.add(Unimplemented.catName);
       } else {
         // Add the found category
-        categoriesSet.add(resource.category);
+        categoriesSet.add(record.category);
       }
     }
   }
