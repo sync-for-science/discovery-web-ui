@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 import { connectToResources } from '../../recoil';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
 import RecordCard from '../cards/RecordCard';
@@ -15,9 +14,9 @@ const CardList = ({ normalized, patient }) => {
   // return record.map((r, i) => <RecordCard key={i} resource={r} normalized={normalized} />);
 
   return normalized.map((r, i) => (
-    <RecordCard 
-      key={i} 
-      resource={r} 
+    <RecordCard
+      key={i}
+      resource={r}
       normalized={normalized}
       patient={patient}
     />
@@ -25,7 +24,9 @@ const CardList = ({ normalized, patient }) => {
 };
 
 const Collections = (props) => {
-  const { loading, normalized, legacy, patient } = props.resources;
+  const {
+    loading, normalized, legacy, patient,
+  } = props.resources;
 
   return (
     <div>

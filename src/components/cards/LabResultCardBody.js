@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import CardBodyField from './CardBodyField';
 import TimeSeries from '../TimeSeries/index';
-import {computeTimeSeriesLabResultsData} from '../../fhirUtil'
+import { computeTimeSeriesLabResultsData } from '../../fhirUtil';
 
 const useStyles = makeStyles((theme) => ({
   timeSeries: {
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LabResultCardBody = ({ fieldsData, labResults }) => {
-  const classes = useStyles()
+  const classes = useStyles();
   const valueRatioDisplay = `${fieldsData.valueRatio && fieldsData.valueRatio.numerator.value} / ${fieldsData.valueRatio && fieldsData.valueRatio.denominator.value}`;
 
   let valueField;
@@ -48,7 +48,7 @@ const LabResultCardBody = ({ fieldsData, labResults }) => {
     });
   }
 
-  const { data, highlights } = computeTimeSeriesLabResultsData(fieldsData, labResults)
+  const { data, highlights } = computeTimeSeriesLabResultsData(fieldsData, labResults);
 
   return (
     <>
@@ -81,12 +81,14 @@ const LabResultCardBody = ({ fieldsData, labResults }) => {
         value={fieldsData.status}
       />
       <Typography variant="timeSeries" className={classes.timeSeries}>
-        {data && <TimeSeries
+        {data && (
+        <TimeSeries
           measure={fieldsData.display}
           data={data}
           highlights={highlights}
           dotClickFn={() => {}}
-        />}
+        />
+        )}
       </Typography>
     </>
   );

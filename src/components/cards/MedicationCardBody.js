@@ -10,7 +10,9 @@ const MedicationCardBody = ({ fieldsData }) => {
         && fieldsData.dosageInstruction.timing
         && fieldsData.dosageInstruction.timing.repeat
     ) {
-      const asNeededText = fieldsData.dosageInstruction.asNeededBoolean ? 'as needed' : 'as instructed'; // what the opposite of As Needed?
+      const asNeededText = fieldsData.dosageInstruction.asNeededBoolean
+        ? 'as needed'
+        : 'as instructed'; // what the opposite of As Needed?
       const { frequency } = fieldsData.dosageInstruction.timing.repeat;
       const { period } = fieldsData.dosageInstruction.timing.repeat;
       const { periodUnit } = fieldsData.dosageInstruction.timing.repeat;
@@ -88,7 +90,12 @@ const MedicationCardBody = ({ fieldsData }) => {
         value={formatDosageInstruction()}
       />
       <CardBodyField
-        dependency={fieldsData.dosageInstruction && fieldsData.dosageInstruction.timing && fieldsData.dosageInstruction.timing.repeat && fieldsData.dosageInstruction.timing.repeat.boundsPeriod}
+        dependency={
+          fieldsData.dosageInstruction
+          && fieldsData.dosageInstruction.timing
+          && fieldsData.dosageInstruction.timing.repeat
+          && fieldsData.dosageInstruction.timing.repeat.boundsPeriod
+        }
         label="STARTING ON"
         value={formatDosageStart()}
       />

@@ -1,10 +1,10 @@
-import React from 'react'
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
-import CardBodyField from './CardBodyField'
+import CardBodyField from './CardBodyField';
 import TimeSeries from '../TimeSeries/index';
-import {computeTimeSeriesVitalSignsData} from '../../fhirUtil'
+import { computeTimeSeriesVitalSignsData } from '../../fhirUtil';
 
 const useStyles = makeStyles((theme) => ({
   timeSeries: {
@@ -12,72 +12,74 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const VitalSignCardBody = ({fieldsData, vitalSigns}) => {
-  const classes = useStyles()
-  const valueDisplay = fieldsData.valueQuantity && `${fieldsData.valueQuantity.value.toFixed(1)} ${fieldsData.valueQuantity.unit}`
-  
+const VitalSignCardBody = ({ fieldsData, vitalSigns }) => {
+  const classes = useStyles();
+  const valueDisplay = fieldsData.valueQuantity && `${fieldsData.valueQuantity.value.toFixed(1)} ${fieldsData.valueQuantity.unit}`;
+
   // breakout embedded fields in component, typically for Blood Pressure
-  let displayComponents
+  let displayComponents;
   if (fieldsData.component) {
     displayComponents = fieldsData.component.map((resource, i) => {
-      let label
-      if (resource.code.text === "Diastolic Blood Pressure") {
-        label = "DIASTOLIC"
-      } else if (resource.code.text === "Systolic Blood Pressure") {
-        label = "SYSTOLIC"
+      let label;
+      if (resource.code.text === 'Diastolic Blood Pressure') {
+        label = 'DIASTOLIC';
+      } else if (resource.code.text === 'Systolic Blood Pressure') {
+        label = 'SYSTOLIC';
       } else {
-        label = resource.code.text
+        label = resource.code.text;
       }
 
-      const resourceValueDisplay = resource.valueQuantity && `${resource.valueQuantity.value.toFixed(1)} ${resource.valueQuantity.unit}`
+      const resourceValueDisplay = resource.valueQuantity && `${resource.valueQuantity.value.toFixed(1)} ${resource.valueQuantity.unit}`;
 
       return (
-        <CardBodyField 
+        <CardBodyField
           key={i}
-          dependency={resource.valueQuantity.value} 
+          dependency={resource.valueQuantity.value}
           label={label}
-          value={resourceValueDisplay} 
+          value={resourceValueDisplay}
         />
-      )
-    })
+      );
+    });
   }
 
-  const { data, highlights } = computeTimeSeriesVitalSignsData(fieldsData, vitalSigns)
+  const { data, highlights } = computeTimeSeriesVitalSignsData(fieldsData, vitalSigns);
 
   return (
     <>
-      <CardBodyField 
-        dependency={fieldsData.display} 
-        label="MEASURE" 
-        value={fieldsData.display} 
+      <CardBodyField
+        dependency={fieldsData.display}
+        label="MEASURE"
+        value={fieldsData.display}
         highlight
       />
-      <CardBodyField 
-        dependency={fieldsData.valueQuantity} 
-        label="VALUE" 
+      <CardBodyField
+        dependency={fieldsData.valueQuantity}
+        label="VALUE"
         value={valueDisplay}
       />
       {displayComponents}
-      <CardBodyField 
-        dependency={fieldsData.provider} 
-        label="PROVIDER" 
-        value={fieldsData.provider} 
+      <CardBodyField
+        dependency={fieldsData.provider}
+        label="PROVIDER"
+        value={fieldsData.provider}
       />
-      <CardBodyField 
-        dependency={fieldsData.status} 
-        label="STATUS" 
-        value={fieldsData.status} 
+      <CardBodyField
+        dependency={fieldsData.status}
+        label="STATUS"
+        value={fieldsData.status}
       />
       <Typography variant="timeSeries" className={classes.timeSeries}>
-        {data && <TimeSeries
+        {data && (
+        <TimeSeries
           measure={fieldsData.display}
           data={data}
           highlights={highlights}
           dotClickFn={() => {}}
-        />}
+        />
+        )}
       </Typography>
     </>
-  )
-}
+  );
+};
 
-export default VitalSignCardBody
+export default VitalSignCardBody;

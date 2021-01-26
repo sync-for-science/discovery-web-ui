@@ -790,8 +790,8 @@ export function renderLabs(matchingData, resources, dotClickFn, providers) {
 }
 
 export const computeTimeSeriesLabResultsData = (fieldsData, labResults) => {
-  const { date, display } = fieldsData
-  let series = {}
+  const { date, display } = fieldsData;
+  const series = {};
   labResults.forEach((elt) => {
     try {
       const displayStr = elt.data.code.coding[0].display;
@@ -807,7 +807,7 @@ export const computeTimeSeriesLabResultsData = (fieldsData, labResults) => {
     } catch (e) {
       log(`renderLabs() 2: ${e.message}`);
     }
-  })
+  });
 
   let highlightValue = false;
   const value = tryWithDefault(fieldsData, (fieldsData) => fieldsData.valueQuantity.value, null);
@@ -846,11 +846,10 @@ export const computeTimeSeriesLabResultsData = (fieldsData, labResults) => {
     .sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
   const thisValue = fieldsData.valueQuantity ? fieldsData.valueQuantity.value : null;
 
-  const highlights = [{ x: new Date(date), y: thisValue }]
+  const highlights = [{ x: new Date(date), y: thisValue }];
 
-  return {data, highlights}
-}
-
+  return { data, highlights };
+};
 
 //
 // renderMeds()
@@ -1133,7 +1132,7 @@ export function renderVitals(matchingData, resources, dotClickFn, providers) {
     try {
       // Don't display Vital Signs "container" resources with related elements
       const displayStr = canonVitals(classFromCat(elt.category).primaryText(elt));
-      
+
       if (displayStr !== 'Vital Signs') {
         found.push({
           provider: elt.provider,
@@ -1274,8 +1273,8 @@ export function renderVitals(matchingData, resources, dotClickFn, providers) {
 }
 
 export const computeTimeSeriesVitalSignsData = (fieldsData, vitalSigns) => {
-  const { date, display } = fieldsData
-  let series = {}
+  const { date, display } = fieldsData;
+  const series = {};
   vitalSigns.forEach((elt) => {
     try {
       // this is different than renderVitals, removes canonVitals
@@ -1315,17 +1314,16 @@ export const computeTimeSeriesVitalSignsData = (fieldsData, vitalSigns) => {
     } catch (e) {
       log(`renderVitals() 2: ${e.message}`);
     }
-  })
+  });
 
   // Select only values with matching provider and then sort
   const data = series[display] && series[display].filter((e) => e.provider === fieldsData.provider)
-  .sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
+    .sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
 
   // this is different than renderVitals due to different shape of fieldsData
-  const thisValue = fieldsData.valueQuantity && fieldsData.valueQuantity.value
+  const thisValue = fieldsData.valueQuantity && fieldsData.valueQuantity.value;
 
-  const highlights = [{ x: new Date(date), y: thisValue }]
-  
+  const highlights = [{ x: new Date(date), y: thisValue }];
 
   return { data, highlights };
 };

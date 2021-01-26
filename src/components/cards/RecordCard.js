@@ -47,10 +47,10 @@ const selectCardBody = (fieldsData, normalized) => {
     case 'Immunizations':
       return <ImmunizationCardBody fieldsData={fieldsData} />;
     case 'Lab Results':
-      const labOptions = {}
+      const labOptions = {};
       const labResultsPath = '[*category=Lab Results]';
       const labResults = jsonQuery(labResultsPath, { data: normalized, ...labOptions }).value;
-      return <LabResultCardBody fieldsData={fieldsData} labResults={labResults}/>;
+      return <LabResultCardBody fieldsData={fieldsData} labResults={labResults} />;
     case 'Exams':
       return <ExamCardBody fieldsData={fieldsData} />;
     case 'Meds Statement':
@@ -60,9 +60,9 @@ const selectCardBody = (fieldsData, normalized) => {
     case 'Other':
       return <UnimplementedCardBody fieldsData={fieldsData} />;
     case 'Vital Signs':
-        const vitalSignsOptions = {};
-        const vitalSignsPath = '[*category=Vital Signs]';
-        const vitalSigns = jsonQuery(vitalSignsPath, { data: normalized, ...vitalSignsOptions }).value;
+      const vitalSignsOptions = {};
+      const vitalSignsPath = '[*category=Vital Signs]';
+      const vitalSigns = jsonQuery(vitalSignsPath, { data: normalized, ...vitalSignsOptions }).value;
       return <VitalSignCardBody fieldsData={fieldsData} vitalSigns={vitalSigns} />;
     default:
       break;
@@ -170,11 +170,11 @@ const RecordCard = ({ resource, normalized, patient }) => {
 
   // console.log('fieldsData', fieldsData)
 
-  const patientAgeAtRecord = formatAge(patient.data.birthDate, resource.itemDate, 'age ') || ""
-  
+  const patientAgeAtRecord = formatAge(patient.data.birthDate, resource.itemDate, 'age ') || '';
+
   return (
-    <Card 
-      className={classes.root} 
+    <Card
+      className={classes.root}
       variant="outlined"
       id={`${format(new Date(fieldsData.date), 'y-MM-dd')}-${fieldsData.display}`}
     >
