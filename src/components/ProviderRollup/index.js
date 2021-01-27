@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import '../../css/Selector.css';
 
 import { useRecoilState } from 'recoil';
-import { activeProvidersState, providersModeState } from '../../recoil';
+import { activeProvidersState, providersModeState, SELECTION_STATES } from '../../recoil';
 
 //
 // Render the DiscoveryApp "rollup" provider line
@@ -37,22 +37,22 @@ class ProviderRollup extends React.PureComponent {
     // const enabled = this.getActiveCount();
 
     // cycles from: active > all > none > active
-    if (providersMode === 'none') { // (enabled === 0) {
-      setProvidersMode('active');
-    } else if (providersMode === 'active') { // (enabled < providers.length) {
-      setProvidersMode('all');
-    } else if (providersMode === 'all') {
-      setProvidersMode('none');
+    if (providersMode === SELECTION_STATES.NONE) { // (enabled === 0) {
+      setProvidersMode(SELECTION_STATES.SELECTED);
+    } else if (providersMode === SELECTION_STATES.SELECTED) { // (enabled < providers.length) {
+      setProvidersMode(SELECTION_STATES.ALL);
+    } else if (providersMode === SELECTION_STATES.ALL) {
+      setProvidersMode(SELECTION_STATES.NONE);
     }
   }
 
   buttonClass() {
     const { providersMode } = this.props;
-    if (providersMode === 'none') {
+    if (providersMode === SELECTION_STATES.NONE) {
       return 'selector-rollup-nav-button-none';
-    } if (providersMode === 'active') {
+    } if (providersMode === SELECTION_STATES.SELECTED) {
       return 'selector-rollup-nav-button-partial';
-    } if (providersMode === 'all') {
+    } if (providersMode === SELECTION_STATES.ALL) {
       return 'selector-rollup-nav-button-all';
     }
   }

@@ -5,7 +5,7 @@ import '../../css/Selector.css';
 import './CategoryRollup.css';
 
 import { useRecoilState } from 'recoil';
-import { activeCategoriesState, categoriesModeState } from '../../recoil';
+import { activeCategoriesState, categoriesModeState, SELECTION_STATES } from '../../recoil';
 
 //
 // Render the DiscoveryApp "rollup" category line
@@ -37,22 +37,22 @@ class CategoryRollup extends React.PureComponent {
     // const enabled = this.getActiveCount();
 
     // cycles from: active > all > none > active
-    if (categoriesMode === 'none') { // (enabled === 0) {
-      setCategoriesMode('active');
-    } else if (categoriesMode === 'active') { // (enabled < categories.length) {
-      setCategoriesMode('all');
-    } else if (categoriesMode === 'all') {
-      setCategoriesMode('none');
+    if (categoriesMode === SELECTION_STATES.NONE) { // (enabled === 0) {
+      setCategoriesMode(SELECTION_STATES.SELECTED);
+    } else if (categoriesMode === SELECTION_STATES.SELECTED) { // (enabled < categories.length) {
+      setCategoriesMode(SELECTION_STATES.ALL);
+    } else if (categoriesMode === SELECTION_STATES.ALL) {
+      setCategoriesMode(SELECTION_STATES.NONE);
     }
   }
 
   buttonClass() {
     const { categoriesMode } = this.props;
-    if (categoriesMode === 'none') {
+    if (categoriesMode === SELECTION_STATES.NONE) {
       return 'selector-rollup-nav-button-none';
-    } if (categoriesMode === 'active') {
+    } if (categoriesMode === SELECTION_STATES.SELECTED) {
       return 'selector-rollup-nav-button-partial';
-    } if (categoriesMode === 'all') {
+    } if (categoriesMode === SELECTION_STATES.ALL) {
       return 'selector-rollup-nav-button-all';
     }
   }
