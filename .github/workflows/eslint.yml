@@ -18,4 +18,4 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci --cache .npm
       - name: Run ESLint
-        run: npm run-script lint:js
+        run: npm run-script lint:js -- --quiet
