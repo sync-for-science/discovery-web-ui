@@ -57,6 +57,34 @@ export const allRecordIds = selector({
   },
 });
 
+// from src/components/Unimplemented/index.js :
+const UNIMPLEMENTED_CATEGORIES = [
+  'Practitioner', 'List', 'Questionnaire', 'Questionnaire Response', 'Observation-Other',
+  'Diagnostic Report', 'Care Plan', 'Medication', 'Organization', 'Goal', 'Basic',
+  'Immunization Recommendation', 'Imaging Study', 'Coverage', 'Related Person', 'Device',
+];
+
+export const groupedRecordIdsBySubtypeState = selector({
+  key: 'groupedRecordIdsBySubtypeState',
+  get: ({ get }) => {
+    const { records } = get(resourcesState);
+    return Object.entries(records).reduce((acc, [uuid, record]) => {
+      if (record.category === 'Patient') {
+        console.info(`IGNORE PATIENT ${uuid}`); // eslint-disable-line no-console
+        // return acc;
+      }
+      // const { category, displayCoding, data: { resourceType, contained: { resourceType: containedResourceType } = {} } } = record;
+      const { category, displayCoding } = record;
+      const cat = UNIMPLEMENTED_CATEGORIES.includes(category) ? 'Other' : category; // `${resourceType}:${category}`;
+      acc[cat] = acc[cat] ?? {};
+      const subType = displayCoding.display ?? '(no subtype)'; // Safety, but may be unnecessary
+      acc[cat][subType] = acc[cat][subType] ?? [];
+      acc[cat][subType].push(uuid);
+      return acc;
+    }, {});
+  },
+});
+
 export const patientRecord = selector({
   key: 'patientRecord',
   get: ({ get }) => {
@@ -83,16 +111,56 @@ export const vitalSignsRecords = selector({
   },
 });
 
+const pruneEmpty = ((o) => Object.entries(o).reduce((acc, [k, v]) => {
+  // prune items whose values are null, undefined, or empty string:
+  if (v) {
+    acc[k] = v;
+  }
+  return acc;
+}, {}));
+
 // TODO: ^other states facilitate implementation of something like the following:
-// export const collectionsState = atom({
-//   key: 'collectionsState',
-//   default: {
-//     activeCollection: 'default',
-//     collections: {
-//       default: {},
-//     },
-//   },
-// });
+export const collectionsState = atom({
+  key: 'collectionsState',
+  default: {
+    activeCollection: 'default',
+    collections: {
+      default: {
+        label: 'Untitled Collection',
+        uuids: {}, // new Set(),
+      },
+    },
+  },
+});
+
+export const activeCollectionState = selector({
+  key: 'activeCollectionState',
+  get: ({ get }) => {
+    const allCollections = get(collectionsState);
+    const { activeCollection, collections } = allCollections;
+    const currentActiveCollection = collections[activeCollection];
+    return currentActiveCollection;
+  },
+  set: ({ get, set }, newValues) => {
+    const allCollections = get(collectionsState);
+    const { activeCollection, collections } = allCollections;
+    const currentActiveCollection = collections[activeCollection];
+    const { label } = currentActiveCollection;
+    const uuids = pruneEmpty({
+      ...currentActiveCollection.uuids,
+      ...newValues,
+    });
+    set(collectionsState, {
+      activeCollection,
+      collections: {
+        [activeCollection]: {
+          label,
+          uuids,
+        },
+      },
+    });
+  },
+});
 
 // TODO: use 3rd party library, eg, reselect:
 const recoilAtomsCache = {};
@@ -101,14 +169,6 @@ const memoize = (f) => (...args) => {
   recoilAtomsCache[cacheKey] = recoilAtomsCache[cacheKey] ?? f(...args);
   return recoilAtomsCache[cacheKey];
 };
-
-const pruneEmpty = ((o) => Object.entries(o).reduce((acc, [k, v]) => {
-  // prune items whose values are null, undefined, or empty string:
-  if (v) {
-    acc[k] = v;
-  }
-  return acc;
-}, {}));
 
 export const notesWithRecordId = memoize((recordId) => {
   const atomForThisRecord = atom({

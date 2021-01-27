@@ -1,12 +1,15 @@
 import React from 'react';
 
 import { useRecoilValue } from 'recoil';
-import { allRecordIds, resourcesState, patientRecord } from '../../recoil';
+import {
+  resourcesState, patientRecord, groupedRecordIdsBySubtypeState,
+} from '../../recoil';
 
+/* eslint-disable react/jsx-one-expression-per-line */
 const Collections = () => {
-  const recordIds = useRecoilValue(allRecordIds);
   const resources = useRecoilValue(resourcesState);
   const patient = useRecoilValue(patientRecord);
+  const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsBySubtypeState);
 
   const {
     loading, records,
@@ -20,18 +23,26 @@ const Collections = () => {
         { String(loading) }
       </div>
       <div className="collections-content">
-        <h4>patient:</h4>
-        <pre>
-          { JSON.stringify(patient, null, '  ') }
-        </pre>
-        <h4>records:</h4>
-        <pre>
-          { JSON.stringify(records, null, '  ') }
-        </pre>
-        <h4>recordIds:</h4>
-        <pre>
-          { JSON.stringify(recordIds, null, '  ') }
-        </pre>
+        <div>
+          <h4>groupedRecordIdsBySubtype:</h4>
+          <pre>
+            {JSON.stringify(groupedRecordIdsBySubtype, null, '  ') }
+          </pre>
+        </div>
+        <hr />
+        <div style={{ backgroundColor: '#ff9' }}>
+          <h4>patient:</h4>
+          <pre>
+            { JSON.stringify(patient, null, '  ') }
+          </pre>
+        </div>
+        <hr />
+        <div>
+          <h4>records:</h4>
+          <pre>
+            { JSON.stringify(records, null, '  ') }
+          </pre>
+        </div>
       </div>
     </div>
   );
