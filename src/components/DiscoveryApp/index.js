@@ -158,7 +158,6 @@ class DiscoveryApp extends React.PureComponent {
             <div className="inner-container">
               <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
                 <StandardFilters
-                  activeView={activeView}
                   resources={legacyResources}
                   dates={dates}
                   categories={categories}
@@ -180,7 +179,6 @@ class DiscoveryApp extends React.PureComponent {
                     <Switch>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/summary`}>
                         <SummaryView
-                          activeView={activeView}
                           resources={legacyResources}
                           dates={dates}
                           categories={categories}
@@ -189,7 +187,6 @@ class DiscoveryApp extends React.PureComponent {
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/catalog`}>
                         <TilesView
-                          activeView={activeView}
                           resources={this.props.resources}
                           totalResCount={totalResCount}
                           dates={dates}
@@ -203,7 +200,6 @@ class DiscoveryApp extends React.PureComponent {
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/compare`}>
                         <CompareView
-                          activeView={activeView}
                           resources={this.props.resources}
                           totalResCount={totalResCount}
                           dates={dates}
@@ -218,7 +214,6 @@ class DiscoveryApp extends React.PureComponent {
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/timeline`}>
                         <ContentPanel
                           open
-                          activeView={activeView}
                           catsEnabled={activeCategories}
                           provsEnabled={activeProviders}
                           dotClickFn={this.onDotClick}
