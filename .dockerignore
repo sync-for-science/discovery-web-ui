@@ -11,6 +11,7 @@
 !/src/**
 !package.json
 !package-lock.json
+!.babelrc
 !config-overrides.js
 !postcss.config.js
 !run.sh
