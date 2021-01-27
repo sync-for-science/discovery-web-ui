@@ -74,12 +74,12 @@ class DiscoveryApp extends React.PureComponent {
 
   componentDidMount() {
     window.addEventListener('resize', this.onEvent);
-    window.addEventListener('keydown', this.onEvent);
+    // window.addEventListener('keydown', this.onEvent);
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.onEvent);
-    window.removeEventListener('keydown', this.onEvent);
+    // window.removeEventListener('keydown', this.onEvent);
   }
 
   onEvent = (event) => {
