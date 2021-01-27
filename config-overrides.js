@@ -19,24 +19,14 @@ const {
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
 
-// The following works, on its own:  (but without react-app-rewire-postcss / postcss-nested)
-// module.exports = override(
-//   // useBabelRc(),
-//   addBabelPlugins(
-//     '@babel/plugin-proposal-nullish-coalescing-operator',
-//     '@babel/plugin-proposal-optional-chaining',
-//   ),
-// );
-// ^ replace react-app-rewire-postcss with: addPostcssPlugins([postCssNested]) ?
-
 module.exports = (config, env) => {
   override(
-    // useBabelRc(),
+    // useBabelRc(), // < alternative to addBabelPlugins ?
     addBabelPlugins(
       '@babel/plugin-proposal-nullish-coalescing-operator',
       '@babel/plugin-proposal-optional-chaining',
     ),
-    // addPostcssPlugins([postCssNested]),
+    // addPostcssPlugins([postCssNested]), // < use this, instead of react-app-rewire-postcss ?
   )(config);
 
   rewirePostCSS(config, true);
