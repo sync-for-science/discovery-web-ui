@@ -90,7 +90,7 @@ const itemDate = (item, category) => {
 // See queryOptions()
 const isCategory = (input, value) => {
   //      console.log('input.category: ' + JSON.stringify(input.category,null,3));
-  if (input && input.category) {
+  if (input?.category) {
     if (input.category.text === value) {
       return true;
     } if (input.category.coding) {
