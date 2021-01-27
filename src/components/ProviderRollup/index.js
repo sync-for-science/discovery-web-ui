@@ -4,27 +4,16 @@ import PropTypes from 'prop-types';
 // import './ProviderRollup.css';
 import '../../css/Selector.css';
 
-// import SVGContainer from '../SVGContainer';
-// import DotLine from '../DotLine';
-
-import DiscoveryContext from '../DiscoveryContext';
+import { useRecoilState } from 'recoil';
+import { activeProvidersState, providersModeState, SELECTION_STATES } from '../../recoil';
 
 //
 // Render the DiscoveryApp "rollup" provider line
 //
-export default class ProviderRollup extends React.Component {
-  static myName = 'ProviderRollup';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
-
+class ProviderRollup extends React.PureComponent {
   static propTypes = {
-    svgWidth: PropTypes.string.isRequired,
-    dotPositionsFn: PropTypes.func.isRequired,
-    dotClickFn: PropTypes.func,
     isExpanded: PropTypes.bool.isRequired,
     expansionFn: PropTypes.func.isRequired,
-    provsEnabledFn: PropTypes.func.isRequired, // Callback to report changed provider enable/disable
-    categories: PropTypes.arrayOf(PropTypes.string),
   }
 
   state = {
@@ -36,46 +25,36 @@ export default class ProviderRollup extends React.Component {
     this.props.expansionFn('Providers', !this.state.isExpanded);
   }
 
+  // getActiveCount = () => {
+  //   const { activeProviders } = this.props;
+  //   return Object.values(activeProviders).reduce((count, isActive) => count + (isActive ? 1 : 0), 0);
+  // }
+
   handleSetClearButtonClick = () => {
-    const enabled = Object.keys(this.context.provsEnabled).reduce((count, key) => count + (this.context.provsEnabled[key]
-    && this.props.providers.includes(key) ? 1 : 0), 0);
-    let newProvsEnabled = {};
+    const {
+      providersMode, setProvidersMode,
+    } = this.props;
+    // const enabled = this.getActiveCount();
 
-    if (enabled === 0) {
-      // None enabled
-      if (this.context.savedProvsEnabled) {
-        // --> prior saved partial
-        newProvsEnabled = this.context.savedProvsEnabled;
-      } else {
-        // --> all enabled
-        for (const prov of this.props.providers) {
-          newProvsEnabled[prov] = true;
-        }
-      }
-    } else if (enabled < this.props.providers.length) {
-      // Part enabled --> all enabled (and save partial)
-      this.context.updateGlobalContext({ savedProvsEnabled: this.context.provsEnabled });
-      for (const prov of this.props.providers) {
-        newProvsEnabled[prov] = true;
-      }
-    } else {
-      // All enabled --> none enabled
-      for (const prov of this.props.providers) {
-        newProvsEnabled[prov] = false;
-      }
+    // cycles from: active > all > none > active
+    if (providersMode === SELECTION_STATES.NONE) { // (enabled === 0) {
+      setProvidersMode(SELECTION_STATES.SELECTED);
+    } else if (providersMode === SELECTION_STATES.SELECTED) { // (enabled < providers.length) {
+      setProvidersMode(SELECTION_STATES.ALL);
+    } else if (providersMode === SELECTION_STATES.ALL) {
+      setProvidersMode(SELECTION_STATES.NONE);
     }
-
-    this.props.provsEnabledFn(newProvsEnabled);
   }
 
   buttonClass() {
-    const enabled = this.context.provsEnabled ? Object.keys(this.context.provsEnabled).reduce((count, key) => count + (this.context.provsEnabled[key]
-      && this.props.providers.includes(key) ? 1 : 0), 0)
-      : 0;
-
-    if (enabled === 0) return 'selector-rollup-nav-button-none';
-    if (enabled < this.props.providers.length) return 'selector-rollup-nav-button-partial';
-    return 'selector-rollup-nav-button-all';
+    const { providersMode } = this.props;
+    if (providersMode === SELECTION_STATES.NONE) {
+      return 'selector-rollup-nav-button-none';
+    } if (providersMode === SELECTION_STATES.SELECTED) {
+      return 'selector-rollup-nav-button-partial';
+    } if (providersMode === SELECTION_STATES.ALL) {
+      return 'selector-rollup-nav-button-all';
+    }
   }
 
   render() {
@@ -89,3 +68,20 @@ export default class ProviderRollup extends React.Component {
     );
   }
 }
+
+const ProviderRollupHOC = (props) => {
+  const [activeProviders, setActiveProviders] = useRecoilState(activeProvidersState);
+  const [providersMode, setProvidersMode] = useRecoilState(providersModeState);
+
+  return (
+    <ProviderRollup
+      {...props} // eslint-disable-line react/jsx-props-no-spreading
+      activeProviders={activeProviders}
+      setActiveProviders={setActiveProviders}
+      providersMode={providersMode}
+      setProvidersMode={setProvidersMode}
+    />
+  );
+};
+
+export default ProviderRollupHOC;

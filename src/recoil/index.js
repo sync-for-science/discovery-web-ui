@@ -1,5 +1,9 @@
 import React from 'react';
-import { useRecoilValue, atom } from 'recoil';
+import {
+  atom, useRecoilValue,
+} from 'recoil';
+
+export * from './category-provider-filters';
 
 export const resourcesState = atom({
   key: 'resourcesState', // unique ID (with respect to other atoms/selectors)
@@ -8,21 +12,34 @@ export const resourcesState = atom({
     error: null,
     raw: null,
     normalized: null,
+    totalResCount: 0,
     patient: null,
     providers: [],
     categories: [],
     legacy: null,
   },
+  // dangerouslyAllowMutability: true, // < Object.isExtensible(res.data), in: src/components/Annotation/index.js
 });
 
 export const filtersState = atom({
-  key: 'filtersState', // unique ID (with respect to other atoms/selectors)
+  key: 'filtersState',
   default: {
     dates: null,
     thumbLeftDate: null,
     thumbRightDate: null,
   },
 });
+
+// TODO: ^other states facilitate implementation of something like the following:
+// export const collectionsState = atom({
+//   key: 'collectionsState',
+//   default: {
+//     activeCollection: 'default',
+//     collections: {
+//       default: {},
+//     },
+//   },
+// });
 
 // read-only connection to resources and filters:
 export const connectToResources = (Component) => (props) => {

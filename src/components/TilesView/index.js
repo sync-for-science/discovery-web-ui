@@ -46,7 +46,6 @@ export default class TilesView extends React.PureComponent {
     provsEnabled: PropTypes.object.isRequired,
     thumbLeftDate: PropTypes.string.isRequired,
     thumbRightDate: PropTypes.string.isRequired,
-    lastEvent: PropTypes.instanceOf(Event),
     // context, nextPrevFn added in StandardFilters
   }
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { get } from 'axios';
 
 import './DiscoveryApp.css';
@@ -18,7 +18,9 @@ import PageFooter from '../PageFooter';
 import {
   normalizeResourcesAndInjectPartipantId, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
 } from './Api';
-import { resourcesState, filtersState } from '../../recoil';
+import {
+  resourcesState, filtersState, activeCategoriesState, activeProvidersState,
+} from '../../recoil';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -32,7 +34,7 @@ class DiscoveryApp extends React.PureComponent {
 
   state = {
     // resources: null, // Will be set to an instance of FhirTransform
-    totalResCount: null, // Number of resources excluding Patient resources
+    // totalResCount: null, // Number of resources excluding Patient resources
     // dates: null, // Collection of dates for views:
     //    allDates
     //    minDate     Earliest date we have data for this participant
@@ -40,22 +42,19 @@ class DiscoveryApp extends React.PureComponent {
     //    maxDate     Latest date we have data for this participant
     //    endDate     Dec 31 of maxDate's year
     searchRefs: [], // Search results to highlight
-    searchMatchWords: [], // Search results matching words
-    laserSearch: false, // Laser Search enabled?
     // isLoading: false,
     // fetchError: null, // Possible axios error object
     lastEvent: null,
     // thumbLeftDate: null,
     // thumbRightDate: null,
     dotClickDate: null, // dot click from ContentPanel
-    catsEnabled: null,
-    provsEnabled: null,
-    providers: [],
+
+    // catsEnabled: null,
+    // provsEnabled: null,
+    // providers: [],
 
     // Shared Global Context
     updateGlobalContext: (updates) => this.setState(updates),
-
-    themeName: null, // PageHeader
 
     savedCatsEnabled: null, // StandardFilters & CategoryRollup
     savedProvsEnabled: null, // StandardFilters & ProviderRollup
@@ -84,13 +83,6 @@ class DiscoveryApp extends React.PureComponent {
 
   onEvent = (event) => {
     this.setState({ lastEvent: event });
-  }
-
-  setEnabled = (catsEnabled, provsEnabled) => {
-    this.setState({
-      catsEnabled,
-      provsEnabled,
-    });
   }
 
   // Record thumb positions as returned from StandardFilters
@@ -128,22 +120,6 @@ class DiscoveryApp extends React.PureComponent {
     }
   }
 
-  get initialCats() {
-    const { resources: { categories } } = this.props;
-    const cats = {};
-
-    for (const cat of categories) {
-      cats[cat] = true;
-    }
-
-    return cats;
-  }
-
-  get initialProvs() {
-    const { resources: { providers } } = this.props;
-    return providers.reduce((res, prov) => { res[prov] = true; return res; }, {});
-  }
-
   render() {
     const { error, loading, legacy: legacyResources } = this.props.resources;
 
@@ -159,13 +135,18 @@ class DiscoveryApp extends React.PureComponent {
 
     const isSummary = activeView === 'summary';
 
-    const { dates, thumbLeftDate, thumbRightDate } = this.props.filters;
+    const {
+      resources, activeCategories, activeProviders, filters,
+    } = this.props;
 
-    const { resources: { patient, providers, categories } } = this.props;
+    const { dates, thumbLeftDate, thumbRightDate } = filters;
+
+    const {
+      patient, totalResCount, providers, categories,
+    } = resources;
 
     return (
       <DiscoveryContext.Provider value={{ ...this.state, ...this.props.filters }}>
-        { this.state.themeName && <link rel="stylesheet" type="text/css" href={`/themes/${this.state.themeName}.css`} /> }
         <div className="discovery-app">
           <PageHeader
             participantId={participantId}
@@ -179,10 +160,9 @@ class DiscoveryApp extends React.PureComponent {
                   resources={legacyResources}
                   dates={dates}
                   categories={categories}
-                  catsEnabled={this.initialCats}
+                  catsEnabled={activeCategories}
                   providers={providers}
-                  provsEnabled={this.initialProvs}
-                  enabledFn={this.setEnabled}
+                  provsEnabled={activeProviders}
                   dateRangeFn={this.setDateRange}
                   lastEvent={this.state.lastEvent}
                   // TODO: convert to use route path segment:
@@ -203,45 +183,42 @@ class DiscoveryApp extends React.PureComponent {
                           dates={dates}
                           categories={categories}
                           providers={providers}
-                          lastEvent={this.state.lastEvent}
                         />
                       </Route>
                       <Route path="/participant/:participantId/catalog">
                         <TilesView
                           activeView={activeView}
                           resources={this.props.resources}
-                          totalResCount={this.state.totalResCount}
+                          totalResCount={totalResCount}
                           dates={dates}
                           categories={categories}
                           providers={providers}
-                          catsEnabled={this.state.catsEnabled}
-                          provsEnabled={this.state.provsEnabled}
+                          catsEnabled={activeCategories}
+                          provsEnabled={activeProviders}
                           thumbLeftDate={thumbLeftDate}
                           thumbRightDate={thumbRightDate}
-                          lastEvent={this.state.lastEvent}
                         />
                       </Route>
                       <Route path="/participant/:participantId/compare">
                         <CompareView
                           activeView={activeView}
                           resources={this.props.resources}
-                          totalResCount={this.state.totalResCount}
+                          totalResCount={totalResCount}
                           dates={dates}
                           categories={categories}
                           providers={providers}
-                          catsEnabled={this.state.catsEnabled}
-                          provsEnabled={this.state.provsEnabled}
+                          catsEnabled={activeCategories}
+                          provsEnabled={activeProviders}
                           thumbLeftDate={thumbLeftDate}
                           thumbRightDate={thumbRightDate}
-                          lastEvent={this.state.lastEvent}
                         />
                       </Route>
                       <Route path="/participant/:participantId/timeline">
                         <ContentPanel
                           open
                           activeView={activeView}
-                          catsEnabled={this.state.catsEnabled}
-                          provsEnabled={this.state.provsEnabled}
+                          catsEnabled={activeCategories}
+                          provsEnabled={activeProviders}
                           dotClickFn={this.onDotClick}
                           containerClassName="content-panel-absolute"
                           topBoundFn={this.calcContentPanelTopBound}
@@ -252,7 +229,7 @@ class DiscoveryApp extends React.PureComponent {
                           resources={legacyResources}
                           patient={patient}
                           providers={providers}
-                          totalResCount={this.state.totalResCount}
+                          totalResCount={totalResCount}
                           viewName="Report"
                           viewIconClass="longitudinal-view-icon"
                         />
@@ -286,6 +263,8 @@ class DiscoveryApp extends React.PureComponent {
 const DiscoveryAppHOC = (props) => {
   const [resources, setResources] = useRecoilState(resourcesState);
   const [filters, setFilters] = useRecoilState(filtersState);
+  const activeCategories = useRecoilValue(activeCategoriesState);
+  const activeProviders = useRecoilValue(activeProvidersState);
 
   useEffect(() => {
     function fetchData() {
@@ -312,10 +291,13 @@ const DiscoveryAppHOC = (props) => {
         const patient = normalized.find(({ category }) => category === 'Patient');
         const providers = extractProviders(normalized);
         const categories = extractCategories(normalized);
+        const totalResCount = legacy.transformed.filter((elt) => elt.category !== 'Patient').length;
+
         setResources({
           ...resources,
           raw,
           normalized,
+          totalResCount,
           patient,
           providers,
           categories,
@@ -341,6 +323,8 @@ const DiscoveryAppHOC = (props) => {
     <DiscoveryApp
       {...props} // eslint-disable-line react/jsx-props-no-spreading
       resources={resources}
+      activeCategories={activeCategories}
+      activeProviders={activeProviders}
       filters={filters}
       setFilters={setFilters}
     />
