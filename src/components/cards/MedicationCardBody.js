@@ -5,7 +5,7 @@ import { formatDate } from './GenericCardBody';
 
 const MedicationCardBody = ({ fieldsData }) => {
   function formatDosageInstruction() {
-    if ( fieldsData.dosageInstruction?.timing?.repeat) {
+    if (fieldsData.dosageInstruction?.timing?.repeat) {
       const asNeededText = fieldsData.dosageInstruction.asNeededBoolean
         ? 'as needed'
         : 'as instructed'; // what the opposite of As Needed?
@@ -18,7 +18,7 @@ const MedicationCardBody = ({ fieldsData }) => {
   }
 
   function formatDosageStart() {
-    if ( fieldsData.dosageInstruction?.timing?.repeat?.boundsPeriod ) {
+    if (fieldsData.dosageInstruction?.timing?.repeat?.boundsPeriod) {
       return formatDate(fieldsData.dosageInstruction.timing.repeat.boundsPeriod);
     }
 
@@ -81,7 +81,7 @@ const MedicationCardBody = ({ fieldsData }) => {
         value={formatDosageInstruction()}
       />
       <CardBodyField
-        dependency={ fieldsData.dosageInstruction?.timing?.repeat?.boundsPeriod }
+        dependency={fieldsData.dosageInstruction?.timing?.repeat?.boundsPeriod}
         label="STARTING ON"
         value={formatDosageStart()}
       />
