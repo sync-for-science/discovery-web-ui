@@ -82,15 +82,15 @@ export const vitalSignsRecords = selector({
 });
 
 // TODO: ^other states facilitate implementation of something like the following:
-// export const collectionsState = atom({
-//   key: 'collectionsState',
-//   default: {
-//     activeCollection: 'default',
-//     collections: {
-//       default: {},
-//     },
-//   },
-// });
+export const collectionsState = atom({
+  key: 'collectionsState',
+  default: {
+    activeCollection: 'default',
+    collections: {
+      default: {},
+    },
+  },
+});
 
 // TODO: use 3rd party library, eg, reselect:
 const recoilAtomsCache = {};
