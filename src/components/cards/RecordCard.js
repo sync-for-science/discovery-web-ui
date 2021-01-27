@@ -110,39 +110,27 @@ const RecordCard = ({ resource, normalized, patient }) => {
     billablePeriod: data.billablePeriod,
     category: resource.category,
     careTeam: data.careTeam,
-    class: data.class && data.class.code,
+    class: data.class?.code,
     clinicalStatus: data.clinicalStatus,
     criticality: data.criticality,
     component: data.component,
     contained: data.contained,
     date: resource.itemDate,
     daysSupply: data.daysSupply,
-    diagnosis:
-      data.diagnosis
-      && data.diagnosis[0]
-      && data.diagnosis[0].type
-      && data.diagnosis[0].type[0]
-      && data.diagnosis[0].type[0].coding
-      && data.diagnosis[0].type[0].coding[0]
-      && data.diagnosis[0].type[0].coding[0].code,
-    display: data.code && data.code.text,
+    diagnosis: data.diagnosis?.[0]?.type?.[0]?.coding?.[0]?.code,
+    display: data.code?.text,
     dispenseRequest: data.dispenseRequest,
-    dosageInstruction: data.dosageInstruction && data.dosageInstruction[0],
-    medicationDisplay: data.medicationCodeableConcept && data.medicationCodeableConcept.text,
+    dosageInstruction: data.dosageInstruction?.[0],
+    medicationDisplay: data.medicationCodeableConcept?.text,
     notGiven: data.notGiven,
     onset: data.onsetDateTime,
-    orderedBy: data.orderer && data.orderer.display,
+    orderedBy: data.orderer?.display,
     participantId: resource.id,
     period: data.period,
     primarySource: data.primarySource,
     provider,
     reaction: data.reaction,
-    reason: data.reason
-      && data.reason[0]
-      && data.reason[0].coding
-      && data.reason[0].coding[0]
-      && data.reason[0].coding
-      && data.reason[0].coding[0].display,
+    reason: data.reason?.[0]?.coding?.[0]?.display,
     referenceRange: data.referenceRange,
     reported: data.reported,
     resourceId: data.id,
@@ -155,12 +143,8 @@ const RecordCard = ({ resource, normalized, patient }) => {
     totalCost: data.totalCost,
     type: data.type,
     use: data.use,
-    vaccineDisplay:
-      data.vaccineCode
-      && data.vaccineCode.coding
-      && data.vaccineCode.coding[0]
-      && data.vaccineCode.coding[0].display,
-    valueCodeableConcept: data.valueCodeableConcept && data.valueCodeableConcept.coding,
+    vaccineDisplay: data.vaccineCode?.coding?.[0]?.display,
+    valueCodeableConcept: data.valueCodeableConcept?.coding,
     valueConcept: data.valueConcept,
     valueQuantity: data.valueQuantity,
     valueRatio: data.valueRatio,

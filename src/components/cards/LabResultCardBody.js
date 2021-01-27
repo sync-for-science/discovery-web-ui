@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LabResultCardBody = ({ fieldsData, labResults }) => {
   const classes = useStyles();
-  const valueRatioDisplay = `${fieldsData.valueRatio && fieldsData.valueRatio.numerator.value} / ${fieldsData.valueRatio && fieldsData.valueRatio.denominator.value}`;
+  const valueRatioDisplay = `${fieldsData.valueRatio?.numerator?.value} / ${fieldsData.valueRatio?.denominator?.value}`;
 
   let valueField;
   if (fieldsData.valueQuantity) {

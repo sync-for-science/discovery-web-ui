@@ -5,11 +5,7 @@ import { formatDate } from './GenericCardBody';
 
 const MedicationCardBody = ({ fieldsData }) => {
   function formatDosageInstruction() {
-    if (
-      fieldsData.dosageInstruction
-        && fieldsData.dosageInstruction.timing
-        && fieldsData.dosageInstruction.timing.repeat
-    ) {
+    if ( fieldsData.dosageInstruction?.timing?.repeat) {
       const asNeededText = fieldsData.dosageInstruction.asNeededBoolean
         ? 'as needed'
         : 'as instructed'; // what the opposite of As Needed?
@@ -22,12 +18,7 @@ const MedicationCardBody = ({ fieldsData }) => {
   }
 
   function formatDosageStart() {
-    if (
-      fieldsData.dosageInstruction
-        && fieldsData.dosageInstruction.timing
-        && fieldsData.dosageInstruction.timing.repeat
-        && fieldsData.dosageInstruction.timing.repeat.boundsPeriod
-    ) {
+    if ( fieldsData.dosageInstruction?.timing?.repeat?.boundsPeriod ) {
       return formatDate(fieldsData.dosageInstruction.timing.repeat.boundsPeriod);
     }
 
@@ -85,24 +76,19 @@ const MedicationCardBody = ({ fieldsData }) => {
         value="TBD"
       />
       <CardBodyField
-        dependency={fieldsData.dosageInstruction && fieldsData.dosageInstruction.timing}
+        dependency={fieldsData.dosageInstruction?.timing}
         label="DOSAGE"
         value={formatDosageInstruction()}
       />
       <CardBodyField
-        dependency={
-          fieldsData.dosageInstruction
-          && fieldsData.dosageInstruction.timing
-          && fieldsData.dosageInstruction.timing.repeat
-          && fieldsData.dosageInstruction.timing.repeat.boundsPeriod
-        }
+        dependency={ fieldsData.dosageInstruction?.timing?.repeat?.boundsPeriod }
         label="STARTING ON"
         value={formatDosageStart()}
       />
       <CardBodyField
         dependency={fieldsData.dispenseRequest}
         label="REFILLS"
-        value={fieldsData.dispenseRequest && fieldsData.dispenseRequest.numberOfRepeatsAllowed}
+        value={fieldsData.dispenseRequest?.numberOfRepeatsAllowed}
       />
     </>
   );
