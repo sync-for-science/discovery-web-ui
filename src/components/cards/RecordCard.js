@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { string, shape } from 'prop-types';
 import Card from '@material-ui/core/Card';
@@ -11,6 +11,7 @@ import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { format } from 'date-fns';
+import { useRecoilState } from 'recoil';
 
 import GenericCardBody from './GenericCardBody';
 import MedicationCardBody from './MedicationCardBody';
@@ -25,6 +26,7 @@ import SocialHistoryCardBody from './SocialHistoryCardBody';
 import UnimplementedCardBody from './UnimplementedCardBody';
 import VitalSignCardBody from './VitalSignCardBody';
 import { formatAge } from '../../util';
+import { notesState } from '../../recoil';
 
 const selectCardBody = (fieldsData) => {
   switch (fieldsData.category) {
@@ -91,8 +93,9 @@ const useStyles = makeStyles((theme) => ({
 const RecordCard = ({
   recordId, records, patient,
 }) => {
-  const [expanded, setExpanded] = React.useState(false);
   const classes = useStyles();
+  const [expanded, setExpanded] = useState(false);
+  const [notes, setNotes] = useRecoilState(notesState)
 
   // console.info('recordId, records, patient:', recordId, records, patient);
   const record = records[recordId];
@@ -100,6 +103,23 @@ const RecordCard = ({
   const {
     provider, data, itemDate, category,
   } = record;
+
+  const onSaveNote = (e) => {
+    const noteTextId = `note-entry-${data.id}`
+    const noteTextValue = document.getElementById(noteTextId).value
+    const newRecordNotes = notes
+
+    if (!newRecordNotes[data.id]) {
+      newRecordNotes[data.id] = []
+    } 
+    newRecordNotes[data.id].push({timestamp: new Date, noteText: noteTextValue})
+
+    setNotes({
+      ...notes, 
+      newRecordNotes
+    })
+  }
+
 
   const displayDate = format(new Date(itemDate), 'MMM d, y h:mm:ssaaa');
 
@@ -188,13 +208,15 @@ const RecordCard = ({
         <CardContent>
           <TextField
             className={classes.noteField}
-            id="note"
+            id={`note-entry-${data.id}`}
             placeholder="New Note"
             variant="outlined"
             size="small"
             fullWidth
+            // onChange={(e) => setNoteText(e.target.value)}
+            
           />
-          <Button variant="contained" disableElevation size="small">Add Note</Button>
+          <Button variant="contained" disableElevation size="small" onClick={onSaveNote}>Add Note</Button>
         </CardContent>
       </Collapse>
     </Card>

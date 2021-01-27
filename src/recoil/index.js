@@ -91,3 +91,8 @@ export const vitalSignsRecords = selector({
 //     },
 //   },
 // });
+
+export const notesState = atom({
+  key: 'notesState', // unique ID (with respect to other atoms/selectors)
+  default: {}
+});
