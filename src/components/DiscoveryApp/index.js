@@ -57,6 +57,7 @@ class DiscoveryApp extends React.PureComponent {
     // Shared Global Context
     updateGlobalContext: (updates) => {
       console.info('updateGlobalContext: ', JSON.stringify(updates, null, '  '));
+      console.info('this.context: ', JSON.stringify(this.context, null, '  '));
       this.setState(updates);
     },
 
