@@ -74,7 +74,6 @@ const VitalSignCardBody = ({ fieldsData, vitalSigns }) => {
           measure={fieldsData.display}
           data={data}
           highlights={highlights}
-          dotClickFn={() => {}}
         />
         )}
       </Typography>

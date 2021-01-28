@@ -15,7 +15,7 @@ const BenefitCardBody = ({ fieldsData }) => {
       case 'Coverage':
         return (
           <CardBodyField
-            key={i}
+            key={`card-body-field-${fieldsData.id}-${i}`}
             dependency={containedResource.type.text}
             label="COVERAGE"
             value={containedResource.type.text}
@@ -24,7 +24,7 @@ const BenefitCardBody = ({ fieldsData }) => {
       case 'ReferralRequest':
         return (
           <CardBodyField
-            key={i}
+            key={`card-body-field-${fieldsData.id}-${i}`}
             dependency={containedResource.status}
             label="REFERRAL"
             value={containedResource.status}
@@ -34,7 +34,7 @@ const BenefitCardBody = ({ fieldsData }) => {
         // ???? is a reference to Const.unknownValue which lives in utils.js. We'll want a way to handle unknown values
         return (
           <CardBodyField
-            key={i}
+            key={`card-body-field-${fieldsData.id}-${i}`}
             dependency={containedResource.resourceType}
             label={containedResource.resourceType}
             value="????"

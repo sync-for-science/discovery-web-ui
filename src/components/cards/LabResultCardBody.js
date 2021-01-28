@@ -86,7 +86,6 @@ const LabResultCardBody = ({ fieldsData, labResults }) => {
           measure={fieldsData.display}
           data={data}
           highlights={highlights}
-          dotClickFn={() => {}}
         />
         )}
       </Typography>

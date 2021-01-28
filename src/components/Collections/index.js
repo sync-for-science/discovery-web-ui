@@ -13,9 +13,9 @@ const CardList = ({ normalized, patient }) => {
   // const record = normalized.filter(element => element.data.id === '4afef915-ade7-42d4-8e82-5012e1c47704')
   // return record.map((r, i) => <RecordCard key={i} resource={r} normalized={normalized} />);
 
-  return normalized.map((r, i) => (
+  return normalized.map((r) => (
     <RecordCard
-      key={i}
+      key={`record-card-${r.data.id}`}
       resource={r}
       normalized={normalized}
       patient={patient}
