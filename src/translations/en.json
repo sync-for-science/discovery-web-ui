@@ -1,6 +1,9 @@
 {
+  "plurals": {
+    "records": "record",
+    "records_plural": "records"
+  },
   "card-details": {
-    "heading_plural": "Displaying {{subCount}} of {{count}} records",
-    "heading": "Displaying {{subCount}} of {{count}} record"
+    "heading": "Displaying {{subCount}} of {{count}} $t(plurals.records, {{count}})"
   },
 }
