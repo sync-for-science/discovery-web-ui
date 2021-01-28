@@ -1,3 +1,6 @@
 {
-  
+  "card-details": {
+    "heading_plural": "Displaying {{subCount}} of {{count}} records",
+    "heading": "Displaying {{subCount}} of {{count}} record"
+  },
 }
