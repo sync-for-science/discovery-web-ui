@@ -149,6 +149,6 @@ export const DrawerPortal = ({ children }) => {
   return drawer;
 };
 
-export default function PersistentDrawerRight({ open, children }) {
+export default function PersistentDrawerRight({ _open, children }) {
   return (<DrawerPortal>{ children }</DrawerPortal>);
 }

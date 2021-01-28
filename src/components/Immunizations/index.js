@@ -52,7 +52,7 @@ class Immunizations extends React.Component {
     this.setMatchingData();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, _prevState) {
     if (prevProps.data !== this.props.data) {
       this.setMatchingData();
     }

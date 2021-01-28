@@ -49,7 +49,7 @@ export default class DocumentReferences extends React.Component {
     this.setMatchingData();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, _prevState) {
     if (prevProps.data !== this.props.data) {
       this.setMatchingData();
     }

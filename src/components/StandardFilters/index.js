@@ -149,7 +149,7 @@ class StandardFilters extends React.PureComponent {
   }
 
   // Kluge: following needs to know about lower-level classes
-  updateSvgWidth = (event) => {
+  updateSvgWidth = (_event) => {
     const availableWidthEl = checkQuerySelector('#measure-available-width');
     if (availableWidthEl) {
       const availableWidth = availableWidthEl.getBoundingClientRect().width;

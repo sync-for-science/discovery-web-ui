@@ -17,7 +17,7 @@ export default class Sparkline extends React.Component {
     clickFn: PropTypes.func,
   }
 
-  handleClick = (event) => {
+  handleClick = (_event) => {
     log('Sparkline click');
     // let dotDate = datapoint.x.toISOString();
     // let formattedDotDate = formatDate(dotDate, true, true);

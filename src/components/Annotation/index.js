@@ -99,7 +99,7 @@ export default class Annotation extends React.Component {
     axios.post(`${config.serverUrl}/participants/${annotation.id}/${annotation.provider}/${annotation.resourceId}`, {
       annotation: text,
     })
-      .then((response) => {
+      .then((_response) => {
         this.setState({ inEdit: false, changed: false });
       })
       .catch((error) => {
@@ -123,7 +123,7 @@ export default class Annotation extends React.Component {
     event.stopPropagation();
   }
 
-  checkForChange = (event) => {
+  checkForChange = (_event) => {
     const { annotation } = this.props;
     const oldText = annotation.annotationHistory ? annotation.annotationHistory[annotation.annotationHistory.length - 1].annotationText : '';
     const isChanged = this.annotationDiv().innerHTML !== oldText;

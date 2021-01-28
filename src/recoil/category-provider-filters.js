@@ -33,7 +33,7 @@ export const activeCategoriesState = selector({
     }
     return activeCategories;
   },
-  set: ({ get, set }, newValue) => {
+  set: ({ _get, set }, newValue) => {
     // could this lead to a cycle?
     set(storedActiveCategoriesState, newValue);
     set(categoriesModeState, SELECTION_STATES.SELECTED);
@@ -66,7 +66,7 @@ export const activeProvidersState = selector({
     }
     return activeProviders;
   },
-  set: ({ get, set }, newValue) => {
+  set: ({ _get, set }, newValue) => {
     set(storedActiveProvidersState, newValue);
     // could this lead to a cycle?
     set(providersModeState, SELECTION_STATES.SELECTED);
