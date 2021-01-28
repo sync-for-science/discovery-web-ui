@@ -20,10 +20,12 @@ export default class TimeSeries extends React.Component {
     dotClickFn: PropTypes.func,
   }
 
-  handleDotClick = (datapoint, event) => {
-    const dotDate = datapoint.x.toISOString();
+  handleDotClick = (datapoint, _event) => {
+    const dotDate = datapoint.x.toISOString?.();
     const formattedDotDate = formatKeyDate(dotDate);
-    this.props.dotClickFn && this.props.dotClickFn(dotDate);
+    if (this.props.dotClickFn) {
+      this.props.dotClickFn(dotDate);
+    }
     // Need to "yield" via setTimeout() for 'elt' to resolve correctly
     setTimeout(() => {
       const elt = document.getElementById(`${formattedDotDate}-${this.props.measure}`);
