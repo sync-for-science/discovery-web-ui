@@ -60,7 +60,6 @@ module.exports = {
     'no-restricted-syntax': ['warn'],
     'no-return-assign': ['warn'],
     'no-shadow': ['warn'],
-    'no-unused-vars': ['warn'],
     'prefer-rest-params': ['warn'],
     radix: ['warn'],
     'react/button-has-type': ['warn'],
