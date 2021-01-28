@@ -6,7 +6,7 @@ import CardBodyField from './CardBodyField';
 import TimeSeries from '../TimeSeries/index';
 import { computeTimeSeriesVitalSignsData } from '../../fhirUtil';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   timeSeries: {
     marginTop: '20px',
   },

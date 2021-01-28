@@ -25,7 +25,7 @@ const CardList = ({ normalized, patient }) => {
 
 const Collections = (props) => {
   const {
-    loading, normalized, legacy, patient,
+    loading, normalized, patient,
   } = props.resources;
 
   return (

@@ -6,7 +6,7 @@ import CardBodyField from './CardBodyField';
 import TimeSeries from '../TimeSeries/index';
 import { computeTimeSeriesLabResultsData } from '../../fhirUtil';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   timeSeries: {
     marginTop: '20px',
   },
@@ -48,8 +48,8 @@ const LabResultCardBody = ({ fieldsData, labResults }) => {
     });
   }
 
-  const refRangeLabel = fieldsData.referenceRange?.[0]?.meaning?.coding?.[0]?.display || 'REFERENCE RANGE'
-  
+  const refRangeLabel = fieldsData.referenceRange?.[0]?.meaning?.coding?.[0]?.display || 'REFERENCE RANGE';
+
   const lowValue = fieldsData.referenceRange?.[0]?.low?.value;
   const lowUnits = fieldsData.referenceRange?.[0]?.low?.unit;
   const highValue = fieldsData.referenceRange?.[0]?.high?.value;
@@ -57,8 +57,7 @@ const LabResultCardBody = ({ fieldsData, labResults }) => {
 
   const refRange = lowValue && lowUnits && highValue && highUnits
     ? `${lowValue + (lowUnits && lowUnits !== highUnits ? ` ${lowUnits}` : '')} - ${highValue}${highUnits ? ` ${highUnits}` : ''}`
-    : fieldsData.referenceRange?.text
-
+    : fieldsData.referenceRange?.text;
 
   const { data, highlights } = computeTimeSeriesLabResultsData(fieldsData, labResults);
 

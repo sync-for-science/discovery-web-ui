@@ -282,7 +282,7 @@ export function renderDisplay(matchingData, typeLabel, { providers, viewName }) 
       >
         <div className="content-data">
           { elt.display && <div className="col01 label">{typeLabel}</div> }
-          {/* TODO: fix appContext*/}
+          {/* TODO: fix appContext */}
           {/* { elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> } */}
           { elt.display && (
             <HighlightDiv
@@ -689,7 +689,7 @@ export function renderLabs(matchingData, resources, dotClickFn, providers) {
 }
 
 export const computeTimeSeriesLabResultsData = (fieldsData, labResults) => {
-  const { date, display } = fieldsData;
+  const { date } = fieldsData;
   const series = {};
   labResults.forEach((elt) => {
     try {
