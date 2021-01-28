@@ -127,6 +127,7 @@ class StandardFilters extends React.PureComponent {
       //      this.setState({ dotClickContext: newContext });
       //   }
     } else if (this.props.allowDotClick && prevProps.dotClickDate !== this.props.dotClickDate) {
+      console.error('========================= "${this.props.lastEvent}" this.props.dotClickDate: ', this.props.dotClickDate);
       // Set dotClickContext from dot clicked in ContentPanel (via this.props.dotClickDate)
       const theDate = this.props.dates.allDates.find((elt) => new Date(elt.date).getTime() === new Date(this.props.dotClickDate).getTime());
       this.props.setDotClickContext({
