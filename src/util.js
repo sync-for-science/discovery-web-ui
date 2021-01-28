@@ -337,7 +337,7 @@ export function checkQuerySelector(sel) {
 //
 export function uniqueBy(arr, keyFn) {
   const seen = {};
-  return arr.filter((elt, index) => {
+  return arr.filter((elt, _index) => {
     try {
       const key = keyFn(elt);
       return seen.hasOwnProperty(key) ? false : seen[key] = true;

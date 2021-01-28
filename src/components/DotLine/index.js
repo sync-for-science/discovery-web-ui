@@ -33,7 +33,7 @@ export default class DotLine extends React.Component {
   renderDot = (result, dot, index) => {
     // TODO: make consistent (need units?)
     const halfHeight = numericPart(this.props.height) / 2 + unitPart(this.props.height);
-    const dotClickFn = this.props.dotClickFn ? (e) => this.props.dotClickFn(this.props.context, dot.date, dot.dotType) : null;
+    const dotClickFn = this.props.dotClickFn ? (_event) => this.props.dotClickFn(this.props.context, dot.date, dot.dotType) : null;
     const style = this.props.dotClickFn ? {} : { cursor: 'default' };
     const isContent = ['Category', 'Provider'].includes(this.props.context.parent);
 

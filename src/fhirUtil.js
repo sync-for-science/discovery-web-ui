@@ -66,21 +66,6 @@ export function formatPatientAddress(address) {
     addr.country}`;
 }
 
-export function formatPatientMRN(identifier, maxLength) {
-  const identElts = Array.isArray(identifier) ? identifier : [identifier];
-  for (const elt of identElts) {
-    try {
-      if (elt.type.coding[0].code === 'MR') {
-        return maxLength === 0 || elt.value.length <= maxLength ? elt.value : `...${elt.value.substring(elt.value.length - maxLength)}`;
-      }
-    } catch (e) {
-      log(`formatPatientMRN(): ${e.message}`);
-    }
-  }
-
-  return 'Unknown';
-}
-
 export function fhirKey(elt) {
   return `${elt.provider}/${elt.data.id}`;
 }

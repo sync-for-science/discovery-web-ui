@@ -27,7 +27,7 @@ export default class Unimplemented extends React.Component {
     return stringCompare(Unimplemented.primaryText(a), Unimplemented.primaryText(b));
   }
 
-  static code(elt) {
+  static code(_elt) {
     return null;
   }
 
@@ -66,7 +66,7 @@ export default class Unimplemented extends React.Component {
     this.setMatchingData();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, _prevState) {
     if (!stringifyEqArray(prevProps.data, this.props.data)) {
       this.setMatchingData();
     }

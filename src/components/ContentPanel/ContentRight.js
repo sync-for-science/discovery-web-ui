@@ -210,11 +210,11 @@ class ContentPanel extends React.PureComponent {
   //   return false;
   // }
 
-  static getDerivedStateFromProps(props, state) {
+  static getDerivedStateFromProps(_props, _state) {
     return null;
   }
 
-  getSnapshotBeforeUpdate(prevProps, prevState) {
+  getSnapshotBeforeUpdate(_prevProps, _prevState) {
     // Capture info from the DOM before it is updated
     // Return value is passed as 'snapshot' to componentDidUpdate()
     // logDiffs('Props', prevProps, this.props);
@@ -222,7 +222,7 @@ class ContentPanel extends React.PureComponent {
     return null;
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps, prevState, _snapshot) {
     const doUpdateResources = notEqJSON(prevProps, this.props)
       || prevState.showAllData !== this.state.showAllData
       || prevState.trimLevel !== this.state.trimLevel

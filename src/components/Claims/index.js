@@ -23,12 +23,12 @@ export default class Claims extends React.Component {
   }
 
   // TODO
-  static code(elt) {
+  static code(_elt) {
     return null;
   }
 
   // TODO
-  static primaryText(elt) {
+  static primaryText(_elt) {
     return Const.unknownValue;
   }
 
@@ -57,7 +57,7 @@ export default class Claims extends React.Component {
     this.setMatchingData();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, _prevState) {
     if (!shallowEqArray(prevProps.data, this.props.data)) {
       this.setMatchingData();
     }

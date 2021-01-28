@@ -109,7 +109,7 @@ export default class TimeWidget extends React.Component {
     this.cacheSizes();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, _prevState) {
     if (prevProps.timelineWidth !== this.props.timelineWidth || prevProps.thumbLeft !== this.props.thumbLeft) {
       this.setState({
         leftX: this.props.thumbLeft * numericPart(this.props.timelineWidth),

@@ -79,7 +79,7 @@ export default class MedsRequested extends React.Component {
     this.setMatchingData();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, _prevState) {
     if (!shallowEqArray(prevProps.data, this.props.data)) {
       this.setMatchingData();
     }
