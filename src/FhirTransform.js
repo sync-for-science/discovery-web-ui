@@ -27,11 +27,7 @@ export default class FhirTransform {
     }
     if (template instanceof Array) {
       // iterate over array members
-      const arr = [];
-      for (const elt of template) {
-        arr.push(FhirTransform.transform(data, elt));
-      }
-      return arr;
+      return template.map((elt) => FhirTransform.transform(data, elt));
     }
     if (template === null || !(template instanceof Object)) {
       // return primitive types
