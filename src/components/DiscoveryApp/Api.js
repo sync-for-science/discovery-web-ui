@@ -1,4 +1,3 @@
-import { get } from 'axios';
 import FhirTransform from '../../FhirTransform';
 import {
   cleanDates, normalizeDates, timelineIncrYears, tryWithDefault,
