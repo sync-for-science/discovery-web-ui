@@ -20,7 +20,7 @@ import {
   normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
 } from './Api';
 import {
-  resourcesState, filtersState, activeCategoriesState, activeProvidersState,
+  resourcesState, updateTimeFiltersState, activeCategoriesState, activeProvidersState,
 } from '../../recoil';
 
 import DiscoveryContext from '../DiscoveryContext';
@@ -86,15 +86,6 @@ class DiscoveryApp extends React.PureComponent {
     this.setState({ lastEvent: event });
   }
 
-  // Record thumb positions as returned from StandardFilters
-  setDateRange = (minDate, maxDate) => {
-    this.props.setFilters({
-      ...this.props.filters,
-      thumbLeftDate: minDate,
-      thumbRightDate: maxDate,
-    });
-  }
-
   onDotClick = (dotClickDate) => {
     this.setState({ dotClickDate });
   }
@@ -137,17 +128,17 @@ class DiscoveryApp extends React.PureComponent {
     const isSummary = activeView === 'summary';
 
     const {
-      resources, activeCategories, activeProviders, filters,
+      resources, activeCategories, activeProviders, timeFilters,
     } = this.props;
 
-    const { dates, thumbLeftDate, thumbRightDate } = filters;
+    const { dates, thumbLeftDate, thumbRightDate } = timeFilters;
 
     const {
       totalResCount, providers, categories,
     } = resources;
 
     return (
-      <DiscoveryContext.Provider value={{ ...this.state, ...this.props.filters }}>
+      <DiscoveryContext.Provider value={{ ...this.state, ...this.props.timeFilters }}>
         <div className="discovery-app">
           <PageHeader
             patientMode={patientMode}
@@ -164,7 +155,6 @@ class DiscoveryApp extends React.PureComponent {
                   catsEnabled={activeCategories}
                   providers={providers}
                   provsEnabled={activeProviders}
-                  dateRangeFn={this.setDateRange}
                   lastEvent={this.state.lastEvent}
                   // TODO: convert to use route path segment:
                   // allowDotClick={!['compare', 'catalog'].includes(activeView)}
@@ -256,7 +246,7 @@ class DiscoveryApp extends React.PureComponent {
 // if using React.memo, there's a proptype warning for Route:
 const DiscoveryAppHOC = (props) => {
   const [resources, setResources] = useRecoilState(resourcesState);
-  const [filters, setFilters] = useRecoilState(filtersState);
+  const [timeFilters, updateTimeFilters] = useRecoilState(updateTimeFiltersState);
   const activeCategories = useRecoilValue(activeCategoriesState);
   const activeProviders = useRecoilValue(activeProvidersState);
 
@@ -297,8 +287,8 @@ const DiscoveryAppHOC = (props) => {
           legacy,
         });
 
-        setFilters({
-          ...filters,
+        // TODO: migrate this call to recoil.js so it is automatically derived from resources.legacy, using DefaultValue api ?
+        updateTimeFilters({
           ...computeFilterState(legacy),
         });
       }).catch((error) => {
@@ -318,8 +308,8 @@ const DiscoveryAppHOC = (props) => {
       resources={resources}
       activeCategories={activeCategories}
       activeProviders={activeProviders}
-      filters={filters}
-      setFilters={setFilters}
+      timeFilters={timeFilters}
+      updateTimeFilters={updateTimeFilters}
     />
   );
 };

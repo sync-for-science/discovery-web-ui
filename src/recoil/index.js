@@ -20,12 +20,24 @@ export const resourcesState = atom({
   // dangerouslyAllowMutability: true, // < Object.isExtensible(res.data), in: src/components/Annotation/index.js
 });
 
-export const filtersState = atom({
-  key: 'filtersState',
+const timeFiltersState = atom({
+  key: 'timeFiltersState',
   default: {
     dates: null,
     thumbLeftDate: null,
     thumbRightDate: null,
+  },
+});
+
+export const updateTimeFiltersState = selector({
+  key: 'updateTimeFiltersState',
+  get: ({ get }) => get(timeFiltersState),
+  set: ({ get, set }, newValues) => {
+    const previousValues = get(timeFiltersState);
+    set(timeFiltersState, {
+      ...previousValues,
+      ...newValues,
+    });
   },
 });
 

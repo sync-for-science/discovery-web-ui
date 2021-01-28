@@ -2,6 +2,7 @@ import React from 'react';
 import {
   atom,
   useRecoilState,
+  useSetRecoilState,
   useRecoilValue,
 } from 'recoil';
 import PropTypes from 'prop-types';
@@ -22,7 +23,7 @@ import Provider from '../Provider';
 import Unimplemented from '../Unimplemented';
 import DiscoveryContext from '../DiscoveryContext';
 
-import { activeCategoriesState, activeProvidersState } from '../../recoil';
+import { activeCategoriesState, activeProvidersState, updateTimeFiltersState } from '../../recoil';
 //
 // Render the "container" (with filters) for views of the participant's data
 //
@@ -48,7 +49,7 @@ class StandardFilters extends React.PureComponent {
     // provsEnabled: PropTypes.object.isRequired,
     activeProviders: PropTypes.shape({}).isRequired,
     // enabledFn: PropTypes.func.isRequired, // Callback to report changed category & provider enable/disable
-    dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
+    // dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
     lastEvent: PropTypes.instanceOf(Event),
     allowDotClick: PropTypes.bool,
     dotClickDate: PropTypes.string,
@@ -204,6 +205,14 @@ class StandardFilters extends React.PureComponent {
     return (target - min) / (max - min);
   }
 
+  // Record thumb positions as returned from StandardFilters
+  setDateRange = (minDate, maxDate) => {
+    this.props.updateTimeFilters({
+      thumbLeftDate: minDate,
+      thumbRightDate: maxDate,
+    });
+  }
+
   //
   // Handle TimeWidget left/right thumb movement
   //   minActivePos:  location [0..1] of left thumb
@@ -212,11 +221,9 @@ class StandardFilters extends React.PureComponent {
   //
   setLeftRight = (minActivePos, maxActivePos, isExpanded) => {
     //      console.log('minPos: ' + minActivePos + '  maxPos: ' + maxActivePos);
-    if (this.props.dateRangeFn) {
-      const minDate = this.posToDate(minActivePos);
-      const maxDate = this.posToDate(maxActivePos);
-      this.props.dateRangeFn(minDate, maxDate);
-    }
+    const minDate = this.posToDate(minActivePos);
+    const maxDate = this.posToDate(maxActivePos);
+    this.setDateRange(minDate, maxDate);
     this.setState({
       minActivePos,
       maxActivePos,
@@ -626,6 +633,7 @@ export const dotClickContextState = atom({
 });
 
 const StandardFiltersHOC = React.memo((props) => {
+  const updateTimeFilters = useSetRecoilState(updateTimeFiltersState);
   const [dotClickContext, setDotClickContext] = useRecoilState(dotClickContextState);
 
   const activeCategories = useRecoilValue(activeCategoriesState);
@@ -634,6 +642,7 @@ const StandardFiltersHOC = React.memo((props) => {
   return (
     <StandardFilters
       {...props} // eslint-disable-line react/jsx-props-no-spreading
+      updateTimeFilters={updateTimeFilters}
       dotClickContext={dotClickContext}
       setDotClickContext={setDotClickContext}
       activeCategories={activeCategories}
