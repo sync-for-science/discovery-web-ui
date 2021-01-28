@@ -282,7 +282,8 @@ export function renderDisplay(matchingData, typeLabel, { providers, viewName }) 
       >
         <div className="content-data">
           { elt.display && <div className="col01 label">{typeLabel}</div> }
-          {/* elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> */}
+          {/* TODO: fix appContext */}
+          {/* { elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> } */}
           { elt.display && (
             <HighlightDiv
               className="col02 value-text primary"
@@ -686,6 +687,36 @@ export function renderLabs(matchingData, resources, dotClickFn, providers) {
   }
   return null;
 }
+
+export const computeTimeSeriesLabResultsData = (fieldsData, labResults) => {
+  const { date } = fieldsData;
+  const series = {};
+  labResults.forEach((elt) => {
+    try {
+      const displayStr = elt.data.code.coding[0].display;
+      const xVal = elt.itemDate instanceof Date ? elt.daitemDatete : new Date(elt.itemDate);
+      const yVal = elt.data.valueQuantity.value;
+      if (series.hasOwnProperty(displayStr)) {
+        // Add to series
+        series[displayStr].push({ provider: elt.provider, x: xVal, y: yVal });
+      } else {
+        // New series
+        series[displayStr] = [{ provider: elt.provider, x: xVal, y: yVal }];
+      }
+    } catch (e) {
+      log(`renderLabs() 2: ${e.message}`);
+    }
+  });
+
+  // Select only values with matching provider and then sort
+  const data = series[fieldsData.display] && series[fieldsData.display].filter((e) => e.provider === fieldsData.provider)
+    .sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
+  const thisValue = fieldsData.valueQuantity ? fieldsData.valueQuantity.value : null;
+
+  const highlights = [{ x: new Date(date), y: thisValue }];
+
+  return { data, highlights };
+};
 
 //
 // renderMeds()
@@ -1107,6 +1138,62 @@ export function renderVitals(matchingData, resources, dotClickFn, providers) {
   }
   return null;
 }
+
+export const computeTimeSeriesVitalSignsData = (fieldsData, vitalSigns) => {
+  const { date, display } = fieldsData;
+  const series = {};
+  vitalSigns.forEach((elt) => {
+    try {
+      // this is different than renderVitals, removes canonVitals
+      const displayStr = elt.data.code.coding[0].display;
+      // Don't graph Vital Signs "container" resources
+      if (displayStr !== 'Vital Signs') {
+        const xVal = elt.itemDate instanceof Date ? elt.itemDate : new Date(elt.itemDate);
+        if (elt.data.valueQuantity) {
+          // Single data value
+          const yVal = elt.data.valueQuantity.value;
+          if (series.hasOwnProperty(displayStr)) {
+            // Add to series
+            series[displayStr].push({ provider: elt.provider, x: xVal, y: yVal });
+          } else {
+            // New series
+            series[displayStr] = [{ provider: elt.provider, x: xVal, y: yVal }];
+          }
+        } else if (elt.data.component) {
+          // Dual/pair data values
+          const y1 = tryWithDefault(elt, (e) => e.data.component[0].valueQuantity.value, 0);
+          const y2 = tryWithDefault(elt, (e) => e.data.component[1].valueQuantity.value, 0);
+          const yVal = (y1 + y2) / 2;
+          const yVar = Math.abs(y2 - y1);
+          if (series.hasOwnProperty(displayStr)) {
+            // Add to series
+            series[displayStr].push({
+              provider: elt.provider, x: xVal, y: yVal, yVariance: yVar, y1, y2,
+            });
+          } else {
+            // New series
+            series[displayStr] = [{
+              provider: elt.provider, x: xVal, y: yVal, yVariance: yVar, y1, y2,
+            }];
+          }
+        }
+      }
+    } catch (e) {
+      log(`renderVitals() 2: ${e.message}`);
+    }
+  });
+
+  // Select only values with matching provider and then sort
+  const data = series[display] && series[display].filter((e) => e.provider === fieldsData.provider)
+    .sort((a, b) => stringCompare(a.x.toISOString(), b.x.toISOString()));
+
+  // this is different than renderVitals due to different shape of fieldsData
+  const thisValue = fieldsData.valueQuantity && fieldsData.valueQuantity.value;
+
+  const highlights = [{ x: new Date(date), y: thisValue }];
+
+  return { data, highlights };
+};
 
 function renderContainedResource(res, index) {
   const payload = [];

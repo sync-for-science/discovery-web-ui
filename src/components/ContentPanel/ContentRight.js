@@ -634,7 +634,7 @@ class ContentPanel extends React.PureComponent {
         </div>
       )];
     return (
-      <div className="content-panel-inner-body">
+      <div className="content-right-inner-body">
         { this.state.showJSON
           ? (
             <pre className="content-panel-data">
@@ -717,7 +717,6 @@ class ContentPanel extends React.PureComponent {
   }
 
   render() {
-    // console.info('this.props.context: ', this.props.context);
     // Locally extend DiscoveryContext with trimLevel & viewName (hack)
 
     if (!this.state.isOpen) {
