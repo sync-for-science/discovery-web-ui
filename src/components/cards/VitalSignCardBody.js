@@ -19,7 +19,7 @@ const VitalSignCardBody = ({ fieldsData, vitalSigns }) => {
   // breakout embedded fields in component, typically for Blood Pressure
   let displayComponents;
   if (fieldsData.component) {
-    displayComponents = fieldsData.component.map((resource, i) => {
+    displayComponents = fieldsData.component.map((resource) => {
       let label;
       if (resource.code.text === 'Diastolic Blood Pressure') {
         label = 'DIASTOLIC';
@@ -33,7 +33,7 @@ const VitalSignCardBody = ({ fieldsData, vitalSigns }) => {
 
       return (
         <CardBodyField
-          key={i}
+          key={`${resource.code.text}`}
           dependency={resource.valueQuantity.value}
           label={label}
           value={resourceValueDisplay}

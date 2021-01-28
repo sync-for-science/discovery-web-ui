@@ -47,9 +47,7 @@ const selectCardBody = (fieldsData, normalized) => {
     case 'Immunizations':
       return <ImmunizationCardBody fieldsData={fieldsData} />;
     case 'Lab Results':
-      const labOptions = {};
-      const labResultsPath = '[*category=Lab Results]';
-      const labResults = jsonQuery(labResultsPath, { data: normalized, ...labOptions }).value;
+      const labResults = jsonQuery('[*category=Lab Results]', { data: normalized }).value;
       return <LabResultCardBody fieldsData={fieldsData} labResults={labResults} />;
     case 'Exams':
       return <ExamCardBody fieldsData={fieldsData} />;
@@ -60,9 +58,7 @@ const selectCardBody = (fieldsData, normalized) => {
     case 'Other':
       return <UnimplementedCardBody fieldsData={fieldsData} />;
     case 'Vital Signs':
-      const vitalSignsOptions = {};
-      const vitalSignsPath = '[*category=Vital Signs]';
-      const vitalSigns = jsonQuery(vitalSignsPath, { data: normalized, ...vitalSignsOptions }).value;
+      const vitalSigns = jsonQuery('[*category=Vital Signs]', { data: normalized }).value;
       return <VitalSignCardBody fieldsData={fieldsData} vitalSigns={vitalSigns} />;
     default:
       break;

@@ -282,7 +282,8 @@ export function renderDisplay(matchingData, typeLabel, { providers, viewName }) 
       >
         <div className="content-data">
           { elt.display && <div className="col01 label">{typeLabel}</div> }
-          {/* elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> */}
+          {/* TODO: fix appContext*/}
+          {/* { elt.display && <div className='col02 value-text primary'>{elt.display}{consultText(appContext, elt)}</div> } */}
           { elt.display && (
             <HighlightDiv
               className="col02 value-text primary"
@@ -317,8 +318,8 @@ export function renderDisplay(matchingData, typeLabel, { providers, viewName }) 
           { isValid(elt, (e) => e.reason[0].assertedDate)
           && <div className="col02 value-text">{formatDisplayDate(elt.reason[0].assertedDate, false, false)}</div> }
 
-          {/* { isMultipleProviders && <div className="col01 label">Provider</div> }
-          { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> } */}
+          { isMultipleProviders && <div className="col01 label">Provider</div> }
+          { isMultipleProviders && <div className="col02 value-text">{titleCase(elt.provider)}</div> }
 
           <CondDiv
             check={elt.status}
