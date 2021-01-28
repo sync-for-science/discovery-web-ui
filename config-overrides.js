@@ -19,7 +19,7 @@ const {
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
 
-module.exports = (config, env) => {
+module.exports = (config, _env) => {
   override(
     // useBabelRc(), // < alternative to addBabelPlugins ?
     addBabelPlugins(
