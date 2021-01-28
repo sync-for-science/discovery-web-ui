@@ -48,16 +48,16 @@ const LabResultCardBody = ({ fieldsData, labResults }) => {
     });
   }
 
-  const refRangeLabel = fieldsDisplay.referenceRange?.[0]?.meaning?.coding?.[0]?.display || 'REFERENCE RANGE'
+  const refRangeLabel = fieldsData.referenceRange?.[0]?.meaning?.coding?.[0]?.display || 'REFERENCE RANGE'
   
-  const lowValue = elt.referenceRange?.[0]?.low?.value;
-  const lowUnits = elt.referenceRange?.[0]?.low?.unit;
-  const highValue = elt.referenceRange?.[0]?.high?.value;
-  const highUnits = elt.referenceRange?.[0]?.high?.unit;
+  const lowValue = fieldsData.referenceRange?.[0]?.low?.value;
+  const lowUnits = fieldsData.referenceRange?.[0]?.low?.unit;
+  const highValue = fieldsData.referenceRange?.[0]?.high?.value;
+  const highUnits = fieldsData.referenceRange?.[0]?.high?.unit;
 
   const refRange = lowValue && lowUnits && highValue && highUnits
     ? `${lowValue + (lowUnits && lowUnits !== highUnits ? ` ${lowUnits}` : '')} - ${highValue}${highUnits ? ` ${highUnits}` : ''}`
-    : elt.referenceRange?.text
+    : fieldsData.referenceRange?.text
 
 
   const { data, highlights } = computeTimeSeriesLabResultsData(fieldsData, labResults);
