@@ -27,7 +27,7 @@ const LabResultCardBody = ({ fieldsData, labResults }) => {
       />
     );
   } else if (fieldsData.component) {
-    valueField = fieldsData.component.map((resource, i) => {
+    valueField = fieldsData.component.map((resource) => {
       const valueDisplay = `${resource.valueQuantity.value.toFixed(1)} ${resource.valueQuantity.code}`;
       let label;
       if (resource.code.text === 'Diastolic Blood Pressure') {
@@ -39,7 +39,7 @@ const LabResultCardBody = ({ fieldsData, labResults }) => {
       }
       return (
         <CardBodyField
-          key={i}
+          key={resource.code.text}
           dependency={resource.valueQuantity.value}
           label={label}
           value={valueDisplay}
