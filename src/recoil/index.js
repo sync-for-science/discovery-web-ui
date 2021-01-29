@@ -47,12 +47,19 @@ export const allRecordIds = selector({
   },
 });
 
+// export const patientRecord = selector({
+//   key: 'patientRecord',
+//   get: ({ get }) => {
+//     const { normalized } = get(resourcesState);
+//     return normalized.find(({ category }) => category === 'Patient');
+//   },
+// });
+
 export const labResultRecords = selector({
   key: 'labResultRecords',
   get: ({ get }) => {
     const { normalized } = get(resourcesState);
-    const labResults = jsonQuery('[*category=Lab Results]', { data: normalized }).value;
-    return labResults;
+    return jsonQuery('[*category=Lab Results]', { data: normalized }).value;
   },
 });
 
@@ -60,8 +67,7 @@ export const vitalSignsRecords = selector({
   key: 'vitalSignsRecords',
   get: ({ get }) => {
     const { normalized } = get(resourcesState);
-    const vitalSigns = jsonQuery('[*category=Vital Signs]', { data: normalized }).value;
-    return vitalSigns;
+    return jsonQuery('[*category=Vital Signs]', { data: normalized }).value;
   },
 });
 
