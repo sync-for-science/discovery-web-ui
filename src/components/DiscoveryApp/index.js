@@ -150,6 +150,7 @@ class DiscoveryApp extends React.PureComponent {
       <DiscoveryContext.Provider value={{ ...this.state, ...this.props.filters }}>
         <div className="discovery-app">
           <PageHeader
+            patientMode={patientMode}
             participantId={participantId}
           />
           <div className="outer-container">

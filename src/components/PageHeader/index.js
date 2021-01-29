@@ -13,7 +13,7 @@ import {
 
 import './PageHeader.css';
 
-const PageHeader = ({ participantId }) => (
+const PageHeader = ({ patientMode, participantId }) => (
   <header>
     <div className="logo-box">
       <Modal
@@ -27,22 +27,22 @@ const PageHeader = ({ participantId }) => (
     </div>
     <nav>
       <NavLink
-        to={`/participant/${participantId}/summary`}
+        to={`/${patientMode}/${participantId}/summary`}
       >
         Summary
       </NavLink>
       <NavLink
-        to={`/participant/${participantId}/catalog`}
+        to={`/${patientMode}/${participantId}/catalog`}
       >
         Catalog
       </NavLink>
       <NavLink
-        to={`/participant/${participantId}/compare`}
+        to={`/${patientMode}/${participantId}/compare`}
       >
         Compare
       </NavLink>
       <NavLink
-        to={`/participant/${participantId}/collections`}
+        to={`/${patientMode}/${participantId}/collections`}
       >
         Collections
       </NavLink>
@@ -51,6 +51,7 @@ const PageHeader = ({ participantId }) => (
 );
 
 PageHeader.propTypes = {
+  patientMode: string.isRequired,
   participantId: string.isRequired,
 };
 
