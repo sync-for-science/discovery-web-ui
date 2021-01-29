@@ -23,7 +23,7 @@ ReactDOM.render(
         <Switch>
           <Route exact path="/" component={ParticipantList} />
           <Route path="/participant/:participantId/:activeView?" component={DiscoveryApp} />
-          <Route path="/uploaded/:id" component={DiscoveryApp} />
+          <Route path="/uploaded/:uploadId" component={DiscoveryApp} />
         </Switch>
       </Router>
     </ThemeProvider>

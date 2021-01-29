@@ -273,9 +273,9 @@ const DiscoveryAppHOC = (props) => {
         loading: true,
       });
 
-      const { match: { params: { id, participantId } } } = props;
+      const { match: { params: { participantId, uploadId } } } = props;
 
-      const dataUrl = id ? `${config.serverUrl}/data/download/${id}`
+      const dataUrl = uploadId ? `${config.serverUrl}/data/download/${uploadId}`
         : `${config.serverUrl}/participants/${participantId}`;
 
       get(dataUrl).then((response) => {
