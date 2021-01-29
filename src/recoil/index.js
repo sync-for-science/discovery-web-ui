@@ -57,6 +57,23 @@ export const allRecordIds = selector({
   },
 });
 
+export const groupedRecordIdsState = selector({
+  key: 'groupedRecordIdsState',
+  get: ({ get }) => {
+    const { records } = get(resourcesState);
+    return Object.entries(records).reduce((acc, [uuid, record]) => {
+      if (record.category === 'Patient') {
+        console.info(`IGNORE PATIENT ${uuid}`); // eslint-disable-line no-console
+        return acc;
+      }
+      const { data: { resourceType } } = record;
+      acc[resourceType] = acc[resourceType] ?? [];
+      acc[resourceType].push(uuid);
+      return acc;
+    }, {});
+  },
+});
+
 export const patientRecord = selector({
   key: 'patientRecord',
   get: ({ get }) => {
