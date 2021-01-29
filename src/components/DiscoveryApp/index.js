@@ -275,8 +275,7 @@ const DiscoveryAppHOC = (props) => {
 
       const { match: { params: { patientMode, participantId } } } = props;
 
-      const dataUrl = patientMode === 'uploaded' ? `${config.serverUrl}/data/download/${participantId}`
-        : `${config.serverUrl}/participants/${participantId}`;
+      const dataUrl = `${config.serverUrl}/${patientMode === 'uploaded' ? 'data/download' : 'participants'}/${participantId}`;
 
       get(dataUrl).then((response) => {
         // TODO: break-out into dedicated reducer function that uses memoized selectors:
