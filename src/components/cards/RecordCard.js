@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { string, shape } from 'prop-types';
 import Card from '@material-ui/core/Card';
@@ -95,32 +95,44 @@ const RecordCard = ({
 }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
-  const [notes, setNotes] = useRecoilState(notesState)
 
-  // console.info('recordId, records, patient:', recordId, records, patient);
-  const record = records[recordId];
+  const noteInput = useRef(null);
 
-  const {
-    provider, data, itemDate, category,
-  } = record;
-
-  const onSaveNote = (e) => {
-    const noteTextId = `note-entry-${data.id}`
-    const noteTextValue = document.getElementById(noteTextId).value
-    const newRecordNotes = notes
+  const onSaveNote = () => {
+    const newRecordNotes = {...recordNotes}
 
     if (!newRecordNotes[data.id]) {
-      newRecordNotes[data.id] = []
+      newRecordNotes[data.id] = {}
     } 
-    newRecordNotes[data.id].push({timestamp: new Date, noteText: noteTextValue})
+    const newDate = (new Date()).toISOString()
+    let newNote = {}
+    newNote[newDate] = { noteText: noteInput.current.value, editedTimeStamp: newDate, isEditing: false}
+    newRecordNotes[data.id] = {...newRecordNotes[data.id], ...newNote}
 
-    setNotes({
-      ...notes, 
+    setRecordNotes(
       newRecordNotes
-    })
+    )
+    noteInput.current.value = ""
   }
 
 
+  let displayNotes
+  useEffect(() => {
+    const renderNotes = () => {
+      console.log('renderNotes()')
+      const recordSpecificNotes = recordNotes?.[data.id]
+      if (recordSpecificNotes) {
+        return Object.keys(recordSpecificNotes)?.sort().map((noteId) => (
+          <div key={noteId}>{recordSpecificNotes[noteId].noteText}</div>
+        ))
+      }
+      return null
+    }
+    displayNotes = renderNotes()
+  }, [recordNotes])
+
+  console.log('displayNotes', displayNotes)
+  
   const displayDate = format(new Date(itemDate), 'MMM d, y h:mm:ssaaa');
 
   const fieldsData = {
@@ -206,6 +218,7 @@ const RecordCard = ({
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
+          {displayNotes}
           <TextField
             className={classes.noteField}
             id={`note-entry-${data.id}`}
@@ -213,8 +226,7 @@ const RecordCard = ({
             variant="outlined"
             size="small"
             fullWidth
-            // onChange={(e) => setNoteText(e.target.value)}
-            
+            inputRef={noteInput}
           />
           <Button variant="contained" disableElevation size="small" onClick={onSaveNote}>Add Note</Button>
         </CardContent>
