@@ -45,7 +45,7 @@ class DiscoveryApp extends React.PureComponent {
     searchRefs: [], // Search results to highlight
     // isLoading: false,
     // fetchError: null, // Possible axios error object
-    lastEvent: null,
+    // lastEvent: null,
     // thumbLeftDate: null,
     // thumbRightDate: null,
     dotClickDate: null, // dot click from ContentPanel
@@ -70,20 +70,6 @@ class DiscoveryApp extends React.PureComponent {
     onlyMultisource: false, // TilesView & CompareView
 
     onlyAnnotated: false, // ContentPanel
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.onEvent);
-    window.addEventListener('keydown', this.onEvent);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.onEvent);
-    window.removeEventListener('keydown', this.onEvent);
-  }
-
-  onEvent = (event) => {
-    this.setState({ lastEvent: event });
   }
 
   onDotClick = (dotClickDate) => {
@@ -155,7 +141,7 @@ class DiscoveryApp extends React.PureComponent {
                   catsEnabled={activeCategories}
                   providers={providers}
                   provsEnabled={activeProviders}
-                  lastEvent={this.state.lastEvent}
+                  // lastEvent={this.state.lastEvent}
                   // TODO: convert to use route path segment:
                   // allowDotClick={!['compare', 'catalog'].includes(activeView)}
                   allowDotClick

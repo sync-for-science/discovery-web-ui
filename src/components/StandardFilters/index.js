@@ -50,7 +50,7 @@ class StandardFilters extends React.PureComponent {
     activeProviders: PropTypes.shape({}).isRequired,
     // enabledFn: PropTypes.func.isRequired, // Callback to report changed category & provider enable/disable
     // dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
-    lastEvent: PropTypes.instanceOf(Event),
+    // lastEvent: PropTypes.instanceOf(Event),
     allowDotClick: PropTypes.bool,
     dotClickDate: PropTypes.string,
   }
@@ -69,6 +69,8 @@ class StandardFilters extends React.PureComponent {
   }
 
   componentDidMount() {
+    window.addEventListener('resize', this.onResize);
+    // window.addEventListener('keydown', this.onEvent);
     this.updateSvgWidth();
     if (this.props.dates && this.props.allowDotClick) {
       this.props.setDotClickContext({
@@ -90,6 +92,15 @@ class StandardFilters extends React.PureComponent {
     // this.props.enabledFn(this.props.catsEnabled, this.props.provsEnabled);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    // window.removeEventListener('keydown', this.onEvent);
+  }
+
+  onResize = (_event) => {
+    this.updateSvgWidth();
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.minActivePos !== this.state.minActivePos
       || prevState.maxActivePos !== this.state.maxActivePos
@@ -99,13 +110,6 @@ class StandardFilters extends React.PureComponent {
     }
 
     if (prevProps.lastEvent !== this.props.lastEvent) {
-      switch (this.props.lastEvent.type) {
-        case 'resize':
-        default:
-          this.updateSvgWidth();
-          break;
-      }
-
       // TODO: not sure why this was here, but if enabled, next/prev and dot-click don't work w/ searchRefs
       //      } else if (this.context.searchRefs && this.context.searchRefs.length > 0) {
       //   // If most recent searchRef differs from currently highlighted dot, set dotClickContext
