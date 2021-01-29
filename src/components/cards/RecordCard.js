@@ -13,6 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { format } from 'date-fns';
 import { useRecoilState } from 'recoil';
 
+import NoteField from './NoteField'
 import GenericCardBody from './GenericCardBody';
 import MedicationCardBody from './MedicationCardBody';
 import BenefitCardBody from './BenefitCardBody';
@@ -95,44 +96,86 @@ const RecordCard = ({
 }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
+  const [displayNotes, setDisplayNotes] = useState([])
+  const [recordNotesState, setRecordsNotesState] = useRecoilState(notesState)
+
+  const { provider, data, itemDate, category } = records;
 
   const noteInput = useRef(null);
 
   const onSaveNote = () => {
-    const newRecordNotes = {...recordNotes}
+    const newRecordNotes = {...recordNotesState}
 
     if (!newRecordNotes[data.id]) {
       newRecordNotes[data.id] = {}
     } 
     const newDate = (new Date()).toISOString()
     let newNote = {}
-    newNote[newDate] = { noteText: noteInput.current.value, editedTimeStamp: newDate, isEditing: false}
+    newNote[newDate] = { noteText: noteInput.current.value, editTimeStamp: newDate, isEditing: false}
     newRecordNotes[data.id] = {...newRecordNotes[data.id], ...newNote}
 
-    setRecordNotes(
+    setRecordsNotesState(
       newRecordNotes
     )
     noteInput.current.value = ""
   }
 
+  const handleNoteAction = (noteId, action, text = null) => {
+    const newRecordNotesState = { ...recordNotesState }
+    const newRecordNotes = { ...newRecordNotesState[data.id] }
+    const newRecordNote = { ...newRecordNotes[noteId] }
 
-  let displayNotes
-  useEffect(() => {
-    const renderNotes = () => {
-      console.log('renderNotes()')
-      const recordSpecificNotes = recordNotes?.[data.id]
-      if (recordSpecificNotes) {
-        return Object.keys(recordSpecificNotes)?.sort().map((noteId) => (
-          <div key={noteId}>{recordSpecificNotes[noteId].noteText}</div>
-        ))
-      }
-      return null
+    switch (action) {
+      case "delete":
+        delete newRecordNotes[noteId]
+        if (Object.keys(newRecordNotes).length > 0) {
+          newRecordNotesState[data.id] = newRecordNotes
+        } else {
+          delete newRecordNotesState[data.id]
+        }
+        break;
+      case "edit":
+        newRecordNote.isEditing = true
+        newRecordNotes[noteId] = newRecordNote
+        newRecordNotesState[data.id] = newRecordNotes
+        break;
+      case "save":
+        newRecordNote.noteText = text
+        newRecordNote.isEditing = false
+        newRecordNote.editTimeStamp = (new Date()).toISOString()
+        newRecordNotes[noteId] = newRecordNote
+        newRecordNotesState[data.id] = newRecordNotes
+        break;
     }
-    displayNotes = renderNotes()
-  }, [recordNotes])
 
-  console.log('displayNotes', displayNotes)
-  
+    setRecordsNotesState(newRecordNotesState)
+  }
+
+  useEffect(() => {
+    const recordSpecificNotes = recordNotesState?.[data.id]
+
+    let renderedNotes = []
+    if (recordSpecificNotes) {
+      renderedNotes = Object.keys(recordSpecificNotes)?.sort().map((noteId) => {
+        const {noteText, editTimeStamp, isEditing} = recordSpecificNotes[noteId]
+        return (
+          <NoteField 
+            key={noteId} 
+            noteId={noteId} 
+            noteText={noteText} 
+            editTimeStamp={editTimeStamp} 
+            isEditing={isEditing}
+            handleDelete={() => handleNoteAction(noteId, "delete")}
+            handleEdit={() => handleNoteAction(noteId, "edit")}
+            handleSave={handleNoteAction}
+          />
+        )
+      })
+    }
+
+    setDisplayNotes(renderedNotes)
+  }, [recordNotesState, setDisplayNotes])
+
   const displayDate = format(new Date(itemDate), 'MMM d, y h:mm:ssaaa');
 
   const fieldsData = {
@@ -212,7 +255,6 @@ const RecordCard = ({
       <CardActions disableSpacing className={classes.cardActions}>
         <Button variant="outlined" disableElevation size="small" onClick={() => setExpanded(!expanded)}>
           Notes
-          {' '}
           <ExpandMoreIcon />
         </Button>
       </CardActions>

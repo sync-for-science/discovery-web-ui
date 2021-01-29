@@ -44,8 +44,21 @@ export const rootTheme = createMuiTheme({
     },
     s4sLabel: {
       fontFamily: 'label',
-      fontSize: '0.625rem',
+      fontSize: '0.813rem',
       color: 'var(--label-data)',
+    },
+    s4sNoteHeader: {
+      fontFamily: 'text-bold',
+      fontSize: '0.813rem',
+    },
+    s4sNoteText: {
+      fontFamily: 'text',
+      color: 'var(--label-data)',
+    },
+    s4sNoteHeaderButton: {
+      fontFamily: 'text-bold',
+      fontSize: '0.813rem',
+      color: 'var(--ca1)',
     },
     s4sValueText: {
       fontFamily: 'data-text-bold',
