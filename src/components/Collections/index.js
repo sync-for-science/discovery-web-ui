@@ -5,7 +5,9 @@ import { allRecordIds, connectToResources } from '../../recoil';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
 import RecordCard from '../cards/RecordCard';
 
-const CardList = ({ normalized, patient }) => {
+const CardList = ({
+  recordIds, records, normalized, patient,
+}) => {
   if (!normalized) {
     return null;
   }
@@ -14,10 +16,10 @@ const CardList = ({ normalized, patient }) => {
   // const record = normalized.filter(element => element.data.id === '4afef915-ade7-42d4-8e82-5012e1c47704')
   // return record.map((r, i) => <RecordCard key={i} resource={r} normalized={normalized} />);
 
-  return normalized.map((r) => (
+  return recordIds.map((uuid) => (
     <RecordCard
-      key={`record-card-${r.data.id}`}
-      resource={r}
+      key={`record-card-${uuid}`}
+      resource={records[uuid]}
       records={normalized}
       patient={patient}
     />
@@ -29,7 +31,7 @@ const Collections = (props) => {
   // console.info('recordIds: ', recordIds);
 
   const {
-    loading, normalized, patient,
+    loading, records, normalized, patient,
   } = props.resources;
 
   return (
@@ -48,6 +50,8 @@ const Collections = (props) => {
         <div className="card-list">
           <CardList
             normalized={normalized}
+            recordIds={allRecordIds}
+            records={records}
             patient={patient}
           />
         </div>
