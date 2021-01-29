@@ -37,6 +37,7 @@ export const allRecordIds = selector({
     return Object.entries(records).reduce((acc, [uuid, record]) => {
       if (record.category === 'Patient') {
         console.info(`IGNORE PATIENT ${uuid}`); // eslint-disable-line no-console
+        return acc;
       }
       acc.push(uuid);
       return acc;
