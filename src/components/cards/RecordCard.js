@@ -1,19 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { string, shape } from 'prop-types';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
-import Collapse from '@material-ui/core/Collapse';
-import TextField from '@material-ui/core/TextField';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { format } from 'date-fns';
-import { useRecoilState } from 'recoil';
 
-import NoteField from './NoteField';
 import GenericCardBody from './GenericCardBody';
 import MedicationCardBody from './MedicationCardBody';
 import BenefitCardBody from './BenefitCardBody';
@@ -26,8 +19,8 @@ import MedicationStatementCardBody from './MedicationStatementCardBody';
 import SocialHistoryCardBody from './SocialHistoryCardBody';
 import UnimplementedCardBody from './UnimplementedCardBody';
 import VitalSignCardBody from './VitalSignCardBody';
+import NotesEditor from '../notes/NotesEditor';
 import { formatAge } from '../../util';
-import { notesState } from '../../recoil';
 
 const selectCardBody = (fieldsData) => {
   switch (fieldsData.category) {
@@ -95,92 +88,13 @@ const RecordCard = ({
   recordId, records, patient,
 }) => {
   const classes = useStyles();
-  const [expanded, setExpanded] = useState(false);
-  const [displayNotes, setDisplayNotes] = useState([]);
-  const [recordNotesState, setRecordsNotesState] = useRecoilState(notesState);
 
+  // console.info('recordId, records, patient:', recordId, records, patient);
   const record = records[recordId];
 
   const {
     provider, data, itemDate, category,
   } = record;
-
-  const noteInput = useRef(null);
-
-  const onSaveNote = () => {
-    const newRecordNotes = { ...recordNotesState };
-
-    if (!newRecordNotes[data.id]) {
-      newRecordNotes[data.id] = {};
-    }
-    const newDate = (new Date()).toISOString();
-    const newNote = {};
-    newNote[newDate] = { noteText: noteInput.current.value, editTimeStamp: newDate, isEditing: false };
-    newRecordNotes[data.id] = { ...newRecordNotes[data.id], ...newNote };
-
-    setRecordsNotesState(
-      newRecordNotes,
-    );
-    noteInput.current.value = '';
-  };
-
-  const handleNoteAction = (noteId, action, text = null) => {
-    const newRecordNotesState = { ...recordNotesState };
-    const newRecordNotes = { ...newRecordNotesState[data.id] };
-    const newRecordNote = { ...newRecordNotes[noteId] };
-
-    switch (action) {
-      case 'delete':
-        delete newRecordNotes[noteId];
-        if (Object.keys(newRecordNotes).length > 0) {
-          newRecordNotesState[data.id] = newRecordNotes;
-        } else {
-          delete newRecordNotesState[data.id];
-        }
-        break;
-      case 'edit':
-        newRecordNote.isEditing = true;
-        newRecordNotes[noteId] = newRecordNote;
-        newRecordNotesState[data.id] = newRecordNotes;
-        break;
-      case 'save':
-        newRecordNote.noteText = text;
-        newRecordNote.isEditing = false;
-        newRecordNote.editTimeStamp = (new Date()).toISOString();
-        newRecordNotes[noteId] = newRecordNote;
-        newRecordNotesState[data.id] = newRecordNotes;
-        break;
-      default:
-        break;
-    }
-
-    setRecordsNotesState(newRecordNotesState);
-  };
-
-  useEffect(() => {
-    const recordSpecificNotes = recordNotesState?.[data.id];
-
-    let renderedNotes = [];
-    if (recordSpecificNotes) {
-      renderedNotes = Object.keys(recordSpecificNotes)?.sort().map((noteId) => {
-        const { noteText, editTimeStamp, isEditing } = recordSpecificNotes[noteId];
-        return (
-          <NoteField
-            key={noteId}
-            noteId={noteId}
-            noteText={noteText}
-            editTimeStamp={editTimeStamp}
-            isEditing={isEditing}
-            handleDelete={() => handleNoteAction(noteId, 'delete')}
-            handleEdit={() => handleNoteAction(noteId, 'edit')}
-            handleSave={handleNoteAction}
-          />
-        );
-      });
-    }
-
-    setDisplayNotes(renderedNotes);
-  }, [recordNotesState, setDisplayNotes]);
 
   const displayDate = format(new Date(itemDate), 'MMM d, y h:mm:ssaaa');
 
@@ -258,27 +172,10 @@ const RecordCard = ({
           {selectCardBody(fieldsData, records)}
         </Grid>
       </CardContent>
-      <CardActions disableSpacing className={classes.cardActions}>
-        <Button variant="outlined" disableElevation size="small" onClick={() => setExpanded(!expanded)}>
-          Notes
-          <ExpandMoreIcon />
-        </Button>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          {displayNotes}
-          <TextField
-            className={classes.noteField}
-            id={`note-entry-${data.id}`}
-            placeholder="New Note"
-            variant="outlined"
-            size="small"
-            fullWidth
-            inputRef={noteInput}
-          />
-          <Button variant="contained" disableElevation size="small" onClick={onSaveNote}>Add Note</Button>
-        </CardContent>
-      </Collapse>
+      <NotesEditor
+        recordId={recordId}
+        data={data}
+      />
     </Card>
   );
 };
