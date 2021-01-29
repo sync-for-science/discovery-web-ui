@@ -2,9 +2,11 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { useRecoilValue } from 'recoil';
 import CardBodyField from './CardBodyField';
 import TimeSeries from '../TimeSeries/index';
 import { computeTimeSeriesLabResultsData } from '../../fhirUtil';
+import { labResultRecords } from '../../recoil';
 
 const useStyles = makeStyles(() => ({
   timeSeries: {
@@ -12,7 +14,8 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const LabResultCardBody = ({ fieldsData, labResults }) => {
+const LabResultCardBody = ({ fieldsData }) => {
+  const labResults = useRecoilValue(labResultRecords);
   const classes = useStyles();
   const valueRatioDisplay = `${fieldsData.valueRatio?.numerator?.value} / ${fieldsData.valueRatio?.denominator?.value}`;
 

@@ -11,7 +11,6 @@ import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { format } from 'date-fns';
-import jsonQuery from 'json-query';
 
 import GenericCardBody from './GenericCardBody';
 import MedicationCardBody from './MedicationCardBody';
@@ -27,7 +26,7 @@ import UnimplementedCardBody from './UnimplementedCardBody';
 import VitalSignCardBody from './VitalSignCardBody';
 import { formatAge } from '../../util';
 
-const selectCardBody = (fieldsData, records) => {
+const selectCardBody = (fieldsData) => {
   switch (fieldsData.category) {
     case 'Conditions':
     case 'Document References':
@@ -47,8 +46,7 @@ const selectCardBody = (fieldsData, records) => {
     case 'Immunizations':
       return <ImmunizationCardBody fieldsData={fieldsData} />;
     case 'Lab Results':
-      const labResults = jsonQuery('[*category=Lab Results]', { data: records }).value;
-      return <LabResultCardBody fieldsData={fieldsData} labResults={labResults} />;
+      return <LabResultCardBody fieldsData={fieldsData} />;
     case 'Exams':
       return <ExamCardBody fieldsData={fieldsData} />;
     case 'Meds Statement':
@@ -58,8 +56,7 @@ const selectCardBody = (fieldsData, records) => {
     case 'Other':
       return <UnimplementedCardBody fieldsData={fieldsData} />;
     case 'Vital Signs':
-      const vitalSigns = jsonQuery('[*category=Vital Signs]', { data: records }).value;
-      return <VitalSignCardBody fieldsData={fieldsData} vitalSigns={vitalSigns} />;
+      return <VitalSignCardBody fieldsData={fieldsData} />;
     default:
       break;
   }
@@ -91,11 +88,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecordCard = ({ recordId, records, patient }) => {
+const RecordCard = ({
+  recordId, records, patient,
+}) => {
   const [expanded, setExpanded] = React.useState(false);
   const classes = useStyles();
 
-  console.info('recordId, records, patient:', recordId, records, patient);
+  // console.info('recordId, records, patient:', recordId, records, patient);
   const record = records[recordId];
 
   const {

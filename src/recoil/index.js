@@ -2,6 +2,7 @@ import React from 'react';
 import {
   atom, selector, useRecoilValue,
 } from 'recoil';
+import jsonQuery from 'json-query';
 
 export * from './category-provider-filters';
 
@@ -46,6 +47,24 @@ export const allRecordIds = selector({
   },
 });
 
+export const labResultRecords = selector({
+  key: 'labResultRecords',
+  get: ({ get }) => {
+    const { normalized } = get(resourcesState);
+    const labResults = jsonQuery('[*category=Lab Results]', { data: normalized }).value;
+    return labResults;
+  },
+});
+
+export const vitalSignsRecords = selector({
+  key: 'vitalSignsRecords',
+  get: ({ get }) => {
+    const { normalized } = get(resourcesState);
+    const vitalSigns = jsonQuery('[*category=Vital Signs]', { data: normalized }).value;
+    return vitalSigns;
+  },
+});
+
 // TODO: ^other states facilitate implementation of something like the following:
 // export const collectionsState = atom({
 //   key: 'collectionsState',
@@ -61,6 +80,8 @@ export const allRecordIds = selector({
 export const connectToResources = (Component) => (props) => {
   const resources = useRecoilValue(resourcesState);
   const filters = useRecoilValue(filtersState);
+  // const vitalSigns = useRecoilValue(vitalSignsRecords);
+  // const labResults = useRecoilValue(labResultRecords);
   // useContext(DiscoveryContext);
 
   return (

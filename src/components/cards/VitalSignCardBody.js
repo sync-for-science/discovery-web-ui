@@ -2,9 +2,11 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { useRecoilValue } from 'recoil';
 import CardBodyField from './CardBodyField';
 import TimeSeries from '../TimeSeries/index';
 import { computeTimeSeriesVitalSignsData } from '../../fhirUtil';
+import { vitalSignsRecords } from '../../recoil';
 
 const useStyles = makeStyles(() => ({
   timeSeries: {
@@ -12,7 +14,8 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const VitalSignCardBody = ({ fieldsData, vitalSigns }) => {
+const VitalSignCardBody = ({ fieldsData }) => {
+  const vitalSigns = useRecoilValue(vitalSignsRecords);
   const classes = useStyles();
   const valueDisplay = fieldsData.valueQuantity && `${fieldsData.valueQuantity.value.toFixed(1)} ${fieldsData.valueQuantity.unit}`;
 
