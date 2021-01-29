@@ -31,8 +31,8 @@ export const filtersState = atom({
   },
 });
 
-export const allRecordIdsState = selector({
-  key: 'allRecordIdsState',
+export const allRecordIds = selector({
+  key: 'allRecordIds',
   get: ({ get }) => {
     const { records } = get(resourcesState);
     // Return all record ids as an Array:
