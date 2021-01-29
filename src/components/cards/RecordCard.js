@@ -150,6 +150,8 @@ const RecordCard = ({
         newRecordNotes[noteId] = newRecordNote;
         newRecordNotesState[data.id] = newRecordNotes;
         break;
+      default:
+        break;
     }
 
     setRecordsNotesState(newRecordNotesState);
