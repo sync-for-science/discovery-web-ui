@@ -156,7 +156,8 @@ class StandardFilters extends React.PureComponent {
     const availableWidthEl = checkQuerySelector('#measure-available-width');
     if (availableWidthEl) {
       const availableWidth = availableWidthEl.getBoundingClientRect().width;
-      this.setState({ svgWidth: `${availableWidth}px` });
+      const MIN_WIDTH = 810;
+      this.setState({ svgWidth: `${Math.max(MIN_WIDTH, availableWidth)}px` });
     }
   }
 
