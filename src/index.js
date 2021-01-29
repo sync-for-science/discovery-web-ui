@@ -16,7 +16,7 @@ import './css/Fonts.css';
 import ParticipantList from './components/ParticipantList';
 import DiscoveryApp from './components/DiscoveryApp';
 
-export const PATIENT_MODES_SEGMENT = '/:patientMode(participant|uploaded)';
+export const PATIENT_MODE_SEGMENT = '/:patientMode(participant|uploaded)';
 
 ReactDOM.render(
   <RecoilRoot>
@@ -24,7 +24,7 @@ ReactDOM.render(
       <Router>
         <Switch>
           <Route exact path="/" component={ParticipantList} />
-          <Route path={`${PATIENT_MODES_SEGMENT}/:participantId/:activeView?`} component={DiscoveryApp} />
+          <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/:activeView?`} component={DiscoveryApp} />
         </Switch>
       </Router>
     </ThemeProvider>

@@ -15,7 +15,7 @@ import CompareView from '../CompareView';
 import TilesView from '../TilesView';
 import Collections from '../Collections';
 import PageFooter from '../PageFooter';
-import { PATIENT_MODES_SEGMENT } from '../../index';
+import { PATIENT_MODE_SEGMENT } from '../../index';
 import {
   normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
 } from './Api';
@@ -178,7 +178,7 @@ class DiscoveryApp extends React.PureComponent {
                 <main>
                   { legacyResources && (
                     <Switch>
-                      <Route path={`${PATIENT_MODES_SEGMENT}/:participantId/summary`}>
+                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/summary`}>
                         <SummaryView
                           activeView={activeView}
                           resources={legacyResources}
@@ -187,7 +187,7 @@ class DiscoveryApp extends React.PureComponent {
                           providers={providers}
                         />
                       </Route>
-                      <Route path={`${PATIENT_MODES_SEGMENT}/:participantId/catalog`}>
+                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/catalog`}>
                         <TilesView
                           activeView={activeView}
                           resources={this.props.resources}
@@ -201,7 +201,7 @@ class DiscoveryApp extends React.PureComponent {
                           thumbRightDate={thumbRightDate}
                         />
                       </Route>
-                      <Route path={`${PATIENT_MODES_SEGMENT}/:participantId/compare`}>
+                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/compare`}>
                         <CompareView
                           activeView={activeView}
                           resources={this.props.resources}
@@ -215,7 +215,7 @@ class DiscoveryApp extends React.PureComponent {
                           thumbRightDate={thumbRightDate}
                         />
                       </Route>
-                      <Route path={`${PATIENT_MODES_SEGMENT}/:participantId/timeline`}>
+                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/timeline`}>
                         <ContentPanel
                           open
                           activeView={activeView}
@@ -235,10 +235,10 @@ class DiscoveryApp extends React.PureComponent {
                           viewIconClass="longitudinal-view-icon"
                         />
                       </Route>
-                      <Route path={`${PATIENT_MODES_SEGMENT}/:participantId/collections`}>
+                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/collections`}>
                         <Collections />
                       </Route>
-                      <Route path={`${PATIENT_MODES_SEGMENT}/:participantId/:activeView?`}>
+                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/:activeView?`}>
                         <Redirect
                           push
                           to={`/${patientMode}/${participantId}/summary`}
