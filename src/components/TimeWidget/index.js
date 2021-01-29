@@ -335,6 +335,7 @@ export default class TimeWidget extends React.Component {
   }
 
   onDotClick = (context, date, dotType) => {
+    console.error('============ TimeWidget onDotClick, context, date, dotType: ', context, date, dotType);
     this.setRange(this.state.rangeButton, date);
     this.props.dotClickFn(context, date, dotType);
   }

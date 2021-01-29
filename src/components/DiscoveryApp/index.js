@@ -77,6 +77,7 @@ class DiscoveryApp extends React.PureComponent {
   }
 
   onDotClick = (dotClickDate) => {
+    console.error('============ DiscoveryApp onDotClick, dotClickDate: ', dotClickDate);
     this.setState({ dotClickDate });
   }
 
