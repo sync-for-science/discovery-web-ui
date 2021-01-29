@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useRecoilValue } from 'recoil';
-import { allRecordIds, connectToResources } from '../../recoil';
+import { allRecordIds, resourcesState } from '../../recoil';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
 import RecordCard from '../cards/RecordCard';
 
@@ -16,13 +16,13 @@ const CardList = ({
   />
 ));
 
-const Collections = (props) => {
+const Collections = () => {
   const recordIds = useRecoilValue(allRecordIds);
-  // console.info('recordIds: ', recordIds);
+  const resources = useRecoilValue(resourcesState);
 
   const {
     loading, records, patient,
-  } = props.resources;
+  } = resources;
 
   return (
     <div>
@@ -54,4 +54,4 @@ const Collections = (props) => {
   );
 };
 
-export default connectToResources(Collections);
+export default React.memo(Collections);

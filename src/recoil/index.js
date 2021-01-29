@@ -1,6 +1,5 @@
-import React from 'react';
 import {
-  atom, selector, useRecoilValue,
+  atom, selector,
 } from 'recoil';
 import jsonQuery from 'json-query';
 
@@ -81,20 +80,3 @@ export const vitalSignsRecords = selector({
 //     },
 //   },
 // });
-
-// read-only connection to resources and filters:
-export const connectToResources = (Component) => (props) => {
-  const resources = useRecoilValue(resourcesState);
-  const filters = useRecoilValue(filtersState);
-  // const vitalSigns = useRecoilValue(vitalSignsRecords);
-  // const labResults = useRecoilValue(labResultRecords);
-  // useContext(DiscoveryContext);
-
-  return (
-    <Component
-      {...props} // eslint-disable-line react/jsx-props-no-spreading
-      resources={resources}
-      filters={filters}
-    />
-  );
-};
