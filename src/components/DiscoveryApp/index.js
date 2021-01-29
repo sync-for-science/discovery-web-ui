@@ -15,6 +15,7 @@ import CompareView from '../CompareView';
 import TilesView from '../TilesView';
 import Collections from '../Collections';
 import PageFooter from '../PageFooter';
+import { PATIENT_MODE_SEGMENT } from '../../index';
 import {
   normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
 } from './Api';
@@ -131,7 +132,7 @@ class DiscoveryApp extends React.PureComponent {
       return <p>Loading ...</p>;
     }
 
-    const { match: { params: { activeView = 'summary', participantId } } } = this.props;
+    const { match: { params: { activeView = 'summary', patientMode, participantId } } } = this.props;
 
     const isSummary = activeView === 'summary';
 
@@ -149,6 +150,7 @@ class DiscoveryApp extends React.PureComponent {
       <DiscoveryContext.Provider value={{ ...this.state, ...this.props.filters }}>
         <div className="discovery-app">
           <PageHeader
+            patientMode={patientMode}
             participantId={participantId}
           />
           <div className="outer-container">
@@ -176,7 +178,7 @@ class DiscoveryApp extends React.PureComponent {
                 <main>
                   { legacyResources && (
                     <Switch>
-                      <Route path="/participant/:participantId/summary">
+                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/summary`}>
                         <SummaryView
                           activeView={activeView}
                           resources={legacyResources}
@@ -185,7 +187,7 @@ class DiscoveryApp extends React.PureComponent {
                           providers={providers}
                         />
                       </Route>
-                      <Route path="/participant/:participantId/catalog">
+                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/catalog`}>
                         <TilesView
                           activeView={activeView}
                           resources={this.props.resources}
@@ -199,7 +201,7 @@ class DiscoveryApp extends React.PureComponent {
                           thumbRightDate={thumbRightDate}
                         />
                       </Route>
-                      <Route path="/participant/:participantId/compare">
+                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/compare`}>
                         <CompareView
                           activeView={activeView}
                           resources={this.props.resources}
@@ -213,7 +215,7 @@ class DiscoveryApp extends React.PureComponent {
                           thumbRightDate={thumbRightDate}
                         />
                       </Route>
-                      <Route path="/participant/:participantId/timeline">
+                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/timeline`}>
                         <ContentPanel
                           open
                           activeView={activeView}
@@ -233,15 +235,13 @@ class DiscoveryApp extends React.PureComponent {
                           viewIconClass="longitudinal-view-icon"
                         />
                       </Route>
-                      <Route path="/participant/:participantId/collections">
+                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/collections`}>
                         <Collections />
                       </Route>
-                      <Route
-                        path="/participant/:participantId/:activeView?"
-                      >
+                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/:activeView?`}>
                         <Redirect
                           push
-                          to={`/participant/${participantId}/summary`}
+                          to={`/${patientMode}/${participantId}/summary`}
                         />
                       </Route>
                     </Switch>
@@ -273,10 +273,9 @@ const DiscoveryAppHOC = (props) => {
         loading: true,
       });
 
-      const { match: { params: { id, participantId } } } = props;
+      const { match: { params: { patientMode, participantId } } } = props;
 
-      const dataUrl = id ? `${config.serverUrl}/data/download/${id}`
-        : `${config.serverUrl}/participants/${participantId}`;
+      const dataUrl = `${config.serverUrl}/${patientMode === 'uploaded' ? 'data/download' : 'participants'}/${participantId}`;
 
       get(dataUrl).then((response) => {
         // TODO: break-out into dedicated reducer function that uses memoized selectors:
