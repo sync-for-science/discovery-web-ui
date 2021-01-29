@@ -29,8 +29,8 @@ const timeFilters = atom({
   },
 });
 
-export const updateTimeFiltersState = selector({
-  key: 'updateTimeFiltersState',
+export const timeFiltersState = selector({
+  key: 'timeFiltersState',
   get: ({ get }) => get(timeFilters),
   set: ({ get, set }, newValues) => {
     const previousValues = get(timeFilters);

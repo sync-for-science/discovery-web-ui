@@ -23,7 +23,7 @@ import Provider from '../Provider';
 import Unimplemented from '../Unimplemented';
 import DiscoveryContext from '../DiscoveryContext';
 
-import { activeCategoriesState, activeProvidersState, updateTimeFiltersState } from '../../recoil';
+import { activeCategoriesState, activeProvidersState, timeFiltersState } from '../../recoil';
 //
 // Render the "container" (with filters) for views of the participant's data
 //
@@ -638,7 +638,7 @@ export const dotClickContextState = atom({
 });
 
 const StandardFiltersHOC = React.memo((props) => {
-  const updateTimeFilters = useSetRecoilState(updateTimeFiltersState);
+  const updateTimeFilters = useSetRecoilState(timeFiltersState);
   const [dotClickContext, setDotClickContext] = useRecoilState(dotClickContextState);
 
   const activeCategories = useRecoilValue(activeCategoriesState);

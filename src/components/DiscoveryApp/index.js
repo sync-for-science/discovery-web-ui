@@ -20,7 +20,7 @@ import {
   normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
 } from './Api';
 import {
-  resourcesState, updateTimeFiltersState, activeCategoriesState, activeProvidersState,
+  resourcesState, timeFiltersState, activeCategoriesState, activeProvidersState,
 } from '../../recoil';
 
 import DiscoveryContext from '../DiscoveryContext';
@@ -232,7 +232,7 @@ class DiscoveryApp extends React.PureComponent {
 // if using React.memo, there's a proptype warning for Route:
 const DiscoveryAppHOC = (props) => {
   const [resources, setResources] = useRecoilState(resourcesState);
-  const [timeFilters, updateTimeFilters] = useRecoilState(updateTimeFiltersState);
+  const [timeFilters, updateTimeFilters] = useRecoilState(timeFiltersState);
   const activeCategories = useRecoilValue(activeCategoriesState);
   const activeProviders = useRecoilValue(activeProvidersState);
 
