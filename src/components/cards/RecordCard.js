@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { string, shape } from 'prop-types';
 import Card from '@material-ui/core/Card';
@@ -13,7 +13,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { format } from 'date-fns';
 import { useRecoilState } from 'recoil';
 
-import NoteField from './NoteField'
+import NoteField from './NoteField';
 import GenericCardBody from './GenericCardBody';
 import MedicationCardBody from './MedicationCardBody';
 import BenefitCardBody from './BenefitCardBody';
@@ -96,87 +96,89 @@ const RecordCard = ({
 }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
-  const [displayNotes, setDisplayNotes] = useState([])
-  const [recordNotesState, setRecordsNotesState] = useRecoilState(notesState)
+  const [displayNotes, setDisplayNotes] = useState([]);
+  const [recordNotesState, setRecordsNotesState] = useRecoilState(notesState);
 
-  const record = records[recordId]
+  const record = records[recordId];
 
-  const { provider, data, itemDate, category } = record;
+  const {
+    provider, data, itemDate, category,
+  } = record;
 
   const noteInput = useRef(null);
 
   const onSaveNote = () => {
-    const newRecordNotes = {...recordNotesState}
+    const newRecordNotes = { ...recordNotesState };
 
     if (!newRecordNotes[data.id]) {
-      newRecordNotes[data.id] = {}
-    } 
-    const newDate = (new Date()).toISOString()
-    let newNote = {}
-    newNote[newDate] = { noteText: noteInput.current.value, editTimeStamp: newDate, isEditing: false}
-    newRecordNotes[data.id] = {...newRecordNotes[data.id], ...newNote}
+      newRecordNotes[data.id] = {};
+    }
+    const newDate = (new Date()).toISOString();
+    const newNote = {};
+    newNote[newDate] = { noteText: noteInput.current.value, editTimeStamp: newDate, isEditing: false };
+    newRecordNotes[data.id] = { ...newRecordNotes[data.id], ...newNote };
 
     setRecordsNotesState(
-      newRecordNotes
-    )
-    noteInput.current.value = ""
-  }
+      newRecordNotes,
+    );
+    noteInput.current.value = '';
+  };
 
   const handleNoteAction = (noteId, action, text = null) => {
-    const newRecordNotesState = { ...recordNotesState }
-    const newRecordNotes = { ...newRecordNotesState[data.id] }
-    const newRecordNote = { ...newRecordNotes[noteId] }
+    const newRecordNotesState = { ...recordNotesState };
+    const newRecordNotes = { ...newRecordNotesState[data.id] };
+    const newRecordNote = { ...newRecordNotes[noteId] };
 
     switch (action) {
-      case "delete":
-        delete newRecordNotes[noteId]
+      case 'delete':
+        delete newRecordNotes[noteId];
         if (Object.keys(newRecordNotes).length > 0) {
-          newRecordNotesState[data.id] = newRecordNotes
+          newRecordNotesState[data.id] = newRecordNotes;
         } else {
-          delete newRecordNotesState[data.id]
+          delete newRecordNotesState[data.id];
         }
         break;
-      case "edit":
-        newRecordNote.isEditing = true
-        newRecordNotes[noteId] = newRecordNote
-        newRecordNotesState[data.id] = newRecordNotes
+      case 'edit':
+        newRecordNote.isEditing = true;
+        newRecordNotes[noteId] = newRecordNote;
+        newRecordNotesState[data.id] = newRecordNotes;
         break;
-      case "save":
-        newRecordNote.noteText = text
-        newRecordNote.isEditing = false
-        newRecordNote.editTimeStamp = (new Date()).toISOString()
-        newRecordNotes[noteId] = newRecordNote
-        newRecordNotesState[data.id] = newRecordNotes
+      case 'save':
+        newRecordNote.noteText = text;
+        newRecordNote.isEditing = false;
+        newRecordNote.editTimeStamp = (new Date()).toISOString();
+        newRecordNotes[noteId] = newRecordNote;
+        newRecordNotesState[data.id] = newRecordNotes;
         break;
     }
 
-    setRecordsNotesState(newRecordNotesState)
-  }
+    setRecordsNotesState(newRecordNotesState);
+  };
 
   useEffect(() => {
-    const recordSpecificNotes = recordNotesState?.[data.id]
+    const recordSpecificNotes = recordNotesState?.[data.id];
 
-    let renderedNotes = []
+    let renderedNotes = [];
     if (recordSpecificNotes) {
       renderedNotes = Object.keys(recordSpecificNotes)?.sort().map((noteId) => {
-        const {noteText, editTimeStamp, isEditing} = recordSpecificNotes[noteId]
+        const { noteText, editTimeStamp, isEditing } = recordSpecificNotes[noteId];
         return (
-          <NoteField 
-            key={noteId} 
-            noteId={noteId} 
-            noteText={noteText} 
-            editTimeStamp={editTimeStamp} 
+          <NoteField
+            key={noteId}
+            noteId={noteId}
+            noteText={noteText}
+            editTimeStamp={editTimeStamp}
             isEditing={isEditing}
-            handleDelete={() => handleNoteAction(noteId, "delete")}
-            handleEdit={() => handleNoteAction(noteId, "edit")}
+            handleDelete={() => handleNoteAction(noteId, 'delete')}
+            handleEdit={() => handleNoteAction(noteId, 'edit')}
             handleSave={handleNoteAction}
           />
-        )
-      })
+        );
+      });
     }
 
-    setDisplayNotes(renderedNotes)
-  }, [recordNotesState, setDisplayNotes])
+    setDisplayNotes(renderedNotes);
+  }, [recordNotesState, setDisplayNotes]);
 
   const displayDate = format(new Date(itemDate), 'MMM d, y h:mm:ssaaa');
 
