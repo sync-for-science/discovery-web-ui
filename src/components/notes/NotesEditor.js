@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { string } from 'prop-types';
 import { useRecoilState } from 'recoil';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NotesEditor = ({ recordId, data }) => {
+const NotesEditor = ({ recordId }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const [displayNotes, setDisplayNotes] = useState([]);
@@ -47,13 +48,13 @@ const NotesEditor = ({ recordId, data }) => {
   const onSaveNote = () => {
     const newRecordNotes = { ...recordNotesState };
 
-    if (!newRecordNotes[data.id]) {
-      newRecordNotes[data.id] = {};
+    if (!newRecordNotes[recordId]) {
+      newRecordNotes[recordId] = {};
     }
     const newDate = (new Date()).toISOString();
     const newNote = {};
     newNote[newDate] = { noteText: noteInput.current.value, editTimeStamp: newDate, isEditing: false };
-    newRecordNotes[data.id] = { ...newRecordNotes[data.id], ...newNote };
+    newRecordNotes[recordId] = { ...newRecordNotes[recordId], ...newNote };
 
     setRecordsNotesState(
       newRecordNotes,
@@ -63,29 +64,29 @@ const NotesEditor = ({ recordId, data }) => {
 
   const handleNoteAction = (noteId, action, text = null) => {
     const newRecordNotesState = { ...recordNotesState };
-    const newRecordNotes = { ...newRecordNotesState[data.id] };
+    const newRecordNotes = { ...newRecordNotesState[recordId] };
     const newRecordNote = { ...newRecordNotes[noteId] };
 
     switch (action) {
       case 'delete':
         delete newRecordNotes[noteId];
         if (Object.keys(newRecordNotes).length > 0) {
-          newRecordNotesState[data.id] = newRecordNotes;
+          newRecordNotesState[recordId] = newRecordNotes;
         } else {
-          delete newRecordNotesState[data.id];
+          delete newRecordNotesState[recordId];
         }
         break;
       case 'edit':
         newRecordNote.isEditing = true;
         newRecordNotes[noteId] = newRecordNote;
-        newRecordNotesState[data.id] = newRecordNotes;
+        newRecordNotesState[recordId] = newRecordNotes;
         break;
       case 'save':
         newRecordNote.noteText = text;
         newRecordNote.isEditing = false;
         newRecordNote.editTimeStamp = (new Date()).toISOString();
         newRecordNotes[noteId] = newRecordNote;
-        newRecordNotesState[data.id] = newRecordNotes;
+        newRecordNotesState[recordId] = newRecordNotes;
         break;
       default:
         break;
@@ -95,7 +96,7 @@ const NotesEditor = ({ recordId, data }) => {
   };
 
   useEffect(() => {
-    const recordSpecificNotes = recordNotesState?.[data.id];
+    const recordSpecificNotes = recordNotesState?.[recordId];
 
     let renderedNotes = [];
     if (recordSpecificNotes) {
@@ -132,7 +133,7 @@ const NotesEditor = ({ recordId, data }) => {
           {displayNotes}
           <TextField
             className={classes.noteField}
-            id={`note-entry-${data.id}`}
+            id={`note-entry-${recordId}`}
             placeholder="New Note"
             variant="outlined"
             size="small"
@@ -144,6 +145,10 @@ const NotesEditor = ({ recordId, data }) => {
       </Collapse>
     </>
   );
+};
+
+NotesEditor.prototype = {
+  recordId: string.isRequired,
 };
 
 export default React.memo(NotesEditor);

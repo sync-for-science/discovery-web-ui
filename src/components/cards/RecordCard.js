@@ -174,7 +174,6 @@ const RecordCard = ({
       </CardContent>
       <NotesEditor
         recordId={recordId}
-        data={data}
       />
     </Card>
   );
