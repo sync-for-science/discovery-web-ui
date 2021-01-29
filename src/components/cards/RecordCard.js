@@ -99,7 +99,9 @@ const RecordCard = ({
   const [displayNotes, setDisplayNotes] = useState([])
   const [recordNotesState, setRecordsNotesState] = useRecoilState(notesState)
 
-  const { provider, data, itemDate, category } = records;
+  const record = records[recordId]
+
+  const { provider, data, itemDate, category } = record;
 
   const noteInput = useRef(null);
 
