@@ -13,7 +13,6 @@ import SVGContainer from '../SVGContainer';
 import DotLine from '../DotLine';
 
 import DiscoveryContext from '../DiscoveryContext';
-import CategoryRollup from '../CategoryRollup';
 
 //
 // Render the DiscoveryApp Time Widget
@@ -427,7 +426,7 @@ export default class TimeWidget extends React.Component {
             >
               <DotLine
                 dotPositions={this.props.dotPositionsFn('CategoryRollup', 'Categories', true)}
-                context={{ parent: CategoryRollup.myName, rowName: 'Categories' }}
+                context={{ parent: 'Category', rowName: 'Categories' }}
                 dotClickFn={this.props.dotClickFn}
               />
             </SVGContainer>
