@@ -17,7 +17,7 @@ const CardList = ({ normalized, patient }) => {
     <RecordCard
       key={`record-card-${r.data.id}`}
       resource={r}
-      normalized={normalized}
+      records={normalized}
       patient={patient}
     />
   ));
