@@ -8,8 +8,7 @@ import Collapse from '@material-ui/core/Collapse';
 import CardContent from '@material-ui/core/CardContent';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import { notesState } from '../../recoil';
-import NoteField from '../cards/NoteField';
+import { notesWithRecordId } from '../../recoil';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,85 +39,13 @@ const useStyles = makeStyles((theme) => ({
 const NotesEditor = ({ recordId }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
-  const [displayNotes, setDisplayNotes] = useState([]);
-  const [recordNotesState, setRecordsNotesState] = useRecoilState(notesState);
+  const [notesForThisRecord, saveNewNote] = useRecoilState(notesWithRecordId(recordId));
 
   const noteInput = useRef(null);
 
-  const onSaveNote = () => {
-    const newRecordNotes = { ...recordNotesState };
-
-    if (!newRecordNotes[recordId]) {
-      newRecordNotes[recordId] = {};
-    }
-    const newDate = (new Date()).toISOString();
-    const newNote = {};
-    newNote[newDate] = { noteText: noteInput.current.value, editTimeStamp: newDate, isEditing: false };
-    newRecordNotes[recordId] = { ...newRecordNotes[recordId], ...newNote };
-
-    setRecordsNotesState(
-      newRecordNotes,
-    );
-    noteInput.current.value = '';
+  const handleAddNote = (_event) => {
+    saveNewNote(noteInput.current.value);
   };
-
-  const handleNoteAction = (noteId, action, text = null) => {
-    const newRecordNotesState = { ...recordNotesState };
-    const newRecordNotes = { ...newRecordNotesState[recordId] };
-    const newRecordNote = { ...newRecordNotes[noteId] };
-
-    switch (action) {
-      case 'delete':
-        delete newRecordNotes[noteId];
-        if (Object.keys(newRecordNotes).length > 0) {
-          newRecordNotesState[recordId] = newRecordNotes;
-        } else {
-          delete newRecordNotesState[recordId];
-        }
-        break;
-      case 'edit':
-        newRecordNote.isEditing = true;
-        newRecordNotes[noteId] = newRecordNote;
-        newRecordNotesState[recordId] = newRecordNotes;
-        break;
-      case 'save':
-        newRecordNote.noteText = text;
-        newRecordNote.isEditing = false;
-        newRecordNote.editTimeStamp = (new Date()).toISOString();
-        newRecordNotes[noteId] = newRecordNote;
-        newRecordNotesState[recordId] = newRecordNotes;
-        break;
-      default:
-        break;
-    }
-
-    setRecordsNotesState(newRecordNotesState);
-  };
-
-  useEffect(() => {
-    const recordSpecificNotes = recordNotesState?.[recordId];
-
-    let renderedNotes = [];
-    if (recordSpecificNotes) {
-      renderedNotes = Object.keys(recordSpecificNotes)?.sort().map((noteId) => {
-        const { noteText, editTimeStamp, isEditing } = recordSpecificNotes[noteId];
-        return (
-          <NoteField
-            key={noteId}
-            noteId={noteId}
-            noteText={noteText}
-            editTimeStamp={editTimeStamp}
-            isEditing={isEditing}
-            handleDelete={() => handleNoteAction(noteId, 'delete')}
-            handleEdit={() => handleNoteAction(noteId, 'edit')}
-            handleSave={handleNoteAction}
-          />
-        );
-      });
-    }
-
-    setDisplayNotes(renderedNotes);
-  }, [recordNotesState, setDisplayNotes]);
 
   return (
     <>
@@ -130,7 +57,7 @@ const NotesEditor = ({ recordId }) => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          {displayNotes}
+          {/* {displayNotes} */}
           <TextField
             className={classes.noteField}
             id={`note-entry-${recordId}`}
@@ -140,7 +67,7 @@ const NotesEditor = ({ recordId }) => {
             fullWidth
             inputRef={noteInput}
           />
-          <Button variant="contained" disableElevation size="small" onClick={onSaveNote}>Add Note</Button>
+          <Button variant="contained" disableElevation size="small" onClick={handleAddNote}>Add Note</Button>
         </CardContent>
       </Collapse>
     </>

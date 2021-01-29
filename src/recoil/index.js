@@ -92,7 +92,31 @@ export const vitalSignsRecords = selector({
 //   },
 // });
 
-export const notesState = atom({
-  key: 'notesState', // unique ID (with respect to other atoms/selectors)
-  default: {},
+// TODO: use 3rd party library, eg, reselect:
+const _memoize_cache = {};
+const memoize = (f) => (...args) => {
+  const cacheKey = args.join('-');
+  _memoize_cache[cacheKey] = _memoize_cache[cacheKey] ?? f(...args);
+  return _memoize_cache[cacheKey];
+};
+
+export const notesWithRecordId = memoize((recordId) => {
+  const atomForThisRecord = atom({
+    key: `stored-notes-${recordId}`,
+    default: {},
+  });
+  return selector({
+    key: `notesForRecord-${recordId}`, // unique ID (with respect to other atoms/selectors)
+    get: ({ get }) =>
+      // TODO: get from server or localStorage:
+      get(atomForThisRecord),
+    set: ({ get, set }, noteText) => {
+      const existingNotesForId = get(atomForThisRecord);
+      const creationTime = (new Date()).toISOString();
+      set(atomForThisRecord, {
+        ...existingNotesForId,
+        [creationTime]: { noteText, lastUpdated: creationTime },
+      });
+    },
+  });
 });
