@@ -22,8 +22,7 @@ ReactDOM.render(
       <Router>
         <Switch>
           <Route exact path="/" component={ParticipantList} />
-          <Route path="/participant/:participantId/:activeView?" component={DiscoveryApp} />
-          <Route path="/uploaded/:uploadId/:activeView?" component={DiscoveryApp} />
+          <Route path="/:patientMode(participant|uploaded)/:participantId/:activeView?" component={DiscoveryApp} />
         </Switch>
       </Router>
     </ThemeProvider>

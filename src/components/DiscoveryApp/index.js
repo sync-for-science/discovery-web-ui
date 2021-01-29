@@ -131,7 +131,7 @@ class DiscoveryApp extends React.PureComponent {
       return <p>Loading ...</p>;
     }
 
-    const { match: { params: { activeView = 'summary', participantId } } } = this.props;
+    const { match: { params: { activeView = 'summary', patientMode, participantId } } } = this.props;
 
     const isSummary = activeView === 'summary';
 
@@ -176,7 +176,7 @@ class DiscoveryApp extends React.PureComponent {
                 <main>
                   { legacyResources && (
                     <Switch>
-                      <Route path="/participant/:participantId/summary">
+                      <Route path="/(participant|uploaded)/:participantId/summary">
                         <SummaryView
                           activeView={activeView}
                           resources={legacyResources}
@@ -185,7 +185,7 @@ class DiscoveryApp extends React.PureComponent {
                           providers={providers}
                         />
                       </Route>
-                      <Route path="/participant/:participantId/catalog">
+                      <Route path="/(participant|uploaded)/:participantId/catalog">
                         <TilesView
                           activeView={activeView}
                           resources={this.props.resources}
@@ -199,7 +199,7 @@ class DiscoveryApp extends React.PureComponent {
                           thumbRightDate={thumbRightDate}
                         />
                       </Route>
-                      <Route path="/participant/:participantId/compare">
+                      <Route path="/(participant|uploaded)/:participantId/compare">
                         <CompareView
                           activeView={activeView}
                           resources={this.props.resources}
@@ -213,7 +213,7 @@ class DiscoveryApp extends React.PureComponent {
                           thumbRightDate={thumbRightDate}
                         />
                       </Route>
-                      <Route path="/participant/:participantId/timeline">
+                      <Route path="/(participant|uploaded)/:participantId/timeline">
                         <ContentPanel
                           open
                           activeView={activeView}
@@ -233,15 +233,15 @@ class DiscoveryApp extends React.PureComponent {
                           viewIconClass="longitudinal-view-icon"
                         />
                       </Route>
-                      <Route path="/participant/:participantId/collections">
+                      <Route path="/(participant|uploaded)/:participantId/collections">
                         <Collections />
                       </Route>
                       <Route
-                        path="/participant/:participantId/:activeView?"
+                        path="/(participant|uploaded)/:participantId/:activeView?"
                       >
                         <Redirect
                           push
-                          to={`/participant/${participantId}/summary`}
+                          to={`/${patientMode}/${participantId}/summary`}
                         />
                       </Route>
                     </Switch>
@@ -273,9 +273,9 @@ const DiscoveryAppHOC = (props) => {
         loading: true,
       });
 
-      const { match: { params: { participantId, uploadId } } } = props;
+      const { match: { params: { patientMode, participantId } } } = props;
 
-      const dataUrl = uploadId ? `${config.serverUrl}/data/download/${uploadId}`
+      const dataUrl = patientMode === 'uploaded' ? `${config.serverUrl}/data/download/${participantId}`
         : `${config.serverUrl}/participants/${participantId}`;
 
       get(dataUrl).then((response) => {
