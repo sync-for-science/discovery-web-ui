@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  atom, useRecoilValue,
+  atom, selector, useRecoilValue,
 } from 'recoil';
 
 export * from './category-provider-filters';
@@ -28,6 +28,21 @@ export const filtersState = atom({
     dates: null,
     thumbLeftDate: null,
     thumbRightDate: null,
+  },
+});
+
+export const allRecordIdsState = selector({
+  key: 'allRecordIdsState',
+  get: ({ get }) => {
+    const { records } = get(resourcesState);
+    // Return all record ids as an Array:
+    return Object.entries(records).reduce((acc, [uuid, record]) => {
+      if (record.category === 'Patient') {
+        console.info(`IGNORE PATIENT ${uuid}`); // eslint-disable-line no-console
+      }
+      acc.push(uuid);
+      return acc;
+    }, []);
   },
 });
 
