@@ -142,7 +142,7 @@ class DiscoveryApp extends React.PureComponent {
     const { dates, thumbLeftDate, thumbRightDate } = filters;
 
     const {
-      patient, totalResCount, providers, categories,
+      totalResCount, providers, categories,
     } = resources;
 
     return (
@@ -227,7 +227,6 @@ class DiscoveryApp extends React.PureComponent {
                           thumbLeftDate={thumbLeftDate}
                           thumbRightDate={thumbRightDate}
                           resources={legacyResources}
-                          patient={patient}
                           providers={providers}
                           totalResCount={totalResCount}
                           viewName="Report"
@@ -287,8 +286,6 @@ const DiscoveryAppHOC = (props) => {
           throw new Error('Invalid Participant ID');
         }
         const legacy = generateLegacyResources(raw, normalized, participantId);
-        // const patient = legacy.pathItem('[category=Patient]');
-        const patient = normalized.find(({ category }) => category === 'Patient');
         const totalResCount = legacy.transformed.filter((elt) => elt.category !== 'Patient').length;
         const records = generateRecordsDictionary(normalized);
         const providers = extractProviders(records);
@@ -300,7 +297,6 @@ const DiscoveryAppHOC = (props) => {
           normalized,
           records,
           totalResCount,
-          patient,
           providers,
           categories,
           legacy,

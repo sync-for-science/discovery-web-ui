@@ -14,7 +14,6 @@ export const resourcesState = atom({
     normalized: null,
     records: {},
     totalResCount: 0,
-    patient: null,
     providers: [],
     categories: [],
     legacy: null,
@@ -46,13 +45,13 @@ export const allRecordIds = selector({
   },
 });
 
-// export const patientRecord = selector({
-//   key: 'patientRecord',
-//   get: ({ get }) => {
-//     const { normalized } = get(resourcesState);
-//     return normalized.find(({ category }) => category === 'Patient');
-//   },
-// });
+export const patientRecord = selector({
+  key: 'patientRecord',
+  get: ({ get }) => {
+    const { normalized } = get(resourcesState);
+    return normalized.find(({ category }) => category === 'Patient');
+  },
+});
 
 export const labResultRecords = selector({
   key: 'labResultRecords',

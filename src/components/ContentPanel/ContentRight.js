@@ -38,6 +38,7 @@ import Unimplemented from '../Unimplemented';
 
 import DiscoveryContext from '../DiscoveryContext';
 import PersistentDrawerRight from './Drawer';
+import { patientRecord } from '../../recoil';
 
 //
 // Render the content panel for ReportView, FinancialView, TilesView
@@ -745,11 +746,13 @@ class ContentPanel extends React.PureComponent {
 
 const ContentPanelHOC = React.memo((props) => {
   const dotClickContext = useRecoilValue(dotClickContextState);
+  const patient = useRecoilValue(patientRecord);
 
   return (
     <ContentPanel
       {...props} // eslint-disable-line react/jsx-props-no-spreading
       context={dotClickContext}
+      patient={patient}
     />
   );
 });

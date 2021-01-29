@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useRecoilValue } from 'recoil';
-import { allRecordIds, resourcesState } from '../../recoil';
+import { allRecordIds, resourcesState, patientRecord } from '../../recoil';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
 import RecordCard from '../cards/RecordCard';
 
@@ -19,9 +19,10 @@ const CardList = ({
 const Collections = () => {
   const recordIds = useRecoilValue(allRecordIds);
   const resources = useRecoilValue(resourcesState);
+  const patient = useRecoilValue(patientRecord);
 
   const {
-    loading, records, patient,
+    loading, records,
   } = resources;
 
   return (
