@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { shape } from 'prop-types';
+import { string, shape } from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -91,12 +91,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecordCard = ({ resource, records, patient }) => {
+const RecordCard = ({ recordId, records, patient }) => {
   const [expanded, setExpanded] = React.useState(false);
   const classes = useStyles();
+
+  console.info('recordId, records, patient:', recordId, records, patient);
+  const record = records[recordId];
+
   const {
     provider, data, itemDate, category,
-  } = resource;
+  } = record;
 
   const displayDate = format(new Date(itemDate), 'MMM d, y h:mm:ssaaa');
 
@@ -104,14 +108,14 @@ const RecordCard = ({ resource, records, patient }) => {
     abatement: data.abatementDateTime,
     asserted: data.assertedDate,
     billablePeriod: data.billablePeriod,
-    category: resource.category,
+    category: record.category,
     careTeam: data.careTeam,
     class: data.class?.code,
     clinicalStatus: data.clinicalStatus,
     criticality: data.criticality,
     component: data.component,
     contained: data.contained,
-    date: resource.itemDate,
+    date: record.itemDate,
     daysSupply: data.daysSupply,
     diagnosis: data.diagnosis?.[0]?.type?.[0]?.coding?.[0]?.code,
     display: data.code?.text,
@@ -121,7 +125,7 @@ const RecordCard = ({ resource, records, patient }) => {
     notGiven: data.notGiven,
     onset: data.onsetDateTime,
     orderedBy: data.orderer?.display,
-    participantId: resource.id,
+    participantId: record.id,
     period: data.period,
     primarySource: data.primarySource,
     provider,
@@ -150,7 +154,7 @@ const RecordCard = ({ resource, records, patient }) => {
 
   // console.log('fieldsData', fieldsData)
 
-  const patientAgeAtRecord = formatAge(patient.data.birthDate, resource.itemDate, 'age ') || '';
+  const patientAgeAtRecord = formatAge(patient.data.birthDate, record.itemDate, 'age ') || '';
 
   return (
     <Card
@@ -199,7 +203,9 @@ const RecordCard = ({ resource, records, patient }) => {
 };
 
 RecordCard.prototype = {
-  resource: shape({}),
+  recordId: string.isRequired,
+  records: shape({}).isRequired,
+  patient: shape({}).isRequired,
 };
 
 export default RecordCard;

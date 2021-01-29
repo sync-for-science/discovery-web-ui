@@ -6,32 +6,22 @@ import PersistentDrawerRight from '../ContentPanel/Drawer';
 import RecordCard from '../cards/RecordCard';
 
 const CardList = ({
-  recordIds, records, normalized, patient,
-}) => {
-  if (!normalized) {
-    return null;
-  }
-
-  // const record = normalized.filter((element) => element.category === 'Lab Results');
-  // const record = normalized.filter(element => element.data.id === '4afef915-ade7-42d4-8e82-5012e1c47704')
-  // return record.map((r, i) => <RecordCard key={i} resource={r} normalized={normalized} />);
-
-  return recordIds.map((uuid) => (
-    <RecordCard
-      key={`record-card-${uuid}`}
-      resource={records[uuid]}
-      records={normalized}
-      patient={patient}
-    />
-  ));
-};
+  recordIds, records, patient,
+}) => recordIds.map((uuid) => (
+  <RecordCard
+    key={`record-card-${uuid}`}
+    recordId={uuid}
+    records={records}
+    patient={patient}
+  />
+));
 
 const Collections = (props) => {
   const recordIds = useRecoilValue(allRecordIds);
   // console.info('recordIds: ', recordIds);
 
   const {
-    loading, records, normalized, patient,
+    loading, records, patient,
   } = props.resources;
 
   return (
@@ -42,15 +32,19 @@ const Collections = (props) => {
         { String(loading) }
       </div>
       <div className="collections-content">
+        <h4>patient:</h4>
         <pre>
-          { JSON.stringify(normalized, null, '  ') }
+          { JSON.stringify(patient, null, '  ') }
+        </pre>
+        <h4>records:</h4>
+        <pre>
+          { JSON.stringify(records, null, '  ') }
         </pre>
       </div>
       <PersistentDrawerRight>
         <div className="card-list">
           <CardList
-            normalized={normalized}
-            recordIds={allRecordIds}
+            recordIds={recordIds}
             records={records}
             patient={patient}
           />
