@@ -207,4 +207,4 @@ RecordCard.prototype = {
   patient: shape({}).isRequired,
 };
 
-export default RecordCard;
+export default React.memo(RecordCard);
