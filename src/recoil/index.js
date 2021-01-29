@@ -11,7 +11,6 @@ export const resourcesState = atom({
     loading: false,
     error: null,
     raw: null,
-    normalized: null,
     records: {},
     totalResCount: 0,
     providers: [],
@@ -48,24 +47,24 @@ export const allRecordIds = selector({
 export const patientRecord = selector({
   key: 'patientRecord',
   get: ({ get }) => {
-    const { normalized } = get(resourcesState);
-    return normalized.find(({ category }) => category === 'Patient');
+    const { records } = get(resourcesState);
+    return Object.values(records).find(({ category }) => category === 'Patient');
   },
 });
 
 export const labResultRecords = selector({
   key: 'labResultRecords',
   get: ({ get }) => {
-    const { normalized } = get(resourcesState);
-    return jsonQuery('[*category=Lab Results]', { data: normalized }).value;
+    const { records } = get(resourcesState);
+    return jsonQuery('[*category=Lab Results]', { data: Object.values(records) }).value;
   },
 });
 
 export const vitalSignsRecords = selector({
   key: 'vitalSignsRecords',
   get: ({ get }) => {
-    const { normalized } = get(resourcesState);
-    return jsonQuery('[*category=Vital Signs]', { data: normalized }).value;
+    const { records } = get(resourcesState);
+    return jsonQuery('[*category=Vital Signs]', { data: Object.values(records) }).value;
   },
 });
 

@@ -287,14 +287,15 @@ const DiscoveryAppHOC = (props) => {
         }
         const legacy = generateLegacyResources(raw, normalized, participantId);
         const totalResCount = legacy.transformed.filter((elt) => elt.category !== 'Patient').length;
+        // TODO: records (as dictionary) could be built direcetly, without intersitial "normalized" ?
         const records = generateRecordsDictionary(normalized);
+        // TODO: should providers and categories be dedicated recoil states, derived from "records" ?
         const providers = extractProviders(records);
         const categories = extractCategories(records);
 
         setResources({
           ...resources,
           raw,
-          normalized,
           records,
           totalResCount,
           providers,
