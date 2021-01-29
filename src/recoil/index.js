@@ -1,7 +1,7 @@
-import React from 'react';
 import {
-  atom, useRecoilValue,
+  atom, selector,
 } from 'recoil';
+import jsonQuery from 'json-query';
 
 export * from './category-provider-filters';
 
@@ -11,9 +11,8 @@ export const resourcesState = atom({
     loading: false,
     error: null,
     raw: null,
-    normalized: null,
+    records: {},
     totalResCount: 0,
-    patient: null,
     providers: [],
     categories: [],
     legacy: null,
@@ -30,6 +29,45 @@ export const filtersState = atom({
   },
 });
 
+export const allRecordIds = selector({
+  key: 'allRecordIds',
+  get: ({ get }) => {
+    const { records } = get(resourcesState);
+    // Return all record ids as an Array:
+    return Object.entries(records).reduce((acc, [uuid, record]) => {
+      if (record.category === 'Patient') {
+        console.info(`IGNORE PATIENT ${uuid}`); // eslint-disable-line no-console
+      }
+      acc.push(uuid);
+      return acc;
+    }, []);
+  },
+});
+
+export const patientRecord = selector({
+  key: 'patientRecord',
+  get: ({ get }) => {
+    const { records } = get(resourcesState);
+    return Object.values(records).find(({ category }) => category === 'Patient');
+  },
+});
+
+export const labResultRecords = selector({
+  key: 'labResultRecords',
+  get: ({ get }) => {
+    const { records } = get(resourcesState);
+    return jsonQuery('[*category=Lab Results]', { data: Object.values(records) }).value;
+  },
+});
+
+export const vitalSignsRecords = selector({
+  key: 'vitalSignsRecords',
+  get: ({ get }) => {
+    const { records } = get(resourcesState);
+    return jsonQuery('[*category=Vital Signs]', { data: Object.values(records) }).value;
+  },
+});
+
 // TODO: ^other states facilitate implementation of something like the following:
 // export const collectionsState = atom({
 //   key: 'collectionsState',
@@ -40,18 +78,3 @@ export const filtersState = atom({
 //     },
 //   },
 // });
-
-// read-only connection to resources and filters:
-export const connectToResources = (Component) => (props) => {
-  const resources = useRecoilValue(resourcesState);
-  const filters = useRecoilValue(filtersState);
-  // useContext(DiscoveryContext);
-
-  return (
-    <Component
-      {...props} // eslint-disable-line react/jsx-props-no-spreading
-      resources={resources}
-      filters={filters}
-    />
-  );
-};

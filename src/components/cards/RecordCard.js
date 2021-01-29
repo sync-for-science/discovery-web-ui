@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { shape } from 'prop-types';
+import { string, shape } from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -11,7 +11,6 @@ import Collapse from '@material-ui/core/Collapse';
 import TextField from '@material-ui/core/TextField';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { format } from 'date-fns';
-import jsonQuery from 'json-query';
 
 import GenericCardBody from './GenericCardBody';
 import MedicationCardBody from './MedicationCardBody';
@@ -27,7 +26,7 @@ import UnimplementedCardBody from './UnimplementedCardBody';
 import VitalSignCardBody from './VitalSignCardBody';
 import { formatAge } from '../../util';
 
-const selectCardBody = (fieldsData, normalized) => {
+const selectCardBody = (fieldsData) => {
   switch (fieldsData.category) {
     case 'Conditions':
     case 'Document References':
@@ -47,8 +46,7 @@ const selectCardBody = (fieldsData, normalized) => {
     case 'Immunizations':
       return <ImmunizationCardBody fieldsData={fieldsData} />;
     case 'Lab Results':
-      const labResults = jsonQuery('[*category=Lab Results]', { data: normalized }).value;
-      return <LabResultCardBody fieldsData={fieldsData} labResults={labResults} />;
+      return <LabResultCardBody fieldsData={fieldsData} />;
     case 'Exams':
       return <ExamCardBody fieldsData={fieldsData} />;
     case 'Meds Statement':
@@ -58,8 +56,7 @@ const selectCardBody = (fieldsData, normalized) => {
     case 'Other':
       return <UnimplementedCardBody fieldsData={fieldsData} />;
     case 'Vital Signs':
-      const vitalSigns = jsonQuery('[*category=Vital Signs]', { data: normalized }).value;
-      return <VitalSignCardBody fieldsData={fieldsData} vitalSigns={vitalSigns} />;
+      return <VitalSignCardBody fieldsData={fieldsData} />;
     default:
       break;
   }
@@ -91,12 +88,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecordCard = ({ resource, normalized, patient }) => {
+const RecordCard = ({
+  recordId, records, patient,
+}) => {
   const [expanded, setExpanded] = React.useState(false);
   const classes = useStyles();
+
+  // console.info('recordId, records, patient:', recordId, records, patient);
+  const record = records[recordId];
+
   const {
     provider, data, itemDate, category,
-  } = resource;
+  } = record;
 
   const displayDate = format(new Date(itemDate), 'MMM d, y h:mm:ssaaa');
 
@@ -104,14 +107,14 @@ const RecordCard = ({ resource, normalized, patient }) => {
     abatement: data.abatementDateTime,
     asserted: data.assertedDate,
     billablePeriod: data.billablePeriod,
-    category: resource.category,
+    category: record.category,
     careTeam: data.careTeam,
     class: data.class?.code,
     clinicalStatus: data.clinicalStatus,
     criticality: data.criticality,
     component: data.component,
     contained: data.contained,
-    date: resource.itemDate,
+    date: record.itemDate,
     daysSupply: data.daysSupply,
     diagnosis: data.diagnosis?.[0]?.type?.[0]?.coding?.[0]?.code,
     display: data.code?.text,
@@ -121,7 +124,7 @@ const RecordCard = ({ resource, normalized, patient }) => {
     notGiven: data.notGiven,
     onset: data.onsetDateTime,
     orderedBy: data.orderer?.display,
-    participantId: resource.id,
+    participantId: record.id,
     period: data.period,
     primarySource: data.primarySource,
     provider,
@@ -150,7 +153,7 @@ const RecordCard = ({ resource, normalized, patient }) => {
 
   // console.log('fieldsData', fieldsData)
 
-  const patientAgeAtRecord = formatAge(patient.data.birthDate, resource.itemDate, 'age ') || '';
+  const patientAgeAtRecord = formatAge(patient.data.birthDate, record.itemDate, 'age ') || '';
 
   return (
     <Card
@@ -171,7 +174,7 @@ const RecordCard = ({ resource, normalized, patient }) => {
       />
       <CardContent>
         <Grid container spacing={0}>
-          {selectCardBody(fieldsData, normalized)}
+          {selectCardBody(fieldsData, records)}
         </Grid>
       </CardContent>
       <CardActions disableSpacing className={classes.cardActions}>
@@ -199,7 +202,9 @@ const RecordCard = ({ resource, normalized, patient }) => {
 };
 
 RecordCard.prototype = {
-  resource: shape({}),
+  recordId: string.isRequired,
+  records: shape({}).isRequired,
+  patient: shape({}).isRequired,
 };
 
-export default RecordCard;
+export default React.memo(RecordCard);

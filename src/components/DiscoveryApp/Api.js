@@ -193,6 +193,7 @@ export const normalizeResourcesAndInjectPartipantId = (participantId) => (data) 
   const result = [];
   for (const providerName in data) {
     if (data[providerName].error) {
+      console.error('data[providerName].error: ', data[providerName].error); // eslint-disable-line no-console
       // Error response
       if (!result.Error) {
         // Init container
@@ -223,6 +224,18 @@ export const normalizeResourcesAndInjectPartipantId = (participantId) => (data) 
   }
   return result;
 };
+
+export const generateRecordsDictionary = (normalized) => normalized.reduce((acc, record) => {
+  const { data: { id: uuid } } = record;
+  // console.info('uuid: ', uuid);
+  if (acc[uuid]) {
+    console.info(`record ${uuid} already exists. (category = ${record.category})`); // eslint-disable-line no-console
+  }
+  return {
+    ...acc,
+    [uuid]: record,
+  };
+}, {});
 
 export const generateLegacyResources = (rawResponseData, normalizedResources, participantId) => {
   const legacyResources = new FhirTransform(normalizedResources);
@@ -259,33 +272,35 @@ export const computeFilterState = (legacyResources) => {
 };
 
 // Return sorted array of all provider names for this participant
-export const extractProviders = (normalized) => {
-  const provs = {};
-  if (normalized) {
-    for (const resource of normalized) {
+export const extractProviders = (records) => {
+  const providersSet = new Set();
+  if (records) {
+    for (const key in records) {
+      const record = records[key];
       // Add the found provider
-      provs[resource.provider] = null;
+      providersSet.add(record.provider);
     }
   }
-  return Object.keys(provs).sort();
+  return [...providersSet].sort();
 };
 
 // Return sorted array of all populated category names for this participant
-export const extractCategories = (normalized) => {
+export const extractCategories = (records) => {
   // const { legacy: legacyResources } = this.props.resources;
-  const cats = {};
-  if (normalized) {
-    for (const resource of normalized) {
-      if (resource.category === 'Patient') {
+  const categoriesSet = new Set();
+  if (records) {
+    for (const key in records) {
+      const record = records[key];
+      if (record.category === 'Patient') {
         // Ignore
-      } else if (Unimplemented.unimplementedCats.includes(resource.category)) {
+      } else if (Unimplemented.unimplementedCats.includes(record.category)) {
         // Add the "Unimplemented" category
-        cats[Unimplemented.catName] = null;
+        categoriesSet.add(Unimplemented.catName);
       } else {
         // Add the found category
-        cats[resource.category] = null;
+        categoriesSet.add(record.category);
       }
     }
   }
-  return Object.keys(cats).sort();
+  return [...categoriesSet].sort();
 };

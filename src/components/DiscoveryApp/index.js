@@ -16,7 +16,7 @@ import TilesView from '../TilesView';
 import Collections from '../Collections';
 import PageFooter from '../PageFooter';
 import {
-  normalizeResourcesAndInjectPartipantId, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
+  normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
 } from './Api';
 import {
   resourcesState, filtersState, activeCategoriesState, activeProvidersState,
@@ -142,7 +142,7 @@ class DiscoveryApp extends React.PureComponent {
     const { dates, thumbLeftDate, thumbRightDate } = filters;
 
     const {
-      patient, totalResCount, providers, categories,
+      totalResCount, providers, categories,
     } = resources;
 
     return (
@@ -227,7 +227,6 @@ class DiscoveryApp extends React.PureComponent {
                           thumbLeftDate={thumbLeftDate}
                           thumbRightDate={thumbRightDate}
                           resources={legacyResources}
-                          patient={patient}
                           providers={providers}
                           totalResCount={totalResCount}
                           viewName="Report"
@@ -287,18 +286,18 @@ const DiscoveryAppHOC = (props) => {
           throw new Error('Invalid Participant ID');
         }
         const legacy = generateLegacyResources(raw, normalized, participantId);
-        // const patient = legacy.pathItem('[category=Patient]');
-        const patient = normalized.find(({ category }) => category === 'Patient');
-        const providers = extractProviders(normalized);
-        const categories = extractCategories(normalized);
         const totalResCount = legacy.transformed.filter((elt) => elt.category !== 'Patient').length;
+        // TODO: records (as dictionary) could be built direcetly, without intersitial "normalized" ?
+        const records = generateRecordsDictionary(normalized);
+        // TODO: should providers and categories be dedicated recoil states, derived from "records" ?
+        const providers = extractProviders(records);
+        const categories = extractCategories(records);
 
         setResources({
           ...resources,
           raw,
-          normalized,
+          records,
           totalResCount,
-          patient,
           providers,
           categories,
           legacy,

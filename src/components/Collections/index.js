@@ -1,32 +1,29 @@
 import React from 'react';
 
-import { connectToResources } from '../../recoil';
+import { useRecoilValue } from 'recoil';
+import { allRecordIds, resourcesState, patientRecord } from '../../recoil';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
 import RecordCard from '../cards/RecordCard';
 
-const CardList = ({ normalized, patient }) => {
-  if (!normalized) {
-    return null;
-  }
+const CardList = ({
+  recordIds, records, patient,
+}) => recordIds.map((uuid) => (
+  <RecordCard
+    key={`record-card-${uuid}`}
+    recordId={uuid}
+    records={records}
+    patient={patient}
+  />
+));
 
-  // const record = normalized.filter((element) => element.category === 'Lab Results');
-  // const record = normalized.filter(element => element.data.id === '4afef915-ade7-42d4-8e82-5012e1c47704')
-  // return record.map((r, i) => <RecordCard key={i} resource={r} normalized={normalized} />);
+const Collections = () => {
+  const recordIds = useRecoilValue(allRecordIds);
+  const resources = useRecoilValue(resourcesState);
+  const patient = useRecoilValue(patientRecord);
 
-  return normalized.map((r) => (
-    <RecordCard
-      key={`record-card-${r.data.id}`}
-      resource={r}
-      normalized={normalized}
-      patient={patient}
-    />
-  ));
-};
-
-const Collections = (props) => {
   const {
-    loading, normalized, patient,
-  } = props.resources;
+    loading, records,
+  } = resources;
 
   return (
     <div>
@@ -36,14 +33,20 @@ const Collections = (props) => {
         { String(loading) }
       </div>
       <div className="collections-content">
+        <h4>patient:</h4>
         <pre>
-          { JSON.stringify(normalized, null, '  ') }
+          { JSON.stringify(patient, null, '  ') }
+        </pre>
+        <h4>records:</h4>
+        <pre>
+          { JSON.stringify(records, null, '  ') }
         </pre>
       </div>
       <PersistentDrawerRight>
         <div className="card-list">
           <CardList
-            normalized={normalized}
+            recordIds={recordIds}
+            records={records}
             patient={patient}
           />
         </div>
@@ -52,4 +55,4 @@ const Collections = (props) => {
   );
 };
 
-export default connectToResources(Collections);
+export default React.memo(Collections);

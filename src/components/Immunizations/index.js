@@ -8,12 +8,11 @@ import { renderImmunizations, primaryTextValue } from '../../fhirUtil.js';
 import {
   Const, stringCompare, formatKey, formatContentHeader,
 } from '../../util.js';
-import { connectToResources } from '../../recoil';
 
 //
 // Display the 'Immunizations' category if there are matching resources
 //
-class Immunizations extends React.Component {
+export default class Immunizations extends React.Component {
   static catName = 'Immunizations';
 
   static compareFn(a, b) {
@@ -75,5 +74,3 @@ class Immunizations extends React.Component {
       ));
   }
 }
-
-export default connectToResources(Immunizations);
