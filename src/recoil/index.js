@@ -93,12 +93,20 @@ export const vitalSignsRecords = selector({
 // });
 
 // TODO: use 3rd party library, eg, reselect:
-const _memoize_cache = {};
+const recoilAtomsCache = {};
 const memoize = (f) => (...args) => {
   const cacheKey = args.join('-');
-  _memoize_cache[cacheKey] = _memoize_cache[cacheKey] ?? f(...args);
-  return _memoize_cache[cacheKey];
+  recoilAtomsCache[cacheKey] = recoilAtomsCache[cacheKey] ?? f(...args);
+  return recoilAtomsCache[cacheKey];
 };
+
+const pruneEmpty = ((o) => Object.entries(o).reduce((acc, [k, v]) => {
+  // prune items whose values are null, undefined, or empty string:
+  if (v) {
+    acc[k] = v;
+  }
+  return acc;
+}, {}));
 
 export const notesWithRecordId = memoize((recordId) => {
   const atomForThisRecord = atom({
@@ -110,13 +118,14 @@ export const notesWithRecordId = memoize((recordId) => {
     get: ({ get }) =>
       // TODO: get from server or localStorage:
       get(atomForThisRecord),
-    set: ({ get, set }, noteText) => {
+    set: ({ get, set }, { noteId: oldId, noteText }) => {
       const existingNotesForId = get(atomForThisRecord);
-      const creationTime = (new Date()).toISOString();
-      set(atomForThisRecord, {
+      const nowUTC = (new Date()).toISOString();
+      const noteId = oldId ?? nowUTC;
+      set(atomForThisRecord, pruneEmpty({
         ...existingNotesForId,
-        [creationTime]: { noteText, lastUpdated: creationTime },
-      });
+        [noteId]: noteText === null ? null : { noteText, lastUpdated: nowUTC },
+      }));
     },
   });
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { string } from 'prop-types';
 import { useRecoilState } from 'recoil';
 import CardActions from '@material-ui/core/CardActions';
@@ -6,47 +6,42 @@ import Button from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import CardContent from '@material-ui/core/CardContent';
-import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { notesWithRecordId } from '../../recoil';
+import NoteField from '../cards/NoteField';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    marginTop: 10,
-  },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
+const useStyles = makeStyles(() => ({
+  // root: {
+  //   marginTop: 10,
+  // },
+  // media: {
+  //   height: 0,
+  //   paddingTop: '56.25%', // 16:9
+  // },
+  // expand: {
+  //   transform: 'rotate(0deg)',
+  //   marginLeft: 'auto',
+  //   transition: theme.transitions.create('transform', {
+  //     duration: theme.transitions.duration.shortest,
+  //   }),
+  // },
+  // expandOpen: {
+  //   transform: 'rotate(180deg)',
+  // },
   cardActions: {
     padding: 16,
   },
-  noteField: {
-    marginBottom: 10,
-  },
+  // noteField: {
+  //   marginBottom: 10,
+  // },
 }));
 
 const NotesEditor = ({ recordId }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
-  const [notesForThisRecord, saveNewNote] = useRecoilState(notesWithRecordId(recordId));
+  const [notesForThisRecord, updateOrCreateNote] = useRecoilState(notesWithRecordId(recordId));
 
-  const noteInput = useRef(null);
-
-  const handleAddNote = (_event) => {
-    saveNewNote(noteInput.current.value);
-  };
-
+  // TODO: consolidate last <TextField /> into just an instance of <NoteField /> ?
   return (
     <>
       <CardActions disableSpacing className={classes.cardActions}>
@@ -57,17 +52,19 @@ const NotesEditor = ({ recordId }) => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          {/* {displayNotes} */}
-          <TextField
-            className={classes.noteField}
-            id={`note-entry-${recordId}`}
-            placeholder="New Note"
-            variant="outlined"
-            size="small"
-            fullWidth
-            inputRef={noteInput}
+          {Object.entries(notesForThisRecord).map(([creationTime, noteData]) => (
+            <NoteField
+              key={creationTime}
+              noteId={creationTime}
+              noteData={noteData}
+              updateOrCreateNote={updateOrCreateNote}
+            />
+          ))}
+          <NoteField
+            noteId="add-note"
+            noteData={null}
+            updateOrCreateNote={updateOrCreateNote}
           />
-          <Button variant="contained" disableElevation size="small" onClick={handleAddNote}>Add Note</Button>
         </CardContent>
       </Collapse>
     </>
