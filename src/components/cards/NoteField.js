@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const CompletedNote = ({
-  noteText, lastUpdated, handleDeleteNote, handleEdit,
+  noteText, lastUpdated, handleDeleteNote, handleSetEditingMode,
 }) => {
   const classes = useStyles();
   // TODO: Use <Button /> instead of <Typography />, and style Button variant?
@@ -35,7 +35,7 @@ const CompletedNote = ({
         </Grid>
         <Grid item container xs={6}>
           <Grid item xs={6} align="right">
-            <Typography variant="s4sNoteHeaderButton" onClick={handleEdit}>EDIT</Typography>
+            <Typography variant="s4sNoteHeaderButton" onClick={handleSetEditingMode}>EDIT</Typography>
           </Grid>
           <Grid item xs={6} align="right">
             <Typography variant="s4sNoteHeaderButton" onClick={handleDeleteNote}>DELETE</Typography>
@@ -49,37 +49,19 @@ const CompletedNote = ({
   );
 };
 
-// TODO: support markdown for notes? (eg: support multiline):
-const EditingNote = ({
-  noteId, lastUpdated, handleUpdateNote, noteInputRef,
-}) => {
-  const classes = useStyles();
-  return (
-    <div style={{ marginBottom: '20px' }}>
-      <div className={classes.noteHeader}>
-        <Typography variant="s4sNoteHeader">{formatDate(lastUpdated)}</Typography>
-      </div>
-      <TextField
-        id={`editing-note-${noteId}`}
-        placeholder="Edit Note"
-        autoComplete="off"
-        className={classes.editTextField}
-        variant="outlined"
-        size="small"
-        fullWidth
-        multiline
-        inputRef={noteInputRef}
-      />
-      <Button variant="contained" disableElevation size="small" onClick={handleUpdateNote}>Save</Button>
-    </div>
-  );
-};
-
 const NoteField = ({
   noteId, noteData, updateOrCreateNote,
 }) => {
   const classes = useStyles();
   const noteInputRef = useRef(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleInputEscapeBlur = (event) => {
+    if (event.keyCode === 27) {
+      noteInputRef.current.blur();
+      setIsEditing(false);
+    }
+  };
 
   // noteDate will be null:
   if (noteId === 'add-note') {
@@ -104,6 +86,7 @@ const NoteField = ({
           fullWidth
           multiline
           inputRef={noteInputRef}
+          onKeyDown={handleInputEscapeBlur}
         />
         <Button variant="contained" disableElevation size="small" onClick={handleAddNewNote}>Add Note</Button>
       </>
@@ -112,9 +95,6 @@ const NoteField = ({
 
   // Otherwise, this is an existing note:
   const { noteText, lastUpdated } = noteData;
-
-  // TODO: isEditing state
-  const [isEditing, setIsEditing] = useState(false);
 
   // ...an existing note active for editing:
   if (isEditing) {
@@ -128,13 +108,24 @@ const NoteField = ({
       setIsEditing(false);
     };
     return (
-      <EditingNote
-        noteId={noteId}
-        noteText={noteText}
-        lastUpdated={lastUpdated}
-        handleUpdateNote={handleUpdateNote}
-        noteInputRef={noteInputRef}
-      />
+      <div style={{ marginBottom: '20px' }}>
+        <div className={classes.noteHeader}>
+          <Typography variant="s4sNoteHeader">{formatDate(lastUpdated)}</Typography>
+        </div>
+        <TextField
+          id={`editing-note-${noteId}`}
+          placeholder="Edit Note"
+          autoComplete="off"
+          className={classes.editTextField}
+          variant="outlined"
+          size="small"
+          fullWidth
+          multiline
+          inputRef={noteInputRef}
+          onKeyDown={handleInputEscapeBlur}
+        />
+        <Button variant="contained" disableElevation size="small" onClick={handleUpdateNote}>Save</Button>
+      </div>
     );
   }
 
@@ -147,14 +138,19 @@ const NoteField = ({
     });
   };
 
+  const handleSetEditingMode = (_event) => {
+    setIsEditing(true);
+  };
+
+  // TODO: support markdown for notes? (eg: support multiline):
   return (
     <CompletedNote
       noteText={noteText}
       lastUpdated={lastUpdated}
       handleDeleteNote={handleDeleteNote}
-      handleEdit={() => setIsEditing(true)}
+      handleSetEditingMode={handleSetEditingMode}
     />
   );
 };
 
-export default NoteField;
+export default React.memo(NoteField);
