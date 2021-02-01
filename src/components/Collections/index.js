@@ -12,7 +12,7 @@ const Collections = () => {
   const patient = useRecoilValue(patientRecord);
 
   const {
-    loading, records,
+    loading, records, categories, providers
   } = resources;
 
   return (
@@ -23,6 +23,22 @@ const Collections = () => {
         { String(loading) }
       </div>
       <div className="collections-content">
+        {categories.map((catLabel) => (
+          <div key={catLabel}>
+            <h4>{catLabel}</h4>
+            <div>
+              {groupedRecordIds[catLabel]?.map((uuid) => (
+                <div key={uuid}>
+                  <h6>{uuid}</h6>
+                  <pre>Contained:</pre>
+                  <pre>
+                    { JSON.stringify(records[uuid].data?.contained, null, '  ') }
+                  </pre>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
         <hr />
         <div>
           <h4>groupedRecordIds:</h4>
