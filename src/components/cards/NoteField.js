@@ -123,6 +123,7 @@ const NoteField = ({
           multiline
           inputRef={noteInputRef}
           onKeyDown={handleInputEscapeBlur}
+          autoFocus
         />
         <Button variant="contained" disableElevation size="small" onClick={handleUpdateNote}>Save</Button>
       </div>
