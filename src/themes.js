@@ -28,9 +28,9 @@ export const rootTheme = createMuiTheme({
     },
   },
   palette: {
-    // TODO:
-    // primary: {
-    // },
+    primary: {
+      main: 'rgb(65, 151, 198)' // Colors.css --ca1
+    }
   },
   typography: {
     s4sHeader: {

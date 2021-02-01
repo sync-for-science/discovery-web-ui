@@ -3,6 +3,7 @@ import { string } from 'prop-types';
 import { useRecoilState } from 'recoil';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import CardContent from '@material-ui/core/CardContent';
@@ -11,29 +12,9 @@ import { notesWithRecordId } from '../../recoil';
 import NoteField from '../cards/NoteField';
 
 const useStyles = makeStyles(() => ({
-  // root: {
-  //   marginTop: 10,
-  // },
-  // media: {
-  //   height: 0,
-  //   paddingTop: '56.25%', // 16:9
-  // },
-  // expand: {
-  //   transform: 'rotate(0deg)',
-  //   marginLeft: 'auto',
-  //   transition: theme.transitions.create('transform', {
-  //     duration: theme.transitions.duration.shortest,
-  //   }),
-  // },
-  // expandOpen: {
-  //   transform: 'rotate(180deg)',
-  // },
   cardActions: {
-    padding: 16,
+    padding: '0 10px',
   },
-  // noteField: {
-  //   marginBottom: 10,
-  // },
 }));
 
 const NotesEditor = ({ recordId }) => {
@@ -41,12 +22,11 @@ const NotesEditor = ({ recordId }) => {
   const [expanded, setExpanded] = useState(false);
   const [notesForThisRecord, updateOrCreateNote] = useRecoilState(notesWithRecordId(recordId));
 
-  // TODO: consolidate last <TextField /> into just an instance of <NoteField /> ?
   return (
     <>
       <CardActions disableSpacing className={classes.cardActions}>
-        <Button variant="outlined" disableElevation size="small" onClick={() => setExpanded(!expanded)}>
-          Notes
+        <Button color="primary" disableElevation size="small" onClick={() => setExpanded(!expanded)}>
+          <Typography variant="s4sNoteHeader">Notes</Typography>
           <ExpandMoreIcon />
         </Button>
       </CardActions>

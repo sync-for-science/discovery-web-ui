@@ -12,9 +12,6 @@ const useStyles = makeStyles(() => ({
   root: {
     marginBottom: 30,
   },
-  noteHeader: {
-    marginBottom: 5,
-  },
   editTextField: {
     marginBottom: 10,
   },
@@ -30,22 +27,33 @@ const CompletedNote = ({
   // TODO: Use <Button /> instead of <Typography />, and style Button variant?
   return (
     <Grid container className={classes.root}>
-      <Grid item container className={classes.noteHeader}>
+      <Grid item container alignItems="center">
         <Grid item xs={6}>
           <Typography variant="s4sNoteHeader">{formatDate(lastUpdated)}</Typography>
         </Grid>
         <Grid item container xs={6}>
           <Grid item xs={6} align="right">
-            <Typography variant="s4sNoteHeaderButton" onClick={handleSetEditingMode}>EDIT</Typography>
+              <Button onClick={handleSetEditingMode}>
+                <Typography variant="s4sNoteHeaderButton">
+                  EDIT
+                </Typography>
+              </Button>
           </Grid>
           <Grid item xs={6} align="right">
-            <Typography variant="s4sNoteHeaderButton" onClick={handleDeleteNote}>DELETE</Typography>
+            <Button onClick={handleDeleteNote}>
+              <Typography variant="s4sNoteHeaderButton">
+                DELETE
+              </Typography>
+            </Button>
           </Grid>
         </Grid>
       </Grid>
-      <Grid item>
-        <Typography variant="s4sNoteText"><ReactMarkdown>{noteText}</ReactMarkdown></Typography>
-      </Grid>
+        <Typography variant="s4sNoteText">
+          {/* react-markdown defaults to wrapping a <p> around the text. this causes style problems */}
+          <ReactMarkdown renderers={{paragraph: 'span'}}>
+            {noteText}
+          </ReactMarkdown>
+        </Typography>
     </Grid>
   );
 };
@@ -100,8 +108,6 @@ const NoteField = ({
   // ...an existing note active for editing:
   if (isEditing) {
     const handleUpdateNote = (_event) => {
-      // console.info('handleUpdateNote _event: ', _event);
-      // console.info('handleUpdateNote noteInputRef.current.value: ', noteInputRef.current.value);
       updateOrCreateNote({
         noteId,
         noteText: noteInputRef.current.value,
