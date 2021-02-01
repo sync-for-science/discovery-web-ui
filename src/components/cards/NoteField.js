@@ -33,11 +33,11 @@ const CompletedNote = ({
         </Grid>
         <Grid item container xs={6}>
           <Grid item xs={6} align="right">
-              <Button onClick={handleSetEditingMode}>
-                <Typography variant="s4sNoteHeaderButton">
-                  EDIT
-                </Typography>
-              </Button>
+            <Button onClick={handleSetEditingMode}>
+              <Typography variant="s4sNoteHeaderButton">
+                EDIT
+              </Typography>
+            </Button>
           </Grid>
           <Grid item xs={6} align="right">
             <Button onClick={handleDeleteNote}>
@@ -48,12 +48,12 @@ const CompletedNote = ({
           </Grid>
         </Grid>
       </Grid>
-        <Typography variant="s4sNoteText">
-          {/* react-markdown defaults to wrapping a <p> around the text. this causes style problems */}
-          <ReactMarkdown renderers={{paragraph: 'span'}}>
-            {noteText}
-          </ReactMarkdown>
-        </Typography>
+      <Typography variant="s4sNoteText">
+        {/* react-markdown defaults to wrapping a <p> around the text. this causes style problems */}
+        <ReactMarkdown renderers={{ paragraph: 'span' }}>
+          {noteText}
+        </ReactMarkdown>
+      </Typography>
     </Grid>
   );
 };
