@@ -2,6 +2,7 @@ import React from 'react';
 import {
   atom,
   useRecoilState,
+  useSetRecoilState,
   useRecoilValue,
 } from 'recoil';
 import PropTypes from 'prop-types';
@@ -22,8 +23,7 @@ import Provider from '../Provider';
 import Unimplemented from '../Unimplemented';
 import DiscoveryContext from '../DiscoveryContext';
 
-import { SUBROUTES } from '../../constants';
-import { activeCategoriesState, activeProvidersState } from '../../recoil';
+import { activeCategoriesState, activeProvidersState, timeFiltersState } from '../../recoil';
 //
 // Render the "container" (with filters) for views of the participant's data
 //
@@ -31,7 +31,6 @@ class StandardFilters extends React.PureComponent {
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
-    activeView: PropTypes.oneOf(SUBROUTES),
     resources: PropTypes.instanceOf(FhirTransform),
     dates: PropTypes.shape({
       allDates: PropTypes.arrayOf(PropTypes.shape({
@@ -50,8 +49,8 @@ class StandardFilters extends React.PureComponent {
     // provsEnabled: PropTypes.object.isRequired,
     activeProviders: PropTypes.shape({}).isRequired,
     // enabledFn: PropTypes.func.isRequired, // Callback to report changed category & provider enable/disable
-    dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
-    lastEvent: PropTypes.instanceOf(Event),
+    // dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
+    // lastEvent: PropTypes.instanceOf(Event),
     allowDotClick: PropTypes.bool,
     dotClickDate: PropTypes.string,
   }
@@ -70,6 +69,8 @@ class StandardFilters extends React.PureComponent {
   }
 
   componentDidMount() {
+    window.addEventListener('resize', this.onResize);
+    // window.addEventListener('keydown', this.onEvent);
     this.updateSvgWidth();
     if (this.props.dates && this.props.allowDotClick) {
       this.props.setDotClickContext({
@@ -91,6 +92,15 @@ class StandardFilters extends React.PureComponent {
     // this.props.enabledFn(this.props.catsEnabled, this.props.provsEnabled);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    // window.removeEventListener('keydown', this.onEvent);
+  }
+
+  onResize = (_event) => {
+    this.updateSvgWidth();
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.minActivePos !== this.state.minActivePos
       || prevState.maxActivePos !== this.state.maxActivePos
@@ -100,13 +110,6 @@ class StandardFilters extends React.PureComponent {
     }
 
     if (prevProps.lastEvent !== this.props.lastEvent) {
-      switch (this.props.lastEvent.type) {
-        case 'resize':
-        default:
-          this.updateSvgWidth();
-          break;
-      }
-
       // TODO: not sure why this was here, but if enabled, next/prev and dot-click don't work w/ searchRefs
       //      } else if (this.context.searchRefs && this.context.searchRefs.length > 0) {
       //   // If most recent searchRef differs from currently highlighted dot, set dotClickContext
@@ -153,7 +156,8 @@ class StandardFilters extends React.PureComponent {
     const availableWidthEl = checkQuerySelector('#measure-available-width');
     if (availableWidthEl) {
       const availableWidth = availableWidthEl.getBoundingClientRect().width;
-      this.setState({ svgWidth: `${availableWidth}px` });
+      const MIN_WIDTH = 810;
+      this.setState({ svgWidth: `${Math.max(MIN_WIDTH, availableWidth)}px` });
     }
   }
 
@@ -206,6 +210,14 @@ class StandardFilters extends React.PureComponent {
     return (target - min) / (max - min);
   }
 
+  // Record thumb positions as returned from StandardFilters
+  setDateRange = (minDate, maxDate) => {
+    this.props.updateTimeFilters({
+      thumbLeftDate: minDate,
+      thumbRightDate: maxDate,
+    });
+  }
+
   //
   // Handle TimeWidget left/right thumb movement
   //   minActivePos:  location [0..1] of left thumb
@@ -214,11 +226,9 @@ class StandardFilters extends React.PureComponent {
   //
   setLeftRight = (minActivePos, maxActivePos, isExpanded) => {
     //      console.log('minPos: ' + minActivePos + '  maxPos: ' + maxActivePos);
-    if (this.props.dateRangeFn) {
-      const minDate = this.posToDate(minActivePos);
-      const maxDate = this.posToDate(maxActivePos);
-      this.props.dateRangeFn(minDate, maxDate);
-    }
+    const minDate = this.posToDate(minActivePos);
+    const maxDate = this.posToDate(maxActivePos);
+    this.setDateRange(minDate, maxDate);
     this.setState({
       minActivePos,
       maxActivePos,
@@ -628,6 +638,7 @@ export const dotClickContextState = atom({
 });
 
 const StandardFiltersHOC = React.memo((props) => {
+  const updateTimeFilters = useSetRecoilState(timeFiltersState);
   const [dotClickContext, setDotClickContext] = useRecoilState(dotClickContextState);
 
   const activeCategories = useRecoilValue(activeCategoriesState);
@@ -636,6 +647,7 @@ const StandardFiltersHOC = React.memo((props) => {
   return (
     <StandardFilters
       {...props} // eslint-disable-line react/jsx-props-no-spreading
+      updateTimeFilters={updateTimeFilters}
       dotClickContext={dotClickContext}
       setDotClickContext={setDotClickContext}
       activeCategories={activeCategories}

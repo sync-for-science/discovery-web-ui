@@ -331,7 +331,7 @@
   font-size: 1rem;
   background-color: var(--background-content);
   white-space: pre-wrap;
-  padding-right: 30px,
+  padding-right: 30px;
 }
 
 .content-panel-inner-body-alt {
@@ -348,7 +348,6 @@
   margin: 5px 5px 0 0;
   overflow: hidden;
   white-space: pre-wrap;
-  
 }
 
 .content-panel-inner-body-alt-container {

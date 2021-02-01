@@ -20,7 +20,7 @@ import {
   normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
 } from './Api';
 import {
-  resourcesState, filtersState, activeCategoriesState, activeProvidersState,
+  resourcesState, timeFiltersState, activeCategoriesState, activeProvidersState,
 } from '../../recoil';
 
 import DiscoveryContext from '../DiscoveryContext';
@@ -45,7 +45,7 @@ class DiscoveryApp extends React.PureComponent {
     searchRefs: [], // Search results to highlight
     // isLoading: false,
     // fetchError: null, // Possible axios error object
-    lastEvent: null,
+    // lastEvent: null,
     // thumbLeftDate: null,
     // thumbRightDate: null,
     dotClickDate: null, // dot click from ContentPanel
@@ -70,29 +70,6 @@ class DiscoveryApp extends React.PureComponent {
     onlyMultisource: false, // TilesView & CompareView
 
     onlyAnnotated: false, // ContentPanel
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.onEvent);
-    window.addEventListener('keydown', this.onEvent);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.onEvent);
-    window.removeEventListener('keydown', this.onEvent);
-  }
-
-  onEvent = (event) => {
-    this.setState({ lastEvent: event });
-  }
-
-  // Record thumb positions as returned from StandardFilters
-  setDateRange = (minDate, maxDate) => {
-    this.props.setFilters({
-      ...this.props.filters,
-      thumbLeftDate: minDate,
-      thumbRightDate: maxDate,
-    });
   }
 
   onDotClick = (dotClickDate) => {
@@ -137,17 +114,17 @@ class DiscoveryApp extends React.PureComponent {
     const isSummary = activeView === 'summary';
 
     const {
-      resources, activeCategories, activeProviders, filters,
+      resources, activeCategories, activeProviders, timeFilters,
     } = this.props;
 
-    const { dates, thumbLeftDate, thumbRightDate } = filters;
+    const { dates, thumbLeftDate, thumbRightDate } = timeFilters;
 
     const {
       totalResCount, providers, categories,
     } = resources;
 
     return (
-      <DiscoveryContext.Provider value={{ ...this.state, ...this.props.filters }}>
+      <DiscoveryContext.Provider value={{ ...this.state, ...this.props.timeFilters }}>
         <div className="discovery-app">
           <PageHeader
             patientMode={patientMode}
@@ -158,15 +135,13 @@ class DiscoveryApp extends React.PureComponent {
             <div className="inner-container">
               <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
                 <StandardFilters
-                  activeView={activeView}
                   resources={legacyResources}
                   dates={dates}
                   categories={categories}
                   catsEnabled={activeCategories}
                   providers={providers}
                   provsEnabled={activeProviders}
-                  dateRangeFn={this.setDateRange}
-                  lastEvent={this.state.lastEvent}
+                  // lastEvent={this.state.lastEvent}
                   // TODO: convert to use route path segment:
                   // allowDotClick={!['compare', 'catalog'].includes(activeView)}
                   allowDotClick
@@ -180,7 +155,6 @@ class DiscoveryApp extends React.PureComponent {
                     <Switch>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/summary`}>
                         <SummaryView
-                          activeView={activeView}
                           resources={legacyResources}
                           dates={dates}
                           categories={categories}
@@ -189,7 +163,6 @@ class DiscoveryApp extends React.PureComponent {
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/catalog`}>
                         <TilesView
-                          activeView={activeView}
                           resources={this.props.resources}
                           totalResCount={totalResCount}
                           dates={dates}
@@ -203,7 +176,6 @@ class DiscoveryApp extends React.PureComponent {
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/compare`}>
                         <CompareView
-                          activeView={activeView}
                           resources={this.props.resources}
                           totalResCount={totalResCount}
                           dates={dates}
@@ -218,7 +190,6 @@ class DiscoveryApp extends React.PureComponent {
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/timeline`}>
                         <ContentPanel
                           open
-                          activeView={activeView}
                           catsEnabled={activeCategories}
                           provsEnabled={activeProviders}
                           dotClickFn={this.onDotClick}
@@ -261,7 +232,7 @@ class DiscoveryApp extends React.PureComponent {
 // if using React.memo, there's a proptype warning for Route:
 const DiscoveryAppHOC = (props) => {
   const [resources, setResources] = useRecoilState(resourcesState);
-  const [filters, setFilters] = useRecoilState(filtersState);
+  const [timeFilters, updateTimeFilters] = useRecoilState(timeFiltersState);
   const activeCategories = useRecoilValue(activeCategoriesState);
   const activeProviders = useRecoilValue(activeProvidersState);
 
@@ -302,8 +273,8 @@ const DiscoveryAppHOC = (props) => {
           legacy,
         });
 
-        setFilters({
-          ...filters,
+        // TODO: migrate this call to recoil.js so it is automatically derived from resources.legacy, using DefaultValue api ?
+        updateTimeFilters({
           ...computeFilterState(legacy),
         });
       }).catch((error) => {
@@ -323,8 +294,8 @@ const DiscoveryAppHOC = (props) => {
       resources={resources}
       activeCategories={activeCategories}
       activeProviders={activeProviders}
-      filters={filters}
-      setFilters={setFilters}
+      timeFilters={timeFilters}
+      updateTimeFilters={updateTimeFilters}
     />
   );
 };
