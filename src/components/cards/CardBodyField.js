@@ -18,8 +18,8 @@ const CardBodyField = ({
   if (dependency) {
     return (
       <>
-        <Grid item xs={3}><Typography variant="s4sLabel">{label}</Typography></Grid>
-        <Grid item xs={9}><Typography className={highlightStyle} variant="s4sValueText">{value}</Typography></Grid>
+        <Grid item xs={4}><Typography variant="s4sLabel">{label}</Typography></Grid>
+        <Grid item xs={8}><Typography className={highlightStyle} variant="s4sValueText">{value}</Typography></Grid>
       </>
     );
   }

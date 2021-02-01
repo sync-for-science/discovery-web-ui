@@ -85,7 +85,8 @@ button:focus {
     }
 
     & div.card-list { /* MUI views */
-      width: var(--right-details-width);
+      /* appears this width causes to card container to grow beyond the window */
+      /* width: var(--right-details-width); */ 
       height: calc(100vh - var(--top-header-height) - 70px);
       overflow: scroll;
     }

@@ -91,3 +91,41 @@ export const vitalSignsRecords = selector({
 //     },
 //   },
 // });
+
+// TODO: use 3rd party library, eg, reselect:
+const recoilAtomsCache = {};
+const memoize = (f) => (...args) => {
+  const cacheKey = args.join('-');
+  recoilAtomsCache[cacheKey] = recoilAtomsCache[cacheKey] ?? f(...args);
+  return recoilAtomsCache[cacheKey];
+};
+
+const pruneEmpty = ((o) => Object.entries(o).reduce((acc, [k, v]) => {
+  // prune items whose values are null, undefined, or empty string:
+  if (v) {
+    acc[k] = v;
+  }
+  return acc;
+}, {}));
+
+export const notesWithRecordId = memoize((recordId) => {
+  const atomForThisRecord = atom({
+    key: `stored-notes-${recordId}`,
+    default: {},
+  });
+  return selector({
+    key: `notesForRecord-${recordId}`, // unique ID (with respect to other atoms/selectors)
+    get: ({ get }) =>
+      // TODO: get from server or localStorage:
+      get(atomForThisRecord),
+    set: ({ get, set }, { noteId: oldId, noteText }) => {
+      const existingNotesForId = get(atomForThisRecord);
+      const nowUTC = (new Date()).toISOString();
+      const noteId = oldId ?? nowUTC;
+      set(atomForThisRecord, pruneEmpty({
+        ...existingNotesForId,
+        [noteId]: noteText === null ? null : { noteText, lastUpdated: nowUTC },
+      }));
+    },
+  });
+});

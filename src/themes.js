@@ -10,6 +10,11 @@ export const rootTheme = createMuiTheme({
         // See both: https://material-ui.com/getting-started/faq/
         //           https://next.material-ui.com/guides/migration-v4/
       },
+      styleOverrides: {
+        root: {
+          fontFamily: 'text-bold',
+        },
+      },
     },
     MuiDialogActions: {
       styleOverrides: {
@@ -28,9 +33,9 @@ export const rootTheme = createMuiTheme({
     },
   },
   palette: {
-    // TODO:
-    // primary: {
-    // },
+    primary: {
+      main: 'rgb(65, 151, 198)', // Colors.css --ca1
+    },
   },
   typography: {
     s4sHeader: {
@@ -44,7 +49,15 @@ export const rootTheme = createMuiTheme({
     },
     s4sLabel: {
       fontFamily: 'label',
-      fontSize: '0.625rem',
+      fontSize: '0.813rem',
+      color: 'var(--label-data)',
+    },
+    s4sNoteHeader: {
+      fontFamily: 'text-bold',
+      fontSize: '0.813rem',
+    },
+    s4sNoteText: {
+      fontFamily: 'text',
       color: 'var(--label-data)',
     },
     s4sValueText: {
