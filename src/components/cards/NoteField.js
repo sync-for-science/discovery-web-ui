@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import ReactMarkdown from 'react-markdown';
 
 import { formatDate } from './GenericCardBody';
 
@@ -43,7 +44,7 @@ const CompletedNote = ({
         </Grid>
       </Grid>
       <Grid item>
-        <Typography variant="s4sNoteText">{noteText}</Typography>
+        <Typography variant="s4sNoteText"><ReactMarkdown>{noteText}</ReactMarkdown></Typography>
       </Grid>
     </Grid>
   );
@@ -144,7 +145,6 @@ const NoteField = ({
     setIsEditing(true);
   };
 
-  // TODO: support markdown for notes? (eg: support multiline):
   return (
     <CompletedNote
       noteText={noteText}
