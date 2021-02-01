@@ -64,11 +64,12 @@ export const groupedRecordIdsState = selector({
     return Object.entries(records).reduce((acc, [uuid, record]) => {
       if (record.category === 'Patient') {
         console.info(`IGNORE PATIENT ${uuid}`); // eslint-disable-line no-console
-        return acc;
+        // return acc;
       }
-      const { data: { resourceType } } = record;
-      acc[resourceType] = acc[resourceType] ?? [];
-      acc[resourceType].push(uuid);
+      const { category, data: { resourceType, contained: { resourceType: containedResourceType } = {} } } = record;
+      const cat = category; // `${resourceType}:${category}`;
+      acc[cat] = acc[cat] ?? [];
+      acc[cat].push(uuid);
       return acc;
     }, {});
   },
