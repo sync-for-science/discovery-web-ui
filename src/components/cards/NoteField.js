@@ -34,16 +34,12 @@ const CompletedNote = ({
         <Grid item container xs={6}>
           <Grid item xs={6} align="right">
             <Button onClick={handleSetEditingMode}>
-              <Typography variant="s4sNoteHeaderButton">
-                EDIT
-              </Typography>
+              EDIT
             </Button>
           </Grid>
           <Grid item xs={6} align="right">
             <Button onClick={handleDeleteNote}>
-              <Typography variant="s4sNoteHeaderButton">
-                DELETE
-              </Typography>
+              DELETE
             </Button>
           </Grid>
         </Grid>

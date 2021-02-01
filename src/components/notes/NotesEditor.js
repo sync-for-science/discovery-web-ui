@@ -3,7 +3,6 @@ import { string } from 'prop-types';
 import { useRecoilState } from 'recoil';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Collapse from '@material-ui/core/Collapse';
 import CardContent from '@material-ui/core/CardContent';
@@ -26,7 +25,7 @@ const NotesEditor = ({ recordId }) => {
     <>
       <CardActions disableSpacing className={classes.cardActions}>
         <Button color="primary" disableElevation size="small" onClick={() => setExpanded(!expanded)}>
-          <Typography variant="s4sNoteHeader">Notes</Typography>
+          Notes
           <ExpandMoreIcon />
         </Button>
       </CardActions>
