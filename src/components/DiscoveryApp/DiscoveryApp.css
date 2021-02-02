@@ -36,21 +36,20 @@ button:focus {
   overflow-y: hidden;
 }
 
-.outer-container {
+#outer-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 100vw;
   height: 100vh;
 
-  > #left-nav {
+  > #left-filters {
     width: var(--left-nav-width);
     padding-top: var(--top-header-height);
   }
 
-  > .inner-container {
+  > #inner-container {
     margin-top: 56px;
-    width: calc(100vw - var(--left-nav-width) - var(--right-details-width));
 
     > .standard-filters {
       width: 100%;
@@ -64,11 +63,7 @@ button:focus {
       }
 
       > main {
-        & .collections-content {
-          width: calc(100vw - var(--left-nav-width) - var(--right-details-width) - 16px);
-          height: calc(100vh - 260px);
-          overflow: scroll;
-        }
+        /* placeholder */
       }
     }
   }
@@ -86,9 +81,39 @@ button:focus {
 
     & div.card-list { /* MUI views */
       /* appears this width causes to card container to grow beyond the window */
-      /* width: var(--right-details-width); */ 
+      /* width: var(--right-details-width); */
       height: calc(100vh - var(--top-header-height) - 70px);
       overflow: scroll;
+    }
+  }
+
+  &.route-summary {
+    > #inner-container {
+      width: 100vw;
+    }
+  }
+
+  &.route-catalog,
+  &.route-compare {
+    > #inner-container {
+      width: calc(100vw - var(--left-nav-width) - var(--right-details-width));
+    }
+  }
+
+  &.route-collections {
+    > #inner-container {
+      width: calc(100vw - var(--left-nav-width));
+
+      > #below-timeline {
+        > main {
+          & .collections-content {
+            /* TODO: eliminate height/width, here, and implement actual scrolling in individual panels? */
+            width: calc(100vw - var(--left-nav-width) - 16px);
+            height: calc(100vh - 260px);
+            overflow: scroll;
+          }
+        }
+      }
     }
   }
 }

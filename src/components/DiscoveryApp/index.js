@@ -112,6 +112,7 @@ class DiscoveryApp extends React.PureComponent {
     const { match: { params: { activeView = 'summary', patientMode, participantId } } } = this.props;
 
     const isSummary = activeView === 'summary';
+    const hasCardListRight = ['catalog', 'compare'].includes(activeView);
 
     const {
       resources, activeCategories, activeProviders, timeFilters,
@@ -130,11 +131,12 @@ class DiscoveryApp extends React.PureComponent {
             patientMode={patientMode}
             participantId={participantId}
           />
-          <div className="outer-container">
-            <div id="left-nav" style={{ display: isSummary ? 'none' : 'block' }} />
-            <div className="inner-container">
+          <div id="outer-container" className={`route-${activeView}`}>
+            <div id="left-filters" style={{ display: isSummary ? 'none' : 'block' }} />
+            <div id="inner-container">
               <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
                 <StandardFilters
+                  activeView={activeView} // trigger timeline resizing when route changes
                   resources={legacyResources}
                   dates={dates}
                   categories={categories}
@@ -220,7 +222,7 @@ class DiscoveryApp extends React.PureComponent {
                 </main>
               </div>
             </div>
-            { !isSummary && <div id="details-right" /> }
+            { hasCardListRight && <div id="details-right" /> }
           </div>
           <PageFooter resources={legacyResources} />
         </div>
