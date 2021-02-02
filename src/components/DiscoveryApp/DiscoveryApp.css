@@ -36,7 +36,7 @@ button:focus {
   overflow-y: hidden;
 }
 
-.outer-container {
+#outer-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -48,7 +48,7 @@ button:focus {
     padding-top: var(--top-header-height);
   }
 
-  > .inner-container {
+  > #inner-container {
     margin-top: 56px;
     width: calc(100vw - var(--left-nav-width) - var(--right-details-width));
 
@@ -86,7 +86,7 @@ button:focus {
 
     & div.card-list { /* MUI views */
       /* appears this width causes to card container to grow beyond the window */
-      /* width: var(--right-details-width); */ 
+      /* width: var(--right-details-width); */
       height: calc(100vh - var(--top-header-height) - 70px);
       overflow: scroll;
     }

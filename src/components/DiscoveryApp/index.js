@@ -130,9 +130,9 @@ class DiscoveryApp extends React.PureComponent {
             patientMode={patientMode}
             participantId={participantId}
           />
-          <div className="outer-container">
+          <div id="outer-container">
             <div id="left-nav" style={{ display: isSummary ? 'none' : 'block' }} />
-            <div className="inner-container">
+            <div id="inner-container">
               <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
                 <StandardFilters
                   resources={legacyResources}
