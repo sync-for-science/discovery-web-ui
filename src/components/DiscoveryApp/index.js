@@ -112,6 +112,7 @@ class DiscoveryApp extends React.PureComponent {
     const { match: { params: { activeView = 'summary', patientMode, participantId } } } = this.props;
 
     const isSummary = activeView === 'summary';
+    const hasCardListRight = ['catalog', 'compare'].includes(activeView);
 
     const {
       resources, activeCategories, activeProviders, timeFilters,
@@ -220,7 +221,7 @@ class DiscoveryApp extends React.PureComponent {
                 </main>
               </div>
             </div>
-            { !isSummary && <div id="details-right" /> }
+            { hasCardListRight && <div id="details-right" /> }
           </div>
           <PageFooter resources={legacyResources} />
         </div>
