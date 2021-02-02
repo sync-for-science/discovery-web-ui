@@ -19,7 +19,7 @@ const MedicationCardBody = ({ fieldsData }) => {
 
   function formatDosageStart() {
     if (fieldsData.dosageInstruction?.timing?.repeat?.boundsPeriod) {
-      return formatDate(fieldsData.dosageInstruction.timing.repeat.boundsPeriod);
+      return formatDate(fieldsData.dosageInstruction.timing.repeat.boundsPeriod.start);
     }
 
     return null;
