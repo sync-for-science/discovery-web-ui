@@ -61,7 +61,9 @@ export const patientRecord = selector({
   key: 'patientRecord',
   get: ({ get }) => {
     const { records } = get(resourcesState);
-    return Object.values(records).find(({ category }) => category === 'Patient');
+    // TODO: after patient exists, memoize patient, possibly using reselect?
+    // always return an Object:
+    return Object.values(records).find(({ category }) => category === 'Patient') || {};
   },
 });
 

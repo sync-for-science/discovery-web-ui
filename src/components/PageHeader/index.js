@@ -10,11 +10,12 @@ import {
   Tooltip as AboutTooltip,
   Body as AboutBody,
 } from '../modals/AboutDiscovery';
-
+import UserProfile from '../UserProfile';
 import './PageHeader.css';
 
 const PageHeader = ({ patientMode, participantId }) => (
   <header>
+    <UserProfile />
     <div className="logo-box">
       <Modal
         modalId="about-discovery"
