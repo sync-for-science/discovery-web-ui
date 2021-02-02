@@ -1,23 +1,16 @@
-import React from 'react';
-
+import React, {useState} from 'react';
+import Grid from '@material-ui/core/Grid';
 import { useRecoilValue } from 'recoil';
+
 import {
   allRecordIds, groupedRecordIdsState, resourcesState, patientRecord,
 } from '../../recoil';
+import CollectionsList from './CollectionsList'
+import CollectionDisplay from './CollectionDisplay'
 
-/* eslint-disable react/jsx-one-expression-per-line */
-const Collections = () => {
-  const recordIds = useRecoilValue(allRecordIds);
-  const groupedRecordIds = useRecoilValue(groupedRecordIdsState);
-  const resources = useRecoilValue(resourcesState);
-  const patient = useRecoilValue(patientRecord);
-
-  const {
-    loading, records, categories, providers,
-  } = resources;
-
+const renderRecordJSON = ({loading, categories, groupedRecordIds, patient, records, recordIds}) => {
   return (
-    <div>
+    <>
       <h3>COLLECTIONS</h3>
       <div>
         loading:
@@ -67,10 +60,75 @@ const Collections = () => {
           <pre>
             { JSON.stringify(records, null, '  ') }
           </pre>
+          <h4>recordIds:</h4>
+          <pre>
+            { JSON.stringify(recordIds, null, '  ') }
+          </pre>
         </div>
       </div>
-    </div>
-  );
-};
+    </>
+  )
+}
+
+/* eslint-disable react/jsx-one-expression-per-line */
+const Collections = () => {
+  const recordIds = useRecoilValue(allRecordIds);
+  const groupedRecordIds = useRecoilValue(groupedRecordIdsState);
+  const resources = useRecoilValue(resourcesState);
+  const patient = useRecoilValue(patientRecord);
+
+  const dummyCollections = [
+    {
+      id: 0,
+      title: 'Diabetes',
+    },
+    {
+      id: 1,
+      title: 'High Blood Pressure',
+    },
+    {
+      id: 2,
+      title: 'Immunizations',
+      recordCardIds: {},
+    },
+    {
+      id: 3,
+      title: 'Sprains',
+    }
+  ]
+
+  // setState for dummyCollections to give appearance of multiple collections
+  const [collections, setCollections] = useState(dummyCollections)
+  const [selected, setSelected] = useState(null)
+
+  const {
+    loading, records, categories, providers,
+  } = resources;
+
+
+  
+
+  return (
+    <>
+      {/* {renderRecordJSON({loading, categories, groupedRecordIds, patient, records, recordIds})} */}
+      <Grid container spacing={2}>
+        <Grid style={{paddingLeft: '0px'}} item xs={3}>
+          <CollectionsList 
+            collections={collections} 
+            selected={selected} 
+            setSelected={setSelected}
+          />
+        </Grid>
+        <Grid item xs={9}>
+          <CollectionDisplay 
+            selected={selected}
+            records={records}
+            groupedRecordIds={groupedRecordIds}
+          />
+        </Grid>
+      </Grid>
+    </>
+  )
+}
 
 export default React.memo(Collections);
