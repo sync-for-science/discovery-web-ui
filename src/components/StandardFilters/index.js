@@ -599,7 +599,7 @@ class StandardFilters extends React.PureComponent {
   )
 
   portalLeftNav = () => {
-    const leftNavTarget = document.getElementById('left-nav');
+    const leftNavTarget = document.getElementById('left-filters');
     if (leftNavTarget) {
       return ReactDOM.createPortal((this.renderLeftNav()), leftNavTarget);
     }

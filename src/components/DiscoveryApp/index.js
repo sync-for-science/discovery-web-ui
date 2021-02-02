@@ -131,7 +131,7 @@ class DiscoveryApp extends React.PureComponent {
             participantId={participantId}
           />
           <div id="outer-container">
-            <div id="left-nav" style={{ display: isSummary ? 'none' : 'block' }} />
+            <div id="left-filters" style={{ display: isSummary ? 'none' : 'block' }} />
             <div id="inner-container">
               <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
                 <StandardFilters

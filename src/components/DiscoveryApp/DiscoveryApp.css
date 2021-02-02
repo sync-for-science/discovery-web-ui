@@ -43,7 +43,7 @@ button:focus {
   width: 100vw;
   height: 100vh;
 
-  > #left-nav {
+  > #left-filters {
     width: var(--left-nav-width);
     padding-top: var(--top-header-height);
   }
