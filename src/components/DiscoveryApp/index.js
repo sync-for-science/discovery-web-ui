@@ -136,6 +136,7 @@ class DiscoveryApp extends React.PureComponent {
             <div id="inner-container">
               <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
                 <StandardFilters
+                  activeView={activeView} // trigger timeline resizing when route changes
                   resources={legacyResources}
                   dates={dates}
                   categories={categories}

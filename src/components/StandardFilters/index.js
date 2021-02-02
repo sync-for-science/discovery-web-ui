@@ -23,6 +23,7 @@ import Provider from '../Provider';
 import Unimplemented from '../Unimplemented';
 import DiscoveryContext from '../DiscoveryContext';
 
+import { SUBROUTES } from '../../constants';
 import { activeCategoriesState, activeProvidersState, timeFiltersState } from '../../recoil';
 //
 // Render the "container" (with filters) for views of the participant's data
@@ -31,6 +32,7 @@ class StandardFilters extends React.PureComponent {
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
+    activeView: PropTypes.oneOf(SUBROUTES),
     resources: PropTypes.instanceOf(FhirTransform),
     dates: PropTypes.shape({
       allDates: PropTypes.arrayOf(PropTypes.shape({
@@ -102,6 +104,10 @@ class StandardFilters extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (prevProps.activeView !== this.props.activeView) {
+      this.updateSvgWidth();
+    }
+
     if (prevState.minActivePos !== this.state.minActivePos
       || prevState.maxActivePos !== this.state.maxActivePos
       || notEqJSON(prevProps.activeCategories, this.props.activeCategories)
