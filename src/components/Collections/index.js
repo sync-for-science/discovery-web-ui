@@ -5,6 +5,7 @@ import {
   allRecordIds, groupedRecordIdsState, resourcesState, patientRecord,
 } from '../../recoil';
 
+/* eslint-disable react/jsx-one-expression-per-line */
 const Collections = () => {
   const recordIds = useRecoilValue(allRecordIds);
   const groupedRecordIds = useRecoilValue(groupedRecordIdsState);
@@ -12,7 +13,7 @@ const Collections = () => {
   const patient = useRecoilValue(patientRecord);
 
   const {
-    loading, records, categories, providers
+    loading, records, categories, providers,
   } = resources;
 
   return (
@@ -27,15 +28,22 @@ const Collections = () => {
           <div key={catLabel}>
             <h4>{catLabel}</h4>
             <div>
-              {groupedRecordIds[catLabel]?.map((uuid) => (
-                <div key={uuid}>
-                  <h6>{uuid}</h6>
-                  <pre>Contained:</pre>
-                  <pre>
-                    { JSON.stringify(records[uuid].data?.contained, null, '  ') }
-                  </pre>
-                </div>
-              ))}
+              {groupedRecordIds[catLabel]?.map((uuid) => {
+                const record = records[uuid];
+                const { category, data: { resourceType, contained: { resourceType: containedResourceType } = {} } } = record;
+                return (
+                  <div key={uuid}>
+                    <hr />
+                    <pre><b>uuid</b>: {uuid}</pre>
+                    <pre><b>category</b>: {category}</pre>
+                    <pre><b>resourceType</b>: {resourceType}</pre>
+                    <pre><b>containedResourceType</b>: {JSON.stringify(containedResourceType)}</pre>
+                    <pre>
+                      <b>Contained</b>: { JSON.stringify(record.data?.contained, null, '  ') }
+                    </pre>
+                  </div>
+                );
+              })}
             </div>
           </div>
         ))}
