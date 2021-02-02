@@ -83,10 +83,10 @@ const UserProfile = () => {
             </Typography>
           </CardContent>
         </Card>
-        <MenuItem onClick={handleMenuItemClick} data-menu-item="link-1">
+        <MenuItem onClick={handleMenuItemClick} data-menu-item="link-1" style={{ display: 'none' }}>
           example link 1
         </MenuItem>
-        <MenuItem onClick={handleMenuItemClick} data-menu-item="link-2">
+        <MenuItem onClick={handleMenuItemClick} data-menu-item="link-2" style={{ display: 'none' }}>
           example link 2
         </MenuItem>
       </Menu>
