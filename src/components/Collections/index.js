@@ -2,19 +2,6 @@ import React from 'react';
 
 import { useRecoilValue } from 'recoil';
 import { allRecordIds, resourcesState, patientRecord } from '../../recoil';
-import PersistentDrawerRight from '../ContentPanel/Drawer';
-import RecordCard from '../cards/RecordCard';
-
-const CardList = ({
-  recordIds, records, patient,
-}) => recordIds.map((uuid) => (
-  <RecordCard
-    key={`record-card-${uuid}`}
-    recordId={uuid}
-    records={records}
-    patient={patient}
-  />
-));
 
 const Collections = () => {
   const recordIds = useRecoilValue(allRecordIds);
@@ -41,16 +28,11 @@ const Collections = () => {
         <pre>
           { JSON.stringify(records, null, '  ') }
         </pre>
+        <h4>recordIds:</h4>
+        <pre>
+          { JSON.stringify(recordIds, null, '  ') }
+        </pre>
       </div>
-      <PersistentDrawerRight>
-        <div className="card-list">
-          <CardList
-            recordIds={recordIds}
-            records={records}
-            patient={patient}
-          />
-        </div>
-      </PersistentDrawerRight>
     </div>
   );
 };
