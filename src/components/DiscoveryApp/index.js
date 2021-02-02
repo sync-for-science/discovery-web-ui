@@ -130,7 +130,7 @@ class DiscoveryApp extends React.PureComponent {
             patientMode={patientMode}
             participantId={participantId}
           />
-          <div id="outer-container">
+          <div id="outer-container" className={`route-${activeView}`}>
             <div id="left-filters" style={{ display: isSummary ? 'none' : 'block' }} />
             <div id="inner-container">
               <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
