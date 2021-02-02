@@ -11,7 +11,7 @@ import FhirTransform from '../../FhirTransform.js';
 import { primaryTextValue } from '../../fhirUtil.js';
 
 import Unimplemented from '../Unimplemented';
-import ContentPanel from '../ContentPanel/ContentRight';
+import SelectedCardCollection from '../SelectedCardCollection';
 
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -708,27 +708,7 @@ export default class TilesView extends React.PureComponent {
           </div>
           ) }
         </div>
-        <ContentPanel
-          open
-          catsEnabled={this.props.catsEnabled}
-          provsEnabled={this.props.provsEnabled}
-          containerClassName="content-panel-tiles-view"
-          topBoundFn={() => this.state.topBound}
-          bottomBoundFn={this.contentPanelBottomBound}
-          initialPositionYFn={this.initialPositionY.bind(this)}
-          onResizeFn={this.onContentPanelResize.bind(this)}
-          nextPrevFn={this.props.nextPrevFn}
-          thumbLeftDate={this.props.thumbLeftDate}
-          thumbRightDate={this.props.thumbRightDate}
-          resources={this.selectedTileResources()}
-          patient={this.props.resources.patient}
-          providers={this.props.resources.providers}
-          totalResCount={this.props.totalResCount}
-          viewName="Tiles"
-          viewIconClass="tiles-view-icon"
-          tileSort
-          noResultDisplay={Object.keys(this.state.uniqueStruct).length > 0 ? 'No Card is selected' : 'No data to display'}
-        />
+        <SelectedCardCollection />
       </div>
     );
   }
