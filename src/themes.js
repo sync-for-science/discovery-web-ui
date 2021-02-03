@@ -38,6 +38,11 @@ export const rootTheme = createMuiTheme({
     },
   },
   typography: {
+    'user-profile': {
+      marginLeft: '8px',
+      fontFamily: 'header-bold',
+      fontSize: '1rem',
+    },
     s4sHeader: {
       fontFamily: 'header-bold',
       fontSize: '0.813rem',
