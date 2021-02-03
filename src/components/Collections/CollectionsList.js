@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
   collectionTitle: {
     margin: '10px 0',
     display: 'flex',
+    cursor: 'pointer'
   },
   selected: {
     backgroundColor: 'lightblue'
@@ -71,10 +72,11 @@ const CollectionsList = ({collections, selected, setSelected}) => {
         </div>
         {collections.map((collection, i) => (
           <CollectionTitle 
-          key={i} 
-          collection={collection} 
-          selected={selected}
-          handleSelect={() => setSelected(collection)}/>
+            key={i} 
+            collection={collection} 
+            selected={selected}
+            handleSelect={() => setSelected(collection)}
+          />
         ))}
       </div>
     </div>

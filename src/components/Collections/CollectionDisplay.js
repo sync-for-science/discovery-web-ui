@@ -1,7 +1,9 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { useRecoilValue } from 'recoil'
 
+import { activeCategoriesState } from '../../recoil/index'
 import RecordCard from '../cards/RecordCard'
 import CollectionsNoteEditor from '../notes/CollectionsNoteEditor'
 
@@ -37,28 +39,32 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CollectionDisplay = ({selected, records, groupedRecordIds, patient}) => {
+  const activeCategories = useRecoilValue(activeCategoriesState);
   const classes = useStyles()
   const collectionName = selected ? selected.title : "Untitled Collection"
 
-  const displayRecordCards = (groupedRecordIds, records) => {
+  const displayRecordCards = (groupedRecordIds, records, activeCategories) => {
     return Object.entries(groupedRecordIds).map(([category, recordIds]) => {
       if (category === "Patient") {
         return null
       }
-      return(
-        <div key={`groupedRecordCard-${category}`} style={{margin: '5px'}}>
-          <div style={{width: '400px'}}>
-            <Typography variant="s4sHeader">{category}</Typography>
+      if (activeCategories[category]) {
+        return(
+          <div key={`groupedRecordCard-${category}`} style={{margin: '5px'}}>
+            <div style={{width: '400px'}}>
+              <Typography variant="s4sHeader">{category}</Typography>
+            </div>
+            <div style={{ height: '95%', overflowY: 'scroll', paddingRight: '10px'}}>
+              {recordIds.map((recordId, i) => {
+                return(
+                  <RecordCard key={i} recordId={recordId} records={records} patient={patient} />
+                )
+              })}
+            </div>
           </div>
-          <div style={{ height: '95%', overflowY: 'scroll', paddingRight: '10px'}}>
-            {recordIds.map((recordId, i) => {
-              return(
-                <RecordCard key={i} recordId={recordId} records={records} patient={patient} />
-              )
-            })}
-          </div>
-        </div>
-      )
+        )
+      }
+      return null
     })
   }
   
@@ -70,7 +76,7 @@ const CollectionDisplay = ({selected, records, groupedRecordIds, patient}) => {
     } else {
       collectionData = (
         <div style={{display: 'flex', overflowX: 'scroll', height: '100%' }}>
-          {displayRecordCards(groupedRecordIds, records)}
+          {displayRecordCards(groupedRecordIds, records, activeCategories)}
         </div>
       )
     }
