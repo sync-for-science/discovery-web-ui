@@ -115,6 +115,17 @@
   cursor: default;
 }
 
+.provider-selector-nav {
+  /* @insert .selector-button; */
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 160px;
+  max-width: 160px;
+  height: auto;
+  font-size: 0.75rem;
+}
+
 /* Common for @insert */
 .selector-button {
   display: flex;
