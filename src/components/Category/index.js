@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useRecoilState } from 'recoil';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import '../../css/Selector.css';
 import { activeCategoriesState } from '../../recoil';
@@ -13,7 +15,7 @@ const Category = ({ categoryName }) => {
 
   const isEnabled = activeCategories[categoryName];
 
-  const handleButtonClick = () => {
+  const handleChange = () => {
     setActiveCategories((prevActiveCategories) => ({
       ...prevActiveCategories,
       [categoryName]: !isEnabled,
@@ -21,11 +23,20 @@ const Category = ({ categoryName }) => {
   };
 
   return (
-    <div className="selector">
-      <div className="selector-nav">
-        <button className={isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={handleButtonClick}>
-          { categoryName }
-        </button>
+    <div>
+      <div>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={isEnabled}
+              onChange={handleChange}
+              color="primary"
+            />
+          }
+          label={categoryName}
+          classes="label"
+          className="provider-selector-nav"
+        />
       </div>
     </div>
   );
