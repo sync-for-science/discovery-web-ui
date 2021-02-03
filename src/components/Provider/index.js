@@ -41,7 +41,6 @@ const Provider = ({ providerName }) => {
             <Checkbox
               checked={isEnabled}
               onChange={handleChange}
-              name="titleCase(providerName)"
               color="primary"
             />
           }
