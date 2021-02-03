@@ -12,8 +12,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NotesEditor = ({ collectionTitle }) => {
-  const classes = useStyles()
-  const [notesForThisCollection, createOrEditCollectionNote] = useRecoilState(collectionNotes(collectionTitle))
+  const classes = useStyles();
+  const [notesForThisCollection, createOrEditCollectionNote] = useRecoilState(collectionNotes(collectionTitle));
 
   return (
     <>
