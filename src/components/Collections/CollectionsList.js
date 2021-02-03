@@ -2,12 +2,11 @@ import React from 'react'
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '700px', 
+    height: '750px', 
     borderRadius: '10px', 
     backgroundColor: 'white', 
     overflow: 'hidden'
@@ -57,8 +56,6 @@ const CollectionTitle = ({collection, selected, handleSelect}) => {
 
 const CollectionsList = ({collections, selected, setSelected}) => {
   const classes = useStyles()
-
-  console.log('selected', selected)
 
   return(
     <div className={classes.root}>

@@ -105,25 +105,23 @@ const Collections = () => {
     loading, records, categories, providers,
   } = resources;
 
-
-  
-
   return (
     <>
       {/* {renderRecordJSON({loading, categories, groupedRecordIds, patient, records, recordIds})} */}
       <Grid container spacing={2}>
-        <Grid style={{paddingLeft: '0px'}} item xs={3}>
+        <Grid style={{paddingLeft: '0px'}} item xs={2}>
           <CollectionsList 
             collections={collections} 
             selected={selected} 
             setSelected={setSelected}
           />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={10}>
           <CollectionDisplay 
             selected={selected}
             records={records}
             groupedRecordIds={groupedRecordIds}
+            patient={patient}
           />
         </Grid>
       </Grid>

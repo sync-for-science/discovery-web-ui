@@ -147,3 +147,27 @@ export const notesWithRecordId = memoize((recordId) => {
     },
   });
 });
+
+export const collectionNotes = memoize((collectionName) => {
+  const atomForThisCollectionNotes = atom({
+    key: `stored-collection-notes-${collectionName}`,
+    default: {},
+  });
+  return selector({
+    key: `notesForCollection-${collectionName}`, // unique name (with respect to other atoms/selectors)
+    get: ({ get }) =>
+      // TODO: get from server or localStorage:
+      get(atomForThisCollectionNotes),
+    set: ({ get, set }, { noteId: oldId, noteText }) => {
+      const existingNotesForCollection = get(atomForThisCollectionNotes);
+      const nowUTC = (new Date()).toISOString();
+      const noteId = oldId ?? nowUTC;
+      set(atomForThisCollectionNotes, pruneEmpty({
+        ...existingNotesForCollection,
+        [noteId]: noteText === null ? null : { noteText, lastUpdated: nowUTC },
+      }));
+    },
+  });
+});
+
+
