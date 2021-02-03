@@ -55,7 +55,7 @@ const UserProfile = () => {
         aria-controls="user-profile-menu"
         aria-haspopup="true"
       >
-        <AccountCircleIcon />
+        <AccountCircleIcon color="secondary" />
         <Typography variant="user-profile">{formatPatientName(name)}</Typography>
       </IconButton>
       <Menu

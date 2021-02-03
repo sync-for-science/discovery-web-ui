@@ -36,12 +36,16 @@ export const rootTheme = createMuiTheme({
     primary: {
       main: 'rgb(65, 151, 198)', // Colors.css --ca1
     },
+    secondary: {
+      main: '#fff',
+    },
   },
   typography: {
     'user-profile': {
       marginLeft: '8px',
       fontFamily: 'header-bold',
       fontSize: '1rem',
+      color: 'white',
     },
     s4sHeader: {
       fontFamily: 'header-bold',
