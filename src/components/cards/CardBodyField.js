@@ -4,6 +4,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
+  root: {
+    marginBottom: '2px'
+  },
   highlight: {
     display: 'block',
     backgroundColor: '#fff', // disable, for now; if ever needed, add this color to theme
@@ -11,17 +14,18 @@ const useStyles = makeStyles(() => ({
 }));
 
 const CardBodyField = ({
-  dependency, label, value, highlight = false,
+  dependency, label, value, highlight = false, bold = false
 }) => {
   const classes = useStyles();
   const highlightStyle = highlight ? classes.highlight : '';
+  const valueFontStyle = bold ? 's4sValueTextBold' : 's4sValueText'
 
   if (dependency) {
     return (
-      <>
+      <Grid item container className={classes.root}>
         <Grid item xs={4}><Typography variant="s4sLabel">{label}</Typography></Grid>
-        <Grid item xs={8}><Typography className={highlightStyle} variant="s4sValueText">{value}</Typography></Grid>
-      </>
+        <Grid item xs={8}><Typography className={highlightStyle} variant={valueFontStyle}>{value}</Typography></Grid>
+      </Grid>
     );
   }
 

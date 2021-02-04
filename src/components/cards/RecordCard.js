@@ -22,37 +22,37 @@ import VitalSignCardBody from './VitalSignCardBody';
 import NotesEditor from '../notes/NotesEditor';
 import { formatAge } from '../../util';
 
-const selectCardBody = (fieldsData) => {
+const selectCardBody = (fieldsData, patientAgeAtRecord) => {
   switch (fieldsData.category) {
     case 'Conditions':
     case 'Document References':
     case 'Meds Administration':
     case 'Procedures':
     case 'Procedure Requests':
-      return <GenericCardBody fieldsData={fieldsData} />;
+      return <GenericCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
     case 'Meds Dispensed':
     case 'Meds Requested':
-      return <MedicationCardBody fieldsData={fieldsData} />;
+      return <MedicationCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
     case 'Benefits':
-      return <BenefitCardBody fieldsData={fieldsData} />;
+      return <BenefitCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
     case 'Claims':
-      return <ClaimCardBody fieldsData={fieldsData} />;
+      return <ClaimCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
     case 'Encounters':
-      return <EncounterCardBody fieldsData={fieldsData} />;
+      return <EncounterCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
     case 'Immunizations':
-      return <ImmunizationCardBody fieldsData={fieldsData} />;
+      return <ImmunizationCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
     case 'Lab Results':
-      return <LabResultCardBody fieldsData={fieldsData} />;
+      return <LabResultCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
     case 'Exams':
-      return <ExamCardBody fieldsData={fieldsData} />;
+      return <ExamCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
     case 'Meds Statement':
-      return <MedicationStatementCardBody fieldsData={fieldsData} />;
+      return <MedicationStatementCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
     case 'Social History':
-      return <SocialHistoryCardBody fieldsData={fieldsData} />;
+      return <SocialHistoryCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
     case 'Other':
-      return <UnimplementedCardBody fieldsData={fieldsData} />;
+      return <UnimplementedCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
     case 'Vital Signs':
-      return <VitalSignCardBody fieldsData={fieldsData} />;
+      return <VitalSignCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
     default:
       break;
   }
@@ -148,7 +148,7 @@ const RecordCard = ({
 
   // console.log('fieldsData', fieldsData)
 
-  const patientAgeAtRecord = formatAge(patient.data.birthDate, record.itemDate, 'age ') || '';
+  const patientAgeAtRecord = formatAge(patient.data.birthDate, record.itemDate, '') || '';
 
   return (
     <Card
@@ -168,8 +168,8 @@ const RecordCard = ({
         subheaderTypographyProps={{ variant: 's4sSubheader' }}
       />
       <CardContent>
-        <Grid container spacing={0}>
-          {selectCardBody(fieldsData, records)}
+        <Grid container>
+          {selectCardBody(fieldsData, patientAgeAtRecord)}
         </Grid>
       </CardContent>
       <NotesEditor

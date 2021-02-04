@@ -167,7 +167,7 @@ export function formatAge(birthDate, ageDate, prefix) {
   } if (years === 0 && weeks <= MAX_ONLY_WEEKS) {
     return `${prefix + weeks} weeks`;
   }
-  return prefix + (years > 0 ? `${years}yr` : '') + (years > 0 && months > 0 ? ' ' : '') + (months > 0 ? `${months}mo` : '');
+  return prefix + (years > 0 ? `${years} years,` : '') + (years > 0 && months > 0 ? ' ' : '') + (months > 0 ? `${months} months` : '');
 }
 
 // TODO: cleanup when determine not to show disabled header, eliminate header highlight
