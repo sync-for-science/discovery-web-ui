@@ -52,7 +52,7 @@ const Provider = ({ providerName }) => {
   );
 };
 
-Provider.myName = "Category";
+Provider.myName = 'Category';
 
 Provider.propTypes = {
   providerName: PropTypes.string.isRequired,

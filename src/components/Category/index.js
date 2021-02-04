@@ -51,7 +51,7 @@ const Category = ({ categoryName }) => {
   );
 };
 
-Category.myName = "Category";
+Category.myName = 'Category';
 
 Category.propTypes = {
   categoryName: PropTypes.string.isRequired,
