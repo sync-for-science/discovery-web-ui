@@ -108,11 +108,13 @@ class StandardFilters extends React.PureComponent {
       this.updateSvgWidth();
     }
 
-    if (prevState.minActivePos !== this.state.minActivePos
-      || prevState.maxActivePos !== this.state.maxActivePos
-      || notEqJSON(prevProps.activeCategories, this.props.activeCategories)
-      || notEqJSON(prevProps.activeProviders, this.props.activeProviders)) {
-      this.setState({ activeDates: this.calcActiveDates() });
+    if (
+        prevState.minActivePos !== this.state.minActivePos
+        || prevState.maxActivePos !== this.state.maxActivePos
+        || notEqJSON(prevProps.activeCategories, this.props.activeCategories)
+        || notEqJSON(prevProps.activeProviders, this.props.activeProviders)
+      ) {
+      this.setState({ activeDates: this.calcActiveDates() }); // problem with green dots not showing up is because this.calcActiveDates() doesn't fire on initial load
     }
 
     if (prevProps.lastEvent !== this.props.lastEvent) {
@@ -154,6 +156,7 @@ class StandardFilters extends React.PureComponent {
         activeDates[dateOnly(res.itemDate)] = true;
       }
     }
+    console.log('activeDates', activeDates)
     return activeDates;
   }
 
@@ -183,7 +186,10 @@ class StandardFilters extends React.PureComponent {
   // Is 'dot':  (1) in the TimeWidget's active range
   //    (2) associated with an active Category
   //    (3) associated with an active Provider
-  isActive = (dot) => this.state.activeDates[dateOnly(dot.date)]
+  isActive = (dot) => {
+    // console.log('this.state.activeDates', this.state.activeDates)
+    return(this.state.activeDates[dateOnly(dot.date)])
+  }
 
   //
   // Mark a position-scaled copy of this dot with 'dotType' and include in result array
@@ -291,6 +297,7 @@ class StandardFilters extends React.PureComponent {
     const thumbDistance = this.state.maxActivePos - this.state.minActivePos;
     const oldPosition = this.props.dotClickContext.position;
     const newContext = { ...this.props.dotClickContext };
+
     const dates = this.fetchDotPositions(newContext.parent, newContext.rowName, true, true);
     const currDateIndex = dates.findIndex((elt) => elt.date === newContext.date);
 
@@ -426,6 +433,7 @@ class StandardFilters extends React.PureComponent {
     const { dotClickContext } = this.props;
     const matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget'
         || (dotClickContext.parent === parent && dotClickContext.rowName === rowName));
+
     const inactiveHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
     //               ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
       (((!isEnabled || !this.isActive(elt)) && elt.position === dotClickContext.position)
