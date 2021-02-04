@@ -185,9 +185,7 @@ class StandardFilters extends React.PureComponent {
   // Is 'dot':  (1) in the TimeWidget's active range
   //    (2) associated with an active Category
   //    (3) associated with an active Provider
-  isActive = (dot) =>
-    // console.log('this.state.activeDates', this.state.activeDates)
-    (this.state.activeDates[dateOnly(dot.date)])
+  isActive = (dot) => this.state.activeDates[dateOnly(dot.date)]
 
   //
   // Mark a position-scaled copy of this dot with 'dotType' and include in result array
@@ -295,7 +293,6 @@ class StandardFilters extends React.PureComponent {
     const thumbDistance = this.state.maxActivePos - this.state.minActivePos;
     const oldPosition = this.props.dotClickContext.position;
     const newContext = { ...this.props.dotClickContext };
-
     const dates = this.fetchDotPositions(newContext.parent, newContext.rowName, true, true);
     const currDateIndex = dates.findIndex((elt) => elt.date === newContext.date);
 
@@ -431,7 +428,6 @@ class StandardFilters extends React.PureComponent {
     const { dotClickContext } = this.props;
     const matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget'
         || (dotClickContext.parent === parent && dotClickContext.rowName === rowName));
-
     const inactiveHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
     //               ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
       (((!isEnabled || !this.isActive(elt)) && elt.position === dotClickContext.position)
