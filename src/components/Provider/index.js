@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
     marginLeft: 5,
   },
   label: {
-    fontSize: ".8em",
+    fontSize: '.8em',
   },
   checkbox: {
     padding: 1,
@@ -24,7 +24,7 @@ const Provider = ({ providerName }) => {
   const classes = useStyles();
 
   const [activeProviders, setActiveProviders] = useRecoilState(
-    activeProvidersState
+    activeProvidersState,
   );
 
   const isEnabled = activeProviders[providerName];
@@ -39,14 +39,14 @@ const Provider = ({ providerName }) => {
   return (
     <FormControlLabel
       classes={classes}
-      control={
+      control={(
         <Checkbox
           className={classes.checkbox}
           checked={isEnabled}
           onChange={handleChange}
           color="primary"
         />
-      }
+      )}
       label={titleCase(providerName)}
     />
   );
