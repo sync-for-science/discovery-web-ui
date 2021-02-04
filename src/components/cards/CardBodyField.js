@@ -6,8 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles(() => ({
   highlight: {
     display: 'block',
-    padding: '4px',
-    backgroundColor: '#d78c14', // add this color to theme
+    backgroundColor: '#fff', // disable, for now; if ever needed, add this color to theme
   },
 }));
 
