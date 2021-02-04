@@ -1,10 +1,12 @@
 import FhirTransform from '../../FhirTransform';
 import {
-  cleanDates, normalizeDates, timelineIncrYears, tryWithDefault,
+  classFromCat,
+  cleanDates, Const, normalizeDates, timelineIncrYears, tryWithDefault,
 } from '../../util';
 import config from '../../config';
 import { log } from '../../utils/logger';
 import Unimplemented from '../Unimplemented';
+import { primaryTextValue } from '../../fhirUtil';
 
 const itemDate = (item, category) => {
   let date = null;
@@ -112,6 +114,14 @@ const queryOptions = {
   },
 };
 
+// This is derived from src/components/TilesView/index.js, line 185:
+const getCoding = (record) => {
+  const codeObj = classFromCat(record.category).code(record);
+  const code = tryWithDefault(codeObj, (codeObj) => codeObj.coding[0].code, tryWithDefault(codeObj, (codeObj) => codeObj.code, '????'));
+  const display = primaryTextValue(codeObj);
+  return { code, display: display === Const.unknownValue ? `All ${record.category}` : display };
+};
+
 // const categoriesForProviderTemplate = ({ participantId }) => ({
 const categoriesForProviderTemplate = {
   Patient: (e) => FhirTransform.getPathItem(e, 'entry.resource[*resourceType=Patient]'),
@@ -191,38 +201,43 @@ const checkResourceCoverage = (rawResponseData, normalizedResources, participant
 // Template/function for the full merged data set
 export const normalizeResourcesAndInjectPartipantId = (participantId) => (data) => {
   const result = [];
-  for (const providerName in data) {
-    if (data[providerName].error) {
-      console.error('data[providerName].error: ', data[providerName].error); // eslint-disable-line no-console
+  for (const provider in data) {
+    if (data[provider].error) {
+      console.error('data[providerName].error: ', data[provider].error); // eslint-disable-line no-console
       // Error response
       if (!result.Error) {
         // Init container
         result.Error = {};
       }
-      result.Error[providerName] = data[providerName].error;
+      result.Error[provider] = data[provider].error;
     } else {
       // Valid data for this provider
-      const obj = FhirTransform.transform(data[providerName], categoriesForProviderTemplate);
-      for (const propName in obj) {
-        if (obj[propName] === null || obj[propName] === undefined || (obj[propName] instanceof Array && obj[propName].length === 0)) {
+      const obj = FhirTransform.transform(data[provider], categoriesForProviderTemplate);
+      for (const category in obj) {
+        if (obj[category] === null || obj[category] === undefined || (obj[category] instanceof Array && obj[category].length === 0)) {
           // Ignore empty top-level item
         } else {
           // Flatten data
-          for (const elt of obj[propName]) {
-            // for (const elt in obj[propName]) {
+          for (const record of obj[category]) {
+            // for (const record in obj[propName]) {
             result.push({
-              provider: providerName,
-              category: propName,
-              itemDate: itemDate(elt, propName),
-              id: participantId,
-              data: elt,
+              provider,
+              category,
+              itemDate: itemDate(record, category),
+              id: participantId, // TODO: this should be called participantId, not id ("id" implies uuid?)
+              data: record,
             });
           }
         }
       }
     }
   }
-  return result;
+  // 2nd pass -- TODO: consolidate into same loop, ^above:
+  return result.map((record) => {
+    const displayCoding = getCoding(record);
+    record.displayCoding = displayCoding;
+    return record;
+  });
 };
 
 export const generateRecordsDictionary = (normalized) => normalized.reduce((acc, record) => {
