@@ -1,6 +1,7 @@
 import React from 'react';
 
 import CardBodyField from './CardBodyField';
+import CARD_BODY_LABEL from './cardBodyLabel';
 
 const ImmunizationCardBody = ({ fieldsData }) => {
   const givenDisplay = fieldsData.notGiven ? 'no' : 'yes';
@@ -9,34 +10,39 @@ const ImmunizationCardBody = ({ fieldsData }) => {
   return (
     <>
       <CardBodyField
+        dependency={fieldsData.patientAgeAtRecord}
+        label={CARD_BODY_LABEL.age}
+        value={fieldsData.patientAgeAtRecord}
+      />
+      <CardBodyField
         dependency={fieldsData.vaccineDisplay}
-        label="VACCINE"
+        label={CARD_BODY_LABEL.vaccine}
         value={fieldsData.vaccineDisplay}
         highlight
       />
       <CardBodyField
         dependency={fieldsData.notGiven !== undefined}
-        label="GIVEN"
+        label={CARD_BODY_LABEL.given}
         value={givenDisplay}
       />
       <CardBodyField
         dependency={fieldsData.reported}
-        label="REPORTED"
+        label={CARD_BODY_LABEL.reported}
         value={reportedDisplay}
       />
       <CardBodyField
         dependency={fieldsData.primarySource}
-        label="PRIMARY SOURCE"
+        label={CARD_BODY_LABEL.primarySource}
         value={primarySourceDisplay}
       />
       <CardBodyField
         dependency={fieldsData.provider}
-        label="PROVIDER"
+        label={CARD_BODY_LABEL.provider}
         value={fieldsData.provider}
       />
       <CardBodyField
         dependency={fieldsData.status}
-        label="STATUS"
+        label={CARD_BODY_LABEL.status}
         value={fieldsData.status}
       />
     </>
