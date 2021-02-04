@@ -19,8 +19,8 @@ const MedicationCardBody = ({ fieldsData }) => {
   }
 
   function formatDosageStart() {
-    if (fieldsData.dosageInstruction?.timing?.repeat?.boundsPeriod) {
-      return formatDate(fieldsData.dosageInstruction.timing.repeat.boundsPeriod);
+    if (fieldsData.dosageInstruction?.timing?.repeat?.boundsPeriod?.start) {
+      return formatDate(fieldsData.dosageInstruction.timing.repeat.boundsPeriod.start);
     }
 
     return null;
@@ -82,7 +82,7 @@ const MedicationCardBody = ({ fieldsData }) => {
         value={formatDosageInstruction()}
       />
       <CardBodyField
-        dependency={fieldsData.dosageInstruction?.timing?.repeat?.boundsPeriod}
+        dependency={fieldsData.dosageInstruction?.timing?.repeat?.boundsPeriod?.start}
         label="STARTING ON"
         value={formatDosageStart()}
       />
