@@ -11,8 +11,9 @@ const MedicationCardBody = ({ fieldsData }) => {
         : 'as instructed'; // what the opposite of As Needed?
       const { frequency } = fieldsData.dosageInstruction.timing.repeat;
       const { period } = fieldsData.dosageInstruction.timing.repeat;
-      const { periodUnit } = fieldsData.dosageInstruction.timing.repeat;
-      return `${frequency} every ${period} ${periodUnit} ${asNeededText}`; // need dynamic translation for
+      // DSTU2 / STU3 compatibility
+      const { periodUnit, periodUnits } = fieldsData.dosageInstruction.timing.repeat;
+      return `${frequency} every ${period} ${periodUnit || periodUnits} ${asNeededText}`; // need dynamic translation for
     }
     return null;
   }
