@@ -1,9 +1,10 @@
 import React from 'react';
 
+import CARD_BODY_LABEL from './cardBodyLabel'
 import CardBodyField from './CardBodyField';
 import { formatDate } from './GenericCardBody';
 
-const MedicationCardBody = ({ fieldsData }) => {
+const MedicationCardBody = ({ fieldsData, patientAgeAtRecord }) => {
   function formatDosageInstruction() {
     if (fieldsData.dosageInstruction?.timing?.repeat) {
       const asNeededText = fieldsData.dosageInstruction.asNeededBoolean
@@ -29,66 +30,71 @@ const MedicationCardBody = ({ fieldsData }) => {
   return (
     <>
       <CardBodyField
+        dependency={patientAgeAtRecord}
+        label={CARD_BODY_LABEL.age}
+        value={patientAgeAtRecord}
+      />
+      <CardBodyField
         dependency={fieldsData.medicationDisplay}
-        label="MEDICATIONS"
+        label={CARD_BODY_LABEL.medications}
         value={fieldsData.medicationDisplay}
         highlight
       />
       <CardBodyField
         dependency={fieldsData.reason}
-        label="REASON"
+        label={CARD_BODY_LABEL.reason}
         value={fieldsData.reason}
       />
       <CardBodyField
         dependency={fieldsData.onset}
-        label="ONSET"
+        label={CARD_BODY_LABEL.onset}
         value={formatDate(fieldsData.onset)}
       />
       <CardBodyField
         dependency={fieldsData.abatement}
-        label="ABATEMENT"
+        label={CARD_BODY_LABEL.abatement}
         value={formatDate(fieldsData.abatement)}
       />
       <CardBodyField
         dependency={fieldsData.asserted}
-        label="ASSERTED"
+        label={CARD_BODY_LABEL.asserted}
         value={formatDate(fieldsData.asserted)}
       />
       <CardBodyField
         dependency={fieldsData.provider}
-        label="PROVIDER"
+        label={CARD_BODY_LABEL.provider}
         value={fieldsData.provider}
       />
       <CardBodyField
         dependency={fieldsData.status}
-        label="STATUS"
+        label={CARD_BODY_LABEL.status}
         value={fieldsData.status}
       />
       {/* note sure where to find quantity, patient 3001 doesnt have med req supply */}
       <CardBodyField
         dependency={fieldsData.quantity}
-        label="QUANTITY"
+        label={CARD_BODY_LABEL.quantity}
         value="TBD"
       />
       {/* note sure where to find supply, patient 3001 doesnt have med req supply */}
       <CardBodyField
         dependency={fieldsData.supply}
-        label="SUPPLY"
+        label={CARD_BODY_LABEL.supply}
         value="TBD"
       />
       <CardBodyField
         dependency={fieldsData.dosageInstruction?.timing}
-        label="DOSAGE"
+        label={CARD_BODY_LABEL.dosage}
         value={formatDosageInstruction()}
       />
       <CardBodyField
         dependency={fieldsData.dosageInstruction?.timing?.repeat?.boundsPeriod?.start}
-        label="STARTING ON"
+        label={CARD_BODY_LABEL.startingOn}
         value={formatDosageStart()}
       />
       <CardBodyField
         dependency={fieldsData.dispenseRequest}
-        label="REFILLS"
+        label={CARD_BODY_LABEL.refills}
         value={fieldsData.dispenseRequest?.numberOfRepeatsAllowed}
       />
     </>

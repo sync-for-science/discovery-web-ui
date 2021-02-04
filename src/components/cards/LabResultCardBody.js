@@ -1,8 +1,9 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-
 import { useRecoilValue } from 'recoil';
+
+import CARD_BODY_LABEL from './cardBodyLabel'
 import CardBodyField from './CardBodyField';
 import TimeSeries from '../TimeSeries/index';
 import { computeTimeSeriesLabResultsData } from '../../fhirUtil';
@@ -14,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const LabResultCardBody = ({ fieldsData }) => {
+const LabResultCardBody = ({ fieldsData, patientAgeAtRecord }) => {
   const labResults = useRecoilValue(labResultRecords);
   const classes = useStyles();
   const valueRatioDisplay = `${fieldsData.valueRatio?.numerator?.value} / ${fieldsData.valueRatio?.denominator?.value}`;
@@ -25,7 +26,7 @@ const LabResultCardBody = ({ fieldsData }) => {
     valueField = (
       <CardBodyField
         dependency={valueDisplay}
-        label="VALUE"
+        label={CARD_BODY_LABEL.value}
         value={valueDisplay}
       />
     );
@@ -34,9 +35,9 @@ const LabResultCardBody = ({ fieldsData }) => {
       const valueDisplay = `${resource.valueQuantity.value.toFixed(1)} ${resource.valueQuantity.code}`;
       let label;
       if (resource.code.text === 'Diastolic Blood Pressure') {
-        label = 'DIASTOLIC';
+        label = CARD_BODY_LABEL.diastolic;
       } else if (resource.code.text === 'Systolic Blood Pressure') {
-        label = 'SYSTOLIC';
+        label = CARD_BODY_LABEL.systolic;
       } else {
         label = resource.code.text;
       }
@@ -67,15 +68,20 @@ const LabResultCardBody = ({ fieldsData }) => {
   return (
     <>
       <CardBodyField
+        dependency={patientAgeAtRecord}
+        label={CARD_BODY_LABEL.age}
+        value={patientAgeAtRecord}
+      />
+      <CardBodyField
         dependency={fieldsData.display}
-        label="MEASURE"
+        label={CARD_BODY_LABEL.measure}
         value={fieldsData.display}
         highlight
       />
       {valueField}
       <CardBodyField
         dependency={fieldsData.valueRatio}
-        label="VALUE RATIO"
+        label={CARD_BODY_LABEL.valueRatio}
         value={valueRatioDisplay}
       />
       {/* Need to parse Reference Range per fhirUtil, but can't find example */}
@@ -86,12 +92,12 @@ const LabResultCardBody = ({ fieldsData }) => {
       />
       <CardBodyField
         dependency={fieldsData.provider}
-        label="PROVIDER"
+        label={CARD_BODY_LABEL.provider}
         value={fieldsData.provider}
       />
       <CardBodyField
         dependency={fieldsData.status}
-        label="STATUS"
+        label={CARD_BODY_LABEL.status}
         value={fieldsData.status}
       />
       <Typography variant="timeSeries" className={classes.timeSeries}>

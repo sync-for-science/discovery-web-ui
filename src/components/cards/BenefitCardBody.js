@@ -2,22 +2,23 @@ import React from 'react';
 import { formatDate } from './GenericCardBody';
 
 import CardBodyField from './CardBodyField';
+import CARD_BODY_LABEL from './cardBodyLabel'
 
-const BenefitCardBody = ({ fieldsData }) => {
+const BenefitCardBody = ({ fieldsData, patientAgeAtRecord }) => {
   const claimDisplay = fieldsData.type.coding[0].display;
   const periodDisplay = `${formatDate(fieldsData.billablePeriod.start, false)} - ${formatDate(fieldsData.billablePeriod.end, false)}`;
   const totalCostDisplay = `${fieldsData.totalCost.value.toFixed(2)} ${fieldsData.totalCost.code}`;
   const totalBenefitDisplay = fieldsData.totalBenefit || 'unknown';
   const roleDisplay = fieldsData.careTeam[0].role.coding[0].display;
 
-  const renderContainedResource = (containedResource) => {
+  const renderContainedResource = (containedResource, ) => {
     switch (containedResource.resourceType) {
       case 'Coverage':
         return (
           <CardBodyField
             key={`${containedResource.resourceType}`}
             dependency={containedResource.type.text}
-            label="COVERAGE"
+            label={CARD_BODY_LABEL.coverage}
             value={containedResource.type.text}
           />
         );
@@ -26,7 +27,7 @@ const BenefitCardBody = ({ fieldsData }) => {
           <CardBodyField
             key={`${containedResource.resourceType}`}
             dependency={containedResource.status}
-            label="REFERRAL"
+            label={CARD_BODY_LABEL.referral}
             value={containedResource.status}
           />
         );
@@ -48,44 +49,49 @@ const BenefitCardBody = ({ fieldsData }) => {
   return (
     <>
       <CardBodyField
+        dependency={patientAgeAtRecord}
+        label={CARD_BODY_LABEL.age}
+        value={patientAgeAtRecord}
+      />
+      <CardBodyField
         dependency={fieldsData.type.coding[0].display}
-        label="CLAIM TYPE"
+        label={CARD_BODY_LABEL.claimType}
         value={claimDisplay}
         highlight
       />
       <CardBodyField
         dependency={fieldsData.billablePeriod}
-        label="PERIOD"
+        label={CARD_BODY_LABEL.period}
         value={periodDisplay}
       />
       <CardBodyField
         dependency={fieldsData.totalCost}
-        label="TOTAL COST"
+        label={CARD_BODY_LABEL.totalCost}
         value={totalCostDisplay}
       />
       <CardBodyField
         dependency={fieldsData.totalBenefit}
-        label="TOTAL BENEFIT"
+        label={CARD_BODY_LABEL.totalBenefit}
         value={totalBenefitDisplay}
       />
       <CardBodyField
         dependency={fieldsData.provider}
-        label="PROVIDER"
+        label={CARD_BODY_LABEL.provider}
         value={fieldsData.provider}
       />
       <CardBodyField
         dependency={fieldsData.diagnosis}
-        label="DIAGNOSIS"
+        label={CARD_BODY_LABEL.diagnosis}
         value={fieldsData.diagnosis}
       />
       <CardBodyField
         dependency={fieldsData.status}
-        label="STATUS"
+        label={CARD_BODY_LABEL.status}
         value={fieldsData.status}
       />
       <CardBodyField
         dependency={fieldsData.careTeam[0].role.coding[0].display}
-        label="ROLE"
+        label={CARD_BODY_LABEL.role}
         value={roleDisplay}
       />
       {renderContained()}
