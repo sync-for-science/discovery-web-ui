@@ -27,8 +27,6 @@ export default class DotLine extends React.Component {
     dotClickFn: PropTypes.func, // Callback when a dot is clicked
   }
 
-  
-
   //
   // Accumulate array of svg <circle> elements for dots
   //

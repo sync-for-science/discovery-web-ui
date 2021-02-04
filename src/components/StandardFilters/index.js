@@ -109,11 +109,11 @@ class StandardFilters extends React.PureComponent {
     }
 
     if (
-        prevState.minActivePos !== this.state.minActivePos
+      prevState.minActivePos !== this.state.minActivePos
         || prevState.maxActivePos !== this.state.maxActivePos
         || notEqJSON(prevProps.activeCategories, this.props.activeCategories)
         || notEqJSON(prevProps.activeProviders, this.props.activeProviders)
-      ) {
+    ) {
       this.setState({ activeDates: this.calcActiveDates() }); // problem with green dots not showing up is because this.calcActiveDates() doesn't fire on initial load
     }
 
@@ -156,7 +156,6 @@ class StandardFilters extends React.PureComponent {
         activeDates[dateOnly(res.itemDate)] = true;
       }
     }
-    console.log('activeDates', activeDates)
     return activeDates;
   }
 
@@ -186,10 +185,9 @@ class StandardFilters extends React.PureComponent {
   // Is 'dot':  (1) in the TimeWidget's active range
   //    (2) associated with an active Category
   //    (3) associated with an active Provider
-  isActive = (dot) => {
+  isActive = (dot) =>
     // console.log('this.state.activeDates', this.state.activeDates)
-    return(this.state.activeDates[dateOnly(dot.date)])
-  }
+    (this.state.activeDates[dateOnly(dot.date)])
 
   //
   // Mark a position-scaled copy of this dot with 'dotType' and include in result array
