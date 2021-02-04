@@ -284,6 +284,11 @@ export const extractProviders = (records) => {
   return [...providersSet].sort();
 };
 
+// return an DSTU2/STU3+ periodUnit
+export const extractPeriodUnit = (timingRepeat) => {
+  return timingRepeat.periodUnit || timingRepeat.periodUnits;
+};
+
 // Return sorted array of all populated category names for this participant
 export const extractCategories = (records) => {
   // const { legacy: legacyResources } = this.props.resources;

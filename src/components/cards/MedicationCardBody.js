@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { extractPeriodUnit } from "../DiscoveryApp/Api";
 import CardBodyField from './CardBodyField';
 import { formatDate } from './GenericCardBody';
 
@@ -12,8 +13,8 @@ const MedicationCardBody = ({ fieldsData }) => {
       const { frequency } = fieldsData.dosageInstruction.timing.repeat;
       const { period } = fieldsData.dosageInstruction.timing.repeat;
       // DSTU2 / STU3 compatibility
-      const { periodUnit, periodUnits } = fieldsData.dosageInstruction.timing.repeat;
-      return `${frequency} every ${period} ${periodUnit || periodUnits} ${asNeededText}`; // need dynamic translation for
+      const periodUnit = extractPeriodUnit(fieldsData.dosageInstruction.timing.repeat);
+      return `${frequency} every ${period} ${periodUnit} ${asNeededText}`; // need dynamic translation for
     }
     return null;
   }
