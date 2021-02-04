@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { string, shape } from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
+import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { format } from 'date-fns';
 
@@ -62,26 +62,11 @@ const useStyles = makeStyles(() => ({
   root: {
     marginTop: 10,
   },
-  // media: {
-  //   height: 0,
-  //   paddingTop: '56.25%', // 16:9
-  // },
-  // expand: {
-  //   transform: 'rotate(0deg)',
-  //   marginLeft: 'auto',
-  //   transition: theme.transitions.create('transform', {
-  //     duration: theme.transitions.duration.shortest,
-  //   }),
-  // },
-  // expandOpen: {
-  //   transform: 'rotate(180deg)',
-  // },
-  // cardActions: {
-  //   padding: 16,
-  // },
-  // noteField: {
-  //   marginBottom: 10,
-  // },
+  title: {
+    padding: '16px 16px 0 16px',
+    display: 'flex',
+    justifyContent: 'space-between'
+  }
 }));
 
 const RecordCard = ({
@@ -156,7 +141,7 @@ const RecordCard = ({
       variant="outlined"
       id={`${format(new Date(fieldsData.date), 'y-MM-dd')}-${fieldsData.display}`}
     >
-      <CardHeader
+      {/* <CardHeader
         // action={(
         //   <IconButton aria-label="remove">
         //     <CloseIcon />
@@ -166,7 +151,15 @@ const RecordCard = ({
         subheader={`${displayDate} | ${patientAgeAtRecord}`}
         titleTypographyProps={{ variant: 's4sHeader' }}
         subheaderTypographyProps={{ variant: 's4sSubheader' }}
-      />
+      /> */}
+      <div className={classes.title}>
+        <Typography variant="s4sHeader">
+          {category}
+        </Typography>
+        <Typography variant="s4sSubheader">
+          {displayDate}
+        </Typography>
+      </div>
       <CardContent>
         <Grid container>
           {selectCardBody(fieldsData, patientAgeAtRecord)}
