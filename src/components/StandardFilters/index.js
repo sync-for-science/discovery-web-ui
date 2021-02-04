@@ -108,11 +108,13 @@ class StandardFilters extends React.PureComponent {
       this.updateSvgWidth();
     }
 
-    if (prevState.minActivePos !== this.state.minActivePos
-      || prevState.maxActivePos !== this.state.maxActivePos
-      || notEqJSON(prevProps.activeCategories, this.props.activeCategories)
-      || notEqJSON(prevProps.activeProviders, this.props.activeProviders)) {
-      this.setState({ activeDates: this.calcActiveDates() });
+    if (
+      prevState.minActivePos !== this.state.minActivePos
+        || prevState.maxActivePos !== this.state.maxActivePos
+        || notEqJSON(prevProps.activeCategories, this.props.activeCategories)
+        || notEqJSON(prevProps.activeProviders, this.props.activeProviders)
+    ) {
+      this.setState({ activeDates: this.calcActiveDates() }); // problem with green dots not showing up is because this.calcActiveDates() doesn't fire on initial load
     }
 
     if (prevProps.lastEvent !== this.props.lastEvent) {
