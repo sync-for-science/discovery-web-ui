@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilValue } from 'recoil';
 
-import CARD_BODY_LABEL from './cardBodyLabel'
+import CARD_BODY_LABEL from './cardBodyLabel';
 import CardBodyField from './CardBodyField';
 import TimeSeries from '../TimeSeries/index';
 import { computeTimeSeriesLabResultsData } from '../../fhirUtil';

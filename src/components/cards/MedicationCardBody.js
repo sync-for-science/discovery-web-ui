@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CARD_BODY_LABEL from './cardBodyLabel'
+import CARD_BODY_LABEL from './cardBodyLabel';
 import CardBodyField from './CardBodyField';
 import { formatDate } from './GenericCardBody';
 

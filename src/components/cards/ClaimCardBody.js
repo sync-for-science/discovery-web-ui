@@ -2,7 +2,7 @@ import React from 'react';
 import { formatDate } from './GenericCardBody';
 
 import CardBodyField from './CardBodyField';
-import CARD_BODY_LABEL from './cardBodyLabel'
+import CARD_BODY_LABEL from './cardBodyLabel';
 
 const ClaimCardBody = ({ fieldsData, patientAgeAtRecord }) => {
   const periodDisplay = `${formatDate(fieldsData.billablePeriod.start, false)} - ${formatDate(fieldsData.billablePeriod.end, false)}`;

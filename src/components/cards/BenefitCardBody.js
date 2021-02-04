@@ -2,7 +2,7 @@ import React from 'react';
 import { formatDate } from './GenericCardBody';
 
 import CardBodyField from './CardBodyField';
-import CARD_BODY_LABEL from './cardBodyLabel'
+import CARD_BODY_LABEL from './cardBodyLabel';
 
 const BenefitCardBody = ({ fieldsData, patientAgeAtRecord }) => {
   const claimDisplay = fieldsData.type.coding[0].display;
@@ -11,7 +11,7 @@ const BenefitCardBody = ({ fieldsData, patientAgeAtRecord }) => {
   const totalBenefitDisplay = fieldsData.totalBenefit || 'unknown';
   const roleDisplay = fieldsData.careTeam[0].role.coding[0].display;
 
-  const renderContainedResource = (containedResource, ) => {
+  const renderContainedResource = (containedResource) => {
     switch (containedResource.resourceType) {
       case 'Coverage':
         return (

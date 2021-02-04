@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CardBodyField from './CardBodyField';
-import CARD_BODY_LABEL from './cardBodyLabel'
+import CARD_BODY_LABEL from './cardBodyLabel';
 
 const UnimplementedCardBody = ({ fieldsData, patientAgeAtRecord }) => (
   <>

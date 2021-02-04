@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CardBodyField from './CardBodyField';
-import CARD_BODY_LABEL from './cardBodyLabel'
+import CARD_BODY_LABEL from './cardBodyLabel';
 
 // no exam records found in patients so far, data use/shape not confirmed
 const ExamCardBody = ({ fieldsData, patientAgeAtRecord }) => {
