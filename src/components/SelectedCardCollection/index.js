@@ -14,7 +14,7 @@ import RecordCard from '../cards/RecordCard';
 
 const SelectedCardCollection = () => {
   const recordIds = useRecoilValue(allRecordIds);
-  const groupedRecordIds = useRecoilValue(groupedRecordIdsState);
+  const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsBySubtypeState);
   const resources = useRecoilValue(resourcesState);
   const activeCategories = useRecoilValue(activeCategoriesState);
 
@@ -35,30 +35,30 @@ const SelectedCardCollection = () => {
         records
       </h4>
       <div className="card-list">
-        {categories.map((catLabel) => activeCategories[catLabel] && (
-          <Accordion
-            key={catLabel}
-            // defaultExpanded={activeCategories[catLabel]}
-            disabled={!activeCategories[catLabel]}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+        {categories.filter((catLabel) => activeCategories[catLabel]).map((catLabel) => Object.entries(groupedRecordIdsBySubtype[catLabel])
+          .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
+          .map(([displayCoding, uuids]) => (
+            <Accordion
+              key={displayCoding}
             >
-              <Typography>{catLabel}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {
-                activeCategories[catLabel] && groupedRecordIds[catLabel] && groupedRecordIds[catLabel].map((uuid) => (
-                  <RecordCard
-                    key={`record-card-${uuid}`}
-                    recordId={uuid}
-                    records={records}
-                  />
-                ))
-              }
-            </AccordionDetails>
-          </Accordion>
-        ))}
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <Typography>{displayCoding}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                {
+                  uuids.map((uuid) => (
+                    <RecordCard
+                      key={`record-card-${uuid}`}
+                      recordId={uuid}
+                      records={records}
+                    />
+                  ))
+                }
+              </AccordionDetails>
+            </Accordion>
+          )))}
       </div>
     </PersistentDrawerRight>
   );
