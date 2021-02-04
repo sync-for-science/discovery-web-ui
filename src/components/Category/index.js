@@ -1,16 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useRecoilState } from 'recoil';
+import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import '../../css/Selector.css';
 import { activeCategoriesState } from '../../recoil';
 
-//
-// Render a DiscoveryApp category line
-//
+const useStyles = makeStyles(() => ({
+  root: {
+    marginLeft: 5,
+  }
+}));
+
 const Category = ({ categoryName }) => {
+  const classes = useStyles();
+
   const [activeCategories, setActiveCategories] = useRecoilState(activeCategoriesState);
 
   const isEnabled = activeCategories[categoryName];
@@ -23,22 +28,17 @@ const Category = ({ categoryName }) => {
   };
 
   return (
-    <div>
-      <div>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={isEnabled}
-              onChange={handleChange}
-              color="primary"
-            />
-          }
-          label={categoryName}
-          classes="label"
-          className="provider-selector-nav"
+    <FormControlLabel className={classes.root}
+
+      control={
+        <Checkbox
+          checked={isEnabled}
+          onChange={handleChange}
+          color="primary"
         />
-      </div>
-    </div>
+      }
+      label={categoryName}
+    />
   );
 };
 

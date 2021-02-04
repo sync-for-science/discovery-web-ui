@@ -1,17 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useRecoilState } from 'recoil';
+import { makeStyles } from "@material-ui/core/styles";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import '../../css/Selector.css';
 import { titleCase } from '../../util.js';
 import { activeProvidersState } from '../../recoil';
 
-//
-// Render a DiscoveryApp provider line
-//
+const useStyles = makeStyles(() => ({
+  root: {
+    marginLeft: 5,
+  },
+}));
+
 const Provider = ({ providerName }) => {
+  const classes = useStyles();
+
   const [activeProviders, setActiveProviders] = useRecoilState(activeProvidersState);
 
   const isEnabled = activeProviders[providerName];
@@ -23,33 +28,20 @@ const Provider = ({ providerName }) => {
     }));
   };
 
-  // return (
-  //   <div className="selector">
-  //     <div className="selector-nav">
-  //       <button className={isEnabled ? 'selector-button-enabled' : 'selector-button-disabled'} onClick={handleButtonClick}>
-  //         { titleCase(providerName) }
-  //       </button>
-  //     </div>
-  //   </div>
-  // );
-
   return (
-    <div>
-      <div>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={isEnabled}
-              onChange={handleChange}
-              color="primary"
-            />
-          }
-          label={titleCase(providerName)}
-          classes="label"
-          className="provider-selector-nav"
+    <FormControlLabel className={classes.root}
+      control={
+        <Checkbox
+          checked={isEnabled}
+          onChange={handleChange}
+          color="primary"
         />
-      </div>
-    </div>
+      }
+      label={titleCase(providerName)}
+      sx={{
+        marginLeft: 20
+      }}
+    />
   );
 };
 
