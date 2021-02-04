@@ -285,9 +285,7 @@ export const extractProviders = (records) => {
 };
 
 // return an DSTU2/STU3+ periodUnit
-export const extractPeriodUnit = (timingRepeat) => {
-  return timingRepeat.periodUnit || timingRepeat.periodUnits;
-};
+export const extractPeriodUnit = (timingRepeat) => timingRepeat.periodUnit || timingRepeat.periodUnits;
 
 // Return sorted array of all populated category names for this participant
 export const extractCategories = (records) => {
