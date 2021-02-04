@@ -9,12 +9,12 @@ export function formatDate(date, displayMinutes = true) {
   return date ? format(new Date(date), dateDisplay) : null;
 }
 
-const GenericCardBody = ({ fieldsData, patientAgeAtRecord }) => (
+const GenericCardBody = ({ fieldsData }) => (
   <>
     <CardBodyField
-      dependency={patientAgeAtRecord}
+      dependency={fieldsData.patientAgeAtRecord}
       label={CARD_BODY_LABEL.age}
-      value={patientAgeAtRecord}
+      value={fieldsData.patientAgeAtRecord}
     />
     <CardBodyField
       dependency={fieldsData.display}

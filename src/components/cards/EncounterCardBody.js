@@ -4,15 +4,15 @@ import { formatDate } from './GenericCardBody';
 import CardBodyField from './CardBodyField';
 import CARD_BODY_LABEL from './cardBodyLabel';
 
-const EncounterCardBody = ({ fieldsData, patientAgeAtRecord }) => {
+const EncounterCardBody = ({ fieldsData }) => {
   const displayType = fieldsData.type[0].text;
   const displayEnd = formatDate(fieldsData.period.end);
   return (
     <>
       <CardBodyField
-        dependency={patientAgeAtRecord}
+        dependency={fieldsData.patientAgeAtRecord}
         label={CARD_BODY_LABEL.age}
-        value={patientAgeAtRecord}
+        value={fieldsData.patientAgeAtRecord}
       />
       <CardBodyField
         dependency={fieldsData.type[0].text}

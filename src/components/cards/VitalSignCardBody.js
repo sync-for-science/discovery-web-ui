@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const VitalSignCardBody = ({ fieldsData, patientAgeAtRecord }) => {
+const VitalSignCardBody = ({ fieldsData }) => {
   const vitalSigns = useRecoilValue(vitalSignsRecords);
   const classes = useStyles();
   const valueDisplay = fieldsData.valueQuantity && `${fieldsData.valueQuantity.value.toFixed(1)} ${fieldsData.valueQuantity.unit}`;
@@ -51,9 +51,9 @@ const VitalSignCardBody = ({ fieldsData, patientAgeAtRecord }) => {
   return (
     <>
       <CardBodyField
-        dependency={patientAgeAtRecord}
+        dependency={fieldsData.patientAgeAtRecord}
         label={CARD_BODY_LABEL.age}
-        value={patientAgeAtRecord}
+        value={fieldsData.patientAgeAtRecord}
       />
       <CardBodyField
         dependency={fieldsData.display}

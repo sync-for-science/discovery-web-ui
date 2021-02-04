@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const LabResultCardBody = ({ fieldsData, patientAgeAtRecord }) => {
+const LabResultCardBody = ({ fieldsData }) => {
   const labResults = useRecoilValue(labResultRecords);
   const classes = useStyles();
   const valueRatioDisplay = `${fieldsData.valueRatio?.numerator?.value} / ${fieldsData.valueRatio?.denominator?.value}`;
@@ -68,9 +68,9 @@ const LabResultCardBody = ({ fieldsData, patientAgeAtRecord }) => {
   return (
     <>
       <CardBodyField
-        dependency={patientAgeAtRecord}
+        dependency={fieldsData.patientAgeAtRecord}
         label={CARD_BODY_LABEL.age}
-        value={patientAgeAtRecord}
+        value={fieldsData.patientAgeAtRecord}
       />
       <CardBodyField
         dependency={fieldsData.display}

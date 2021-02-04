@@ -4,14 +4,14 @@ import CardBodyField from './CardBodyField';
 import CARD_BODY_LABEL from './cardBodyLabel';
 
 // no exam records found in patients so far, data use/shape not confirmed
-const ExamCardBody = ({ fieldsData, patientAgeAtRecord }) => {
+const ExamCardBody = ({ fieldsData }) => {
   const valueDisplay = `${fieldsData.valueQuantity.value.toFixed(1)} ${fieldsData.valueQuantity.unit}`;
   return (
     <>
       <CardBodyField
-        dependency={patientAgeAtRecord}
+        dependency={fieldsData.patientAgeAtRecord}
         label={CARD_BODY_LABEL.age}
-        value={patientAgeAtRecord}
+        value={fieldsData.patientAgeAtRecord}
       />
       <CardBodyField
         dependency={fieldsData.display}

@@ -3,12 +3,12 @@ import React from 'react';
 import CardBodyField from './CardBodyField';
 import CARD_BODY_LABEL from './cardBodyLabel';
 
-const UnimplementedCardBody = ({ fieldsData, patientAgeAtRecord }) => (
+const UnimplementedCardBody = ({ fieldsData }) => (
   <>
     <CardBodyField
-      dependency={patientAgeAtRecord}
+      dependency={fieldsData.patientAgeAtRecord}
       label={CARD_BODY_LABEL.age}
-      value={patientAgeAtRecord}
+      value={fieldsData.patientAgeAtRecord}
     />
     <CardBodyField
       dependency={fieldsData.category}

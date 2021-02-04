@@ -4,12 +4,12 @@ import CardBodyField from './CardBodyField';
 import CARD_BODY_LABEL from './cardBodyLabel';
 
 // no Social History records found in patients so far, data use/shape not confirmed
-const SocialHistoryCardBody = ({ fieldsData, patientAgeAtRecord }) => (
+const SocialHistoryCardBody = ({ fieldsData }) => (
   <>
     <CardBodyField
-      dependency={patientAgeAtRecord}
+      dependency={fieldsData.patientAgeAtRecord}
       label={CARD_BODY_LABEL.age}
-      value={patientAgeAtRecord}
+      value={fieldsData.patientAgeAtRecord}
     />
     <CardBodyField
       dependency={fieldsData.display}

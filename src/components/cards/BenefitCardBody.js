@@ -4,7 +4,7 @@ import { formatDate } from './GenericCardBody';
 import CardBodyField from './CardBodyField';
 import CARD_BODY_LABEL from './cardBodyLabel';
 
-const BenefitCardBody = ({ fieldsData, patientAgeAtRecord }) => {
+const BenefitCardBody = ({ fieldsData }) => {
   const claimDisplay = fieldsData.type.coding[0].display;
   const periodDisplay = `${formatDate(fieldsData.billablePeriod.start, false)} - ${formatDate(fieldsData.billablePeriod.end, false)}`;
   const totalCostDisplay = `${fieldsData.totalCost.value.toFixed(2)} ${fieldsData.totalCost.code}`;
@@ -49,9 +49,9 @@ const BenefitCardBody = ({ fieldsData, patientAgeAtRecord }) => {
   return (
     <>
       <CardBodyField
-        dependency={patientAgeAtRecord}
+        dependency={fieldsData.patientAgeAtRecord}
         label={CARD_BODY_LABEL.age}
-        value={patientAgeAtRecord}
+        value={fieldsData.patientAgeAtRecord}
       />
       <CardBodyField
         dependency={fieldsData.type.coding[0].display}

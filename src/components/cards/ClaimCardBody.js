@@ -4,15 +4,15 @@ import { formatDate } from './GenericCardBody';
 import CardBodyField from './CardBodyField';
 import CARD_BODY_LABEL from './cardBodyLabel';
 
-const ClaimCardBody = ({ fieldsData, patientAgeAtRecord }) => {
+const ClaimCardBody = ({ fieldsData }) => {
   const periodDisplay = `${formatDate(fieldsData.billablePeriod.start, false)} - ${formatDate(fieldsData.billablePeriod.end, false)}`;
   const displayTotal = `${fieldsData.total.value.toFixed(2)} ${fieldsData.total.code}`;
   return (
     <>
       <CardBodyField
-        dependency={patientAgeAtRecord}
+        dependency={fieldsData.patientAgeAtRecord}
         label={CARD_BODY_LABEL.age}
-        value={patientAgeAtRecord}
+        value={fieldsData.patientAgeAtRecord}
       />
       <CardBodyField
         dependency={fieldsData.billablePeriod.start}

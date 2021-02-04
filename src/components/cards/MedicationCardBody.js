@@ -4,7 +4,7 @@ import CARD_BODY_LABEL from './cardBodyLabel';
 import CardBodyField from './CardBodyField';
 import { formatDate } from './GenericCardBody';
 
-const MedicationCardBody = ({ fieldsData, patientAgeAtRecord }) => {
+const MedicationCardBody = ({ fieldsData }) => {
   function formatDosageInstruction() {
     if (fieldsData.dosageInstruction?.timing?.repeat) {
       const asNeededText = fieldsData.dosageInstruction.asNeededBoolean
@@ -30,9 +30,9 @@ const MedicationCardBody = ({ fieldsData, patientAgeAtRecord }) => {
   return (
     <>
       <CardBodyField
-        dependency={patientAgeAtRecord}
+        dependency={fieldsData.patientAgeAtRecord}
         label={CARD_BODY_LABEL.age}
-        value={patientAgeAtRecord}
+        value={fieldsData.patientAgeAtRecord}
       />
       <CardBodyField
         dependency={fieldsData.medicationDisplay}

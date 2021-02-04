@@ -3,16 +3,16 @@ import React from 'react';
 import CardBodyField from './CardBodyField';
 import CARD_BODY_LABEL from './cardBodyLabel';
 
-const ImmunizationCardBody = ({ fieldsData, patientAgeAtRecord }) => {
+const ImmunizationCardBody = ({ fieldsData }) => {
   const givenDisplay = fieldsData.notGiven ? 'no' : 'yes';
   const primarySourceDisplay = fieldsData.primarySource ? 'yes' : 'no';
   const reportedDisplay = fieldsData.reported ? 'yes' : 'no';
   return (
     <>
       <CardBodyField
-        dependency={patientAgeAtRecord}
+        dependency={fieldsData.patientAgeAtRecord}
         label={CARD_BODY_LABEL.age}
-        value={patientAgeAtRecord}
+        value={fieldsData.patientAgeAtRecord}
       />
       <CardBodyField
         dependency={fieldsData.vaccineDisplay}
