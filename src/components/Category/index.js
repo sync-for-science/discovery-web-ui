@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { useRecoilState } from "recoil";
-import { makeStyles } from "@material-ui/core/styles";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useRecoilState } from 'recoil';
+import { makeStyles } from '@material-ui/core/styles';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
-import { activeCategoriesState } from "../../recoil";
+import { activeCategoriesState } from '../../recoil';
 
 const useStyles = makeStyles(() => ({
   root: {
