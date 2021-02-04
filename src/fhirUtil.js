@@ -27,6 +27,7 @@ function dropFinalDigits(str) {
  * @returns {String} Patient's name, or an empty string
  */
 export function formatPatientName(name) {
+  // TODO: replace implementation with simpler one that uses i18n?
   if (!name) {
     return '';
   }
