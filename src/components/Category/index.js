@@ -9,7 +9,7 @@ import { activeCategoriesState } from '../../recoil';
 
 const useStyles = makeStyles(() => ({
   root: {
-    marginLeft: 5,
+    marginLeft: 8,
   },
   label: {
     fontSize: '.8em',
