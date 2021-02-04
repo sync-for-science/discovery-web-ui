@@ -31,6 +31,7 @@
 
   /* Gray Tint (GT) */
   --gt1: rgb(233, 237, 244);             /* Blue Gray Light */
+  --gt1-dot: rgb(205, 208, 212);             /* Blue Gray Light */
   --gt1-40: rgba(233, 237, 244, 0.4);     /* Blue Gray Light */
   --gt2: rgb(124, 130, 143);             /* Blue Gray Medium */
   --gt3: rgb(166, 183, 217);             /* Blue Gray Medium Dark */
@@ -100,7 +101,7 @@
   --background-data: var(--co1);
   --background-accent: var(--ca1);
   --background-annotation: var(--gt1-40);
-  --background-timeline: var(--gt7);
+  --background-timeline: var(--white);
   --background-timeline-selector: var(--gn4-50);
   --background-scrollbar-thumb: var(--gt4);
   --background-scrollbar-thumb-hover: var(--gn5);
@@ -230,7 +231,7 @@
   --dots-active-highlight-stroke: var(--white);
   --dots-active-highlight-search: var();
   --dots-active-highlight-search-stroke: var(--white);
-  --dots-inactive: var(--gn4-15);
+  --dots-inactive: var(--gt1-dot);
   --dots-inactive-stroke: var(--white);
   --dots-content-inactive: var(--gn4-25);
   --dots-content-inactive-stroke: var(--white);

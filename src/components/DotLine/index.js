@@ -37,6 +37,8 @@ export default class DotLine extends React.Component {
     const style = this.props.dotClickFn ? {} : { cursor: 'default' };
     const isContent = ['Category', 'Provider'].includes(this.props.context.parent);
 
+    console.log('dotPositions:', this.props.dotPositions)
+    
     switch (dot.dotType) {
       case 'inactive':
       case 'inactive-highlight':
@@ -156,6 +158,8 @@ export default class DotLine extends React.Component {
 
     return result;
   }
+
+  
 
   render() {
     return this.props.dotPositions.length > 0 ? this.props.dotPositions.reduce(this.renderDot, []) : null;
