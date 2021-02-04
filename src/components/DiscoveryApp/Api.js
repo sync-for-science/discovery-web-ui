@@ -1,7 +1,6 @@
 import FhirTransform from '../../FhirTransform';
 import {
-  classFromCat,
-  cleanDates, Const, normalizeDates, timelineIncrYears, tryWithDefault,
+  classFromCat, formatAge, cleanDates, Const, normalizeDates, timelineIncrYears, tryWithDefault,
 } from '../../util';
 import config from '../../config';
 import { log } from '../../utils/logger';
@@ -232,10 +231,15 @@ export const normalizeResourcesAndInjectPartipantId = (participantId) => (data) 
       }
     }
   }
-  // 2nd pass -- TODO: consolidate into same loop, ^above:
+  // TODO: extract patient from raw response, 1st, then pass to this function:
+  const patient = result.find(({ category }) => category === 'Patient');
+  // 2nd pass -- TODO: consolidate into same loop, ^above?
   return result.map((record) => {
     const displayCoding = getCoding(record);
+    // category === 'Patient' records will not have a patientAgeAtRecord:
+    const patientAgeAtRecord = formatAge(patient.data.birthDate, record.itemDate, '') || '';
     record.displayCoding = displayCoding;
+    record.patientAgeAtRecord = patientAgeAtRecord;
     return record;
   });
 };
