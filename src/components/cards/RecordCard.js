@@ -20,7 +20,6 @@ import SocialHistoryCardBody from './SocialHistoryCardBody';
 import UnimplementedCardBody from './UnimplementedCardBody';
 import VitalSignCardBody from './VitalSignCardBody';
 import NotesEditor from '../notes/NotesEditor';
-import { formatAge } from '../../util';
 
 const selectCardBody = (fieldsData) => {
   switch (fieldsData.category) {
@@ -70,7 +69,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const RecordCard = ({
-  recordId, records, patient,
+  recordId, records,
 }) => {
   const classes = useStyles();
 
