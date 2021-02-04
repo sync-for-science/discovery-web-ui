@@ -44,7 +44,11 @@ const SelectedCardCollection = () => {
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
               >
-                <Typography>{displayCoding}</Typography>
+                <Typography>
+                  {catLabel}
+                  {' - '}
+                  {displayCoding}
+                </Typography>
               </AccordionSummary>
               <AccordionDetails>
                 {
