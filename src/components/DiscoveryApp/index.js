@@ -56,8 +56,8 @@ class DiscoveryApp extends React.PureComponent {
 
     // Shared Global Context
     updateGlobalContext: (updates) => {
-      console.info('updateGlobalContext: ', JSON.stringify(updates, null, '  '));
-      console.info('this.context: ', JSON.stringify(this.context, null, '  '));
+      // console.info('updateGlobalContext: ', JSON.stringify(updates, null, '  '));
+      // console.info('this.context: ', JSON.stringify(this.context, null, '  '));
       this.setState(updates);
     },
 
@@ -77,7 +77,7 @@ class DiscoveryApp extends React.PureComponent {
   }
 
   onDotClick = (dotClickDate) => {
-    console.error('============ DiscoveryApp onDotClick, dotClickDate: ', dotClickDate);
+    // console.error('============ DiscoveryApp onDotClick, dotClickDate: ', dotClickDate);
     this.setState({ dotClickDate });
   }
 

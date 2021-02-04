@@ -66,10 +66,9 @@ export const groupedRecordIdsState = selector({
         console.info(`IGNORE PATIENT ${uuid}`); // eslint-disable-line no-console
         // return acc;
       }
-      const { category, data: { resourceType, contained: { resourceType: containedResourceType } = {} } } = record;
-      const cat = category; // `${resourceType}:${category}`;
-      acc[cat] = acc[cat] ?? [];
-      acc[cat].push(uuid);
+      const { category } = record;
+      acc[category] = acc[category] ?? [];
+      acc[category].push(uuid);
       return acc;
     }, {});
   },

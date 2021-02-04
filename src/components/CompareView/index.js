@@ -341,9 +341,9 @@ export default class CompareView extends React.PureComponent {
     const newSelectedUniqueItems = { ...this.state.selectedUniqueItems }; // copy selected unique items obj
     const uniqueItemId = this.parseUniqueItemId(e.target.id);
 
-    console.error('CompareView: e.target.id: ', e.target.id);
-    console.error('CompareView: uniqueItemId: ', uniqueItemId);
-    console.info('CompareView uniqueStruct: ', JSON.stringify(this.state.uniqueStruct, null, '  '));
+    // console.error('CompareView: e.target.id: ', e.target.id);
+    // console.error('CompareView: uniqueItemId: ', uniqueItemId);
+    // console.info('CompareView uniqueStruct: ', JSON.stringify(this.state.uniqueStruct, null, '  '));
 
     let matchingUniqueItemResources = null;
     let clearedPrevSelected = false;
