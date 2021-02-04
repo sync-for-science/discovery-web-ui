@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { extractPeriodUnit } from "../DiscoveryApp/Api";
+import { extractPeriodUnit } from '../DiscoveryApp/Api';
 import CardBodyField from './CardBodyField';
 import { formatDate } from './GenericCardBody';
 
