@@ -15,6 +15,9 @@ const useStyles = makeStyles(() => ({
   label: {
     fontSize: ".8em",
   },
+  checkbox: {
+    padding: 1,
+  },
 }));
 
 const Provider = ({ providerName }) => {
@@ -37,7 +40,12 @@ const Provider = ({ providerName }) => {
     <FormControlLabel
       classes={classes}
       control={
-        <Checkbox checked={isEnabled} onChange={handleChange} color="primary" />
+        <Checkbox
+          className={classes.checkbox}
+          checked={isEnabled}
+          onChange={handleChange}
+          color="primary"
+        />
       }
       label={titleCase(providerName)}
     />
