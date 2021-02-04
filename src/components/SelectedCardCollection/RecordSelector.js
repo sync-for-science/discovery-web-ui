@@ -1,5 +1,7 @@
 import React from 'react';
 import { array, string } from 'prop-types';
+import { useRecoilState } from 'recoil';
+import { activeCollectionState } from '../../recoil';
 
 const showCount = (count) => {
   if (count > 1) {
@@ -8,14 +10,28 @@ const showCount = (count) => {
   return null;
 };
 
-const RecordSelector = ({ label, uuids }) => (
-  <button
-    className="tile-standard"
-  >
-    {label}
-    {showCount(uuids.length)}
-  </button>
-);
+const RecordSelector = ({ label, uuids }) => {
+  const [activeCollection, setActiveCollection] = useRecoilState(activeCollectionState);
+  // console.info('activeCollection: ', JSON.stringify(activeCollection, null, '  '));
+  const { uuids: activeUuids } = activeCollection;
+  const hasActiveUuid = uuids.reduce((acc, uuid) => activeUuids[uuid] || acc, false);
+  console.info('hasActiveUuid: ', hasActiveUuid);
+  const cssClass = hasActiveUuid ? 'tile-standard-selected' : 'tile-standard';
+  // tile-standard-selected tile-standard-last
+  const handleClick = () => {
+    const resetUuids = uuids.reduce((acc, uuid) => ({ ...acc, [uuid]: !hasActiveUuid }), {});
+    setActiveCollection(resetUuids);
+  };
+  return (
+    <button
+      className={cssClass}
+      onClick={handleClick}
+    >
+      {label}
+      {showCount(uuids.length)}
+    </button>
+  );
+};
 
 RecordSelector.propTypes = {
   // displayCoding: shape({
@@ -26,4 +42,4 @@ RecordSelector.propTypes = {
   uuids: array.isRequired,
 };
 
-export default RecordSelector;
+export default React.memo(RecordSelector);
