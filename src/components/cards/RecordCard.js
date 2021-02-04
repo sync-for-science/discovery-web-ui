@@ -29,30 +29,30 @@ const selectCardBody = (fieldsData, patientAgeAtRecord) => {
     case 'Meds Administration':
     case 'Procedures':
     case 'Procedure Requests':
-      return <GenericCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
+      return <GenericCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord} />;
     case 'Meds Dispensed':
     case 'Meds Requested':
-      return <MedicationCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
+      return <MedicationCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord} />;
     case 'Benefits':
-      return <BenefitCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
+      return <BenefitCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord} />;
     case 'Claims':
-      return <ClaimCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
+      return <ClaimCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord} />;
     case 'Encounters':
-      return <EncounterCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
+      return <EncounterCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord} />;
     case 'Immunizations':
-      return <ImmunizationCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
+      return <ImmunizationCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord} />;
     case 'Lab Results':
-      return <LabResultCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
+      return <LabResultCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord} />;
     case 'Exams':
-      return <ExamCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
+      return <ExamCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord} />;
     case 'Meds Statement':
-      return <MedicationStatementCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
+      return <MedicationStatementCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord} />;
     case 'Social History':
-      return <SocialHistoryCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
+      return <SocialHistoryCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord} />;
     case 'Other':
-      return <UnimplementedCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
+      return <UnimplementedCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord} />;
     case 'Vital Signs':
-      return <VitalSignCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord}/>;
+      return <VitalSignCardBody fieldsData={fieldsData} patientAgeAtRecord={patientAgeAtRecord} />;
     default:
       break;
   }
@@ -65,8 +65,8 @@ const useStyles = makeStyles(() => ({
   title: {
     padding: '16px 16px 0 16px',
     display: 'flex',
-    justifyContent: 'space-between'
-  }
+    justifyContent: 'space-between',
+  },
 }));
 
 const RecordCard = ({
@@ -141,17 +141,6 @@ const RecordCard = ({
       variant="outlined"
       id={`${format(new Date(fieldsData.date), 'y-MM-dd')}-${fieldsData.display}`}
     >
-      {/* <CardHeader
-        // action={(
-        //   <IconButton aria-label="remove">
-        //     <CloseIcon />
-        //   </IconButton>
-        // )}
-        title={category}
-        subheader={`${displayDate} | ${patientAgeAtRecord}`}
-        titleTypographyProps={{ variant: 's4sHeader' }}
-        subheaderTypographyProps={{ variant: 's4sSubheader' }}
-      /> */}
       <div className={classes.title}>
         <Typography variant="s4sHeader">
           {category}

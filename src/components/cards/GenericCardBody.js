@@ -2,7 +2,7 @@ import React from 'react';
 import { format } from 'date-fns';
 
 import CardBodyField from './CardBodyField';
-import CARD_BODY_LABEL from './cardBodyLabel'
+import CARD_BODY_LABEL from './cardBodyLabel';
 
 export function formatDate(date, displayMinutes = true) {
   const dateDisplay = displayMinutes ? 'MMM d, y h:mm:ssaaa' : 'MMM d, y';
