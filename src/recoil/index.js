@@ -133,6 +133,12 @@ export const collectionsState = atom({
   },
 });
 
+export const lastRecordsClickedState = atom({
+  key: 'lastRecordsClicked',
+  default: {
+  },
+});
+
 export const activeCollectionState = selector({
   key: 'activeCollectionState',
   get: ({ get }) => {
@@ -159,6 +165,26 @@ export const activeCollectionState = selector({
         },
       },
     });
+    set(lastRecordsClickedState, pruneEmpty(newValues));
+  },
+});
+
+export const groupedRecordIdsInCurrentCollectionState = selector({
+  key: 'groupedRecordIdsInCurrentCollectionState',
+  get: ({ get }) => {
+    const groupedRecordIdsBySubtype = get(groupedRecordIdsBySubtypeState);
+    const activeCollection = get(activeCollectionState);
+    const { uuids: uuidsInCollection } = activeCollection;
+    return Object.entries(groupedRecordIdsBySubtype).reduce((accCats, [catLabel, subtypes]) => {
+      accCats[catLabel] = Object.entries(subtypes).reduce((accSubtypes, [subtypeLabel, uuids]) => {
+        const activeUuids = uuids.filter((uuid) => uuidsInCollection[uuid]);
+        if (activeUuids.length > 0) {
+          accSubtypes[subtypeLabel] = activeUuids;
+        }
+        return accSubtypes;
+      }, {});
+      return accCats;
+    }, {});
   },
 });
 

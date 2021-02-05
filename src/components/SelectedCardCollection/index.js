@@ -9,7 +9,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  activeCategoriesState, resourcesState, groupedRecordIdsState, allRecordIds,
+  activeCategoriesState, resourcesState, allRecordIds, groupedRecordIdsInCurrentCollectionState,
 } from '../../recoil';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
 import RecordCard from '../cards/RecordCard';
@@ -36,7 +36,7 @@ const CardListHeader = ({ collectionCount, totalCount }) => {
 
 const SelectedCardCollection = () => {
   const recordIds = useRecoilValue(allRecordIds);
-  const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsBySubtypeState);
+  const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsInCurrentCollectionState);
   const resources = useRecoilValue(resourcesState);
   const activeCategories = useRecoilValue(activeCategoriesState);
 
