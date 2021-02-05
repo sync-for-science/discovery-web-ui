@@ -140,6 +140,7 @@ export function formatKey(res) {
 }
 
 export function formatAge(birthDate, ageDate, prefix) {
+  // TODO: replace implementation with simpler one that uses date-fns for Date math?
   const DAY_MS = 24 * 60 * 60 * 1000;
   const MAX_ONLY_DAYS = 21; // Max age to show just as "days"
   const MAX_ONLY_WEEKS = 10; // Max age to show just as "weeks"
@@ -167,7 +168,7 @@ export function formatAge(birthDate, ageDate, prefix) {
   } if (years === 0 && weeks <= MAX_ONLY_WEEKS) {
     return `${prefix + weeks} weeks`;
   }
-  return prefix + (years > 0 ? `${years}yr` : '') + (years > 0 && months > 0 ? ' ' : '') + (months > 0 ? `${months}mo` : '');
+  return prefix + (years > 0 ? `${years} years` : '') + (years > 0 && months > 0 ? ', ' : '') + (months > 0 ? `${months} months` : '');
 }
 
 // TODO: cleanup when determine not to show disabled header, eliminate header highlight

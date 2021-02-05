@@ -2,6 +2,7 @@ import React from 'react';
 import { format } from 'date-fns';
 
 import CardBodyField from './CardBodyField';
+import CARD_BODY_LABEL from './cardBodyLabel';
 
 export function formatDate(date, displayMinutes = true) {
   const dateDisplay = displayMinutes ? 'MMM d, y h:mm:ssaaa' : 'MMM d, y';
@@ -11,54 +12,59 @@ export function formatDate(date, displayMinutes = true) {
 const GenericCardBody = ({ fieldsData }) => (
   <>
     <CardBodyField
+      dependency={fieldsData.patientAgeAtRecord}
+      label={CARD_BODY_LABEL.age}
+      value={fieldsData.patientAgeAtRecord}
+    />
+    <CardBodyField
       dependency={fieldsData.display}
-      label="CONDITIONS"
+      label={CARD_BODY_LABEL.conditions}
       value={fieldsData.display}
-      highlight
+      bold
     />
     <CardBodyField
       dependency={fieldsData.reason}
-      label="REASON"
+      label={CARD_BODY_LABEL.reason}
       value={fieldsData.reason}
     />
     <CardBodyField
       dependency={fieldsData.onset}
-      label="ONSET"
+      label={CARD_BODY_LABEL.onset}
       value={formatDate(fieldsData.onset)}
     />
     <CardBodyField
       dependency={fieldsData.abatement}
-      label="ABATEMENT"
+      label={CARD_BODY_LABEL.abatement}
       value={formatDate(fieldsData.abatement)}
     />
     <CardBodyField
       dependency={fieldsData.orderedBy}
-      label="ORDERED BY"
+      label={CARD_BODY_LABEL.orderedBy}
       value={fieldsData.orderedBy}
     />
     <CardBodyField
       dependency={fieldsData.asserted}
-      label="ASSERTED"
+      label={CARD_BODY_LABEL.asserted}
       value={formatDate(fieldsData.asserted)}
     />
     <CardBodyField
       dependency={fieldsData.provider}
-      label="PROVIDER"
+      label={CARD_BODY_LABEL.provider}
       value={fieldsData.provider}
     />
     <CardBodyField
       dependency={fieldsData.status}
-      label="STATUS"
+      label={CARD_BODY_LABEL.status}
       value={fieldsData.status}
     />
     <CardBodyField
       dependency={fieldsData.clinicalStatus}
-      label="CLINICAL STATUS"
+      label={CARD_BODY_LABEL.clinicalStatus}
       value={fieldsData.clinicalStatus}
     />
     <CardBodyField
       dependency={fieldsData.verificationStatus}
-      label="VERIFICATION"
+      label={CARD_BODY_LABEL.verification}
       value={fieldsData.verificationStatus}
     />
   </>

@@ -12,6 +12,16 @@ const useStyles = makeStyles(() => ({
   root: {
     marginBottom: 30,
   },
+  noteContainer: {
+    '& *:first-of-type': {
+      marginTop: '0',
+      paddingTop: '0',
+    },
+    '& *:last-of-type': {
+      marginBottom: '0',
+      paddingBottom: '0',
+    },
+  },
   editTextField: {
     marginBottom: 10,
   },
@@ -44,12 +54,17 @@ const CompletedNote = ({
           </Grid>
         </Grid>
       </Grid>
-      <Typography variant="s4sNoteText">
-        {/* react-markdown defaults to wrapping a <p> around the text. this causes style problems */}
-        <ReactMarkdown renderers={{ paragraph: 'span' }}>
-          {noteText}
-        </ReactMarkdown>
-      </Typography>
+      <Grid item container alignItems="center">
+        <Typography
+          component="div"
+          className={classes.noteContainer}
+          variant="s4sNoteText"
+        >
+          <ReactMarkdown>
+            {noteText}
+          </ReactMarkdown>
+        </Typography>
+      </Grid>
     </Grid>
   );
 };
