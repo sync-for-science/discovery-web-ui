@@ -38,7 +38,7 @@ const SelectedCardCollection = () => {
   const recordIds = useRecoilValue(allRecordIds);
   const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsInCurrentCollectionState);
   const resources = useRecoilValue(resourcesState);
-  const activeCategories = useRecoilValue(activeCategoriesState);
+  // const activeCategories = useRecoilValue(activeCategoriesState);
   // const totalFilteredRecordCount = useRecoilValue(totalFilteredRecordCountState);
 
   const {
@@ -66,9 +66,7 @@ const SelectedCardCollection = () => {
                 expandIcon={<ExpandMoreIcon />}
               >
                 <Typography>
-                  {catLabel}
-                  {' - '}
-                  {displayCoding}
+                  {catLabel} - {displayCoding} {/* eslint-disable-line react/jsx-one-expression-per-line */}
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>
