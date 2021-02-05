@@ -1,11 +1,17 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import CardBodyField from './CardBodyField';
 import { formatDate } from './GenericCardBody';
 
 const MedicationCardBody = ({ fieldsData }) => {
+  const { t } = useTranslation();
+
   function formatDosageInstruction() {
     if (fieldsData.dosageInstruction?.timing?.repeat) {
+      const instruction = fieldsData.dosageInstruction;
+      const text = t('fhir:dosageInstruction', { instruction });
+
       const asNeededText = fieldsData.dosageInstruction.asNeededBoolean
         ? 'as needed'
         : 'as instructed'; // what the opposite of As Needed?
