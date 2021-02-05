@@ -56,9 +56,10 @@ const SelectedCardCollection = () => {
       <div className="card-list">
         {categories.map((catLabel) => Object.entries(groupedRecordIdsBySubtype[catLabel])
           .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
-          .map(([displayCoding, { uuids }]) => (
+          .map(([displayCoding, { hasLastAdded, uuids }]) => (
             <Accordion
               key={displayCoding}
+              defaultExpanded={hasLastAdded}
               disableGutters
             >
               <AccordionSummary
@@ -75,6 +76,7 @@ const SelectedCardCollection = () => {
                   uuids.map((uuid) => (
                     <RecordCard
                       key={`record-card-${uuid}`}
+                      recentlyAdded={hasLastAdded}
                       recordId={uuid}
                       records={records}
                     />

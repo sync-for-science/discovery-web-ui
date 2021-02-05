@@ -183,6 +183,7 @@ export const groupedRecordIdsInCurrentCollectionState = selector({
     const groupedRecordIdsBySubtype = get(groupedRecordIdsBySubtypeState);
     const activeCollection = get(activeCollectionState);
     const activeCategories = get(activeCategoriesState);
+    const lastUuidsClicked = get(lastRecordsClickedState);
     let totalFilteredRecordCount = 0;
     const { uuids: uuidsInCollection } = activeCollection;
     const filteredResults = Object.entries(groupedRecordIdsBySubtype)
@@ -191,7 +192,9 @@ export const groupedRecordIdsInCurrentCollectionState = selector({
         accCats[catLabel] = Object.entries(subtypes).reduce((accSubtypes, [subtypeLabel, uuids]) => {
           const activeUuids = uuids.filter((uuid) => uuidsInCollection[uuid]);
           if (activeUuids.length > 0) {
+            const hasLastAdded = activeUuids.reduce((acc, uuid) => lastUuidsClicked[uuid] || acc, false);
             accSubtypes[subtypeLabel] = {
+              hasLastAdded,
               uuids: activeUuids,
             };
             totalFilteredRecordCount += activeUuids.length;
