@@ -1,16 +1,38 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import AppBar from '@material-ui/core/AppBar';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import { makeStyles } from '@material-ui/core/styles';
 import {
   activeCategoriesState, resourcesState, groupedRecordIdsState, allRecordIds,
 } from '../../recoil';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
 import RecordCard from '../cards/RecordCard';
+
+const useStyles = makeStyles(() => ({
+  appBar: {
+    minWidth: 'initial',
+  },
+}));
+
+const CardListHeader = ({ collectionCount, totalCount }) => {
+  const classes = useStyles();
+  return (
+    <AppBar
+      position="relative"
+      className={classes.appBar}
+    >
+      <Typography variant="card-list-header">
+        Displaying {collectionCount} of {totalCount} records {/* eslint-disable-line react/jsx-one-expression-per-line */}
+      </Typography>
+    </AppBar>
+  );
+};
 
 const SelectedCardCollection = () => {
   const recordIds = useRecoilValue(allRecordIds);
@@ -26,14 +48,10 @@ const SelectedCardCollection = () => {
 
   return (
     <PersistentDrawerRight>
-      {/* <h4>Displaying {recordCount} of {recordIds.length} records</h4> */}
-      <h4>
-        Displaying X of
-        {' '}
-        {recordIds.length}
-        {' '}
-        records
-      </h4>
+      <CardListHeader
+        collectionCount={recordIds.length}
+        totalCount={recordIds.length}
+      />
       <div className="card-list">
         {categories.filter((catLabel) => activeCategories[catLabel]).map((catLabel) => Object.entries(groupedRecordIdsBySubtype[catLabel])
           .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))

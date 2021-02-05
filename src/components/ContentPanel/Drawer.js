@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'none',
   },
   contentBody: {
-    padding: '8px',
   },
   rootOpen: {
     transition: theme.transitions.create(['width', 'minWidth'], {
