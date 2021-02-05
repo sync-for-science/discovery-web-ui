@@ -191,7 +191,9 @@ export const groupedRecordIdsInCurrentCollectionState = selector({
         accCats[catLabel] = Object.entries(subtypes).reduce((accSubtypes, [subtypeLabel, uuids]) => {
           const activeUuids = uuids.filter((uuid) => uuidsInCollection[uuid]);
           if (activeUuids.length > 0) {
-            accSubtypes[subtypeLabel] = activeUuids;
+            accSubtypes[subtypeLabel] = {
+              uuids: activeUuids,
+            };
             totalFilteredRecordCount += activeUuids.length;
           }
           return accSubtypes;
