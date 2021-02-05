@@ -54,7 +54,7 @@ const SelectedCardCollection = () => {
         totalCount={recordIds.length}
       />
       <div className="card-list">
-        {categories.filter((catLabel) => activeCategories[catLabel]).map((catLabel) => Object.entries(groupedRecordIdsBySubtype[catLabel])
+        {categories.map((catLabel) => Object.entries(groupedRecordIdsBySubtype[catLabel])
           .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
           .map(([displayCoding, uuids]) => (
             <Accordion
