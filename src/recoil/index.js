@@ -2,6 +2,7 @@ import {
   atom, selector,
 } from 'recoil';
 import jsonQuery from 'json-query';
+import { activeCategoriesState } from './category-provider-filters';
 
 export * from './category-provider-filters';
 
@@ -181,19 +182,22 @@ export const groupedRecordIdsInCurrentCollectionState = selector({
   get: ({ get }) => {
     const groupedRecordIdsBySubtype = get(groupedRecordIdsBySubtypeState);
     const activeCollection = get(activeCollectionState);
+    const activeCategories = get(activeCategoriesState);
     let totalFilteredRecordCount = 0;
     const { uuids: uuidsInCollection } = activeCollection;
-    const filteredResults = Object.entries(groupedRecordIdsBySubtype).reduce((accCats, [catLabel, subtypes]) => {
-      accCats[catLabel] = Object.entries(subtypes).reduce((accSubtypes, [subtypeLabel, uuids]) => {
-        const activeUuids = uuids.filter((uuid) => uuidsInCollection[uuid]);
-        if (activeUuids.length > 0) {
-          accSubtypes[subtypeLabel] = activeUuids;
-          totalFilteredRecordCount += activeUuids.length;
-        }
-        return accSubtypes;
+    const filteredResults = Object.entries(groupedRecordIdsBySubtype)
+      .filter(([catLabel]) => (activeCategories[catLabel]))
+      .reduce((accCats, [catLabel, subtypes]) => {
+        accCats[catLabel] = Object.entries(subtypes).reduce((accSubtypes, [subtypeLabel, uuids]) => {
+          const activeUuids = uuids.filter((uuid) => uuidsInCollection[uuid]);
+          if (activeUuids.length > 0) {
+            accSubtypes[subtypeLabel] = activeUuids;
+            totalFilteredRecordCount += activeUuids.length;
+          }
+          return accSubtypes;
+        }, {});
+        return accCats;
       }, {});
-      return accCats;
-    }, {});
     filteredResults.totalFilteredRecordCount = totalFilteredRecordCount;
     return filteredResults;
   },
