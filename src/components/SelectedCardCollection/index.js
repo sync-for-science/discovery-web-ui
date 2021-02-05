@@ -39,6 +39,7 @@ const SelectedCardCollection = () => {
   const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsInCurrentCollectionState);
   const resources = useRecoilValue(resourcesState);
   const activeCategories = useRecoilValue(activeCategoriesState);
+  // const totalFilteredRecordCount = useRecoilValue(totalFilteredRecordCountState);
 
   const {
     records, categories, // loading, providers,
@@ -49,7 +50,7 @@ const SelectedCardCollection = () => {
   return (
     <PersistentDrawerRight>
       <CardListHeader
-        collectionCount={recordIds.length}
+        collectionCount={groupedRecordIdsBySubtype.totalFilteredRecordCount}
         totalCount={recordIds.length}
       />
       <div className="card-list">

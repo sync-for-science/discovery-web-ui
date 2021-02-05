@@ -169,22 +169,33 @@ export const activeCollectionState = selector({
   },
 });
 
+// TODO: possibly, use a selector to compute from groupedRecordIdsInCurrentCollectionState:
+// export const totalFilteredRecordCountState = atom({
+//   key: 'totalFilteredRecordCountState',
+//   default: 0,
+// });
+
+// shape has diverged from groupedRecordIdsBySubtypeState:
 export const groupedRecordIdsInCurrentCollectionState = selector({
   key: 'groupedRecordIdsInCurrentCollectionState',
   get: ({ get }) => {
     const groupedRecordIdsBySubtype = get(groupedRecordIdsBySubtypeState);
     const activeCollection = get(activeCollectionState);
+    let totalFilteredRecordCount = 0;
     const { uuids: uuidsInCollection } = activeCollection;
-    return Object.entries(groupedRecordIdsBySubtype).reduce((accCats, [catLabel, subtypes]) => {
+    const filteredResults = Object.entries(groupedRecordIdsBySubtype).reduce((accCats, [catLabel, subtypes]) => {
       accCats[catLabel] = Object.entries(subtypes).reduce((accSubtypes, [subtypeLabel, uuids]) => {
         const activeUuids = uuids.filter((uuid) => uuidsInCollection[uuid]);
         if (activeUuids.length > 0) {
           accSubtypes[subtypeLabel] = activeUuids;
+          totalFilteredRecordCount += activeUuids.length;
         }
         return accSubtypes;
       }, {});
       return accCats;
     }, {});
+    filteredResults.totalFilteredRecordCount = totalFilteredRecordCount;
+    return filteredResults;
   },
 });
 
