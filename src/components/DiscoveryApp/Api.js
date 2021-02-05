@@ -237,6 +237,7 @@ export const normalizeResourcesAndInjectPartipantId = (participantId) => (data) 
   return result.map((record) => {
     const displayCoding = getCoding(record);
     // category === 'Patient' records will not have a patientAgeAtRecord:
+    // TODO: perhaps patientAgeAtRecord should be a duration, that is converted to presentation format in components via date-fns/i18n:
     const patientAgeAtRecord = formatAge(patient.data.birthDate, record.itemDate, '') || '';
     record.displayCoding = displayCoding;
     record.patientAgeAtRecord = patientAgeAtRecord;
