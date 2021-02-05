@@ -58,6 +58,7 @@ const SelectedCardCollection = () => {
           .map(([displayCoding, uuids]) => (
             <Accordion
               key={displayCoding}
+              disableGutters
             >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
