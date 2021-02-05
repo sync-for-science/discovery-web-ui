@@ -32,7 +32,7 @@ i18n.use(initReactI18next).init({
     }, null, '  '));
   },
   react: {
-    useSuspense: false,
+    useSuspense: true, // considered experimental by react but strongly recommended by i18next
     transSupportBasicHtmlNodes: true,
     transKeepBasicHtmlNodesFor: ['br', 'b', 'i', 'strong'], // limited support for attributes -- use ReactMarkdown for <a href="...">
   },
