@@ -1,18 +1,14 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import AppBar from '@material-ui/core/AppBar';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  activeCategoriesState, resourcesState, allRecordIds, groupedRecordIdsInCurrentCollectionState,
+  resourcesState, allRecordIds, groupedRecordIdsInCurrentCollectionState,
 } from '../../recoil';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
-import RecordCard from '../cards/RecordCard';
+import CardsForCategory from './CardsForCategory';
 
 const useStyles = makeStyles(() => ({
   appBar: {
@@ -36,16 +32,10 @@ const CardListHeader = ({ collectionCount, totalCount }) => {
 
 const SelectedCardCollection = () => {
   const recordIds = useRecoilValue(allRecordIds);
-  const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsInCurrentCollectionState);
   const resources = useRecoilValue(resourcesState);
-  // const activeCategories = useRecoilValue(activeCategoriesState);
-  // const totalFilteredRecordCount = useRecoilValue(totalFilteredRecordCountState);
+  const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsInCurrentCollectionState);
 
-  const {
-    records, categories, // loading, providers,
-  } = resources;
-
-  // const recordCount = Object.values(groupedRecordIds).reduce((acc, arr) => (acc + arr.length), 0);
+  const { categories } = resources;
 
   return (
     <PersistentDrawerRight>
@@ -54,35 +44,12 @@ const SelectedCardCollection = () => {
         totalCount={recordIds.length}
       />
       <div className="card-list">
-        {categories.map((catLabel) => Object.entries(groupedRecordIdsBySubtype[catLabel])
-          .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
-          .map(([displayCoding, { hasLastAdded, uuids }]) => (
-            <Accordion
-              key={displayCoding}
-              defaultExpanded={hasLastAdded}
-              disableGutters
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-              >
-                <Typography>
-                  {catLabel} - {displayCoding} {/* eslint-disable-line react/jsx-one-expression-per-line */}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                {
-                  uuids.map((uuid) => (
-                    <RecordCard
-                      key={`record-card-${uuid}`}
-                      recentlyAdded={hasLastAdded}
-                      recordId={uuid}
-                      records={records}
-                    />
-                  ))
-                }
-              </AccordionDetails>
-            </Accordion>
-          )))}
+        {categories.map((category) => (
+          <CardsForCategory
+            key={category}
+            category={category}
+          />
+        ))}
       </div>
     </PersistentDrawerRight>
   );
