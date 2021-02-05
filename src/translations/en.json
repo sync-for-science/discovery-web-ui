@@ -5,5 +5,5 @@
   },
   "card-details": {
     "heading": "Displaying {{subCount}} of {{count}} $t(plurals.records, {{count}})"
-  },
+  }
 }
