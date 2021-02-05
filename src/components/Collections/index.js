@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import { useRecoilValue } from 'recoil';
 
 import {
-  groupedRecordIdsState, resourcesState, patientRecord,
+  resourcesState,
 } from '../../recoil';
 
 import CollectionsList from './CollectionsList';
@@ -11,9 +11,7 @@ import CollectionDisplay from './CollectionDisplay';
 
 /* eslint-disable react/jsx-one-expression-per-line */
 const Collections = () => {
-  const groupedRecordIds = useRecoilValue(groupedRecordIdsState);
   const resources = useRecoilValue(resourcesState);
-  const patient = useRecoilValue(patientRecord);
 
   const dummyCollections = [
     {
@@ -54,7 +52,6 @@ const Collections = () => {
           <CollectionDisplay
             selected={selected}
             records={records}
-            groupedRecordIds={groupedRecordIds}
           />
         </Grid>
       </Grid>

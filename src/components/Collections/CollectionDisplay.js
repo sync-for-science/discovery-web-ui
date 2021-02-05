@@ -3,9 +3,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilValue } from 'recoil';
 
-import { activeCategoriesState } from '../../recoil/index';
-import RecordCard from '../cards/RecordCard';
+import { activeCategoriesState, resourcesState } from '../../recoil/index';
 import CollectionsNoteEditor from '../notes/CollectionsNoteEditor';
+import CardsForCategory from '../SelectedCardCollection/CardsForCategory';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,26 +38,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CollectionDisplay = ({
-  selected, records, groupedRecordIds, patient,
+  selected,
 }) => {
   const activeCategories = useRecoilValue(activeCategoriesState);
   const classes = useStyles();
   const collectionName = selected ? selected.title : 'Untitled Collection';
+  const resources = useRecoilValue(resourcesState);
+  const { categories } = resources;
 
-  const displayRecordCards = (groupedRecordIds, records, activeCategories) => Object.entries(groupedRecordIds).map(([category, recordIds]) => {
-    if (category === 'Patient') {
-      return null;
-    }
-    if (activeCategories[category]) {
+  const displayRecordCards = (activeCategories) => categories.map((categoryLabel) => {
+    if (activeCategories[categoryLabel]) {
       return (
-        <div key={`groupedRecordCard-${category}`} style={{ margin: '5px' }}>
+        <div key={`groupedRecordCard-${categoryLabel}`} style={{ margin: '5px' }}>
           <div style={{ width: '400px' }}>
-            <Typography variant="s4sHeader">{category}</Typography>
+            <Typography variant="s4sHeader">{categoryLabel}</Typography>
           </div>
           <div style={{ height: '95%', overflowY: 'scroll', paddingRight: '10px' }}>
-            {recordIds.map((recordId, i) => (
-              <RecordCard key={i} recordId={recordId} records={records} patient={patient} />
-            ))}
+            <CardsForCategory
+              categoryLabel={categoryLabel}
+            />
           </div>
         </div>
       );
@@ -72,7 +71,7 @@ const CollectionDisplay = ({
     } else {
       collectionData = (
         <div style={{ display: 'flex', overflowX: 'scroll', height: '100%' }}>
-          {displayRecordCards(groupedRecordIds, records, activeCategories)}
+          {displayRecordCards(activeCategories)}
         </div>
       );
     }
