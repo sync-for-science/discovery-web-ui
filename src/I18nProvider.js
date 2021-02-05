@@ -5,6 +5,8 @@ import i18n from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
 
 import enTranslations from './translations/en.json';
+// translations of FHIR structures from machine to human
+import fhirTranslations from './translations/fhir.json';
 
 /**
  * https://www.i18next.com/principles/namespaces
@@ -18,11 +20,14 @@ const defaultLocale = 'en-US';
 i18n.use(initReactI18next).init({
   lng: defaultLocale,
   fallbackLng: defaultLocale,
-  ns: [defaultNamespace],
+  ns: [defaultNamespace, 'fhir'],
   defaultNS: defaultNamespace,
   debug: false,
   resources: {
-    en: { [defaultNamespace]: enTranslations },
+    en: {
+      [defaultNamespace]: enTranslations,
+      fhir: fhirTranslations,
+    },
   },
   returnObjects: true, // support js Arrays and Objects in translation files
   saveMissing: true, // enables missingKeyHandler
