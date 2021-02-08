@@ -9,10 +9,13 @@ import {
 } from '../../recoil';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
 import CardsForCategory from './CardsForCategory';
+import CollectionSwitcher from '../Collections/CollectionSwitcher';
 
 const useStyles = makeStyles(() => ({
   appBar: {
     minWidth: 'initial',
+    height: '90px',
+    padding: '8px',
   },
 }));
 
@@ -23,7 +26,8 @@ const CardListHeader = ({ filteredCollectionCount, totalCount }) => {
       position="relative"
       className={classes.appBar}
     >
-      <Typography variant="card-list-header">
+      <CollectionSwitcher />
+      <Typography variant="card-list-collection-count">
         Displaying {filteredCollectionCount} of {totalCount} records {/* eslint-disable-line react/jsx-one-expression-per-line */}
       </Typography>
     </AppBar>

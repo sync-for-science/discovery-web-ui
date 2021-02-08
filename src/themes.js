@@ -47,10 +47,9 @@ export const rootTheme = createMuiTheme({
       fontSize: '1rem',
       color: 'white',
     },
-    'card-list-header': {
-      fontFamily: 'header',
+    'card-list-collection-count': {
       display: 'block',
-      margin: 12,
+      fontFamily: 'header',
     },
     'card-list-category-header': {
       fontFamily: 'header-bold',
