@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilValue } from 'recoil';
 
-import { activeCategoriesState, filteredActiveCollectionState, resourcesState } from '../../recoil/index';
+import { allCollectionsState, filteredActiveCollectionState, resourcesState } from '../../recoil/index';
 import CollectionsNoteEditor from '../notes/CollectionsNoteEditor';
 import CardsForCategory from '../SelectedCardCollection/CardsForCategory';
 
@@ -37,59 +37,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CollectionDisplay = ({
-  selected,
-}) => {
-  // const activeCategories = useRecoilValue(activeCategoriesState);
+const CollectionDisplay = () => {
   const classes = useStyles();
-  const collectionName = selected ? selected.title : 'Untitled Collection';
+  // const collectionName = selected ? selected.title : 'Untitled Collection';
   const resources = useRecoilValue(resourcesState);
   const { categories } = resources;
   const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
+  const allCollections = useRecoilValue(allCollectionsState);
 
-  const displayRecordCards = () => categories.map((categoryLabel) => {
-    if (filteredActiveCollection[categoryLabel].filteredCollectionCount) {
-      return (
-        <div key={`groupedRecordCard-${categoryLabel}`} style={{ margin: '5px' }}>
-          <div style={{ width: '400px' }}>
-            <Typography variant="s4sHeader">{categoryLabel}</Typography>
-          </div>
-          <div style={{ height: '95%', overflowY: 'scroll', paddingRight: '10px' }}>
-            <CardsForCategory
-              categoryLabel={categoryLabel}
-            />
-          </div>
-        </div>
-      );
-    }
-    return null;
-  });
-
-  let collectionData;
-  if (selected) {
-    if (selected.id !== 2) {
-      collectionData = <Typography variant="s4sHeader">No RecordCards in this collection</Typography>;
-    } else {
-      collectionData = (
-        <div style={{ display: 'flex', overflowX: 'scroll', height: '100%' }}>
-          {displayRecordCards()}
-        </div>
-      );
-    }
-  }
+  const { activeCollectionId, collections } = allCollections;
+  const activeCollectionLabel = collections[activeCollectionId].label;
 
   return (
     <div className={classes.root}>
       <div className={classes.header}>
-        <Typography variant="s4sHeader">{collectionName}</Typography>
+        <Typography variant="s4sHeader">{activeCollectionLabel}</Typography>
       </div>
       <div className={classes.bodyContainer}>
         <div className={classes.recordCardsContainer}>
-          {collectionData}
+          <div style={{ display: 'flex', overflowX: 'scroll', height: '100%' }}>
+            {categories.map((categoryLabel) => {
+              if (filteredActiveCollection[categoryLabel] && filteredActiveCollection[categoryLabel].filteredCollectionCount) {
+                return (
+                  <div key={`groupedRecordCard-${categoryLabel}`} style={{ margin: '5px' }}>
+                    <div style={{ width: '400px' }}>
+                      <Typography variant="s4sHeader">{categoryLabel}</Typography>
+                    </div>
+                    <div style={{ height: '95%', overflowY: 'scroll', paddingRight: '10px' }}>
+                      <CardsForCategory
+                        categoryLabel={categoryLabel}
+                      />
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })}
+          </div>
         </div>
         <div className={classes.collectionNotes}>
           <CollectionsNoteEditor
-            collectionName={collectionName}
+            activeCollectionId={activeCollectionId}
           />
         </div>
       </div>
@@ -97,4 +85,4 @@ const CollectionDisplay = ({
   );
 };
 
-export default CollectionDisplay;
+export default React.memo(CollectionDisplay);

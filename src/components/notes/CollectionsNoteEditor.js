@@ -11,9 +11,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const NotesEditor = ({ collectionTitle }) => {
+const NotesEditor = ({ activeCollectionId }) => {
   const classes = useStyles();
-  const [notesForThisCollection, createOrEditCollectionNote] = useRecoilState(collectionNotes(collectionTitle));
+  const [notesForThisCollection, createOrEditCollectionNote] = useRecoilState(collectionNotes(activeCollectionId));
 
   return (
     <>
@@ -37,7 +37,7 @@ const NotesEditor = ({ collectionTitle }) => {
 };
 
 NotesEditor.prototype = {
-  collectionTitle: string,
+  activeCollectionId: string,
 };
 
 export default React.memo(NotesEditor);

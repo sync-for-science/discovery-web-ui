@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-// import AddIcon from '@material-ui/icons/Add';
+import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { allCollectionsState } from '../../recoil';
 
 const useStyles = makeStyles((theme) => ({
@@ -24,19 +24,14 @@ const useStyles = makeStyles((theme) => ({
   body: {
     padding: '20px',
   },
-  collectionTitle: {
+  collectionSelector: {
     margin: '10px 0',
+    padding: '8px',
     display: 'flex',
     cursor: 'pointer',
   },
   selected: {
     backgroundColor: 'lightblue',
-  },
-  icon: {
-    marginRight: '10px',
-    fontSize: '16px',
-    display: 'flex',
-    alignItems: 'center',
   },
   newCollectionField: {
     margin: '16px 0 8px 0',
@@ -47,19 +42,17 @@ const CollectionTitle = ({
   label, activeCollectionId, collectionId, handleSelect,
 }) => {
   const classes = useStyles();
-  const selectedStyle = activeCollectionId === collectionId ? classes.selected : '';
+  const isActiveCollection = (activeCollectionId === collectionId);
+  const selectedStyle = isActiveCollection ? classes.selected : '';
+  // TODO: replace following with MUI select list or combo box?
   return (
-    <div
-      className={classes.collectionTitle}
+    <MenuItem
+      className={`${classes.collectionSelector} ${selectedStyle}`}
+      disabled={isActiveCollection}
       onClick={handleSelect}
     >
-      {/* <div className={classes.icon}>
-        <AddIcon fontSize="inherit" />
-      </div> */}
-      <div className={selectedStyle}>
-        <Typography variant="s4sHeader">{label}</Typography>
-      </div>
-    </div>
+      <Typography variant="s4sHeader">{label}</Typography>
+    </MenuItem>
   );
 };
 
@@ -67,10 +60,8 @@ const CollectionsList = () => {
   const classes = useStyles();
   const collectionInputRef = useRef(null);
   const [allCollections, setAllCollections] = useRecoilState(allCollectionsState);
-  // console.info('allCollections: ', JSON.stringify(allCollections, null, '  '));
   const setActiveCollection = (collectionId) => {
     setAllCollections((previousState) => {
-      // console.error('handleAddNewCollection previousState: ', previousState);
       const { collections } = previousState;
       return {
         activeCollectionId: collectionId,
@@ -82,9 +73,7 @@ const CollectionsList = () => {
   const handleAddNewCollection = (_event) => {
     const newCollectionLabel = collectionInputRef?.current?.value;
     if (newCollectionLabel) {
-      console.info('collectionInputRef: ', newCollectionLabel);
       setAllCollections((previousState) => {
-        console.info('handleAddNewCollection previousState: ', JSON.stringify(previousState, null, '  '));
         const nowUTC = (new Date()).toISOString();
         return {
           activeCollectionId: previousState.activeCollectionId,
@@ -137,4 +126,4 @@ const CollectionsList = () => {
   );
 };
 
-export default CollectionsList;
+export default React.memo(CollectionsList);
