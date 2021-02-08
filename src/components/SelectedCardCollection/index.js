@@ -44,10 +44,10 @@ const SelectedCardCollection = () => {
         totalCount={recordIds.length}
       />
       <div className="card-list">
-        {categories.map((category) => (
+        {categories.map((categoryLabel) => (
           <CardsForCategory
-            key={category}
-            category={category}
+            key={categoryLabel}
+            categoryLabel={categoryLabel}
           />
         ))}
       </div>

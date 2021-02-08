@@ -9,15 +9,15 @@ import { useRecoilValue } from 'recoil';
 import RecordCard from '../cards/RecordCard';
 import { groupedRecordIdsInCurrentCollectionState, resourcesState } from '../../recoil';
 
-const CardsForCategory = ({ category }) => {
+const CardsForCategory = ({ categoryLabel }) => {
   const resources = useRecoilValue(resourcesState);
   const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsInCurrentCollectionState);
 
   const { records } = resources;
-  const categorySubtypesInCollection = groupedRecordIdsBySubtype[category];
-  // console.info('categorySubtypesInCollection: ', JSON.stringify(categorySubtypesInCollection, null, '  '));
+  const category = groupedRecordIdsBySubtype[categoryLabel];
+  // console.info('category: ', JSON.stringify(category, null, '  '));
 
-  return categorySubtypesInCollection.subtypes && Object.entries(categorySubtypesInCollection.subtypes)
+  return category.subtypes && Object.entries(category.subtypes)
     .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
     .map(([displayCoding, { hasLastAdded, uuids }]) => (
       <Accordion
@@ -29,7 +29,7 @@ const CardsForCategory = ({ category }) => {
           expandIcon={<ExpandMoreIcon />}
         >
           <Typography>
-            {category} - {displayCoding} {/* eslint-disable-line react/jsx-one-expression-per-line */}
+            {categoryLabel} - {displayCoding} {/* eslint-disable-line react/jsx-one-expression-per-line */}
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
