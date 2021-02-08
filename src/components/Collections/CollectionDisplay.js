@@ -60,9 +60,6 @@ const CollectionDisplay = () => {
               if (filteredActiveCollection[categoryLabel] && filteredActiveCollection[categoryLabel].filteredCollectionCount) {
                 return (
                   <div key={`groupedRecordCard-${categoryLabel}`} style={{ margin: '5px' }}>
-                    <div style={{ width: '400px' }}>
-                      <Typography variant="s4sHeader">{categoryLabel}</Typography>
-                    </div>
                     <div style={{ height: '95%', overflowY: 'scroll', paddingRight: '10px' }}>
                       <CardsForCategory
                         categoryLabel={categoryLabel}
