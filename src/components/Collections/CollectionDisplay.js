@@ -56,6 +56,7 @@ const CollectionDisplay = () => {
       <div className={classes.bodyContainer}>
         <div className={classes.recordCardsContainer}>
           <div style={{ display: 'flex', overflowX: 'scroll', height: '100%' }}>
+            {filteredActiveCollection.filteredCollectionCount === 0 ? <Typography variant="s4sHeader">No Records in this collection</Typography> : null}
             {categories.map((categoryLabel) => {
               if (filteredActiveCollection[categoryLabel] && filteredActiveCollection[categoryLabel].filteredCollectionCount) {
                 return (
