@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import AddIcon from '@material-ui/icons/Add';
+import Button from '@material-ui/core/Button';
+// import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   newCollectionField: {
-    marginBottom: '30px',
+    margin: '16px 0 8px 0',
   },
 }));
 
@@ -45,9 +46,9 @@ const CollectionTitle = ({ collection, selected, handleSelect }) => {
   const selectedStyle = selected?.id === collection.id ? classes.selected : '';
   return (
     <div className={classes.collectionTitle} onClick={handleSelect}>
-      <div className={classes.icon}>
+      {/* <div className={classes.icon}>
         <AddIcon fontSize="inherit" />
-      </div>
+      </div> */}
       <div className={selectedStyle}>
         <Typography variant="s4sHeader">{collection.title}</Typography>
       </div>
@@ -57,6 +58,7 @@ const CollectionTitle = ({ collection, selected, handleSelect }) => {
 
 const CollectionsList = ({ collections, selected, setSelected }) => {
   const classes = useStyles();
+  const collectionInputRef = useRef(null);
 
   return (
     <div className={classes.root}>
@@ -64,12 +66,6 @@ const CollectionsList = ({ collections, selected, setSelected }) => {
         <Typography variant="s4sHeader">Collections</Typography>
       </div>
       <div className={classes.body}>
-        <div className={classes.newCollectionField}>
-          <TextField
-            placeholder="New Topic"
-            size="small"
-          />
-        </div>
         {collections.map((collection, i) => (
           <CollectionTitle
             key={i}
@@ -78,6 +74,22 @@ const CollectionsList = ({ collections, selected, setSelected }) => {
             handleSelect={() => setSelected(collection)}
           />
         ))}
+        <div className={classes.newCollectionField}>
+          <TextField
+            placeholder="New Collection"
+            size="small"
+            inputRef={collectionInputRef}
+          />
+        </div>
+        <Button
+          variant="contained"
+          color="primary"
+          disableElevation
+          size="small"
+          // onClick={handleAddNewCollection}
+        >
+          Add
+        </Button>
       </div>
     </div>
   );
