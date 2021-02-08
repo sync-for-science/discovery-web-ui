@@ -81,6 +81,7 @@ export const groupedRecordIdsBySubtypeState = selector({
       const subType = displayCoding.display ?? '(no subtype)'; // Safety, but may be unnecessary
       acc[cat].subtypes[subType] = acc[cat].subtypes[subType] ?? [];
       acc[cat].subtypes[subType].push(uuid);
+      acc[cat].totalCount += 1;
       return acc;
     }, {});
     // console.info('groupedRecordIdsBySubtypeState: ', JSON.stringify(result, null, '  '));
@@ -172,12 +173,6 @@ export const activeCollectionState = selector({
   },
 });
 
-// TODO: possibly, use a selector to compute from groupedRecordIdsInCurrentCollectionState:
-// export const totalFilteredRecordCountState = atom({
-//   key: 'totalFilteredRecordCountState',
-//   default: 0,
-// });
-
 // shape has diverged from groupedRecordIdsBySubtypeState:
 export const groupedRecordIdsInCurrentCollectionState = selector({
   key: 'groupedRecordIdsInCurrentCollectionState',
@@ -186,28 +181,31 @@ export const groupedRecordIdsInCurrentCollectionState = selector({
     const activeCollection = get(activeCollectionState);
     const activeCategories = get(activeCategoriesState);
     const lastUuidsClicked = get(lastRecordsClickedState);
-    let totalFilteredRecordCount = 0;
+    let filteredCountForCategory = 0;
     const { uuids: uuidsInCollection } = activeCollection;
     const filteredResults = Object.entries(groupedRecordIdsBySubtype)
       .filter(([catLabel]) => (activeCategories[catLabel]))
       .reduce((accCats, [catLabel, category]) => {
         accCats[catLabel] = Object.entries(category.subtypes).reduce((accCategory, [subtypeLabel, uuids]) => {
-          accCategory.totalCount += uuids.length;
           const activeUuids = uuids.filter((uuid) => uuidsInCollection[uuid]);
           if (activeUuids.length > 0) {
             const hasLastAdded = activeUuids.reduce((acc, uuid) => lastUuidsClicked[uuid] || acc, false);
-            accCategory.collectionCount += activeUuids.length;
+            accCategory.filteredCollectionCount += activeUuids.length;
             accCategory.subtypes[subtypeLabel] = {
               hasLastAdded,
               uuids: activeUuids,
             };
-            totalFilteredRecordCount += activeUuids.length;
+            filteredCountForCategory += activeUuids.length;
           }
           return accCategory;
-        }, { totalCount: 0, collectionCount: 0, subtypes: {} });
+        }, {
+          filteredCollectionCount: 0,
+          totalCount: category.totalCount,
+          subtypes: {},
+        });
         return accCats;
       }, {});
-    filteredResults.totalFilteredRecordCount = totalFilteredRecordCount;
+    filteredResults.filteredCollectionCount = filteredCountForCategory;
     // console.info('groupedRecordIdsInCurrentCollectionState: ', JSON.stringify(filteredResults, null, '  '));
     return filteredResults;
   },

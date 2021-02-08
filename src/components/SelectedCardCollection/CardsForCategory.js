@@ -49,7 +49,7 @@ const CardsForCategory = ({ categoryLabel }) => {
   const { records } = resources;
   const category = groupedRecordIdsBySubtype[categoryLabel];
   // console.info('category: ', JSON.stringify(category, null, '  '));
-  if (category.collectionCount === 0) {
+  if (category.filteredCollectionCount === 0) {
     return null;
   }
   return (
@@ -63,7 +63,7 @@ const CardsForCategory = ({ categoryLabel }) => {
         <Typography
           variant="card-list-category-count"
         >
-          [{`${category.collectionCount} of ${category.totalCount}`}] {/* eslint-disable-line react/jsx-one-expression-per-line */}
+          [{`${category.filteredCollectionCount} of ${category.totalCount}`}] {/* eslint-disable-line react/jsx-one-expression-per-line */}
         </Typography>
       </Typography>
       {

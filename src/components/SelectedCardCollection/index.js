@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const CardListHeader = ({ collectionCount, totalCount }) => {
+const CardListHeader = ({ filteredCollectionCount, totalCount }) => {
   const classes = useStyles();
   return (
     <AppBar
@@ -24,7 +24,7 @@ const CardListHeader = ({ collectionCount, totalCount }) => {
       className={classes.appBar}
     >
       <Typography variant="card-list-header">
-        Displaying {collectionCount} of {totalCount} records {/* eslint-disable-line react/jsx-one-expression-per-line */}
+        Displaying {filteredCollectionCount} of {totalCount} records {/* eslint-disable-line react/jsx-one-expression-per-line */}
       </Typography>
     </AppBar>
   );
@@ -40,7 +40,7 @@ const SelectedCardCollection = () => {
   return (
     <PersistentDrawerRight>
       <CardListHeader
-        collectionCount={groupedRecordIdsBySubtype.totalFilteredRecordCount}
+        filteredCollectionCount={groupedRecordIdsBySubtype.filteredCollectionCount}
         totalCount={recordIds.length}
       />
       <div className="card-list">
