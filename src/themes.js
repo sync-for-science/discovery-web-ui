@@ -16,6 +16,11 @@ export const rootTheme = createMuiTheme({
         },
       },
     },
+    MuiMenuItem: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
     MuiDialogActions: {
       styleOverrides: {
         justifyContent: 'space-between',
