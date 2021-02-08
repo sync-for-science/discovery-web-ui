@@ -69,7 +69,7 @@ export const groupedRecordIdsBySubtypeState = selector({
   key: 'groupedRecordIdsBySubtypeState',
   get: ({ get }) => {
     const { records } = get(resourcesState);
-    return Object.entries(records).reduce((acc, [uuid, record]) => {
+    const result = Object.entries(records).reduce((acc, [uuid, record]) => {
       if (record.category === 'Patient') {
         console.info(`IGNORE PATIENT ${uuid}`); // eslint-disable-line no-console
         // return acc;
@@ -83,6 +83,8 @@ export const groupedRecordIdsBySubtypeState = selector({
       acc[cat][subType].push(uuid);
       return acc;
     }, {});
+    console.info('groupedRecordIdsBySubtypeState: ', JSON.stringify(result, null, '  '));
+    return result;
   },
 });
 
@@ -204,6 +206,7 @@ export const groupedRecordIdsInCurrentCollectionState = selector({
         return accCats;
       }, {});
     filteredResults.totalFilteredRecordCount = totalFilteredRecordCount;
+    console.info('groupedRecordIdsInCurrentCollectionState: ', JSON.stringify(filteredResults, null, '  '));
     return filteredResults;
   },
 });
