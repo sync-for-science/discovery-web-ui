@@ -16,7 +16,6 @@ const CategorySubtypeAccordion = ({
   const { hasLastAdded, uuids } = categorySubtype;
   return (
     <Accordion
-      key={subtypeLabel}
       // defaultExpanded={hasLastAdded}
       disableGutters
     >
@@ -72,6 +71,7 @@ const CardsForCategory = ({ categoryLabel }) => {
           .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
           .map(([displayCoding, categorySubtype]) => (
             <CategorySubtypeAccordion
+              key={displayCoding}
               records={records}
               categoryLabel={categoryLabel}
               subtypeLabel={displayCoding}
