@@ -2,28 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './TilesView.css';
+import { useRecoilValue } from 'recoil';
 import config from '../../config.js';
 import { log } from '../../utils/logger';
 import {
-  Const, getStyle, stringCompare, tryWithDefault, numericPart, inDateRange, uniqueBy, notEqJSON, classFromCat,
+  Const, getStyle, tryWithDefault, numericPart, inDateRange, uniqueBy, notEqJSON, classFromCat,
 } from '../../util.js';
 import FhirTransform from '../../FhirTransform.js';
 import { primaryTextValue } from '../../fhirUtil.js';
 
 import Unimplemented from '../Unimplemented';
 import SelectedCardCollection from '../SelectedCardCollection';
+import RecordSelector from '../SelectedCardCollection/RecordSelector';
 
 import DiscoveryContext from '../DiscoveryContext';
+import {
+  groupedRecordIdsBySubtypeState,
+} from '../../recoil';
 
 //
 // Render the "tiles view" of the participant's data
 //
-export default class TilesView extends React.PureComponent {
+class CompareView extends React.PureComponent {
   static myName = 'TilesView';
 
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
+    groupedRecordIdsBySubtype: PropTypes.shape({}),
     resources: PropTypes.shape({
       patient: PropTypes.shape({}),
       providers: PropTypes.arrayOf(PropTypes.string),
@@ -572,22 +578,24 @@ export default class TilesView extends React.PureComponent {
   }
 
   renderTiles(catName) {
+    const { groupedRecordIdsBySubtype } = this.props;
     const tiles = [];
-    for (const catInst of this.state.uniqueStruct[catName].sort((a, b) => stringCompare(a.display, b.display))) {
-      const tileIdStr = this.tileId(catName, catInst.display, catInst.trueCategory);
-      const tileId = this.parseTileId(tileIdStr);
-      const count = catInst.provs.reduce((accum, prov) => accum + prov.count, 0);
-
-      tiles.push(
-        <button
-          className={this.tileClassName(tileId.catName, tileId.display)}
-          key={tileIdStr}
-          id={tileIdStr}
-          onClick={this.onTileClick.bind(this)}
-        >
-          { catInst.display + (count > 1 ? ` [${count}]` : '') }
-        </button>,
-      );
+    // for (const catInst of this.state.uniqueStruct[catName].sort((a, b) => stringCompare(a.display, b.display))) {
+    if (groupedRecordIdsBySubtype[catName]) {
+      Object.entries(groupedRecordIdsBySubtype[catName].subtypes)
+        // .sort(([catName1], [catName2]) => (catName1 > catName2))
+        // .forEach(([catName, uuids]) => {
+        .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
+        .forEach(([displayCoding, uuids]) => {
+          // const tileIdStr = this.tileId(catName, catInst.display, catInst.trueCategory);
+          // const tileId = this.parseTileId(tileIdStr);
+          // const count = catInst.provs.reduce((accum, prov) => accum + prov.count, 0);
+          tiles.push(<RecordSelector
+            key={displayCoding}
+            label={displayCoding}
+            uuids={uuids}
+          />);
+        });
     }
     return tiles;
   }
@@ -713,3 +721,16 @@ export default class TilesView extends React.PureComponent {
     );
   }
 }
+
+const CompareViewHOC = (props) => {
+  const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsBySubtypeState);
+
+  return (
+    <CompareView
+      {...props} // eslint-disable-line react/jsx-props-no-spreading
+      groupedRecordIdsBySubtype={groupedRecordIdsBySubtype}
+    />
+  );
+};
+
+export default CompareViewHOC;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { string, shape } from 'prop-types';
+import { shape, string, bool } from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -61,6 +61,10 @@ const useStyles = makeStyles(() => ({
   root: {
     marginTop: 10,
   },
+  recentlyAdded: {
+    borderColor: 'var(--tile-selected-last)',
+    marginTop: 10,
+  },
   title: {
     padding: '16px 16px 0 16px',
     display: 'flex',
@@ -69,7 +73,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const RecordCard = ({
-  recordId, records,
+  recordId, records, recentlyAdded,
 }) => {
   const classes = useStyles();
 
@@ -135,7 +139,7 @@ const RecordCard = ({
 
   return (
     <Card
-      className={classes.root}
+      className={recentlyAdded ? classes.recentlyAdded : classes.root}
       variant="outlined"
       id={`${format(new Date(fieldsData.date), 'y-MM-dd')}-${fieldsData.display}`}
     >
@@ -162,7 +166,7 @@ const RecordCard = ({
 RecordCard.prototype = {
   recordId: string.isRequired,
   records: shape({}).isRequired,
-  patient: shape({}).isRequired,
+  recentlyAdded: bool.isRequired,
 };
 
 export default React.memo(RecordCard);

@@ -9,8 +9,8 @@ const useStyles = makeStyles(() => ({
     marginBottom: '2px',
   },
   highlight: {
-    display: 'block',
-    backgroundColor: '#fff', // disable, for now; if ever needed, add this color to theme
+    // display: 'block',
+    // backgroundColor: '#fff', // disable, for now; if ever needed, add this color to theme
   },
 }));
 
