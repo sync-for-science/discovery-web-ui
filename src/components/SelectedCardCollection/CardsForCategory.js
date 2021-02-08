@@ -49,7 +49,7 @@ const CardsForCategory = ({ categoryLabel }) => {
   const { records } = resources;
   const category = filteredActiveCollection[categoryLabel];
   // console.info('category: ', JSON.stringify(category, null, '  '));
-  if (category.filteredCollectionCount === 0) {
+  if (!category || category.filteredCollectionCount === 0) {
     return null;
   }
   return (
