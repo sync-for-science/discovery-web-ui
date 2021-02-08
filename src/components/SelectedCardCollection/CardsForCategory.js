@@ -15,8 +15,9 @@ const CardsForCategory = ({ category }) => {
 
   const { records } = resources;
   const categorySubtypesInCollection = groupedRecordIdsBySubtype[category];
+  // console.info('categorySubtypesInCollection: ', JSON.stringify(categorySubtypesInCollection, null, '  '));
 
-  return Object.entries(categorySubtypesInCollection)
+  return categorySubtypesInCollection.subtypes && Object.entries(categorySubtypesInCollection.subtypes)
     .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
     .map(([displayCoding, { hasLastAdded, uuids }]) => (
       <Accordion

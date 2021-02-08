@@ -83,7 +83,7 @@ export const groupedRecordIdsBySubtypeState = selector({
       acc[cat][subType].push(uuid);
       return acc;
     }, {});
-    console.info('groupedRecordIdsBySubtypeState: ', JSON.stringify(result, null, '  '));
+    // console.info('groupedRecordIdsBySubtypeState: ', JSON.stringify(result, null, '  '));
     return result;
   },
 });
@@ -190,23 +190,25 @@ export const groupedRecordIdsInCurrentCollectionState = selector({
     const { uuids: uuidsInCollection } = activeCollection;
     const filteredResults = Object.entries(groupedRecordIdsBySubtype)
       .filter(([catLabel]) => (activeCategories[catLabel]))
-      .reduce((accCats, [catLabel, subtypes]) => {
-        accCats[catLabel] = Object.entries(subtypes).reduce((accSubtypes, [subtypeLabel, uuids]) => {
+      .reduce((accCats, [catLabel, category]) => {
+        accCats[catLabel] = Object.entries(category).reduce((accCategory, [subtypeLabel, uuids]) => {
+          accCategory.totalCount += uuids.length;
           const activeUuids = uuids.filter((uuid) => uuidsInCollection[uuid]);
           if (activeUuids.length > 0) {
             const hasLastAdded = activeUuids.reduce((acc, uuid) => lastUuidsClicked[uuid] || acc, false);
-            accSubtypes[subtypeLabel] = {
+            accCategory.collectionCount += activeUuids.length;
+            accCategory.subtypes[subtypeLabel] = {
               hasLastAdded,
               uuids: activeUuids,
             };
             totalFilteredRecordCount += activeUuids.length;
           }
-          return accSubtypes;
-        }, {});
+          return accCategory;
+        }, { totalCount: 0, collectionCount: 0, subtypes: {} });
         return accCats;
       }, {});
     filteredResults.totalFilteredRecordCount = totalFilteredRecordCount;
-    console.info('groupedRecordIdsInCurrentCollectionState: ', JSON.stringify(filteredResults, null, '  '));
+    // console.info('groupedRecordIdsInCurrentCollectionState: ', JSON.stringify(filteredResults, null, '  '));
     return filteredResults;
   },
 });
