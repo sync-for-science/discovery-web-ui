@@ -127,7 +127,7 @@ const pruneEmpty = ((o) => Object.entries(o).reduce((acc, [k, v]) => {
 export const collectionsState = atom({
   key: 'collectionsState',
   default: {
-    activeCollection: 'default',
+    activeCollectionId: 'default',
     collections: {
       default: {
         label: 'Untitled Collection',
@@ -147,23 +147,23 @@ export const activeCollectionState = selector({
   key: 'activeCollectionState',
   get: ({ get }) => {
     const allCollections = get(collectionsState);
-    const { activeCollection, collections } = allCollections;
-    const currentActiveCollection = collections[activeCollection];
+    const { activeCollectionId, collections } = allCollections;
+    const currentActiveCollection = collections[activeCollectionId];
     return currentActiveCollection;
   },
   set: ({ get, set }, newValues) => {
     const allCollections = get(collectionsState);
-    const { activeCollection, collections } = allCollections;
-    const currentActiveCollection = collections[activeCollection];
+    const { activeCollectionId, collections } = allCollections;
+    const currentActiveCollection = collections[activeCollectionId];
     const { label } = currentActiveCollection;
     const uuids = pruneEmpty({
       ...currentActiveCollection.uuids,
       ...newValues,
     });
     set(collectionsState, {
-      activeCollection,
+      activeCollectionId,
       collections: {
-        [activeCollection]: {
+        [activeCollectionId]: {
           label,
           uuids,
         },
