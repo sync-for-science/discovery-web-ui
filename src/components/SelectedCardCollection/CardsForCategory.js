@@ -50,6 +50,9 @@ const CardsForCategory = ({ categoryLabel }) => {
   const { records } = resources;
   const category = groupedRecordIdsBySubtype[categoryLabel];
   // console.info('category: ', JSON.stringify(category, null, '  '));
+  if (category.collectionCount === 0) {
+    return null;
+  }
   return (
     <div
       key={categoryLabel}
