@@ -124,8 +124,8 @@ const pruneEmpty = ((o) => Object.entries(o).reduce((acc, [k, v]) => {
 }, {}));
 
 // TODO: ^other states facilitate implementation of something like the following:
-export const collectionsState = atom({
-  key: 'collectionsState',
+export const allCollectionsState = atom({
+  key: 'allCollectionsState',
   default: {
     activeCollectionId: 'default',
     collections: {
@@ -146,13 +146,13 @@ export const lastRecordsClickedState = atom({
 export const activeCollectionState = selector({
   key: 'activeCollectionState',
   get: ({ get }) => {
-    const allCollections = get(collectionsState);
+    const allCollections = get(allCollectionsState);
     const { activeCollectionId, collections } = allCollections;
     const currentActiveCollection = collections[activeCollectionId];
     return currentActiveCollection;
   },
   set: ({ get, set }, newValues) => {
-    const allCollections = get(collectionsState);
+    const allCollections = get(allCollectionsState);
     const { activeCollectionId, collections } = allCollections;
     const currentActiveCollection = collections[activeCollectionId];
     const { label } = currentActiveCollection;
@@ -160,9 +160,10 @@ export const activeCollectionState = selector({
       ...currentActiveCollection.uuids,
       ...newValues,
     });
-    set(collectionsState, {
+    set(allCollectionsState, {
       activeCollectionId,
       collections: {
+        ...allCollections.collections,
         [activeCollectionId]: {
           label,
           uuids,

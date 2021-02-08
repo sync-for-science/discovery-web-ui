@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 // import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilValue, useRecoilState } from 'recoil';
-import { collectionsState, activeCollectionState } from '../../recoil';
+import { allCollectionsState } from '../../recoil';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,11 +43,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CollectionTitle = ({ label, activeCollectionId, collectionId }) => {
+const CollectionTitle = ({
+  label, activeCollectionId, collectionId, handleSelect,
+}) => {
   const classes = useStyles();
   const selectedStyle = activeCollectionId === collectionId ? classes.selected : '';
   return (
-    <div className={classes.collectionTitle}>
+    <div
+      className={classes.collectionTitle}
+      onClick={handleSelect}
+    >
       {/* <div className={classes.icon}>
         <AddIcon fontSize="inherit" />
       </div> */}
@@ -61,10 +66,40 @@ const CollectionTitle = ({ label, activeCollectionId, collectionId }) => {
 const CollectionsList = () => {
   const classes = useStyles();
   const collectionInputRef = useRef(null);
-  // const [activeCollection, setActiveCollection] = useRecoilState(collectionsState);
-  const allCollections = useRecoilValue(collectionsState);
-  console.info('allCollections: ', JSON.stringify(allCollections, null, '  '));
-  const { collections, activeCollection } = allCollections;
+  const [allCollections, setAllCollections] = useRecoilState(allCollectionsState);
+  // console.info('allCollections: ', JSON.stringify(allCollections, null, '  '));
+  const setActiveCollection = (collectionId) => {
+    setAllCollections((previousState) => {
+      // console.error('handleAddNewCollection previousState: ', previousState);
+      const { collections } = previousState;
+      return {
+        activeCollectionId: collectionId,
+        collections,
+      };
+    });
+  };
+
+  const handleAddNewCollection = (_event) => {
+    const newCollectionLabel = collectionInputRef?.current?.value;
+    if (newCollectionLabel) {
+      console.info('collectionInputRef: ', newCollectionLabel);
+      setAllCollections((previousState) => {
+        console.info('handleAddNewCollection previousState: ', JSON.stringify(previousState, null, '  '));
+        const nowUTC = (new Date()).toISOString();
+        return {
+          activeCollectionId: previousState.activeCollectionId,
+          collections: {
+            ...previousState.collections,
+            [nowUTC]: {
+              label: newCollectionLabel,
+              uuids: [],
+            },
+          },
+        };
+      });
+      collectionInputRef.current.value = '';
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -72,13 +107,13 @@ const CollectionsList = () => {
         <Typography variant="s4sHeader">Collections</Typography>
       </div>
       <div className={classes.body}>
-        {Object.entries(collections).map(([collectionId, { label }]) => (
+        {Object.entries(allCollections.collections).map(([collectionId, { label }]) => (
           <CollectionTitle
             key={collectionId}
             label={label}
-            activeCollectionId={activeCollection}
+            activeCollectionId={allCollections.activeCollectionId}
             collectionId={collectionId}
-            // handleSelect={() => setSelected(collection)}
+            handleSelect={(_event) => setActiveCollection(collectionId)}
           />
         ))}
         <div className={classes.newCollectionField}>
@@ -93,7 +128,7 @@ const CollectionsList = () => {
           color="primary"
           disableElevation
           size="small"
-          // onClick={handleAddNewCollection}
+          onClick={handleAddNewCollection}
         >
           Add
         </Button>
