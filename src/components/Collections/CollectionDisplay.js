@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilValue } from 'recoil';
 
-import { activeCategoriesState, resourcesState } from '../../recoil/index';
+import { activeCategoriesState, filteredActiveCollectionState, resourcesState } from '../../recoil/index';
 import CollectionsNoteEditor from '../notes/CollectionsNoteEditor';
 import CardsForCategory from '../SelectedCardCollection/CardsForCategory';
 
@@ -40,14 +40,15 @@ const useStyles = makeStyles((theme) => ({
 const CollectionDisplay = ({
   selected,
 }) => {
-  const activeCategories = useRecoilValue(activeCategoriesState);
+  // const activeCategories = useRecoilValue(activeCategoriesState);
   const classes = useStyles();
   const collectionName = selected ? selected.title : 'Untitled Collection';
   const resources = useRecoilValue(resourcesState);
   const { categories } = resources;
+  const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
 
-  const displayRecordCards = (activeCategories) => categories.map((categoryLabel) => {
-    if (activeCategories[categoryLabel]) {
+  const displayRecordCards = () => categories.map((categoryLabel) => {
+    if (filteredActiveCollection[categoryLabel].filteredCollectionCount) {
       return (
         <div key={`groupedRecordCard-${categoryLabel}`} style={{ margin: '5px' }}>
           <div style={{ width: '400px' }}>
@@ -71,7 +72,7 @@ const CollectionDisplay = ({
     } else {
       collectionData = (
         <div style={{ display: 'flex', overflowX: 'scroll', height: '100%' }}>
-          {displayRecordCards(activeCategories)}
+          {displayRecordCards()}
         </div>
       );
     }

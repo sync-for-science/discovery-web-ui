@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil';
 
 import {
   resourcesState,
+  activeCollectionState, filteredActiveCollectionState,
 } from '../../recoil';
 
 import CollectionsList from './CollectionsList';
@@ -35,6 +36,8 @@ const Collections = () => {
 
   // setState for dummyCollections to give appearance of multiple collections
   const [selected, setSelected] = useState(null);
+  const activeCollection = useRecoilValue(activeCollectionState);
+  console.info('activeCollection: ', JSON.stringify(activeCollection, null, '  '));
 
   const { records } = resources;
 
@@ -42,11 +45,7 @@ const Collections = () => {
     <>
       <Grid container spacing={2}>
         <Grid style={{ paddingLeft: '0px' }} item xs={2}>
-          <CollectionsList
-            collections={dummyCollections}
-            selected={selected}
-            setSelected={setSelected}
-          />
+          <CollectionsList />
         </Grid>
         <Grid item xs={10}>
           <CollectionDisplay

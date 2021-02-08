@@ -4,6 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 // import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { collectionsState, activeCollectionState } from '../../recoil';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,24 +43,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CollectionTitle = ({ collection, selected, handleSelect }) => {
+const CollectionTitle = ({ label, activeCollectionId, collectionId }) => {
   const classes = useStyles();
-  const selectedStyle = selected?.id === collection.id ? classes.selected : '';
+  const selectedStyle = activeCollectionId === collectionId ? classes.selected : '';
   return (
-    <div className={classes.collectionTitle} onClick={handleSelect}>
+    <div className={classes.collectionTitle}>
       {/* <div className={classes.icon}>
         <AddIcon fontSize="inherit" />
       </div> */}
       <div className={selectedStyle}>
-        <Typography variant="s4sHeader">{collection.title}</Typography>
+        <Typography variant="s4sHeader">{label}</Typography>
       </div>
     </div>
   );
 };
 
-const CollectionsList = ({ collections, selected, setSelected }) => {
+const CollectionsList = () => {
   const classes = useStyles();
   const collectionInputRef = useRef(null);
+  // const [activeCollection, setActiveCollection] = useRecoilState(collectionsState);
+  const allCollections = useRecoilValue(collectionsState);
+  console.info('allCollections: ', JSON.stringify(allCollections, null, '  '));
+  const { collections, activeCollection } = allCollections;
 
   return (
     <div className={classes.root}>
@@ -66,12 +72,13 @@ const CollectionsList = ({ collections, selected, setSelected }) => {
         <Typography variant="s4sHeader">Collections</Typography>
       </div>
       <div className={classes.body}>
-        {collections.map((collection, i) => (
+        {Object.entries(collections).map(([collectionId, { label }]) => (
           <CollectionTitle
-            key={i}
-            collection={collection}
-            selected={selected}
-            handleSelect={() => setSelected(collection)}
+            key={collectionId}
+            label={label}
+            activeCollectionId={activeCollection}
+            collectionId={collectionId}
+            // handleSelect={() => setSelected(collection)}
           />
         ))}
         <div className={classes.newCollectionField}>
