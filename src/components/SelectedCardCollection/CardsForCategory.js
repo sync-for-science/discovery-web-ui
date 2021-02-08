@@ -21,7 +21,7 @@ const CardsForCategory = ({ category }) => {
     .map(([displayCoding, { hasLastAdded, uuids }]) => (
       <Accordion
         key={displayCoding}
-        defaultExpanded={hasLastAdded}
+        // defaultExpanded={hasLastAdded}
         disableGutters
       >
         <AccordionSummary
