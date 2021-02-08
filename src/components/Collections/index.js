@@ -2,14 +2,14 @@ import React from 'react';
 
 import { useRecoilValue } from 'recoil';
 import {
-  resourcesState, patientRecord, groupedRecordIdsInCurrentCollectionState,
+  resourcesState, patientRecord, filteredActiveCollectionState,
 } from '../../recoil';
 
 /* eslint-disable react/jsx-one-expression-per-line */
 const Collections = () => {
   const resources = useRecoilValue(resourcesState);
   const patient = useRecoilValue(patientRecord);
-  const groupedRecordIdsInCurrentCollection = useRecoilValue(groupedRecordIdsInCurrentCollectionState);
+  const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
 
   const {
     loading, records,
@@ -26,7 +26,7 @@ const Collections = () => {
         <div>
           <h4>groupedRecordIdsInCurrentCollection:</h4>
           <pre>
-            {JSON.stringify(groupedRecordIdsInCurrentCollection, null, '  ') }
+            {JSON.stringify(filteredActiveCollection, null, '  ') }
           </pre>
         </div>
         <hr />

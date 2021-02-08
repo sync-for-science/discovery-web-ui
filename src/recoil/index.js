@@ -174,7 +174,7 @@ export const activeCollectionState = selector({
 });
 
 // shape has diverged from groupedRecordIdsBySubtypeState:
-export const groupedRecordIdsInCurrentCollectionState = selector({
+export const filteredActiveCollectionState = selector({
   key: 'groupedRecordIdsInCurrentCollectionState',
   get: ({ get }) => {
     const groupedRecordIdsBySubtype = get(groupedRecordIdsBySubtypeState);

@@ -8,7 +8,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 
 import { useRecoilValue } from 'recoil';
 import RecordCard from '../cards/RecordCard';
-import { groupedRecordIdsInCurrentCollectionState, resourcesState } from '../../recoil';
+import { filteredActiveCollectionState, resourcesState } from '../../recoil';
 
 const CategorySubtypeAccordion = ({
   records, categoryLabel, subtypeLabel, categorySubtype,
@@ -44,10 +44,10 @@ const CategorySubtypeAccordion = ({
 
 const CardsForCategory = ({ categoryLabel }) => {
   const resources = useRecoilValue(resourcesState);
-  const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsInCurrentCollectionState);
+  const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
 
   const { records } = resources;
-  const category = groupedRecordIdsBySubtype[categoryLabel];
+  const category = filteredActiveCollection[categoryLabel];
   // console.info('category: ', JSON.stringify(category, null, '  '));
   if (category.filteredCollectionCount === 0) {
     return null;

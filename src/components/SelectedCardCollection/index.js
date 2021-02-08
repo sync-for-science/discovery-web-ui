@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  resourcesState, allRecordIds, groupedRecordIdsInCurrentCollectionState,
+  resourcesState, allRecordIds, filteredActiveCollectionState,
 } from '../../recoil';
 import PersistentDrawerRight from '../ContentPanel/Drawer';
 import CardsForCategory from './CardsForCategory';
@@ -33,14 +33,14 @@ const CardListHeader = ({ filteredCollectionCount, totalCount }) => {
 const SelectedCardCollection = () => {
   const recordIds = useRecoilValue(allRecordIds);
   const resources = useRecoilValue(resourcesState);
-  const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsInCurrentCollectionState);
+  const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
 
   const { categories } = resources;
 
   return (
     <PersistentDrawerRight>
       <CardListHeader
-        filteredCollectionCount={groupedRecordIdsBySubtype.filteredCollectionCount}
+        filteredCollectionCount={filteredActiveCollection.filteredCollectionCount}
         totalCount={recordIds.length}
       />
       <div className="card-list">
