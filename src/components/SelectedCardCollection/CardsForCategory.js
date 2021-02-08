@@ -1,4 +1,5 @@
 import React from 'react';
+import { string } from 'prop-types';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -49,21 +50,38 @@ const CardsForCategory = ({ categoryLabel }) => {
   const { records } = resources;
   const category = groupedRecordIdsBySubtype[categoryLabel];
   // console.info('category: ', JSON.stringify(category, null, '  '));
+  return (
+    <div
+      key={categoryLabel}
+    >
+      <Typography
+        variant="card-list-category-header"
+      >
+        {categoryLabel}
+        <Typography
+          variant="card-list-category-count"
+        >
+          [{`${category.collectionCount} of ${category.totalCount}`}] {/* eslint-disable-line react/jsx-one-expression-per-line */}
+        </Typography>
+      </Typography>
+      {
+        Object.entries(category.subtypes)
+          .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
+          .map(([displayCoding, categorySubtype]) => (
+            <CategorySubtypeAccordion
+              records={records}
+              categoryLabel={categoryLabel}
+              subtypeLabel={displayCoding}
+              categorySubtype={categorySubtype}
+            />
+          ))
+      }
+    </div>
+  );
+};
 
-  // <h4>
-  //   {categoryLabel}
-  //   [{`${category.collectionCount} of ${category.totalCount}`}]
-  // </h4>
-  return Object.entries(category.subtypes)
-    .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
-    .map(([displayCoding, categorySubtype]) => (
-      <CategorySubtypeAccordion
-        records={records}
-        categoryLabel={categoryLabel}
-        subtypeLabel={displayCoding}
-        categorySubtype={categorySubtype}
-      />
-    ));
+CardsForCategory.propTypes = {
+  categoryLabel: string.isRequired,
 };
 
 export default CardsForCategory;
