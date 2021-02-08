@@ -582,7 +582,7 @@ class CompareView extends React.PureComponent {
     const tiles = [];
     // for (const catInst of this.state.uniqueStruct[catName].sort((a, b) => stringCompare(a.display, b.display))) {
     if (groupedRecordIdsBySubtype[catName]) {
-      Object.entries(groupedRecordIdsBySubtype[catName])
+      Object.entries(groupedRecordIdsBySubtype[catName].subtypes)
         // .sort(([catName1], [catName2]) => (catName1 > catName2))
         // .forEach(([catName, uuids]) => {
         .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))

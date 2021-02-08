@@ -77,10 +77,10 @@ export const groupedRecordIdsBySubtypeState = selector({
       // const { category, displayCoding, data: { resourceType, contained: { resourceType: containedResourceType } = {} } } = record;
       const { category, displayCoding } = record;
       const cat = UNIMPLEMENTED_CATEGORIES.includes(category) ? 'Other' : category; // `${resourceType}:${category}`;
-      acc[cat] = acc[cat] ?? {};
+      acc[cat] = acc[cat] ?? { totalCount: 0, subtypes: {} };
       const subType = displayCoding.display ?? '(no subtype)'; // Safety, but may be unnecessary
-      acc[cat][subType] = acc[cat][subType] ?? [];
-      acc[cat][subType].push(uuid);
+      acc[cat].subtypes[subType] = acc[cat].subtypes[subType] ?? [];
+      acc[cat].subtypes[subType].push(uuid);
       return acc;
     }, {});
     // console.info('groupedRecordIdsBySubtypeState: ', JSON.stringify(result, null, '  '));
@@ -191,7 +191,7 @@ export const groupedRecordIdsInCurrentCollectionState = selector({
     const filteredResults = Object.entries(groupedRecordIdsBySubtype)
       .filter(([catLabel]) => (activeCategories[catLabel]))
       .reduce((accCats, [catLabel, category]) => {
-        accCats[catLabel] = Object.entries(category).reduce((accCategory, [subtypeLabel, uuids]) => {
+        accCats[catLabel] = Object.entries(category.subtypes).reduce((accCategory, [subtypeLabel, uuids]) => {
           accCategory.totalCount += uuids.length;
           const activeUuids = uuids.filter((uuid) => uuidsInCollection[uuid]);
           if (activeUuids.length > 0) {
