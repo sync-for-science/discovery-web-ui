@@ -9,6 +9,39 @@ import { useRecoilValue } from 'recoil';
 import RecordCard from '../cards/RecordCard';
 import { groupedRecordIdsInCurrentCollectionState, resourcesState } from '../../recoil';
 
+const CategorySubtypeAccordion = ({
+  records, categoryLabel, subtypeLabel, categorySubtype,
+}) => {
+  const { hasLastAdded, uuids } = categorySubtype;
+  return (
+    <Accordion
+      key={subtypeLabel}
+      // defaultExpanded={hasLastAdded}
+      disableGutters
+    >
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+      >
+        <Typography>
+          {categoryLabel} - {subtypeLabel} {/* eslint-disable-line react/jsx-one-expression-per-line */}
+        </Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        {
+          uuids.map((uuid) => (
+            <RecordCard
+              key={`record-card-${uuid}`}
+              recentlyAdded={hasLastAdded}
+              recordId={uuid}
+              records={records}
+            />
+          ))
+        }
+      </AccordionDetails>
+    </Accordion>
+  );
+};
+
 const CardsForCategory = ({ categoryLabel }) => {
   const resources = useRecoilValue(resourcesState);
   const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsInCurrentCollectionState);
@@ -17,34 +50,19 @@ const CardsForCategory = ({ categoryLabel }) => {
   const category = groupedRecordIdsBySubtype[categoryLabel];
   // console.info('category: ', JSON.stringify(category, null, '  '));
 
-  return category.subtypes && Object.entries(category.subtypes)
+  // <h4>
+  //   {categoryLabel}
+  //   [{`${category.collectionCount} of ${category.totalCount}`}]
+  // </h4>
+  return Object.entries(category.subtypes)
     .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
-    .map(([displayCoding, { hasLastAdded, uuids }]) => (
-      <Accordion
-        key={displayCoding}
-        // defaultExpanded={hasLastAdded}
-        disableGutters
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-        >
-          <Typography>
-            {categoryLabel} - {displayCoding} {/* eslint-disable-line react/jsx-one-expression-per-line */}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {
-            uuids.map((uuid) => (
-              <RecordCard
-                key={`record-card-${uuid}`}
-                recentlyAdded={hasLastAdded}
-                recordId={uuid}
-                records={records}
-              />
-            ))
-          }
-        </AccordionDetails>
-      </Accordion>
+    .map(([displayCoding, categorySubtype]) => (
+      <CategorySubtypeAccordion
+        records={records}
+        categoryLabel={categoryLabel}
+        subtypeLabel={displayCoding}
+        categorySubtype={categorySubtype}
+      />
     ));
 };
 
