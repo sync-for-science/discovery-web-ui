@@ -13,11 +13,11 @@ import {
 class CompareView extends React.PureComponent {
   static propTypes = {
     groupedRecordIdsBySubtype: PropTypes.shape({}),
-    resources: PropTypes.shape({
-      patient: PropTypes.shape({}),
-      providers: PropTypes.arrayOf(PropTypes.string),
-      legacy: PropTypes.instanceOf(FhirTransform),
-    }),
+    // resources: PropTypes.shape({
+    //   patient: PropTypes.shape({}),
+    //   providers: PropTypes.arrayOf(PropTypes.string),
+    //   legacy: PropTypes.instanceOf(FhirTransform),
+    // }),
     totalResCount: PropTypes.number,
     categories: PropTypes.arrayOf(PropTypes.string).isRequired,
     providers: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -30,14 +30,14 @@ class CompareView extends React.PureComponent {
 
   state = {
     firstTileColNum: 0,
-    leftColNavEnabled: true,
-    rightColNavEnabled: true,
+    // leftColNavEnabled: true,
+    // rightColNavEnabled: true,
     uniqueStruct: {},
     numVisibleCols: 0,
     selectedTiles: {},
-    lastTileSelected: null,
-    topBound: 0,
-    onlyMultisource: false,
+    // lastTileSelected: null,
+    // topBound: 0,
+    // onlyMultisource: false,
   }
 
   // onResize = () => {

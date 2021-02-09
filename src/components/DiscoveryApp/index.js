@@ -178,7 +178,6 @@ class DiscoveryApp extends React.PureComponent {
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/compare`}>
                         <CompareView
-                          resources={this.props.resources}
                           totalResCount={totalResCount}
                           dates={dates}
                           categories={categories}
