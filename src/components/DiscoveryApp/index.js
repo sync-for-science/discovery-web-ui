@@ -12,7 +12,7 @@ import StandardFilters from '../StandardFilters';
 import ContentPanel from '../ContentPanel/ContentRight';
 import SummaryView from '../SummaryView';
 import CompareView from '../CompareView';
-import TilesView from '../TilesView';
+import TilesView from '../CatalogView';
 import Collections from '../Collections';
 import PageFooter from '../PageFooter';
 import { PATIENT_MODE_SEGMENT } from '../../index';
