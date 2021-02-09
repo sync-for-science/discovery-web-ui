@@ -14,6 +14,7 @@ const CategorySubtypeAccordion = ({
   records, categoryLabel, subtypeLabel, categorySubtype,
 }) => {
   const { hasLastAdded, uuids } = categorySubtype;
+  const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
   return (
     <Accordion
       // defaultExpanded={hasLastAdded}
@@ -22,7 +23,7 @@ const CategorySubtypeAccordion = ({
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
       >
-        {categoryLabel} - {subtypeLabel} {/* eslint-disable-line react/jsx-one-expression-per-line */}
+        {summaryLabel}
       </AccordionSummary>
       <AccordionDetails>
         {
