@@ -1,5 +1,5 @@
 {
-  "dosageInstruction": {
-
-  }
+  "dosageInstruction": "{{o.timing.repeat.frequency}} every {{o.timing.repeat.period}} {{o.timing.repeat.periodUnits}} $t(fhir:asNeeded, o.asNeededBoolean)",
+  "asNeeded_true": "as needed",
+  "asNeeded_false": "as instructed"
 }

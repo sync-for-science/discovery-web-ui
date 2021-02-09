@@ -10,17 +10,18 @@ const MedicationCardBody = ({ fieldsData }) => {
 
   function formatDosageInstruction() {
     if (fieldsData.dosageInstruction?.timing?.repeat) {
-      const instruction = fieldsData.dosageInstruction;
-      const text = t('fhir:dosageInstruction', { instruction });
+      const o = fieldsData.dosageInstruction;
+      return t('fhir:dosageInstruction', { o });
 
-      const asNeededText = fieldsData.dosageInstruction.asNeededBoolean
-        ? 'as needed'
-        : 'as instructed'; // what the opposite of As Needed?
-      const { frequency } = fieldsData.dosageInstruction.timing.repeat;
-      const { period } = fieldsData.dosageInstruction.timing.repeat;
-      // DSTU2 / STU3 compatibility
-      const { periodUnit, periodUnits } = fieldsData.dosageInstruction.timing.repeat;
-      return `${frequency} every ${period} ${periodUnit || periodUnits} ${asNeededText}`; // need dynamic translation for
+    //   const asNeededText = fieldsData.dosageInstruction.asNeededBoolean
+    //     ? 'as needed'
+    //     : 'as instructed'; // what the opposite of As Needed?
+    //   const { frequency } = fieldsData.dosageInstruction.timing.repeat;
+    //   const { period } = fieldsData.dosageInstruction.timing.repeat;
+    //   // DSTU2 / STU3 compatibility
+    //   const { periodUnit, periodUnits } = fieldsData.dosageInstruction.timing.repeat;
+    //   return `${frequency} every ${period} ${periodUnit || periodUnits} ${asNeededText}`; // need dynamic translation for
+    // }
     }
     return null;
   }

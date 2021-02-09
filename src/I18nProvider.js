@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import i18n from 'i18next';
+import ICU from 'i18next-icu';
 // import LanguageDetector from 'i18next-browser-languagedetector'; // for now: always en-US
 import { initReactI18next, I18nextProvider } from 'react-i18next';
 

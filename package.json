@@ -10,6 +10,7 @@
     "axios": "^0.18.1",
     "date-fns": "^2.16.1",
     "i18next": "^19.8.7",
+    "i18next-icu": "^1.4.2",
     "json-query": "^2.2.2",
     "moment": "^2.24.0",
     "postcss-import": "^12.0.1",
