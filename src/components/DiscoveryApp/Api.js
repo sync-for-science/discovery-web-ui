@@ -113,7 +113,7 @@ const queryOptions = {
   },
 };
 
-// This is derived from src/components/TilesView/index.js, line 185:
+// This is derived from src/components/CatalogView/index.js, line 185:
 const getCoding = (record) => {
   const codeObj = classFromCat(record.category).code(record);
   const code = tryWithDefault(codeObj, (codeObj) => codeObj.coding[0].code, tryWithDefault(codeObj, (codeObj) => codeObj.code, '????'));

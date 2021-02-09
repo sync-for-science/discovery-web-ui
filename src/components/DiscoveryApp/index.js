@@ -12,7 +12,7 @@ import StandardFilters from '../StandardFilters';
 import ContentPanel from '../ContentPanel/ContentRight';
 import SummaryView from '../SummaryView';
 import CompareView from '../CompareView';
-import TilesView from '../CatalogView';
+import CatalogView from '../CatalogView';
 import Collections from '../Collections';
 import PageFooter from '../PageFooter';
 import { PATIENT_MODE_SEGMENT } from '../../index';
@@ -60,14 +60,14 @@ class DiscoveryApp extends React.PureComponent {
     savedCatsEnabled: null, // StandardFilters & CategoryRollup
     savedProvsEnabled: null, // StandardFilters & ProviderRollup
 
-    lastTileSelected: null, // TilesView & CompareView
-    savedSelectedTiles: null, // TilesView & CompareView
-    lastSavedSelectedTiles: null, // TilesView & CompareView
-    viewAccentDates: [], // TilesView & CompareView
-    viewLastAccentDates: [], // TilesView & CompareView
-    highlightedResources: [], // TilesView & CompareView
-    lastHighlightedResources: [], // TilesView & CompareView
-    onlyMultisource: false, // TilesView & CompareView
+    lastTileSelected: null, // CatalogView & CompareView
+    savedSelectedTiles: null, // CatalogView & CompareView
+    lastSavedSelectedTiles: null, // CatalogView & CompareView
+    viewAccentDates: [], // CatalogView & CompareView
+    viewLastAccentDates: [], // CatalogView & CompareView
+    highlightedResources: [], // CatalogView & CompareView
+    lastHighlightedResources: [], // CatalogView & CompareView
+    onlyMultisource: false, // CatalogView & CompareView
 
     onlyAnnotated: false, // ContentPanel
   }
@@ -164,7 +164,7 @@ class DiscoveryApp extends React.PureComponent {
                         />
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/catalog`}>
-                        <TilesView
+                        <CatalogView
                           resources={this.props.resources}
                           totalResCount={totalResCount}
                           dates={dates}
