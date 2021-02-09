@@ -1,11 +1,11 @@
-import FhirTransform from '../../FhirTransform';
+import FhirTransform from '../FhirTransform';
 import {
   classFromCat, formatAge, cleanDates, Const, normalizeDates, timelineIncrYears, tryWithDefault,
-} from '../../util';
-import config from '../../config';
-import { log } from '../../utils/logger';
-import Unimplemented from '../Unimplemented';
-import { primaryTextValue } from '../../fhirUtil';
+} from '../util';
+import config from '../config';
+import { log } from './logger';
+import Unimplemented from '../components/Unimplemented';
+import { primaryTextValue } from '../fhirUtil';
 
 const itemDate = (item, category) => {
   let date = null;
