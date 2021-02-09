@@ -33,7 +33,7 @@ const CollectionSwitcher = () => {
 
   return (
     <FormControl
-      variant="outlined"
+      variant="standard" // filled outlined standard
       color="secondary"
       className={classes.formControl}
     >
