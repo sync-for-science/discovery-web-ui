@@ -24,8 +24,6 @@ import {
 // Render the "tiles view" of the participant's data
 //
 class CompareView extends React.PureComponent {
-  static myName = 'TilesView';
-
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
