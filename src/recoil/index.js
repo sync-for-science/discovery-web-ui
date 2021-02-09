@@ -182,7 +182,7 @@ export const filteredActiveCollectionState = selector({
     const activeCollection = get(activeCollectionState);
     const activeCategories = get(activeCategoriesState);
     const lastUuidsClicked = get(lastRecordsClickedState);
-    let filteredCountForCategory = 0;
+    let totalFilteredRecordCount = 0;
     const { uuids: uuidsInCollection } = activeCollection;
     const filteredCategories = Object.entries(groupedRecordIdsBySubtype)
       .filter(([catLabel]) => (activeCategories[catLabel]))
@@ -196,7 +196,7 @@ export const filteredActiveCollectionState = selector({
               hasLastAdded,
               uuids: activeUuids,
             };
-            filteredCountForCategory += activeUuids.length;
+            totalFilteredRecordCount += activeUuids.length;
           }
           return accCategory;
         }, {
@@ -206,7 +206,7 @@ export const filteredActiveCollectionState = selector({
         });
         return accCats;
       }, {});
-    filteredCategories.filteredCollectionCount = filteredCountForCategory;
+    filteredCategories.filteredCollectionCount = totalFilteredRecordCount;
     // console.info('groupedRecordIdsInCurrentCollectionState: ', JSON.stringify(filteredResults, null, '  '));
     return filteredCategories;
   },
