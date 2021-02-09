@@ -70,7 +70,7 @@ const CollectionsList = () => {
     });
   };
 
-  const handleAddNewCollection = (_event) => {
+  const handleAddNewCollection = () => {
     const newCollectionLabel = collectionInputRef?.current?.value;
     if (newCollectionLabel) {
       setAllCollections((previousState) => {
@@ -102,7 +102,7 @@ const CollectionsList = () => {
             label={label}
             activeCollectionId={allCollections.activeCollectionId}
             collectionId={collectionId}
-            handleSelect={(_event) => setActiveCollection(collectionId)}
+            handleSelect={() => setActiveCollection(collectionId)}
           />
         ))}
         <div className={classes.newCollectionField}>
