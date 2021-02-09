@@ -60,6 +60,7 @@ const selectCardBody = (fieldsData) => {
 const useStyles = makeStyles(() => ({
   root: {
     marginTop: 10,
+    minWidth: '240px',
   },
   recentlyAdded: {
     borderColor: 'var(--tile-selected-last)',
