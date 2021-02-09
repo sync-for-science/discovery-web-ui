@@ -192,15 +192,14 @@ export const filteredActiveCollectionState = selector({
         accCats[catLabel] = Object.entries(category.subtypes).reduce((accCategory, [subtypeLabel, uuids]) => {
           const uuidsForEnabledProviders = uuids.filter((uuid) => activeProviders[records[uuid].provider]);
           const activeUuids = uuidsForEnabledProviders.filter((uuid) => uuidsInCollection[uuid]);
-          if (activeUuids.length > 0) {
-            const hasLastAdded = activeUuids.reduce((acc, uuid) => lastUuidsClicked[uuid] || acc, false);
-            accCategory.filteredCollectionCount += activeUuids.length;
-            accCategory.subtypes[subtypeLabel] = {
-              hasLastAdded,
-              uuids: activeUuids,
-            };
-            totalFilteredRecordCount += activeUuids.length;
-          }
+          const hasLastAdded = activeUuids.reduce((acc, uuid) => lastUuidsClicked[uuid] || acc, false);
+          accCategory.filteredCollectionCount += activeUuids.length;
+          accCategory.subtypes[subtypeLabel] = {
+            hasLastAdded,
+            uuids: activeUuids, // not all subtype uuids -- just uuids for sub filtered by category and provider
+            collectionUuids: activeUuids,
+          };
+          totalFilteredRecordCount += activeUuids.length;
           return accCategory;
         }, {
           filteredCollectionCount: 0,
