@@ -48,15 +48,19 @@ class CompareView extends React.PureComponent {
     console.error(`TODO: handleSetClearButtonClick(${catName}): re-impliment via recoil`); // eslint-disable-line no-console
   }
 
-  buttonClass(catName) {
-    const selectedTilesForCat = this.state.selectedTiles[this.hyphenate(catName)];
-    const selectedCount = selectedTilesForCat ? Object.keys(selectedTilesForCat).length : 0;
-    const tilesForCatCount = this.state.uniqueStruct[catName].length;
-
-    if (selectedCount === 0) return 'tiles-view-column-header-button-none';
-    if (selectedCount < tilesForCatCount) return 'tiles-view-column-header-button-partial';
-    return 'tiles-view-column-header-button-all';
+  hyphenate(name) {
+    return name.toLowerCase().replace(/ /g, '-');
   }
+
+  // buttonClass(catName) {
+  //   const selectedTilesForCat = this.state.selectedTiles[this.hyphenate(catName)];
+  //   const selectedCount = selectedTilesForCat ? Object.keys(selectedTilesForCat).length : 0;
+  //   const tilesForCatCount = this.state.uniqueStruct[catName].length;
+  //
+  //   if (selectedCount === 0) return 'tiles-view-column-header-button-none';
+  //   if (selectedCount < tilesForCatCount) return 'tiles-view-column-header-button-partial';
+  //   return 'tiles-view-column-header-button-all';
+  // }
 
   noneEnabled(obj) {
     for (const propName of Object.keys(obj)) {
@@ -73,6 +77,7 @@ class CompareView extends React.PureComponent {
     } if (this.noneEnabled(this.props.provsEnabled)) {
       return 'No Provider is selected';
     }
+    console.error('this.props.noResultDisplay: ', this.props.noResultDisplay);
     return this.props.noResultDisplay ? this.props.noResultDisplay : 'No data found for the selected Records, Providers, and Time period';
   }
 
@@ -94,21 +99,23 @@ class CompareView extends React.PureComponent {
   }
 
   renderTileColumns() {
-    const cols = [];
-    for (const catName of Object.keys(this.state.uniqueStruct).slice(this.state.firstTileColNum,
-      this.state.firstTileColNum + Math.ceil(this.state.numVisibleCols))) {
-      cols.push(
-        <div className={`${this.hyphenate(catName)} tiles-view-column-container`} key={catName}>
-          <div className="tiles-view-column-header">
-            {catName}
-            <button className={this.buttonClass(catName)} onClick={() => this.handleSetClearButtonClick(catName)} />
-          </div>
-          <div className="tiles-view-column-content">
-            { this.renderTiles(catName) }
-          </div>
-        </div>,
-      );
-    }
+    const { groupedRecordIdsBySubtype, catsEnabled } = this.props;
+    const cols = Object.entries(groupedRecordIdsBySubtype).reduce((acc, [categoryLabel, category]) => {
+      if (catsEnabled[categoryLabel]) {
+        acc.push(
+          <div className={`${this.hyphenate(categoryLabel)} tiles-view-column-container`} key={categoryLabel}>
+            <div className="tiles-view-column-header">
+              {categoryLabel}
+              {/* <button className={this.buttonClass(categoryLabel)} onClick={() => this.handleSetClearButtonClick(categoryLabel)} /> */}
+            </div>
+            <div className="tiles-view-column-content">
+              { this.renderTiles(categoryLabel) }
+            </div>
+          </div>,
+        );
+      }
+      return acc;
+    }, []);
 
     if (cols.length === 0) {
       cols.push(
@@ -135,8 +142,14 @@ class CompareView extends React.PureComponent {
   }
 
   render() {
-    const maxFirstTileColNum = Object.keys(this.state.uniqueStruct).length - Math.trunc(this.state.numVisibleCols);
+    const { catsEnabled, provsEnabled } = this.props;
+
+    const enablededCategoryCount = Object.values(catsEnabled).reduce((acc, enabled) => (enabled ? (acc + 1) : acc), 0);
+
+    const maxFirstTileColNum = enablededCategoryCount - Math.trunc(this.state.numVisibleCols);
+
     const tileSelected = Object.keys(this.state.selectedTiles).length > 0;
+
     return (
       <div className="tiles-view">
         <div className="tiles-view-header">
@@ -148,24 +161,24 @@ class CompareView extends React.PureComponent {
           </div>
         </div>
         <div className="tiles-view-container">
-          { Object.keys(this.state.uniqueStruct).length > 0 && (
-          <div className="tiles-view-nav-left">
-            <button
-              className={this.state.firstTileColNum > 0 ? 'tiles-view-nav-left-button-on' : 'tiles-view-nav-left-button-off'}
-              onClick={() => this.onNavClick('left')}
-            />
-          </div>
+          { enablededCategoryCount > 0 && (
+            <div className="tiles-view-nav-left">
+              <button
+                className={this.state.firstTileColNum > 0 ? 'tiles-view-nav-left-button-on' : 'tiles-view-nav-left-button-off'}
+                onClick={() => this.onNavClick('left')}
+              />
+            </div>
           ) }
           <div className="tiles-view-container-inner">
             { this.renderTileColumns() }
           </div>
-          { Object.keys(this.state.uniqueStruct).length > 0 && (
-          <div className="tiles-view-nav-right">
-            <button
-              className={this.state.firstTileColNum < maxFirstTileColNum ? 'tiles-view-nav-right-button-on' : 'tiles-view-nav-right-button-off'}
-              onClick={() => this.onNavClick('right')}
-            />
-          </div>
+          { enablededCategoryCount > 0 && (
+            <div className="tiles-view-nav-right">
+              <button
+                className={this.state.firstTileColNum < maxFirstTileColNum ? 'tiles-view-nav-right-button-on' : 'tiles-view-nav-right-button-off'}
+                onClick={() => this.onNavClick('right')}
+              />
+            </div>
           ) }
         </div>
         <SelectedCardCollection />
