@@ -57,16 +57,19 @@ export const rootTheme = createMuiTheme({
       fontFamily: 'header',
     },
     'card-list-category-header': {
+      display: 'flex',
+      justifyContent: 'space-between',
       fontFamily: 'header-bold',
-      display: 'block',
       color: 'var(--ca1)',
-      margin: 12,
+      margin: 4,
+    },
+    'card-list-category-label': {
+      fontSize: '1rem',
     },
     'card-list-category-count': {
       fontFamily: 'header',
       display: 'inline',
       color: '#aaa',
-      margin: 12,
     },
     s4sHeader: {
       fontFamily: 'header-bold',

@@ -59,7 +59,11 @@ const CardsForCategory = ({ categoryLabel }) => {
       <Typography
         variant="card-list-category-header"
       >
-        {categoryLabel}
+        <Typography
+          variant="card-list-category-label"
+        >
+          {categoryLabel}
+        </Typography>
         <Typography
           variant="card-list-category-count"
         >
