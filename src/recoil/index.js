@@ -2,7 +2,7 @@ import {
   atom, selector,
 } from 'recoil';
 import jsonQuery from 'json-query';
-import { activeCategoriesState } from './category-provider-filters';
+import { activeCategoriesState, activeProvidersState } from './category-provider-filters';
 
 export * from './category-provider-filters';
 
@@ -181,6 +181,8 @@ export const filteredActiveCollectionState = selector({
     const groupedRecordIdsBySubtype = get(groupedRecordIdsBySubtypeState);
     const activeCollection = get(activeCollectionState);
     const activeCategories = get(activeCategoriesState);
+    const activeProviders = get(activeProvidersState);
+    const { records } = get(resourcesState);
     const lastUuidsClicked = get(lastRecordsClickedState);
     let totalFilteredRecordCount = 0;
     const { uuids: uuidsInCollection } = activeCollection;
@@ -188,7 +190,8 @@ export const filteredActiveCollectionState = selector({
       .filter(([catLabel]) => (activeCategories[catLabel]))
       .reduce((accCats, [catLabel, category]) => {
         accCats[catLabel] = Object.entries(category.subtypes).reduce((accCategory, [subtypeLabel, uuids]) => {
-          const activeUuids = uuids.filter((uuid) => uuidsInCollection[uuid]);
+          const uuidsForEnabledProviders = uuids.filter((uuid) => activeProviders[records[uuid].provider]);
+          const activeUuids = uuidsForEnabledProviders.filter((uuid) => uuidsInCollection[uuid]);
           if (activeUuids.length > 0) {
             const hasLastAdded = activeUuids.reduce((acc, uuid) => lastUuidsClicked[uuid] || acc, false);
             accCategory.filteredCollectionCount += activeUuids.length;
