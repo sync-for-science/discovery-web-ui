@@ -14,14 +14,9 @@ const RecordSelector = ({ label, uuids }) => {
   const [activeCollection, setActiveCollection] = useRecoilState(activeCollectionState);
   const lastUuidsClicked = useRecoilValue(lastRecordsClickedState);
 
-  // console.info('activeCollection: ', JSON.stringify(activeCollection, null, '  '));
-  // console.info('lastUuidsClicked: ', JSON.stringify(lastUuidsClicked, null, '  '));
-
   const { uuids: activeUuids } = activeCollection;
-  const hasLastClickedUuid = uuids.reduce((acc, uuid) => lastUuidsClicked[uuid] || acc, false);
-  const hasActiveUuid = hasLastClickedUuid || uuids.reduce((acc, uuid) => activeUuids[uuid] || acc, false);
-  // console.info('hasActiveUuid: ', hasActiveUuid);
-  // console.info('hasLastClickedUuid: ', hasLastClickedUuid);
+  const hasActiveUuid = uuids.reduce((acc, uuid) => activeUuids[uuid] || acc, false);
+  const hasLastClickedUuid = hasActiveUuid && uuids.reduce((acc, uuid) => lastUuidsClicked[uuid] || acc, false);
 
   const cssClass = hasLastClickedUuid ? 'tile-standard-last' : (hasActiveUuid ? 'tile-standard-selected' : 'tile-standard');
 
@@ -42,10 +37,6 @@ const RecordSelector = ({ label, uuids }) => {
 };
 
 RecordSelector.propTypes = {
-  // displayCoding: shape({
-  //   code: string.isRequired,
-  //   display: string.isRequired,
-  // }).isRequired,
   label: string.isRequired,
   uuids: array.isRequired,
 };

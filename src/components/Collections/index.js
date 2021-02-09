@@ -1,51 +1,18 @@
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
 
-import { useRecoilValue } from 'recoil';
-import {
-  resourcesState, patientRecord, filteredActiveCollectionState,
-} from '../../recoil';
+import CollectionsList from './CollectionsList';
+import CollectionDisplay from './CollectionDisplay';
 
-/* eslint-disable react/jsx-one-expression-per-line */
-const Collections = () => {
-  const resources = useRecoilValue(resourcesState);
-  const patient = useRecoilValue(patientRecord);
-  const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
-
-  const {
-    loading, records,
-  } = resources;
-
-  return (
-    <div>
-      <h3>COLLECTIONS</h3>
-      <div>
-        loading:
-        { String(loading) }
-      </div>
-      <div className="collections-content">
-        <div>
-          <h4>groupedRecordIdsInCurrentCollection:</h4>
-          <pre>
-            {JSON.stringify(filteredActiveCollection, null, '  ') }
-          </pre>
-        </div>
-        <hr />
-        <div style={{ backgroundColor: '#ff9' }}>
-          <h4>patient:</h4>
-          <pre>
-            { JSON.stringify(patient, null, '  ') }
-          </pre>
-        </div>
-        <hr />
-        <div>
-          <h4>records:</h4>
-          <pre>
-            { JSON.stringify(records, null, '  ') }
-          </pre>
-        </div>
-      </div>
-    </div>
-  );
-};
+const Collections = () => (
+  <Grid container spacing={2}>
+    <Grid style={{ paddingLeft: '0px' }} item xs={2}>
+      <CollectionsList />
+    </Grid>
+    <Grid item xs={10}>
+      <CollectionDisplay />
+    </Grid>
+  </Grid>
+);
 
 export default React.memo(Collections);

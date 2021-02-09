@@ -16,6 +16,33 @@ export const rootTheme = createMuiTheme({
         },
       },
     },
+    MuiMenuItem: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+        },
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'header',
+          padding: '0px',
+          paddingLeft: '8px',
+        },
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          padding: '8px',
+        },
+      },
+    },
     MuiDialogActions: {
       styleOverrides: {
         justifyContent: 'space-between',
@@ -47,22 +74,24 @@ export const rootTheme = createMuiTheme({
       fontSize: '1rem',
       color: 'white',
     },
-    'card-list-header': {
-      fontFamily: 'header',
+    'card-list-collection-count': {
       display: 'block',
-      margin: 12,
+      fontFamily: 'header',
     },
     'card-list-category-header': {
+      display: 'flex',
+      justifyContent: 'space-between',
       fontFamily: 'header-bold',
-      display: 'block',
       color: 'var(--ca1)',
-      margin: 12,
+      margin: 4,
+    },
+    'card-list-category-label': {
+      fontSize: '1rem',
     },
     'card-list-category-count': {
       fontFamily: 'header',
       display: 'inline',
       color: '#aaa',
-      margin: 12,
     },
     s4sHeader: {
       fontFamily: 'header-bold',

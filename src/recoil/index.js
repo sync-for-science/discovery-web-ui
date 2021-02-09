@@ -124,10 +124,10 @@ const pruneEmpty = ((o) => Object.entries(o).reduce((acc, [k, v]) => {
 }, {}));
 
 // TODO: ^other states facilitate implementation of something like the following:
-export const collectionsState = atom({
-  key: 'collectionsState',
+export const allCollectionsState = atom({
+  key: 'allCollectionsState',
   default: {
-    activeCollection: 'default',
+    activeCollectionId: 'default',
     collections: {
       default: {
         label: 'Untitled Collection',
@@ -146,24 +146,25 @@ export const lastRecordsClickedState = atom({
 export const activeCollectionState = selector({
   key: 'activeCollectionState',
   get: ({ get }) => {
-    const allCollections = get(collectionsState);
-    const { activeCollection, collections } = allCollections;
-    const currentActiveCollection = collections[activeCollection];
+    const allCollections = get(allCollectionsState);
+    const { activeCollectionId, collections } = allCollections;
+    const currentActiveCollection = collections[activeCollectionId];
     return currentActiveCollection;
   },
   set: ({ get, set }, newValues) => {
-    const allCollections = get(collectionsState);
-    const { activeCollection, collections } = allCollections;
-    const currentActiveCollection = collections[activeCollection];
+    const allCollections = get(allCollectionsState);
+    const { activeCollectionId, collections } = allCollections;
+    const currentActiveCollection = collections[activeCollectionId];
     const { label } = currentActiveCollection;
     const uuids = pruneEmpty({
       ...currentActiveCollection.uuids,
       ...newValues,
     });
-    set(collectionsState, {
-      activeCollection,
+    set(allCollectionsState, {
+      activeCollectionId,
       collections: {
-        [activeCollection]: {
+        ...allCollections.collections,
+        [activeCollectionId]: {
           label,
           uuids,
         },
@@ -235,6 +236,28 @@ export const notesWithRecordId = memoize((recordId) => {
       const noteId = oldId ?? nowUTC;
       set(atomForThisRecord, pruneEmpty({
         ...existingNotesForId,
+        [noteId]: noteText === null ? null : { noteText, lastUpdated: nowUTC },
+      }));
+    },
+  });
+});
+
+export const collectionNotes = memoize((collectionName) => {
+  const atomForThisCollectionNotes = atom({
+    key: `stored-collection-notes-${collectionName}`,
+    default: {},
+  });
+  return selector({
+    key: `notesForCollection-${collectionName}`, // unique name (with respect to other atoms/selectors)
+    get: ({ get }) =>
+      // TODO: get from server or localStorage:
+      get(atomForThisCollectionNotes),
+    set: ({ get, set }, { noteId: oldId, noteText }) => {
+      const existingNotesForCollection = get(atomForThisCollectionNotes);
+      const nowUTC = (new Date()).toISOString();
+      const noteId = oldId ?? nowUTC;
+      set(atomForThisCollectionNotes, pruneEmpty({
+        ...existingNotesForCollection,
         [noteId]: noteText === null ? null : { noteText, lastUpdated: nowUTC },
       }));
     },

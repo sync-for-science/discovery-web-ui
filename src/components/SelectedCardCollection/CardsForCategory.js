@@ -14,6 +14,7 @@ const CategorySubtypeAccordion = ({
   records, categoryLabel, subtypeLabel, categorySubtype,
 }) => {
   const { hasLastAdded, uuids } = categorySubtype;
+  const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
   return (
     <Accordion
       // defaultExpanded={hasLastAdded}
@@ -22,9 +23,7 @@ const CategorySubtypeAccordion = ({
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
       >
-        <Typography>
-          {categoryLabel} - {subtypeLabel} {/* eslint-disable-line react/jsx-one-expression-per-line */}
-        </Typography>
+        {summaryLabel}
       </AccordionSummary>
       <AccordionDetails>
         {
@@ -49,7 +48,7 @@ const CardsForCategory = ({ categoryLabel }) => {
   const { records } = resources;
   const category = filteredActiveCollection[categoryLabel];
   // console.info('category: ', JSON.stringify(category, null, '  '));
-  if (category.filteredCollectionCount === 0) {
+  if (!category || category.filteredCollectionCount === 0) {
     return null;
   }
   return (
@@ -59,7 +58,11 @@ const CardsForCategory = ({ categoryLabel }) => {
       <Typography
         variant="card-list-category-header"
       >
-        {categoryLabel}
+        <Typography
+          variant="card-list-category-label"
+        >
+          {categoryLabel}
+        </Typography>
         <Typography
           variant="card-list-category-count"
         >

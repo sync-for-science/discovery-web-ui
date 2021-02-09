@@ -34,7 +34,6 @@ const CompletedNote = ({
   noteText, lastUpdated, handleDeleteNote, handleSetEditingMode,
 }) => {
   const classes = useStyles();
-  // TODO: Use <Button /> instead of <Typography />, and style Button variant?
   return (
     <Grid container className={classes.root}>
       <Grid item container alignItems="center">
@@ -42,12 +41,10 @@ const CompletedNote = ({
           <Typography variant="s4sNoteHeader">{formatDate(lastUpdated)}</Typography>
         </Grid>
         <Grid item container xs={6}>
-          <Grid item xs={6} align="right">
+          <Grid item container justifyContent="flex-end">
             <Button onClick={handleSetEditingMode}>
               EDIT
             </Button>
-          </Grid>
-          <Grid item xs={6} align="right">
             <Button onClick={handleDeleteNote}>
               DELETE
             </Button>
