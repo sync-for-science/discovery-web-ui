@@ -18,7 +18,7 @@ import PageFooter from '../PageFooter';
 import { PATIENT_MODE_SEGMENT } from '../../index';
 import {
   normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
-} from './Api';
+} from '../../utils/api';
 import {
   resourcesState, timeFiltersState, activeCategoriesState, activeProvidersState,
 } from '../../recoil';
