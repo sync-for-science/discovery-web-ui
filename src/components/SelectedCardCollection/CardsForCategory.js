@@ -22,9 +22,7 @@ const CategorySubtypeAccordion = ({
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
       >
-        <Typography>
-          {categoryLabel} - {subtypeLabel} {/* eslint-disable-line react/jsx-one-expression-per-line */}
-        </Typography>
+        {categoryLabel} - {subtypeLabel} {/* eslint-disable-line react/jsx-one-expression-per-line */}
       </AccordionSummary>
       <AccordionDetails>
         {

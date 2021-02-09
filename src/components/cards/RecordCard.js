@@ -59,12 +59,11 @@ const selectCardBody = (fieldsData) => {
 
 const useStyles = makeStyles(() => ({
   root: {
-    marginTop: 10,
+    marginBottom: 8,
     minWidth: '240px',
   },
   recentlyAdded: {
     borderColor: 'var(--tile-selected-last)',
-    marginTop: 10,
   },
   title: {
     padding: '16px 16px 0 16px',
@@ -140,7 +139,7 @@ const RecordCard = ({
 
   return (
     <Card
-      className={recentlyAdded ? classes.recentlyAdded : classes.root}
+      className={`${classes.root} ${recentlyAdded ? classes.recentlyAdded : ''}`}
       variant="outlined"
       id={`${format(new Date(fieldsData.date), 'y-MM-dd')}-${fieldsData.display}`}
     >

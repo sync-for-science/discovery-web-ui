@@ -21,6 +21,28 @@ export const rootTheme = createMuiTheme({
         disableRipple: true,
       },
     },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+        },
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'header',
+          padding: '0px',
+          paddingLeft: '8px',
+        },
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          padding: '8px',
+        },
+      },
+    },
     MuiDialogActions: {
       styleOverrides: {
         justifyContent: 'space-between',
