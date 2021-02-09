@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './TilesView.css';
+import './CatalogView.css';
 import { useRecoilValue } from 'recoil';
 import config from '../../config.js';
 import { log } from '../../utils/logger';
