@@ -38,7 +38,7 @@ const MedicationCardBody = ({ fieldsData }) => {
         dependency={fieldsData.medicationDisplay}
         label={CARD_BODY_LABEL.medications}
         value={fieldsData.medicationDisplay}
-        highlight
+        bold
       />
       <CardBodyField
         dependency={fieldsData.reason}

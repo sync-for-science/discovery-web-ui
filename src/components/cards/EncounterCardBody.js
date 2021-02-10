@@ -18,7 +18,7 @@ const EncounterCardBody = ({ fieldsData }) => {
         dependency={fieldsData.type[0].text}
         label={CARD_BODY_LABEL.type}
         value={displayType}
-        highlight
+        bold
       />
       <CardBodyField
         dependency={fieldsData.period.start !== fieldsData.period.end}

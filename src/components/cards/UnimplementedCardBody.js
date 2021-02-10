@@ -14,7 +14,7 @@ const UnimplementedCardBody = ({ fieldsData }) => (
       dependency={fieldsData.category}
       label={fieldsData.category}
       value="Pending"
-      highlight
+      bold
     />
     <CardBodyField
       dependency={fieldsData.provider}

@@ -57,7 +57,7 @@ const BenefitCardBody = ({ fieldsData }) => {
         dependency={fieldsData.type.coding[0].display}
         label={CARD_BODY_LABEL.claimType}
         value={claimDisplay}
-        highlight
+        bold
       />
       <CardBodyField
         dependency={fieldsData.billablePeriod}

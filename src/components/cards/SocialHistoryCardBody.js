@@ -15,7 +15,7 @@ const SocialHistoryCardBody = ({ fieldsData }) => (
       dependency={fieldsData.display}
       label={CARD_BODY_LABEL.type}
       value={fieldsData.display}
-      highlight
+      bold
     />
     <CardBodyField
       dependency={fieldsData.value}
