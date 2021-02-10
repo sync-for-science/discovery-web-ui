@@ -78,38 +78,14 @@ class CompareView extends React.PureComponent {
     return cols;
   }
 
-  onNavClick = (_dir) => {
-  }
-
   render() {
-    const { filteredActiveCollection } = this.props;
-
-    const enablededCategoryCount = Object.values(filteredActiveCollection).reduce((acc, category) => (category.totalCount ? (acc + 1) : acc), 0);
-
-    const maxFirstTileColNum = enablededCategoryCount - Math.trunc(this.state.numVisibleCols);
-
     return (
       <div className="tiles-view">
         <div className="tiles-view-header" />
         <div className="tiles-view-container">
-          { enablededCategoryCount > 0 && (
-            <div className="tiles-view-nav-left">
-              <button
-                className={this.state.firstTileColNum > 0 ? 'tiles-view-nav-left-button-on' : 'tiles-view-nav-left-button-off'}
-              />
-            </div>
-          ) }
           <div className="tiles-view-container-inner">
             { this.renderTileColumns() }
           </div>
-          { enablededCategoryCount > 0 && (
-            <div className="tiles-view-nav-right">
-              <button
-                className={this.state.firstTileColNum < maxFirstTileColNum ? 'tiles-view-nav-right-button-on' : 'tiles-view-nav-right-button-off'}
-                onClick={() => this.onNavClick('right')}
-              />
-            </div>
-          ) }
         </div>
         <SelectedCardCollection />
       </div>
