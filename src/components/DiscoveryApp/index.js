@@ -6,10 +6,8 @@ import { get } from 'axios';
 
 import './DiscoveryApp.css';
 import config from '../../config.js';
-import { log } from '../../utils/logger';
 import PageHeader from '../PageHeader';
 import StandardFilters from '../StandardFilters';
-import ContentPanel from '../ContentPanel/ContentRight';
 import SummaryView from '../SummaryView';
 import CompareView from '../CompareView';
 import CatalogView from '../CatalogView';
@@ -25,9 +23,6 @@ import {
 
 import DiscoveryContext from '../DiscoveryContext';
 
-//
-// Render the top-level Discovery application page
-//
 class DiscoveryApp extends React.PureComponent {
   static propTypes = {
     match: PropTypes.object,
@@ -64,32 +59,6 @@ class DiscoveryApp extends React.PureComponent {
     onlyMultisource: false, // CatalogView & CompareView
 
     onlyAnnotated: false, // ContentPanel
-  }
-
-  onDotClick = (dotClickDate) => {
-    this.setState({ dotClickDate });
-  }
-
-  calcContentPanelTopBound() {
-    try {
-      const headerBot = document.querySelector('.time-widget').getBoundingClientRect().top;
-      const targetTop = document.querySelector('.standard-filters-categories-and-providers').getBoundingClientRect().top;
-      log(`Top Bound: ${targetTop - headerBot}`);
-      return targetTop - headerBot;
-    } catch (e) {
-      return 0;
-    }
-  }
-
-  calcContentPanelBottomBound() {
-    try {
-      const footTop = document.querySelector('.page-footer').getBoundingClientRect().top;
-      const headerBot = document.querySelector('.time-widget').getBoundingClientRect().bottom;
-      log(`Bottom Bound: ${footTop - headerBot + 26}`);
-      return footTop - headerBot + 26;
-    } catch (e) {
-      return 0;
-    }
   }
 
   render() {
@@ -137,8 +106,6 @@ class DiscoveryApp extends React.PureComponent {
                   catsEnabled={activeCategories}
                   providers={providers}
                   provsEnabled={activeProviders}
-                  // lastEvent={this.state.lastEvent}
-                  // TODO: convert to use route path segment:
                   // allowDotClick={!['compare', 'catalog'].includes(activeView)}
                   allowDotClick
                   dotClickDate={this.state.dotClickDate}
@@ -162,25 +129,6 @@ class DiscoveryApp extends React.PureComponent {
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/compare`}>
                         <CompareView />
-                      </Route>
-                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/timeline`}>
-                        <ContentPanel
-                          open
-                          catsEnabled={activeCategories}
-                          provsEnabled={activeProviders}
-                          dotClickFn={this.onDotClick}
-                          containerClassName="content-panel-absolute"
-                          topBoundFn={this.calcContentPanelTopBound}
-                          bottomBoundFn={this.calcContentPanelBottomBound}
-                          // context, nextPrevFn added in StandardFilters
-                          dateRangeStart={dateRangeStart}
-                          dateRangeEnd={dateRangeEnd}
-                          resources={legacyResources}
-                          providers={providers}
-                          totalResCount={totalResCount}
-                          viewName="Report"
-                          viewIconClass="longitudinal-view-icon"
-                        />
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/collections`}>
                         <Collections />
