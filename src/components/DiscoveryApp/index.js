@@ -164,16 +164,7 @@ class DiscoveryApp extends React.PureComponent {
                         />
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/catalog`}>
-                        <CatalogView
-                          totalResCount={totalResCount}
-                          dates={dates}
-                          categories={categories}
-                          providers={providers}
-                          catsEnabled={activeCategories}
-                          provsEnabled={activeProviders}
-                          thumbLeftDate={thumbLeftDate}
-                          thumbRightDate={thumbRightDate}
-                        />
+                        <CatalogView />
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/compare`}>
                         <CompareView

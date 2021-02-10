@@ -6,7 +6,10 @@ import './CatalogView.css';
 import SelectedCardCollection from '../SelectedCardCollection';
 import RecordSelector from '../SelectedCardCollection/RecordSelector';
 import {
+  activeCategoriesState,
+  activeProvidersState,
   filteredActiveCollectionState,
+  // timeFiltersState,
 } from '../../recoil';
 
 class CompareView extends React.PureComponent {
@@ -31,9 +34,9 @@ class CompareView extends React.PureComponent {
   }
 
   get noResultDisplay() {
-    if (this.noneEnabled(this.props.catsEnabled)) {
+    if (this.noneEnabled(this.props.activeCategories)) {
       return 'No Record type is selected';
-    } if (this.noneEnabled(this.props.provsEnabled)) {
+    } if (this.noneEnabled(this.props.activeProviders)) {
       return 'No Provider is selected';
     }
     return this.props.noResultDisplay ? this.props.noResultDisplay : 'No data found for the selected Records, Providers, and Time period';
@@ -130,28 +133,28 @@ class CompareView extends React.PureComponent {
 
 CompareView.propTypes = {
   filteredActiveCollection: PropTypes.shape({}),
-  // resources: PropTypes.shape({
-  //   patient: PropTypes.shape({}),
-  //   providers: PropTypes.arrayOf(PropTypes.string),
-  //   legacy: PropTypes.instanceOf(FhirTransform),
-  // }),
-  // totalResCount: PropTypes.number,
-  // categories: PropTypes.arrayOf(PropTypes.string).isRequired,
-  // providers: PropTypes.arrayOf(PropTypes.string).isRequired,
-  catsEnabled: PropTypes.object.isRequired,
-  provsEnabled: PropTypes.object.isRequired,
-  thumbLeftDate: PropTypes.string.isRequired,
-  thumbRightDate: PropTypes.string.isRequired,
-  // context, nextPrevFn added in StandardFilters
+  activeCategories: PropTypes.shape({}),
+  activeProviders: PropTypes.shape({}),
+  // thumbLeftDate: PropTypes.string.isRequired,
+  // thumbRightDate: PropTypes.string.isRequired,
 };
 
 const CompareViewHOC = (props) => {
   const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
+  const activeCategories = useRecoilValue(activeCategoriesState);
+  const activeProviders = useRecoilValue(activeProvidersState);
+  // const timeFilters = useRecoilValue(timeFiltersState);
+  // const { dates, thumbLeftDate, thumbRightDate } = timeFilters;
 
   return (
     <CompareView
       {...props} // eslint-disable-line react/jsx-props-no-spreading
       filteredActiveCollection={filteredActiveCollection}
+      activeCategories={activeCategories}
+      activeProviders={activeProviders}
+      // dates={dates}
+      // thumbLeftDate={thumbLeftDate}
+      // thumbRightDate={thumbRightDate}
     />
   );
 };
