@@ -196,7 +196,7 @@ export const filteredActiveCollectionState = selector({
           accCategory.filteredCollectionCount += activeUuids.length;
           accCategory.subtypes[subtypeLabel] = {
             hasLastAdded,
-            uuids: activeUuids, // not all subtype uuids -- just uuids for sub filtered by category and provider
+            uuids: uuidsForEnabledProviders, // not all subtype uuids -- just uuids for sub filtered by category and provider
             collectionUuids: activeUuids,
           };
           totalFilteredRecordCount += activeUuids.length;
