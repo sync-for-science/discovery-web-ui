@@ -10,23 +10,6 @@ import {
 } from '../../recoil';
 
 class CompareView extends React.PureComponent {
-  static propTypes = {
-    filteredActiveCollection: PropTypes.shape({}),
-    // resources: PropTypes.shape({
-    //   patient: PropTypes.shape({}),
-    //   providers: PropTypes.arrayOf(PropTypes.string),
-    //   legacy: PropTypes.instanceOf(FhirTransform),
-    // }),
-    // totalResCount: PropTypes.number,
-    // categories: PropTypes.arrayOf(PropTypes.string).isRequired,
-    // providers: PropTypes.arrayOf(PropTypes.string).isRequired,
-    catsEnabled: PropTypes.object.isRequired,
-    provsEnabled: PropTypes.object.isRequired,
-    thumbLeftDate: PropTypes.string.isRequired,
-    thumbRightDate: PropTypes.string.isRequired,
-    // context, nextPrevFn added in StandardFilters
-  }
-
   state = {
     firstTileColNum: 0,
     // leftColNavEnabled: true,
@@ -37,19 +20,6 @@ class CompareView extends React.PureComponent {
     // topBound: 0,
     // onlyMultisource: false,
   }
-
-  // onResize = () => {
-  //   this.setState({ numVisibleCols: this.numVisibleCols() });
-  // }
-  // buttonClass(catName) {
-  //   const selectedTilesForCat = this.state.selectedTiles[this.hyphenate(catName)];
-  //   const selectedCount = selectedTilesForCat ? Object.keys(selectedTilesForCat).length : 0;
-  //   const tilesForCatCount = this.state.uniqueStruct[catName].length;
-  //
-  //   if (selectedCount === 0) return 'tiles-view-column-header-button-none';
-  //   if (selectedCount < tilesForCatCount) return 'tiles-view-column-header-button-partial';
-  //   return 'tiles-view-column-header-button-all';
-  // }
 
   noneEnabled(obj) {
     for (const propName of Object.keys(obj)) {
@@ -161,6 +131,23 @@ class CompareView extends React.PureComponent {
     );
   }
 }
+
+CompareView.propTypes = {
+  filteredActiveCollection: PropTypes.shape({}),
+  // resources: PropTypes.shape({
+  //   patient: PropTypes.shape({}),
+  //   providers: PropTypes.arrayOf(PropTypes.string),
+  //   legacy: PropTypes.instanceOf(FhirTransform),
+  // }),
+  // totalResCount: PropTypes.number,
+  // categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // providers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  catsEnabled: PropTypes.object.isRequired,
+  provsEnabled: PropTypes.object.isRequired,
+  thumbLeftDate: PropTypes.string.isRequired,
+  thumbRightDate: PropTypes.string.isRequired,
+  // context, nextPrevFn added in StandardFilters
+};
 
 const CompareViewHOC = (props) => {
   const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
