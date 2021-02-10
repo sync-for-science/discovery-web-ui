@@ -1,30 +1,28 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
 import InputBase from '@material-ui/core/InputBase';
-import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { useRecoilState } from 'recoil';
 
-import { allCollectionsState } from '../../recoil';
-import CollectionActions from './CollectionActions'
 import { TextField } from '@material-ui/core';
+import { allCollectionsState } from '../../recoil';
+import CollectionActions from './CollectionActions';
 
 const useStyles = makeStyles((_theme) => ({
   formControl: {
     width: '100%',
   },
   inputField: {
-    backgroundColor: '#fff'
-  }
+    backgroundColor: '#fff',
+  },
 }));
 
 const CustomInputBase = withStyles(() => ({
   root: {
-    color: '#fff'
-  }
+    color: '#fff',
+  },
 }))(InputBase); // for some reason, this disables the borderBottom in Select
 
 const CollectionSwitcher = () => {
@@ -32,7 +30,7 @@ const CollectionSwitcher = () => {
 
   const [allCollections, setAllCollections] = useRecoilState(allCollectionsState);
   const { activeCollectionId, collections } = allCollections;
-  const [showRenameField, setShowRenameField] = useState(false)
+  const [showRenameField, setShowRenameField] = useState(false);
 
   const handleChange = (event) => {
     const { target: { value: collectionId } } = event;
@@ -45,7 +43,7 @@ const CollectionSwitcher = () => {
     });
   };
 
-  const renameInput = useRef(null)
+  const renameInput = useRef(null);
 
   const handleSaveRenameCollection = () => {
     setAllCollections((previousState) => {
@@ -53,7 +51,7 @@ const CollectionSwitcher = () => {
       return {
         activeCollectionId,
         collections: {
-          ...collections, 
+          ...collections,
           [activeCollectionId]: {
             label: renameInput.current.value,
             uuids: collections[activeCollectionId].uuids,
@@ -61,8 +59,8 @@ const CollectionSwitcher = () => {
         },
       };
     });
-    setShowRenameField(false)
-  }
+    setShowRenameField(false);
+  };
 
   const handleNewCollectionState = () => {
     setAllCollections((previousState) => {
@@ -71,22 +69,22 @@ const CollectionSwitcher = () => {
       return {
         activeCollectionId: nowUTC,
         collections: {
-          ...collections, 
+          ...collections,
           [nowUTC]: {
-            label: "New Collection",
+            label: 'New Collection',
             uuids: [],
           },
         },
       };
     });
-  }
+  };
 
   const handleNewCollection = async () => {
-    await handleNewCollectionState() // need to await NewCollectionState so renameInput.current.value has latest collections
-    setShowRenameField(true)
-  }
+    await handleNewCollectionState(); // need to await NewCollectionState so renameInput.current.value has latest collections
+    setShowRenameField(true);
+  };
 
-  let displayCollection
+  let displayCollection;
   if (!showRenameField) {
     displayCollection = (
       <FormControl
@@ -100,7 +98,7 @@ const CollectionSwitcher = () => {
           id="select-active-collection"
           value={activeCollectionId}
           MenuProps={{ MenuListProps: { disablePadding: true } }}
-          inputProps={{ 'aria-label': 'Without label', }}
+          inputProps={{ 'aria-label': 'Without label' }}
           input={<CustomInputBase />}
           onChange={handleChange}
         >
@@ -114,26 +112,25 @@ const CollectionSwitcher = () => {
           ))}
         </Select>
       </FormControl>
-    )
+    );
   } else {
-    debugger
     displayCollection = (
-      <TextField 
-        size="small" 
-        fullWidth 
+      <TextField
+        size="small"
+        fullWidth
         InputProps={{
-          className: classes.inputField
+          className: classes.inputField,
         }}
         inputRef={renameInput}
         defaultValue={collections[activeCollectionId].label}
       />
-    )
+    );
   }
 
   return (
     <>
       {displayCollection}
-      <CollectionActions 
+      <CollectionActions
         showRenameField={showRenameField}
         setShowRenameField={setShowRenameField}
         handleSaveRenameCollection={handleSaveRenameCollection}

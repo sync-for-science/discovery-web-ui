@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import MenuIcon from '@material-ui/icons/Menu';
-import IconButton from '@material-ui/core/IconButton'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
-import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
@@ -12,18 +12,18 @@ const useStyles = makeStyles(() => ({
     height: '100%',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   saveButton: {
-    height: '100%'
-  }
+    height: '100%',
+  },
 }));
 
 const StyledMenu = withStyles()((props) => (
   <Menu
     elevation={1}
     getContentAnchorEl={null}
-    style={{fontSize: '50px'}}
+    style={{ fontSize: '50px' }}
     anchorOrigin={{
       vertical: 'bottom',
       horizontal: 'center',
@@ -32,20 +32,22 @@ const StyledMenu = withStyles()((props) => (
       vertical: 'top',
       horizontal: 'center',
     }}
-    {...props}
+    {...props} // eslint-disable-line react/jsx-props-no-spreading
   />
 ));
 
 const StyledButton = withStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.primary.dark,
-    color: 'white'
-  }
+    color: 'white',
+  },
 }))(Button);
 
-const CollectionActions = ({showRenameField, setShowRenameField, handleSaveRenameCollection, handleNewCollection}) => {
+const CollectionActions = ({
+  showRenameField, setShowRenameField, handleSaveRenameCollection, handleNewCollection,
+}) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const classes = useStyles()
+  const classes = useStyles();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,21 +58,21 @@ const CollectionActions = ({showRenameField, setShowRenameField, handleSaveRenam
   };
 
   const handleShowRenameCollection = () => {
-    setShowRenameField(true)
-    handleClose()
-  }
+    setShowRenameField(true);
+    handleClose();
+  };
 
   const handleRenameCollection = () => {
-    handleClose()
-    setShowRenameField(false)
-    handleSaveRenameCollection()
-  }
+    handleClose();
+    setShowRenameField(false);
+    handleSaveRenameCollection();
+  };
 
-  let displayIcon
+  let displayIcon;
   if (!showRenameField) {
     displayIcon = (
       <>
-        <IconButton size="small" onClick={handleClick} >
+        <IconButton size="small" onClick={handleClick}>
           <MenuIcon color="secondary" />
         </IconButton>
         <StyledMenu
@@ -84,27 +86,27 @@ const CollectionActions = ({showRenameField, setShowRenameField, handleSaveRenam
           <MenuItem onClick={handleNewCollection}>New Collection</MenuItem>
         </StyledMenu>
       </>
-    )
+    );
   } else {
     displayIcon = (
-      <StyledButton 
-        size="small" 
-        variant="contained" 
-        disableElevation 
-        color="secondary" 
+      <StyledButton
+        size="small"
+        variant="contained"
+        disableElevation
+        color="secondary"
         className={classes.saveButton}
         onClick={handleRenameCollection}
       >
         Save
       </StyledButton>
-    )
+    );
   }
 
-  return(
+  return (
     <div className={classes.root}>
       {displayIcon}
     </div>
-  )
-}
+  );
+};
 
-export default CollectionActions
+export default CollectionActions;
