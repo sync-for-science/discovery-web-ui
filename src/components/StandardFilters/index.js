@@ -221,8 +221,8 @@ class StandardFilters extends React.PureComponent {
   // Record thumb positions as returned from StandardFilters
   setDateRange = (minDate, maxDate) => {
     this.props.updateTimeFilters({
-      dateRangeStart: minDate,
-      dateRangeEnd: maxDate,
+      dateRangeStart: minDate.substring(0, 10),
+      dateRangeEnd: maxDate.substring(0, 10),
     });
   }
 

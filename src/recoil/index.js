@@ -181,6 +181,12 @@ export const activeCollectionState = selector({
   },
 });
 
+// derived from util.js inDateRange, but simplified: TODO: use date-fns and tz-aware Date math?
+const isInDateRange = (date, dateRangeStart, dateRangeEnd) => {
+  const dateStr = date.substring(0, 10);
+  return dateStr >= dateRangeStart && dateStr <= dateRangeEnd;
+};
+
 // shape has diverged from groupedRecordIdsBySubtypeState:
 export const filteredActiveCollectionState = selector({
   key: 'filteredActiveCollectionState',
@@ -189,31 +195,35 @@ export const filteredActiveCollectionState = selector({
     const activeCollection = get(activeCollectionState);
     const activeCategories = get(activeCategoriesState);
     const activeProviders = get(activeProvidersState);
+    const { dateRangeStart, dateRangeEnd } = get(timeFiltersState);
     const { records } = get(resourcesState);
     const lastUuidsClicked = get(lastRecordsClickedState);
-    let totalFilteredRecordCount = 0; // total count of all uuids in call categories, after applying category and provider (and todo: timeline) filters
-    let totalFilteredCollectionCount = 0; // count of uuids in totalFilteredRecordCount, that are also in the current collection
+    let totalFilteredRecordCount = 0; // total count of all uuids in all categories, after applying category, provider, and timeline filters
+    let totalFilteredCollectionCount = 0; // all uuids in ^totalFilteredRecordCount, that are also in the current collection
     const { uuids: uuidsInCollection } = activeCollection;
     const filteredCategories = Object.entries(groupedRecordIdsBySubtype)
       .filter(([catLabel]) => (activeCategories[catLabel]))
       .reduce((accCats, [catLabel, category]) => {
         accCats[catLabel] = Object.entries(category.subtypes).reduce((accCategory, [subtypeLabel, uuids]) => {
-          const uuidsForEnabledProviders = uuids.filter((uuid) => activeProviders[records[uuid].provider]);
-          const activeUuids = uuidsForEnabledProviders.filter((uuid) => uuidsInCollection[uuid]);
+          const uuidsFiltered = uuids.filter((uuid) => {
+            const record = records[uuid];
+            return activeProviders[record.provider] && isInDateRange(record.itemDate, dateRangeStart, dateRangeEnd);
+          });
+          const activeUuids = uuidsFiltered.filter((uuid) => uuidsInCollection[uuid]);
           const hasLastAdded = activeUuids.reduce((acc, uuid) => lastUuidsClicked[uuid] || acc, false);
-          accCategory.filteredRecordCount += uuidsForEnabledProviders.length;
+          accCategory.filteredRecordCount += uuidsFiltered.length;
           accCategory.filteredCollectionCount += activeUuids.length;
           accCategory.subtypes[subtypeLabel] = {
             hasLastAdded,
-            uuids: uuidsForEnabledProviders, // not all subtype uuids -- just uuids for sub filtered by category and provider
-            collectionUuids: activeUuids,
+            uuids: uuidsFiltered, // not all subtype uuids -- just uuids for subtype, filtered by category, provider, and timeline filters
+            collectionUuids: activeUuids, // count of uuids in ^uuidsFiltered, that are also in the current collection
           };
-          totalFilteredRecordCount += uuidsForEnabledProviders.length;
+          totalFilteredRecordCount += uuidsFiltered.length;
           totalFilteredCollectionCount += activeUuids.length;
           return accCategory;
         }, {
-          filteredRecordCount: 0, // count of all uuids in category, after applying category and provider (and todo: timeline) filters
-          filteredCollectionCount: 0, // count of uuids in category filteredRecordCount, that are also in the current collection
+          filteredRecordCount: 0, // count of all uuids in category, after applying category, provider, and timeline filters
+          filteredCollectionCount: 0, // count of uuids in ^filteredRecordCount, that are also in the current collection
           totalCount: category.totalCount,
           subtypes: {},
         });
