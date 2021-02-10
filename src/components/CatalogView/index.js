@@ -3,16 +3,15 @@ import PropTypes from 'prop-types';
 import { useRecoilValue } from 'recoil';
 
 import './CatalogView.css';
-import FhirTransform from '../../FhirTransform.js';
 import SelectedCardCollection from '../SelectedCardCollection';
 import RecordSelector from '../SelectedCardCollection/RecordSelector';
 import {
-  groupedRecordIdsBySubtypeState,
+  filteredActiveCollectionState,
 } from '../../recoil';
 
 class CompareView extends React.PureComponent {
   static propTypes = {
-    groupedRecordIdsBySubtype: PropTypes.shape({}),
+    filteredActiveCollection: PropTypes.shape({}),
     // resources: PropTypes.shape({
     //   patient: PropTypes.shape({}),
     //   providers: PropTypes.arrayOf(PropTypes.string),
@@ -81,27 +80,10 @@ class CompareView extends React.PureComponent {
     return this.props.noResultDisplay ? this.props.noResultDisplay : 'No data found for the selected Records, Providers, and Time period';
   }
 
-  renderTiles(catName) {
-    const { groupedRecordIdsBySubtype } = this.props;
-    const tiles = [];
-    if (groupedRecordIdsBySubtype[catName]) {
-      Object.entries(groupedRecordIdsBySubtype[catName].subtypes)
-        .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
-        .forEach(([displayCoding, uuids]) => {
-          tiles.push(<RecordSelector
-            key={displayCoding}
-            label={displayCoding}
-            uuids={uuids}
-          />);
-        });
-    }
-    return tiles;
-  }
-
   renderTileColumns() {
-    const { groupedRecordIdsBySubtype, catsEnabled } = this.props;
-    const cols = Object.entries(groupedRecordIdsBySubtype).reduce((acc, [categoryLabel, category]) => {
-      if (catsEnabled[categoryLabel]) {
+    const { filteredActiveCollection } = this.props;
+    const cols = Object.entries(filteredActiveCollection).reduce((acc, [categoryLabel, category]) => {
+      if (category?.filteredRecordCount) {
         acc.push(
           <div className={`${this.hyphenate(categoryLabel)} tiles-view-column-container`} key={categoryLabel}>
             <div className="tiles-view-column-header">
@@ -109,7 +91,18 @@ class CompareView extends React.PureComponent {
               {/* <button className={this.buttonClass(categoryLabel)} onClick={() => this.handleSetClearButtonClick(categoryLabel)} /> */}
             </div>
             <div className="tiles-view-column-content">
-              { this.renderTiles(categoryLabel) }
+              { Object.entries(category.subtypes)
+                .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
+                .reduce((acc, [displayCoding, { uuids, _collectionUuids }]) => {
+                  if (uuids.length) {
+                    acc.push(<RecordSelector
+                      key={displayCoding}
+                      label={displayCoding}
+                      uuids={uuids}
+                    />);
+                  }
+                  return acc;
+                }, []) }
             </div>
           </div>,
         );
@@ -142,9 +135,10 @@ class CompareView extends React.PureComponent {
   }
 
   render() {
-    const { catsEnabled, provsEnabled } = this.props;
+    const { filteredActiveCollection, catsEnabled, provsEnabled } = this.props;
 
-    const enablededCategoryCount = Object.values(catsEnabled).reduce((acc, enabled) => (enabled ? (acc + 1) : acc), 0);
+    // const enablededCategoryCount = Object.values(catsEnabled).reduce((acc, enabled) => (enabled ? (acc + 1) : acc), 0);
+    const enablededCategoryCount = Object.values(filteredActiveCollection).reduce((acc, category) => (category.totalCount ? (acc + 1) : acc), 0);
 
     const maxFirstTileColNum = enablededCategoryCount - Math.trunc(this.state.numVisibleCols);
 
@@ -188,12 +182,12 @@ class CompareView extends React.PureComponent {
 }
 
 const CompareViewHOC = (props) => {
-  const groupedRecordIdsBySubtype = useRecoilValue(groupedRecordIdsBySubtypeState);
+  const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
 
   return (
     <CompareView
       {...props} // eslint-disable-line react/jsx-props-no-spreading
-      groupedRecordIdsBySubtype={groupedRecordIdsBySubtype}
+      filteredActiveCollection={filteredActiveCollection}
     />
   );
 };
