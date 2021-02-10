@@ -10,27 +10,33 @@ import {
 import PersistentDrawerRight from '../ContentPanel/Drawer';
 import CardsForCategory from './CardsForCategory';
 import CollectionSwitcher from '../Collections/CollectionSwitcher';
+import CollectionActions from '../Collections/CollectionActions';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   appBar: {
     minWidth: 'initial',
-    height: '90px',
     padding: '8px',
+    backgroundColor: theme.palette.primary.main,
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center'
   },
 }));
 
 const CardListHeader = ({ filteredCollectionCount, totalCount }) => {
   const classes = useStyles();
   return (
-    <AppBar
-      position="relative"
+    // <AppBar
+    //   position="relative"
+    //   className={classes.appBar}
+    // >
+    //   <CollectionSwitcher />
+    // </AppBar>
+    <div
       className={classes.appBar}
     >
       <CollectionSwitcher />
-      <Typography variant="card-list-collection-count">
-        Displaying {filteredCollectionCount} of {totalCount} records {/* eslint-disable-line react/jsx-one-expression-per-line */}
-      </Typography>
-    </AppBar>
+    </div>
   );
 };
 
