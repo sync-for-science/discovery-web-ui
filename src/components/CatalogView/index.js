@@ -9,19 +9,12 @@ import {
   activeCategoriesState,
   activeProvidersState,
   filteredActiveCollectionState,
-  // timeFiltersState,
 } from '../../recoil';
 
 class CompareView extends React.PureComponent {
   state = {
     firstTileColNum: 0,
-    // leftColNavEnabled: true,
-    // rightColNavEnabled: true,
-    // uniqueStruct: {},
     numVisibleCols: 0,
-    // lastTileSelected: null,
-    // topBound: 0,
-    // onlyMultisource: false,
   }
 
   noneEnabled(obj) {
@@ -86,12 +79,6 @@ class CompareView extends React.PureComponent {
   }
 
   onNavClick = (_dir) => {
-    // if (dir === 'left') {
-    //   this.setState({ firstTileColNum: Math.max(0, this.state.firstTileColNum - 1) });
-    // } else {
-    //   const maxFirstTileColNum = Object.keys(this.state.uniqueStruct).length - Math.trunc(this.state.numVisibleCols);
-    //   this.setState({ firstTileColNum: Math.min(maxFirstTileColNum, this.state.firstTileColNum + 1) });
-    // }
   }
 
   render() {
@@ -109,7 +96,6 @@ class CompareView extends React.PureComponent {
             <div className="tiles-view-nav-left">
               <button
                 className={this.state.firstTileColNum > 0 ? 'tiles-view-nav-left-button-on' : 'tiles-view-nav-left-button-off'}
-                onClick={() => this.onNavClick('left')}
               />
             </div>
           ) }
@@ -135,16 +121,12 @@ CompareView.propTypes = {
   filteredActiveCollection: PropTypes.shape({}),
   activeCategories: PropTypes.shape({}),
   activeProviders: PropTypes.shape({}),
-  // thumbLeftDate: PropTypes.string.isRequired,
-  // thumbRightDate: PropTypes.string.isRequired,
 };
 
 const CompareViewHOC = (props) => {
   const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
   const activeCategories = useRecoilValue(activeCategoriesState);
   const activeProviders = useRecoilValue(activeProvidersState);
-  // const timeFilters = useRecoilValue(timeFiltersState);
-  // const { dates, thumbLeftDate, thumbRightDate } = timeFilters;
 
   return (
     <CompareView
@@ -152,9 +134,6 @@ const CompareViewHOC = (props) => {
       filteredActiveCollection={filteredActiveCollection}
       activeCategories={activeCategories}
       activeProviders={activeProviders}
-      // dates={dates}
-      // thumbLeftDate={thumbLeftDate}
-      // thumbRightDate={thumbRightDate}
     />
   );
 };
