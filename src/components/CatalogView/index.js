@@ -17,9 +17,9 @@ class CompareView extends React.PureComponent {
     //   providers: PropTypes.arrayOf(PropTypes.string),
     //   legacy: PropTypes.instanceOf(FhirTransform),
     // }),
-    totalResCount: PropTypes.number,
-    categories: PropTypes.arrayOf(PropTypes.string).isRequired,
-    providers: PropTypes.arrayOf(PropTypes.string).isRequired,
+    // totalResCount: PropTypes.number,
+    // categories: PropTypes.arrayOf(PropTypes.string).isRequired,
+    // providers: PropTypes.arrayOf(PropTypes.string).isRequired,
     catsEnabled: PropTypes.object.isRequired,
     provsEnabled: PropTypes.object.isRequired,
     thumbLeftDate: PropTypes.string.isRequired,
@@ -31,7 +31,7 @@ class CompareView extends React.PureComponent {
     firstTileColNum: 0,
     // leftColNavEnabled: true,
     // rightColNavEnabled: true,
-    uniqueStruct: {},
+    // uniqueStruct: {},
     numVisibleCols: 0,
     // lastTileSelected: null,
     // topBound: 0,
@@ -121,13 +121,13 @@ class CompareView extends React.PureComponent {
     return cols;
   }
 
-  onNavClick = (dir) => {
-    if (dir === 'left') {
-      this.setState({ firstTileColNum: Math.max(0, this.state.firstTileColNum - 1) });
-    } else {
-      const maxFirstTileColNum = Object.keys(this.state.uniqueStruct).length - Math.trunc(this.state.numVisibleCols);
-      this.setState({ firstTileColNum: Math.min(maxFirstTileColNum, this.state.firstTileColNum + 1) });
-    }
+  onNavClick = (_dir) => {
+    // if (dir === 'left') {
+    //   this.setState({ firstTileColNum: Math.max(0, this.state.firstTileColNum - 1) });
+    // } else {
+    //   const maxFirstTileColNum = Object.keys(this.state.uniqueStruct).length - Math.trunc(this.state.numVisibleCols);
+    //   this.setState({ firstTileColNum: Math.min(maxFirstTileColNum, this.state.firstTileColNum + 1) });
+    // }
   }
 
   onClearClick = () => {
