@@ -22,9 +22,9 @@ export const rootTheme = createMuiTheme({
       },
       styleOverrides: {
         root: {
-          fontFamily: 'header'
-        }
-      }
+          fontFamily: 'header',
+        },
+      },
     },
     MuiAccordion: {
       styleOverrides: {
@@ -67,14 +67,14 @@ export const rootTheme = createMuiTheme({
       styleOverrides: {
         root: {
           fontFamily: 'header',
-        }
-      }
+        },
+      },
     },
   },
   palette: {
     primary: {
       main: 'rgb(65, 151, 198)', // Colors.css --ca1
-      dark: 'rgb(23, 104, 145)', //Colors.css --ca3
+      dark: 'rgb(23, 104, 145)', // Colors.css --ca3
     },
     secondary: {
       main: '#fff',
