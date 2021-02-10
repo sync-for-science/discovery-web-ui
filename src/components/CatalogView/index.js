@@ -41,15 +41,6 @@ class CompareView extends React.PureComponent {
   // onResize = () => {
   //   this.setState({ numVisibleCols: this.numVisibleCols() });
   // }
-
-  handleSetClearButtonClick = (catName) => {
-    console.error(`TODO: handleSetClearButtonClick(${catName}): re-impliment via recoil`); // eslint-disable-line no-console
-  }
-
-  hyphenate(name) {
-    return name.toLowerCase().replace(/ /g, '-');
-  }
-
   // buttonClass(catName) {
   //   const selectedTilesForCat = this.state.selectedTiles[this.hyphenate(catName)];
   //   const selectedCount = selectedTilesForCat ? Object.keys(selectedTilesForCat).length : 0;
@@ -85,7 +76,7 @@ class CompareView extends React.PureComponent {
       .reduce((acc, [categoryLabel, category]) => {
         if (category?.filteredRecordCount) {
           acc.push(
-            <div className={`${this.hyphenate(categoryLabel)} tiles-view-column-container`} key={categoryLabel}>
+            <div className="tiles-view-column-container" key={categoryLabel}>
               <div className="tiles-view-column-header">
                 {categoryLabel}
                 {/* <button className={this.buttonClass(categoryLabel)} onClick={() => this.handleSetClearButtonClick(categoryLabel)} /> */}
