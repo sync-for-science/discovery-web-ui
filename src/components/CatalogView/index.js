@@ -33,7 +33,6 @@ class CompareView extends React.PureComponent {
     // rightColNavEnabled: true,
     uniqueStruct: {},
     numVisibleCols: 0,
-    selectedTiles: {},
     // lastTileSelected: null,
     // topBound: 0,
     // onlyMultisource: false,
@@ -76,7 +75,6 @@ class CompareView extends React.PureComponent {
     } if (this.noneEnabled(this.props.provsEnabled)) {
       return 'No Provider is selected';
     }
-    console.error('this.props.noResultDisplay: ', this.props.noResultDisplay);
     return this.props.noResultDisplay ? this.props.noResultDisplay : 'No data found for the selected Records, Providers, and Time period';
   }
 
@@ -137,14 +135,11 @@ class CompareView extends React.PureComponent {
   }
 
   render() {
-    const { filteredActiveCollection, catsEnabled, provsEnabled } = this.props;
+    const { filteredActiveCollection } = this.props;
 
-    // const enablededCategoryCount = Object.values(catsEnabled).reduce((acc, enabled) => (enabled ? (acc + 1) : acc), 0);
     const enablededCategoryCount = Object.values(filteredActiveCollection).reduce((acc, category) => (category.totalCount ? (acc + 1) : acc), 0);
 
     const maxFirstTileColNum = enablededCategoryCount - Math.trunc(this.state.numVisibleCols);
-
-    const tileSelected = Object.keys(this.state.selectedTiles).length > 0;
 
     return (
       <div className="tiles-view">
