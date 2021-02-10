@@ -25,8 +25,15 @@ const timeFilters = atom({
   key: 'timeFilters',
   default: {
     dates: null,
-    thumbLeftDate: null,
-    thumbRightDate: null,
+    // dates: {
+    //   allDates: null,
+    //   minDate: null,
+    //   startDate: null,
+    //   maxDate: null,
+    //   endDate: null,
+    // },
+    dateRangeStart: null,
+    dateRangeEnd: null,
   },
 });
 

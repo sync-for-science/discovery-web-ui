@@ -74,8 +74,8 @@ class ContentPanel extends React.PureComponent {
     catsEnabled: PropTypes.object.isRequired,
     provsEnabled: PropTypes.object.isRequired,
     nextPrevFn: PropTypes.func, // added dynamically by StandardFilters
-    thumbLeftDate: PropTypes.string.isRequired,
-    thumbRightDate: PropTypes.string.isRequired,
+    dateRangeStart: PropTypes.string.isRequired,
+    dateRangeEnd: PropTypes.string.isRequired,
     viewName: PropTypes.string.isRequired,
     viewIconClass: PropTypes.string.isRequired,
     // ------ note that resources are not no directly receiving recoil state "resources":
@@ -315,14 +315,14 @@ class ContentPanel extends React.PureComponent {
       && res.category !== 'Patient'
       && this.catEnabled(res.category)
       && this.provEnabled(res.provider)
-      && inDateRange(res.itemDate, this.props.thumbLeftDate,
-        this.props.thumbRightDate)
+      && inDateRange(res.itemDate, this.props.dateRangeStart,
+        this.props.dateRangeEnd)
       && (!this.state.onlyAnnotated || (res.data.discoveryAnnotation
         && res.data.discoveryAnnotation.annotationHistory))) : this.props.resources.transformed.filter((res) => res.category !== 'Patient'
       && this.catEnabled(res.category)
       && this.provEnabled(res.provider)
-      && inDateRange(res.itemDate, this.props.thumbLeftDate,
-        this.props.thumbRightDate)
+      && inDateRange(res.itemDate, this.props.dateRangeStart,
+        this.props.dateRangeEnd)
       && (!this.state.onlyAnnotated || (res.data.discoveryAnnotation
         && res.data.discoveryAnnotation.annotationHistory)));
 
