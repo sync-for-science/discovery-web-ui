@@ -91,10 +91,6 @@ class CompareView extends React.PureComponent {
     // }
   }
 
-  onClearClick = () => {
-    console.error('TODO: onClearClick: re-implement via recoil'); // eslint-disable-line no-console
-  }
-
   render() {
     const { filteredActiveCollection } = this.props;
 
