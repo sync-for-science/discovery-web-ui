@@ -18,7 +18,7 @@ const MedicationStatementCardBody = ({ fieldsData }) => {
         dependency={fieldsData.display}
         label={CARD_BODY_LABEL.medication}
         value={fieldsData.display}
-        highlight
+        bold
       />
       {/* consultText from fhirUtil.js not built due to lack of example data, use/shape not confirmed */}
       <CardBodyField

@@ -18,7 +18,7 @@ const ClaimCardBody = ({ fieldsData }) => {
         dependency={fieldsData.billablePeriod.start}
         label={CARD_BODY_LABEL.period}
         value={periodDisplay}
-        highlight
+        bold
       />
       <CardBodyField
         dependency={fieldsData.total.value}
