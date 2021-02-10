@@ -16,10 +16,7 @@ const useStyles = makeStyles(() => ({
   },
   label: {
     fontSize: '.8em',
-  },
-  checkbox: {
-    padding: 1,
-  },
+  }
 }));
 
 const Provider = ({ providerName }) => {
@@ -47,6 +44,9 @@ const Provider = ({ providerName }) => {
           checked={isEnabled}
           onChange={handleChange}
           color="primary"
+          style = {{
+            padding: 1,
+          }}
         />
       )}
       label={titleCase(providerName)}
