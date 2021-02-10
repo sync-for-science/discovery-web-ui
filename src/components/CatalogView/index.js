@@ -82,33 +82,35 @@ class CompareView extends React.PureComponent {
 
   renderTileColumns() {
     const { filteredActiveCollection } = this.props;
-    const cols = Object.entries(filteredActiveCollection).reduce((acc, [categoryLabel, category]) => {
-      if (category?.filteredRecordCount) {
-        acc.push(
-          <div className={`${this.hyphenate(categoryLabel)} tiles-view-column-container`} key={categoryLabel}>
-            <div className="tiles-view-column-header">
-              {categoryLabel}
-              {/* <button className={this.buttonClass(categoryLabel)} onClick={() => this.handleSetClearButtonClick(categoryLabel)} /> */}
-            </div>
-            <div className="tiles-view-column-content">
-              { Object.entries(category.subtypes)
-                .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
-                .reduce((acc, [displayCoding, { uuids, _collectionUuids }]) => {
-                  if (uuids.length) {
-                    acc.push(<RecordSelector
-                      key={displayCoding}
-                      label={displayCoding}
-                      uuids={uuids}
-                    />);
-                  }
-                  return acc;
-                }, []) }
-            </div>
-          </div>,
-        );
-      }
-      return acc;
-    }, []);
+    const cols = Object.entries(filteredActiveCollection)
+      .sort(([categoryLabel1], [categoryLabel2]) => ((categoryLabel1 < categoryLabel2) ? -1 : 1))
+      .reduce((acc, [categoryLabel, category]) => {
+        if (category?.filteredRecordCount) {
+          acc.push(
+            <div className={`${this.hyphenate(categoryLabel)} tiles-view-column-container`} key={categoryLabel}>
+              <div className="tiles-view-column-header">
+                {categoryLabel}
+                {/* <button className={this.buttonClass(categoryLabel)} onClick={() => this.handleSetClearButtonClick(categoryLabel)} /> */}
+              </div>
+              <div className="tiles-view-column-content">
+                { Object.entries(category.subtypes)
+                  .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
+                  .reduce((acc, [displayCoding, { uuids, _collectionUuids }]) => {
+                    if (uuids.length) {
+                      acc.push(<RecordSelector
+                        key={displayCoding}
+                        label={displayCoding}
+                        uuids={uuids}
+                      />);
+                    }
+                    return acc;
+                  }, []) }
+              </div>
+            </div>,
+          );
+        }
+        return acc;
+      }, []);
 
     if (cols.length === 0) {
       cols.push(
