@@ -146,14 +146,7 @@ class CompareView extends React.PureComponent {
 
     return (
       <div className="tiles-view">
-        <div className="tiles-view-header">
-          <div
-            className={tileSelected ? 'tiles-view-header-button-clear-selected' : 'tiles-view-header-button-clear'}
-            onClick={this.onClearClick}
-          >
-            Clear
-          </div>
-        </div>
+        <div className="tiles-view-header" />
         <div className="tiles-view-container">
           { enablededCategoryCount > 0 && (
             <div className="tiles-view-nav-left">
