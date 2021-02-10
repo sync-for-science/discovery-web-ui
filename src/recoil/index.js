@@ -176,7 +176,7 @@ export const activeCollectionState = selector({
 
 // shape has diverged from groupedRecordIdsBySubtypeState:
 export const filteredActiveCollectionState = selector({
-  key: 'groupedRecordIdsInCurrentCollectionState',
+  key: 'filteredActiveCollectionState',
   get: ({ get }) => {
     const groupedRecordIdsBySubtype = get(groupedRecordIdsBySubtypeState);
     const activeCollection = get(activeCollectionState);
@@ -184,7 +184,8 @@ export const filteredActiveCollectionState = selector({
     const activeProviders = get(activeProvidersState);
     const { records } = get(resourcesState);
     const lastUuidsClicked = get(lastRecordsClickedState);
-    let totalFilteredRecordCount = 0;
+    let totalFilteredRecordCount = 0; // total count of all uuids in call categories, after applying category and provider (and todo: timeline) filters
+    let totalFilteredCollectionCount = 0; // count of uuids in totalFilteredRecordCount, that are also in the current collection
     const { uuids: uuidsInCollection } = activeCollection;
     const filteredCategories = Object.entries(groupedRecordIdsBySubtype)
       .filter(([catLabel]) => (activeCategories[catLabel]))
@@ -193,22 +194,26 @@ export const filteredActiveCollectionState = selector({
           const uuidsForEnabledProviders = uuids.filter((uuid) => activeProviders[records[uuid].provider]);
           const activeUuids = uuidsForEnabledProviders.filter((uuid) => uuidsInCollection[uuid]);
           const hasLastAdded = activeUuids.reduce((acc, uuid) => lastUuidsClicked[uuid] || acc, false);
+          accCategory.filteredRecordCount += uuidsForEnabledProviders.length;
           accCategory.filteredCollectionCount += activeUuids.length;
           accCategory.subtypes[subtypeLabel] = {
             hasLastAdded,
             uuids: uuidsForEnabledProviders, // not all subtype uuids -- just uuids for sub filtered by category and provider
             collectionUuids: activeUuids,
           };
-          totalFilteredRecordCount += activeUuids.length;
+          totalFilteredRecordCount += uuidsForEnabledProviders.length;
+          totalFilteredCollectionCount += activeUuids.length;
           return accCategory;
         }, {
-          filteredCollectionCount: 0,
+          filteredRecordCount: 0, // count of all uuids in category, after applying category and provider (and todo: timeline) filters
+          filteredCollectionCount: 0, // count of uuids in category filteredRecordCount, that are also in the current collection
           totalCount: category.totalCount,
           subtypes: {},
         });
         return accCats;
       }, {});
-    filteredCategories.filteredCollectionCount = totalFilteredRecordCount;
+    filteredCategories.filteredRecordCount = totalFilteredRecordCount;
+    filteredCategories.filteredCollectionCount = totalFilteredCollectionCount;
     // console.info('groupedRecordIdsInCurrentCollectionState: ', JSON.stringify(filteredResults, null, '  '));
     return filteredCategories;
   },
