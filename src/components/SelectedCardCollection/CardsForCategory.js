@@ -12,7 +12,7 @@ import RecordCard from '../cards/RecordCard';
 import { filteredActiveCollectionState, resourcesState } from '../../recoil';
 
 const useStyles = makeStyles((theme) => ({
-  accordianSummary: {
+  accordionSummary: {
     backgroundColor: theme.palette.tile,
     width: 400,
   },
@@ -32,7 +32,7 @@ const CategorySubtypeAccordion = ({
   return (
     <Accordion
       // defaultExpanded={hasLastAdded}
-      className={classes.accordianSummary}
+      className={classes.accordionSummary}
       elevation={0}
     >
       <AccordionSummary
