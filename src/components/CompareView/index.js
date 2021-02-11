@@ -61,7 +61,7 @@ const ProviderSparkLine = ({
   }, []);
   if (data.length) {
     return (
-      <div className="compare-view-data-row" key={providerLabel}>
+      <div className="compare-view-data-row">
         <Sparkline
           className="compare-view-sparkline"
           minDate={minDate}
@@ -87,10 +87,15 @@ const CompareView = () => {
   const { records } = useRecoilValue(resourcesState);
 
   const {
-    dateRangeStart, dateRangeEnd, dates, dates: { minDate, maxDate },
+    dateRangeStart, dateRangeEnd, // dates, dates: { minDate, maxDate }
   } = useRecoilValue(timeFiltersState);
-  // console.info('dateRangeStart, dateRangeEnd: ', dateRangeStart, dateRangeEnd);
-  // console.info('minDate, maxDate: ', minDate, maxDate);
+  // console.info('         dates: ', dates);
+  // console.info('dateRangeStart: ', dateRangeStart);
+  // console.info('       minDate: ', minDate,);
+  // console.info('  dateRangeEnd: ', dateRangeEnd);
+  // console.info('       maxDate: ', maxDate);
+  const minDate = new Date(dateRangeStart);
+  const maxDate = new Date(dateRangeEnd);
 
   const providerLabels = Object.keys(activeProviders);
 
@@ -124,11 +129,12 @@ const CompareView = () => {
                       >
                         {providerLabels.map((providerLabel) => (
                           <ProviderSparkLine
+                            key={providerLabel}
                             providerLabel={providerLabel}
                             uuids={uuids}
                             records={records}
-                            minDate={new Date(minDate)}
-                            maxDate={new Date(maxDate)}
+                            minDate={minDate}
+                            maxDate={maxDate}
                           />
                         ))}
                       </div>
