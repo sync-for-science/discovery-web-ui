@@ -14,7 +14,9 @@ const MedicationCardBody = ({ fieldsData }) => {
       const { period } = fieldsData.dosageInstruction.timing.repeat;
       // DSTU2 / STU3 compatibility
       const { periodUnit, periodUnits } = fieldsData.dosageInstruction.timing.repeat;
-      return `${frequency} every ${period} ${periodUnit || periodUnits} ${asNeededText}`; // need dynamic translation for
+      const { value, unit, code } = fieldsData.dosageInstruction.doseQuantity;
+
+      return `${frequency} doses of ${value}${unit || code} every ${period} ${periodUnit || periodUnits} ${asNeededText}`; // need dynamic translation for
     }
     return null;
   }

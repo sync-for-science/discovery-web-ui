@@ -19,23 +19,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const StyledMenu = withStyles()((props) => (
-  <Menu
-    elevation={1}
-    getContentAnchorEl={null}
-    style={{ fontSize: '50px' }}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props} // eslint-disable-line react/jsx-props-no-spreading
-  />
-));
-
 const StyledButton = withStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.primary.dark,
@@ -75,16 +58,26 @@ const CollectionActions = ({
         <IconButton size="small" onClick={handleClick}>
           <MenuIcon color="secondary" />
         </IconButton>
-        <StyledMenu
+        <Menu
           id="simple-menu"
           anchorEl={anchorEl}
           keepMounted
           open={Boolean(anchorEl)}
           onClose={handleClose}
+          elevation={1}
+          getContentAnchorEl={null}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
         >
           <MenuItem onClick={handleShowRenameCollection}>Rename</MenuItem>
           <MenuItem onClick={handleNewCollection}>New Collection</MenuItem>
-        </StyledMenu>
+        </Menu>
       </>
     );
   } else {

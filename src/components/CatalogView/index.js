@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import './TilesView.css';
+import './CatalogView.css';
 import { useRecoilValue } from 'recoil';
 import config from '../../config.js';
 import { log } from '../../utils/logger';
@@ -24,8 +24,6 @@ import {
 // Render the "tiles view" of the participant's data
 //
 class CompareView extends React.PureComponent {
-  static myName = 'TilesView';
-
   static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {

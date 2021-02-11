@@ -13,8 +13,13 @@ import { filteredActiveCollectionState, resourcesState } from '../../recoil';
 const CategorySubtypeAccordion = ({
   records, categoryLabel, subtypeLabel, categorySubtype,
 }) => {
-  const { hasLastAdded, uuids } = categorySubtype;
+  const { hasLastAdded, collectionUuids } = categorySubtype;
   const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
+
+  if (collectionUuids.length === 0) {
+    return null;
+  }
+
   return (
     <Accordion
       // defaultExpanded={hasLastAdded}
@@ -27,7 +32,7 @@ const CategorySubtypeAccordion = ({
       </AccordionSummary>
       <AccordionDetails>
         {
-          uuids.map((uuid) => (
+          collectionUuids.map((uuid) => (
             <RecordCard
               key={`record-card-${uuid}`}
               recentlyAdded={hasLastAdded}

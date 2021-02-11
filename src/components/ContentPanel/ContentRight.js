@@ -41,7 +41,7 @@ import PersistentDrawerRight from './Drawer';
 import { patientRecord } from '../../recoil';
 
 //
-// Render the content panel for ReportView, FinancialView, TilesView
+// Render the content panel for ReportView, FinancialView, CatalogView
 //
 // NOTE: This would be much simplified by use of a functioning virtual list that
 //       supports variable height elements, e.g. (when finished):
