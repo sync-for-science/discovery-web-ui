@@ -10,7 +10,7 @@
 
 .tiles-view {
   /* TODO: better metrics for height */
-  height: calc(100vh - 200px);
+  height: calc(100vh - 184px);
   min-width: 840px;
   display: flex;
   flex-direction: column;

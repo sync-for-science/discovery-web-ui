@@ -178,6 +178,7 @@ const CollectionsList = () => {
             placeholder="New Collection"
             size="small"
             inputRef={collectionInputRef}
+            fullWidth
           />
         </div>
         <Button

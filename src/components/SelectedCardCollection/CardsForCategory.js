@@ -5,14 +5,23 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { useRecoilValue } from 'recoil';
 import RecordCard from '../cards/RecordCard';
 import { filteredActiveCollectionState, resourcesState } from '../../recoil';
 
+const useStyles = makeStyles((theme) => ({
+  accordionSummary: {
+    backgroundColor: theme.palette.tile,
+    width: 400,
+  },
+}));
+
 const CategorySubtypeAccordion = ({
   records, categoryLabel, subtypeLabel, categorySubtype,
 }) => {
+  const classes = useStyles();
   const { hasLastAdded, collectionUuids } = categorySubtype;
   const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
 
@@ -23,7 +32,8 @@ const CategorySubtypeAccordion = ({
   return (
     <Accordion
       // defaultExpanded={hasLastAdded}
-      disableGutters
+      className={classes.accordionSummary}
+      elevation={0}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}

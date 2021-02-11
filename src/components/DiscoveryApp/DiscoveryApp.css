@@ -45,18 +45,17 @@ button:focus {
 
   > #left-filters {
     width: var(--left-nav-width);
-    padding-top: var(--top-header-height);
   }
 
   > #inner-container {
-    margin-top: 56px;
+    padding: 8px;
 
     > .standard-filters {
       width: 100%;
     }
 
     > #below-timeline {
-      padding: 8px;
+      margin-top: 11px;
 
       > #measure-available-width {
         width: 100%;
@@ -70,9 +69,7 @@ button:focus {
 
   > #details-right {
     width: var(--right-details-width);
-    min-width: var(--right-details-width);
-    margin-top: var(--top-header-height);
-    padding-right: 12px;
+    padding: 8px 0px;
     z-index: 5; /* 4, and buttons from timeline overlap */
 
     & div.record-list { /* legacy views */
@@ -82,9 +79,10 @@ button:focus {
     & div.card-list { /* MUI views */
       /* appears this width causes to card container to grow beyond the window */
       /* width: var(--right-details-width); */
-        --scrollable-offset-from-header: 96px;
+      --scrollable-offset-from-header: 96px;
       height: calc(100vh - var(--top-header-height) - var(--scrollable-offset-from-header));
       overflow: scroll;
+      padding: 8px;
     }
   }
 
