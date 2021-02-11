@@ -1,10 +1,10 @@
+/* eslint-disable react/jsx-filename-extension */
 import React, { useState, useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
-import Fab from '@material-ui/core/Fab';
-import EditIcon from '@material-ui/icons/Edit';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilState } from 'recoil';
 import { allCollectionsState } from '../../recoil';
@@ -79,29 +79,28 @@ const CollectionTitle = ({
   let collectionView;
   if (!renamingCollection) {
     collectionView = (
-      <div style={{ position: 'relative' }}>
-        <MenuItem
-          className={`${classes.collectionSelector} ${selectedStyle}`}
-          onClick={handleSelect}
-        >
-          <Typography variant="s4sHeader">{label}</Typography>
-        </MenuItem>
-        {isActiveCollection
+      <Grid container>
+        <Grid item container alignItems="center">
+          <Grid item xs={8}>
+            <MenuItem
+              className={`${classes.collectionSelector} ${selectedStyle}`}
+              onClick={handleSelect}
+            >
+              <Typography variant="s4sHeader">{label}</Typography>
+            </MenuItem>
+          </Grid>
+          <Grid item container xs={4}>
+            <Grid item container justifyContent="flex-end">
+              {isActiveCollection
         && (
-        <Fab
-          color="secondary"
-          aria-label="edit"
-          size="small"
-          style={{
-            position: 'absolute',
-            top: '1px',
-            right: '1px',
-          }}
-        >
-          <EditIcon onClick={() => setRenamingCollection(true)} />
-        </Fab>
+          <Button onClick={() => setRenamingCollection(true)}>
+            RENAME
+          </Button>
         )}
-      </div>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
     );
   } else {
     collectionView = (
