@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { allCollectionsState } from '../../recoil';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,8 +50,7 @@ const CollectionTitle = ({
   const isActiveCollection = (activeCollectionId === collectionId);
   const selectedStyle = isActiveCollection ? classes.selected : '';
   const [renamingCollection, setRenamingCollection] = useState(false);
-  // eslint-disable-next-line no-unused-vars
-  const [allCollections, setAllCollections] = useRecoilState(allCollectionsState);
+  const setAllCollections = useSetRecoilState(allCollectionsState);
 
   const renameInput = useRef(null);
 
@@ -76,9 +75,8 @@ const CollectionTitle = ({
     setRenamingCollection(false);
   };
 
-  let collectionView;
   if (!renamingCollection) {
-    collectionView = (
+    return (
       <Grid container>
         <Grid item container alignItems="center">
           <Grid item xs={8}>
@@ -102,32 +100,26 @@ const CollectionTitle = ({
         </Grid>
       </Grid>
     );
-  } else {
-    collectionView = (
-      <>
-        <TextField
-          size="small"
-          fullWidth
-          inputRef={renameInput}
-          defaultValue={label}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          disableElevation
-          size="small"
-          onClick={handleRenameCollection}
-          className={classes.newCollectionField}
-        >
-          Save
-        </Button>
-      </>
-    );
   }
 
   return (
     <>
-      { collectionView }
+      <TextField
+        size="small"
+        fullWidth
+        inputRef={renameInput}
+        defaultValue={label}
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        disableElevation
+        size="small"
+        onClick={handleRenameCollection}
+        className={classes.newCollectionField}
+      >
+        Save
+      </Button>
     </>
   );
 };
