@@ -16,7 +16,7 @@
 
 header {
   user-select: none;
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
   z-index: 1;
