@@ -34,11 +34,6 @@ class DiscoveryApp extends React.PureComponent {
     searchRefs: [], // Search results to highlight
     // lastEvent: null,
     dotClickDate: null, // dot click from ContentPanel
-
-    viewAccentDates: [], // CatalogView & CompareView
-    viewLastAccentDates: [], // CatalogView & CompareView
-    highlightedResources: [], // CatalogView & CompareView
-    lastHighlightedResources: [], // CatalogView & CompareView
   }
 
   render() {

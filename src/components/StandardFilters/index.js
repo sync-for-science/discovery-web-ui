@@ -55,6 +55,8 @@ class StandardFilters extends React.PureComponent {
     svgWidth: '0px',
     // dotClickContext: null, // The current dot (if one is highlighted)
     activeDates: {}, // Dates that are within the TimeWidget's active range and have one or more resources with enabled Categories/Providers
+    viewAccentDates: [], // CatalogView & CompareView
+    viewLastAccentDates: [], // CatalogView & CompareView
   }
 
   componentDidMount() {
@@ -386,7 +388,7 @@ class StandardFilters extends React.PureComponent {
     }
     const { startDate, endDate, allDates } = this.props.dates;
     const { searchRefs } = this.context;
-    const viewAccentRefs = this.context.viewAccentDates.reduce((result, date) => {
+    const viewAccentRefs = this.state.viewAccentDates.reduce((result, date) => {
       result.push({
         dotType: 'view-accent',
         date,
@@ -394,7 +396,7 @@ class StandardFilters extends React.PureComponent {
       });
       return result;
     }, []);
-    const viewLastAccentRefs = this.context.viewLastAccentDates.reduce((result, date) => {
+    const viewLastAccentRefs = this.state.viewLastAccentDates.reduce((result, date) => {
       result.push({
         dotType: 'view-last-accent',
         date,
