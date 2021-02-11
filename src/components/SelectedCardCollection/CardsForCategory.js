@@ -14,6 +14,7 @@ import { filteredActiveCollectionState, resourcesState } from '../../recoil';
 const useStyles = makeStyles((theme) => ({
   accordianSummary: {
     backgroundColor: theme.palette.tile,
+    width: 400
   },
 }));
 
@@ -31,7 +32,6 @@ const CategorySubtypeAccordion = ({
   return (
     <Accordion
       // defaultExpanded={hasLastAdded}
-      // disableGutters
       className={classes.accordianSummary}
       elevation={0}
     >
