@@ -286,8 +286,8 @@ export const computeFilterState = (legacyResources) => {
 
   return {
     dates,
-    thumbLeftDate: minDate,
-    thumbRightDate: maxDate,
+    dateRangeStart: minDate.substring(0, 10),
+    dateRangeEnd: maxDate.substring(0, 10),
   };
 };
 
