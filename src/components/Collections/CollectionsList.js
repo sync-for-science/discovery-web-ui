@@ -1,10 +1,12 @@
-import React, { useRef } from 'react';
+/* eslint-disable react/jsx-filename-extension */
+import React, { useState, useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { allCollectionsState } from '../../recoil';
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
   newCollectionField: {
     margin: '16px 0 8px 0',
   },
+  renameCollectionField: {
+    margin: '16px 0 8px 0',
+  },
 }));
 
 const CollectionTitle = ({
@@ -44,15 +49,78 @@ const CollectionTitle = ({
   const classes = useStyles();
   const isActiveCollection = (activeCollectionId === collectionId);
   const selectedStyle = isActiveCollection ? classes.selected : '';
-  // TODO: replace following with MUI select list or combo box?
+  const [renamingCollection, setRenamingCollection] = useState(false);
+  const setAllCollections = useSetRecoilState(allCollectionsState);
+
+  const renameInput = useRef(null);
+
+  const handleSaveRenameCollection = () => {
+    setAllCollections((previousState) => {
+      const { collections } = previousState;
+      return {
+        activeCollectionId,
+        collections: {
+          ...collections,
+          [activeCollectionId]: {
+            label: renameInput.current.value,
+            uuids: collections[activeCollectionId].uuids,
+          },
+        },
+      };
+    });
+  };
+
+  const handleRenameCollection = () => {
+    handleSaveRenameCollection();
+    setRenamingCollection(false);
+  };
+
+  if (!renamingCollection) {
+    return (
+      <Grid container>
+        <Grid item container alignItems="center">
+          <Grid item xs={8}>
+            <MenuItem
+              className={`${classes.collectionSelector} ${selectedStyle}`}
+              onClick={handleSelect}
+            >
+              <Typography variant="s4sHeader" noWrap>{label}</Typography>
+            </MenuItem>
+          </Grid>
+          <Grid item container xs={4}>
+            <Grid item container justifyContent="flex-end">
+              {isActiveCollection
+        && (
+          <Button onClick={() => setRenamingCollection(true)}>
+            RENAME
+          </Button>
+        )}
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    );
+  }
+
   return (
-    <MenuItem
-      className={`${classes.collectionSelector} ${selectedStyle}`}
-      disabled={isActiveCollection}
-      onClick={handleSelect}
-    >
-      <Typography variant="s4sHeader">{label}</Typography>
-    </MenuItem>
+    <>
+      <TextField
+        size="small"
+        fullWidth
+        inputRef={renameInput}
+        defaultValue={label}
+      />
+      <Button
+        variant="contained"
+        color="primary"
+        disableElevation
+        size="small"
+        onClick={handleRenameCollection}
+        className={classes.newCollectionField}
+      >
+        Save
+      </Button>
+    </>
   );
 };
 
