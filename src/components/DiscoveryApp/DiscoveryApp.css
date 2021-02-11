@@ -79,9 +79,10 @@ button:focus {
     & div.card-list { /* MUI views */
       /* appears this width causes to card container to grow beyond the window */
       /* width: var(--right-details-width); */
-        --scrollable-offset-from-header: 96px;
+      --scrollable-offset-from-header: 96px;
       height: calc(100vh - var(--top-header-height) - var(--scrollable-offset-from-header));
       overflow: scroll;
+      padding: 8px;
     }
   }
 
