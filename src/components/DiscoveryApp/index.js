@@ -31,7 +31,6 @@ class DiscoveryApp extends React.PureComponent {
   }
 
   state = {
-    searchRefs: [], // Search results to highlight
     // lastEvent: null,
   }
 

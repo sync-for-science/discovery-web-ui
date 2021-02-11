@@ -54,6 +54,7 @@ class StandardFilters extends React.PureComponent {
     svgWidth: '0px',
     // dotClickContext: null, // The current dot (if one is highlighted)
     activeDates: {}, // Dates that are within the TimeWidget's active range and have one or more resources with enabled Categories/Providers
+    searchRefs: [],
     dotClickDate: null, // dot click from ContentPanel
     viewAccentDates: [], // CatalogView & CompareView
     viewLastAccentDates: [], // CatalogView & CompareView
@@ -105,9 +106,9 @@ class StandardFilters extends React.PureComponent {
 
     if (prevProps.lastEvent !== this.props.lastEvent) {
       // TODO: not sure why this was here, but if enabled, next/prev and dot-click don't work w/ searchRefs
-      //      } else if (this.context.searchRefs && this.context.searchRefs.length > 0) {
+      //      } else if (this.state.searchRefs && this.state.searchRefs.length > 0) {
       //   // If most recent searchRef differs from currently highlighted dot, set dotClickContext
-      //   let recentRef = this.context.searchRefs[0];
+      //   let recentRef = this.state.searchRefs[0];
       //   if (recentRef.position !== this.props.dotClickContext.position) {
       //      let newContext = Object.assign({}, this.props.dotClickContext);
       //      newContext.date = recentRef.date;
@@ -387,7 +388,7 @@ class StandardFilters extends React.PureComponent {
       return [];
     }
     const { startDate, endDate, allDates } = this.props.dates;
-    const { searchRefs } = this.context;
+    const { searchRefs } = this.state;
     const viewAccentRefs = this.state.viewAccentDates.reduce((result, date) => {
       result.push({
         dotType: 'view-accent',
