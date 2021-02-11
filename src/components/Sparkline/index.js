@@ -13,12 +13,7 @@ export default class Sparkline extends React.Component {
   static propTypes = {
     minDate: PropTypes.instanceOf(Date).isRequired,
     maxDate: PropTypes.instanceOf(Date).isRequired,
-    data: PropTypes.arrayOf(
-      PropTypes.shape({
-        x: PropTypes.instanceOf(Date).isRequired,
-        y: PropTypes.oneOf([0]).isRequired, // always 0?
-      }).isRequired,
-    ).isRequired,
+    dates: PropTypes.arrayOf(PropTypes.instanceOf(Date).isRequired).isRequired,
     clickFn: PropTypes.func,
   }
 
@@ -41,8 +36,9 @@ export default class Sparkline extends React.Component {
 
   // TODO: fix so that line color/width come from CSS
   render() {
-    const { minDate, maxDate, data } = this.props;
-    if (data && data.length > 0) {
+    const { minDate, maxDate, dates } = this.props;
+    if (dates && dates.length > 0) {
+      const timeSeriesData = dates.map((d) => ({ x: d, y: 0 }));
       return (
         <XYPlot
           className={this.props.className}
@@ -58,7 +54,7 @@ export default class Sparkline extends React.Component {
             strokeWidth="0.5px"
             data={[{ x: minDate, y: 0 }, { x: maxDate, y: 0 }]}
           />
-          <MarkSeries className={this.props.clickFn ? 'mark' : 'mark-noclick'} data={data} size={3.5} />
+          <MarkSeries className={this.props.clickFn ? 'mark' : 'mark-noclick'} data={timeSeriesData} size={3.5} />
         </XYPlot>
       );
     }

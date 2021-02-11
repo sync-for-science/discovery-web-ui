@@ -47,26 +47,23 @@ const NoResultsDisplay = React.memo(({ filteredRecordCount, activeCategories, ac
 const ProviderSparkLine = ({
   providerLabel, uuids, records, minDate, maxDate,
 }) => {
-  const data = uuids.reduce((acc, uuid) => {
+  const dates = uuids.reduce((acc, uuid) => {
     const r = records[uuid];
     if (r.provider === providerLabel) {
       if (inDateRange(r.itemDate, minDate, maxDate)) {
-        acc.push({
-          x: new Date(r.itemDate),
-          y: 0,
-        });
+        acc.push(new Date(r.itemDate));
       }
     }
     return acc;
   }, []);
-  if (data.length) {
+  if (dates.length) {
     return (
       <div className="compare-view-data-row">
         <Sparkline
           className="compare-view-sparkline"
           minDate={minDate}
           maxDate={maxDate}
-          data={data}
+          dates={dates}
         />
         <div className="compare-view-provider">
           { titleCase(providerLabel) + formatYearRange(minDate, maxDate, ' [', ']') }
