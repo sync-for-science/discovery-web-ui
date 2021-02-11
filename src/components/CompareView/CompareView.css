@@ -10,7 +10,7 @@
   @insert .view-container;
 
   /* TODO: better metrics for height */
-  height: calc(100vh - 200px);
+  height: calc(100vh - 184px);
   background-color: var(--background-content);
   margin: 0;
 
@@ -142,7 +142,6 @@
 .compare-view-unique-item-container {
   display: flex;
   flex-direction: row;
-  width: 100%;
 
   /* height: calc(100% - 38px); */
   margin: 0;
