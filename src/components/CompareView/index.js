@@ -79,22 +79,13 @@ const CompareView = () => {
   const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
   const activeCategories = useRecoilValue(activeCategoriesState);
   const activeProviders = useRecoilValue(activeProvidersState);
-
-  const { filteredRecordCount } = filteredActiveCollection;
+  const { dateRangeStart, dateRangeEnd } = useRecoilValue(timeFiltersState);
   const { records } = useRecoilValue(resourcesState);
 
-  const {
-    dateRangeStart, dateRangeEnd, // dates, dates: { minDate, maxDate }
-  } = useRecoilValue(timeFiltersState);
-  // console.info('         dates: ', dates);
-  // console.info('dateRangeStart: ', dateRangeStart);
-  // console.info('       minDate: ', minDate,);
-  // console.info('  dateRangeEnd: ', dateRangeEnd);
-  // console.info('       maxDate: ', maxDate);
+  const { filteredRecordCount } = filteredActiveCollection;
+  const providerLabels = Object.keys(activeProviders);
   const minDate = new Date(dateRangeStart);
   const maxDate = new Date(dateRangeEnd);
-
-  const providerLabels = Object.keys(activeProviders);
 
   const columnsForCategories = Object.entries(filteredActiveCollection)
     .sort(([categoryLabel1], [categoryLabel2]) => ((categoryLabel1 < categoryLabel2) ? -1 : 1))
