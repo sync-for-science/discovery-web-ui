@@ -98,7 +98,6 @@ const CollectionSwitcher = () => {
           id="select-active-collection"
           value={activeCollectionId}
           MenuProps={{ MenuListProps: { disablePadding: true } }}
-          inputProps={{ 'aria-label': 'Without label' }}
           input={<CustomInputBase />}
           onChange={handleChange}
         >
