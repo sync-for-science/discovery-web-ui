@@ -8,8 +8,8 @@ import CardsForCategory from './CardsForCategory';
 import CollectionSwitcher from '../Collections/CollectionSwitcher';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: '8px',
+  collectionSwitcher: {
+    padding: '8px 16px',
     backgroundColor: theme.palette.primary.main,
     height: '40px',
     display: 'flex',
@@ -25,7 +25,7 @@ const SelectedCardCollection = () => {
 
   return (
     <PersistentDrawerRight>
-      <div className={classes.root}>
+      <div className={classes.collectionSwitcher}>
         <CollectionSwitcher />
       </div>
       <div className="card-list">
