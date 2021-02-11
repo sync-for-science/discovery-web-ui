@@ -71,12 +71,7 @@ const ProvidersSparkLines = ({
             maxDate={maxDate}
             data={data}
           />
-          {/* <div className='compare-view-date-range'>
-      { this.formatYearRange(thisProv.minDate, thisProv.maxDate) }
-         </div> */}
           <div className="compare-view-provider">
-            {/* titleCase(thisProv.provName) + this.formatCount(thisProv.count, ' [', '', ' [', 'x, ')
-           + this.formatYearRange(thisProv.minDate, thisProv.maxDate, '', ']') */}
             { titleCase(providerLabel) + formatYearRange(minDate, maxDate, ' [', ']') }
           </div>
         </div>,
