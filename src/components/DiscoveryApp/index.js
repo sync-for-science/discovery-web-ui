@@ -30,10 +30,6 @@ class DiscoveryApp extends React.PureComponent {
     match: PropTypes.object,
   }
 
-  state = {
-    // lastEvent: null,
-  }
-
   render() {
     const { error, loading, legacy: legacyResources } = this.props.resources;
 
@@ -57,7 +53,7 @@ class DiscoveryApp extends React.PureComponent {
     const { providers, categories } = resources;
 
     return (
-      <DiscoveryContext.Provider value={{ ...this.state, ...this.props.timeFilters }}>
+      <DiscoveryContext.Provider value={{ ...this.props.timeFilters }}>
         <div className="discovery-app">
           <PageHeader
             patientMode={patientMode}
