@@ -79,6 +79,7 @@ export const rootTheme = createMuiTheme({
     secondary: {
       main: '#fff',
     },
+    tile: 'rgb(233, 237, 244)' // Colors.css --gt1
   },
   typography: {
     'user-profile': {
