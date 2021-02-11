@@ -14,14 +14,14 @@ import { filteredActiveCollectionState, resourcesState } from '../../recoil';
 const useStyles = makeStyles((theme) => ({
   accordianSummary: {
     backgroundColor: theme.palette.tile,
-    width: 400
+    width: 400,
   },
 }));
 
 const CategorySubtypeAccordion = ({
   records, categoryLabel, subtypeLabel, categorySubtype,
 }) => {
-  const classes = useStyles()
+  const classes = useStyles();
   const { hasLastAdded, collectionUuids } = categorySubtype;
   const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
 

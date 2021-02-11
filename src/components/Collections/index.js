@@ -7,24 +7,23 @@ import CollectionDisplay from './CollectionDisplay';
 
 const useStyles = makeStyles(() => ({
   gridContainer: {
-    width: 'calc(100vw - 170px)' // view width - left filters
+    width: 'calc(100vw - 170px)', // view width - left filters
   },
 }));
 
 const Collections = () => {
-  const classes = useStyles()
-  
-  return(
+  const classes = useStyles();
+
+  return (
     <Grid container spacing={2} className={classes.gridContainer}>
       <Grid item xs={2}>
-      <CollectionsList />
+        <CollectionsList />
       </Grid>
       <Grid item xs={10}>
-      <CollectionDisplay />
+        <CollectionDisplay />
       </Grid>
     </Grid>
-  )
-}
-
+  );
+};
 
 export default React.memo(Collections);
