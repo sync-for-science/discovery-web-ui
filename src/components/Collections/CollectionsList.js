@@ -86,7 +86,7 @@ const CollectionTitle = ({
               className={`${classes.collectionSelector} ${selectedStyle}`}
               onClick={handleSelect}
             >
-              <Typography variant="s4sHeader">{label}</Typography>
+              <Typography variant="s4sHeader" noWrap>{label}</Typography>
             </MenuItem>
           </Grid>
           <Grid item container xs={4}>
