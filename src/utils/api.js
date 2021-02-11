@@ -1,11 +1,11 @@
-import FhirTransform from '../../FhirTransform';
+import FhirTransform from '../FhirTransform';
 import {
   classFromCat, formatAge, cleanDates, Const, normalizeDates, timelineIncrYears, tryWithDefault,
-} from '../../util';
-import config from '../../config';
-import { log } from '../../utils/logger';
-import Unimplemented from '../Unimplemented';
-import { primaryTextValue } from '../../fhirUtil';
+} from '../util';
+import config from '../config';
+import { log } from './logger';
+import Unimplemented from '../components/Unimplemented';
+import { primaryTextValue } from '../fhirUtil';
 
 const itemDate = (item, category) => {
   let date = null;
@@ -113,7 +113,7 @@ const queryOptions = {
   },
 };
 
-// This is derived from src/components/TilesView/index.js, line 185:
+// This is derived from src/components/CatalogView/index.js, line 185:
 const getCoding = (record) => {
   const codeObj = classFromCat(record.category).code(record);
   const code = tryWithDefault(codeObj, (codeObj) => codeObj.coding[0].code, tryWithDefault(codeObj, (codeObj) => codeObj.code, '????'));

@@ -133,16 +133,16 @@
   /* Tile */
   --tile: var(--gt1);
 
-  /* TilesView.css */
+  /* CatalogView.css */
   --tile-selected: var(--co2);
 
-  /* TilesView.css */
+  /* CatalogView.css */
   --tile-selected-last: var(--co1);
 
-  /* TilesView.css */
+  /* CatalogView.css */
   --tile-area: var(--white);
 
-  /* TilesView.css */
+  /* CatalogView.css */
 
   /* Content */
   --content-header-old: var(--gt4);
@@ -193,13 +193,13 @@
   --label-title: var(--ca1);
   --label-tile: var(--black);
 
-  /* TilesView.css */
+  /* CatalogView.css */
   --label-tile-selected: var(--black);
 
-  /* TilesView.css */
+  /* CatalogView.css */
   --label-tile-selected-last: var(--white);
 
-  /* TilesView.css */
+  /* CatalogView.css */
 
   /* Text */
   --text: var(--);
