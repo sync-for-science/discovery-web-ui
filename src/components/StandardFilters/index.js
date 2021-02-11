@@ -43,7 +43,6 @@ class StandardFilters extends React.PureComponent {
     // dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
     // lastEvent: PropTypes.instanceOf(Event),
     allowDotClick: PropTypes.bool,
-    dotClickDate: PropTypes.string,
   }
 
   state = {
@@ -55,6 +54,7 @@ class StandardFilters extends React.PureComponent {
     svgWidth: '0px',
     // dotClickContext: null, // The current dot (if one is highlighted)
     activeDates: {}, // Dates that are within the TimeWidget's active range and have one or more resources with enabled Categories/Providers
+    dotClickDate: null, // dot click from ContentPanel
     viewAccentDates: [], // CatalogView & CompareView
     viewLastAccentDates: [], // CatalogView & CompareView
   }
@@ -114,9 +114,9 @@ class StandardFilters extends React.PureComponent {
       //      newContext.position = recentRef.position;
       //      this.setState({ dotClickContext: newContext });
       //   }
-    } else if (this.props.allowDotClick && prevProps.dotClickDate !== this.props.dotClickDate) {
-      // Set dotClickContext from dot clicked in ContentPanel (via this.props.dotClickDate)
-      const theDate = this.props.dates.allDates.find((elt) => new Date(elt.date).getTime() === new Date(this.props.dotClickDate).getTime());
+    } else if (this.props.allowDotClick && prevState.dotClickDate !== this.state.dotClickDate) {
+      // Set dotClickContext from dot clicked in ContentPanel (via this.state.dotClickDate)
+      const theDate = this.props.dates.allDates.find((elt) => new Date(elt.date).getTime() === new Date(this.state.dotClickDate).getTime());
       this.props.setDotClickContext({
         parent: 'TimeWidget',
         rowName: 'Full',
