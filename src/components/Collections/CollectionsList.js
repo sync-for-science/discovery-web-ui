@@ -1,8 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
+import Fab from '@material-ui/core/Fab';
+import EditIcon from '@material-ui/icons/Edit';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRecoilState } from 'recoil';
 import { allCollectionsState } from '../../recoil';
@@ -36,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
   newCollectionField: {
     margin: '16px 0 8px 0',
   },
+  renameCollectionField: {
+    margin: '16px 0 8px 0',
+  },
 }));
 
 const CollectionTitle = ({
@@ -44,15 +49,86 @@ const CollectionTitle = ({
   const classes = useStyles();
   const isActiveCollection = (activeCollectionId === collectionId);
   const selectedStyle = isActiveCollection ? classes.selected : '';
-  // TODO: replace following with MUI select list or combo box?
+  const [renamingCollection, setRenamingCollection] = useState(false);
+  const [allCollections, setAllCollections] = useRecoilState(allCollectionsState);
+
+  const renameInput = useRef(null);
+
+  const handleSaveRenameCollection = () => {
+    setAllCollections((previousState) => {
+      const { collections } = previousState;
+      return {
+        activeCollectionId,
+        collections: {
+          ...collections,
+          [activeCollectionId]: {
+            label: renameInput.current.value,
+            uuids: collections[activeCollectionId].uuids,
+          },
+        },
+      };
+    });
+  };
+
+  const handleRenameCollection = () => {
+    handleSaveRenameCollection();
+    setRenamingCollection(false);
+  };
+
+  let collectionView;
+  if (!renamingCollection) {
+    collectionView = (
+      <div style={{ position: 'relative' }}>
+        <MenuItem
+          className={`${classes.collectionSelector} ${selectedStyle}`}
+          onClick={handleSelect}
+        >
+          <Typography variant="s4sHeader">{label}</Typography>
+        </MenuItem>
+        {isActiveCollection
+        && (
+        <Fab
+          color="secondary"
+          aria-label="edit"
+          size="small"
+          style={{
+            position: 'absolute',
+            top: '1px',
+            right: '1px',
+          }}
+        >
+          <EditIcon onClick={() => setRenamingCollection(true)} />
+        </Fab>
+        )}
+      </div>
+    );
+  } else {
+    collectionView = (
+      <>
+        <TextField
+          size="small"
+          fullWidth
+          inputRef={renameInput}
+          defaultValue={label}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          disableElevation
+          size="small"
+          onClick={handleRenameCollection}
+          className={classes.newCollectionField}
+        >
+          Save
+        </Button>
+      </>
+    );
+  }
+
   return (
-    <MenuItem
-      className={`${classes.collectionSelector} ${selectedStyle}`}
-      disabled={isActiveCollection}
-      onClick={handleSelect}
-    >
-      <Typography variant="s4sHeader">{label}</Typography>
-    </MenuItem>
+    <>
+      { collectionView }
+    </>
   );
 };
 
