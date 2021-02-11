@@ -30,7 +30,6 @@
   overflow-x: scroll;
   overflow-y: hidden;
   background-color: var(--tile-area);
-  margin: 15px 0 10px 0;
 }
 
 .tiles-view-header {
