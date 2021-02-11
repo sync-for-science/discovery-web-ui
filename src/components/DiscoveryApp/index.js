@@ -29,36 +29,14 @@ class DiscoveryApp extends React.PureComponent {
   }
 
   state = {
-    // resources: null, // Will be set to an instance of FhirTransform
-    // totalResCount: null, // Number of resources excluding Patient resources
-    // dates: null, // Collection of dates for views:
-    //    allDates
-    //    minDate     Earliest date we have data for this participant
-    //    startDate     Jan 1 of minDate's year
-    //    maxDate     Latest date we have data for this participant
-    //    endDate     Dec 31 of maxDate's year
     searchRefs: [], // Search results to highlight
-    // isLoading: false,
-    // fetchError: null, // Possible axios error object
     // lastEvent: null,
     dotClickDate: null, // dot click from ContentPanel
 
-    // Shared Global Context
-    updateGlobalContext: (updates) => this.setState(updates),
-
-    savedCatsEnabled: null, // StandardFilters & CategoryRollup
-    savedProvsEnabled: null, // StandardFilters & ProviderRollup
-
-    lastTileSelected: null, // CatalogView & CompareView
-    savedSelectedTiles: null, // CatalogView & CompareView
-    lastSavedSelectedTiles: null, // CatalogView & CompareView
     viewAccentDates: [], // CatalogView & CompareView
     viewLastAccentDates: [], // CatalogView & CompareView
     highlightedResources: [], // CatalogView & CompareView
     lastHighlightedResources: [], // CatalogView & CompareView
-    onlyMultisource: false, // CatalogView & CompareView
-
-    onlyAnnotated: false, // ContentPanel
   }
 
   render() {
@@ -81,11 +59,9 @@ class DiscoveryApp extends React.PureComponent {
       resources, activeCategories, activeProviders, timeFilters,
     } = this.props;
 
-    const { dates, dateRangeStart, dateRangeEnd } = timeFilters;
+    const { dates } = timeFilters;
 
-    const {
-      totalResCount, providers, categories,
-    } = resources;
+    const { providers, categories } = resources;
 
     return (
       <DiscoveryContext.Provider value={{ ...this.state, ...this.props.timeFilters }}>
