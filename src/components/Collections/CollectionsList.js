@@ -50,6 +50,7 @@ const CollectionTitle = ({
   const isActiveCollection = (activeCollectionId === collectionId);
   const selectedStyle = isActiveCollection ? classes.selected : '';
   const [renamingCollection, setRenamingCollection] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [allCollections, setAllCollections] = useRecoilState(allCollectionsState);
 
   const renameInput = useRef(null);
