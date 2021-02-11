@@ -44,11 +44,46 @@ const NoResultsDisplay = React.memo(({ filteredRecordCount, activeCategories, ac
   );
 });
 
-const ProvidersSparkLines = ({ provs }) => {
+const ProvidersSparkLines = ({
+  uuids, records, provs, minDate, maxDate,
+}) => {
   const divs = [];
+
   for (const providerLabel of provs) {
-    divs.push(<div>{providerLabel}</div>);
+    const data = uuids.reduce((acc, uuid) => {
+      const r = records[uuid];
+      if (r.provider === providerLabel) {
+        if (inDateRange(r.itemDate, minDate, maxDate)) {
+          acc.push({
+            x: new Date(r.itemDate),
+            y: 0,
+          });
+        }
+      }
+      return acc;
+    }, []);
+    if (data.length) {
+      divs.push(
+        <div className="compare-view-data-row" key={providerLabel}>
+          <Sparkline
+            className="compare-view-sparkline"
+            minDate={minDate}
+            maxDate={maxDate}
+            data={data}
+          />
+          {/* <div className='compare-view-date-range'>
+      { this.formatYearRange(thisProv.minDate, thisProv.maxDate) }
+         </div> */}
+          <div className="compare-view-provider">
+            {/* titleCase(thisProv.provName) + this.formatCount(thisProv.count, ' [', '', ' [', 'x, ')
+           + this.formatYearRange(thisProv.minDate, thisProv.maxDate, '', ']') */}
+            { titleCase(providerLabel) + formatYearRange(minDate, maxDate, ' [', ']') }
+          </div>
+        </div>,
+      );
+    }
   }
+
   return divs;
 };
 
@@ -97,7 +132,11 @@ const CompareView = () => {
                         className="compare-view-data-column"
                       >
                         <ProvidersSparkLines
+                          uuids={uuids}
+                          records={records}
                           provs={provs}
+                          minDate={new Date(minDate)}
+                          maxDate={new Date(maxDate)}
                         />
                       </div>
                     </div>,
