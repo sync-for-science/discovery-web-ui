@@ -4,11 +4,24 @@ import { useRecoilValue } from 'recoil';
 import './CompareView.css';
 import SelectedCardCollection from '../SelectedCardCollection';
 import RecordSelector from '../SelectedCardCollection/RecordSelector';
+import Sparkline from '../Sparkline';
+
 import {
   activeCategoriesState,
   activeProvidersState,
+  timeFiltersState,
   filteredActiveCollectionState,
+  resourcesState,
 } from '../../recoil';
+
+import { titleCase, inDateRange } from '../../util.js';
+
+const formatYearRange = (minDate, maxDate, pre, post) => {
+  const minYear = `${minDate.getFullYear()}`;
+  const maxYear = `${maxDate.getFullYear()}`;
+
+  return minYear === maxYear ? pre + minYear + post : `${pre + minYear} \u2013 ${maxYear}${post}`;
+};
 
 const noneEnabled = (obj) => Object.values(obj).reduce((acc, isEnabled) => (isEnabled ? false : acc), true);
 
@@ -31,37 +44,67 @@ const NoResultsDisplay = React.memo(({ filteredRecordCount, activeCategories, ac
   );
 });
 
+const ProvidersSparkLines = ({ provs }) => {
+  const divs = [];
+  for (const providerLabel of provs) {
+    divs.push(<div>{providerLabel}</div>);
+  }
+  return divs;
+};
+
 const CompareView = () => {
   const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
   const activeCategories = useRecoilValue(activeCategoriesState);
   const activeProviders = useRecoilValue(activeProvidersState);
 
   const { filteredRecordCount } = filteredActiveCollection;
+  const { records } = useRecoilValue(resourcesState);
+
+  const {
+    dateRangeStart, dateRangeEnd, dates, dates: { minDate, maxDate },
+  } = useRecoilValue(timeFiltersState);
+  // console.info('dateRangeStart, dateRangeEnd: ', dateRangeStart, dateRangeEnd);
+  // console.info('minDate, maxDate: ', minDate, maxDate);
+
+  const provs = Object.keys(activeProviders);
 
   const columnsForCategories = Object.entries(filteredActiveCollection)
     .sort(([categoryLabel1], [categoryLabel2]) => ((categoryLabel1 < categoryLabel2) ? -1 : 1))
     .reduce((acc, [categoryLabel, category]) => {
       if (category?.filteredRecordCount) {
         acc.push(
-          <div className="tiles-view-column-container" key={categoryLabel}>
-            <div className="tiles-view-column-header">
-              {categoryLabel}
-              {/* <button className={this.buttonClass(categoryLabel)} onClick={() => this.handleSetClearButtonClick(categoryLabel)} /> */}
+          <div className="compare-view-category-container" key={categoryLabel}>
+            <div className="compare-view-title-container">
+              <div className="compare-view-title">
+                {categoryLabel}
+                {/* <button className={this.buttonClass(categoryLabel)} onClick={() => this.handleSetClearButtonClick(categoryLabel)} /> */}
+              </div>
             </div>
-            <div className="tiles-view-column-content">
-              { Object.entries(category.subtypes)
-                .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
-                .reduce((acc, [displayCoding, { uuids, _collectionUuids }]) => {
-                  if (uuids.length) {
-                    acc.push(<RecordSelector
+            { Object.entries(category.subtypes)
+              .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
+              .reduce((acc, [displayCoding, { uuids, _collectionUuids }]) => {
+                if (uuids.length) {
+                  acc.push(
+                    <div
                       key={displayCoding}
-                      label={displayCoding}
-                      uuids={uuids}
-                    />);
-                  }
-                  return acc;
-                }, []) }
-            </div>
+                      className="compare-view-unique-item-container"
+                    >
+                      <RecordSelector
+                        label={displayCoding}
+                        uuids={uuids}
+                      />
+                      <div
+                        className="compare-view-data-column"
+                      >
+                        <ProvidersSparkLines
+                          provs={provs}
+                        />
+                      </div>
+                    </div>,
+                  );
+                }
+                return acc;
+              }, []) }
           </div>,
         );
       }
@@ -69,10 +112,10 @@ const CompareView = () => {
     }, []);
 
   return (
-    <div className="tiles-view">
-      <div className="tiles-view-header" />
-      <div className="tiles-view-container">
-        <div className="tiles-view-container-inner">
+    <div className="compare-view">
+      <div className="compare-view-header" />
+      <div className="compare-view-scroller">
+        <div className="compare-view-all-unique-items">
           { columnsForCategories }
           <NoResultsDisplay
             filteredRecordCount={filteredRecordCount}
