@@ -21,7 +21,6 @@ import {
   resourcesState, timeFiltersState, activeCategoriesState, activeProvidersState,
 } from '../../recoil';
 
-import DiscoveryContext from '../DiscoveryContext';
 import CategoryFilter from '../filters/CategoryFilter';
 import ProviderFilter from '../filters/ProviderFilter';
 
@@ -53,67 +52,65 @@ class DiscoveryApp extends React.PureComponent {
     const { providers, categories } = resources;
 
     return (
-      <DiscoveryContext.Provider value={{ ...this.props.timeFilters }}>
-        <div className="discovery-app">
-          <PageHeader
-            patientMode={patientMode}
-            participantId={participantId}
-          />
-          <div id="outer-container" className={`route-${activeView}`}>
-            {!isSummary && (
-              <div id="left-filters">
-                <CategoryFilter />
-                <ProviderFilter />
-              </div>
-            )}
-            <div id="inner-container">
-              <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
-                <StandardFilters
-                  activeView={activeView} // trigger timeline resizing when route changes
-                  resources={legacyResources}
-                  dates={dates}
-                  // allowDotClick={!['compare', 'catalog'].includes(activeView)}
-                  allowDotClick
-                />
-              </div>
-              <div id="below-timeline">
-                <div id="measure-available-width">  </div>
-                <main>
-                  { legacyResources && (
-                    <Switch>
-                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/summary`}>
-                        <SummaryView
-                          resources={legacyResources}
-                          dates={dates}
-                          categories={categories}
-                          providers={providers}
-                        />
-                      </Route>
-                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/catalog`}>
-                        <CatalogView />
-                      </Route>
-                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/compare`}>
-                        <CompareView />
-                      </Route>
-                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/collections`}>
-                        <Collections />
-                      </Route>
-                      <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/:activeView?`}>
-                        <Redirect
-                          push
-                          to={`/${patientMode}/${participantId}/summary`}
-                        />
-                      </Route>
-                    </Switch>
-                  )}
-                </main>
-              </div>
+      <div className="discovery-app">
+        <PageHeader
+          patientMode={patientMode}
+          participantId={participantId}
+        />
+        <div id="outer-container" className={`route-${activeView}`}>
+          {!isSummary && (
+            <div id="left-filters">
+              <CategoryFilter />
+              <ProviderFilter />
             </div>
-            { hasCardListRight && <div id="details-right" /> }
+          )}
+          <div id="inner-container">
+            <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
+              <StandardFilters
+                activeView={activeView} // trigger timeline resizing when route changes
+                resources={legacyResources}
+                dates={dates}
+                // allowDotClick={!['compare', 'catalog'].includes(activeView)}
+                allowDotClick
+              />
+            </div>
+            <div id="below-timeline">
+              <div id="measure-available-width">  </div>
+              <main>
+                { legacyResources && (
+                  <Switch>
+                    <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/summary`}>
+                      <SummaryView
+                        resources={legacyResources}
+                        dates={dates}
+                        categories={categories}
+                        providers={providers}
+                      />
+                    </Route>
+                    <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/catalog`}>
+                      <CatalogView />
+                    </Route>
+                    <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/compare`}>
+                      <CompareView />
+                    </Route>
+                    <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/collections`}>
+                      <Collections />
+                    </Route>
+                    <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/:activeView?`}>
+                      <Redirect
+                        push
+                        to={`/${patientMode}/${participantId}/summary`}
+                      />
+                    </Route>
+                  </Switch>
+                )}
+              </main>
+            </div>
           </div>
-          <PageFooter resources={legacyResources} />
+          { hasCardListRight && <div id="details-right" /> }
         </div>
-      </DiscoveryContext.Provider>
+        <PageFooter resources={legacyResources} />
+      </div>
     );
   }
 }

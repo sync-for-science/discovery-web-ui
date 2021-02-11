@@ -14,7 +14,6 @@ import {
 } from '../../util.js';
 import TimeWidget from '../TimeWidget';
 import Unimplemented from '../Unimplemented';
-import DiscoveryContext from '../DiscoveryContext';
 
 import { SUBROUTES } from '../../constants';
 import { activeCategoriesState, activeProvidersState, timeFiltersState } from '../../recoil';
@@ -22,8 +21,6 @@ import { activeCategoriesState, activeProvidersState, timeFiltersState } from '.
 // Render the "container" (with filters) for views of the participant's data
 //
 class StandardFilters extends React.PureComponent {
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
-
   static propTypes = {
     activeView: PropTypes.oneOf(SUBROUTES),
     resources: PropTypes.instanceOf(FhirTransform),
