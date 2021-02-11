@@ -67,7 +67,7 @@ const CompareView = () => {
   const minDate = new Date(dateRangeStart);
   const maxDate = new Date(dateRangeEnd);
 
-  const columnsForCategories = Object.entries(filteredActiveCollection)
+  const itemsForCategories = Object.entries(filteredActiveCollection)
     .sort(([categoryLabel1], [categoryLabel2]) => ((categoryLabel1 < categoryLabel2) ? -1 : 1))
     .reduce((acc, [categoryLabel, category]) => {
       if (category?.filteredRecordCount) {
@@ -122,7 +122,7 @@ const CompareView = () => {
       <div className="compare-view-header" />
       <div className="compare-view-scroller">
         <div className="compare-view-all-unique-items">
-          { columnsForCategories }
+          { itemsForCategories }
           <NoResultsDisplay
             filteredRecordCount={filteredRecordCount}
             activeCategories={activeCategories}
