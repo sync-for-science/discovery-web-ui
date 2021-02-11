@@ -402,12 +402,6 @@ class StandardFilters extends React.PureComponent {
       });
       return result;
     }, []);
-    //  // TODO: to use, need to build highlightedResources on Tiles/Compare load
-    //   let viewAccentRefs = this.context.highlightedResources ? this.context.highlightedResources.reduce((result, res) => {
-    //            let date = res.itemDate;
-    //            result.push({ dotType: 'view-accent', date: date, position: normalizeDates([date], startDate, endDate)[0] });
-    //            return result;
-    //               }, []) : [];
 
     const { dotClickContext } = this.props;
     const matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget'
