@@ -18,7 +18,7 @@ const ImmunizationCardBody = ({ fieldsData }) => {
         dependency={fieldsData.vaccineDisplay}
         label={CARD_BODY_LABEL.vaccine}
         value={fieldsData.vaccineDisplay}
-        highlight
+        bold
       />
       <CardBodyField
         dependency={fieldsData.notGiven !== undefined}
