@@ -11,28 +11,31 @@ import {
   filteredActiveCollectionState,
 } from '../../recoil';
 
+const noneEnabled = (obj) => Object.values(obj).reduce((acc, isEnabled) => (isEnabled ? false : acc), true);
+
+const NoResultsDisplay = React.memo(({ filteredRecordCount, activeCategories, activeProviders }) => {
+  if (filteredRecordCount) {
+    return null;
+  }
+
+  let message = 'No data found for the selected Records, Providers, and Time period';
+  if (noneEnabled(activeCategories)) {
+    message = 'No Record type is selected';
+  } else if (noneEnabled(activeProviders)) {
+    message = 'No Provider is selected';
+  }
+
+  return (
+    <div className="tiles-view-container-inner-empty" key="1">
+      { message }
+    </div>
+  );
+});
+
 class CompareView extends React.PureComponent {
   state = {
     firstTileColNum: 0,
     numVisibleCols: 0,
-  }
-
-  noneEnabled(obj) {
-    for (const propName of Object.keys(obj)) {
-      if (obj[propName]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  get noResultDisplay() {
-    if (this.noneEnabled(this.props.activeCategories)) {
-      return 'No Record type is selected';
-    } if (this.noneEnabled(this.props.activeProviders)) {
-      return 'No Provider is selected';
-    }
-    return this.props.noResultDisplay ? this.props.noResultDisplay : 'No data found for the selected Records, Providers, and Time period';
   }
 
   renderTileColumns() {
@@ -67,24 +70,22 @@ class CompareView extends React.PureComponent {
         return acc;
       }, []);
 
-    if (cols.length === 0) {
-      cols.push(
-        <div className="tiles-view-container-inner-empty" key="1">
-          { this.noResultDisplay }
-        </div>,
-      );
-    }
-
     return cols;
   }
 
   render() {
+    const { activeCategories, activeProviders, filteredActiveCollection: { filteredRecordCount } } = this.props;
     return (
       <div className="tiles-view">
         <div className="tiles-view-header" />
         <div className="tiles-view-container">
           <div className="tiles-view-container-inner">
             { this.renderTileColumns() }
+            <NoResultsDisplay
+              filteredRecordCount={filteredRecordCount}
+              activeCategories={activeCategories}
+              activeProviders={activeProviders}
+            />
           </div>
         </div>
         <SelectedCardCollection />
