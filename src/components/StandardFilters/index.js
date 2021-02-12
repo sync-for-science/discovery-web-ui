@@ -8,18 +8,11 @@ import {
 import PropTypes from 'prop-types';
 
 import './StandardFilters.css';
-import ReactDOM from 'react-dom';
 import FhirTransform from '../../FhirTransform.js';
 import {
   combine, cleanDates, normalizeDates, checkQuerySelector, notEqJSON, dateOnly,
 } from '../../util.js';
 import TimeWidget from '../TimeWidget';
-import CategoryRollup from '../CategoryRollup';
-import Categories from '../Categories';
-import Category from '../Category';
-import ProviderRollup from '../ProviderRollup';
-import Providers from '../Providers';
-import Provider from '../Provider';
 import Unimplemented from '../Unimplemented';
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -567,17 +560,6 @@ class StandardFilters extends React.PureComponent {
     }
   }
 
-  renderLeftNav = () => (
-    <div className="standard-filters-categories-and-providers" />
-  )
-
-  portalLeftNav = () => {
-    const leftNavTarget = document.getElementById('left-filters');
-    if (leftNavTarget) {
-      return ReactDOM.createPortal((this.renderLeftNav()), leftNavTarget);
-    }
-  }
-
   // TODO: handle noDots for LongitudinalView???
   render() {
     //      console.log('SF render: ' + (this.props.dotClickContext ? this.props.dotClickContext.date : this.props.dotClickContext));
@@ -585,22 +567,19 @@ class StandardFilters extends React.PureComponent {
     const dotClickFn = this.props.allowDotClick ? this.onDotClick : null;
 
     return (
-      <>
-        <TimeWidget
-          minDate={dates ? dates.minDate : ''}
-          maxDate={dates ? dates.maxDate : ''}
-          startDate={dates ? dates.startDate : ''}
-          endDate={dates ? dates.endDate : ''}
-          dotContext={this.props.dotClickContext}
-          thumbLeft={this.state.minActivePos}
-          thumbRight={this.state.maxActivePos}
-          timelineWidth={this.state.svgWidth}
-          setLeftRightFn={this.setLeftRight}
-          dotPositionsFn={this.fetchDotPositions}
-          dotClickFn={dotClickFn}
-        />
-        { this.portalLeftNav() }
-      </>
+      <TimeWidget
+        minDate={dates ? dates.minDate : ''}
+        maxDate={dates ? dates.maxDate : ''}
+        startDate={dates ? dates.startDate : ''}
+        endDate={dates ? dates.endDate : ''}
+        dotContext={this.props.dotClickContext}
+        thumbLeft={this.state.minActivePos}
+        thumbRight={this.state.maxActivePos}
+        timelineWidth={this.state.svgWidth}
+        setLeftRightFn={this.setLeftRight}
+        dotPositionsFn={this.fetchDotPositions}
+        dotClickFn={dotClickFn}
+      />
     );
   }
 }

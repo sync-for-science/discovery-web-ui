@@ -6,21 +6,6 @@
 
 /* v.01.05 Updated 08/21/2019 */
 
-.standard-filters-categories-and-providers {
-  /* lower/main timeline */
-
-  /*
-  position: fixed;
-  top: 166px;
-  left: 0;
-  height: auto;
-  */
-  width: var(--left-nav-width);
-  padding: 0;
-  margin: 0;
-  overflow: visible;
-}
-
 .standard-filters-category-nav-button-container {
   display: flex;
   flex-direction: row;
