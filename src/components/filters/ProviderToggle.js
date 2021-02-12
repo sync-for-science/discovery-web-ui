@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Provider = ({ providerName }) => {
+const ProviderToggle = ({ providerName }) => {
   const classes = useStyles();
 
   const [activeProviders, setActiveProviders] = useRecoilState(
@@ -52,10 +52,8 @@ const Provider = ({ providerName }) => {
   );
 };
 
-Provider.myName = 'Category';
-
-Provider.propTypes = {
+ProviderToggle.propTypes = {
   providerName: PropTypes.string.isRequired,
 };
 
-export default Provider;
+export default ProviderToggle;

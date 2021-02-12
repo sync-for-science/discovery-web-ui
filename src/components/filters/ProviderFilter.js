@@ -2,7 +2,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import Providers from '../Providers';
 import ProviderRollup from './ProviderRollup';
-import Provider from '../Provider';
+import ProviderToggle from './ProviderToggle';
 import { activeProvidersState } from '../../recoil';
 
 const ProviderFilter = () => {
@@ -18,7 +18,7 @@ const ProviderFilter = () => {
       { isExpanded && Object.keys(activeProviders)
         .sort()
         .map((prov) => (
-          <Provider
+          <ProviderToggle
             key={prov}
             providerName={prov}
           />
