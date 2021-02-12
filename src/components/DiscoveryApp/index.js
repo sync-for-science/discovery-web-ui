@@ -138,10 +138,6 @@ class DiscoveryApp extends React.PureComponent {
                   activeView={activeView} // trigger timeline resizing when route changes
                   resources={legacyResources}
                   dates={dates}
-                  categories={categories}
-                  catsEnabled={activeCategories}
-                  providers={providers}
-                  provsEnabled={activeProviders}
                   // lastEvent={this.state.lastEvent}
                   // TODO: convert to use route path segment:
                   // allowDotClick={!['compare', 'catalog'].includes(activeView)}

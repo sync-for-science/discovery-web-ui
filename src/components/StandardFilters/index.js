@@ -37,11 +37,7 @@ class StandardFilters extends React.PureComponent {
       maxDate: PropTypes.string.isRequired, // Latest date we have data for this participant
       endDate: PropTypes.string.isRequired, // Dec 31 of last year of timeline tick periods
     }),
-    categories: PropTypes.arrayOf(PropTypes.string).isRequired,
-    // catsEnabled: PropTypes.object.isRequired, // Initial state
     activeCategories: PropTypes.shape({}).isRequired,
-    providers: PropTypes.arrayOf(PropTypes.string).isRequired,
-    // provsEnabled: PropTypes.object.isRequired,
     activeProviders: PropTypes.shape({}).isRequired,
     // enabledFn: PropTypes.func.isRequired, // Callback to report changed category & provider enable/disable
     // dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
@@ -55,9 +51,7 @@ class StandardFilters extends React.PureComponent {
     maxActivePos: 1.0, // Location [0..1] of TimeWidget right thumb
     timelineIsExpanded: false, // Is expanded timeline displayed (restricted dot range in effect)
     catsExpanded: true,
-    // catsEnabled: {}, // Enabled status of categories
     provsExpanded: true,
-    // provsEnabled: {}, // Enabled status of providers
     svgWidth: '0px',
     // dotClickContext: null, // The current dot (if one is highlighted)
     activeDates: {}, // Dates that are within the TimeWidget's active range and have one or more resources with enabled Categories/Providers
@@ -82,9 +76,6 @@ class StandardFilters extends React.PureComponent {
         position: this.props.dates.allDates[this.props.dates.allDates.length - 1].position,
       });
     }
-
-    // this.setState({ provsEnabled: this.props.provsEnabled });
-    // this.props.enabledFn(this.props.catsEnabled, this.props.provsEnabled);
   }
 
   componentWillUnmount() {
