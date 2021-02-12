@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { get } from 'axios';
 
 import './DiscoveryApp.css';
@@ -18,7 +18,7 @@ import {
   normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
 } from '../../utils/api';
 import {
-  resourcesState, timeFiltersState, activeCategoriesState, activeProvidersState,
+  resourcesState, timeFiltersState,
 } from '../../recoil';
 
 import CategoryFilter from '../filters/CategoryFilter';
@@ -119,8 +119,6 @@ class DiscoveryApp extends React.PureComponent {
 const DiscoveryAppHOC = (props) => {
   const [resources, setResources] = useRecoilState(resourcesState);
   const [timeFilters, updateTimeFilters] = useRecoilState(timeFiltersState);
-  const activeCategories = useRecoilValue(activeCategoriesState);
-  const activeProviders = useRecoilValue(activeProvidersState);
 
   useEffect(() => {
     function fetchData() {
@@ -178,8 +176,6 @@ const DiscoveryAppHOC = (props) => {
     <DiscoveryApp
       {...props} // eslint-disable-line react/jsx-props-no-spreading
       resources={resources}
-      activeCategories={activeCategories}
-      activeProviders={activeProviders}
       timeFilters={timeFilters}
       updateTimeFilters={updateTimeFilters}
     />
