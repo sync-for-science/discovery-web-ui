@@ -12,6 +12,9 @@ const useStyles = makeStyles(() => ({
   root: {
     marginLeft: 8,
     marginBottom: 4,
+    // TODO: align correctly for both single and multi-line labels:
+    // display: 'flex',
+    // alignItems: 'flex-start',
   },
   label: {
     fontSize: '.8em',
