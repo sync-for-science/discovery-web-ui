@@ -106,15 +106,6 @@
   margin: 8px 5px 8px auto;
 }
 
-.standard-filters-provider-nav-spacer-bottom {
-  height: 3px;
-  min-height: 3px;
-  width: 182px;
-  min-width: 182px;
-  padding: 0;
-  margin: 3px 0 0;
-}
-
 .standard-filters-single-provider {
   display: flex;
   flex-direction: column;

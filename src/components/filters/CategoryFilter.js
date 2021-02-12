@@ -15,17 +15,14 @@ const CategoryFilter = () => {
         isExpanded={isExpanded}
         expansionFn={() => setExpanded(!isExpanded)}
       />
-      { isExpanded ? [
-        Object.keys(activeCategories)
-          .sort()
-          .map((cat) => (
-            <Category
-              key={cat}
-              categoryName={cat}
-            />
-          )),
-        <div className="standard-filters-category-nav-spacer-bottom" key="1" />,
-      ] : null }
+      { isExpanded && Object.keys(activeCategories)
+        .sort()
+        .map((cat) => (
+          <Category
+            key={cat}
+            categoryName={cat}
+          />
+        ))}
     </Categories>
   );
 };

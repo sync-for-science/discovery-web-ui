@@ -15,17 +15,14 @@ const ProviderFilter = () => {
         isExpanded={isExpanded}
         expansionFn={() => setExpanded(!isExpanded)}
       />
-      { isExpanded ? [
-        Object.keys(activeProviders)
-          .sort()
-          .map((prov) => (
-            <Provider
-              key={prov}
-              providerName={prov}
-            />
-          )),
-        <div className="standard-filters-provider-nav-spacer-bottom" key="1" />,
-      ] : null }
+      { isExpanded && Object.keys(activeProviders)
+        .sort()
+        .map((prov) => (
+          <Provider
+            key={prov}
+            providerName={prov}
+          />
+        ))}
     </Providers>
   );
 };
