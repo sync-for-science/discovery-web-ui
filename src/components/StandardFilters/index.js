@@ -108,11 +108,13 @@ class StandardFilters extends React.PureComponent {
       this.updateSvgWidth();
     }
 
-    if (prevState.minActivePos !== this.state.minActivePos
-      || prevState.maxActivePos !== this.state.maxActivePos
-      || notEqJSON(prevProps.activeCategories, this.props.activeCategories)
-      || notEqJSON(prevProps.activeProviders, this.props.activeProviders)) {
-      this.setState({ activeDates: this.calcActiveDates() });
+    if (
+      prevState.minActivePos !== this.state.minActivePos
+        || prevState.maxActivePos !== this.state.maxActivePos
+        || notEqJSON(prevProps.activeCategories, this.props.activeCategories)
+        || notEqJSON(prevProps.activeProviders, this.props.activeProviders)
+    ) {
+      this.setState({ activeDates: this.calcActiveDates() }); // problem with green dots not showing up is because this.calcActiveDates() doesn't fire on initial load
     }
 
     if (prevProps.lastEvent !== this.props.lastEvent) {
@@ -219,8 +221,8 @@ class StandardFilters extends React.PureComponent {
   // Record thumb positions as returned from StandardFilters
   setDateRange = (minDate, maxDate) => {
     this.props.updateTimeFilters({
-      thumbLeftDate: minDate,
-      thumbRightDate: maxDate,
+      dateRangeStart: minDate.substring(0, 10),
+      dateRangeEnd: maxDate.substring(0, 10),
     });
   }
 

@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { atom, useRecoilState, useRecoilValue } from 'recoil';
 
-const drawerWidth = 420;
+const drawerWidth = '100%';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'none',
   },
   contentBody: {
-    padding: '8px',
   },
   rootOpen: {
     transition: theme.transitions.create(['width', 'minWidth'], {

@@ -44,8 +44,8 @@ export default class CompareView extends React.PureComponent {
     providers: PropTypes.arrayOf(PropTypes.string).isRequired,
     catsEnabled: PropTypes.object.isRequired,
     provsEnabled: PropTypes.object.isRequired,
-    thumbLeftDate: PropTypes.string.isRequired,
-    thumbRightDate: PropTypes.string.isRequired,
+    dateRangeStart: PropTypes.string.isRequired,
+    dateRangeEnd: PropTypes.string.isRequired,
     // context, nextPrevFn added in StandardFilters
   }
 
@@ -206,7 +206,7 @@ export default class CompareView extends React.PureComponent {
       : legacy.pathItem(`[*category=${cat}][*provider=${prov}]`);
     for (const res of resources) {
       if (this.noCompareCategories.includes(res.category)
-        || !inDateRange(res.itemDate, this.props.thumbLeftDate, this.props.thumbRightDate)) {
+        || !inDateRange(res.itemDate, this.props.dateRangeStart, this.props.dateRangeEnd)) {
         continue; // Ignore this resource
       }
 
@@ -702,8 +702,8 @@ export default class CompareView extends React.PureComponent {
           initialPositionYFn={this.initialPositionY.bind(this)}
           onResizeFn={this.onContentPanelResize.bind(this)}
           nextPrevFn={this.props.nextPrevFn}
-          thumbLeftDate={this.props.thumbLeftDate}
-          thumbRightDate={this.props.thumbRightDate}
+          dateRangeStart={this.props.dateRangeStart}
+          dateRangeEnd={this.props.dateRangeEnd}
           resources={this.selectedUniqueItemResources()}
           patient={this.props.resources.patient}
           providers={this.props.resources.providers}

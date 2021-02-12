@@ -2,7 +2,7 @@
 
 @import '../../css/ViewContainer.css';
 
-/* Sync for Science Discovery TilesView Stylesheet */
+/* Sync for Science Discovery CatalogView Stylesheet */
 
 /* v.01.09 Updated 01/08/2020 */
 
@@ -10,7 +10,7 @@
 
 .tiles-view {
   /* TODO: better metrics for height */
-  height: calc(100vh - 200px);
+  height: calc(100vh - 184px);
   min-width: 840px;
   display: flex;
   flex-direction: column;
@@ -136,10 +136,8 @@
 .tiles-view-container-inner {
   display: flex;
   flex-direction: row;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  margin: 16px;
+  margin-top: 0px;
   background-color: var(--tile-area);
 }
 

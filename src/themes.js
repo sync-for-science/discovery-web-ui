@@ -16,6 +16,38 @@ export const rootTheme = createMuiTheme({
         },
       },
     },
+    MuiMenuItem: {
+      defaultProps: {
+        disableRipple: true,
+      },
+      styleOverrides: {
+        root: {
+          fontFamily: 'header',
+        },
+      },
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+        },
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'header',
+          padding: '0px',
+          paddingLeft: '8px',
+        },
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          padding: '8px',
+        },
+      },
+    },
     MuiDialogActions: {
       styleOverrides: {
         justifyContent: 'space-between',
@@ -31,13 +63,50 @@ export const rootTheme = createMuiTheme({
         },
       },
     },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'header',
+        },
+      },
+    },
   },
   palette: {
     primary: {
       main: 'rgb(65, 151, 198)', // Colors.css --ca1
+      dark: 'rgb(23, 104, 145)', // Colors.css --ca3
     },
+    secondary: {
+      main: '#fff',
+    },
+    tile: 'var(--tile)',
   },
   typography: {
+    'user-profile': {
+      marginLeft: '8px',
+      fontFamily: 'header-bold',
+      fontSize: '1rem',
+      color: 'white',
+    },
+    'card-list-collection-count': {
+      display: 'block',
+      fontFamily: 'header',
+    },
+    'card-list-category-header': {
+      display: 'flex',
+      justifyContent: 'space-between',
+      fontFamily: 'header-bold',
+      color: 'var(--ca1)',
+      margin: 4,
+    },
+    'card-list-category-label': {
+      fontSize: '1rem',
+    },
+    'card-list-category-count': {
+      fontFamily: 'header',
+      display: 'inline',
+      color: '#aaa',
+    },
     s4sHeader: {
       fontFamily: 'header-bold',
       fontSize: '0.813rem',
@@ -48,9 +117,18 @@ export const rootTheme = createMuiTheme({
       color: 'var(--label-data)',
     },
     s4sLabel: {
+      fontFamily: 'data-text-bold',
+      fontSize: '0.813rem',
+      color: 'var(--label-data)',
+    },
+    s4sValueText: {
       fontFamily: 'label',
       fontSize: '0.813rem',
       color: 'var(--label-data)',
+    },
+    s4sValueTextBold: {
+      fontFamily: 'data-text-bold',
+      fontSize: '0.813rem',
     },
     s4sNoteHeader: {
       fontFamily: 'text-bold',
@@ -59,10 +137,6 @@ export const rootTheme = createMuiTheme({
     s4sNoteText: {
       fontFamily: 'text',
       color: 'var(--label-data)',
-    },
-    s4sValueText: {
-      fontFamily: 'data-text-bold',
-      fontSize: '0.813rem',
     },
     timeSeries: {
       fontFamily: 'text',

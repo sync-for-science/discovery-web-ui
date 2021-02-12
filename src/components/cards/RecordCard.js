@@ -1,9 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { string, shape } from 'prop-types';
+import { shape, string, bool } from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
+import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { format } from 'date-fns';
 
@@ -20,7 +20,6 @@ import SocialHistoryCardBody from './SocialHistoryCardBody';
 import UnimplementedCardBody from './UnimplementedCardBody';
 import VitalSignCardBody from './VitalSignCardBody';
 import NotesEditor from '../notes/NotesEditor';
-import { formatAge } from '../../util';
 
 const selectCardBody = (fieldsData) => {
   switch (fieldsData.category) {
@@ -60,32 +59,21 @@ const selectCardBody = (fieldsData) => {
 
 const useStyles = makeStyles(() => ({
   root: {
-    marginTop: 10,
+    marginBottom: 8,
+    minWidth: '240px',
   },
-  // media: {
-  //   height: 0,
-  //   paddingTop: '56.25%', // 16:9
-  // },
-  // expand: {
-  //   transform: 'rotate(0deg)',
-  //   marginLeft: 'auto',
-  //   transition: theme.transitions.create('transform', {
-  //     duration: theme.transitions.duration.shortest,
-  //   }),
-  // },
-  // expandOpen: {
-  //   transform: 'rotate(180deg)',
-  // },
-  // cardActions: {
-  //   padding: 16,
-  // },
-  // noteField: {
-  //   marginBottom: 10,
-  // },
+  recentlyAdded: {
+    borderColor: 'var(--tile-selected-last)',
+  },
+  title: {
+    padding: '16px 16px 0 16px',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
 }));
 
 const RecordCard = ({
-  recordId, records, patient,
+  recordId, records, recentlyAdded,
 }) => {
   const classes = useStyles();
 
@@ -102,24 +90,25 @@ const RecordCard = ({
     abatement: data.abatementDateTime,
     asserted: data.assertedDate,
     billablePeriod: data.billablePeriod,
-    category: record.category,
     careTeam: data.careTeam,
+    category: record.category,
     class: data.class?.code,
     clinicalStatus: data.clinicalStatus,
-    criticality: data.criticality,
     component: data.component,
     contained: data.contained,
+    criticality: data.criticality,
     date: record.itemDate,
     daysSupply: data.daysSupply,
     diagnosis: data.diagnosis?.[0]?.type?.[0]?.coding?.[0]?.code,
-    display: data.code?.text,
     dispenseRequest: data.dispenseRequest,
+    display: data.code?.text,
     dosageInstruction: data.dosageInstruction?.[0],
     medicationDisplay: data.medicationCodeableConcept?.text,
     notGiven: data.notGiven,
     onset: data.onsetDateTime,
     orderedBy: data.orderer?.display,
     participantId: record.id,
+    patientAgeAtRecord: record.patientAgeAtRecord,
     period: data.period,
     primarySource: data.primarySource,
     provider,
@@ -148,28 +137,23 @@ const RecordCard = ({
 
   // console.log('fieldsData', fieldsData)
 
-  const patientAgeAtRecord = formatAge(patient.data.birthDate, record.itemDate, 'age ') || '';
-
   return (
     <Card
-      className={classes.root}
+      className={`${classes.root} ${recentlyAdded ? classes.recentlyAdded : ''}`}
       variant="outlined"
       id={`${format(new Date(fieldsData.date), 'y-MM-dd')}-${fieldsData.display}`}
     >
-      <CardHeader
-        // action={(
-        //   <IconButton aria-label="remove">
-        //     <CloseIcon />
-        //   </IconButton>
-        // )}
-        title={category}
-        subheader={`${displayDate} | ${patientAgeAtRecord}`}
-        titleTypographyProps={{ variant: 's4sHeader' }}
-        subheaderTypographyProps={{ variant: 's4sSubheader' }}
-      />
+      <div className={classes.title}>
+        <Typography variant="s4sHeader">
+          {category}
+        </Typography>
+        <Typography variant="s4sSubheader">
+          {displayDate}
+        </Typography>
+      </div>
       <CardContent>
-        <Grid container spacing={0}>
-          {selectCardBody(fieldsData, records)}
+        <Grid container>
+          {selectCardBody(fieldsData)}
         </Grid>
       </CardContent>
       <NotesEditor
@@ -182,7 +166,7 @@ const RecordCard = ({
 RecordCard.prototype = {
   recordId: string.isRequired,
   records: shape({}).isRequired,
-  patient: shape({}).isRequired,
+  recentlyAdded: bool.isRequired,
 };
 
 export default React.memo(RecordCard);

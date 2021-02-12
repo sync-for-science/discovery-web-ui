@@ -12,13 +12,13 @@ import StandardFilters from '../StandardFilters';
 import ContentPanel from '../ContentPanel/ContentRight';
 import SummaryView from '../SummaryView';
 import CompareView from '../CompareView';
-import TilesView from '../TilesView';
+import CatalogView from '../CatalogView';
 import Collections from '../Collections';
 import PageFooter from '../PageFooter';
 import { PATIENT_MODE_SEGMENT } from '../../index';
 import {
   normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
-} from './Api';
+} from '../../utils/api';
 import {
   resourcesState, timeFiltersState, activeCategoriesState, activeProvidersState,
 } from '../../recoil';
@@ -46,13 +46,7 @@ class DiscoveryApp extends React.PureComponent {
     // isLoading: false,
     // fetchError: null, // Possible axios error object
     // lastEvent: null,
-    // thumbLeftDate: null,
-    // thumbRightDate: null,
     dotClickDate: null, // dot click from ContentPanel
-
-    // catsEnabled: null,
-    // provsEnabled: null,
-    // providers: [],
 
     // Shared Global Context
     updateGlobalContext: (updates) => this.setState(updates),
@@ -60,14 +54,14 @@ class DiscoveryApp extends React.PureComponent {
     savedCatsEnabled: null, // StandardFilters & CategoryRollup
     savedProvsEnabled: null, // StandardFilters & ProviderRollup
 
-    lastTileSelected: null, // TilesView & CompareView
-    savedSelectedTiles: null, // TilesView & CompareView
-    lastSavedSelectedTiles: null, // TilesView & CompareView
-    viewAccentDates: [], // TilesView & CompareView
-    viewLastAccentDates: [], // TilesView & CompareView
-    highlightedResources: [], // TilesView & CompareView
-    lastHighlightedResources: [], // TilesView & CompareView
-    onlyMultisource: false, // TilesView & CompareView
+    lastTileSelected: null, // CatalogView & CompareView
+    savedSelectedTiles: null, // CatalogView & CompareView
+    lastSavedSelectedTiles: null, // CatalogView & CompareView
+    viewAccentDates: [], // CatalogView & CompareView
+    viewLastAccentDates: [], // CatalogView & CompareView
+    highlightedResources: [], // CatalogView & CompareView
+    lastHighlightedResources: [], // CatalogView & CompareView
+    onlyMultisource: false, // CatalogView & CompareView
 
     onlyAnnotated: false, // ContentPanel
   }
@@ -118,7 +112,7 @@ class DiscoveryApp extends React.PureComponent {
       resources, activeCategories, activeProviders, timeFilters,
     } = this.props;
 
-    const { dates, thumbLeftDate, thumbRightDate } = timeFilters;
+    const { dates, dateRangeStart, dateRangeEnd } = timeFilters;
 
     const {
       totalResCount, providers, categories,
@@ -164,17 +158,7 @@ class DiscoveryApp extends React.PureComponent {
                         />
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/catalog`}>
-                        <TilesView
-                          resources={this.props.resources}
-                          totalResCount={totalResCount}
-                          dates={dates}
-                          categories={categories}
-                          providers={providers}
-                          catsEnabled={activeCategories}
-                          provsEnabled={activeProviders}
-                          thumbLeftDate={thumbLeftDate}
-                          thumbRightDate={thumbRightDate}
-                        />
+                        <CatalogView />
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/compare`}>
                         <CompareView
@@ -185,8 +169,8 @@ class DiscoveryApp extends React.PureComponent {
                           providers={providers}
                           catsEnabled={activeCategories}
                           provsEnabled={activeProviders}
-                          thumbLeftDate={thumbLeftDate}
-                          thumbRightDate={thumbRightDate}
+                          dateRangeStart={dateRangeStart}
+                          dateRangeEnd={dateRangeEnd}
                         />
                       </Route>
                       <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/timeline`}>
@@ -199,8 +183,8 @@ class DiscoveryApp extends React.PureComponent {
                           topBoundFn={this.calcContentPanelTopBound}
                           bottomBoundFn={this.calcContentPanelBottomBound}
                           // context, nextPrevFn added in StandardFilters
-                          thumbLeftDate={thumbLeftDate}
-                          thumbRightDate={thumbRightDate}
+                          dateRangeStart={dateRangeStart}
+                          dateRangeEnd={dateRangeEnd}
                           resources={legacyResources}
                           providers={providers}
                           totalResCount={totalResCount}

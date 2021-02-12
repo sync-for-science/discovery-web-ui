@@ -2,6 +2,7 @@ import React from 'react';
 import { formatDate } from './GenericCardBody';
 
 import CardBodyField from './CardBodyField';
+import CARD_BODY_LABEL from './cardBodyLabel';
 
 const ClaimCardBody = ({ fieldsData }) => {
   const periodDisplay = `${formatDate(fieldsData.billablePeriod.start, false)} - ${formatDate(fieldsData.billablePeriod.end, false)}`;
@@ -9,34 +10,39 @@ const ClaimCardBody = ({ fieldsData }) => {
   return (
     <>
       <CardBodyField
+        dependency={fieldsData.patientAgeAtRecord}
+        label={CARD_BODY_LABEL.age}
+        value={fieldsData.patientAgeAtRecord}
+      />
+      <CardBodyField
         dependency={fieldsData.billablePeriod.start}
-        label="PERIOD"
+        label={CARD_BODY_LABEL.period}
         value={periodDisplay}
-        highlight
+        bold
       />
       <CardBodyField
         dependency={fieldsData.total.value}
-        label="TOTAL"
+        label={CARD_BODY_LABEL.total}
         value={displayTotal}
       />
       <CardBodyField
         dependency={fieldsData.provider}
-        label="PROVIDER"
+        label={CARD_BODY_LABEL.provider}
         value={fieldsData.provider}
       />
       <CardBodyField
         dependency={fieldsData.diagnosis}
-        label="DIAGNOSIS"
+        label={CARD_BODY_LABEL.diagnosis}
         value={fieldsData.diagnosis}
       />
       <CardBodyField
         dependency={fieldsData.status}
-        label="STATUS"
+        label={CARD_BODY_LABEL.status}
         value={fieldsData.status}
       />
       <CardBodyField
         dependency={fieldsData.use}
-        label="USE"
+        label={CARD_BODY_LABEL.use}
         value={fieldsData.use}
       />
     </>

@@ -12,6 +12,16 @@ const useStyles = makeStyles(() => ({
   root: {
     marginBottom: 30,
   },
+  noteContainer: {
+    '& *:first-of-type': {
+      marginTop: '0',
+      paddingTop: '0',
+    },
+    '& *:last-of-type': {
+      marginBottom: '0',
+      paddingBottom: '0',
+    },
+  },
   editTextField: {
     marginBottom: 10,
   },
@@ -24,7 +34,6 @@ const CompletedNote = ({
   noteText, lastUpdated, handleDeleteNote, handleSetEditingMode,
 }) => {
   const classes = useStyles();
-  // TODO: Use <Button /> instead of <Typography />, and style Button variant?
   return (
     <Grid container className={classes.root}>
       <Grid item container alignItems="center">
@@ -32,24 +41,27 @@ const CompletedNote = ({
           <Typography variant="s4sNoteHeader">{formatDate(lastUpdated)}</Typography>
         </Grid>
         <Grid item container xs={6}>
-          <Grid item xs={6} align="right">
+          <Grid item container justifyContent="flex-end">
             <Button onClick={handleSetEditingMode}>
               EDIT
             </Button>
-          </Grid>
-          <Grid item xs={6} align="right">
             <Button onClick={handleDeleteNote}>
               DELETE
             </Button>
           </Grid>
         </Grid>
       </Grid>
-      <Typography variant="s4sNoteText">
-        {/* react-markdown defaults to wrapping a <p> around the text. this causes style problems */}
-        <ReactMarkdown renderers={{ paragraph: 'span' }}>
-          {noteText}
-        </ReactMarkdown>
-      </Typography>
+      <Grid item container alignItems="center">
+        <Typography
+          component="div"
+          className={classes.noteContainer}
+          variant="s4sNoteText"
+        >
+          <ReactMarkdown>
+            {noteText}
+          </ReactMarkdown>
+        </Typography>
+      </Grid>
     </Grid>
   );
 };

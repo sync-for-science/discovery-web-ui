@@ -1,8 +1,9 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-
 import { useRecoilValue } from 'recoil';
+
+import CARD_BODY_LABEL from './cardBodyLabel';
 import CardBodyField from './CardBodyField';
 import TimeSeries from '../TimeSeries/index';
 import { computeTimeSeriesVitalSignsData } from '../../fhirUtil';
@@ -25,9 +26,9 @@ const VitalSignCardBody = ({ fieldsData }) => {
     displayComponents = fieldsData.component.map((resource) => {
       let label;
       if (resource.code.text === 'Diastolic Blood Pressure') {
-        label = 'DIASTOLIC';
+        label = CARD_BODY_LABEL.diastolic;
       } else if (resource.code.text === 'Systolic Blood Pressure') {
-        label = 'SYSTOLIC';
+        label = CARD_BODY_LABEL.systolic;
       } else {
         label = resource.code.text;
       }
@@ -50,25 +51,30 @@ const VitalSignCardBody = ({ fieldsData }) => {
   return (
     <>
       <CardBodyField
+        dependency={fieldsData.patientAgeAtRecord}
+        label={CARD_BODY_LABEL.age}
+        value={fieldsData.patientAgeAtRecord}
+      />
+      <CardBodyField
         dependency={fieldsData.display}
-        label="MEASURE"
+        label={CARD_BODY_LABEL.measure}
         value={fieldsData.display}
-        highlight
+        bold
       />
       <CardBodyField
         dependency={fieldsData.valueQuantity}
-        label="VALUE"
+        label={CARD_BODY_LABEL.value}
         value={valueDisplay}
       />
       {displayComponents}
       <CardBodyField
         dependency={fieldsData.provider}
-        label="PROVIDER"
+        label={CARD_BODY_LABEL.provider}
         value={fieldsData.provider}
       />
       <CardBodyField
         dependency={fieldsData.status}
-        label="STATUS"
+        label={CARD_BODY_LABEL.status}
         value={fieldsData.status}
       />
       <Typography variant="timeSeries" className={classes.timeSeries}>

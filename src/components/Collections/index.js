@@ -1,39 +1,28 @@
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
 
-import { useRecoilValue } from 'recoil';
-import { allRecordIds, resourcesState, patientRecord } from '../../recoil';
+import CollectionsList from './CollectionsList';
+import CollectionDisplay from './CollectionDisplay';
+
+const useStyles = makeStyles(() => ({
+  gridContainer: {
+    width: 'calc(100vw - 170px)', // view width - left filters
+  },
+}));
 
 const Collections = () => {
-  const recordIds = useRecoilValue(allRecordIds);
-  const resources = useRecoilValue(resourcesState);
-  const patient = useRecoilValue(patientRecord);
-
-  const {
-    loading, records,
-  } = resources;
+  const classes = useStyles();
 
   return (
-    <div>
-      <h3>COLLECTIONS</h3>
-      <div>
-        loading:
-        { String(loading) }
-      </div>
-      <div className="collections-content">
-        <h4>patient:</h4>
-        <pre>
-          { JSON.stringify(patient, null, '  ') }
-        </pre>
-        <h4>records:</h4>
-        <pre>
-          { JSON.stringify(records, null, '  ') }
-        </pre>
-        <h4>recordIds:</h4>
-        <pre>
-          { JSON.stringify(recordIds, null, '  ') }
-        </pre>
-      </div>
-    </div>
+    <Grid container spacing={2} className={classes.gridContainer}>
+      <Grid item xs={2}>
+        <CollectionsList />
+      </Grid>
+      <Grid item xs={10}>
+        <CollectionDisplay />
+      </Grid>
+    </Grid>
   );
 };
 
