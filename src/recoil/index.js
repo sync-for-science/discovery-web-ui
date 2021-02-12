@@ -138,15 +138,10 @@ export const allCollectionsState = atom({
     collections: {
       default: {
         label: 'Untitled Collection',
-        uuids: {}, // new Set(),
+        uuids: {},
+        recentlyAddedUuids: {},
       },
     },
-  },
-});
-
-export const lastRecordsClickedState = atom({
-  key: 'lastRecordsClicked',
-  default: {
   },
 });
 
@@ -159,6 +154,7 @@ export const activeCollectionState = selector({
     return currentActiveCollection;
   },
   set: ({ get, set }, newValues) => {
+    // newValues is a hash where each key is a record uuid, whose value is a Boolean (to add or remove)
     const allCollections = get(allCollectionsState);
     const { activeCollectionId, collections } = allCollections;
     const currentActiveCollection = collections[activeCollectionId];
@@ -174,10 +170,10 @@ export const activeCollectionState = selector({
         [activeCollectionId]: {
           label,
           uuids,
+          recentlyAddedUuids: pruneEmpty(newValues),
         },
       },
     });
-    set(lastRecordsClickedState, pruneEmpty(newValues));
   },
 });
 
@@ -197,10 +193,9 @@ export const filteredActiveCollectionState = selector({
     const activeProviders = get(activeProvidersState);
     const { dateRangeStart, dateRangeEnd } = get(timeFiltersState);
     const { records } = get(resourcesState);
-    const lastUuidsClicked = get(lastRecordsClickedState);
     let totalFilteredRecordCount = 0; // total count of all uuids in all categories, after applying category, provider, and timeline filters
-    let totalFilteredCollectionCount = 0; // all uuids in ^totalFilteredRecordCount, that are also in the current collection
-    const { uuids: uuidsInCollection } = activeCollection;
+    let totalFilteredCollectionCount = 0; // count of uuids in ^totalFilteredRecordCount, that are also in the current collection
+    const { uuids: uuidsInCollection, recentlyAddedUuids } = activeCollection;
     const filteredCategories = Object.entries(groupedRecordIdsBySubtype)
       .filter(([catLabel]) => (activeCategories[catLabel]))
       .reduce((accCats, [catLabel, category]) => {
@@ -210,13 +205,13 @@ export const filteredActiveCollectionState = selector({
             return activeProviders[record.provider] && isInDateRange(record.itemDate, dateRangeStart, dateRangeEnd);
           });
           const activeUuids = uuidsFiltered.filter((uuid) => uuidsInCollection[uuid]);
-          const hasLastAdded = activeUuids.reduce((acc, uuid) => lastUuidsClicked[uuid] || acc, false);
+          const hasLastAdded = activeUuids.reduce((acc, uuid) => recentlyAddedUuids[uuid] || acc, false);
           accCategory.filteredRecordCount += uuidsFiltered.length;
           accCategory.filteredCollectionCount += activeUuids.length;
           accCategory.subtypes[subtypeLabel] = {
             hasLastAdded,
             uuids: uuidsFiltered, // not all subtype uuids -- just uuids for subtype, filtered by category, provider, and timeline filters
-            collectionUuids: activeUuids, // count of uuids in ^uuidsFiltered, that are also in the current collection
+            collectionUuids: activeUuids, // all uuids in ^uuidsFiltered, that are also in the current collection
           };
           totalFilteredRecordCount += uuidsFiltered.length;
           totalFilteredCollectionCount += activeUuids.length;

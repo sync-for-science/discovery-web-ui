@@ -1,7 +1,7 @@
 import React from 'react';
 import { array, string } from 'prop-types';
-import { useRecoilValue, useRecoilState } from 'recoil';
-import { activeCollectionState, lastRecordsClickedState } from '../../recoil';
+import { useRecoilState } from 'recoil';
+import { activeCollectionState } from '../../recoil';
 
 const showCount = (count) => {
   if (count > 1) {
@@ -12,11 +12,10 @@ const showCount = (count) => {
 
 const RecordSelector = ({ label, uuids }) => {
   const [activeCollection, setActiveCollection] = useRecoilState(activeCollectionState);
-  const lastUuidsClicked = useRecoilValue(lastRecordsClickedState);
 
-  const { uuids: activeUuids } = activeCollection;
+  const { uuids: activeUuids, recentlyAddedUuids } = activeCollection;
   const hasActiveUuid = uuids.reduce((acc, uuid) => activeUuids[uuid] || acc, false);
-  const hasLastClickedUuid = hasActiveUuid && uuids.reduce((acc, uuid) => lastUuidsClicked[uuid] || acc, false);
+  const hasLastClickedUuid = hasActiveUuid && uuids.reduce((acc, uuid) => recentlyAddedUuids[uuid] || acc, false);
 
   const cssClass = hasLastClickedUuid ? 'tile-standard-last' : (hasActiveUuid ? 'tile-standard-selected' : 'tile-standard');
 
