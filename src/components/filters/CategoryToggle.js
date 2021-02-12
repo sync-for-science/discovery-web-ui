@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Category = ({ categoryName }) => {
+const CategoryToggle = ({ categoryName }) => {
   const classes = useStyles();
 
   const [activeCategories, setActiveCategories] = useRecoilState(
@@ -51,10 +51,8 @@ const Category = ({ categoryName }) => {
   );
 };
 
-Category.myName = 'Category';
-
-Category.propTypes = {
+CategoryToggle.propTypes = {
   categoryName: PropTypes.string.isRequired,
 };
 
-export default Category;
+export default CategoryToggle;

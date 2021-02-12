@@ -2,7 +2,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import Categories from '../Categories';
 import CategoryRollup from './CategoryRollup';
-import Category from '../Category';
+import CategoryToggle from './CategoryToggle';
 import { activeCategoriesState } from '../../recoil';
 
 const CategoryFilter = () => {
@@ -18,7 +18,7 @@ const CategoryFilter = () => {
       { isExpanded && Object.keys(activeCategories)
         .sort()
         .map((cat) => (
-          <Category
+          <CategoryToggle
             key={cat}
             categoryName={cat}
           />
