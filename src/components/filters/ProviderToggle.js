@@ -10,10 +10,12 @@ import { activeProvidersState } from '../../recoil';
 
 const useStyles = makeStyles(() => ({
   root: {
-    marginLeft: 5,
+    marginLeft: 8,
+    marginBottom: 4,
   },
   label: {
     fontSize: '.8em',
+    marginLeft: 4,
   },
 }));
 
