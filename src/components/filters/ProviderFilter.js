@@ -1,6 +1,5 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import Providers from '../Providers';
 import ProviderRollup from './ProviderRollup';
 import ProviderToggle from './ProviderToggle';
 import { activeProvidersState } from '../../recoil';
@@ -10,7 +9,7 @@ const ProviderFilter = () => {
   const activeProviders = useRecoilValue(activeProvidersState);
 
   return (
-    <Providers>
+    <div className="selector-set">
       <ProviderRollup
         isExpanded={isExpanded}
         expansionFn={() => setExpanded(!isExpanded)}
@@ -23,7 +22,7 @@ const ProviderFilter = () => {
             providerName={prov}
           />
         ))}
-    </Providers>
+    </div>
   );
 };
 
