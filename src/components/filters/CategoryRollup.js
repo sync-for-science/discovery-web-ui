@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import '../../css/Selector.css';
-import '../CategoryRollup/CategoryRollup.css';
+import './CategoryRollup.css';
 
 import { useRecoilState } from 'recoil';
 import { activeCategoriesState, categoriesModeState, SELECTION_STATES } from '../../recoil';
