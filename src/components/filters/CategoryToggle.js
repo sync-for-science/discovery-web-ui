@@ -14,9 +14,6 @@ const useStyles = makeStyles(() => ({
   label: {
     fontSize: '.8em',
   },
-  checkbox: {
-    padding: 1,
-  },
 }));
 
 const CategoryToggle = ({ categoryName }) => {
@@ -40,7 +37,6 @@ const CategoryToggle = ({ categoryName }) => {
       classes={classes}
       control={(
         <Checkbox
-          className={classes.checkbox}
           checked={isEnabled}
           onChange={handleChange}
           color="primary"
