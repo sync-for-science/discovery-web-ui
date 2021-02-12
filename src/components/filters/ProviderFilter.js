@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import Providers from '../Providers';
-import ProviderRollup from '../ProviderRollup';
+import ProviderRollup from './ProviderRollup';
 import Provider from '../Provider';
 import { activeProvidersState } from '../../recoil';
 
