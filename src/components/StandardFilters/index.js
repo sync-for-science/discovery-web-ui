@@ -568,42 +568,7 @@ class StandardFilters extends React.PureComponent {
   }
 
   renderLeftNav = () => (
-    <div className="standard-filters-categories-and-providers">
-      <Categories>
-        <CategoryRollup
-          isExpanded={this.state.catsExpanded}
-          expansionFn={this.onExpandContract}
-        />
-        { this.state.catsExpanded ? [
-          this.props.categories && this.props.categories.map(
-            (cat) => (
-              <Category
-                key={cat}
-                categoryName={cat}
-              />
-            ),
-          ),
-          <div className="standard-filters-category-nav-spacer-bottom" key="1" />,
-        ] : null }
-      </Categories>
-      <Providers>
-        <ProviderRollup
-          isExpanded={this.state.provsExpanded}
-          expansionFn={this.onExpandContract}
-        />
-        { this.state.provsExpanded ? [
-          this.props.providers.map(
-            (prov) => (
-              <Provider
-                key={prov}
-                providerName={prov}
-              />
-            ),
-          ),
-          <div className="standard-filters-provider-nav-spacer-bottom" key="1" />,
-        ] : null }
-      </Providers>
-    </div>
+    <div className="standard-filters-categories-and-providers" />
   )
 
   portalLeftNav = () => {
