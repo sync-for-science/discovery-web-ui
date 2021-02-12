@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import Categories from '../Categories';
-import CategoryRollup from '../CategoryRollup';
+import CategoryRollup from './CategoryRollup';
 import Category from '../Category';
 import { activeCategoriesState } from '../../recoil';
 
