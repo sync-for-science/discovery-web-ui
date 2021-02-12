@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
   },
   label: {
     fontSize: '.8em',
-  }
+  },
 }));
 
 const Provider = ({ providerName }) => {
@@ -44,7 +44,7 @@ const Provider = ({ providerName }) => {
           checked={isEnabled}
           onChange={handleChange}
           color="primary"
-          style = {{
+          style={{
             padding: 1,
           }}
         />

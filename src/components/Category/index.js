@@ -40,7 +40,7 @@ const Category = ({ categoryName }) => {
           checked={isEnabled}
           onChange={handleChange}
           color="primary"
-          style = {{
+          style={{
             padding: 1,
           }}
         />
