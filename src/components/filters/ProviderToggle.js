@@ -10,17 +10,19 @@ import { activeProvidersState } from '../../recoil';
 
 const useStyles = makeStyles(() => ({
   root: {
-    marginLeft: 5,
+    marginLeft: 8,
+    marginBottom: 4,
+    // TODO: align correctly for both single and multi-line labels:
+    // display: 'flex',
+    // alignItems: 'flex-start',
   },
   label: {
     fontSize: '.8em',
-  },
-  checkbox: {
-    padding: 1,
+    marginLeft: 4,
   },
 }));
 
-const Provider = ({ providerName }) => {
+const ProviderToggle = ({ providerName }) => {
   const classes = useStyles();
 
   const [activeProviders, setActiveProviders] = useRecoilState(
@@ -41,7 +43,6 @@ const Provider = ({ providerName }) => {
       classes={classes}
       control={(
         <Checkbox
-          className={classes.checkbox}
           checked={isEnabled}
           onChange={handleChange}
           color="primary"
@@ -52,10 +53,8 @@ const Provider = ({ providerName }) => {
   );
 };
 
-Provider.myName = 'Category';
-
-Provider.propTypes = {
+ProviderToggle.propTypes = {
   providerName: PropTypes.string.isRequired,
 };
 
-export default Provider;
+export default ProviderToggle;

@@ -9,17 +9,19 @@ import { activeCategoriesState } from '../../recoil';
 
 const useStyles = makeStyles(() => ({
   root: {
-    marginLeft: 5,
+    marginLeft: 8,
+    marginBottom: 4,
+    // TODO: align correctly for both single and multi-line labels:
+    // display: 'flex',
+    // alignItems: 'flex-start',
   },
   label: {
     fontSize: '.8em',
-  },
-  checkbox: {
-    padding: 1,
+    marginLeft: 4,
   },
 }));
 
-const Category = ({ categoryName }) => {
+const CategoryToggle = ({ categoryName }) => {
   const classes = useStyles();
 
   const [activeCategories, setActiveCategories] = useRecoilState(
@@ -40,7 +42,6 @@ const Category = ({ categoryName }) => {
       classes={classes}
       control={(
         <Checkbox
-          className={classes.checkbox}
           checked={isEnabled}
           onChange={handleChange}
           color="primary"
@@ -51,10 +52,8 @@ const Category = ({ categoryName }) => {
   );
 };
 
-Category.myName = 'Category';
-
-Category.propTypes = {
+CategoryToggle.propTypes = {
   categoryName: PropTypes.string.isRequired,
 };
 
-export default Category;
+export default CategoryToggle;

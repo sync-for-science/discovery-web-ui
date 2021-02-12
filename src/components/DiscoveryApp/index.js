@@ -24,6 +24,8 @@ import {
 } from '../../recoil';
 
 import DiscoveryContext from '../DiscoveryContext';
+import CategoryFilter from '../filters/CategoryFilter';
+import ProviderFilter from '../filters/ProviderFilter';
 
 //
 // Render the top-level Discovery application page
@@ -126,17 +128,18 @@ class DiscoveryApp extends React.PureComponent {
             participantId={participantId}
           />
           <div id="outer-container" className={`route-${activeView}`}>
-            <div id="left-filters" style={{ display: isSummary ? 'none' : 'block' }} />
+            {!isSummary && (
+              <div id="left-filters">
+                <CategoryFilter />
+                <ProviderFilter />
+              </div>
+            )}
             <div id="inner-container">
               <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
                 <StandardFilters
                   activeView={activeView} // trigger timeline resizing when route changes
                   resources={legacyResources}
                   dates={dates}
-                  categories={categories}
-                  catsEnabled={activeCategories}
-                  providers={providers}
-                  provsEnabled={activeProviders}
                   // lastEvent={this.state.lastEvent}
                   // TODO: convert to use route path segment:
                   // allowDotClick={!['compare', 'catalog'].includes(activeView)}

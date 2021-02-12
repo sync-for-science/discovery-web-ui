@@ -16,6 +16,13 @@ export const rootTheme = createMuiTheme({
         },
       },
     },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+        },
+      },
+    },
     MuiMenuItem: {
       defaultProps: {
         disableRipple: true,

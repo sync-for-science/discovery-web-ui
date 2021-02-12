@@ -8,18 +8,11 @@ import {
 import PropTypes from 'prop-types';
 
 import './StandardFilters.css';
-import ReactDOM from 'react-dom';
 import FhirTransform from '../../FhirTransform.js';
 import {
   combine, cleanDates, normalizeDates, checkQuerySelector, notEqJSON, dateOnly,
 } from '../../util.js';
 import TimeWidget from '../TimeWidget';
-import CategoryRollup from '../CategoryRollup';
-import Categories from '../Categories';
-import Category from '../Category';
-import ProviderRollup from '../ProviderRollup';
-import Providers from '../Providers';
-import Provider from '../Provider';
 import Unimplemented from '../Unimplemented';
 import DiscoveryContext from '../DiscoveryContext';
 
@@ -44,11 +37,7 @@ class StandardFilters extends React.PureComponent {
       maxDate: PropTypes.string.isRequired, // Latest date we have data for this participant
       endDate: PropTypes.string.isRequired, // Dec 31 of last year of timeline tick periods
     }),
-    categories: PropTypes.arrayOf(PropTypes.string).isRequired,
-    // catsEnabled: PropTypes.object.isRequired, // Initial state
     activeCategories: PropTypes.shape({}).isRequired,
-    providers: PropTypes.arrayOf(PropTypes.string).isRequired,
-    // provsEnabled: PropTypes.object.isRequired,
     activeProviders: PropTypes.shape({}).isRequired,
     // enabledFn: PropTypes.func.isRequired, // Callback to report changed category & provider enable/disable
     // dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
@@ -62,9 +51,7 @@ class StandardFilters extends React.PureComponent {
     maxActivePos: 1.0, // Location [0..1] of TimeWidget right thumb
     timelineIsExpanded: false, // Is expanded timeline displayed (restricted dot range in effect)
     catsExpanded: true,
-    // catsEnabled: {}, // Enabled status of categories
     provsExpanded: true,
-    // provsEnabled: {}, // Enabled status of providers
     svgWidth: '0px',
     // dotClickContext: null, // The current dot (if one is highlighted)
     activeDates: {}, // Dates that are within the TimeWidget's active range and have one or more resources with enabled Categories/Providers
@@ -89,9 +76,6 @@ class StandardFilters extends React.PureComponent {
         position: this.props.dates.allDates[this.props.dates.allDates.length - 1].position,
       });
     }
-
-    // this.setState({ provsEnabled: this.props.provsEnabled });
-    // this.props.enabledFn(this.props.catsEnabled, this.props.provsEnabled);
   }
 
   componentWillUnmount() {
@@ -567,52 +551,6 @@ class StandardFilters extends React.PureComponent {
     }
   }
 
-  renderLeftNav = () => (
-    <div className="standard-filters-categories-and-providers">
-      <Categories>
-        <CategoryRollup
-          isExpanded={this.state.catsExpanded}
-          expansionFn={this.onExpandContract}
-        />
-        { this.state.catsExpanded ? [
-          this.props.categories && this.props.categories.map(
-            (cat) => (
-              <Category
-                key={cat}
-                categoryName={cat}
-              />
-            ),
-          ),
-          <div className="standard-filters-category-nav-spacer-bottom" key="1" />,
-        ] : null }
-      </Categories>
-      <Providers>
-        <ProviderRollup
-          isExpanded={this.state.provsExpanded}
-          expansionFn={this.onExpandContract}
-        />
-        { this.state.provsExpanded ? [
-          this.props.providers.map(
-            (prov) => (
-              <Provider
-                key={prov}
-                providerName={prov}
-              />
-            ),
-          ),
-          <div className="standard-filters-provider-nav-spacer-bottom" key="1" />,
-        ] : null }
-      </Providers>
-    </div>
-  )
-
-  portalLeftNav = () => {
-    const leftNavTarget = document.getElementById('left-filters');
-    if (leftNavTarget) {
-      return ReactDOM.createPortal((this.renderLeftNav()), leftNavTarget);
-    }
-  }
-
   // TODO: handle noDots for LongitudinalView???
   render() {
     //      console.log('SF render: ' + (this.props.dotClickContext ? this.props.dotClickContext.date : this.props.dotClickContext));
@@ -620,22 +558,19 @@ class StandardFilters extends React.PureComponent {
     const dotClickFn = this.props.allowDotClick ? this.onDotClick : null;
 
     return (
-      <>
-        <TimeWidget
-          minDate={dates ? dates.minDate : ''}
-          maxDate={dates ? dates.maxDate : ''}
-          startDate={dates ? dates.startDate : ''}
-          endDate={dates ? dates.endDate : ''}
-          dotContext={this.props.dotClickContext}
-          thumbLeft={this.state.minActivePos}
-          thumbRight={this.state.maxActivePos}
-          timelineWidth={this.state.svgWidth}
-          setLeftRightFn={this.setLeftRight}
-          dotPositionsFn={this.fetchDotPositions}
-          dotClickFn={dotClickFn}
-        />
-        { this.portalLeftNav() }
-      </>
+      <TimeWidget
+        minDate={dates ? dates.minDate : ''}
+        maxDate={dates ? dates.maxDate : ''}
+        startDate={dates ? dates.startDate : ''}
+        endDate={dates ? dates.endDate : ''}
+        dotContext={this.props.dotClickContext}
+        thumbLeft={this.state.minActivePos}
+        thumbRight={this.state.maxActivePos}
+        timelineWidth={this.state.svgWidth}
+        setLeftRightFn={this.setLeftRight}
+        dotPositionsFn={this.fetchDotPositions}
+        dotClickFn={dotClickFn}
+      />
     );
   }
 }
