@@ -128,10 +128,12 @@ class DiscoveryApp extends React.PureComponent {
             participantId={participantId}
           />
           <div id="outer-container" className={`route-${activeView}`}>
-            <div id="left-filters" style={{ display: isSummary ? 'none' : 'block' }}>
-              <CategoryFilter />
-              <ProviderFilter />
-            </div>
+            {!isSummary && (
+              <div id="left-filters">
+                <CategoryFilter />
+                <ProviderFilter />
+              </div>
+            )}
             <div id="inner-container">
               <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
                 <StandardFilters
