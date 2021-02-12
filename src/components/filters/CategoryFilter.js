@@ -1,16 +1,16 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import Categories from '../Categories';
 import CategoryRollup from './CategoryRollup';
 import CategoryToggle from './CategoryToggle';
 import { activeCategoriesState } from '../../recoil';
+import '../../css/Selector.css';
 
 const CategoryFilter = () => {
   const [isExpanded, setExpanded] = React.useState(true);
   const activeCategories = useRecoilValue(activeCategoriesState);
 
   return (
-    <Categories>
+    <div className="selector-set">
       <CategoryRollup
         isExpanded={isExpanded}
         expansionFn={() => setExpanded(!isExpanded)}
@@ -23,7 +23,7 @@ const CategoryFilter = () => {
             categoryName={cat}
           />
         ))}
-    </Categories>
+    </div>
   );
 };
 
