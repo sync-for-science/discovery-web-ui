@@ -1,26 +1,33 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import Categories from '../Categories';
 import CategoryRollup from '../CategoryRollup';
 import Category from '../Category';
+import { activeCategoriesState } from '../../recoil';
 
-const CategoryFilter = () => (
-  <Categories>
-    <CategoryRollup
-      isExpanded={this.state.catsExpanded}
-      expansionFn={this.onExpandContract}
-    />
-    { this.state.catsExpanded ? [
-      this.props.categories && this.props.categories.map(
-        (cat) => (
-          <Category
-            key={cat}
-            categoryName={cat}
-          />
-        ),
-      ),
-      <div className="standard-filters-category-nav-spacer-bottom" key="1" />,
-    ] : null }
-  </Categories>
-);
+const CategoryFilter = () => {
+  const [isExpanded, setExpanded] = React.useState(true);
+  const activeCategories = useRecoilValue(activeCategoriesState);
+
+  return (
+    <Categories>
+      <CategoryRollup
+        isExpanded={isExpanded}
+        expansionFn={() => setExpanded(!isExpanded)}
+      />
+      { isExpanded ? [
+        Object.keys(activeCategories)
+          .sort()
+          .map((cat) => (
+            <Category
+              key={cat}
+              categoryName={cat}
+            />
+          )),
+        <div className="standard-filters-category-nav-spacer-bottom" key="1" />,
+      ] : null }
+    </Categories>
+  );
+};
 
 export default CategoryFilter;

@@ -1,27 +1,33 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import Providers from '../Providers';
 import ProviderRollup from '../ProviderRollup';
 import Provider from '../Provider';
+import { activeProvidersState } from '../../recoil';
 
-const ProviderFilter = () => (
+const ProviderFilter = () => {
+  const [isExpanded, setExpanded] = React.useState(true);
+  const activeProviders = useRecoilValue(activeProvidersState);
 
-  <Providers>
-    <ProviderRollup
-      isExpanded={this.state.provsExpanded}
-      expansionFn={this.onExpandContract}
-    />
-    { this.state.provsExpanded ? [
-      this.props.providers.map(
-        (prov) => (
-          <Provider
-            key={prov}
-            providerName={prov}
-          />
-        ),
-      ),
-      <div className="standard-filters-provider-nav-spacer-bottom" key="1" />,
-    ] : null }
-  </Providers>
-);
+  return (
+    <Providers>
+      <ProviderRollup
+        isExpanded={isExpanded}
+        expansionFn={() => setExpanded(!isExpanded)}
+      />
+      { isExpanded ? [
+        Object.keys(activeProviders)
+          .sort()
+          .map((prov) => (
+            <Provider
+              key={prov}
+              providerName={prov}
+            />
+          )),
+        <div className="standard-filters-provider-nav-spacer-bottom" key="1" />,
+      ] : null }
+    </Providers>
+  );
+};
 
 export default ProviderFilter;

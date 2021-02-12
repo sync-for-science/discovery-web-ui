@@ -24,6 +24,8 @@ import {
 } from '../../recoil';
 
 import DiscoveryContext from '../DiscoveryContext';
+import CategoryFilter from '../filters/CategoryFilter';
+import ProviderFilter from '../filters/ProviderFilter';
 
 //
 // Render the top-level Discovery application page
@@ -126,7 +128,10 @@ class DiscoveryApp extends React.PureComponent {
             participantId={participantId}
           />
           <div id="outer-container" className={`route-${activeView}`}>
-            <div id="left-filters" style={{ display: isSummary ? 'none' : 'block' }} />
+            <div id="left-filters" style={{ display: isSummary ? 'none' : 'block' }}>
+              <CategoryFilter />
+              <ProviderFilter />
+            </div>
             <div id="inner-container">
               <div className="standard-filters" style={{ display: isSummary ? 'none' : 'block' }}>
                 <StandardFilters
