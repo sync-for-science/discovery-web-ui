@@ -53,8 +53,8 @@ const CollectionSwitcher = () => {
         collections: {
           ...collections,
           [activeCollectionId]: {
+            ...collections[activeCollectionId],
             label: renameInput.current.value,
-            uuids: collections[activeCollectionId].uuids,
           },
         },
       };
@@ -72,7 +72,8 @@ const CollectionSwitcher = () => {
           ...collections,
           [nowUTC]: {
             label: 'New Collection',
-            uuids: [],
+            uuids: {},
+            recentlyAddedUuids: {},
           },
         },
       };

@@ -83,6 +83,7 @@ const CompareView = () => {
               .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
               .reduce((acc, [displayCoding, { uuids, _collectionUuids }]) => {
                 if (uuids.length) {
+                  // uuids from filteredActiveCollection are a sortable Array:
                   acc.push(
                     <div
                       key={displayCoding}

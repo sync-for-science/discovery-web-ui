@@ -1,6 +1,6 @@
 import React from 'react';
 import { array, string } from 'prop-types';
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { activeCollectionState } from '../../recoil';
 
 const showCount = (count) => {

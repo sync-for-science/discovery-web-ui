@@ -62,8 +62,8 @@ const CollectionTitle = ({
         collections: {
           ...collections,
           [activeCollectionId]: {
+            ...collections[activeCollectionId],
             label: renameInput.current.value,
-            uuids: collections[activeCollectionId].uuids,
           },
         },
       };
@@ -149,7 +149,8 @@ const CollectionsList = () => {
             ...previousState.collections,
             [nowUTC]: {
               label: newCollectionLabel,
-              uuids: [],
+              uuids: {},
+              recentlyAddedUuids: {},
             },
           },
         };
