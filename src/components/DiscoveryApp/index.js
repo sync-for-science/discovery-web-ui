@@ -12,7 +12,6 @@ import SummaryView from '../SummaryView';
 import CompareView from '../CompareView';
 import CatalogView from '../CatalogView';
 import Collections from '../Collections';
-import PageFooter from '../PageFooter';
 import { PATIENT_MODE_SEGMENT } from '../../index';
 import {
   normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
@@ -109,7 +108,6 @@ class DiscoveryApp extends React.PureComponent {
           </div>
           { hasCardListRight && <div id="details-right" /> }
         </div>
-        <PageFooter resources={legacyResources} />
       </div>
     );
   }
