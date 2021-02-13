@@ -345,19 +345,24 @@ class StandardFilters extends React.PureComponent {
   //   dotType:     'active', 'inactive', 'active-highlight', 'inactive-highlight', 'active-highlight-search', 'inactive-highlight-search'
   //
   onDotClick = (context, date, dotType) => {
-    if (this.props.allowDotClick) {
-      const rowDates = this.fetchDotPositions(context.parent, context.rowName, true, true);
-      const { position } = rowDates.find((elt) => elt.date === date);
+    console.info('obsolete onDotClick -- context, date, dotType: ', context, date, dotType); // eslint-disable-line no-console
+    try {
+      if (this.props.allowDotClick) {
+        const rowDates = this.fetchDotPositions(context.parent, context.rowName, true, true);
+        const { position } = rowDates.find((elt) => elt.date === date);
 
-      context.dotType = this.updateDotType(dotType, position, false);
-      context.minDate = rowDates[0].date;
-      context.maxDate = rowDates[rowDates.length - 1].date;
-      context.allDates = this.props.dates.allDates;
-      context.date = date;
-      context.position = position;
-      context.data = this.fetchDataForDot(context.parent, context.rowName, context.date);
+        context.dotType = this.updateDotType(dotType, position, false);
+        context.minDate = rowDates[0].date;
+        context.maxDate = rowDates[rowDates.length - 1].date;
+        context.allDates = this.props.dates.allDates;
+        context.date = date;
+        context.position = position;
+        context.data = this.fetchDataForDot(context.parent, context.rowName, context.date);
 
-      this.setState({ dotClickContext: context });
+        this.setState({ dotClickContext: context });
+      }
+    } catch (e) {
+      console.error(e); // eslint-disable-line no-console
     }
   }
 
