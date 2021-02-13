@@ -2,7 +2,6 @@ import React from 'react';
 import {
   atom,
   useRecoilState,
-  useSetRecoilState,
   useRecoilValue,
 } from 'recoil';
 import PropTypes from 'prop-types';
@@ -16,7 +15,9 @@ import TimeWidget from '../TimeWidget';
 import Unimplemented from '../Unimplemented';
 
 import { SUBROUTES } from '../../constants';
-import { activeCategoriesState, activeProvidersState, timeFiltersState } from '../../recoil';
+import {
+  activeCategoriesState, activeProvidersState, resourcesState, timeFiltersState,
+} from '../../recoil';
 
 const ALLOW_DOT_CLICK = true;
 
@@ -521,7 +522,9 @@ export const dotClickContextState = atom({
 });
 
 const StandardFiltersHOC = React.memo((props) => {
-  const updateTimeFilters = useSetRecoilState(timeFiltersState);
+  const [timeFilters, updateTimeFilters] = useRecoilState(timeFiltersState);
+  const { legacy } = useRecoilValue(resourcesState);
+
   const [dotClickContext, setDotClickContext] = useRecoilState(dotClickContextState);
 
   const activeCategories = useRecoilValue(activeCategoriesState);
@@ -535,6 +538,8 @@ const StandardFiltersHOC = React.memo((props) => {
       setDotClickContext={setDotClickContext}
       activeCategories={activeCategories}
       activeProviders={activeProviders}
+      resources={legacy}
+      dates={timeFilters.dates}
     />
   );
 });
