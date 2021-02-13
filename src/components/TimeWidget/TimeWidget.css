@@ -306,7 +306,10 @@
 }
 
 .date-range-data-left-focused {
+  width: 72px;
   height: 20px;
+  white-space: nowrap;
+  text-align: right; /* keep re-renders visually stable, by aligning on year */
   align-items: center;
   font-family: text;
   font-size: 11px;
@@ -330,7 +333,10 @@
 }
 
 .date-range-data-right-focused {
+  width: 72px;
   height: 20px;
+  text-align: right;
+  white-space: nowrap;
   align-items: center;
   font-family: text;
   font-size: 11px;
