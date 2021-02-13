@@ -132,7 +132,7 @@ const RecordCard = ({
     wasNotGiven: data.wasNotGiven,
   };
 
-  // console.log('fieldsData', fieldsData)
+  // console.log('fieldsData', fieldsData);
 
   return (
     <Card
