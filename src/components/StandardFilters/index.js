@@ -269,64 +269,6 @@ class StandardFilters extends React.PureComponent {
   }
 
   //
-  // Handle ContentPanel next/prev button clicks
-  //   direction:  'next' or 'prev'
-  // Returns true if the button should be enabled, else false
-  //
-  onNextPrevClick = (direction) => {
-    const thumbDistance = this.state.maxActivePos - this.state.minActivePos;
-    const oldPosition = this.props.dotClickContext.position;
-    const newContext = { ...this.props.dotClickContext };
-    const dates = this.fetchDotPositions(newContext.parent, newContext.rowName, true, true);
-    const currDateIndex = dates.findIndex((elt) => elt.date === newContext.date);
-
-    let ret = false;
-
-    if (currDateIndex === -1) {
-      // TODO: an error!
-      return false;
-    }
-
-    // Determine next/prev date
-    if (direction === 'next') {
-      if (currDateIndex === dates.length - 1) {
-        // No 'next' -- do nothing
-        return false;
-      }
-      newContext.date = dates[currDateIndex + 1].date;
-      newContext.position = dates[currDateIndex + 1].position;
-      ret = currDateIndex + 1 < dates.length - 1;
-      // Adjust thumb positions if current dot is in active range
-      if (this.isActiveTimeWidget(this.props.dotClickContext)) {
-        const newMax = Math.min(1.0, this.state.maxActivePos + newContext.position - oldPosition);
-        this.setState({ minActivePos: newMax - thumbDistance, maxActivePos: newMax });
-      }
-    } else {
-      // 'prev'
-      if (currDateIndex === 0) {
-        // No 'prev' -- do nothing
-        return false;
-      }
-      newContext.date = dates[currDateIndex - 1].date;
-      newContext.position = dates[currDateIndex - 1].position;
-      ret = currDateIndex - 1 > 0;
-      // Adjust thumb positions if current dot is in active range
-      if (this.isActiveTimeWidget(this.props.dotClickContext)) {
-        const newMin = Math.max(0.0, this.state.minActivePos + newContext.position - oldPosition);
-        this.setState({ minActivePos: newMin, maxActivePos: newMin + thumbDistance });
-      }
-    }
-
-    // Fetch new/appropriate data
-    newContext.data = this.fetchDataForDot(newContext.parent, newContext.rowName, newContext.date);
-
-    // Set state accordingly
-    this.setState({ dotClickContext: newContext });
-
-    return ret;
-  }
-
-  //
   // Handle dot clicks
   //   context = {
   //      parent:     'CategoryRollup', 'Category', 'ProviderRollup', 'Provider', 'TimeWidget'
