@@ -126,7 +126,7 @@
   margin: 0;
   border-bottom: solid 1px var(--separator-red);
   border-right: solid 1px var(--separator-red);
-  border-bottom-right-radius: 5px;
+  border-bottom-right-radius: 8px;
 }
 
 .timeline-selector-gradient-right {
@@ -136,7 +136,7 @@
   margin: 0 0 0 0;
   border-bottom: solid 1px var(--separator-red);
   border-left: solid 1px var(--separator-red);
-  border-bottom-left-radius: 5px;
+  border-bottom-left-radius: 8px;
 }
 
 .timeline-selection-box {
