@@ -17,9 +17,9 @@ import Unimplemented from '../Unimplemented';
 
 import { SUBROUTES } from '../../constants';
 import { activeCategoriesState, activeProvidersState, timeFiltersState } from '../../recoil';
-//
-// Render the "container" (with filters) for views of the participant's data
-//
+
+const ALLOW_DOT_CLICK = true;
+
 class StandardFilters extends React.PureComponent {
   static propTypes = {
     activeView: PropTypes.oneOf(SUBROUTES),
@@ -39,7 +39,6 @@ class StandardFilters extends React.PureComponent {
     // enabledFn: PropTypes.func.isRequired, // Callback to report changed category & provider enable/disable
     // dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
     // lastEvent: PropTypes.instanceOf(Event),
-    allowDotClick: PropTypes.bool,
   }
 
   state = {
@@ -61,7 +60,7 @@ class StandardFilters extends React.PureComponent {
     window.addEventListener('resize', this.onResize);
     // window.addEventListener('keydown', this.onEvent);
     this.updateSvgWidth();
-    if (this.props.dates && this.props.allowDotClick) {
+    if (this.props.dates && ALLOW_DOT_CLICK) {
       this.props.setDotClickContext({
         parent: 'TimeWidget',
         rowName: 'Full',
@@ -112,7 +111,7 @@ class StandardFilters extends React.PureComponent {
       //      newContext.position = recentRef.position;
       //      this.setState({ dotClickContext: newContext });
       //   }
-    } else if (this.props.allowDotClick && prevState.dotClickDate !== this.state.dotClickDate) {
+    } else if (ALLOW_DOT_CLICK && prevState.dotClickDate !== this.state.dotClickDate) {
       // Set dotClickContext from dot clicked in ContentPanel (via this.state.dotClickDate)
       const theDate = this.props.dates.allDates.find((elt) => new Date(elt.date).getTime() === new Date(this.state.dotClickDate).getTime());
       this.props.setDotClickContext({
@@ -286,7 +285,7 @@ class StandardFilters extends React.PureComponent {
   onDotClick = (context, date, dotType) => {
     console.info('obsolete onDotClick -- context, date, dotType: ', context, date, dotType); // eslint-disable-line no-console
     try {
-      if (this.props.allowDotClick) {
+      if (ALLOW_DOT_CLICK) {
         const rowDates = this.fetchDotPositions(context.parent, context.rowName, true, true);
         const { position } = rowDates.find((elt) => elt.date === date);
 
@@ -353,12 +352,12 @@ class StandardFilters extends React.PureComponent {
     const { dotClickContext } = this.props;
     const matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget'
         || (dotClickContext.parent === parent && dotClickContext.rowName === rowName));
-    const inactiveHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
+    const inactiveHighlightDots = ALLOW_DOT_CLICK && matchContext && allDates.reduce((res, elt) =>
     //               ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
       (((!isEnabled || !this.isActive(elt)) && elt.position === dotClickContext.position)
         ? this.includeDot(res, elt, 'inactive-highlight', parent === 'TimeWidget') : res), []);
 
-    const activeHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
+    const activeHighlightDots = ALLOW_DOT_CLICK && matchContext && allDates.reduce((res, elt) =>
     //               (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
       ((isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
         ? this.includeDot(res, elt, 'active-highlight', parent === 'TimeWidget') : res), []);
@@ -496,7 +495,7 @@ class StandardFilters extends React.PureComponent {
   render() {
     //      console.log('SF render: ' + (this.props.dotClickContext ? this.props.dotClickContext.date : this.props.dotClickContext));
     const { dates } = this.props;
-    const dotClickFn = this.props.allowDotClick ? this.onDotClick : null;
+    const dotClickFn = ALLOW_DOT_CLICK ? this.onDotClick : null;
 
     return (
       <TimeWidget

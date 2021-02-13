@@ -69,8 +69,6 @@ class DiscoveryApp extends React.PureComponent {
                 activeView={activeView} // trigger timeline resizing when route changes
                 resources={legacyResources}
                 dates={dates}
-                // allowDotClick={!['compare', 'catalog'].includes(activeView)}
-                allowDotClick
               />
             </div>
             <div id="below-timeline">
