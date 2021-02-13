@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { get } from 'axios';
 
 import './DiscoveryApp.css';
@@ -44,12 +44,6 @@ class DiscoveryApp extends React.PureComponent {
     const isSummary = activeView === 'summary';
     const hasCardListRight = ['catalog', 'compare'].includes(activeView);
 
-    const { resources, timeFilters } = this.props;
-
-    const { dates } = timeFilters;
-
-    const { providers, categories } = resources;
-
     return (
       <div className="discovery-app">
         <PageHeader
@@ -75,12 +69,7 @@ class DiscoveryApp extends React.PureComponent {
                 { legacyResources && (
                   <Switch>
                     <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/summary`}>
-                      <SummaryView
-                        resources={legacyResources}
-                        dates={dates}
-                        categories={categories}
-                        providers={providers}
-                      />
+                      <SummaryView />
                     </Route>
                     <Route path={`${PATIENT_MODE_SEGMENT}/:participantId/catalog`}>
                       <CatalogView />
@@ -112,7 +101,7 @@ class DiscoveryApp extends React.PureComponent {
 // if using React.memo, there's a proptype warning for Route:
 const DiscoveryAppHOC = (props) => {
   const [resources, setResources] = useRecoilState(resourcesState);
-  const [timeFilters, updateTimeFilters] = useRecoilState(timeFiltersState);
+  const updateTimeFilters = useSetRecoilState(timeFiltersState);
 
   useEffect(() => {
     function fetchData() {
@@ -170,8 +159,6 @@ const DiscoveryAppHOC = (props) => {
     <DiscoveryApp
       {...props} // eslint-disable-line react/jsx-props-no-spreading
       resources={resources}
-      timeFilters={timeFilters}
-      updateTimeFilters={updateTimeFilters}
     />
   );
 };
