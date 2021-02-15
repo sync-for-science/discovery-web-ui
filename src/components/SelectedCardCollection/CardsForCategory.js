@@ -34,7 +34,7 @@ const CategorySubtypeAccordion = ({
     return null;
   }
 
-  const accordionStyle = hasLastAdded ? classes.last : classes.selected
+  const accordionStyle = hasLastAdded ? classes.last : classes.selected;
   return (
     <Accordion
       // defaultExpanded={hasLastAdded}
