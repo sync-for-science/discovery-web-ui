@@ -26,4 +26,4 @@ const ProviderFilter = () => {
   );
 };
 
-export default ProviderFilter;
+export default React.memo(ProviderFilter);

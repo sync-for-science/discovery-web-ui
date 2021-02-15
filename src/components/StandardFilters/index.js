@@ -2,7 +2,6 @@ import React from 'react';
 import {
   atom,
   useRecoilState,
-  useSetRecoilState,
   useRecoilValue,
 } from 'recoil';
 import PropTypes from 'prop-types';
@@ -14,16 +13,15 @@ import {
 } from '../../util.js';
 import TimeWidget from '../TimeWidget';
 import Unimplemented from '../Unimplemented';
-import DiscoveryContext from '../DiscoveryContext';
 
 import { SUBROUTES } from '../../constants';
-import { activeCategoriesState, activeProvidersState, timeFiltersState } from '../../recoil';
-//
-// Render the "container" (with filters) for views of the participant's data
-//
-class StandardFilters extends React.PureComponent {
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
+import {
+  activeCategoriesState, activeProvidersState, resourcesState, timeFiltersState,
+} from '../../recoil';
 
+const ALLOW_DOT_CLICK = true;
+
+class StandardFilters extends React.PureComponent {
   static propTypes = {
     activeView: PropTypes.oneOf(SUBROUTES),
     resources: PropTypes.instanceOf(FhirTransform),
@@ -42,8 +40,6 @@ class StandardFilters extends React.PureComponent {
     // enabledFn: PropTypes.func.isRequired, // Callback to report changed category & provider enable/disable
     // dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
     // lastEvent: PropTypes.instanceOf(Event),
-    allowDotClick: PropTypes.bool,
-    dotClickDate: PropTypes.string,
   }
 
   state = {
@@ -55,13 +51,17 @@ class StandardFilters extends React.PureComponent {
     svgWidth: '0px',
     // dotClickContext: null, // The current dot (if one is highlighted)
     activeDates: {}, // Dates that are within the TimeWidget's active range and have one or more resources with enabled Categories/Providers
+    searchRefs: [],
+    dotClickDate: null, // dot click from ContentPanel
+    viewAccentDates: [], // CatalogView & CompareView
+    viewLastAccentDates: [], // CatalogView & CompareView
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.onResize);
     // window.addEventListener('keydown', this.onEvent);
     this.updateSvgWidth();
-    if (this.props.dates && this.props.allowDotClick) {
+    if (this.props.dates && ALLOW_DOT_CLICK) {
       this.props.setDotClickContext({
         parent: 'TimeWidget',
         rowName: 'Full',
@@ -103,18 +103,18 @@ class StandardFilters extends React.PureComponent {
 
     if (prevProps.lastEvent !== this.props.lastEvent) {
       // TODO: not sure why this was here, but if enabled, next/prev and dot-click don't work w/ searchRefs
-      //      } else if (this.context.searchRefs && this.context.searchRefs.length > 0) {
+      //      } else if (this.state.searchRefs && this.state.searchRefs.length > 0) {
       //   // If most recent searchRef differs from currently highlighted dot, set dotClickContext
-      //   let recentRef = this.context.searchRefs[0];
+      //   let recentRef = this.state.searchRefs[0];
       //   if (recentRef.position !== this.props.dotClickContext.position) {
       //      let newContext = Object.assign({}, this.props.dotClickContext);
       //      newContext.date = recentRef.date;
       //      newContext.position = recentRef.position;
       //      this.setState({ dotClickContext: newContext });
       //   }
-    } else if (this.props.allowDotClick && prevProps.dotClickDate !== this.props.dotClickDate) {
-      // Set dotClickContext from dot clicked in ContentPanel (via this.props.dotClickDate)
-      const theDate = this.props.dates.allDates.find((elt) => new Date(elt.date).getTime() === new Date(this.props.dotClickDate).getTime());
+    } else if (ALLOW_DOT_CLICK && prevState.dotClickDate !== this.state.dotClickDate) {
+      // Set dotClickContext from dot clicked in ContentPanel (via this.state.dotClickDate)
+      const theDate = this.props.dates.allDates.find((elt) => new Date(elt.date).getTime() === new Date(this.state.dotClickDate).getTime());
       this.props.setDotClickContext({
         parent: 'TimeWidget',
         rowName: 'Full',
@@ -269,64 +269,6 @@ class StandardFilters extends React.PureComponent {
   }
 
   //
-  // Handle ContentPanel next/prev button clicks
-  //   direction:  'next' or 'prev'
-  // Returns true if the button should be enabled, else false
-  //
-  onNextPrevClick = (direction) => {
-    const thumbDistance = this.state.maxActivePos - this.state.minActivePos;
-    const oldPosition = this.props.dotClickContext.position;
-    const newContext = { ...this.props.dotClickContext };
-    const dates = this.fetchDotPositions(newContext.parent, newContext.rowName, true, true);
-    const currDateIndex = dates.findIndex((elt) => elt.date === newContext.date);
-
-    let ret = false;
-
-    if (currDateIndex === -1) {
-      // TODO: an error!
-      return false;
-    }
-
-    // Determine next/prev date
-    if (direction === 'next') {
-      if (currDateIndex === dates.length - 1) {
-        // No 'next' -- do nothing
-        return false;
-      }
-      newContext.date = dates[currDateIndex + 1].date;
-      newContext.position = dates[currDateIndex + 1].position;
-      ret = currDateIndex + 1 < dates.length - 1;
-      // Adjust thumb positions if current dot is in active range
-      if (this.isActiveTimeWidget(this.props.dotClickContext)) {
-        const newMax = Math.min(1.0, this.state.maxActivePos + newContext.position - oldPosition);
-        this.setState({ minActivePos: newMax - thumbDistance, maxActivePos: newMax });
-      }
-    } else {
-      // 'prev'
-      if (currDateIndex === 0) {
-        // No 'prev' -- do nothing
-        return false;
-      }
-      newContext.date = dates[currDateIndex - 1].date;
-      newContext.position = dates[currDateIndex - 1].position;
-      ret = currDateIndex - 1 > 0;
-      // Adjust thumb positions if current dot is in active range
-      if (this.isActiveTimeWidget(this.props.dotClickContext)) {
-        const newMin = Math.max(0.0, this.state.minActivePos + newContext.position - oldPosition);
-        this.setState({ minActivePos: newMin, maxActivePos: newMin + thumbDistance });
-      }
-    }
-
-    // Fetch new/appropriate data
-    newContext.data = this.fetchDataForDot(newContext.parent, newContext.rowName, newContext.date);
-
-    // Set state accordingly
-    this.setState({ dotClickContext: newContext });
-
-    return ret;
-  }
-
-  //
   // Handle dot clicks
   //   context = {
   //      parent:     'CategoryRollup', 'Category', 'ProviderRollup', 'Provider', 'TimeWidget'
@@ -342,19 +284,24 @@ class StandardFilters extends React.PureComponent {
   //   dotType:     'active', 'inactive', 'active-highlight', 'inactive-highlight', 'active-highlight-search', 'inactive-highlight-search'
   //
   onDotClick = (context, date, dotType) => {
-    if (this.props.allowDotClick) {
-      const rowDates = this.fetchDotPositions(context.parent, context.rowName, true, true);
-      const { position } = rowDates.find((elt) => elt.date === date);
+    console.info('obsolete onDotClick -- context, date, dotType: ', context, date, dotType); // eslint-disable-line no-console
+    try {
+      if (ALLOW_DOT_CLICK) {
+        const rowDates = this.fetchDotPositions(context.parent, context.rowName, true, true);
+        const { position } = rowDates.find((elt) => elt.date === date);
 
-      context.dotType = this.updateDotType(dotType, position, false);
-      context.minDate = rowDates[0].date;
-      context.maxDate = rowDates[rowDates.length - 1].date;
-      context.allDates = this.props.dates.allDates;
-      context.date = date;
-      context.position = position;
-      context.data = this.fetchDataForDot(context.parent, context.rowName, context.date);
+        context.dotType = this.updateDotType(dotType, position, false);
+        context.minDate = rowDates[0].date;
+        context.maxDate = rowDates[rowDates.length - 1].date;
+        context.allDates = this.props.dates.allDates;
+        context.date = date;
+        context.position = position;
+        context.data = this.fetchDataForDot(context.parent, context.rowName, context.date);
 
-      this.setState({ dotClickContext: context });
+        this.setState({ dotClickContext: context });
+      }
+    } catch (e) {
+      console.error(e); // eslint-disable-line no-console
     }
   }
 
@@ -385,8 +332,8 @@ class StandardFilters extends React.PureComponent {
       return [];
     }
     const { startDate, endDate, allDates } = this.props.dates;
-    const { searchRefs } = this.context;
-    const viewAccentRefs = this.context.viewAccentDates.reduce((result, date) => {
+    const { searchRefs } = this.state;
+    const viewAccentRefs = this.state.viewAccentDates.reduce((result, date) => {
       result.push({
         dotType: 'view-accent',
         date,
@@ -394,7 +341,7 @@ class StandardFilters extends React.PureComponent {
       });
       return result;
     }, []);
-    const viewLastAccentRefs = this.context.viewLastAccentDates.reduce((result, date) => {
+    const viewLastAccentRefs = this.state.viewLastAccentDates.reduce((result, date) => {
       result.push({
         dotType: 'view-last-accent',
         date,
@@ -402,22 +349,16 @@ class StandardFilters extends React.PureComponent {
       });
       return result;
     }, []);
-    //  // TODO: to use, need to build highlightedResources on Tiles/Compare load
-    //   let viewAccentRefs = this.context.highlightedResources ? this.context.highlightedResources.reduce((result, res) => {
-    //            let date = res.itemDate;
-    //            result.push({ dotType: 'view-accent', date: date, position: normalizeDates([date], startDate, endDate)[0] });
-    //            return result;
-    //               }, []) : [];
 
     const { dotClickContext } = this.props;
     const matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget'
         || (dotClickContext.parent === parent && dotClickContext.rowName === rowName));
-    const inactiveHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
+    const inactiveHighlightDots = ALLOW_DOT_CLICK && matchContext && allDates.reduce((res, elt) =>
     //               ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
       (((!isEnabled || !this.isActive(elt)) && elt.position === dotClickContext.position)
         ? this.includeDot(res, elt, 'inactive-highlight', parent === 'TimeWidget') : res), []);
 
-    const activeHighlightDots = this.props.allowDotClick && matchContext && allDates.reduce((res, elt) =>
+    const activeHighlightDots = ALLOW_DOT_CLICK && matchContext && allDates.reduce((res, elt) =>
     //               (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
       ((isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
         ? this.includeDot(res, elt, 'active-highlight', parent === 'TimeWidget') : res), []);
@@ -555,7 +496,7 @@ class StandardFilters extends React.PureComponent {
   render() {
     //      console.log('SF render: ' + (this.props.dotClickContext ? this.props.dotClickContext.date : this.props.dotClickContext));
     const { dates } = this.props;
-    const dotClickFn = this.props.allowDotClick ? this.onDotClick : null;
+    const dotClickFn = ALLOW_DOT_CLICK ? this.onDotClick : null;
 
     return (
       <TimeWidget
@@ -581,7 +522,9 @@ export const dotClickContextState = atom({
 });
 
 const StandardFiltersHOC = React.memo((props) => {
-  const updateTimeFilters = useSetRecoilState(timeFiltersState);
+  const [timeFilters, updateTimeFilters] = useRecoilState(timeFiltersState);
+  const { legacy } = useRecoilValue(resourcesState);
+
   const [dotClickContext, setDotClickContext] = useRecoilState(dotClickContextState);
 
   const activeCategories = useRecoilValue(activeCategoriesState);
@@ -595,6 +538,8 @@ const StandardFiltersHOC = React.memo((props) => {
       setDotClickContext={setDotClickContext}
       activeCategories={activeCategories}
       activeProviders={activeProviders}
+      resources={legacy}
+      dates={timeFilters.dates}
     />
   );
 });

@@ -177,8 +177,6 @@ export function formatContentHeader(isEnabled, category, res, { patient, trimLev
   const dateWithTime = res.itemDate ? formatDisplayDate(res.itemDate, true, false) : noDate;
   const dob = patient.data.birthDate;
   const age = formatAge(dob, res.itemDate, 'age ');
-  //   let highlight = appContext.highlightedResources &&
-  //       appContext.highlightedResources.some(elt => elt.category === category  && elt.itemDate === res.itemDate);
   const highlight = false;
 
   //      <div className={isEnabled ? 'content-header-container' : 'content-header-container-disabled'} id={dateOnly} data-fhir={fhirKey(res)}>

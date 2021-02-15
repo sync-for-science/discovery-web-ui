@@ -12,15 +12,11 @@ import {
 import SVGContainer from '../SVGContainer';
 import DotLine from '../DotLine';
 
-import DiscoveryContext from '../DiscoveryContext';
-
 //
 // Render the DiscoveryApp Time Widget
 //
 export default class TimeWidget extends React.Component {
   static myName = 'TimeWidget';
-
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
 
   static propTypes = {
     minDate: PropTypes.string.isRequired, // Earliest date we have data for this participant
