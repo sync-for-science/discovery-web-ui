@@ -5,6 +5,7 @@ import './CatalogView.css';
 import SelectedCardCollection from '../SelectedCardCollection';
 import RecordSelector from '../SelectedCardCollection/RecordSelector';
 import NoResultsDisplay from '../NoResultsDisplay';
+import ColumnBrowser from '../ColumnBrowser';
 import {
   activeCategoriesState,
   activeProvidersState,
@@ -53,14 +54,15 @@ const CatalogView = () => {
     <div className="tiles-view">
       <div className="tiles-view-header" />
       <div className="tiles-view-container">
-        <div className="tiles-view-container-inner">
-          { columnsForCategories }
+        <ColumnBrowser
+          columns={columnsForCategories}
+        >
           <NoResultsDisplay
             filteredRecordCount={filteredRecordCount}
             activeCategories={activeCategories}
             activeProviders={activeProviders}
           />
-        </div>
+        </ColumnBrowser>
       </div>
       <SelectedCardCollection />
     </div>
