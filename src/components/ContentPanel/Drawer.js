@@ -44,6 +44,8 @@ const useStyles = makeStyles((theme) => ({
   drawer: {
     display: 'flex',
     flexShrink: 0,
+    borderRadius: 10,
+    overflow: 'hidden'
   },
   drawerPaper: {
     position: 'relative',

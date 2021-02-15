@@ -13,7 +13,7 @@ import { filteredActiveCollectionState, resourcesState } from '../../recoil';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 400,
+    width: 390,
   },
   selected: {
     backgroundColor: theme.palette.tile.selected,

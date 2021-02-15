@@ -1,12 +1,12 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import { Typography } from '@material-ui/core';
 
 import './CompareView.css';
 import SelectedCardCollection from '../SelectedCardCollection';
 import RecordSelector from '../SelectedCardCollection/RecordSelector';
 import NoResultsDisplay from '../NoResultsDisplay';
 import Sparkline from '../Sparkline';
-
 import {
   activeCategoriesState,
   activeProvidersState,
@@ -14,7 +14,6 @@ import {
   filteredActiveCollectionState,
   resourcesState,
 } from '../../recoil';
-
 import { titleCase, inDateRange } from '../../util.js';
 
 const formatYearRange = (minDate, maxDate, pre, post) => {
@@ -120,7 +119,11 @@ const CompareView = () => {
 
   return (
     <div className="compare-view">
-      <div className="compare-view-header" />
+      <div className="compare-view-header">
+        <Typography variant="s4sHeader">
+          Record Selector
+        </Typography>
+      </div>
       <div className="compare-view-scroller">
         <div className="compare-view-all-unique-items">
           { itemsForCategories }
