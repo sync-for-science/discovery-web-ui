@@ -135,7 +135,7 @@
   min-height: 30px;
   font-family: header-bold;
   font-size: 0.813rem;
-  color: var(--label-black);
+  color: var(--white);
   padding: 0 0 0 20px;
 
   /*   background-color: var(--background-header-content); */
