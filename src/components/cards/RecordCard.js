@@ -135,8 +135,6 @@ const RecordCard = ({
     wasNotGiven: data.wasNotGiven,
   };
 
-  // console.log('fieldsData', fieldsData)
-
   return (
     <Card
       className={`${classes.root} ${recentlyAdded ? classes.recentlyAdded : ''}`}
