@@ -232,7 +232,7 @@ export const filteredActiveCollectionState = selector({
       }, {});
     filteredCategories.filteredRecordCount = totalFilteredRecordCount;
     filteredCategories.filteredCollectionCount = totalFilteredCollectionCount;
-    // console.info('groupedRecordIdsInCurrentCollectionState: ', JSON.stringify(filteredResults, null, '  '));
+    // console.info('filteredCategories: ', JSON.stringify(filteredCategories, null, '  '));
     return filteredCategories;
   },
 });
