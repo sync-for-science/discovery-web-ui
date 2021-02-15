@@ -89,8 +89,8 @@ export const rootTheme = createMuiTheme({
     tile: {
       standard: 'var(--tile)',
       selected: 'var(--tile-selected)',
-      last: 'var(--tile-selected-last)'
-    }
+      last: 'var(--tile-selected-last)',
+    },
   },
   typography: {
     'user-profile': {
