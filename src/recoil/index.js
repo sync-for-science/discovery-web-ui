@@ -178,8 +178,14 @@ export const activeCollectionState = selector({
 });
 
 // derived from util.js inDateRange, but simplified: TODO: use date-fns and tz-aware Date math?
-const isInDateRange = (date, dateRangeStart, dateRangeEnd) => {
-  const dateStr = date.substring(0, 10);
+const isInDateRange = (record, dateRangeStart, dateRangeEnd) => {
+  const { itemDate } = record;
+  if (!itemDate) {
+    // TODO: determine appropriate handling:
+    console.info('record does not have an itemDate: ', record); // eslint-disable-line no-console
+    return false;
+  }
+  const dateStr = itemDate.substring(0, 10);
   return dateStr >= dateRangeStart && dateStr <= dateRangeEnd;
 };
 
@@ -202,7 +208,7 @@ export const filteredActiveCollectionState = selector({
         accCats[catLabel] = Object.entries(category.subtypes).reduce((accCategory, [subtypeLabel, uuids]) => {
           const uuidsFiltered = uuids.filter((uuid) => {
             const record = records[uuid];
-            return activeProviders[record.provider] && isInDateRange(record.itemDate, dateRangeStart, dateRangeEnd);
+            return activeProviders[record.provider] && isInDateRange(record, dateRangeStart, dateRangeEnd);
           });
           const activeUuids = uuidsFiltered.filter((uuid) => uuidsInCollection[uuid]);
           const hasLastAdded = activeUuids.reduce((acc, uuid) => recentlyAddedUuids[uuid] || acc, false);

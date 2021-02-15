@@ -11,7 +11,7 @@ import {
   filteredActiveCollectionState,
 } from '../../recoil';
 
-const CompareView = () => {
+const CatalogView = () => {
   const filteredActiveCollection = useRecoilValue(filteredActiveCollectionState);
   const activeCategories = useRecoilValue(activeCategoriesState);
   const activeProviders = useRecoilValue(activeProvidersState);
@@ -67,4 +67,4 @@ const CompareView = () => {
   );
 };
 
-export default CompareView;
+export default CatalogView;

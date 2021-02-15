@@ -1,1 +1,1 @@
-export const SUBROUTES = ['summary', 'catalog', 'compare', 'timeline', 'collections'];
+export const SUBROUTES = ['summary', 'catalog', 'compare', 'collections'];

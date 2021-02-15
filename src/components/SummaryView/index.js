@@ -2,18 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import './SummaryView.css';
+import { useRecoilValue } from 'recoil';
 import config from '../../config.js';
 import FhirTransform from '../../FhirTransform.js';
 import { formatPatientName, formatPatientAddress } from '../../fhirUtil.js';
 import { formatDisplayDate, formatAge, titleCase } from '../../util.js';
 import Unimplemented from '../Unimplemented';
+import { resourcesState, timeFiltersState } from '../../recoil';
 
-//
-// Render the "Summary view" of the participant's data
-//
-export default class SummaryView extends React.PureComponent {
-  static myName = 'SummaryView';
-
+class SummaryView extends React.PureComponent {
   static propTypes = {
     resources: PropTypes.instanceOf(FhirTransform),
     dates: PropTypes.shape({
@@ -171,23 +168,20 @@ export default class SummaryView extends React.PureComponent {
         </div>
 
         { config.enablePayer && (
-        <div className="view-info-container">
-          <div className="view-info-graphic-payer" />
-          <div className="view-info-text">
-            <b>Payer</b>
-            {' '}
-            presents your claims and benefits data.
+          <div className="view-info-container">
+            <div className="view-info-graphic-payer" />
+            <div className="view-info-text">
+              <b>Payer</b>
+              {' '}
+              presents your claims and benefits data.
+            </div>
           </div>
-        </div>
         ) }
       </div>
     );
   }
 
   render() {
-    // if (!this.props.resources) {
-    //   return null;
-    // }
     const birthDate = this.props.resources.pathItem('[category=Patient].data.birthDate');
     const dateOfDeath = this.props.resources.pathItem('[category=Patient].data.deceasedDateTime');
     //      let name = formatPatientName(this.props.resources.pathItem('[category=Patient].data.name'));
@@ -210,15 +204,6 @@ export default class SummaryView extends React.PureComponent {
       <div className="summary-view-container">
         { this.renderLeftCol() }
         <div className="summary-view-right-column">
-          {/* <div className='summary-view-right-column-header'>
-            <div className='summary-view-right-column-header-participant-name'>{ name }</div>
-      <div className='summary-view-right-column-header-data-range'>
-         <div className='summary-view-right-column-header-data-range-label'>DATA RANGE</div>
-         <div className='summary-view-right-column-header-data-range-value'>
-      { formatDisplayDate(this.props.dates.minDate, true, true) } &ndash; { formatDisplayDate(this.props.dates.maxDate, true, true) }
-         </div>
-      </div>
-      </div> */}
           <div className="summary-view-right-column-inner-container">
             <div className="demographics-column">
               <div className="demographics-column-header">
@@ -272,3 +257,23 @@ export default class SummaryView extends React.PureComponent {
     );
   }
 }
+
+const SummaryViewHOC = React.memo((props) => {
+  const resources = useRecoilValue(resourcesState);
+  const timeFilters = useRecoilValue(timeFiltersState);
+
+  const { legacy, categories, providers } = resources;
+  const { dates } = timeFilters;
+
+  return (
+    <SummaryView
+      {...props} // eslint-disable-line react/jsx-props-no-spreading
+      resources={legacy}
+      categories={categories}
+      providers={providers}
+      dates={dates}
+    />
+  );
+});
+
+export default SummaryViewHOC;

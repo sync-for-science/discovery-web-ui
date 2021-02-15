@@ -50,7 +50,13 @@ export default class DotLine extends React.Component {
         break;
 
       case 'inactive-search':
-        result.push(<circle className="inactive-search-dots" key={index} cx={`${dot.position * 100}%`} cy={halfHeight} r={config.normalDotRadius} />);
+        result.push(<circle
+          className="inactive-search-dots"
+          key={index}
+          cx={`${dot.position * 100}%`}
+          cy={halfHeight}
+          r={config.normalDotRadius}
+        />);
         break;
 
       case 'active-search':
@@ -78,7 +84,13 @@ export default class DotLine extends React.Component {
         break;
 
       case 'inactive-highlight-search':
-        result.push(<circle className="inactive-search-dots" key={index} cx={`${dot.position * 100}%`} cy={halfHeight} r={config.normalDotRadius} />);
+        result.push(<circle
+          className="inactive-search-dots"
+          key={index}
+          cx={`${dot.position * 100}%`}
+          cy={halfHeight}
+          r={config.normalDotRadius}
+        />);
         break;
 
       case 'active-highlight-search':

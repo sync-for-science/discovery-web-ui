@@ -3,16 +3,7 @@ import PropTypes from 'prop-types';
 
 import './HighlightDiv.css';
 
-import DiscoveryContext from '../DiscoveryContext';
-
-//
-// Highlight Div
-//
-// Alters style of resources if present in context.lastHighlightedResources (and context.highlightedResources if 'showAllHighlights')
-//
 export default class HighlightDiv extends React.Component {
-  static contextType = DiscoveryContext; // Allow the shared context to be accessed via 'this.context'
-
   static propTypes = {
     matchingResources: PropTypes.array,
     showAllHighlights: PropTypes.bool,
@@ -30,11 +21,12 @@ export default class HighlightDiv extends React.Component {
   }
 
   render() {
-    const lastIntersects = this.intersects(this.context.lastHighlightedResources, this.props.matchingResources);
-    const intersects = this.intersects(this.context.highlightedResources, this.props.matchingResources);
-    const intersectClass = lastIntersects ? ' highlight-resource-last' : (this.props.showAllHighlights && intersects ? ' highlight-resource' : '');
+    // TODO: remove this obsolete component.
+    // HighlightDiv is still imported and used by src/fhirUtil.js:
+    console.error('HighlightDiv: this component is obsolete.'); // eslint-disable-line no-console
+
     return (
-      <div className={this.props.className + intersectClass}>
+      <div className={this.props.className}>
         {this.props.children}
       </div>
     );
