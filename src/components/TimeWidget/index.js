@@ -138,15 +138,22 @@ export default class TimeWidget extends React.Component {
   }
 
   onCenterDrag = (e, data) => {
-    const oldCenterX = (this.state.leftX + this.state.rightX - this.centerThumbWidth) / 2;
-    const delta = data.x - oldCenterX;
-    const newLeftX = this.state.leftX + delta;
-    const newRightX = this.state.rightX + delta;
-    const width = numericPart(this.props.timelineWidth);
+    this.setState((prevState) => {
+      const oldCenterX = (prevState.leftX + prevState.rightX - this.centerThumbWidth) / 2;
+      const delta = data.x - oldCenterX;
+      const newLeftX = prevState.leftX + delta;
+      const newRightX = prevState.rightX + delta;
+      const width = numericPart(this.props.timelineWidth);
 
-    this.props.setLeftRightFn(newLeftX / width, newRightX / width, true);
-    const dates = { minDate: this.posToDate(newLeftX / width), maxDate: this.posToDate(newRightX / width) };
-    this.setState({ leftX: newLeftX, rightX: newRightX, thumbDates: dates });
+      this.props.setLeftRightFn(newLeftX / width, newRightX / width, true);
+      const dates = { minDate: this.posToDate(newLeftX / width), maxDate: this.posToDate(newRightX / width) };
+
+      return ({
+        leftX: newLeftX,
+        rightX: newRightX,
+        thumbDates: dates,
+      });
+    });
   }
 
   renderFullYears() {
