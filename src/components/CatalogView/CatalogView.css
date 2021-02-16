@@ -27,8 +27,6 @@
   flex-direction: row;
   width: 100%;
   height: inherit;
-  overflow-x: scroll;
-  overflow-y: hidden;
   background-color: var(--tile-area);
 }
 
@@ -135,6 +133,8 @@
 .tiles-view-container-inner {
   display: flex;
   flex-direction: row;
+  overflow-x: scroll;
+  overflow-y: hidden;
   margin: 16px;
   margin-top: 0;
   background-color: var(--tile-area);
