@@ -3,6 +3,7 @@ import {
 } from 'recoil';
 import jsonQuery from 'json-query';
 import { activeCategoriesState, activeProvidersState } from './category-provider-filters';
+import { computeFilterState } from '../utils/api';
 
 export * from './category-provider-filters';
 
@@ -21,16 +22,29 @@ export const resourcesState = atom({
   // dangerouslyAllowMutability: true, // < Object.isExtensible(res.data), in: src/components/Annotation/index.js
 });
 
+// Derived automatically, after API request:
+export const timelineRangeParamsState = selector({
+  key: 'timelineRangeParamsState',
+  get: ({ get }) => {
+    const { legacy } = get(resourcesState);
+
+    if (legacy) {
+      return computeFilterState(legacy).dates;
+    }
+
+    return {
+      allDates: null,
+      minDate: null,
+      startDate: null,
+      maxDate: null,
+      endDate: null,
+    };
+  },
+});
+
 const timeFilters = atom({
   key: 'timeFilters',
   default: {
-    dates: {
-      allDates: null,
-      minDate: null,
-      maxDate: null,
-      startDate: null,
-      endDate: null,
-    },
     dateRangeStart: null,
     dateRangeEnd: null,
   },
