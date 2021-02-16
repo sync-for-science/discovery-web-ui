@@ -5,6 +5,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { Divider } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -27,9 +28,9 @@ const StyledButton = withStyles((theme) => ({
 }))(Button);
 
 const CollectionActions = ({
-  showRenameField, 
-  setShowRenameField, 
-  saveRenameCollection, 
+  showRenameField,
+  setShowRenameField,
+  saveRenameCollection,
   createNewCollection,
   clearCurrentCollection,
 }) => {
@@ -56,13 +57,13 @@ const CollectionActions = ({
 
   const handleClearCollection = () => {
     handleClose();
-    clearCurrentCollection()
-  }
+    clearCurrentCollection();
+  };
 
   const handleCreateNewCollection = () => {
-    createNewCollection()
-    setAnchorEl(null)
-  }
+    createNewCollection();
+    setAnchorEl(null);
+  };
 
   let displayIcon;
   if (!showRenameField) {
@@ -87,9 +88,11 @@ const CollectionActions = ({
             vertical: 'top',
             horizontal: 'center',
           }}
+          MenuListProps={{ disablePadding: true }}
         >
           <MenuItem onClick={handleShowRenameCollection}>Rename</MenuItem>
           <MenuItem onClick={handleClearCollection}>Clear Collection</MenuItem>
+          <Divider />
           <MenuItem onClick={handleCreateNewCollection}>New Collection</MenuItem>
         </Menu>
       </>

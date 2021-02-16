@@ -96,11 +96,11 @@ const CollectionSwitcher = () => {
             label: collections[activeCollectionId].label,
             recentlyAddedUuids: {},
             uuids: {},
-          }
-        }
-      }
-    })
-  }
+          },
+        },
+      };
+    });
+  };
 
   let displayCollection;
   if (!showRenameField) {
