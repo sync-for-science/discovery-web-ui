@@ -30,9 +30,6 @@ const CategorySubtypeAccordion = ({
   const { hasLastAdded, collectionUuids } = categorySubtype;
   const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
   const [expanded, setExpanded] = useState(hasLastAdded);
-
-  // console.log('expanded', summaryLabel, expanded)
-  // console.log('categorySubtype', categorySubtype);
   
   if (collectionUuids.length === 0) {
     return null;
@@ -42,38 +39,25 @@ const CategorySubtypeAccordion = ({
   //   setExpanded(hasLastAdded)
   // }, [setExpanded, hasLastAdded])
 
+
   // useEffect(() => {
-  //   if (collectionUuids.length === 0) {
-  //     return null;
-  //   }
-  //   setDefaultExpanded()
-  // }, [setDefaultExpanded, collectionUuids]);
+  //     setExpanded(hasLastAdded)
+  // }, [hasLastAdded, setExpanded])
 
   console.log('hasLastAdded', summaryLabel, hasLastAdded)
   console.log('expanded', summaryLabel, expanded)
 
-  // useEffect(() => {
-  //   if (hasLastAdded !== expanded) {
-  //     setExpanded(hasLastAdded)
-  //   }
-  // }, [hasLastAdded, setExpanded])
   
 
   const accordionStyle = hasLastAdded ? classes.last : classes.selected;
 
-  const categoryAccordion = useRef(null)
-  console.log('categoryAccordion', categoryAccordion)
-  // if (hasLastAdded) {
-  //   categoryAccordion.current.scrollIntoView()
-  // }
+  // const categoryAccordion = useRef(null)
   return (
     <Accordion
       // defaultExpanded={hasLastAdded}
       className={`${classes.root} ${accordionStyle}`}
       elevation={0}
       expanded={expanded}
-      
-      ref={categoryAccordion}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
