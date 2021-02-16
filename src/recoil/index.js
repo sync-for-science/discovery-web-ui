@@ -3,9 +3,10 @@ import {
 } from 'recoil';
 import jsonQuery from 'json-query';
 import { activeCategoriesState, activeProvidersState } from './category-provider-filters';
-import { computeFilterParams } from '../utils/api';
+import { timeFiltersState } from './time-filters';
 
 export * from './category-provider-filters';
+export * from './time-filters';
 
 export const resourcesState = atom({
   key: 'resourcesState', // unique ID (with respect to other atoms/selectors)
@@ -20,60 +21,6 @@ export const resourcesState = atom({
     legacy: null,
   },
   // dangerouslyAllowMutability: true, // < Object.isExtensible(res.data), in: src/components/Annotation/index.js
-});
-
-// Derived automatically, after API request:
-export const timelineRangeParamsState = selector({
-  key: 'timelineRangeParamsState',
-  get: ({ get }) => {
-    const { legacy } = get(resourcesState);
-
-    if (legacy) {
-      return computeFilterParams(legacy);
-    }
-
-    return {
-      allDates: null,
-      minDate: null,
-      startDate: null,
-      maxDate: null,
-      endDate: null,
-    };
-  },
-});
-
-const timeFilters = atom({
-  key: 'timeFilters',
-  default: {
-    dateRangeStart: null,
-    dateRangeEnd: null,
-  },
-});
-
-export const timeFiltersState = selector({
-  key: 'timeFiltersState',
-  get: ({ get }) => {
-    const previousValues = get(timeFilters);
-    // console.info('timeFiltersState, previousValues: ', previousValues);
-    if (!previousValues.dateRangeStart) {
-      const { minDate, maxDate } = get(timelineRangeParamsState);
-      // console.info('timeFiltersState, minDate && maxDate: ', minDate, maxDate);
-      if (minDate && maxDate) {
-        return {
-          dateRangeStart: minDate.substring(0, 10),
-          dateRangeEnd: maxDate.substring(0, 10),
-        };
-      }
-    }
-    return previousValues;
-  },
-  set: ({ get, set }, newValues) => {
-    const previousValues = get(timeFilters);
-    set(timeFilters, {
-      ...previousValues,
-      ...newValues,
-    });
-  },
 });
 
 export const allRecordIds = selector({
