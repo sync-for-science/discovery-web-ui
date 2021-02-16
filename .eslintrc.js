@@ -69,7 +69,6 @@ module.exports = {
     'react/forbid-prop-types': ['warn'],
     'react/jsx-filename-extension': ['warn'],
     'react/jsx-no-bind': ['warn'],
-    'react/no-access-state-in-setstate': ['warn'], // < FIX THIS ASAP:
     'react/no-array-index-key': ['warn'],
     'react/no-did-update-set-state': ['warn'],
     'react/no-string-refs': ['warn'],
