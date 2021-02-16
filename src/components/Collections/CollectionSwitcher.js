@@ -45,7 +45,7 @@ const CollectionSwitcher = () => {
 
   const renameInput = useRef(null);
 
-  const handleSaveRenameCollection = () => {
+  const saveRenameCollection = () => {
     setAllCollections((previousState) => {
       const { collections } = previousState;
       return {
@@ -62,7 +62,7 @@ const CollectionSwitcher = () => {
     setShowRenameField(false);
   };
 
-  const handleNewCollectionState = () => {
+  const createNewCollectionState = () => {
     setAllCollections((previousState) => {
       const { collections } = previousState;
       const nowUTC = (new Date()).toISOString();
@@ -80,8 +80,8 @@ const CollectionSwitcher = () => {
     });
   };
 
-  const handleNewCollection = async () => {
-    await handleNewCollectionState(); // need to await NewCollectionState so renameInput.current.value has latest collections
+  const createNewCollection = async () => {
+    await createNewCollectionState(); // need to await NewCollectionState so renameInput.current.value has latest collections
     setShowRenameField(true);
   };
 
@@ -150,8 +150,8 @@ const CollectionSwitcher = () => {
       <CollectionActions
         showRenameField={showRenameField}
         setShowRenameField={setShowRenameField}
-        handleSaveRenameCollection={handleSaveRenameCollection}
-        handleNewCollection={handleNewCollection}
+        saveRenameCollection={saveRenameCollection}
+        createNewCollection={createNewCollection}
         clearCurrentCollection={clearCurrentCollection}
       />
     </>

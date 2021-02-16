@@ -29,8 +29,8 @@ const StyledButton = withStyles((theme) => ({
 const CollectionActions = ({
   showRenameField, 
   setShowRenameField, 
-  handleSaveRenameCollection, 
-  handleNewCollection,
+  saveRenameCollection, 
+  createNewCollection,
   clearCurrentCollection,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -50,14 +50,18 @@ const CollectionActions = ({
   };
 
   const handleRenameCollection = () => {
-    handleClose();
     setShowRenameField(false);
-    handleSaveRenameCollection();
+    saveRenameCollection();
   };
 
   const handleClearCollection = () => {
     handleClose();
     clearCurrentCollection()
+  }
+
+  const handleCreateNewCollection = () => {
+    createNewCollection()
+    setAnchorEl(null)
   }
 
   let displayIcon;
@@ -86,7 +90,7 @@ const CollectionActions = ({
         >
           <MenuItem onClick={handleShowRenameCollection}>Rename</MenuItem>
           <MenuItem onClick={handleClearCollection}>Clear Collection</MenuItem>
-          <MenuItem onClick={handleNewCollection}>New Collection</MenuItem>
+          <MenuItem onClick={handleCreateNewCollection}>New Collection</MenuItem>
         </Menu>
       </>
     );
