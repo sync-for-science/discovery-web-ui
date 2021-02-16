@@ -284,11 +284,7 @@ export const computeFilterParams = (legacyResources) => {
     allDates, minDate, startDate, maxDate, endDate,
   };
 
-  return {
-    dates,
-    dateRangeStart: minDate.substring(0, 10),
-    dateRangeEnd: maxDate.substring(0, 10),
-  };
+  return dates;
 };
 
 // Return sorted array of all provider names for this participant

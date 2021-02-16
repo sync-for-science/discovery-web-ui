@@ -29,7 +29,7 @@ export const timelineRangeParamsState = selector({
     const { legacy } = get(resourcesState);
 
     if (legacy) {
-      return computeFilterParams(legacy).dates;
+      return computeFilterParams(legacy);
     }
 
     return {
