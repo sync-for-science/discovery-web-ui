@@ -52,7 +52,21 @@ const timeFilters = atom({
 
 export const timeFiltersState = selector({
   key: 'timeFiltersState',
-  get: ({ get }) => get(timeFilters),
+  get: ({ get }) => {
+    const previousValues = get(timeFilters);
+    // console.info('timeFiltersState, previousValues: ', previousValues);
+    if (!previousValues.dateRangeStart) {
+      const { minDate, maxDate } = get(timelineRangeParamsState);
+      // console.info('timeFiltersState, minDate && maxDate: ', minDate, maxDate);
+      if (minDate && maxDate) {
+        return {
+          dateRangeStart: minDate.substring(0, 10),
+          dateRangeEnd: maxDate.substring(0, 10),
+        };
+      }
+    }
+    return previousValues;
+  },
   set: ({ get, set }, newValues) => {
     const previousValues = get(timeFilters);
     set(timeFilters, {

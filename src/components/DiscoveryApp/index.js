@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { get } from 'axios';
 
 import './DiscoveryApp.css';
@@ -14,11 +14,9 @@ import CatalogView from '../CatalogView';
 import Collections from '../Collections';
 import { PATIENT_MODE_SEGMENT } from '../../index';
 import {
-  normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, computeFilterState, extractProviders, extractCategories,
+  normalizeResourcesAndInjectPartipantId, generateRecordsDictionary, generateLegacyResources, extractProviders, extractCategories,
 } from '../../utils/api';
-import {
-  resourcesState, timeFiltersState,
-} from '../../recoil';
+import { resourcesState } from '../../recoil';
 
 import CategoryFilter from '../filters/CategoryFilter';
 import ProviderFilter from '../filters/ProviderFilter';
@@ -101,7 +99,6 @@ class DiscoveryApp extends React.PureComponent {
 // if using React.memo, there's a proptype warning for Route:
 const DiscoveryAppHOC = (props) => {
   const [resources, setResources] = useRecoilState(resourcesState);
-  const updateTimeFilters = useSetRecoilState(timeFiltersState);
 
   useEffect(() => {
     function fetchData() {
@@ -138,11 +135,6 @@ const DiscoveryAppHOC = (props) => {
           providers,
           categories,
           legacy,
-        });
-
-        // TODO: migrate this call to recoil.js so it is automatically derived from resources.legacy, using DefaultValue api ?
-        updateTimeFilters({
-          ...computeFilterState(legacy),
         });
       }).catch((error) => {
         setResources({
