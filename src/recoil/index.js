@@ -30,7 +30,8 @@ const UNIMPLEMENTED_CATEGORIES = [
   'Immunization Recommendation', 'Imaging Study', 'Coverage', 'Related Person', 'Device',
 ];
 
-export const groupedRecordIdsBySubtypeState = selector({
+// Computed once, and derived automatically from resourcesState, after API request:
+const groupedRecordIdsBySubtypeState = selector({
   key: 'groupedRecordIdsBySubtypeState',
   get: ({ get }) => {
     const { records } = get(resourcesState);
