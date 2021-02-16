@@ -93,7 +93,7 @@ const CollectionActions = ({
           <MenuItem onClick={handleShowRenameCollection}>Rename</MenuItem>
           <MenuItem onClick={handleClearCollection}>Clear Collection</MenuItem>
           <Divider />
-          <MenuItem onClick={handleCreateNewCollection}>New Collection</MenuItem>
+          <MenuItem onClick={handleCreateNewCollection}>Create New Collection</MenuItem>
         </Menu>
       </>
     );
