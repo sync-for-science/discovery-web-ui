@@ -264,7 +264,7 @@ export const generateLegacyResources = (rawResponseData, normalizedResources, pa
   return legacyResources;
 };
 
-export const computeFilterState = (legacyResources) => {
+export const computeFilterParams = (legacyResources) => {
   const itemDates = cleanDates(legacyResources.pathItem('itemDate'));
 
   if (itemDates.length === 0) {

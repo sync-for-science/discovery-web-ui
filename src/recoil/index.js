@@ -3,7 +3,7 @@ import {
 } from 'recoil';
 import jsonQuery from 'json-query';
 import { activeCategoriesState, activeProvidersState } from './category-provider-filters';
-import { computeFilterState } from '../utils/api';
+import { computeFilterParams } from '../utils/api';
 
 export * from './category-provider-filters';
 
@@ -29,7 +29,7 @@ export const timelineRangeParamsState = selector({
     const { legacy } = get(resourcesState);
 
     if (legacy) {
-      return computeFilterState(legacy).dates;
+      return computeFilterParams(legacy).dates;
     }
 
     return {
