@@ -12,9 +12,14 @@ import RecordCard from '../cards/RecordCard';
 import { filteredActiveCollectionState, resourcesState } from '../../recoil';
 
 const useStyles = makeStyles((theme) => ({
-  accordionSummary: {
-    backgroundColor: theme.palette.tile,
-    width: 400,
+  root: {
+    width: 390,
+  },
+  selected: {
+    backgroundColor: theme.palette.tile.selected,
+  },
+  last: {
+    backgroundColor: theme.palette.tile.last,
   },
 }));
 
@@ -29,10 +34,11 @@ const CategorySubtypeAccordion = ({
     return null;
   }
 
+  const accordionStyle = hasLastAdded ? classes.last : classes.selected;
   return (
     <Accordion
       // defaultExpanded={hasLastAdded}
-      className={classes.accordionSummary}
+      className={`${classes.root} ${accordionStyle}`}
       elevation={0}
     >
       <AccordionSummary
@@ -45,7 +51,6 @@ const CategorySubtypeAccordion = ({
           collectionUuids.map((uuid) => (
             <RecordCard
               key={`record-card-${uuid}`}
-              recentlyAdded={hasLastAdded}
               recordId={uuid}
               records={records}
             />
