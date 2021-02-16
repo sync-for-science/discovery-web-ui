@@ -23,22 +23,6 @@ export const resourcesState = atom({
   // dangerouslyAllowMutability: true, // < Object.isExtensible(res.data), in: src/components/Annotation/index.js
 });
 
-export const allRecordIds = selector({
-  key: 'allRecordIds',
-  get: ({ get }) => {
-    const { records } = get(resourcesState);
-    // Return all record ids as an Array:
-    return Object.entries(records).reduce((acc, [uuid, record]) => {
-      if (record.category === 'Patient') {
-        console.info(`IGNORE PATIENT ${uuid}`); // eslint-disable-line no-console
-        return acc;
-      }
-      acc.push(uuid);
-      return acc;
-    }, []);
-  },
-});
-
 // from src/components/Unimplemented/index.js :
 const UNIMPLEMENTED_CATEGORIES = [
   'Practitioner', 'List', 'Questionnaire', 'Questionnaire Response', 'Observation-Other',
