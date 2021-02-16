@@ -66,7 +66,9 @@ export default class MedsRequested extends React.Component {
         if (elt.data.medicationCodeableConcept || this.tweakMedsRequested(elt)) {
           withCode.push(elt);
         } else if (resolveMedicationReference(elt, this.props.legacyResources)) {
-          this.setState({ matchingData: this.state.matchingData ? this.state.matchingData.concat([elt]).sort(this.sortMeds) : [elt] });
+          this.setState((prevState) => ({
+            matchingData: prevState.matchingData ? prevState.matchingData.concat([elt]).sort(this.sortMeds) : [elt],
+          }));
         }
         resolveReasonReference(elt, this.props.legacyResources);
       }
