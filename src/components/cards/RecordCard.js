@@ -62,9 +62,6 @@ const useStyles = makeStyles(() => ({
     marginBottom: 8,
     minWidth: '240px',
   },
-  recentlyAdded: {
-    borderColor: 'var(--tile-selected-last)',
-  },
   title: {
     padding: '16px 16px 0 16px',
     display: 'flex',
@@ -73,7 +70,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const RecordCard = ({
-  recordId, records, recentlyAdded,
+  recordId, records,
 }) => {
   const classes = useStyles();
 
@@ -137,7 +134,7 @@ const RecordCard = ({
 
   return (
     <Card
-      className={`${classes.root} ${recentlyAdded ? classes.recentlyAdded : ''}`}
+      className={classes.root}
       variant="outlined"
       id={`${format(new Date(fieldsData.date), 'y-MM-dd')}-${fieldsData.display}`}
     >

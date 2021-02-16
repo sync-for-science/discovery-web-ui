@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import { Typography } from '@material-ui/core';
 
 import './CatalogView.css';
 import SelectedCardCollection from '../SelectedCardCollection';
@@ -52,7 +53,11 @@ const CatalogView = () => {
 
   return (
     <div className="tiles-view">
-      <div className="tiles-view-header" />
+      <div className="tiles-view-header">
+        <Typography variant="s4sHeader">
+          Record Selector
+        </Typography>
+      </div>
       <div className="tiles-view-container">
         <ColumnBrowser
           columns={columnsForCategories}

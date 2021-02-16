@@ -16,6 +16,8 @@
   flex-direction: column;
   background-color: var(--tile-area);
   margin: 0;
+  overflow: hidden;
+  border-radius: 10px;
 }
 
 /* Tiles View Container  */
@@ -33,7 +35,7 @@
 .tiles-view-header {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
   height: 30px;
   line-height: 30px;
