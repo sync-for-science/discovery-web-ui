@@ -26,14 +26,17 @@ const useStyles = makeStyles((theme) => ({
 const CategorySubtypeAccordion = ({
   records, categoryLabel, subtypeLabel, categorySubtype,
 }) => {
-  const classes = useStyles();
   const { hasLastAdded, collectionUuids } = categorySubtype;
-  const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
-  const [expanded, setExpanded] = useState(hasLastAdded);
-  
+
   if (collectionUuids.length === 0) {
     return null;
   }
+
+  const classes = useStyles();
+  const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
+  const [expanded, setExpanded] = useState(hasLastAdded);
+  // console.log('summaryLabel: ', summaryLabel);
+  const useExpanded = hasLastAdded || expanded;
 
   // const setDefaultExpanded = useCallback(() => {
   //   setExpanded(hasLastAdded)
@@ -44,11 +47,8 @@ const CategorySubtypeAccordion = ({
   //     setExpanded(hasLastAdded)
   // }, [hasLastAdded, setExpanded])
 
-  console.log('hasLastAdded', summaryLabel, hasLastAdded)
-  console.log('expanded', summaryLabel, expanded)
-
-  
-
+  console.log('hasLastAdded', summaryLabel, hasLastAdded);
+  console.log('expanded', summaryLabel, expanded);
   const accordionStyle = hasLastAdded ? classes.last : classes.selected;
 
   // const categoryAccordion = useRef(null)
@@ -57,7 +57,8 @@ const CategorySubtypeAccordion = ({
       // defaultExpanded={hasLastAdded}
       className={`${classes.root} ${accordionStyle}`}
       elevation={0}
-      expanded={expanded}
+      // defaultExpanded={hasLastAdded}
+      expanded={useExpanded}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
@@ -111,6 +112,7 @@ const CardsForCategory = ({ categoryLabel }) => {
       {
         Object.entries(category.subtypes)
           .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
+          // .filter(([displayCoding, { collectionUuids }]) => (collectionUuids.length))
           .map(([displayCoding, categorySubtype]) => (
             <CategorySubtypeAccordion
               key={displayCoding}
