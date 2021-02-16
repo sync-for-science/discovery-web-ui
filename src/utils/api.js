@@ -264,7 +264,7 @@ export const generateLegacyResources = (rawResponseData, normalizedResources, pa
   return legacyResources;
 };
 
-export const computeFilterState = (legacyResources) => {
+export const computeFilterParams = (legacyResources) => {
   const itemDates = cleanDates(legacyResources.pathItem('itemDate'));
 
   if (itemDates.length === 0) {
@@ -284,11 +284,7 @@ export const computeFilterState = (legacyResources) => {
     allDates, minDate, startDate, maxDate, endDate,
   };
 
-  return {
-    dates,
-    dateRangeStart: minDate.substring(0, 10),
-    dateRangeEnd: maxDate.substring(0, 10),
-  };
+  return dates;
 };
 
 // Return sorted array of all provider names for this participant

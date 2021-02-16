@@ -3,6 +3,7 @@ import {
   atom,
   useRecoilState,
   useRecoilValue,
+  useSetRecoilState,
 } from 'recoil';
 import PropTypes from 'prop-types';
 
@@ -16,7 +17,7 @@ import Unimplemented from '../Unimplemented';
 
 import { SUBROUTES } from '../../constants';
 import {
-  activeCategoriesState, activeProvidersState, resourcesState, timeFiltersState,
+  activeCategoriesState, activeProvidersState, resourcesState, timelineRangeParamsState, timeFiltersState,
 } from '../../recoil';
 
 const ALLOW_DOT_CLICK = true;
@@ -25,7 +26,7 @@ class StandardFilters extends React.PureComponent {
   static propTypes = {
     activeView: PropTypes.oneOf(SUBROUTES),
     resources: PropTypes.instanceOf(FhirTransform),
-    dates: PropTypes.shape({
+    timelineRangeParams: PropTypes.shape({
       allDates: PropTypes.arrayOf(PropTypes.shape({
         position: PropTypes.number.isRequired,
         date: PropTypes.string.isRequired,
@@ -61,19 +62,23 @@ class StandardFilters extends React.PureComponent {
     window.addEventListener('resize', this.onResize);
     // window.addEventListener('keydown', this.onEvent);
     this.updateSvgWidth();
-    if (this.props.dates && ALLOW_DOT_CLICK) {
+    const { timelineRangeParams } = this.props;
+    if (timelineRangeParams?.allDates && ALLOW_DOT_CLICK) {
+      const data = this.fetchDataForDot('TimeWidget', 'Full', timelineRangeParams.maxDate);
+      // console.info('fetchDataForDot, data: ', JSON.stringify(data, null, '  '));
       this.props.setDotClickContext({
         parent: 'TimeWidget',
         rowName: 'Full',
         dotType: 'active',
-        minDate: this.props.dates.minDate,
-        maxDate: this.props.dates.maxDate,
-        startDate: this.props.dates.startDate,
-        endDate: this.props.dates.endDate,
-        allDates: this.props.dates.allDates,
-        date: this.props.dates.maxDate,
-        data: this.fetchDataForDot('TimeWidget', 'Full', this.props.dates.maxDate),
-        position: this.props.dates.allDates[this.props.dates.allDates.length - 1].position,
+        minDate: timelineRangeParams.minDate,
+        maxDate: timelineRangeParams.maxDate,
+        startDate: timelineRangeParams.startDate,
+        endDate: timelineRangeParams.endDate,
+
+        allDates: timelineRangeParams.allDates,
+        date: timelineRangeParams.maxDate,
+        data,
+        position: timelineRangeParams.allDates[timelineRangeParams.allDates.length - 1].position,
       });
     }
   }
@@ -113,15 +118,16 @@ class StandardFilters extends React.PureComponent {
       //      this.setState({ dotClickContext: newContext });
       //   }
     } else if (ALLOW_DOT_CLICK && prevState.dotClickDate !== this.state.dotClickDate) {
-      // Set dotClickContext from dot clicked in ContentPanel (via this.state.dotClickDate)
-      const theDate = this.props.dates.allDates.find((elt) => new Date(elt.date).getTime() === new Date(this.state.dotClickDate).getTime());
+      // Set dotClickContext from dot clicked in ContentPanel (via this.state.dotClickDate)'
+      const { timelineRangeParams } = this.props;
+      const theDate = timelineRangeParams.allDates.find((elt) => new Date(elt.date).getTime() === new Date(this.state.dotClickDate).getTime());
       this.props.setDotClickContext({
         parent: 'TimeWidget',
         rowName: 'Full',
         dotType: 'active',
-        minDate: this.props.dates.minDate,
-        maxDate: this.props.dates.maxDate,
-        allDates: this.props.dates.allDates,
+        minDate: timelineRangeParams.minDate,
+        maxDate: timelineRangeParams.maxDate,
+        allDates: timelineRangeParams.allDates,
         date: theDate.date,
         data: this.fetchDataForDot('TimeWidget', 'Full', theDate.date),
         position: theDate.position,
@@ -185,9 +191,10 @@ class StandardFilters extends React.PureComponent {
 
   // TODO: Move to util.js?
   posToDate(pos) {
-    if (this.props.dates) {
-      const min = new Date(this.props.dates.startDate ? this.props.dates.startDate : 0).getTime();
-      const max = new Date(this.props.dates.endDate ? this.props.dates.endDate : 0).getTime();
+    const { timelineRangeParams } = this.props;
+    if (timelineRangeParams) {
+      const min = new Date(timelineRangeParams.startDate ? timelineRangeParams.startDate : 0).getTime();
+      const max = new Date(timelineRangeParams.endDate ? timelineRangeParams.endDate : 0).getTime();
       const target = min + (max - min) * pos;
       return new Date(target).toISOString();
     }
@@ -196,8 +203,9 @@ class StandardFilters extends React.PureComponent {
 
   // TODO: Move to util.js?
   dateToPos(dateStr) {
-    const min = new Date(this.props.dates.startDate ? this.props.dates.startDate : 0).getTime();
-    const max = new Date(this.props.dates.endDate ? this.props.dates.endDate : 0).getTime();
+    const { timelineRangeParams } = this.props;
+    const min = new Date(timelineRangeParams.startDate ? timelineRangeParams.startDate : 0).getTime();
+    const max = new Date(timelineRangeParams.endDate ? timelineRangeParams.endDate : 0).getTime();
     const target = new Date(dateStr).getTime();
     return (target - min) / (max - min);
   }
@@ -287,13 +295,14 @@ class StandardFilters extends React.PureComponent {
     console.info('obsolete onDotClick -- context, date, dotType: ', context, date, dotType); // eslint-disable-line no-console
     try {
       if (ALLOW_DOT_CLICK) {
+        const { timelineRangeParams } = this.props;
         const rowDates = this.fetchDotPositions(context.parent, context.rowName, true, true);
         const { position } = rowDates.find((elt) => elt.date === date);
 
         context.dotType = this.updateDotType(dotType, position, false);
         context.minDate = rowDates[0].date;
         context.maxDate = rowDates[rowDates.length - 1].date;
-        context.allDates = this.props.dates.allDates;
+        context.allDates = timelineRangeParams.allDates;
         context.date = date;
         context.position = position;
         context.data = this.fetchDataForDot(context.parent, context.rowName, context.date);
@@ -328,10 +337,11 @@ class StandardFilters extends React.PureComponent {
   fetchDotPositions = this.fetchDotPositions.bind(this);
 
   fetchDotPositions(parent, rowName, isEnabled, fetchAll) {
-    if (!this.props.resources || !this.props.dates || this.props.dates.allDates.length === 0) {
+    const { timelineRangeParams } = this.props;
+    if (!this.props.resources || !timelineRangeParams || timelineRangeParams.allDates.length === 0) {
       return [];
     }
-    const { startDate, endDate, allDates } = this.props.dates;
+    const { startDate, endDate, allDates } = timelineRangeParams;
     const { searchRefs } = this.state;
     const viewAccentRefs = this.state.viewAccentDates.reduce((result, date) => {
       result.push({
@@ -495,15 +505,15 @@ class StandardFilters extends React.PureComponent {
   // TODO: handle noDots for LongitudinalView???
   render() {
     //      console.log('SF render: ' + (this.props.dotClickContext ? this.props.dotClickContext.date : this.props.dotClickContext));
-    const { dates } = this.props;
+    const { timelineRangeParams } = this.props;
     const dotClickFn = ALLOW_DOT_CLICK ? this.onDotClick : null;
 
     return (
       <TimeWidget
-        minDate={dates ? dates.minDate : ''}
-        maxDate={dates ? dates.maxDate : ''}
-        startDate={dates ? dates.startDate : ''}
-        endDate={dates ? dates.endDate : ''}
+        minDate={timelineRangeParams.minDate ?? ''}
+        maxDate={timelineRangeParams.maxDate ?? ''}
+        startDate={timelineRangeParams.startDate ?? ''}
+        endDate={timelineRangeParams.endDate ?? ''}
         dotContext={this.props.dotClickContext}
         thumbLeft={this.state.minActivePos}
         thumbRight={this.state.maxActivePos}
@@ -522,13 +532,18 @@ export const dotClickContextState = atom({
 });
 
 const StandardFiltersHOC = React.memo((props) => {
-  const [timeFilters, updateTimeFilters] = useRecoilState(timeFiltersState);
+  const timelineRangeParams = useRecoilValue(timelineRangeParamsState);
+  const updateTimeFilters = useSetRecoilState(timeFiltersState);
   const { legacy } = useRecoilValue(resourcesState);
 
   const [dotClickContext, setDotClickContext] = useRecoilState(dotClickContextState);
 
   const activeCategories = useRecoilValue(activeCategoriesState);
   const activeProviders = useRecoilValue(activeProvidersState);
+
+  if (!timelineRangeParams.allDates) {
+    return null;
+  }
 
   return (
     <StandardFilters
@@ -539,7 +554,7 @@ const StandardFiltersHOC = React.memo((props) => {
       activeCategories={activeCategories}
       activeProviders={activeProviders}
       resources={legacy}
-      dates={timeFilters.dates}
+      timelineRangeParams={timelineRangeParams}
     />
   );
 });

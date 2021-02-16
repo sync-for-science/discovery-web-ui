@@ -8,12 +8,12 @@ import FhirTransform from '../../FhirTransform.js';
 import { formatPatientName, formatPatientAddress } from '../../fhirUtil.js';
 import { formatDisplayDate, formatAge, titleCase } from '../../util.js';
 import Unimplemented from '../Unimplemented';
-import { resourcesState, timeFiltersState } from '../../recoil';
+import { resourcesState, timelineRangeParamsState } from '../../recoil';
 
 class SummaryView extends React.PureComponent {
   static propTypes = {
     resources: PropTypes.instanceOf(FhirTransform),
-    dates: PropTypes.shape({
+    timelineRangeParams: PropTypes.shape({
       allDates: PropTypes.arrayOf(PropTypes.shape({
         position: PropTypes.number.isRequired,
         date: PropTypes.string.isRequired,
@@ -122,7 +122,7 @@ class SummaryView extends React.PureComponent {
 
   renderLeftCol() {
     const name = formatPatientName(this.props.resources.pathItem('[category=Patient].data.name'));
-
+    const { timelineRangeParams } = this.props;
     return (
       <div className="summary-view-left-column">
         <div className="participant">
@@ -133,10 +133,10 @@ class SummaryView extends React.PureComponent {
             DATA RANGE
           </div>
           <div className="data-range-value">
-            { formatDisplayDate(this.props.dates.minDate, true, true) }
+            { formatDisplayDate(timelineRangeParams.minDate, true, true) }
             {' '}
             &ndash;
-            { formatDisplayDate(this.props.dates.maxDate, true, true) }
+            { formatDisplayDate(timelineRangeParams.maxDate, true, true) }
           </div>
         </div>
         <div className="view-info-container">
@@ -260,10 +260,9 @@ class SummaryView extends React.PureComponent {
 
 const SummaryViewHOC = React.memo((props) => {
   const resources = useRecoilValue(resourcesState);
-  const timeFilters = useRecoilValue(timeFiltersState);
+  const timelineRangeParams = useRecoilValue(timelineRangeParamsState);
 
   const { legacy, categories, providers } = resources;
-  const { dates } = timeFilters;
 
   return (
     <SummaryView
@@ -271,7 +270,7 @@ const SummaryViewHOC = React.memo((props) => {
       resources={legacy}
       categories={categories}
       providers={providers}
-      dates={dates}
+      timelineRangeParams={timelineRangeParams}
     />
   );
 });
