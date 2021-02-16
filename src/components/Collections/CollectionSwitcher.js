@@ -85,6 +85,23 @@ const CollectionSwitcher = () => {
     setShowRenameField(true);
   };
 
+  const clearCurrentCollection = () => {
+    setAllCollections((previousState) => {
+      const { collections } = previousState;
+      return {
+        activeCollectionId,
+        collections: {
+          ...collections,
+          [activeCollectionId]: {
+            label: collections[activeCollectionId].label,
+            recentlyAddedUuids: {},
+            uuids: {},
+          }
+        }
+      }
+    })
+  }
+
   let displayCollection;
   if (!showRenameField) {
     displayCollection = (
@@ -135,6 +152,7 @@ const CollectionSwitcher = () => {
         setShowRenameField={setShowRenameField}
         handleSaveRenameCollection={handleSaveRenameCollection}
         handleNewCollection={handleNewCollection}
+        clearCurrentCollection={clearCurrentCollection}
       />
     </>
   );
