@@ -40,6 +40,7 @@ const CategorySubtypeAccordion = ({
       // defaultExpanded={hasLastAdded}
       className={`${classes.root} ${accordionStyle}`}
       elevation={0}
+      TransitionProps={{ unmountOnExit: true }}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
