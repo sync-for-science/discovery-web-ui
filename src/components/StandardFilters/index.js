@@ -541,6 +541,10 @@ const StandardFiltersHOC = React.memo((props) => {
   const activeCategories = useRecoilValue(activeCategoriesState);
   const activeProviders = useRecoilValue(activeProvidersState);
 
+  if (!timelineRangeParams.allDates) {
+    return null;
+  }
+
   return (
     <StandardFilters
       {...props} // eslint-disable-line react/jsx-props-no-spreading
