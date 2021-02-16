@@ -61,7 +61,9 @@ class StandardFilters extends React.PureComponent {
     window.addEventListener('resize', this.onResize);
     // window.addEventListener('keydown', this.onEvent);
     this.updateSvgWidth();
-    if (this.props.dates && ALLOW_DOT_CLICK) {
+    if (this.props.dates?.allDates && ALLOW_DOT_CLICK) {
+      const data = this.fetchDataForDot('TimeWidget', 'Full', this.props.dates.maxDate);
+      // console.info('fetchDataForDot, data: ', JSON.stringify(data, null, '  '));
       this.props.setDotClickContext({
         parent: 'TimeWidget',
         rowName: 'Full',
@@ -70,9 +72,10 @@ class StandardFilters extends React.PureComponent {
         maxDate: this.props.dates.maxDate,
         startDate: this.props.dates.startDate,
         endDate: this.props.dates.endDate,
+
         allDates: this.props.dates.allDates,
         date: this.props.dates.maxDate,
-        data: this.fetchDataForDot('TimeWidget', 'Full', this.props.dates.maxDate),
+        data,
         position: this.props.dates.allDates[this.props.dates.allDates.length - 1].position,
       });
     }

@@ -24,14 +24,13 @@ export const resourcesState = atom({
 const timeFilters = atom({
   key: 'timeFilters',
   default: {
-    dates: null,
-    // dates: {
-    //   allDates: null,
-    //   minDate: null,
-    //   startDate: null,
-    //   maxDate: null,
-    //   endDate: null,
-    // },
+    dates: {
+      allDates: null,
+      minDate: null,
+      maxDate: null,
+      startDate: null,
+      endDate: null,
+    },
     dateRangeStart: null,
     dateRangeEnd: null,
   },
