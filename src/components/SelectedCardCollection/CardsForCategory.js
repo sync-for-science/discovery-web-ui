@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState } from 'react';
 import { string } from 'prop-types';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -27,7 +27,6 @@ const CategorySubtypeAccordion = ({
   records, categoryLabel, subtypeLabel, categorySubtype,
 }) => {
   const { hasLastAdded, collectionUuids } = categorySubtype;
-
   if (collectionUuids.length === 0) {
     return null;
   }
@@ -35,30 +34,14 @@ const CategorySubtypeAccordion = ({
   const classes = useStyles();
   const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
   const [expanded, setExpanded] = useState(hasLastAdded);
-  // console.log('summaryLabel: ', summaryLabel);
-  const useExpanded = hasLastAdded || expanded;
 
-  // const setDefaultExpanded = useCallback(() => {
-  //   setExpanded(hasLastAdded)
-  // }, [setExpanded, hasLastAdded])
-
-
-  // useEffect(() => {
-  //     setExpanded(hasLastAdded)
-  // }, [hasLastAdded, setExpanded])
-
-  console.log('hasLastAdded', summaryLabel, hasLastAdded);
-  console.log('expanded', summaryLabel, expanded);
   const accordionStyle = hasLastAdded ? classes.last : classes.selected;
 
-  // const categoryAccordion = useRef(null)
   return (
     <Accordion
-      // defaultExpanded={hasLastAdded}
       className={`${classes.root} ${accordionStyle}`}
       elevation={0}
-      // defaultExpanded={hasLastAdded}
-      expanded={useExpanded}
+      expanded={expanded}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
@@ -87,7 +70,6 @@ const CardsForCategory = ({ categoryLabel }) => {
 
   const { records } = resources;
   const category = filteredActiveCollection[categoryLabel];
-  // console.info('category: ', JSON.stringify(category, null, '  '));
   if (!category || category.filteredCollectionCount === 0) {
     return null;
   }
@@ -112,7 +94,6 @@ const CardsForCategory = ({ categoryLabel }) => {
       {
         Object.entries(category.subtypes)
           .sort(([subtype1], [subtype2]) => ((subtype1 < subtype2) ? -1 : 1))
-          // .filter(([displayCoding, { collectionUuids }]) => (collectionUuids.length))
           .map(([displayCoding, categorySubtype]) => (
             <CategorySubtypeAccordion
               key={displayCoding}
