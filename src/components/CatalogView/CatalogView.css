@@ -135,7 +135,6 @@
   flex-direction: row;
   overflow-x: scroll;
   overflow-y: hidden;
-  margin: 16px;
   margin-top: 0;
   background-color: var(--tile-area);
 }
