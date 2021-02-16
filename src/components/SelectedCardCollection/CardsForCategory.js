@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { string } from 'prop-types';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -29,21 +29,55 @@ const CategorySubtypeAccordion = ({
   const classes = useStyles();
   const { hasLastAdded, collectionUuids } = categorySubtype;
   const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
+  const [expanded, setExpanded] = useState(hasLastAdded);
 
+  // console.log('expanded', summaryLabel, expanded)
+  // console.log('categorySubtype', categorySubtype);
+  
   if (collectionUuids.length === 0) {
     return null;
   }
 
+  // const setDefaultExpanded = useCallback(() => {
+  //   setExpanded(hasLastAdded)
+  // }, [setExpanded, hasLastAdded])
+
+  // useEffect(() => {
+  //   if (collectionUuids.length === 0) {
+  //     return null;
+  //   }
+  //   setDefaultExpanded()
+  // }, [setDefaultExpanded, collectionUuids]);
+
+  console.log('hasLastAdded', summaryLabel, hasLastAdded)
+  console.log('expanded', summaryLabel, expanded)
+
+  // useEffect(() => {
+  //   if (hasLastAdded !== expanded) {
+  //     setExpanded(hasLastAdded)
+  //   }
+  // }, [hasLastAdded, setExpanded])
+  
+
   const accordionStyle = hasLastAdded ? classes.last : classes.selected;
+
+  const categoryAccordion = useRef(null)
+  console.log('categoryAccordion', categoryAccordion)
+  // if (hasLastAdded) {
+  //   categoryAccordion.current.scrollIntoView()
+  // }
   return (
     <Accordion
       // defaultExpanded={hasLastAdded}
       className={`${classes.root} ${accordionStyle}`}
       elevation={0}
-      TransitionProps={{ unmountOnExit: true }}
+      expanded={expanded}
+      
+      ref={categoryAccordion}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
+        onClick={() => setExpanded(!expanded)}
       >
         {summaryLabel}
       </AccordionSummary>
