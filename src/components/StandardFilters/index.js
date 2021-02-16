@@ -510,10 +510,10 @@ class StandardFilters extends React.PureComponent {
 
     return (
       <TimeWidget
-        minDate={timelineRangeParams ? timelineRangeParams.minDate : ''}
-        maxDate={timelineRangeParams ? timelineRangeParams.maxDate : ''}
-        startDate={timelineRangeParams ? timelineRangeParams.startDate : ''}
-        endDate={timelineRangeParams ? timelineRangeParams.endDate : ''}
+        minDate={timelineRangeParams.minDate ?? ''}
+        maxDate={timelineRangeParams.maxDate ?? ''}
+        startDate={timelineRangeParams.startDate ?? ''}
+        endDate={timelineRangeParams.endDate ?? ''}
         dotContext={this.props.dotClickContext}
         thumbLeft={this.state.minActivePos}
         thumbRight={this.state.maxActivePos}
