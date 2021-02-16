@@ -4,7 +4,7 @@ const ColumnBrowser = ({ children, columns }) => {
   const innerView = useRef();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const distance = 150;
+  const distance = 180;
 
   const onNavClick = (dir) => {
     innerView.current.scrollBy({ left: dir === 'left' ? -distance : distance, behavior: 'smooth' });
