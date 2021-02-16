@@ -3,26 +3,26 @@ import React, { useRef, useState, useEffect } from 'react';
 const ColumnBrowser = ({ children, columns }) => {
   const innerView = useRef();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollright, setCanScrollright] = useState(false);
+  const [canScrollRight, setcanScrollRight] = useState(false);
   const distance = 50;
 
   const onNavClick = (dir) => {
     if (dir === 'left') {
-      innerView.scrollBy({ left: distance, behavior: 'smooth' });
+      innerView.current.scrollBy({ left: -50, behavior: 'smooth' });
     } else {
-      innerView.scrollBy({ right: distance, behavior: 'smooth' });
+      innerView.current.scrollBy({ left: 50, behavior: 'smooth' });
     }
   };
 
   const checkForScrollPosition = () => {
-    console.log('Checking scroll...');
     setCanScrollLeft(innerView.current.scrollLeft > 0);
-    setCanScrollright(innerView.current.scrollLeft !== innerView.current.scrollWidth - innerView.current.clientWidth);
+    setcanScrollRight(innerView.current.scrollLeft !== innerView.current.scrollWidth - innerView.current.clientWidth);
   };
 
   useEffect(() => {
     if (innerView.current) {
       innerView.current.addEventListener('scroll', checkForScrollPosition);
+      checkForScrollPosition();
     }
 
     // clean up on unmount
@@ -33,9 +33,8 @@ const ColumnBrowser = ({ children, columns }) => {
     <>
       <div className="tiles-view-nav-left">
         <button
-          className={true ? 'tiles-view-nav-left-button-on' : 'tiles-view-nav-left-button-off'}
+          className={canScrollLeft ? 'tiles-view-nav-left-button-on' : 'tiles-view-nav-left-button-off'}
           onClick={() => onNavClick('left')}
-          disabled={!canScrollLeft}
         />
       </div>
 
@@ -56,9 +55,8 @@ const ColumnBrowser = ({ children, columns }) => {
 
       <div className="tiles-view-nav-right">
         <button
-          className={true ? 'tiles-view-nav-right-button-on' : 'tiles-view-nav-right-button-off'}
-          onClick={() => onNavClick('left')}
-          disabled={!canScrollright}
+          className={canScrollRight ? 'tiles-view-nav-right-button-on' : 'tiles-view-nav-right-button-off'}
+          onClick={() => onNavClick('right')}
         />
       </div>
     </>
