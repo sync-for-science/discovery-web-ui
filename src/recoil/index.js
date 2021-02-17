@@ -3,7 +3,7 @@ import {
 } from 'recoil';
 import jsonQuery from 'json-query';
 import { activeCategoriesState, activeProvidersState } from './category-provider-filters';
-import { timeFiltersState } from './time-filters';
+import { timeFiltersState, timelineRangeParamsState } from './time-filters';
 
 export * from './category-provider-filters';
 export * from './time-filters';
@@ -137,16 +137,67 @@ export const activeCollectionState = selector({
 });
 
 // derived from util.js inDateRange, but simplified: TODO: use date-fns and tz-aware Date math?
-const isInDateRange = (record, dateRangeStart, dateRangeEnd) => {
+const isInDateRange = (isoDate, dateRangeStart, dateRangeEnd) => isoDate >= dateRangeStart && isoDate <= dateRangeEnd;
+
+const isRecordInDateRange = (record, dateRangeStart, dateRangeEnd) => {
   const { itemDate } = record;
   if (!itemDate) {
     // TODO: determine appropriate handling:
     console.info('record does not have an itemDate: ', record); // eslint-disable-line no-console
     return false;
   }
-  const dateStr = itemDate.substring(0, 10);
-  return dateStr >= dateRangeStart && dateStr <= dateRangeEnd;
+  return isInDateRange(itemDate.substring(0, 10), dateRangeStart, dateRangeEnd);
 };
+
+const activeCollectionByDatesState = selector({
+  key: 'activeCollectionByDatesState',
+  get: ({ get }) => {
+    const { records } = get(resourcesState);
+    const { uuids: uuidsInCollection, recentlyAddedUuids } = get(activeCollectionState);
+
+    return Object.keys(uuidsInCollection).reduce((acc, uuid) => {
+      const record = records[uuid];
+      const isoDate = record?.itemDate.substring(0, 10);
+      // accumulate "true"  values, for each duplicate isoDate:
+      const recentlyAdded = acc[isoDate]?.recentlyAdded;
+      acc[isoDate] = {
+        inCollection: true,
+        recentlyAdded: recentlyAdded || !!recentlyAddedUuids[uuid], // accumulate "true" values
+      };
+      return acc;
+    }, {});
+  },
+});
+
+export const activeDatesState = selector({
+  key: 'activeDatesState',
+  get: ({ get }) => {
+    const { allDates } = get(timelineRangeParamsState);
+    if (!allDates) {
+      return [];
+    }
+
+    const { dateRangeStart, dateRangeEnd } = get(timeFiltersState);
+    const activeCollectionByDates = get(activeCollectionByDatesState);
+
+    return allDates.map((el) => {
+      const { date, position } = el;
+      const isoDate = date.substring(0, 10);
+
+      const { inCollection = false, recentlyAdded = false } = activeCollectionByDates[isoDate] || {};
+
+      return {
+        ...el,
+        date, // TODO: should date be de-duplicated by isoDate?  ...otherwise: overlapping dots?
+        position,
+        inRange: isInDateRange(isoDate, dateRangeStart, dateRangeEnd),
+        inCollection,
+        recentlyAdded,
+        dotType: 'inactive-dots',
+      };
+    });
+  },
+});
 
 // shape has diverged from groupedRecordIdsBySubtypeState:
 export const filteredActiveCollectionState = selector({
@@ -167,7 +218,7 @@ export const filteredActiveCollectionState = selector({
         accCats[catLabel] = Object.entries(category.subtypes).reduce((accCategory, [subtypeLabel, uuids]) => {
           const uuidsFiltered = uuids.filter((uuid) => {
             const record = records[uuid];
-            return activeProviders[record.provider] && isInDateRange(record, dateRangeStart, dateRangeEnd);
+            return activeProviders[record.provider] && isRecordInDateRange(record, dateRangeStart, dateRangeEnd);
           });
           const activeUuids = uuidsFiltered.filter((uuid) => uuidsInCollection[uuid]);
           const hasLastAdded = activeUuids.reduce((acc, uuid) => recentlyAddedUuids[uuid] || acc, false);

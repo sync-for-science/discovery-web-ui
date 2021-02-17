@@ -10,14 +10,14 @@ import PropTypes from 'prop-types';
 import './StandardFilters.css';
 import FhirTransform from '../../FhirTransform.js';
 import {
-  combine, cleanDates, normalizeDates, checkQuerySelector, notEqJSON, dateOnly,
+  normalizeDates, checkQuerySelector, notEqJSON, dateOnly,
 } from '../../util.js';
 import TimeWidget from '../TimeWidget';
 import Unimplemented from '../Unimplemented';
 
 import { SUBROUTES } from '../../constants';
 import {
-  activeCategoriesState, activeProvidersState, resourcesState, timelineRangeParamsState, timeFiltersState,
+  activeCategoriesState, activeProvidersState, resourcesState, timelineRangeParamsState, timeFiltersState, activeDatesState,
 } from '../../recoil';
 
 const ALLOW_DOT_CLICK = true;
@@ -98,9 +98,9 @@ class StandardFilters extends React.PureComponent {
 
     if (
       prevState.minActivePos !== this.state.minActivePos
-        || prevState.maxActivePos !== this.state.maxActivePos
-        || notEqJSON(prevProps.activeCategories, this.props.activeCategories)
-        || notEqJSON(prevProps.activeProviders, this.props.activeProviders)
+      || prevState.maxActivePos !== this.state.maxActivePos
+      || notEqJSON(prevProps.activeCategories, this.props.activeCategories)
+      || notEqJSON(prevProps.activeProviders, this.props.activeProviders)
     ) {
       this.setState({ activeDates: this.calcActiveDates() }); // problem with green dots not showing up is because this.calcActiveDates() doesn't fire on initial load
     }
@@ -310,93 +310,25 @@ class StandardFilters extends React.PureComponent {
     if (!this.props.resources || !timelineRangeParams || timelineRangeParams.allDates.length === 0) {
       return [];
     }
-    const { startDate, endDate, allDates } = timelineRangeParams;
-    const { searchRefs } = this.state;
-    const viewAccentRefs = this.state.viewAccentDates.reduce((result, date) => {
-      result.push({
-        dotType: 'view-accent',
-        date,
-        position: normalizeDates([date], startDate, endDate)[0],
-      });
-      return result;
-    }, []);
-    const viewLastAccentRefs = this.state.viewLastAccentDates.reduce((result, date) => {
-      result.push({
-        dotType: 'view-last-accent',
-        date,
-        position: normalizeDates([date], startDate, endDate)[0],
-      });
-      return result;
-    }, []);
 
-    const { dotClickContext } = this.props;
-    const matchContext = dotClickContext && (parent === 'CategoryRollup' || parent === 'ProviderRollup' || parent === 'TimeWidget'
-        || (dotClickContext.parent === parent && dotClickContext.rowName === rowName));
-    const inactiveHighlightDots = ALLOW_DOT_CLICK && matchContext && allDates.reduce((res, elt) =>
-    //               ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
-      (((!isEnabled || !this.isActive(elt)) && elt.position === dotClickContext.position)
-        ? this.includeDot(res, elt, 'inactive-highlight', parent === 'TimeWidget') : res), []);
+    const { activeDates } = this.props;
+    const { startDate, endDate } = timelineRangeParams;
 
-    const activeHighlightDots = ALLOW_DOT_CLICK && matchContext && allDates.reduce((res, elt) =>
-    //               (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
-      ((isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
-        ? this.includeDot(res, elt, 'active-highlight', parent === 'TimeWidget') : res), []);
-
-    // TODO: is this correct (viewAccentRefs vs viewLastAccentRefs)?
-    const viewAccentHighlightDots = matchContext && viewAccentRefs.reduce((res, elt) =>
-    //               (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
-      ((isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
-        ? this.includeDot(res, elt, 'view-accent-highlight', parent === 'TimeWidget') : res), []);
-
-    const inactiveHighlightSearchDots = matchContext && searchRefs.reduce((res, elt) =>
-    //               ((!isEnabled || !this.isActiveTimeWidget(elt)) && elt.position === dotClickContext.position)
-      (((!isEnabled || !this.isActive(elt)) && elt.position === dotClickContext.position)
-        ? this.includeDot(res, elt, 'inactive-highlight-search', parent === 'TimeWidget') : res), []);
-
-    const activeHighlightSearchDots = matchContext && searchRefs.reduce((res, elt) =>
-    //               (isEnabled && this.isActiveTimeWidget(elt) && elt.position === dotClickContext.position)
-      ((isEnabled && this.isActive(elt) && elt.position === dotClickContext.position)
-        ? this.includeDot(res, elt, 'active-highlight-search', parent === 'TimeWidget') : res), []);
-
-    const highlightDots = combine(inactiveHighlightDots, activeHighlightDots, viewAccentHighlightDots,
-      inactiveHighlightSearchDots, activeHighlightSearchDots);
-
-    switch (parent) {
-      case 'CategoryRollup':
-        if (fetchAll) {
-          return allDates;
-        }
-
-        return combine(allDates.reduce((res, elt) => (this.isActive(elt) ? this.includeDot(res, elt, 'active') : res), []),
-          searchRefs.reduce((res, elt) => (this.isActive(elt) ? this.includeDot(res, elt, 'active-search') : res), []),
-          viewAccentRefs.reduce((res, elt) => (this.isActive(elt) ? this.includeDot(res, elt, 'view-accent') : res), []),
-          viewLastAccentRefs.reduce((res, elt) => (this.isActive(elt) ? this.includeDot(res, elt, 'view-last-accent')
-            : res), []),
-          highlightDots);
-      default: // TimeWidget
-        if (fetchAll) {
-          return allDates;
-        } if (rowName === 'Full') {
-          return combine(allDates.reduce((res, elt) => (!this.isActive(elt)
-            ? this.includeDot(res, elt, 'inactive', true) : res), []),
-          allDates.reduce((res, elt) => (this.isActive(elt)
-            ? this.includeDot(res, elt, 'active', true) : res), []),
-          searchRefs.reduce((res, elt) => (!this.isActive(elt)
-            ? this.includeDot(res, elt, 'inactive-search', true) : res), []),
-          searchRefs.reduce((res, elt) => (this.isActive(elt)
-            ? this.includeDot(res, elt, 'active-search', true) : res), []),
-          viewAccentRefs.reduce((res, elt) => (this.isActive(elt)
-            ? this.includeDot(res, elt, 'view-accent', true) : res), []),
-          viewLastAccentRefs.reduce((res, elt) => (this.isActive(elt)
-            ? this.includeDot(res, elt, 'view-last-accent', true) : res), []),
-          highlightDots);
-        } // TODO: currently not using this case
-        alert(`SF fetchDotPositions(): ${parent} ${rowName} (huh???)`);
-        //             return combine(allDates.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active') : res, []),
-        //                searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active-search') : res, []));
-        return combine(allDates.reduce((res, elt) => (this.isActive(elt) ? this.includeDot(res, elt, 'active') : res), []),
-          searchRefs.reduce((res, elt) => (this.isActive(elt) ? this.includeDot(res, elt, 'active-search') : res), []));
+    if (rowName === 'Full') {
+      return activeDates;
     }
+
+    const { minActivePos, maxActivePos } = this.state;
+
+    return activeDates.filter(({ inRange }) => inRange)
+      .map((el) => {
+        const { date } = el;
+        const position = normalizeDates([date], startDate, endDate)[0];
+        return ({
+          ...el,
+          position: (position - minActivePos) / (maxActivePos - minActivePos),
+        });
+      });
   }
 
   // TODO: handle noDots for LongitudinalView???
@@ -437,6 +369,7 @@ const StandardFiltersHOC = React.memo((props) => {
 
   const activeCategories = useRecoilValue(activeCategoriesState);
   const activeProviders = useRecoilValue(activeProvidersState);
+  const activeDates = useRecoilValue(activeDatesState);
 
   if (!timelineRangeParams.allDates) {
     return null;
@@ -446,6 +379,7 @@ const StandardFiltersHOC = React.memo((props) => {
     <StandardFilters
       {...props} // eslint-disable-line react/jsx-props-no-spreading
       updateTimeFilters={updateTimeFilters}
+      activeDates={activeDates}
       dotClickContext={dotClickContext}
       setDotClickContext={setDotClickContext}
       activeCategories={activeCategories}
