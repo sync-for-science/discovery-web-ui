@@ -9,11 +9,8 @@ import PropTypes from 'prop-types';
 
 import './StandardFilters.css';
 import FhirTransform from '../../FhirTransform.js';
-import {
-  normalizeDates, checkQuerySelector, notEqJSON, dateOnly,
-} from '../../util.js';
+import { normalizeDates, checkQuerySelector } from '../../util.js';
 import TimeWidget from '../TimeWidget';
-import Unimplemented from '../Unimplemented';
 
 import { SUBROUTES } from '../../constants';
 import {
@@ -84,7 +81,6 @@ class StandardFilters extends React.PureComponent {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.onResize);
-    // window.removeEventListener('keydown', this.onEvent);
   }
 
   onResize = (_event) => {
@@ -94,15 +90,6 @@ class StandardFilters extends React.PureComponent {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.activeView !== this.props.activeView) {
       this.updateSvgWidth();
-    }
-
-    if (
-      prevState.minActivePos !== this.state.minActivePos
-      || prevState.maxActivePos !== this.state.maxActivePos
-      || notEqJSON(prevProps.activeCategories, this.props.activeCategories)
-      || notEqJSON(prevProps.activeProviders, this.props.activeProviders)
-    ) {
-      this.setState({ activeDates: this.calcActiveDates() }); // problem with green dots not showing up is because this.calcActiveDates() doesn't fire on initial load
     }
 
     if (ALLOW_DOT_CLICK && prevState.dotClickDate !== this.state.dotClickDate) {
@@ -121,20 +108,6 @@ class StandardFilters extends React.PureComponent {
         position: theDate.position,
       });
     }
-  }
-
-  calcActiveDates() {
-    const activeDates = {};
-    for (const res of this.props.resources.transformed) {
-      const trueCategory = Unimplemented.unimplementedCats.includes(res.category) ? Unimplemented.catName : res.category;
-      if (this.isActiveTimeWidget({ position: this.dateToPos(res.itemDate) })
-        && this.props.activeCategories[trueCategory]
-        && this.props.activeProviders[res.provider]) {
-        // This resource's date is active
-        activeDates[dateOnly(res.itemDate)] = true;
-      }
-    }
-    return activeDates;
   }
 
   // Kluge: following needs to know about lower-level classes
@@ -158,12 +131,6 @@ class StandardFilters extends React.PureComponent {
   // Is 'dot' in the TimeWidget's active range?
   //
   isActiveTimeWidget = (dot) => dot.position >= this.state.minActivePos && dot.position <= this.state.maxActivePos
-
-  //
-  // Is 'dot':  (1) in the TimeWidget's active range
-  //    (2) associated with an active Category
-  //    (3) associated with an active Provider
-  isActive = (dot) => this.state.activeDates[dateOnly(dot.date)]
 
   //
   // Mark a position-scaled copy of this dot with 'dotType' and include in result array
