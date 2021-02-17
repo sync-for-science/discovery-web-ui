@@ -6,9 +6,6 @@ import config from '../../config.js';
 
 import { numericPart, unitPart } from '../../util.js';
 
-//
-// Render a row of dots (within an SVGContainer)
-//
 export default class DotLine extends React.Component {
   static propTypes = {
     width: PropTypes.string, // Added via React.cloneElement() in <SVGContainer/>
@@ -30,9 +27,11 @@ export default class DotLine extends React.Component {
     dotClickFn: PropTypes.func, // Callback when a dot is clicked
   }
 
-  //
-  // Accumulate array of svg <circle> elements for dots
-  //
+  getDotClass = () => {
+    const { inRange, inCollection, recentlyAdded } = this.props;
+    return 'active-dots';
+  };
+
   renderDot = (result, dot, index) => {
     // TODO: make consistent (need units?)
     const halfHeight = numericPart(this.props.height) / 2 + unitPart(this.props.height);
@@ -43,7 +42,7 @@ export default class DotLine extends React.Component {
     // const isContent = ['Category', 'Provider'].includes(this.props.context.parent);
 
     result.push(<circle
-      className="active-dots"
+      className={this.getDotClass()}
       key={index}
       cx={`${dot.position * 100}%`}
       cy={halfHeight}
