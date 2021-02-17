@@ -39,7 +39,7 @@ export default class DotLine extends React.Component {
     return Object.entries(classes).reduce((acc, [k, v]) => (v ? [...acc, k] : acc), []).join(' ');
   };
 
-  renderDot = (result, dot, index) => {
+  renderDot = (result, dot) => {
     // TODO: make consistent (need units?)
     const halfHeight = numericPart(this.props.height) / 2 + unitPart(this.props.height);
     const clickHandlerProps = {
@@ -49,7 +49,7 @@ export default class DotLine extends React.Component {
     // const isContent = ['Category', 'Provider'].includes(this.props.context.parent);
     result.push(<circle
       className={this.getDotClass(dot)}
-      key={index}
+      key={dot.date}
       cx={`${dot.position * 100}%`}
       cy={halfHeight}
       r={config.normalDotRadius}
