@@ -36,138 +36,149 @@ export default class DotLine extends React.Component {
   renderDot = (result, dot, index) => {
     // TODO: make consistent (need units?)
     const halfHeight = numericPart(this.props.height) / 2 + unitPart(this.props.height);
-    const dotClickFn = this.props.dotClickFn ? (_event) => this.props.dotClickFn(this.props.context, dot.date, dot.dotType) : null;
-    const style = this.props.dotClickFn ? {} : { cursor: 'default' };
-    const isContent = ['Category', 'Provider'].includes(this.props.context.parent);
+    const clickHandlerProps = {
+      style: this.props.dotClickFn ? undefined : { cursor: 'default' },
+      onClick: this.props.dotClickFn ? (_event) => this.props.dotClickFn(this.props.context, dot.date, dot.dotType) : undefined,
+    };
+    // const isContent = ['Category', 'Provider'].includes(this.props.context.parent);
 
-    switch (dot.dotType) {
-      case 'inactive':
-      case 'inactive-highlight':
-        result.push(<circle
-          className={isContent ? 'inactive-content-dots' : 'inactive-dots'}
-          key={index}
-          cx={`${dot.position * 100}%`}
-          cy={halfHeight}
-          r={config.normalDotRadius}
-        />);
-        break;
+    result.push(<circle
+      className="active-dots"
+      key={index}
+      cx={`${dot.position * 100}%`}
+      cy={halfHeight}
+      r={config.normalDotRadius}
+      {...clickHandlerProps} // eslint-disable-line react/jsx-props-no-spreading
+    />);
 
-      case 'inactive-search':
-        result.push(<circle
-          className="inactive-search-dots"
-          key={index}
-          cx={`${dot.position * 100}%`}
-          cy={halfHeight}
-          r={config.normalDotRadius}
-        />);
-        break;
+    // switch (dot.dotType) {
+    //   case 'inactive':
+    //   case 'inactive-highlight':
+    //     result.push(<circle
+    //       className={isContent ? 'inactive-content-dots' : 'inactive-dots'}
+    //       key={index}
+    //       cx={`${dot.position * 100}%`}
+    //       cy={halfHeight}
+    //       r={config.normalDotRadius}
+    //     />);
+    //     break;
+    //
+    //   case 'inactive-search':
+    //     result.push(<circle
+    //       className="inactive-search-dots"
+    //       key={index}
+    //       cx={`${dot.position * 100}%`}
+    //       cy={halfHeight}
+    //       r={config.normalDotRadius}
+    //     />);
+    //     break;
+    //
+    //   case 'active-search':
+    //     result.push(<circle
+    //       className="active-search-dots"
+    //       key={index}
+    //       cx={`${dot.position * 100}%`}
+    //       cy={halfHeight}
+    //       r={config.normalDotRadius}
+    //       style={style}
+    //       onClick={dotClickFn}
+    //     />);
+    //     break;
+    //
+    //   case 'active-highlight':
+    //     result.push(<circle
+    //       className="active-dots"
+    //       key={index}
+    //       cx={`${dot.position * 100}%`}
+    //       cy={halfHeight}
+    //       r={config.normalDotRadius}
+    //       style={style}
+    //       onClick={dotClickFn}
+    //     />);
+    //     break;
+    //
+    //   case 'inactive-highlight-search':
+    //     result.push(<circle
+    //       className="inactive-search-dots"
+    //       key={index}
+    //       cx={`${dot.position * 100}%`}
+    //       cy={halfHeight}
+    //       r={config.normalDotRadius}
+    //     />);
+    //     break;
+    //
+    //   case 'active-highlight-search':
+    //     result.push(<circle
+    //       className="active-search-dots"
+    //       key={index}
+    //       cx={`${dot.position * 100}%`}
+    //       cy={halfHeight}
+    //       r={config.normalDotRadius}
+    //       style={style}
+    //       onClick={dotClickFn}
+    //     />);
+    //     break;
+    //
+    //   case 'view-accent':
+    //     result.push(<circle
+    //       className="view-accent-dots"
+    //       key={index}
+    //       cx={`${dot.position * 100}%`}
+    //       cy={halfHeight}
+    //       r={config.normalDotRadius}
+    //       style={style}
+    //       onClick={dotClickFn}
+    //     />);
+    //     break;
+    //
+    //   case 'view-last-accent':
+    //     result.push(<circle
+    //       className="view-last-accent-dots"
+    //       key={index}
+    //       cx={`${dot.position * 100}%`}
+    //       cy={halfHeight}
+    //       r={config.normalDotRadius}
+    //       style={style}
+    //       onClick={dotClickFn}
+    //     />);
+    //     break;
+    //
+    //   case 'view-accent-highlight':
+    //     result.push(<circle
+    //       className="view-accent-dots"
+    //       key={index}
+    //       cx={`${dot.position * 100}%`}
+    //       cy={halfHeight}
+    //       r={config.normalDotRadius}
+    //       style={style}
+    //       onClick={dotClickFn}
+    //     />);
+    //     break;
+    //
+    //   default: // 'active'
+    //     result.push(<circle
+    //       className="active-dots"
+    //       key={index}
+    //       cx={`${dot.position * 100}%`}
+    //       cy={halfHeight}
+    //       r={config.normalDotRadius}
+    //       style={style}
+    //       onClick={dotClickFn}
+    //     />);
+    //     break;
+    // }
 
-      case 'active-search':
-        result.push(<circle
-          className="active-search-dots"
-          key={index}
-          cx={`${dot.position * 100}%`}
-          cy={halfHeight}
-          r={config.normalDotRadius}
-          style={style}
-          onClick={dotClickFn}
-        />);
-        break;
-
-      case 'active-highlight':
-        result.push(<circle
-          className="active-dots"
-          key={index}
-          cx={`${dot.position * 100}%`}
-          cy={halfHeight}
-          r={config.normalDotRadius}
-          style={style}
-          onClick={dotClickFn}
-        />);
-        break;
-
-      case 'inactive-highlight-search':
-        result.push(<circle
-          className="inactive-search-dots"
-          key={index}
-          cx={`${dot.position * 100}%`}
-          cy={halfHeight}
-          r={config.normalDotRadius}
-        />);
-        break;
-
-      case 'active-highlight-search':
-        result.push(<circle
-          className="active-search-dots"
-          key={index}
-          cx={`${dot.position * 100}%`}
-          cy={halfHeight}
-          r={config.normalDotRadius}
-          style={style}
-          onClick={dotClickFn}
-        />);
-        break;
-
-      case 'view-accent':
-        result.push(<circle
-          className="view-accent-dots"
-          key={index}
-          cx={`${dot.position * 100}%`}
-          cy={halfHeight}
-          r={config.normalDotRadius}
-          style={style}
-          onClick={dotClickFn}
-        />);
-        break;
-
-      case 'view-last-accent':
-        result.push(<circle
-          className="view-last-accent-dots"
-          key={index}
-          cx={`${dot.position * 100}%`}
-          cy={halfHeight}
-          r={config.normalDotRadius}
-          style={style}
-          onClick={dotClickFn}
-        />);
-        break;
-
-      case 'view-accent-highlight':
-        result.push(<circle
-          className="view-accent-dots"
-          key={index}
-          cx={`${dot.position * 100}%`}
-          cy={halfHeight}
-          r={config.normalDotRadius}
-          style={style}
-          onClick={dotClickFn}
-        />);
-        break;
-
-      default: // 'active'
-        result.push(<circle
-          className="active-dots"
-          key={index}
-          cx={`${dot.position * 100}%`}
-          cy={halfHeight}
-          r={config.normalDotRadius}
-          style={style}
-          onClick={dotClickFn}
-        />);
-        break;
-    }
-
-    if (dot.dotType.includes('highlight')) {
-      result.push(<circle
-        className="highlight-ring-dots"
-        key={`r${index}`}
-        cx={`${dot.position * 100}%`}
-        cy={halfHeight}
-        r={config.highlightDotRadius}
-        style={style}
-        onClick={dotClickFn}
-      />);
-    }
+    // if (dot.dotType.includes('highlight')) {
+    //   result.push(<circle
+    //     className="highlight-ring-dots"
+    //     key={`r${index}`}
+    //     cx={`${dot.position * 100}%`}
+    //     cy={halfHeight}
+    //     r={config.highlightDotRadius}
+    //     style={style}
+    //     onClick={dotClickFn}
+    //   />);
+    // }
 
     return result;
   }
