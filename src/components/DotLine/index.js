@@ -16,6 +16,9 @@ export default class DotLine extends React.Component {
     dotPositions: PropTypes.arrayOf(PropTypes.shape({ // Dots to be rendered
       position: PropTypes.number.isRequired, //   Horizontal position (range: 0.0 - 1.0)
       date: PropTypes.string.isRequired, //   Associated date
+      inRange: PropTypes.bool.isRequired,
+      inCollection: PropTypes.bool.isRequired,
+      recentlyAdded: PropTypes.bool.isRequired,
       dotType: PropTypes.string.isRequired, //   active/inactive/active-highlight/inactive-highlight/view-accent/view-last-accent/
       //      view-accent-highlight/active-search/inactive-search/active-highlight-search/
       //      inactive-highlight-search
