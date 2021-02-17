@@ -4,6 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() => ({
@@ -27,7 +28,11 @@ const StyledButton = withStyles((theme) => ({
 }))(Button);
 
 const CollectionActions = ({
-  showRenameField, setShowRenameField, handleSaveRenameCollection, handleNewCollection,
+  showRenameField,
+  setShowRenameField,
+  saveRenameCollection,
+  createNewCollection,
+  clearCurrentCollection,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const classes = useStyles();
@@ -46,9 +51,18 @@ const CollectionActions = ({
   };
 
   const handleRenameCollection = () => {
-    handleClose();
     setShowRenameField(false);
-    handleSaveRenameCollection();
+    saveRenameCollection();
+  };
+
+  const handleClearCollection = () => {
+    handleClose();
+    clearCurrentCollection();
+  };
+
+  const handleCreateNewCollection = () => {
+    createNewCollection();
+    setAnchorEl(null);
   };
 
   let displayIcon;
@@ -74,9 +88,12 @@ const CollectionActions = ({
             vertical: 'top',
             horizontal: 'center',
           }}
+          MenuListProps={{ disablePadding: true }}
         >
           <MenuItem onClick={handleShowRenameCollection}>Rename</MenuItem>
-          <MenuItem onClick={handleNewCollection}>New Collection</MenuItem>
+          <MenuItem onClick={handleClearCollection}>Clear Collection</MenuItem>
+          <Divider />
+          <MenuItem onClick={handleCreateNewCollection}>Create New Collection</MenuItem>
         </Menu>
       </>
     );

@@ -138,15 +138,22 @@ export default class TimeWidget extends React.Component {
   }
 
   onCenterDrag = (e, data) => {
-    const oldCenterX = (this.state.leftX + this.state.rightX - this.centerThumbWidth) / 2;
-    const delta = data.x - oldCenterX;
-    const newLeftX = this.state.leftX + delta;
-    const newRightX = this.state.rightX + delta;
-    const width = numericPart(this.props.timelineWidth);
+    this.setState((prevState) => {
+      const oldCenterX = (prevState.leftX + prevState.rightX - this.centerThumbWidth) / 2;
+      const delta = data.x - oldCenterX;
+      const newLeftX = prevState.leftX + delta;
+      const newRightX = prevState.rightX + delta;
+      const width = numericPart(this.props.timelineWidth);
 
-    this.props.setLeftRightFn(newLeftX / width, newRightX / width, true);
-    const dates = { minDate: this.posToDate(newLeftX / width), maxDate: this.posToDate(newRightX / width) };
-    this.setState({ leftX: newLeftX, rightX: newRightX, thumbDates: dates });
+      this.props.setLeftRightFn(newLeftX / width, newRightX / width, true);
+      const dates = { minDate: this.posToDate(newLeftX / width), maxDate: this.posToDate(newRightX / width) };
+
+      return ({
+        leftX: newLeftX,
+        rightX: newRightX,
+        thumbDates: dates,
+      });
+    });
   }
 
   renderFullYears() {
@@ -358,7 +365,7 @@ export default class TimeWidget extends React.Component {
     const rangeMin = formatDisplayDate(this.props.thumbLeft !== 0 ? this.state.thumbDates.minDate : this.props.startDate, true, true);
     const rangeMax = formatDisplayDate(this.props.thumbRight !== 1 ? this.state.thumbDates.maxDate : this.props.endDate, true, true);
     const rightBound = numericPart(this.props.timelineWidth);
-    const rightGradientWidth = numericPart(this.props.timelineWidth) - this.state.rightX;
+    const rightGradientWidth = numericPart(this.props.timelineWidth) - this.state.rightX - 2; // minus 2px because of border width of 1px for left and right gradient
 
     return (
       <div className="time-widget" style={{ width: this.props.timelineWidth }}>

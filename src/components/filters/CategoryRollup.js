@@ -21,7 +21,7 @@ class CategoryRollup extends React.PureComponent {
   }
 
   handleTwistyClick = () => {
-    this.setState({ isExpanded: !this.state.isExpanded });
+    this.setState((prevState) => ({ isExpanded: !prevState.isExpanded }));
     this.props.expansionFn('Categories', !this.state.isExpanded);
   }
 

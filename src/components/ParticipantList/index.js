@@ -94,7 +94,7 @@ export default class ParticipantList extends React.Component {
           </div>
           <button
             className={this.state.menuIsOpen ? 'participant-list-menu-button-open' : 'participant-list-menu-button'}
-            onClick={() => this.setState({ menuIsOpen: !this.state.menuIsOpen })}
+            onClick={() => this.setState((prevState) => ({ menuIsOpen: !prevState.menuIsOpen }))}
           />
           { this.state.menuIsOpen && this.renderMenu() }
         </div>

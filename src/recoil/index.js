@@ -3,8 +3,10 @@ import {
 } from 'recoil';
 import jsonQuery from 'json-query';
 import { activeCategoriesState, activeProvidersState } from './category-provider-filters';
+import { timeFiltersState } from './time-filters';
 
 export * from './category-provider-filters';
+export * from './time-filters';
 
 export const resourcesState = atom({
   key: 'resourcesState', // unique ID (with respect to other atoms/selectors)
@@ -21,50 +23,6 @@ export const resourcesState = atom({
   // dangerouslyAllowMutability: true, // < Object.isExtensible(res.data), in: src/components/Annotation/index.js
 });
 
-const timeFilters = atom({
-  key: 'timeFilters',
-  default: {
-    dates: null,
-    // dates: {
-    //   allDates: null,
-    //   minDate: null,
-    //   startDate: null,
-    //   maxDate: null,
-    //   endDate: null,
-    // },
-    dateRangeStart: null,
-    dateRangeEnd: null,
-  },
-});
-
-export const timeFiltersState = selector({
-  key: 'timeFiltersState',
-  get: ({ get }) => get(timeFilters),
-  set: ({ get, set }, newValues) => {
-    const previousValues = get(timeFilters);
-    set(timeFilters, {
-      ...previousValues,
-      ...newValues,
-    });
-  },
-});
-
-export const allRecordIds = selector({
-  key: 'allRecordIds',
-  get: ({ get }) => {
-    const { records } = get(resourcesState);
-    // Return all record ids as an Array:
-    return Object.entries(records).reduce((acc, [uuid, record]) => {
-      if (record.category === 'Patient') {
-        console.info(`IGNORE PATIENT ${uuid}`); // eslint-disable-line no-console
-        return acc;
-      }
-      acc.push(uuid);
-      return acc;
-    }, []);
-  },
-});
-
 // from src/components/Unimplemented/index.js :
 const UNIMPLEMENTED_CATEGORIES = [
   'Practitioner', 'List', 'Questionnaire', 'Questionnaire Response', 'Observation-Other',
@@ -72,7 +30,8 @@ const UNIMPLEMENTED_CATEGORIES = [
   'Immunization Recommendation', 'Imaging Study', 'Coverage', 'Related Person', 'Device',
 ];
 
-export const groupedRecordIdsBySubtypeState = selector({
+// Computed once, and derived automatically from resourcesState, after API request:
+const groupedRecordIdsBySubtypeState = selector({
   key: 'groupedRecordIdsBySubtypeState',
   get: ({ get }) => {
     const { records } = get(resourcesState);
@@ -232,7 +191,7 @@ export const filteredActiveCollectionState = selector({
       }, {});
     filteredCategories.filteredRecordCount = totalFilteredRecordCount;
     filteredCategories.filteredCollectionCount = totalFilteredCollectionCount;
-    // console.info('groupedRecordIdsInCurrentCollectionState: ', JSON.stringify(filteredResults, null, '  '));
+    // console.info('filteredCategories: ', JSON.stringify(filteredCategories, null, '  '));
     return filteredCategories;
   },
 });

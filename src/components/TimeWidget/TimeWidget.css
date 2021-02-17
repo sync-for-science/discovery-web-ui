@@ -124,9 +124,9 @@
   height: inherit;
   background-color: var(--background-timeline-selector);
   margin: 0;
-  border-bottom: solid 1.5px var(--separator-red);
-  border-right: solid 1.5px var(--separator-red);
-  border-bottom-right-radius: 5px;
+  border-bottom: solid 1px var(--separator-red);
+  border-right: solid 1px var(--separator-red);
+  border-bottom-right-radius: 8px;
 }
 
 .timeline-selector-gradient-right {
@@ -134,9 +134,9 @@
   height: inherit;
   background-color: var(--background-timeline-selector);
   margin: 0 0 0 0;
-  border-bottom: solid 1.5px var(--separator-red);
-  border-left: solid 1.5px var(--separator-red);
-  border-bottom-left-radius: 5px;
+  border-bottom: solid 1px var(--separator-red);
+  border-left: solid 1px var(--separator-red);
+  border-bottom-left-radius: 8px;
 }
 
 .timeline-selection-box {
@@ -279,8 +279,8 @@
   max-height: 20px;
   background-color: var(--background-content);
   padding: 0;
-  border-left: solid 1.5px var(--separator-red);
-  border-right: solid 1.5px var(--separator-red);
+  border-left: solid 1px var(--separator-red);
+  border-right: solid 1px var(--separator-red);
   margin: 0;
 }
 
@@ -306,7 +306,10 @@
 }
 
 .date-range-data-left-focused {
+  width: 72px;
   height: 20px;
+  white-space: nowrap;
+  text-align: right; /* keep re-renders visually stable, by aligning on year */
   align-items: center;
   font-family: text;
   font-size: 11px;
@@ -330,7 +333,10 @@
 }
 
 .date-range-data-right-focused {
+  width: 72px;
   height: 20px;
+  text-align: right;
+  white-space: nowrap;
   align-items: center;
   font-family: text;
   font-size: 11px;
@@ -380,7 +386,7 @@
 
   background-color: var(--button-date-range);
 
-  /*  border: solid 1.5px transparent; */
+  /*  border: solid 1px transparent; */
 }
 
 .date-range-button-off {
@@ -390,7 +396,7 @@
   color: var(--label-gray-light);
   background-color: var(--button-date-range-disabled);
 
-  /*  order: solid 1.5px transparent; */
+  /*  order: solid 1px transparent; */
 }
 
 .timeline-selector {
@@ -413,7 +419,7 @@
   background-image: url("../../svg/bracket-left-top-05.svg");
   background-position: left bottom;
   border-left: 2px solid var(--gs-040-100);
-  margin-left: -1px;
+  /* margin-left: -1px; */
 }
 
 .timeline-selector-left-alt {
@@ -422,7 +428,7 @@
   background-image: url("../../svg/bracket-left-top-05.svg");
   background-position: left bottom;
   border-left: 2px solid var(--gs-040-100);
-  margin-left: -1px;
+  /* margin-left: -1px; */
 }
 
 .timeline-selector-center {
@@ -476,8 +482,8 @@
   background-repeat: repeat-x;
   padding: 0;
   border-bottom: solid 2px var(--separator-white);
-  border-left: solid 1.5px var(--separator-red);
-  border-right: solid 1.5px var(--separator-red);
+  border-left: solid 1px var(--separator-red);
+  border-right: solid 1px var(--separator-red);
   margin: -10px 0 0 0;
 }
 
@@ -504,13 +510,13 @@
 .timeline-shim-right {
   @insert .timeline-shim;
 
-  margin: 0 -1px 0 0;
+  margin: 0 0 0 0;
 }
 
 .timeline-shim-right-alt {
   @insert .timeline-shim;
 
-  margin: 0 -1px 0 0;
+  margin: 0 0 0 0;
 }
 
 /* The expanded (bottom timeline years */
