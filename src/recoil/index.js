@@ -137,7 +137,7 @@ export const activeCollectionState = selector({
 });
 
 // derived from util.js inDateRange, but simplified: TODO: use date-fns and tz-aware Date math?
-const isInDateRange = (isoDate, dateRangeStart, dateRangeEnd) => isoDate >= dateRangeStart && isoDate <= dateRangeEnd;
+const isInDateRange = (isoDate, dateRangeStart, dateRangeEnd) => isoDate && (isoDate >= dateRangeStart && isoDate <= dateRangeEnd);
 
 const isRecordInDateRange = (record, dateRangeStart, dateRangeEnd) => {
   const { itemDate } = record;
@@ -182,15 +182,13 @@ export const activeDatesState = selector({
 
     return allDates.map((el) => {
       const { date, position } = el;
-      const isoDate = date.substring(0, 10);
-
-      const { inCollection = false, recentlyAdded = false } = activeCollectionByDates[isoDate] || {};
+      const { inCollection = false, recentlyAdded = false } = activeCollectionByDates[date] || {};
 
       return {
         ...el,
-        date, // TODO: should date be de-duplicated by isoDate?  ...otherwise: overlapping dots?
+        date,
         position,
-        inRange: isInDateRange(isoDate, dateRangeStart, dateRangeEnd),
+        inRange: isInDateRange(date, dateRangeStart, dateRangeEnd),
         inCollection,
         recentlyAdded,
         dotType: 'inactive-dots',
