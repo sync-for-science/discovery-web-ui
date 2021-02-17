@@ -387,7 +387,7 @@ export default class TimeWidget extends React.Component {
               svgWidth={this.props.timelineWidth}
             >
               <DotLine
-                dotPositions={this.props.dotPositionsFn(TimeWidget.myName, 'Full', true)}
+                dotPositions={this.props.dotPositionsFn(TimeWidget.myName, 'Full')}
                 context={{ parent: TimeWidget.myName, rowName: 'Full' }}
                 dotClickFn={this.props.dotClickFn ? this.onDotClick : null}
               />
@@ -428,7 +428,7 @@ export default class TimeWidget extends React.Component {
               svgWidth={this.props.timelineWidth}
             >
               <DotLine
-                dotPositions={this.props.dotPositionsFn('CategoryRollup', 'Categories', true)}
+                dotPositions={this.props.dotPositionsFn('CategoryRollup', 'Categories')}
                 context={{ parent: 'Category', rowName: 'Categories' }}
                 dotClickFn={this.props.dotClickFn}
               />

@@ -270,7 +270,7 @@ class StandardFilters extends React.PureComponent {
     try {
       if (ALLOW_DOT_CLICK) {
         const { timelineRangeParams } = this.props;
-        const rowDates = this.fetchDotPositions(context.parent, context.rowName, true, true);
+        const rowDates = this.fetchDotPositions(context.parent, context.rowName);
         const { position } = rowDates.find((elt) => elt.date === date);
 
         context.dotType = this.updateDotType(dotType, position, false);
@@ -305,7 +305,8 @@ class StandardFilters extends React.PureComponent {
   //     rowName:  <category-name>/<provider-name>/'Full' or 'Active' (for TimeWidget)
   //   isEnabled:  'true' = render normally, 'false' = active dots become inactive
   //    fetchAll:  'true' = don't label dots with dotType, 'false' = label each dot with dotType
-  fetchDotPositions = (parent, rowName, isEnabled, fetchAll) => {
+  // TODO: migrate this method into TimeWidget?
+  fetchDotPositions = (parent, rowName) => {
     const { timelineRangeParams } = this.props;
     if (!this.props.resources || !timelineRangeParams || timelineRangeParams.allDates.length === 0) {
       return [];
