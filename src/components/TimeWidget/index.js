@@ -365,7 +365,7 @@ export default class TimeWidget extends React.Component {
     const rangeMin = formatDisplayDate(this.props.thumbLeft !== 0 ? this.state.thumbDates.minDate : this.props.startDate, true, true);
     const rangeMax = formatDisplayDate(this.props.thumbRight !== 1 ? this.state.thumbDates.maxDate : this.props.endDate, true, true);
     const rightBound = numericPart(this.props.timelineWidth);
-    const rightGradientWidth = numericPart(this.props.timelineWidth) - this.state.rightX;
+    const rightGradientWidth = numericPart(this.props.timelineWidth) - this.state.rightX - 2; // minus 2px because of border width of 1px for left and right gradient
 
     return (
       <div className="time-widget" style={{ width: this.props.timelineWidth }}>
