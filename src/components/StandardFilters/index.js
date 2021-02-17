@@ -40,7 +40,6 @@ class StandardFilters extends React.PureComponent {
     activeProviders: PropTypes.shape({}).isRequired,
     // enabledFn: PropTypes.func.isRequired, // Callback to report changed category & provider enable/disable
     // dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
-    // lastEvent: PropTypes.instanceOf(Event),
   }
 
   state = {
@@ -106,18 +105,7 @@ class StandardFilters extends React.PureComponent {
       this.setState({ activeDates: this.calcActiveDates() }); // problem with green dots not showing up is because this.calcActiveDates() doesn't fire on initial load
     }
 
-    if (prevProps.lastEvent !== this.props.lastEvent) {
-      // TODO: not sure why this was here, but if enabled, next/prev and dot-click don't work w/ searchRefs
-      //      } else if (this.state.searchRefs && this.state.searchRefs.length > 0) {
-      //   // If most recent searchRef differs from currently highlighted dot, set dotClickContext
-      //   let recentRef = this.state.searchRefs[0];
-      //   if (recentRef.position !== this.props.dotClickContext.position) {
-      //      let newContext = Object.assign({}, this.props.dotClickContext);
-      //      newContext.date = recentRef.date;
-      //      newContext.position = recentRef.position;
-      //      this.setState({ dotClickContext: newContext });
-      //   }
-    } else if (ALLOW_DOT_CLICK && prevState.dotClickDate !== this.state.dotClickDate) {
+    if (ALLOW_DOT_CLICK && prevState.dotClickDate !== this.state.dotClickDate) {
       // Set dotClickContext from dot clicked in ContentPanel (via this.state.dotClickDate)'
       const { timelineRangeParams } = this.props;
       const theDate = timelineRangeParams.allDates.find((elt) => new Date(elt.date).getTime() === new Date(this.state.dotClickDate).getTime());
