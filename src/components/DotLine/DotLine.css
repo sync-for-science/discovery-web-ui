@@ -4,6 +4,31 @@
 
 /* v.01.13 Updated 12/23/2019 */
 
+.timeline-dot {
+  height: 10px;
+  width: 10px;
+  fill: var(--dots-inactive);
+  stroke: var(--dots-inactive-stroke);
+  stroke-width: 1px;
+  padding: 10px 0 3px 0;
+  cursor: pointer;
+  pointer-events: visible;
+
+  &.in-range {
+    stroke: var(--dots-active-stroke);
+  }
+
+  &.in-collection {
+    fill: var(--tile-selected);
+  }
+
+  &.recently-added {
+    fill: var(--tile-selected);
+    stroke: var(--tile-selected-last);
+    stroke-width: 2px;
+  }
+}
+
 .active-dots {
   height: 10px;
   width: 10px;

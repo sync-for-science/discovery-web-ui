@@ -224,7 +224,7 @@
 
   /* FILL COLOR MAPS */
   --dots-active: var(--gt1-dot);
-  --dots-active-stroke: var(--white);
+  --dots-active-stroke: var(--gn4);
   --dots-active-search: var(--cr4);
   --dots-active-search-stroke: var(--white);
   --dots-active-highlight: var(--cr3);
