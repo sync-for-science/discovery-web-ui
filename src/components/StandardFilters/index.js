@@ -380,10 +380,7 @@ class StandardFilters extends React.PureComponent {
         if (fetchAll) {
           return allDates;
         }
-        //      return combine(allDates.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active') : res, []),
-        //         searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'active-search') : res, []),
-        //         viewAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'view-accent') : res, []),
-        //         viewLastAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt) ? this.includeDot(res, elt, 'view-last-accent')
+
         return combine(allDates.reduce((res, elt) => (this.isActive(elt) ? this.includeDot(res, elt, 'active') : res), []),
           searchRefs.reduce((res, elt) => (this.isActive(elt) ? this.includeDot(res, elt, 'active-search') : res), []),
           viewAccentRefs.reduce((res, elt) => (this.isActive(elt) ? this.includeDot(res, elt, 'view-accent') : res), []),
@@ -394,19 +391,6 @@ class StandardFilters extends React.PureComponent {
         if (fetchAll) {
           return allDates;
         } if (rowName === 'Full') {
-          //            return combine(allDates.reduce((res, elt) => !this.isActiveTimeWidget(elt)
-          //                         ? this.includeDot(res, elt, 'inactive', true) : res, []),
-          //                allDates.reduce((res, elt) => this.isActiveTimeWidget(elt)
-          //                         ? this.includeDot(res, elt, 'active', true) : res, []),
-          //                searchRefs.reduce((res, elt) => !this.isActiveTimeWidget(elt)
-          //                         ? this.includeDot(res, elt, 'inactive-search', true) : res, []),
-          //                searchRefs.reduce((res, elt) => this.isActiveTimeWidget(elt)
-          //                         ? this.includeDot(res, elt, 'active-search', true) : res, []),
-          //                viewAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt)
-          //                         ? this.includeDot(res, elt, 'view-accent', true) : res, []),
-          //                viewLastAccentRefs.reduce((res, elt) => this.isActiveTimeWidget(elt)
-          //                             ? this.includeDot(res, elt, 'view-last-accent', true) : res, []),
-          //                highlightDots);
           return combine(allDates.reduce((res, elt) => (!this.isActive(elt)
             ? this.includeDot(res, elt, 'inactive', true) : res), []),
           allDates.reduce((res, elt) => (this.isActive(elt)
