@@ -337,9 +337,8 @@ export default class TimeWidget extends React.Component {
     this.setRange(range, centerDate);
   }
 
-  onDotClick = (context, date, dotType) => {
+  onDotClick = (context, date) => {
     this.setRange(this.state.rangeButton, date);
-    this.props.dotClickFn(context, date, dotType);
   }
 
   renderRangeButtons() {
@@ -389,7 +388,7 @@ export default class TimeWidget extends React.Component {
               <DotLine
                 dotPositions={this.props.dotPositionsFn(TimeWidget.myName, 'Full')}
                 context={{ parent: TimeWidget.myName, rowName: 'Full' }}
-                dotClickFn={this.props.dotClickFn ? this.onDotClick : null}
+                dotClickFn={this.onDotClick}
               />
             </SVGContainer>
           </div>
@@ -430,7 +429,6 @@ export default class TimeWidget extends React.Component {
               <DotLine
                 dotPositions={this.props.dotPositionsFn('CategoryRollup', 'Categories')}
                 context={{ parent: 'Category', rowName: 'Categories' }}
-                dotClickFn={this.props.dotClickFn}
               />
             </SVGContainer>
           ) }

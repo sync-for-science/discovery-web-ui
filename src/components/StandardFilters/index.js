@@ -234,25 +234,6 @@ class StandardFilters extends React.PureComponent {
   //
   onDotClick = (context, date, dotType) => {
     console.info('obsolete onDotClick -- context, date, dotType: ', context, date, dotType); // eslint-disable-line no-console
-    try {
-      if (ALLOW_DOT_CLICK) {
-        const { timelineRangeParams } = this.props;
-        const rowDates = this.fetchDotPositions(context.parent, context.rowName);
-        const { position } = rowDates.find((elt) => elt.date === date);
-
-        context.dotType = this.updateDotType(dotType, position, false);
-        context.minDate = rowDates[0].date;
-        context.maxDate = rowDates[rowDates.length - 1].date;
-        context.allDates = timelineRangeParams.allDates;
-        context.date = date;
-        context.position = position;
-        context.data = this.fetchDataForDot(context.parent, context.rowName, context.date);
-
-        this.setState({ dotClickContext: context });
-      }
-    } catch (e) {
-      console.error(e); // eslint-disable-line no-console
-    }
   }
 
   updateDotType(dotType, position, forceSearch) {
