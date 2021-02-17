@@ -224,20 +224,6 @@ class StandardFilters extends React.PureComponent {
     });
   }
 
-  //
-  // Handle Category/Provider expand/contract
-  //    section:  'Categories', 'Providers'
-  //   expand:  true/false
-  //
-  onExpandContract = (section, expand) => {
-    if (section === 'Categories') {
-      this.setState({ catsExpanded: expand });
-    } else {
-      this.setState({ provsExpanded: expand });
-    }
-  }
-
-  //
   // Return data for the clicked dot
   //    parent:  'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
   //    rowName:  <category-name>/<provider-name>
