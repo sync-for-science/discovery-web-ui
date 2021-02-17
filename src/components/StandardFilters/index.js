@@ -326,17 +326,12 @@ class StandardFilters extends React.PureComponent {
     return parts.join('-');
   }
 
-  //
   // Callback function for this component's state, returning the requested array of position+date+dotType objects
-  //  parent:    'CategoryRollup', 'Category', 'ProviderRollup', 'Provider', 'TimeWidget'
-  //  rowName:  <category-name>/<provider-name>/'Full' or 'Active' (for TimeWidget)
+  //      parent:  'CategoryRollup', 'Category', 'ProviderRollup', 'Provider', 'TimeWidget'
+  //     rowName:  <category-name>/<provider-name>/'Full' or 'Active' (for TimeWidget)
   //   isEnabled:  'true' = render normally, 'false' = active dots become inactive
-  //   fetchAll:  'true' = don't label dots with dotType, 'false' = label each dot with dotType
-  //
-  //   fetchDotPositions = (parent, rowName, isEnabled, fetchAll) => {
-  fetchDotPositions = this.fetchDotPositions.bind(this);
-
-  fetchDotPositions(parent, rowName, isEnabled, fetchAll) {
+  //    fetchAll:  'true' = don't label dots with dotType, 'false' = label each dot with dotType
+  fetchDotPositions = (parent, rowName, isEnabled, fetchAll) => {
     const { timelineRangeParams } = this.props;
     if (!this.props.resources || !timelineRangeParams || timelineRangeParams.allDates.length === 0) {
       return [];
