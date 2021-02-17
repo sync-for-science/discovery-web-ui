@@ -159,11 +159,13 @@ const activeCollectionByDatesState = selector({
       const record = records[uuid];
       const isoDate = record?.itemDate.substring(0, 10);
       // accumulate "true"  values, for each duplicate isoDate:
-      const recentlyAdded = acc[isoDate]?.recentlyAdded;
-      acc[isoDate] = {
-        inCollection: true,
-        recentlyAdded: recentlyAdded || !!recentlyAddedUuids[uuid], // accumulate "true" values
-      };
+      if (isoDate) {
+        const recentlyAdded = acc[isoDate]?.recentlyAdded;
+        acc[isoDate] = {
+          inCollection: true,
+          recentlyAdded: recentlyAdded || !!recentlyAddedUuids[uuid], // accumulate "true" values
+        };
+      }
       return acc;
     }, {});
   },
