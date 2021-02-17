@@ -376,7 +376,6 @@ class StandardFilters extends React.PureComponent {
       inactiveHighlightSearchDots, activeHighlightSearchDots);
 
     switch (parent) {
-      case 'ProviderRollup':
       case 'CategoryRollup':
         if (fetchAll) {
           return allDates;
@@ -391,61 +390,6 @@ class StandardFilters extends React.PureComponent {
           viewLastAccentRefs.reduce((res, elt) => (this.isActive(elt) ? this.includeDot(res, elt, 'view-last-accent')
             : res), []),
           highlightDots);
-
-      case 'Provider':
-        const provDates = cleanDates(this.props.resources.pathItem(`[*provider=${rowName}].itemDate`, this.queryOptions));
-        const normProvDates = normalizeDates(provDates, startDate, endDate);
-        const provDateObjs = provDates.map((date, index) => ({ position: normProvDates[index], date }));
-        const provSearchRefs = searchRefs.filter((elt) => elt.provider === rowName);
-        if (fetchAll) {
-          return provDateObjs;
-        }
-        //      return combine(provDateObjs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
-        //                  ? this.includeDot(res, elt, 'inactive') : res, []),
-        //         provDateObjs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
-        //                  ? this.includeDot(res, elt, 'active') : res, []),
-        //         provSearchRefs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
-        //                  ? this.includeDot(res, elt, 'inactive-search') : res, []),
-        //         provSearchRefs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
-        //                  ? this.includeDot(res, elt, 'active-search') : res, []),
-        //         highlightDots);
-        return combine(provDateObjs.reduce((res, elt) => (!isEnabled || !this.isActive(elt)
-          ? this.includeDot(res, elt, 'inactive') : res), []),
-        provDateObjs.reduce((res, elt) => (isEnabled && this.isActive(elt)
-          ? this.includeDot(res, elt, 'active') : res), []),
-        provSearchRefs.reduce((res, elt) => (!isEnabled || !this.isActive(elt)
-          ? this.includeDot(res, elt, 'inactive-search') : res), []),
-        provSearchRefs.reduce((res, elt) => (isEnabled && this.isActive(elt)
-          ? this.includeDot(res, elt, 'active-search') : res), []),
-        highlightDots);
-
-      case 'Category':
-        const catDates = cleanDates(this.props.resources.pathItem(`[*category=${rowName}].itemDate`, this.queryOptions));
-        const normCatDates = normalizeDates(catDates, startDate, endDate);
-        const catDateObjs = catDates.map((date, index) => ({ position: normCatDates[index], date }));
-        const catSearchRefs = searchRefs.filter((elt) => elt.category === rowName);
-        if (fetchAll) {
-          return catDateObjs;
-        }
-        //      return combine(catDateObjs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
-        //                  ? this.includeDot(res, elt, 'inactive') : res, []),
-        //         catDateObjs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
-        //                  ? this.includeDot(res, elt, 'active') : res, []),
-        //         catSearchRefs.reduce((res, elt) => !isEnabled && this.isActiveTimeWidget(elt)
-        //                  ? this.includeDot(res, elt, 'inactive-search') : res, []),
-        //         catSearchRefs.reduce((res, elt) => isEnabled && this.isActiveTimeWidget(elt)
-        //                  ? this.includeDot(res, elt, 'active-search') : res, []),
-        //         highlightDots);
-        return combine(catDateObjs.reduce((res, elt) => (!isEnabled || !this.isActive(elt)
-          ? this.includeDot(res, elt, 'inactive') : res), []),
-        catDateObjs.reduce((res, elt) => (isEnabled && this.isActive(elt)
-          ? this.includeDot(res, elt, 'active') : res), []),
-        catSearchRefs.reduce((res, elt) => (!isEnabled || !this.isActive(elt)
-          ? this.includeDot(res, elt, 'inactive-search') : res), []),
-        catSearchRefs.reduce((res, elt) => (isEnabled && this.isActive(elt)
-          ? this.includeDot(res, elt, 'active-search') : res), []),
-        highlightDots);
-
       default: // TimeWidget
         if (fetchAll) {
           return allDates;
