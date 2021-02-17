@@ -27,9 +27,16 @@ export default class DotLine extends React.Component {
     dotClickFn: PropTypes.func, // Callback when a dot is clicked
   }
 
-  getDotClass = () => {
-    const { inRange, inCollection, recentlyAdded } = this.props;
-    return 'active-dots';
+  getDotClass = (dot) => {
+    const { recentlyAdded, inCollection, inRange } = dot;
+    const classes = {
+      'timeline-dot': true,
+      'in-range': inRange,
+      'in-collection': inCollection,
+      'recently-added': recentlyAdded,
+    };
+    // TODO: library function, like cx(), that does not rely on hooks API?
+    return Object.entries(classes).reduce((acc, [k, v]) => (v ? [...acc, k] : acc), []).join(' ');
   };
 
   renderDot = (result, dot, index) => {
@@ -40,9 +47,8 @@ export default class DotLine extends React.Component {
       onClick: this.props.dotClickFn ? (_event) => this.props.dotClickFn(this.props.context, dot.date, dot.dotType) : undefined,
     };
     // const isContent = ['Category', 'Provider'].includes(this.props.context.parent);
-
     result.push(<circle
-      className={this.getDotClass()}
+      className={this.getDotClass(dot)}
       key={index}
       cx={`${dot.position * 100}%`}
       cy={halfHeight}
