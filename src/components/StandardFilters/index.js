@@ -43,14 +43,8 @@ class StandardFilters extends React.PureComponent {
     minActivePos: 0.0, // Location [0..1] of TimeWidget left thumb
     maxActivePos: 1.0, // Location [0..1] of TimeWidget right thumb
     timelineIsExpanded: false, // Is expanded timeline displayed (restricted dot range in effect)
-    catsExpanded: true,
-    provsExpanded: true,
     svgWidth: '0px',
     // dotClickContext: null, // The current dot (if one is highlighted)
-    activeDates: {}, // Dates that are within the TimeWidget's active range and have one or more resources with enabled Categories/Providers
-    searchRefs: [],
-    viewAccentDates: [], // CatalogView & CompareView
-    viewLastAccentDates: [], // CatalogView & CompareView
   }
 
   componentDidMount() {
