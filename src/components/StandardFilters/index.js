@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-  atom,
-  useRecoilState,
   useRecoilValue,
   useSetRecoilState,
 } from 'recoil';
@@ -16,8 +14,6 @@ import { SUBROUTES } from '../../constants';
 import {
   resourcesState, timelineRangeParamsState, timeFiltersState, activeDatesState,
 } from '../../recoil';
-
-const ALLOW_DOT_CLICK = true;
 
 class StandardFilters extends React.PureComponent {
   static propTypes = {
@@ -42,32 +38,12 @@ class StandardFilters extends React.PureComponent {
     maxActivePos: 1.0, // Location [0..1] of TimeWidget right thumb
     timelineIsExpanded: false, // Is expanded timeline displayed (restricted dot range in effect)
     svgWidth: '0px',
-    // dotClickContext: null, // The current dot (if one is highlighted)
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.onResize);
     // window.addEventListener('keydown', this.onEvent);
     this.updateSvgWidth();
-    const { timelineRangeParams } = this.props;
-    if (timelineRangeParams?.allDates && ALLOW_DOT_CLICK) {
-      const data = this.fetchDataForDot('TimeWidget', 'Full', timelineRangeParams.maxDate);
-      // console.info('fetchDataForDot, data: ', JSON.stringify(data, null, '  '));
-      this.props.setDotClickContext({
-        parent: 'TimeWidget',
-        rowName: 'Full',
-        dotType: 'active',
-        minDate: timelineRangeParams.minDate,
-        maxDate: timelineRangeParams.maxDate,
-        startDate: timelineRangeParams.startDate,
-        endDate: timelineRangeParams.endDate,
-
-        allDates: timelineRangeParams.allDates,
-        date: timelineRangeParams.maxDate,
-        data,
-        position: timelineRangeParams.allDates[timelineRangeParams.allDates.length - 1].position,
-      });
-    }
   }
 
   componentWillUnmount() {
@@ -165,32 +141,6 @@ class StandardFilters extends React.PureComponent {
     });
   }
 
-  // Return data for the clicked dot
-  //    parent:  'CategoryRollup', 'Category', 'ProviderRollup', 'Provider'
-  //    rowName:  <category-name>/<provider-name>
-  //    date:    date of the clicked dot
-  //
-  fetchDataForDot = (parent, rowName, date) => {
-    switch (parent) {
-      case 'ProviderRollup':
-        // Return all resources for enabled providers matching the clicked date
-        return this.props.resources.pathItem(`[*itemDate=${date}]`);
-
-      case 'Provider':
-        // Return all resources matching the clicked provider and date
-        return this.props.resources.pathItem(`[*itemDate=${date}][*provider=${rowName}]`);
-
-      case 'Category':
-        // Return all resources matching the clicked category and date
-        return this.props.resources.pathItem(`[*itemDate=${date}][*category=${rowName}]`);
-
-      case 'CategoryRollup':
-      default:
-        // Return all resources for enabled categories matching the clicked date
-        return this.props.resources.pathItem(`[*itemDate=${date}]`);
-    }
-  }
-
   //
   // Handle dot clicks
   //   context = {
@@ -256,7 +206,6 @@ class StandardFilters extends React.PureComponent {
 
   // TODO: handle noDots for LongitudinalView???
   render() {
-    //      console.log('SF render: ' + (this.props.dotClickContext ? this.props.dotClickContext.date : this.props.dotClickContext));
     const { timelineRangeParams } = this.props;
 
     return (
@@ -265,7 +214,6 @@ class StandardFilters extends React.PureComponent {
         maxDate={timelineRangeParams.maxDate ?? ''}
         startDate={timelineRangeParams.startDate ?? ''}
         endDate={timelineRangeParams.endDate ?? ''}
-        // dotContext={this.props.dotClickContext}
         thumbLeft={this.state.minActivePos}
         thumbRight={this.state.maxActivePos}
         timelineWidth={this.state.svgWidth}
@@ -277,17 +225,10 @@ class StandardFilters extends React.PureComponent {
   }
 }
 
-export const dotClickContextState = atom({
-  key: 'dotClickContextState', // unique ID (with respect to other atoms/selectors)
-  default: null, // default value (aka initial value)
-});
-
 const StandardFiltersHOC = React.memo((props) => {
   const timelineRangeParams = useRecoilValue(timelineRangeParamsState);
   const updateTimeFilters = useSetRecoilState(timeFiltersState);
   const { legacy } = useRecoilValue(resourcesState);
-
-  const [dotClickContext, setDotClickContext] = useRecoilState(dotClickContextState);
 
   const activeDates = useRecoilValue(activeDatesState);
 
@@ -300,8 +241,6 @@ const StandardFiltersHOC = React.memo((props) => {
       {...props} // eslint-disable-line react/jsx-props-no-spreading
       updateTimeFilters={updateTimeFilters}
       activeDates={activeDates}
-      dotClickContext={dotClickContext}
-      setDotClickContext={setDotClickContext}
       resources={legacy}
       timelineRangeParams={timelineRangeParams}
     />
