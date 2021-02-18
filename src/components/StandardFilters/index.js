@@ -6,19 +6,17 @@ import {
 import PropTypes from 'prop-types';
 
 import './StandardFilters.css';
-import FhirTransform from '../../FhirTransform.js';
 import { normalizeDates, checkQuerySelector } from '../../util.js';
 import TimeWidget from '../TimeWidget';
 
 import { SUBROUTES } from '../../constants';
 import {
-  resourcesState, timelineRangeParamsState, timeFiltersState, activeDatesState,
+  timelineRangeParamsState, timeFiltersState, activeDatesState,
 } from '../../recoil';
 
 class StandardFilters extends React.PureComponent {
   static propTypes = {
     activeView: PropTypes.oneOf(SUBROUTES),
-    resources: PropTypes.instanceOf(FhirTransform),
     timelineRangeParams: PropTypes.shape({
       allDates: PropTypes.arrayOf(PropTypes.shape({
         position: PropTypes.number.isRequired,
@@ -180,7 +178,7 @@ class StandardFilters extends React.PureComponent {
   // TODO: migrate this method into TimeWidget?
   fetchDotPositions = (parent, rowName) => {
     const { timelineRangeParams } = this.props;
-    if (!this.props.resources || !timelineRangeParams || timelineRangeParams.allDates.length === 0) {
+    if (!timelineRangeParams?.allDates?.length) {
       return [];
     }
 
@@ -228,7 +226,6 @@ class StandardFilters extends React.PureComponent {
 const StandardFiltersHOC = React.memo((props) => {
   const timelineRangeParams = useRecoilValue(timelineRangeParamsState);
   const updateTimeFilters = useSetRecoilState(timeFiltersState);
-  const { legacy } = useRecoilValue(resourcesState);
 
   const activeDates = useRecoilValue(activeDatesState);
 
@@ -241,7 +238,6 @@ const StandardFiltersHOC = React.memo((props) => {
       {...props} // eslint-disable-line react/jsx-props-no-spreading
       updateTimeFilters={updateTimeFilters}
       activeDates={activeDates}
-      resources={legacy}
       timelineRangeParams={timelineRangeParams}
     />
   );
