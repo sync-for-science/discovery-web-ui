@@ -49,7 +49,6 @@ class StandardFilters extends React.PureComponent {
     // dotClickContext: null, // The current dot (if one is highlighted)
     activeDates: {}, // Dates that are within the TimeWidget's active range and have one or more resources with enabled Categories/Providers
     searchRefs: [],
-    dotClickDate: null, // dot click from ContentPanel
     viewAccentDates: [], // CatalogView & CompareView
     viewLastAccentDates: [], // CatalogView & CompareView
   }
@@ -87,26 +86,9 @@ class StandardFilters extends React.PureComponent {
     this.updateSvgWidth();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, _prevState) {
     if (prevProps.activeView !== this.props.activeView) {
       this.updateSvgWidth();
-    }
-
-    if (ALLOW_DOT_CLICK && prevState.dotClickDate !== this.state.dotClickDate) {
-      // Set dotClickContext from dot clicked in ContentPanel (via this.state.dotClickDate)'
-      const { timelineRangeParams } = this.props;
-      const theDate = timelineRangeParams.allDates.find((elt) => new Date(elt.date).getTime() === new Date(this.state.dotClickDate).getTime());
-      this.props.setDotClickContext({
-        parent: 'TimeWidget',
-        rowName: 'Full',
-        dotType: 'active',
-        minDate: timelineRangeParams.minDate,
-        maxDate: timelineRangeParams.maxDate,
-        allDates: timelineRangeParams.allDates,
-        date: theDate.date,
-        data: this.fetchDataForDot('TimeWidget', 'Full', theDate.date),
-        position: theDate.position,
-      });
     }
   }
 
