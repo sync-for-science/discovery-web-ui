@@ -16,7 +16,6 @@ export default class DotLine extends React.Component {
       inRange: PropTypes.bool.isRequired,
       inCollection: PropTypes.bool.isRequired,
       recentlyAdded: PropTypes.bool.isRequired,
-      dotType: PropTypes.string.isRequired, //   active/inactive/active-highlight/inactive-highlight/view-accent/view-last-accent/
       //      view-accent-highlight/active-search/inactive-search/active-highlight-search/
       //      inactive-highlight-search
     })).isRequired,

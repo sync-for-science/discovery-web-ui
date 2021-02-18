@@ -193,7 +193,6 @@ export const activeDatesState = selector({
         inRange: isInDateRange(date, dateRangeStart, dateRangeEnd),
         inCollection,
         recentlyAdded,
-        dotType: 'inactive-dots',
       };
     });
   },
