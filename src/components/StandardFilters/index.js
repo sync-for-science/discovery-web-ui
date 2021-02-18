@@ -14,7 +14,7 @@ import TimeWidget from '../TimeWidget';
 
 import { SUBROUTES } from '../../constants';
 import {
-  activeCategoriesState, activeProvidersState, resourcesState, timelineRangeParamsState, timeFiltersState, activeDatesState,
+  resourcesState, timelineRangeParamsState, timeFiltersState, activeDatesState,
 } from '../../recoil';
 
 const ALLOW_DOT_CLICK = true;
@@ -33,8 +33,6 @@ class StandardFilters extends React.PureComponent {
       maxDate: PropTypes.string.isRequired, // Latest date we have data for this participant
       endDate: PropTypes.string.isRequired, // Dec 31 of last year of timeline tick periods
     }),
-    activeCategories: PropTypes.shape({}).isRequired,
-    activeProviders: PropTypes.shape({}).isRequired,
     // enabledFn: PropTypes.func.isRequired, // Callback to report changed category & provider enable/disable
     // dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
   }
@@ -290,8 +288,6 @@ const StandardFiltersHOC = React.memo((props) => {
 
   const [dotClickContext, setDotClickContext] = useRecoilState(dotClickContextState);
 
-  const activeCategories = useRecoilValue(activeCategoriesState);
-  const activeProviders = useRecoilValue(activeProvidersState);
   const activeDates = useRecoilValue(activeDatesState);
 
   if (!timelineRangeParams.allDates) {
@@ -305,8 +301,6 @@ const StandardFiltersHOC = React.memo((props) => {
       activeDates={activeDates}
       dotClickContext={dotClickContext}
       setDotClickContext={setDotClickContext}
-      activeCategories={activeCategories}
-      activeProviders={activeProviders}
       resources={legacy}
       timelineRangeParams={timelineRangeParams}
     />
