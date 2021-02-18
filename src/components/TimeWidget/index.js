@@ -29,7 +29,11 @@ export default class TimeWidget extends React.Component {
     setLeftRightFn: PropTypes.func.isRequired, // Communicate thumb movement to parent
     dotPositionsFn: PropTypes.func.isRequired, // Get dot positions from parent
     // dotClickFn: PropTypes.func, // Communicate dot click to parent
-    dotContext: PropTypes.object, // The last clicked dot (or null)
+    // dotContext: PropTypes.object, // The last clicked dot (or null)
+    lastDot: PropTypes.shape({
+      position: PropTypes.number.isRequired, //   Horizontal position (range: 0.0 - 1.0)
+      date: PropTypes.string.isRequired, //   Associated date
+    }),
   }
 
   state = {
@@ -324,14 +328,15 @@ export default class TimeWidget extends React.Component {
   }
 
   dotInRange(width) {
-    const dotX = this.props.dotContext.position * width;
+    const usePosition = this.props.lastDot.position;
+    const dotX = usePosition * width;
     return this.state.leftX <= dotX && this.state.rightX >= dotX;
   }
 
   onRangeClick(range) {
     const width = numericPart(this.props.timelineWidth);
-    const centerDate = this.dotInRange(width) ? this.props.dotContext.date // last dot clicked
-      : this.posToDate((this.state.leftX + this.state.rightX) / (2 * width)); // center of current range
+    const useDate = this.props.lastDot.date;
+    const centerDate = this.dotInRange(width) ? useDate : this.posToDate((this.state.leftX + this.state.rightX) / (2 * width)); // center of current range
 
     this.setState({ rangeButton: range });
     this.setRange(range, centerDate);
