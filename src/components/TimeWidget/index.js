@@ -28,7 +28,7 @@ export default class TimeWidget extends React.Component {
     timelineWidth: PropTypes.string.isRequired,
     setLeftRightFn: PropTypes.func.isRequired, // Communicate thumb movement to parent
     dotPositionsFn: PropTypes.func.isRequired, // Get dot positions from parent
-    dotClickFn: PropTypes.func, // Communicate dot click to parent
+    // dotClickFn: PropTypes.func, // Communicate dot click to parent
     dotContext: PropTypes.object, // The last clicked dot (or null)
   }
 

@@ -284,7 +284,6 @@ class StandardFilters extends React.PureComponent {
   render() {
     //      console.log('SF render: ' + (this.props.dotClickContext ? this.props.dotClickContext.date : this.props.dotClickContext));
     const { timelineRangeParams } = this.props;
-    const dotClickFn = ALLOW_DOT_CLICK ? this.onDotClick : null;
 
     return (
       <TimeWidget
@@ -298,7 +297,6 @@ class StandardFilters extends React.PureComponent {
         timelineWidth={this.state.svgWidth}
         setLeftRightFn={this.setLeftRight}
         dotPositionsFn={this.fetchDotPositions}
-        dotClickFn={dotClickFn}
       />
     );
   }
