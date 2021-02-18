@@ -42,7 +42,7 @@ export default class DotLine extends React.Component {
     // TODO: make consistent (need units?)
     const halfHeight = numericPart(this.props.height) / 2 + unitPart(this.props.height);
     const clickHandlerProps = {
-      style: this.props.dotClickFn ? undefined : { cursor: 'default' },
+      style: this.props.dotClickFn ? { cursor: 'pointer' } : undefined,
       onClick: this.props.dotClickFn ? (_event) => this.props.dotClickFn(this.props.context, dot.date, dot.dotType) : undefined,
     };
     // const isContent = ['Category', 'Provider'].includes(this.props.context.parent);
