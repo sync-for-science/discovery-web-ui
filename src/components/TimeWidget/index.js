@@ -6,7 +6,7 @@ import moment from 'moment';
 import './TimeWidget.css';
 import config from '../../config.js';
 import {
-  getStyle, formatDisplayDate, formatKeyDate, numericPart, timelineIncrYears,
+  getStyle, formatDisplayDate, formatKeyDate, numericPart, timelineIncrYears, normalizeDates,
 } from '../../util.js';
 
 import SVGContainer from '../SVGContainer';
@@ -23,11 +23,11 @@ export default class TimeWidget extends React.Component {
       startDate: PropTypes.string.isRequired, // Left-most date of the primary timeline
       endDate: PropTypes.string.isRequired, // Right-most date of the primary timeline
     }),
+    activeDates: PropTypes.shape({}).isRequired,
     thumbLeft: PropTypes.number.isRequired, // Relative location [0..1] of the left-most thumb
     thumbRight: PropTypes.number.isRequired, // Relative location [0..1] of the right-most thumb
     timelineWidth: PropTypes.string.isRequired,
     setLeftRightFn: PropTypes.func.isRequired, // Communicate thumb movement to parent
-    dotPositionsFn: PropTypes.func.isRequired, // Get dot positions from parent
   }
 
   constructor(props) {
@@ -93,6 +93,32 @@ export default class TimeWidget extends React.Component {
       fullSize: 1,
       fullSizeUnit: 'month',
     },
+  }
+
+  fetchDotPositions = (isFullRow) => {
+    const { timelineRangeParams } = this.props;
+    if (!timelineRangeParams?.allDates?.length) {
+      return [];
+    }
+
+    const { activeDates } = this.props;
+    const { startDate, endDate } = timelineRangeParams;
+
+    if (isFullRow) {
+      return activeDates;
+    }
+
+    const { thumbLeft: minActivePos, thumbRight: maxActivePos } = this.props;
+
+    return activeDates.filter(({ inRange }) => inRange)
+      .map((el) => {
+        const { date } = el;
+        const position = normalizeDates([date], startDate, endDate)[0];
+        return ({
+          ...el,
+          position: (position - minActivePos) / (maxActivePos - minActivePos),
+        });
+      });
   }
 
   cacheSizes() {
@@ -402,7 +428,7 @@ export default class TimeWidget extends React.Component {
               svgWidth={this.props.timelineWidth}
             >
               <DotLine
-                dotPositions={this.props.dotPositionsFn(true)}
+                dotPositions={this.fetchDotPositions(true)}
                 dotClickFn={this.onDotClick}
               />
             </SVGContainer>
@@ -442,7 +468,7 @@ export default class TimeWidget extends React.Component {
               svgWidth={this.props.timelineWidth}
             >
               <DotLine
-                dotPositions={this.props.dotPositionsFn(false)}
+                dotPositions={this.fetchDotPositions(false)}
               />
             </SVGContainer>
           ) }

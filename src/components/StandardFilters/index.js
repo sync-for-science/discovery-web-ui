@@ -6,7 +6,7 @@ import {
 import PropTypes from 'prop-types';
 
 import './StandardFilters.css';
-import { normalizeDates, checkQuerySelector } from '../../util.js';
+import { checkQuerySelector } from '../../util.js';
 import TimeWidget from '../TimeWidget';
 
 import { SUBROUTES } from '../../constants';
@@ -22,6 +22,7 @@ class StandardFilters extends React.PureComponent {
         position: PropTypes.number.isRequired,
         date: PropTypes.string.isRequired,
       })).isRequired,
+      activeDates: PropTypes.shape({}).isRequired,
       minDate: PropTypes.string.isRequired, // Earliest date we have data for this participant
       startDate: PropTypes.string.isRequired, // Jan 1 of minDate's year
       maxDate: PropTypes.string.isRequired, // Latest date we have data for this participant
@@ -143,44 +144,18 @@ class StandardFilters extends React.PureComponent {
     return parts.join('-');
   }
 
-  fetchDotPositions = (isFullRow) => {
-    const { timelineRangeParams } = this.props;
-    if (!timelineRangeParams?.allDates?.length) {
-      return [];
-    }
-
-    const { activeDates } = this.props;
-    const { startDate, endDate } = timelineRangeParams;
-
-    if (isFullRow) {
-      return activeDates;
-    }
-
-    const { minActivePos, maxActivePos } = this.state;
-
-    return activeDates.filter(({ inRange }) => inRange)
-      .map((el) => {
-        const { date } = el;
-        const position = normalizeDates([date], startDate, endDate)[0];
-        return ({
-          ...el,
-          position: (position - minActivePos) / (maxActivePos - minActivePos),
-        });
-      });
-  }
-
   // TODO: handle noDots for LongitudinalView???
   render() {
-    const { timelineRangeParams } = this.props;
+    const { timelineRangeParams, activeDates } = this.props;
 
     return (
       <TimeWidget
         timelineRangeParams={timelineRangeParams}
+        activeDates={activeDates}
         thumbLeft={this.state.minActivePos}
         thumbRight={this.state.maxActivePos}
         timelineWidth={this.state.svgWidth}
         setLeftRightFn={this.setLeftRight}
-        dotPositionsFn={this.fetchDotPositions}
       />
     );
   }
