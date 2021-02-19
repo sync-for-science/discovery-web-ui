@@ -1,7 +1,7 @@
 import React from 'react';
 import { array, string } from 'prop-types';
-import { useRecoilState } from 'recoil';
-import { activeCollectionState } from '../../recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { activeCollectionState, subcategoryIsExpanded } from '../../recoil';
 
 const showCount = (count) => {
   if (count > 1) {
@@ -12,6 +12,7 @@ const showCount = (count) => {
 
 const RecordSelector = ({ label, uuids }) => {
   const [activeCollection, setActiveCollection] = useRecoilState(activeCollectionState);
+  const setExpanded = useSetRecoilState(subcategoryIsExpanded(label)); // if value is null, user has not yet interacted
 
   const { uuids: activeUuids, recentlyAddedUuids } = activeCollection;
   const hasActiveUuid = uuids.reduce((acc, uuid) => activeUuids[uuid] || acc, false);
@@ -22,6 +23,7 @@ const RecordSelector = ({ label, uuids }) => {
   const handleClick = () => {
     const resetUuids = uuids.reduce((acc, uuid) => ({ ...acc, [uuid]: !hasActiveUuid }), {});
     setActiveCollection(resetUuids);
+    setExpanded(!hasActiveUuid);
   };
 
   return (
