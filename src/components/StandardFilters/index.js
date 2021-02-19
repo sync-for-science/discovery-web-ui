@@ -189,16 +189,12 @@ class StandardFilters extends React.PureComponent {
 
     return (
       <TimeWidget
-        minDate={timelineRangeParams.minDate ?? ''}
-        maxDate={timelineRangeParams.maxDate ?? ''}
-        startDate={timelineRangeParams.startDate ?? ''}
-        endDate={timelineRangeParams.endDate ?? ''}
+        timelineRangeParams={timelineRangeParams}
         thumbLeft={this.state.minActivePos}
         thumbRight={this.state.maxActivePos}
         timelineWidth={this.state.svgWidth}
         setLeftRightFn={this.setLeftRight}
         dotPositionsFn={this.fetchDotPositions}
-        lastDot={timelineRangeParams?.allDates.slice(-1)[0]}
       />
     );
   }
