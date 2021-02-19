@@ -11,15 +11,15 @@
 
   &.in-range {
     stroke: var(--dots-active-stroke);
-  }
 
-  &.in-collection {
-    fill: var(--tile-selected);
-  }
+    &.in-collection {
+      fill: var(--tile-selected);
+    }
 
-  &.recently-added {
-    fill: var(--tile-selected);
-    stroke: var(--tile-selected-last);
-    stroke-width: 2px;
+    &.recently-added {
+      fill: var(--tile-selected);
+      stroke: var(--tile-selected-last);
+      stroke-width: 2px;
+    }
   }
 }
