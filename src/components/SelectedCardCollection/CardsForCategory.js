@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { string } from 'prop-types';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -26,24 +26,27 @@ const useStyles = makeStyles((theme) => ({
 const CategorySubtypeAccordion = ({
   records, categoryLabel, subtypeLabel, categorySubtype,
 }) => {
-  const classes = useStyles();
   const { hasLastAdded, collectionUuids } = categorySubtype;
-  const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
-
   if (collectionUuids.length === 0) {
     return null;
   }
 
+  const classes = useStyles();
+  const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
+  const [expanded, setExpanded] = useState(hasLastAdded);
+
   const accordionStyle = hasLastAdded ? classes.last : classes.selected;
+
   return (
     <Accordion
-      // defaultExpanded={hasLastAdded}
       className={`${classes.root} ${accordionStyle}`}
       elevation={0}
+      expanded={expanded}
       TransitionProps={{ unmountOnExit: true }}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
+        onClick={() => setExpanded(!expanded)}
       >
         {summaryLabel}
       </AccordionSummary>
@@ -68,7 +71,6 @@ const CardsForCategory = ({ categoryLabel }) => {
 
   const { records } = resources;
   const category = filteredActiveCollection[categoryLabel];
-  // console.info('category: ', JSON.stringify(category, null, '  '));
   if (!category || category.filteredCollectionCount === 0) {
     return null;
   }
