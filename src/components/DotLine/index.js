@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import './DotLine.css';
@@ -17,27 +17,38 @@ const getDotClass = (recentlyAdded, inCollection, inRange) => {
   return Object.entries(classes).reduce((acc, [k, v]) => (v ? [...acc, k] : acc), []).join(' ');
 };
 
+const Dot = ({
+  dot, context, dotClickFn, height,
+}) => {
+  const { recentlyAdded, inCollection, inRange } = dot;
+  const className = useMemo(() => getDotClass(recentlyAdded, inCollection, inRange), [recentlyAdded, inCollection, inRange]);
+
+  return (
+    <circle
+      className={className}
+      cx={`${dot.position * 100}%`}
+      cy={height}
+      r={config.normalDotRadius}
+      style={dotClickFn ? { cursor: 'pointer' } : undefined}
+      onClick={dotClickFn ? (_event) => dotClickFn(context, dot.date, dot.dotType) : undefined}
+    />
+  );
+};
+
 const DotLine = ({
   height, context, dotClickFn, dotPositions,
 }) => {
   const halfHeight = numericPart(height) / 2 + unitPart(height);
 
-  return dotPositions.reduce((result, dot) => {
-    const { recentlyAdded, inCollection, inRange } = dot;
-    const className = getDotClass(recentlyAdded, inCollection, inRange);
-
-    result.push(<circle
-      className={className}
+  return dotPositions.map((dot) => (
+    <Dot
       key={dot.date}
-      cx={`${dot.position * 100}%`}
-      cy={halfHeight}
-      r={config.normalDotRadius}
-      style={dotClickFn ? { cursor: 'pointer' } : undefined}
-      onClick={dotClickFn ? (_event) => dotClickFn(context, dot.date, dot.dotType) : undefined}
-    />);
-
-    return result;
-  }, []);
+      dot={dot}
+      context={context}
+      dotClickFn={dotClickFn}
+      height={halfHeight}
+    />
+  ));
 };
 
 DotLine.propTypes = {
