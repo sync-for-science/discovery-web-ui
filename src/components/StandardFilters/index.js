@@ -68,14 +68,6 @@ class StandardFilters extends React.PureComponent {
     }
   }
 
-  //
-  // Callback function to record category/provider enable/disable
-  //   parent:    'Category', 'Provider'
-  //   rowName:  <category-name>/<provider-name>
-  //   isEnabled:  the current state to record
-  //
-
-  //
   // Is 'dot' in the TimeWidget's active range?
   //
   isActiveTimeWidget = (dot) => dot.position >= this.state.minActivePos && dot.position <= this.state.maxActivePos
@@ -151,13 +143,7 @@ class StandardFilters extends React.PureComponent {
     return parts.join('-');
   }
 
-  // Callback function for this component's state, returning the requested array of position+date+dotType objects
-  //      parent:  'CategoryRollup', 'Category', 'ProviderRollup', 'Provider', 'TimeWidget'
-  //     rowName:  <category-name>/<provider-name>/'Full' or 'Active' (for TimeWidget)
-  //   isEnabled:  'true' = render normally, 'false' = active dots become inactive
-  //    fetchAll:  'true' = don't label dots with dotType, 'false' = label each dot with dotType
-  // TODO: migrate this method into TimeWidget?
-  fetchDotPositions = (parent, rowName) => {
+  fetchDotPositions = (isFullRow) => {
     const { timelineRangeParams } = this.props;
     if (!timelineRangeParams?.allDates?.length) {
       return [];
@@ -166,7 +152,7 @@ class StandardFilters extends React.PureComponent {
     const { activeDates } = this.props;
     const { startDate, endDate } = timelineRangeParams;
 
-    if (rowName === 'Full') {
+    if (isFullRow) {
       return activeDates;
     }
 

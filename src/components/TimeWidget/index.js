@@ -16,8 +16,6 @@ import DotLine from '../DotLine';
 // Render the DiscoveryApp Time Widget
 //
 export default class TimeWidget extends React.Component {
-  static myName = 'TimeWidget';
-
   static propTypes = {
     timelineRangeParams: PropTypes.shape({
       minDate: PropTypes.string.isRequired, // Earliest date we have data for this participant
@@ -404,7 +402,7 @@ export default class TimeWidget extends React.Component {
               svgWidth={this.props.timelineWidth}
             >
               <DotLine
-                dotPositions={this.props.dotPositionsFn(TimeWidget.myName, 'Full')}
+                dotPositions={this.props.dotPositionsFn(true)}
                 dotClickFn={this.onDotClick}
               />
             </SVGContainer>
@@ -444,7 +442,7 @@ export default class TimeWidget extends React.Component {
               svgWidth={this.props.timelineWidth}
             >
               <DotLine
-                dotPositions={this.props.dotPositionsFn('CategoryRollup', 'Categories')}
+                dotPositions={this.props.dotPositionsFn(false)}
               />
             </SVGContainer>
           ) }
