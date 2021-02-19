@@ -6,8 +6,7 @@ import config from '../../config.js';
 
 import { numericPart, unitPart } from '../../util.js';
 
-const getDotClass = (dot) => {
-  const { recentlyAdded, inCollection, inRange } = dot;
+const getDotClass = (recentlyAdded, inCollection, inRange) => {
   const classes = {
     'timeline-dot': true,
     'in-range': inRange,
@@ -28,8 +27,12 @@ const DotLine = ({
       style: dotClickFn ? { cursor: 'pointer' } : undefined,
       onClick: dotClickFn ? (_event) => dotClickFn(context, dot.date, dot.dotType) : undefined,
     };
+
+    const { recentlyAdded, inCollection, inRange } = dot;
+    const className = getDotClass(recentlyAdded, inCollection, inRange);
+
     result.push(<circle
-      className={getDotClass(dot)}
+      className={className}
       key={dot.date}
       cx={`${dot.position * 100}%`}
       cy={halfHeight}
