@@ -139,25 +139,6 @@ class StandardFilters extends React.PureComponent {
     });
   }
 
-  //
-  // Handle dot clicks
-  //   context = {
-  //      parent:     'CategoryRollup', 'Category', 'ProviderRollup', 'Provider', 'TimeWidget'
-  //      rowName:     <category-name>/<provider-name>
-  //      dotType:     type of the clicked dot (added below)
-  //      minDate:     date of the first dot for this row
-  //      maxDate:     date of the last dot for this row
-  //      date:     date of the clicked dot (added below)
-  //      position:     position of the clicked dot (added below)
-  //     data:     data associated with the clicked dot (added below)
-  //   }
-  //   date:       date of the clicked dot
-  //   dotType:     'active', 'inactive', 'active-highlight', 'inactive-highlight', 'active-highlight-search', 'inactive-highlight-search'
-  //
-  onDotClick = (context, date, dotType) => {
-    console.info('obsolete onDotClick -- context, date, dotType: ', context, date, dotType); // eslint-disable-line no-console
-  }
-
   updateDotType(dotType, position, forceSearch) {
     const isActivePos = position >= this.state.minActivePos && position <= this.state.maxActivePos;
     const isSearch = dotType.includes('search') || forceSearch;
