@@ -23,11 +23,6 @@ const DotLine = ({
   const halfHeight = numericPart(height) / 2 + unitPart(height);
 
   return dotPositions.reduce((result, dot) => {
-    const clickHandlerProps = {
-      style: dotClickFn ? { cursor: 'pointer' } : undefined,
-      onClick: dotClickFn ? (_event) => dotClickFn(context, dot.date, dot.dotType) : undefined,
-    };
-
     const { recentlyAdded, inCollection, inRange } = dot;
     const className = getDotClass(recentlyAdded, inCollection, inRange);
 
@@ -37,7 +32,8 @@ const DotLine = ({
       cx={`${dot.position * 100}%`}
       cy={halfHeight}
       r={config.normalDotRadius}
-      {...clickHandlerProps} // eslint-disable-line react/jsx-props-no-spreading
+      style={dotClickFn ? { cursor: 'pointer' } : undefined}
+      onClick={dotClickFn ? (_event) => dotClickFn(context, dot.date, dot.dotType) : undefined}
     />);
 
     return result;
