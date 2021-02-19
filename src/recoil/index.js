@@ -247,6 +247,11 @@ export const filteredActiveCollectionState = selector({
   },
 });
 
+export const subcategoryIsExpanded = memoizeWith(identity, (categorySubtypeLabel) => atom({
+  key: `is-expanded-${categorySubtypeLabel}`,
+  default: null, // if value is null, user has not yet interacted
+}));
+
 export const notesWithRecordId = memoizeWith(identity, (recordId) => {
   const atomForThisRecord = atom({
     key: `stored-notes-${recordId}`,
