@@ -23,7 +23,13 @@ export default class TimeWidget extends React.Component {
       startDate: PropTypes.string.isRequired, // Left-most date of the primary timeline
       endDate: PropTypes.string.isRequired, // Right-most date of the primary timeline
     }),
-    activeDates: PropTypes.shape({}).isRequired,
+    activeDates: PropTypes.arrayOf(PropTypes.shape({
+      position: PropTypes.number.isRequired,
+      date: PropTypes.string.isRequired,
+      inRange: PropTypes.bool.isRequired,
+      inCollection: PropTypes.bool.isRequired,
+      recentlyAdded: PropTypes.bool.isRequired,
+    })).isRequired,
     thumbLeft: PropTypes.number.isRequired, // Relative location [0..1] of the left-most thumb
     thumbRight: PropTypes.number.isRequired, // Relative location [0..1] of the right-most thumb
     timelineWidth: PropTypes.string.isRequired,
@@ -96,18 +102,16 @@ export default class TimeWidget extends React.Component {
   }
 
   fetchDotPositions = (isFullRow) => {
-    const { timelineRangeParams } = this.props;
+    const { timelineRangeParams, activeDates } = this.props;
     if (!timelineRangeParams?.allDates?.length) {
       return [];
     }
-
-    const { activeDates } = this.props;
-    const { startDate, endDate } = timelineRangeParams;
 
     if (isFullRow) {
       return activeDates;
     }
 
+    const { startDate, endDate } = timelineRangeParams;
     const { thumbLeft: minActivePos, thumbRight: maxActivePos } = this.props;
 
     return activeDates.filter(({ inRange }) => inRange)

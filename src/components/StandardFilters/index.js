@@ -22,14 +22,18 @@ class StandardFilters extends React.PureComponent {
         position: PropTypes.number.isRequired,
         date: PropTypes.string.isRequired,
       })).isRequired,
-      activeDates: PropTypes.shape({}).isRequired,
       minDate: PropTypes.string.isRequired, // Earliest date we have data for this participant
       startDate: PropTypes.string.isRequired, // Jan 1 of minDate's year
       maxDate: PropTypes.string.isRequired, // Latest date we have data for this participant
       endDate: PropTypes.string.isRequired, // Dec 31 of last year of timeline tick periods
     }),
-    // enabledFn: PropTypes.func.isRequired, // Callback to report changed category & provider enable/disable
-    // dateRangeFn: PropTypes.func, // Optional callback to report changed thumb positions
+    activeDates: PropTypes.arrayOf(PropTypes.shape({
+      position: PropTypes.number.isRequired,
+      date: PropTypes.string.isRequired,
+      inRange: PropTypes.bool.isRequired,
+      inCollection: PropTypes.bool.isRequired,
+      recentlyAdded: PropTypes.bool.isRequired,
+    })).isRequired,
   }
 
   state = {
