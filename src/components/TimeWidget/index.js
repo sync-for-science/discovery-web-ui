@@ -6,7 +6,7 @@ import moment from 'moment';
 import './TimeWidget.css';
 import config from '../../config.js';
 import {
-  getStyle, formatDisplayDate, formatKeyDate, numericPart, timelineIncrYears,
+  getStyle, formatDisplayDate, formatKeyDate, numericPart, timelineIncrYears, normalizeDates,
 } from '../../util.js';
 
 import SVGContainer from '../SVGContainer';
@@ -16,28 +16,40 @@ import DotLine from '../DotLine';
 // Render the DiscoveryApp Time Widget
 //
 export default class TimeWidget extends React.Component {
-  static myName = 'TimeWidget';
-
   static propTypes = {
-    minDate: PropTypes.string.isRequired, // Earliest date we have data for this participant
-    maxDate: PropTypes.string.isRequired, // Latest date we have data for this participant
-    startDate: PropTypes.string.isRequired, // Left-most date of the primary timeline
-    endDate: PropTypes.string.isRequired, // Right-most date of the primary timeline
+    timelineRangeParams: PropTypes.shape({
+      minDate: PropTypes.string.isRequired, // Earliest date we have data for this participant
+      maxDate: PropTypes.string.isRequired, // Latest date we have data for this participant
+      startDate: PropTypes.string.isRequired, // Left-most date of the primary timeline
+      endDate: PropTypes.string.isRequired, // Right-most date of the primary timeline
+    }),
+    activeDates: PropTypes.arrayOf(PropTypes.shape({
+      position: PropTypes.number.isRequired,
+      date: PropTypes.string.isRequired,
+      inRange: PropTypes.bool.isRequired,
+      inCollection: PropTypes.bool.isRequired,
+      recentlyAdded: PropTypes.bool.isRequired,
+    })).isRequired,
     thumbLeft: PropTypes.number.isRequired, // Relative location [0..1] of the left-most thumb
     thumbRight: PropTypes.number.isRequired, // Relative location [0..1] of the right-most thumb
     timelineWidth: PropTypes.string.isRequired,
     setLeftRightFn: PropTypes.func.isRequired, // Communicate thumb movement to parent
-    dotPositionsFn: PropTypes.func.isRequired, // Get dot positions from parent
-    dotClickFn: PropTypes.func, // Communicate dot click to parent
-    dotContext: PropTypes.object, // The last clicked dot (or null)
   }
 
-  state = {
-    leftX: this.props.thumbLeft * numericPart(this.props.timelineWidth),
-    rightX: this.props.thumbRight * numericPart(this.props.timelineWidth),
-    thumbDates: { minDate: this.posToDate(this.props.thumbLeft), maxDate: this.posToDate(this.props.thumbRight) },
-    showExpanded: false,
-    rangeButton: 'ALL',
+  constructor(props) {
+    super(props);
+    const {
+      timelineRangeParams, thumbLeft, thumbRight, timelineWidth,
+    } = props;
+
+    this.state = {
+      leftX: thumbLeft * numericPart(timelineWidth),
+      rightX: thumbRight * numericPart(timelineWidth),
+      thumbDates: { minDate: this.posToDate(thumbLeft), maxDate: this.posToDate(thumbRight) },
+      showExpanded: false,
+      rangeButton: 'ALL',
+      lastDot: timelineRangeParams?.allDates.slice(-1)[0],
+    };
   }
 
   // Define range button characteristics
@@ -89,6 +101,30 @@ export default class TimeWidget extends React.Component {
     },
   }
 
+  fetchDotPositions = (isFullRow) => {
+    const { timelineRangeParams, activeDates } = this.props;
+    if (!timelineRangeParams?.allDates?.length) {
+      return [];
+    }
+
+    if (isFullRow) {
+      return activeDates;
+    }
+
+    const { startDate, endDate } = timelineRangeParams;
+    const { thumbLeft: minActivePos, thumbRight: maxActivePos } = this.props;
+
+    return activeDates.filter(({ inRange }) => inRange)
+      .map((el) => {
+        const { date } = el;
+        const position = normalizeDates([date], startDate, endDate)[0];
+        return ({
+          ...el,
+          position: (position - minActivePos) / (maxActivePos - minActivePos),
+        });
+      });
+  }
+
   cacheSizes() {
     if (!this.centerThumbWidth) {
       const centerThumb = document.querySelector('.timeline-selector-center');
@@ -123,16 +159,20 @@ export default class TimeWidget extends React.Component {
 
   // TODO: Move to util.js?
   posToDate(pos) {
-    const min = new Date(this.props.startDate ? this.props.startDate : 0).getTime();
-    const max = new Date(this.props.endDate ? this.props.endDate : 0).getTime();
+    const { startDate, endDate } = this.props.timelineRangeParams;
+
+    const min = new Date(startDate || 0).getTime();
+    const max = new Date(endDate || 0).getTime();
     const target = min + (max - min) * pos;
     return new Date(target).toISOString();
   }
 
   // TODO: Move to util.js?
   dateToPos(dateStr) {
-    const min = new Date(this.props.startDate ? this.props.startDate : 0).getTime();
-    const max = new Date(this.props.endDate ? this.props.endDate : 0).getTime();
+    const { startDate, endDate } = this.props.timelineRangeParams;
+
+    const min = new Date(startDate || 0).getTime();
+    const max = new Date(endDate || 0).getTime();
     const target = new Date(dateStr).getTime();
     return (target - min) / (max - min);
   }
@@ -157,11 +197,13 @@ export default class TimeWidget extends React.Component {
   }
 
   renderFullYears() {
-    const firstYear = new Date(formatKeyDate(this.props.startDate)).getUTCFullYear();
-    const lastYear = new Date(formatKeyDate(this.props.endDate)).getUTCFullYear();
+    const { startDate, endDate } = this.props.timelineRangeParams;
+
+    const firstYear = new Date(formatKeyDate(startDate)).getUTCFullYear();
+    const lastYear = new Date(formatKeyDate(endDate)).getUTCFullYear();
     const thumbFirstYear = new Date(formatKeyDate(this.state.thumbDates.minDate)).getUTCFullYear();
     const thumbLastYear = new Date(formatKeyDate(this.state.thumbDates.maxDate)).getUTCFullYear();
-    const incr = timelineIncrYears(this.props.startDate, this.props.endDate, config.maxSinglePeriods);
+    const incr = timelineIncrYears(startDate, endDate, config.maxSinglePeriods);
     const years = [];
 
     for (let year = firstYear; year <= lastYear; year += incr) {
@@ -298,6 +340,8 @@ export default class TimeWidget extends React.Component {
   }
 
   setRange(rangeTag, centerDate) {
+    const { startDate, endDate } = this.props.timelineRangeParams;
+
     //      console.log(`Range: ${rangeTag}  CenterDate: ${centerDate}`);
     const range = this.ranges[rangeTag];
     let minPos = range.minPos !== undefined ? range.minPos
@@ -308,10 +352,10 @@ export default class TimeWidget extends React.Component {
     // Adjust window if extends beyond min/max dates
     if (maxPos > 1) {
       maxPos = 1;
-      minPos = this.dateToPos(moment(this.props.endDate).subtract(range.fullSize, range.fullSizeUnit).format());
+      minPos = this.dateToPos(moment(endDate).subtract(range.fullSize, range.fullSizeUnit).format());
     } else if (minPos < 0) {
       minPos = 0;
-      maxPos = this.dateToPos(moment(this.props.startDate).add(range.fullSize, range.fullSizeUnit).format());
+      maxPos = this.dateToPos(moment(startDate).add(range.fullSize, range.fullSizeUnit).format());
     }
 
     const showExpanded = minPos !== 0 || maxPos !== 1;
@@ -324,22 +368,22 @@ export default class TimeWidget extends React.Component {
   }
 
   dotInRange(width) {
-    const dotX = this.props.dotContext.position * width;
+    const usePosition = this.state.lastDot.position;
+    const dotX = usePosition * width;
     return this.state.leftX <= dotX && this.state.rightX >= dotX;
   }
 
   onRangeClick(range) {
     const width = numericPart(this.props.timelineWidth);
-    const centerDate = this.dotInRange(width) ? this.props.dotContext.date // last dot clicked
-      : this.posToDate((this.state.leftX + this.state.rightX) / (2 * width)); // center of current range
+    const useDate = this.state.lastDot.date;
+    const centerDate = this.dotInRange(width) ? useDate : this.posToDate((this.state.leftX + this.state.rightX) / (2 * width)); // center of current range
 
     this.setState({ rangeButton: range });
     this.setRange(range, centerDate);
   }
 
-  onDotClick = (context, date, dotType) => {
+  onDotClick = (date) => {
     this.setRange(this.state.rangeButton, date);
-    this.props.dotClickFn(context, date, dotType);
   }
 
   renderRangeButtons() {
@@ -360,10 +404,11 @@ export default class TimeWidget extends React.Component {
   }
 
   render() {
+    const { startDate, endDate } = this.props.timelineRangeParams;
     //      const rangeMin = formatDisplayDate(this.props.thumbLeft !== 0 ? this.state.thumbDates.minDate : this.props.minDate, true, true);
     //      const rangeMax = formatDisplayDate(this.props.thumbRight !== 1 ? this.state.thumbDates.maxDate : this.props.maxDate, true, true);
-    const rangeMin = formatDisplayDate(this.props.thumbLeft !== 0 ? this.state.thumbDates.minDate : this.props.startDate, true, true);
-    const rangeMax = formatDisplayDate(this.props.thumbRight !== 1 ? this.state.thumbDates.maxDate : this.props.endDate, true, true);
+    const rangeMin = formatDisplayDate(this.props.thumbLeft !== 0 ? this.state.thumbDates.minDate : startDate, true, true);
+    const rangeMax = formatDisplayDate(this.props.thumbRight !== 1 ? this.state.thumbDates.maxDate : endDate, true, true);
     const rightBound = numericPart(this.props.timelineWidth);
     const rightGradientWidth = numericPart(this.props.timelineWidth) - this.state.rightX - 2; // minus 2px because of border width of 1px for left and right gradient
 
@@ -387,9 +432,8 @@ export default class TimeWidget extends React.Component {
               svgWidth={this.props.timelineWidth}
             >
               <DotLine
-                dotPositions={this.props.dotPositionsFn(TimeWidget.myName, 'Full', true)}
-                context={{ parent: TimeWidget.myName, rowName: 'Full' }}
-                dotClickFn={this.props.dotClickFn ? this.onDotClick : null}
+                dotPositions={this.fetchDotPositions(true)}
+                dotClickFn={this.onDotClick}
               />
             </SVGContainer>
           </div>
@@ -428,9 +472,7 @@ export default class TimeWidget extends React.Component {
               svgWidth={this.props.timelineWidth}
             >
               <DotLine
-                dotPositions={this.props.dotPositionsFn('CategoryRollup', 'Categories', true)}
-                context={{ parent: 'Category', rowName: 'Categories' }}
-                dotClickFn={this.props.dotClickFn}
+                dotPositions={this.fetchDotPositions(false)}
               />
             </SVGContainer>
           ) }

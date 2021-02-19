@@ -280,8 +280,21 @@ export const computeFilterParams = (legacyResources) => {
   const endDate = `${lastYear + incr - (lastYear - firstYear) % incr - 1}-12-31`; // Dec 31 of last year of timeline tick periods
   const normDates = normalizeDates(itemDates, startDate, endDate);
   const allDates = itemDates.map((date, index) => ({ position: normDates[index], date }));
+  const existingDates = {};
+  const dedupedDates = allDates.reduce((acc, item) => {
+    const isoDate = item.date.substring(0, 10); // TODO: account for encoded TZ, via date-fns?
+    if (!existingDates[isoDate]) {
+      existingDates[isoDate] = true;
+      acc.push({
+        ...item,
+        date: isoDate,
+      });
+    }
+    return acc;
+  }, []);
+
   const dates = {
-    allDates, minDate, startDate, maxDate, endDate,
+    allDates: dedupedDates, minDate, startDate, maxDate, endDate,
   };
 
   return dates;
