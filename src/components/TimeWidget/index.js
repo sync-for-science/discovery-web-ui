@@ -28,8 +28,6 @@ export default class TimeWidget extends React.Component {
     timelineWidth: PropTypes.string.isRequired,
     setLeftRightFn: PropTypes.func.isRequired, // Communicate thumb movement to parent
     dotPositionsFn: PropTypes.func.isRequired, // Get dot positions from parent
-    // dotClickFn: PropTypes.func, // Communicate dot click to parent
-    // dotContext: PropTypes.object, // The last clicked dot (or null)
     lastDot: PropTypes.shape({
       position: PropTypes.number.isRequired, //   Horizontal position (range: 0.0 - 1.0)
       date: PropTypes.string.isRequired, //   Associated date
@@ -342,7 +340,7 @@ export default class TimeWidget extends React.Component {
     this.setRange(range, centerDate);
   }
 
-  onDotClick = (context, date) => {
+  onDotClick = (date) => {
     this.setRange(this.state.rangeButton, date);
   }
 
@@ -392,7 +390,6 @@ export default class TimeWidget extends React.Component {
             >
               <DotLine
                 dotPositions={this.props.dotPositionsFn(TimeWidget.myName, 'Full')}
-                context={{ parent: TimeWidget.myName, rowName: 'Full' }}
                 dotClickFn={this.onDotClick}
               />
             </SVGContainer>
@@ -433,7 +430,6 @@ export default class TimeWidget extends React.Component {
             >
               <DotLine
                 dotPositions={this.props.dotPositionsFn('CategoryRollup', 'Categories')}
-                context={{ parent: 'Category', rowName: 'Categories' }}
               />
             </SVGContainer>
           ) }

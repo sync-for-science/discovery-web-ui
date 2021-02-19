@@ -18,7 +18,7 @@ const getDotClass = (recentlyAdded, inCollection, inRange) => {
 };
 
 const Dot = ({
-  dot, context, dotClickFn, height,
+  dot, dotClickFn, height,
 }) => {
   const { recentlyAdded, inCollection, inRange } = dot;
   const className = useMemo(() => getDotClass(recentlyAdded, inCollection, inRange), [recentlyAdded, inCollection, inRange]);
@@ -30,13 +30,13 @@ const Dot = ({
       cy={height}
       r={config.normalDotRadius}
       style={dotClickFn ? { cursor: 'pointer' } : undefined}
-      onClick={dotClickFn ? (_event) => dotClickFn(context, dot.date, dot.dotType) : undefined}
+      onClick={dotClickFn ? (_event) => dotClickFn(dot.date, dot.dotType) : undefined}
     />
   );
 };
 
 const DotLine = ({
-  height, context, dotClickFn, dotPositions,
+  height, dotClickFn, dotPositions,
 }) => {
   const halfHeight = numericPart(height) / 2 + unitPart(height);
 
@@ -44,7 +44,6 @@ const DotLine = ({
     <Dot
       key={dot.date}
       dot={dot}
-      context={context}
       dotClickFn={dotClickFn}
       height={halfHeight}
     />
@@ -61,10 +60,6 @@ DotLine.propTypes = {
     inCollection: PropTypes.bool.isRequired,
     recentlyAdded: PropTypes.bool.isRequired,
   })).isRequired,
-  context: PropTypes.shape({
-    parent: PropTypes.string.isRequired, // Parent component name
-    rowName: PropTypes.string.isRequired, // Specific category/provider name
-  }),
   dotClickFn: PropTypes.func, // Callback when a dot is clicked
 };
 
