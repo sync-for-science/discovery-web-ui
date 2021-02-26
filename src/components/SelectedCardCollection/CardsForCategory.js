@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { string } from 'prop-types';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
@@ -7,9 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import RecordCard from '../cards/RecordCard';
-import { filteredActiveCollectionState, resourcesState } from '../../recoil';
+import { filteredActiveCollectionState, resourcesState, subcategoryIsExpanded } from '../../recoil';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +33,7 @@ const CategorySubtypeAccordion = ({
 
   const classes = useStyles();
   const summaryLabel = `${categoryLabel} - ${subtypeLabel}`;
-  const [expanded, setExpanded] = useState(hasLastAdded);
+  const [expanded, setExpanded] = useRecoilState(subcategoryIsExpanded(subtypeLabel)); // if value is null, user has not yet interacted
 
   const accordionStyle = hasLastAdded ? classes.last : classes.selected;
 

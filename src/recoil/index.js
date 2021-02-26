@@ -1,6 +1,7 @@
 import {
   atom, selector,
 } from 'recoil';
+import { memoizeWith, identity } from 'ramda';
 import jsonQuery from 'json-query';
 import { activeCategoriesState, activeProvidersState } from './category-provider-filters';
 import { timeFiltersState, timelineRangeParamsState } from './time-filters';
@@ -246,15 +247,12 @@ export const filteredActiveCollectionState = selector({
   },
 });
 
-// TODO: use 3rd party library, eg, reselect:
-const recoilAtomsCache = {};
-const memoize = (f) => (...args) => {
-  const cacheKey = args.join('-');
-  recoilAtomsCache[cacheKey] = recoilAtomsCache[cacheKey] ?? f(...args);
-  return recoilAtomsCache[cacheKey];
-};
+export const subcategoryIsExpanded = memoizeWith(identity, (categorySubtypeLabel) => atom({
+  key: `is-expanded-${categorySubtypeLabel}`,
+  default: null, // if value is null, user has not yet interacted
+}));
 
-export const notesWithRecordId = memoize((recordId) => {
+export const notesWithRecordId = memoizeWith(identity, (recordId) => {
   const atomForThisRecord = atom({
     key: `stored-notes-${recordId}`,
     default: {},
@@ -276,7 +274,7 @@ export const notesWithRecordId = memoize((recordId) => {
   });
 });
 
-export const collectionNotes = memoize((collectionName) => {
+export const collectionNotes = memoizeWith(identity, (collectionName) => {
   const atomForThisCollectionNotes = atom({
     key: `stored-collection-notes-${collectionName}`,
     default: {},
